@@ -39,6 +39,13 @@
     color: #FFFFFF;
 }
 
+.dropdown-content > hr{
+    margin: auto;
+    padding: 0%;
+    border-bottom: 1px;
+    border-left: 0px;
+    border-right: 0px;
+}
 
 /* DROPDOWN MAIN BUTTON */
 .dropbtn {
@@ -55,7 +62,7 @@
     background-color: #00ddfa;
 }
 
-.dropbtn:focus {
+.dropdown.active .dropbtn {
     background-color: #00ddfa;
 }
 

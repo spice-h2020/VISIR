@@ -15,16 +15,16 @@ const Template: ComponentStory<typeof Dropdown> = (args) => <Dropdown {...args} 
 
 export const onlyOne = Template.bind({});
 onlyOne.args = {
-  optionsLabels: ["GAM", "HECHT", "IMMA"],
+  itemsLabels: ["GAM", "HECHT", "-", "IMMA"],
   mainLabel:  "Select Only One",
-  selectOptions: "selectOnlyOne",
+  selectBehaviour: "selectOnlyOne",
 };
 
 export const diferents = Template.bind({});
 diferents.args = {
-  optionsLabels: ["GAM", "HECHT", "IMMA"],
+  itemsLabels: ["GAM", "-", "HECHT", "IMMA"],
   mainLabel:  "Select Diferents",
-  selectOptions: "selectDiferents",
+  selectBehaviour: "selectDiferents",
 };
 
 
