@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import { Button } from "./Button";
 import './Dropdown.css';
 
 interface DropdownProps {
@@ -88,14 +89,15 @@ export const Dropdown = ({
             className={showDropDown ? 'dropdown active' : 'dropdown'}
             ref={ref}
         >
-            <button
-                className="dropbtn"
-                onClick={(): void => {
+            <Button
+                label={mainLabel}
+                toggleState={true}
+                state={showDropDown}
+                onClick={() => {
                     setShowDropDown(!showDropDown);
                 }}
-            >
-                {mainLabel}
-            </button>
+            />
+
             <div
                 className="dropdown-content"
             >

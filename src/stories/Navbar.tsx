@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React from "react";
 
 import './Navbar.css';
 
@@ -49,11 +49,6 @@ export const Navbar = ({
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-
-
-
-
-
         </div>
 
     );

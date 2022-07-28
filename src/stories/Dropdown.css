@@ -47,22 +47,3 @@
     border-right: 0px;
 }
 
-/* DROPDOWN MAIN BUTTON */
-.dropbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropbtn:hover {
-    background-color: #00ddfa;
-}
-
-.dropdown.active .dropbtn {
-    background-color: #00ddfa;
-}
-

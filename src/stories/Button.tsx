@@ -1,23 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import './button.css';
 
 interface ButtonProps {
   /**
-   * Is this the principal call to action on the page?
-   */
-  primary?: boolean;
-  /**
-   * What background color to use
-   */
-  backgroundColor?: string;
-  /**
-   * How large should the button be?
-   */
-  size?: 'small' | 'medium' | 'large';
-  /**
    * Button contents
    */
   label: string;
+  /**
+   * Toggle the visuals of the button when clicked
+   */
+  toggleState?: boolean;
+  /**
+   * Active state of the button
+   */
+  state?: boolean;
   /**
    * Optional click handler
    */
@@ -28,21 +24,36 @@ interface ButtonProps {
  * Primary UI component for user interaction
  */
 export const Button = ({
-  primary = false,
-  size = 'medium',
-  backgroundColor,
-  label,
-  ...props
+  toggleState = true,
+  state = false,
+  label = 'Button',
+  onClick = (): void => {
+    console.log(`Button Click`);
+  },
 }: ButtonProps) => {
-  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
+
+  const [buttonState, setButtonState] = useState<boolean>(state);
+
+  function buttonClick() {
+    if (toggleState) {
+      setButtonState(!buttonState)
+    }
+    onClick();
+  }
+
+  useEffect(() => {
+    setButtonState(state);
+  }, [state]);
+
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
-      style={{ backgroundColor }}
-      {...props}
+      className={buttonState ? "btn active" : "btn"}
+      onClick={(): void => {
+        buttonClick();
+      }}
     >
       {label}
-    </button>
+    </button >
   );
 };
