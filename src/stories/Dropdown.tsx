@@ -50,7 +50,7 @@ const useOutsideClick = (removeEvent: boolean, ref: React.RefObject<HTMLDivEleme
  * Dropdown component
  */
 export const Dropdown = ({
-    itemsLabels = [],
+    itemsLabels,
     mainLabel = "Dropdown",
     selectBehaviour = "selectDiferents",
     onClick = (option: string) => {
@@ -103,7 +103,7 @@ export const Dropdown = ({
                     (item: string, index: number): JSX.Element => {
 
                         if (item === "-")
-                            return (<hr></hr>);
+                            return (<hr key={index}></hr>);
                         else
                             return (
                                 <a
