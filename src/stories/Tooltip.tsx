@@ -16,7 +16,12 @@ interface TooltipProps {
     /**
      * Content of the tooltip
      */
-    content: string;
+    content: React.ReactNode;
+
+    /**
+     * Show arrow
+     */
+    showArrow?: boolean;
 }
 
 /**
@@ -26,6 +31,7 @@ export const Tooltip = ({
     alignment = "bottom",
     state = false,
     content,
+    showArrow = true,
 }: TooltipProps) => {
 
     const [tooltipState, setTooltipState] = useState<boolean>(state);
@@ -36,11 +42,10 @@ export const Tooltip = ({
 
     return (
         <div className={`tooltip ${tooltipState ? "active" : ""}`} >
-            <span className={`tooltiptext ${alignment}`}>
-                <div dangerouslySetInnerHTML={{ __html: content }} />
-
-                <div className="tooltipArrow"> </div>
-            </span >
+            <div className={`tooltiptext ${alignment}`}>
+                {content}
+                {showArrow ? <div className="tooltipArrow"> </div> : ""}
+            </div >
         </div >
     );
 };

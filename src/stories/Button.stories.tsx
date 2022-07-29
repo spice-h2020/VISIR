@@ -1,6 +1,9 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import './legend.css';
+import './Navbar.css';
+
 import { Button } from './Button';
 
 export default {
@@ -11,21 +14,31 @@ export default {
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const Toggle = Template.bind({});
-Toggle.args = {
-  label: "Button",
+export const Default = Template.bind({});
+Default.args = {
+  content: <div dangerouslySetInnerHTML={{ __html: "<div> Im a button </div>" }} />,
   toggleState: true,
 };
 
-export const noToggle = Template.bind({});
-noToggle.args = {
-  label: "Button",
-  toggleState: false,
+const legendLikeButton =
+  <div className="row legend">
+    <div className="col-9 text" style={{ marginTop: "4px" }}>
+      ENGLISH
+    </div>
+    <div className="col-3 icon">
+      <div className="LegendShape star"> </div>
+    </div>
+  </div>;
+
+export const LegendButton = Template.bind({});
+LegendButton.args = {
+  content: legendLikeButton,
+  toggleState: true,
 };
 
 export const startInit = Template.bind({});
 startInit.args = {
-  label: "Button",
+  content: "Button",
   toggleState: true,
   state: true,
 };

@@ -90,7 +90,7 @@ export const Dropdown = ({
             ref={ref}
         >
             <Button
-                label={mainLabel}
+                content={mainLabel}
                 toggleState={true}
                 state={showDropDown}
                 onClick={() => {

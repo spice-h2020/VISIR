@@ -11,131 +11,137 @@ export default {
 
 const Template: ComponentStory<typeof Tooltip> = (args) => <Tooltip {...args} />;
 
-const legendLikehtml = `
-<div class="popover-body legend" id="PopoverLegend"><div class="row">     
-    <div class="col-6 legend color border-end border-dark">
-        <h5 class="Legend-subTittle border-bottom border-dark text-center">  Selected language </h5>
-        <div class="legendButtonContainer" id="legendButtonContainer color">
-            <button class="legend btn" name="legendOption" id="legendButtonSelected language_ENG">
-                <div class="container legend">
-                    <div class="row">
-                        <div class="col-9">    
-                            ENG
-                        </div>
-                        <div class="col-3 dimension">    
-                            <div class="LegendColor box" style="background-color: rgb(255, 0, 0);"></div>
-                        </div>
-                    </div>
-                </div>
-            </button>
-            <button class="legend btn" name="legendOption" id="legendButtonSelected language_FIN">
-                <div class="container legend">
-                    <div class="row">
-                        <div class="col-9">    
-                            FIN
-                        </div>
-                        <div class="col-3 dimension">    
-                            <div class="LegendColor box" style="background-color: rgb(0, 255, 72);"></div>
-                        </div>
-                    </div>
-                </div>
-            </button>
-            <button class="legend btn" name="legendOption" id="legendButtonSelected language_SWE">
-                <div class="container legend">
-                    <div class="row">
-                        <div class="col-9">    
-                            SWE
-                        </div>
-                        <div class="col-3 dimension">    
-                            <div class="LegendColor box" style="background-color: rgb(25, 166, 255);"></div>
-                        </div>
-                    </div>
-                </div>
-            </button>
+const textColStyle = {
+    marginTop: "4px",
+    overflow: "hidden",
+    whiteSpace: "nowrap"
+} as React.CSSProperties;
+
+const button1 =
+    <div className="row legendButton">
+        <div className="col-9 text" style={textColStyle}>
+            Boomer
+        </div>
+        <div className="col-3 icon">
+            <div className="LegendShape star"> </div>
+        </div>
+    </div >;
+
+const button2 =
+    <div className="row legendButton">
+        <div className="col-9 text" style={textColStyle}>
+            Gen X
+        </div>
+        <div className="col-3 icon">
+            <div className="LegendShape square"> </div>
+        </div>
+    </div >;
+
+const button3 =
+    <div className="row legendButton">
+        <div className="col-9 text" style={textColStyle}>
+            Silent
+        </div>
+        <div className="col-3 icon">
+            <div className="LegendShape triangle"> </div>
+        </div>
+    </div >;
+
+const button4 =
+    <div className="row legendButton">
+        <div className="col-9 text" style={textColStyle}>
+            ENG
+        </div>
+        <div className="col-3 icon">
+            <div className="LegendColor box" style={{ backgroundColor: "rgb(255, 0, 0)" }}></div>
+        </div>
+    </div >;
+
+const button5 =
+    <div className="row legendButton">
+        <div className="col-9 text" style={textColStyle}>
+            FIN
+        </div>
+        <div className="col-3 icon">
+            <div className="LegendColor box" style={{ backgroundColor: "rgb(0, 255, 0)" }}></div>
+        </div>
+    </div >;
+
+const legendContent =
+    <div className='row'>
+        <div className="col legend">
+            <h5 className="legend">Selected language</h5>
+            <div className='buttonLegendContainer'>
+                <Button
+                    content={button4}
+                />
+                <Button
+                    content={button5}
+                />
+            </div>
+        </div>
+        <div className="col legend">
+            <h5 className="legend">Selected age</h5>
+            <div className='buttonLegendContainer'>
+                <Button
+                    content={button1}
+                />
+                <Button
+                    content={button2}
+                />
+                <Button
+                    content={button3}
+                />
+            </div>
         </div>
     </div>
-    <div class="col-6 legend shape ">
-        <h5 class="Legend-subTittle border-bottom border-dark text-center">  Selected age </h5>
-        <div class="legendButtonContainer" id="legendButtonContainer shape">
-            <button class="legend btn" name="legendOption" id="legendButtonSelected age_Boomer">
-                <div class="container legend">
-                    <div class="row">
-                        <div class="col-9">    
-                             Boomer
-                        </div>
-                        <div class="col-3 dimension">    
-                            <div class="LegendShape dot"></div>
-                        </div>
-                    </div>
-                </div>
-            </button>
-            <button class="legend btn" name="legendOption" id="legendButtonSelected age_GenX">
-                <div class="container legend">
-                    <div class="row">
-                        <div class="col-9">    
-                             Gen X
-                        </div>
-                        <div class="col-3 dimension">    
-                            <div class="LegendShape diamond"></div>
-                        </div>
-                    </div>
-                </div>
-            </button>
-            <button class="legend btn" name="legendOption" id="legendButtonSelected age_Silent">
-                <div class="container legend">
-                    <div class="row">
-                        <div class="col-9">    
-                             Silent
-                        </div>
-                        <div class="col-3 dimension">    
-                            <div class="LegendShape star"></div>
-                        </div>
-                    </div>
-                </div>
-            </button>
-            <button class="legend btn" name="legendOption" id="legendButtonSelected age_Millenial">
-                <div class="container legend">
-                    <div class="row">
-                        <div class="col-9">    
-                             Millenial
-                        </div>
-                        <div class="col-3 dimension">    
-                            <div class="LegendShape triangle"></div>
-                        </div>
-                    </div>
-                </div>
-            </button>
-            <button class="legend btn" name="legendOption" id="legendButtonSelected age_GenZ">
-                <div class="container legend">
-                    <div class="row">
-                        <div class="col-9">    
-                             Gen Z
-                        </div>
-                        <div class="col-3 dimension">    
-                            <div class="LegendShape square"></div>
-                        </div>
-                    </div>
-                </div>
-            </button>
-        </div>
-    </div>
-</div>
-`;
-
-
 
 export const legendLike = Template.bind({});
 legendLike.args = {
     alignment: 'right',
     state: false,
-    content: legendLikehtml
+    content: legendContent,
+    showArrow: false
 };
 
-export const bottomSpawn = Template.bind({});
-bottomSpawn.args = {
-    alignment: 'bottom',
+const buttonStyle = {
+    height: "20px",
+    float: "right",
+    width: "auto",
+    verticalAlign: "middle",
+
+} as React.CSSProperties;
+
+textColStyle["margin"] = "0px";
+
+const nodeContent =
+    <div style={{maxWidth: "300px"}}>
+        <div className='row' style={{ borderBottom: "1px solid #212529" }}>
+            <div className="col">
+                <h3 style={textColStyle}>Node Title</h3>
+            </div>
+            <div className="col">
+                <Button
+                    content= "X"
+                    style={buttonStyle}
+                />
+            </div>
+
+        </div>
+        <div className='col' style={{ padding: "5px 5px" }}>
+            <strong> Id: </strong> 14 <br></br>
+            <strong> Label: </strong> 14 <br></br>
+            <strong> AgeGroup: </strong> Adult <br></br>
+            <strong> Language: </strong> ESP <br></br>
+            <strong> Explanation: </strong>  Representative Properties: 'Artefacts collected': 'Aalto vase' <br></br>
+        </div>
+    </div>
+
+
+export const nodeLike = Template.bind({});
+nodeLike.args = {
+    alignment: 'right',
     state: false,
-    content: "<div> no Title </div>"
+    content: nodeContent,
+    showArrow: true
 };
-
-

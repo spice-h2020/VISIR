@@ -5,7 +5,7 @@ interface ButtonProps {
   /**
    * Button contents
    */
-  label: string;
+  content: React.ReactNode;
   /**
    * Toggle the visuals of the button when clicked
    */
@@ -18,6 +18,8 @@ interface ButtonProps {
    * Optional click handler
    */
   onClick?: () => void;
+
+  style?: React.CSSProperties
 }
 
 /**
@@ -26,10 +28,11 @@ interface ButtonProps {
 export const Button = ({
   toggleState = true,
   state = false,
-  label = 'Button',
+  content,
   onClick = (): void => {
     console.log(`Button Click`);
   },
+  style = {},
 }: ButtonProps) => {
 
   const [buttonState, setButtonState] = useState<boolean>(state);
@@ -52,8 +55,9 @@ export const Button = ({
       onClick={(): void => {
         buttonClick();
       }}
+      style={style}
     >
-      {label}
+      {content}
     </button >
   );
 };

@@ -11,6 +11,10 @@
     float: left;
 }
 
+.col{
+    flex: 1 0 0%;
+}
+
 /* COLUMNS */
 .col-1 {
     width: 8.33%;

@@ -1,0 +1,116 @@
+/*--- LEGEND DIMENSIONS HTML ---*/
+/* box shape with border color*/
+.box {
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin: auto;
+    border: 1px solid black;
+    clear: both;
+}
+
+/* Background color */
+.btn.active>.row>.icon>.LegendColor {
+    opacity: 25%;
+}
+
+/* Border color */
+.btn.active>.row>.icon>.LegendBorder {
+    opacity: 25%;
+}
+
+/*Parent shape*/
+.LegendShape {
+    width: 20px;
+    height: 20px;
+    background: rgb(0, 0, 0);
+}
+
+/*All available shapes*/
+.triangle {
+    --path: 50% 0, 100% 100%, 0 100%;
+    /*Second number is the height, starting with 0 at the top of the div*/
+    clip-path: polygon(var(--path));
+}
+
+.diamond {
+    --path: 50% 0, 0% 50%, 50% 100%, 100% 50%;
+    clip-path: polygon(var(--path));
+}
+
+.dot {
+    border-radius: 50%;
+}
+
+.star {
+    --path: 50% 5%, 61% 40%, 98% 40%, 68% 62%, 79% 96%, 50% 75%, 21% 96%, 32% 62%, 2% 40%, 39% 40%;
+    clip-path: polygon(var(--path));
+}
+
+.triangleDown {
+    --path: 0% 0%, 50% 100%, 100% 0%;
+    clip-path: polygon(var(--path));
+}
+
+.hexagon {
+    --path: 25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%;
+    clip-path: polygon(var(--path));
+}
+
+.btn.active>.row>.text {
+    opacity: 35%;
+}
+
+.btn.active>.row>.icon>.LegendShape {
+    opacity: 35%;
+}
+
+.row {
+    display: flex;
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+}
+
+.row.legendButton {
+    margin: 0px auto 1px auto;
+    height: 35px;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.row>* {
+    padding-right: calc(var(--bs-gutter-x) * 0.5);
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
+    margin-top: var(--bs-gutter-y);
+}
+
+h5.legend {
+    margin: 5px auto 0px auto;
+    padding-bottom: 5px;
+    text-align: center;
+    border-bottom: 1px solid #212529 ;
+
+    font-size: 1.25rem;
+    white-space: nowrap;
+}
+
+.legend{
+    background-color: transparent;
+}
+
+.tooltiptext.legend{
+    padding: 1rem 1rem;
+}
+
+.buttonLegendContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.col.legend{
+    border-right: 1px solid #212529;
+}
+
+.col.legend:last-child{
+    border-right: 0px;
+}
