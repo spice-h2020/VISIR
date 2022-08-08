@@ -1,6 +1,6 @@
 import React from "react";
 
-import './Navbar.css';
+import '../style/Navbar.css';
 
 interface NavbarProps {
     /**
@@ -30,6 +30,10 @@ export const Navbar = ({
         <div className="navbar">
             <div
                 className="col-4"
+                style={{
+                    flexDirection: "row",
+                    display: "flex"
+                }}
             >
                 {leftAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
@@ -37,6 +41,7 @@ export const Navbar = ({
             </div>
             <div
                 className="col-4"
+                style={{ display: "contents" }}
             >
                 {midAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
@@ -44,6 +49,10 @@ export const Navbar = ({
             </div>
             <div
                 className="col-4"
+                style={{
+                    flexDirection: "row-reverse",
+                    display: "flex"
+                }}
             >
                 {rightAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);

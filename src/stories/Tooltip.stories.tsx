@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Tooltip } from './Tooltip';
-import { Button } from './Button';
+import { Tooltip } from '../components/Tooltip';
+import { Button } from '../components/Button';
 
 export default {
     title: 'Example/Tooltip',
@@ -123,7 +123,6 @@ const nodeContent =
             <div className="col">
                 <Button
                     content= "X"
-                    style={buttonStyle}
                 />
             </div>
 

@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Navbar } from './Navbar';
-import { Dropdown } from './Dropdown';
+import { Navbar } from '../components/Navbar';
+import { Dropdown } from '../components/Dropdown';
 
 export default {
   title: 'Example/Navbar',

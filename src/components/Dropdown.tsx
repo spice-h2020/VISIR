@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { Button } from "./Button";
-import './Dropdown.css';
+import '../style/Dropdown.css';
 
 interface DropdownProps {
     /**
@@ -22,6 +22,8 @@ interface DropdownProps {
      * Function executed when a dropdown option is selected
      */
     onClick?: (option: string) => boolean;
+
+    extraClassName?: string;
 }
 
 const useOutsideClick = (removeEvent: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function) => {
@@ -58,8 +60,10 @@ export const Dropdown = ({
         console.log(`Default onClick ${option}`);
         return true;
     },
+    extraClassName = ""
 
 }: DropdownProps) => {
+
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
     const [selectedItems, setSelectedOptions] = useState<Array<string>>([]);
 
@@ -86,7 +90,7 @@ export const Dropdown = ({
 
     return (
         <div
-            className={showDropDown ? 'dropdown active' : 'dropdown'}
+            className={showDropDown ? `dropdown ${extraClassName} active` : `dropdown ${extraClassName}`}
             ref={ref}
         >
             <Button

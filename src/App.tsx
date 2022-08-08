@@ -1,24 +1,51 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './style/base.css';
+
+import { Navbar } from './components/Navbar';
+import { Dropdown } from './components/Dropdown';
+import { Button } from './components/Button';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar
+        leftAlignedItems={[
+          <Button
+            content="Visualization module"
+            extraClassName="navBar-mainBtn"
+            onClick={() => { window.location.reload() }}
+          />,
+          <Dropdown
+            mainLabel='File Source'
+            itemsLabels={["Github Main", "Local", "Github Develop", "Use the api (WIP)"]}
+            extraClassName="navBar-dropdown-light"
+          />,
+          <Dropdown
+            mainLabel='Layout'
+            itemsLabels={["Vertical", "Horizontal"]}
+          />,
+
+          <Dropdown
+            mainLabel='Options'
+            itemsLabels={["Hide node labels", "Hide unselected Edges", "-", "Variable edge width", "-", "Third dimension"]}
+          />,
+        ]}
+        midAlignedItems={[
+          <Dropdown
+            mainLabel='Select Perspective'
+            itemsLabels={["1", "2", "3"]}
+          />,
+
+        ]}
+        rightAlignedItems={[
+          <Button
+            content={"Legend"}
+          />,
+        ]}
+      />
+      <h1> Communities Visualization</h1>
+
     </div>
   );
 }

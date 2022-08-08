@@ -10,6 +10,10 @@
     display: block;
 }
 
+.dropdown > .btn{
+    height: 100%;
+}
+
 /*DROPDOWN CONTENT*/
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import './legend.css';
-import './Navbar.css';
+import '../style/legend.css';
+import '../style/Navbar.css';
 
-import { Button } from './Button';
+import { Button } from '../components/Button';
 
 export default {
   title: 'Example/Button',

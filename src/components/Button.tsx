@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './button.css';
+import '../style/button.css';
 
 interface ButtonProps {
   /**
@@ -19,7 +19,7 @@ interface ButtonProps {
    */
   onClick?: () => void;
 
-  style?: React.CSSProperties
+  extraClassName?: string;
 }
 
 /**
@@ -32,7 +32,7 @@ export const Button = ({
   onClick = (): void => {
     console.log(`Button Click`);
   },
-  style = {},
+  extraClassName = "",
 }: ButtonProps) => {
 
   const [buttonState, setButtonState] = useState<boolean>(state);
@@ -51,11 +51,10 @@ export const Button = ({
   return (
     <button
       type="button"
-      className={buttonState ? "btn active" : "btn"}
+      className={buttonState ? `btn ${extraClassName} active` : `btn ${extraClassName}`}
       onClick={(): void => {
         buttonClick();
       }}
-      style={style}
     >
       {content}
     </button >
