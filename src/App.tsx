@@ -1,11 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './style/base.css';
 
 import { Navbar } from './components/Navbar';
 import { Dropdown } from './components/Dropdown';
 import { Button } from './components/Button';
+import { FileSourceDropdown } from './components/FileSourceDropdown';
+import { LayoutDropdown } from './components/LayoutDropdown';
+import { OptionsDropdown } from './components/OptionsDropdown';
+
+import RequestManager from './managers/requestManager';
+import { FileSource, tbOptions } from './constants/toolbarOptions';
+
+const requestManager = new RequestManager();
 
 function App() {
+
+  const [availablePerspectives, setAvailablePerspectives] = useState<string[]>([""]);
+  const [fileSource, setFileSource] = useState<FileSource>(tbOptions.initialFileSource);
+
+  useEffect(() => {
+    requestManager.changeBaseURL(fileSource);
+  }, [fileSource])
+
+  useEffect(() => {
+    requestManager.getAllPerspectives()
+      .then((response) => {
+        console.log("Response received");
+        console.log(response.data);
+        // if (response.status === 200) {
+        //     const file = response.data;
+        //     this.allPerspectivesFile = JSON.parse(file).files;
+        //     this.createEvents()
+        // } else {
+        //     throw new Error(`All perspectives info was ${response.statusText}`);
+        // }
+      })
+      .catch((error) => {
+        console.log("Error received");
+        alert(error.message);
+      });
+
+  }, [fileSource]);
 
   return (
     <div>
@@ -16,25 +51,18 @@ function App() {
             extraClassName="navBar-mainBtn"
             onClick={() => { window.location.reload() }}
           />,
-          <Dropdown
-            mainLabel='File Source'
-            itemsLabels={["Github Main", "Local", "Github Develop", "Use the api (WIP)"]}
-            extraClassName="navBar-dropdown-light"
+          <FileSourceDropdown
+            onClick={setFileSource}
           />,
-          <Dropdown
-            mainLabel='Layout'
-            itemsLabels={["Vertical", "Horizontal"]}
-          />,
-
-          <Dropdown
-            mainLabel='Options'
-            itemsLabels={["Hide node labels", "Hide unselected Edges", "-", "Variable edge width", "-", "Third dimension"]}
-          />,
+          <LayoutDropdown />,
+          <OptionsDropdown />,
         ]}
         midAlignedItems={[
           <Dropdown
             mainLabel='Select Perspective'
             itemsLabels={["1", "2", "3"]}
+            extraClassName="dropdown-dark"
+            selectBehaviour="selectDiferents"
           />,
 
         ]}

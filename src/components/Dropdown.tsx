@@ -7,7 +7,9 @@ interface DropdownProps {
     /**
      * Text of each of the dropdown options. If  the text is = "-", it will be interpreted as a separator inside the dropdown
      */
-    itemsLabels: string[];
+    itemsLabels?: string[];
+
+    items?: React.ReactNode[];
     /**
      * Text of the button that toggles the dropdown.
      */
@@ -54,6 +56,7 @@ const useOutsideClick = (removeEvent: boolean, ref: React.RefObject<HTMLDivEleme
  */
 export const Dropdown = ({
     itemsLabels,
+    items = [],
     mainLabel = "Dropdown",
     selectBehaviour = "selectDiferents",
     onClick = (option: string) => {
@@ -105,7 +108,7 @@ export const Dropdown = ({
             <div
                 className="dropdown-content"
             >
-                {itemsLabels.map(
+                {itemsLabels?.map(
                     (item: string, index: number): JSX.Element => {
 
                         if (item === "-")
@@ -124,6 +127,9 @@ export const Dropdown = ({
                             );
                     })
                 }
+                {items.map((item: any, index: number): JSX.Element => {
+                    return (<React.Fragment key={index}>{item}</React.Fragment>);
+                })}
             </div>
         </div >
     );

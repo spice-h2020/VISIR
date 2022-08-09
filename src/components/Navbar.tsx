@@ -40,7 +40,7 @@ export const Navbar = ({
                 })}
             </div>
             <div
-                className="col-4"
+                className="col-4 align-center"
                 style={{ display: "contents" }}
             >
                 {midAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
