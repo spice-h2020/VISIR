@@ -6,6 +6,6 @@ export enum FileSource {
 }
 
 export const tbOptions = {
-    initialFileSource: FileSource.Main,
+    initialFileSource: FileSource.Local,
 
 }

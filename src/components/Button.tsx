@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import internal from "stream";
 import '../style/button.css';
 
 interface ButtonProps {
@@ -7,28 +8,26 @@ interface ButtonProps {
    */
   content: React.ReactNode;
   /**
-   * Toggle the visuals of the button when clicked
-   */
-  toggleState?: boolean;
-  /**
    * Active state of the button
    */
   state?: boolean;
   /**
    * Optional click handler
    */
-  onClick?: () => any;
+  onClick?: (params: any) => any;
 
   extraClassName?: string;
+
+  buttonId?: number;
 }
 
 /**
  * Primary UI component for user interaction
  */
 export const Button = ({
-  toggleState = true,
   state = false,
   content,
+  buttonId,
   onClick = (): void => {
     console.log(`Button Click`);
   },
@@ -36,16 +35,6 @@ export const Button = ({
 }: ButtonProps) => {
 
   const [buttonState, setButtonState] = useState<boolean>(state);
-
-  function buttonClick() {
-    if (toggleState) {
-      setButtonState(!buttonState);
-      onClick();
-    }
-    else if (onClick()) {
-      setButtonState(!buttonState);
-    }
-  }
 
   useEffect(() => {
     setButtonState(state);
@@ -56,7 +45,7 @@ export const Button = ({
       type="button"
       className={buttonState ? `btn ${extraClassName} active` : `btn ${extraClassName}`}
       onClick={(): void => {
-        buttonClick();
+        onClick(buttonId);
       }}
     >
       {content}

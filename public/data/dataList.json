@@ -1,0 +1,18 @@
+{
+	"files": [
+ 		"DMH artefacts collected (agglomerative)",
+		"DMH artefacts collected (kmedoids)",		
+		"DMH(agglomerative)",
+		"DMH(kmedoids)",
+		"GAM similar emotions in common artworks (agglomerative)",
+		"GAM similar emotions in common artworks (kmedoids)",		
+		"HECHT_beliefJ (agglomerative)",
+		"HECHT_beliefJ (kmedoids)",
+		"HECHT_beliefR (agglomerative)",
+		"HECHT_beliefR (kmedoids)",
+		"IMMA_country_taxonomy (kmedoids)",
+		"IMMA_country_taxonomy",
+		"IMMA_number_interactions",
+		"MNCN"
+	]
+}

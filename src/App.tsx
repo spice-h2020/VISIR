@@ -10,37 +10,34 @@ import { OptionsDropdown } from './components/OptionsDropdown';
 
 import RequestManager from './managers/requestManager';
 import { FileSource, tbOptions } from './constants/toolbarOptions';
+import { SelectPerspectiveDropdown, isAllPerspectivesValid, AllPerspectives } from './components/SelectPerspectiveDropdown';
 
 const requestManager = new RequestManager();
 
 function App() {
 
-  const [availablePerspectives, setAvailablePerspectives] = useState<string[]>([""]);
+  const [availablePerspectives, setAvailablePerspectives] = useState<Object>({});
   const [fileSource, setFileSource] = useState<FileSource>(tbOptions.initialFileSource);
 
   useEffect(() => {
     requestManager.changeBaseURL(fileSource);
-  }, [fileSource])
 
-  useEffect(() => {
     requestManager.getAllPerspectives()
       .then((response) => {
-        console.log("Response received");
-        console.log(response.data);
-        // if (response.status === 200) {
-        //     const file = response.data;
-        //     this.allPerspectivesFile = JSON.parse(file).files;
-        //     this.createEvents()
-        // } else {
-        //     throw new Error(`All perspectives info was ${response.statusText}`);
-        // }
+        console.log("Perspectives Received");
+        if (response.status === 200) {
+          const allPerspectivesFile = JSON.parse(response.data);
+          setAvailablePerspectives(allPerspectivesFile)
+        } else {
+          throw new Error(`All perspectives info was ${response.statusText}`);
+        }
       })
       .catch((error) => {
-        console.log("Error received");
+        console.log(error);
         alert(error.message);
       });
+  }, [fileSource])
 
-  }, [fileSource]);
 
   return (
     <div>
@@ -58,11 +55,10 @@ function App() {
           <OptionsDropdown />,
         ]}
         midAlignedItems={[
-          <Dropdown
-            mainLabel='Select Perspective'
-            itemsLabels={["1", "2", "3"]}
-            extraClassName="dropdown-dark"
-            selectBehaviour="selectDiferents"
+          <SelectPerspectiveDropdown
+            onClick={(key: string) => console.log(`Seleccionado ${key}`)}
+            perspectivesJSON={availablePerspectives as AllPerspectives}
+            isValid={isAllPerspectivesValid(availablePerspectives)}
           />,
 
         ]}

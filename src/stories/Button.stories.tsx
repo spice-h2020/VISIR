@@ -17,7 +17,6 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 export const Default = Template.bind({});
 Default.args = {
   content: <div dangerouslySetInnerHTML={{ __html: "<div> Im a button </div>" }} />,
-  toggleState: true,
 };
 
 const legendLikeButton =
@@ -33,13 +32,11 @@ const legendLikeButton =
 export const LegendButton = Template.bind({});
 LegendButton.args = {
   content: legendLikeButton,
-  toggleState: true,
 };
 
 export const startInit = Template.bind({});
 startInit.args = {
   content: "Button",
-  toggleState: true,
   state: true,
 };
 
