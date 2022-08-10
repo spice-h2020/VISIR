@@ -1,54 +1,58 @@
 import React, { useState, useEffect } from "react";
 
-import { Button } from "./Button";
-import { Dropdown } from "./Dropdown";
+import { Button } from "../basicComponents/Button";
+import { Dropdown } from "../basicComponents/Dropdown";
 
 export interface AllPerspectives {
-    files: string[];
+    names: string[];
 }
 
+//Function to make sure the AllPerspective object received is valid
 export function isAllPerspectivesValid(arg: any): arg is AllPerspectives {
-    return arg && arg.files && typeof (arg.files) == "object" && arg.files[0] && typeof (arg.files[0]) == "string";
+    return arg && arg.names && typeof (arg.names) == "object" && arg.names[0] && typeof (arg.names[0]) == "string";
 }
 
 interface SelectPerspectiveProps {
+    //On click handler
     onClick: (perspectiveKey: string) => any;
-    perspectivesJSON: AllPerspectives;
+    //Object that contains the name of all perspectives availables
+    allPerspectives: AllPerspectives;
+    //Validity state of the allPerspective item, if its not valid, the dropdown will be disabled
     isValid: boolean;
 }
 
 /**
- * Dropdown component
+ * Dropdown component that holds the options to add/hide perspectives to the application
  */
 export const SelectPerspectiveDropdown = ({
     onClick,
     isValid,
-    perspectivesJSON,
+    allPerspectives,
 }: SelectPerspectiveProps) => {
+
     const [selectedItems, setSelectedItems] = useState<Array<boolean>>([]);
 
     useEffect(() => {
         if (isValid) {
-            const newState = new Array<boolean>(perspectivesJSON.files.length);
+            const newState = new Array<boolean>(allPerspectives.names.length);
             newState.fill(false);
             setSelectedItems(newState);
         }
-    }, [perspectivesJSON]);
+    }, [allPerspectives]);
 
     if (!isValid) {
-        console.log("Invalid")
         return (
             <Dropdown
                 items={[]}
-                mainLabel="No perspectives"
+                content="No available perspectives"
                 extraClassName="dropdown-dark"
             />
         );
     }
-
+    
     function selectPerspective(perspectiveKey: string, buttonId: number) {
         const newState = Object.assign(new Array(), selectedItems);
-        newState[buttonId] = !newState[buttonId]; 
+        newState[buttonId] = !newState[buttonId];
 
         setSelectedItems(newState);
 
@@ -56,13 +60,13 @@ export const SelectPerspectiveDropdown = ({
     }
 
     const perspectivesButtons = new Array<React.ReactNode>();
-    for (let i = 0; i < perspectivesJSON.files.length; i++) {
+    for (let i = 0; i < allPerspectives.names.length; i++) {
         perspectivesButtons.push(
             <Button
-                content={perspectivesJSON.files[i]}
+                content={allPerspectives.names[i]}
                 state={selectedItems[i]}
                 onClick={(buttonId: number) => {
-                    selectPerspective(perspectivesJSON.files[i], buttonId);
+                    selectPerspective(allPerspectives.names[i], buttonId);
                 }}
                 buttonId={i}
             />
@@ -72,7 +76,7 @@ export const SelectPerspectiveDropdown = ({
     return (
         <Dropdown
             items={perspectivesButtons}
-            mainLabel="Select Perspective"
+            content="Select Perspective"
             extraClassName="dropdown-dark"
         />
     );

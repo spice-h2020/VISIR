@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 
-import { Button } from "./Button";
-import { Dropdown } from "./Dropdown";
+import { Button } from "../basicComponents/Button";
+import { Dropdown } from "../basicComponents/Dropdown";
 
 import { FileSource, tbOptions } from "../constants/toolbarOptions";
-import { any } from "prop-types";
 
 
 interface FileSourceDropdownProps {
+    //On click handler
     onClick: (key: FileSource) => any;
 }
 
-const initialState = new Array(Object.keys(FileSource).length/2);
-
+//Calculate the initial state of the FileSourceDropdown on start
+const initialState = new Array(Object.keys(FileSource).length / 2);
 const init = () => {
     initialState.fill(false);
     initialState[tbOptions.initialFileSource] = true;
@@ -20,7 +20,7 @@ const init = () => {
 init();
 
 /**
- * Dropdown component
+ * Dropdown component that holds the options to change the source of perspective files in the visualization tool
  */
 export const FileSourceDropdown = ({
     onClick,
@@ -31,7 +31,7 @@ export const FileSourceDropdown = ({
     function changeFileSource(key: FileSource) {
         if (!selectedItems[key]) {
 
-            const newState = new Array(Object.keys(FileSource).length/2);
+            const newState = new Array(Object.keys(FileSource).length / 2);
             newState.fill(false);
             newState[key] = true;
 
@@ -40,7 +40,6 @@ export const FileSourceDropdown = ({
         }
     }
 
-    console.log("preFileSourceButtons")
     const fileSourceButtons = [
         <Button
             content="Github Main"
@@ -66,7 +65,7 @@ export const FileSourceDropdown = ({
     return (
         <Dropdown
             items={fileSourceButtons}
-            mainLabel="File Source"
+            content="File Source"
             extraClassName="dropdown-light"
         />
     );

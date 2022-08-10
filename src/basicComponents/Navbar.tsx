@@ -3,22 +3,16 @@ import React from "react";
 import '../style/Navbar.css';
 
 interface NavbarProps {
-    /**
-     * Components that will be aligned to the leftside of the navbar.
-     */
+    //Components aligned to the left of the navBar
     leftAlignedItems?: React.ReactNode[];
-    /**
-     * Components that will be aligned to the middle of the navbar.
-     */
+    //Components aligned to the middle of the navBar
     midAlignedItems?: React.ReactNode[];
-    /**
-    * Components that will be aligned to the rightside of the navbar.
-    */
+    //Components aligned to the right of the navBar
     rightAlignedItems?: React.ReactNode[];
 }
 
 /**
- * Dropdown component
+ * Navbar that holds diferents react components at the top of the webpage in the form of a toolbar
  */
 export const Navbar = ({
     leftAlignedItems = [],
@@ -28,8 +22,7 @@ export const Navbar = ({
 
     return (
         <div className="navbar">
-            <div
-                className="col-4"
+            <div className="col-4"
                 style={{
                     flexDirection: "row",
                     display: "flex"
@@ -39,16 +32,14 @@ export const Navbar = ({
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div
-                className="col-4 align-center"
+            <div className="col-4 align-center"
                 style={{ display: "contents" }}
             >
                 {midAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div
-                className="col-4"
+            <div className="col-4"
                 style={{
                     flexDirection: "row-reverse",
                     display: "flex"

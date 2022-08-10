@@ -1,7 +1,8 @@
+//WIP component
 import React, { useState, useEffect } from "react";
 
-import { Button } from "./Button";
-import { Dropdown } from "./Dropdown";
+import { Button } from "../basicComponents/Button";
+import { Dropdown } from "../basicComponents/Dropdown";
 
 enum Layouts {
     Horizontal,
@@ -9,9 +10,7 @@ enum Layouts {
 }
 
 const initialSource = Layouts.Horizontal
-/**
- * Dropdown component
- */
+
 export const LayoutDropdown = () => {
 
     const initialState = new Array();
@@ -52,7 +51,7 @@ export const LayoutDropdown = () => {
     return (
         <Dropdown
             items={LayoutButtons}
-            mainLabel="Layout"
+            content="Layout"
             extraClassName="dropdown-light"
         />
     );

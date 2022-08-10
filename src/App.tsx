@@ -1,9 +1,9 @@
+//WIP component
 import React, { useEffect, useState } from 'react';
 import './style/base.css';
 
-import { Navbar } from './components/Navbar';
-import { Dropdown } from './components/Dropdown';
-import { Button } from './components/Button';
+import { Navbar } from './basicComponents/Navbar';
+import { Button } from './basicComponents/Button';
 import { FileSourceDropdown } from './components/FileSourceDropdown';
 import { LayoutDropdown } from './components/LayoutDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
@@ -19,6 +19,8 @@ function App() {
   const [availablePerspectives, setAvailablePerspectives] = useState<Object>({});
   const [fileSource, setFileSource] = useState<FileSource>(tbOptions.initialFileSource);
 
+
+  //Update all available perspectives when the source file changes
   useEffect(() => {
     requestManager.changeBaseURL(fileSource);
 
@@ -57,7 +59,7 @@ function App() {
         midAlignedItems={[
           <SelectPerspectiveDropdown
             onClick={(key: string) => console.log(`Seleccionado ${key}`)}
-            perspectivesJSON={availablePerspectives as AllPerspectives}
+            allPerspectives={availablePerspectives as AllPerspectives}
             isValid={isAllPerspectivesValid(availablePerspectives)}
           />,
 

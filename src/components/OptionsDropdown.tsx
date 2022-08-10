@@ -1,7 +1,8 @@
+//WIP component
 import React, { useState, useEffect } from "react";
 
-import { Button } from "./Button";
-import { Dropdown } from "./Dropdown";
+import { Button } from "../basicComponents/Button";
+import { Dropdown } from "../basicComponents/Dropdown";
 import { TresholdSlider } from "./tresholdSlider";
 
 const initialHideLabels = true;
@@ -86,7 +87,7 @@ export const OptionsDropdown = () => {
     return (
         <Dropdown
             items={fileSourceButtons}
-            mainLabel="Options"
+            content="Options"
             extraClassName="dropdown-light"
         />
     );

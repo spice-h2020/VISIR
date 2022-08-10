@@ -1,6 +1,8 @@
+//WIP component
 import React, { useEffect, useState } from "react";
 
 import '../style/Tooltip.css';
+
 interface TooltipProps {
     /**
      * Components that will be aligned to the leftside of the navbar.
