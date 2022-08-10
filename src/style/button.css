@@ -2,3 +2,8 @@
   cursor: pointer;
   border: none;
 }
+
+
+.btn.active{
+  background-color: aqua;
+}

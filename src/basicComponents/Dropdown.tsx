@@ -40,6 +40,7 @@ export const Dropdown = ({
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
+                    extraClassName={extraClassName}
                 />
                 <div className="dropdown-content">
                     {items.map((item: any, index: number): JSX.Element => {
