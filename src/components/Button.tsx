@@ -39,9 +39,12 @@ export const Button = ({
 
   function buttonClick() {
     if (toggleState) {
-      setButtonState(!buttonState)
+      setButtonState(!buttonState);
+      onClick();
     }
-    onClick();
+    else if (onClick()) {
+      setButtonState(!buttonState);
+    }
   }
 
   useEffect(() => {

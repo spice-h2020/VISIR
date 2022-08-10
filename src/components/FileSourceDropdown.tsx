@@ -37,43 +37,47 @@ export const FileSourceDropdown = ({
     const [selectedItems, setSelectedOptions] = useState<Array<boolean>>(initialState);
 
     function changeFileSource(key: FileSource) {
-        switch (key) {
-            case FileSource.Main:
-                setSelectedOptions([true, false, false, false]);
-                break;
-            case FileSource.Local:
-                setSelectedOptions([false, true, false, false]);
-                break;
-            case FileSource.Develop:
-                setSelectedOptions([false, false, true, false]);
-                break;
-            case FileSource.Api:
-                setSelectedOptions([false, false, false, true]);
-                break;
-        }
+        if (!selectedItems[key]) {
 
-        onClick(key);
+            const newState = new Array();
+            for (let i = 0; i < Object.keys(FileSource).length / 2; i++) {
+                if (i === key) {
+                    newState.push(true);
+                } else {
+                    newState.push(false);
+                }
+            }
+            setSelectedOptions(newState);
+            onClick(key);
+            return true;
+        }
+        return false;
     }
+
     const fileSourceButtons = [
         <Button
             content="Github Main"
             onClick={() => { changeFileSource(FileSource.Main) }}
             state={selectedItems[0]}
+            toggleState={false}
         />,
         <Button
             content="Local"
             onClick={() => { changeFileSource(FileSource.Local) }}
             state={selectedItems[1]}
+            toggleState={false}
         />,
         <Button
             content="Github Develop"
             onClick={() => { changeFileSource(FileSource.Develop) }}
             state={selectedItems[2]}
+            toggleState={false}
         />,
         <Button
             content="Use the API (WIP)"
             onClick={() => { changeFileSource(FileSource.Api) }}
             state={selectedItems[3]}
+            toggleState={false}
         />]
 
     return (
