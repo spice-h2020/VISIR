@@ -14,79 +14,79 @@ const initialBorder = false;
  */
 export const OptionsDropdown = () => {
 
-    const [selectedItems, setSelectedOptions] = useState<Array<boolean>>([initialHideLabels, initialHideEdges, initialEdgeWidth, initialBorder]);
+    // const [selectedItems, setSelectedOptions] = useState<Array<boolean>>([initialHideLabels, initialHideEdges, initialEdgeWidth, initialBorder]);
 
-    function hideLabels() {
-        const newState = selectedItems;
-        newState[0] = !newState[0];
+    // function hideLabels() {
+    //     const newState = selectedItems;
+    //     newState[0] = !newState[0];
 
-        setSelectedOptions(newState)
+    //     setSelectedOptions(newState)
 
-        console.log("Toggle labels");
-    }
+    //     console.log("Toggle labels");
+    // }
 
-    function hideEdges() {
-        const newState = selectedItems;
-        newState[1] = !newState[1];
+    // function hideEdges() {
+    //     const newState = selectedItems;
+    //     newState[1] = !newState[1];
 
-        setSelectedOptions(newState)
+    //     setSelectedOptions(newState)
 
-        console.log("Toggle Edges");
-    }
+    //     console.log("Toggle Edges");
+    // }
 
-    function thresholdChange(value: number) {
-        console.log(`Threshold change to ${value}`);
-    }
+    // function thresholdChange(value: number) {
+    //     console.log(`Threshold change to ${value}`);
+    // }
 
-    function changeEdgeWidth() {
-        const newState = selectedItems;
-        newState[2] = !newState[2];
+    // function changeEdgeWidth() {
+    //     const newState = selectedItems;
+    //     newState[2] = !newState[2];
 
-        setSelectedOptions(newState)
+    //     setSelectedOptions(newState)
 
-        console.log("Toggle Width");
-    }
+    //     console.log("Toggle Width");
+    // }
 
-    function activateNodeBorder() {
-        const newState = selectedItems;
-        newState[3] = !newState[3];
+    // function activateNodeBorder() {
+    //     const newState = selectedItems;
+    //     newState[3] = !newState[3];
 
-        setSelectedOptions(newState)
+    //     setSelectedOptions(newState)
 
-        console.log("Toggle Border");
-    }
+    //     console.log("Toggle Border");
+    // }
 
-    const fileSourceButtons = [
-        <Button
-            content="Hide node labels"
-            onClick={() => { hideLabels() }}
-            state={selectedItems[0]}
-        />,
-        <Button
-            content="Hide unselected Edges"
-            onClick={() => { hideEdges() }}
-            state={selectedItems[1]}
-        />,
-        <hr/>,
-        // <TresholdSlider
-        //     onInput = {thresholdChange}
-        // />,
-        <hr/>,
-        <Button
-            content="Make edge width variable"
-            onClick={() => { changeEdgeWidth() }}
-            state={selectedItems[2]}
-        />,
-        <hr/>,
-        <Button
-            content="Activate nodes borders"
-            onClick={() => { activateNodeBorder() }}
-            state={selectedItems[3]}
-        />]
+    // const fileSourceButtons = [
+    //     <Button
+    //         content="Hide node labels"
+    //         onClick={() => { hideLabels() }}
+    //         state={selectedItems[0]}
+    //     />,
+    //     <Button
+    //         content="Hide unselected Edges"
+    //         onClick={() => { hideEdges() }}
+    //         state={selectedItems[1]}
+    //     />,
+    //     <hr/>,
+    //     // <TresholdSlider
+    //     //     onInput = {thresholdChange}
+    //     // />,
+    //     <hr/>,
+    //     <Button
+    //         content="Make edge width variable"
+    //         onClick={() => { changeEdgeWidth() }}
+    //         state={selectedItems[2]}
+    //     />,
+    //     <hr/>,
+    //     <Button
+    //         content="Activate nodes borders"
+    //         onClick={() => { activateNodeBorder() }}
+    //         state={selectedItems[3]}
+    //     />]
 
     return (
         <Dropdown
-            items={fileSourceButtons}
+            items={[]}
             content="Options"
             extraClassName="dropdown-light"
         />

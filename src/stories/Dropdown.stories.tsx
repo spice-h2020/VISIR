@@ -2,13 +2,14 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
+import { ButtonState } from '../constants/toolbarOptions';
 
 export default {
     title: 'Example/Dropdown',
     component: Dropdown,
 } as ComponentMeta<typeof Dropdown>;
 
-const selectedItems = [false, false, true];
+const selectedItems = [ButtonState.inactive, ButtonState.inactive, ButtonState.active];
 const testButtons = [
     <Button
         content="Option A"

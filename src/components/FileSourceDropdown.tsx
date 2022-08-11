@@ -3,8 +3,7 @@ import { useState } from "react";
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 
-import { FileSource, tbOptions } from "../constants/toolbarOptions";
-
+import { FileSource, tbOptions, ButtonState } from "../constants/toolbarOptions";
 
 interface FileSourceDropdownProps {
     //On click handler
@@ -14,8 +13,8 @@ interface FileSourceDropdownProps {
 //Calculate the initial state of the FileSourceDropdown on start
 const initialState = new Array(Object.keys(FileSource).length / 2);
 const init = () => {
-    initialState.fill(false);
-    initialState[tbOptions.initialFileSource] = true;
+    initialState.fill(ButtonState.inactive);
+    initialState[tbOptions.initialFileSource] = ButtonState.active;
 }
 init();
 
@@ -26,14 +25,14 @@ export const FileSourceDropdown = ({
     onClick,
 }: FileSourceDropdownProps) => {
 
-    const [selectedItems, setSelectedOptions] = useState<Array<boolean>>(initialState);
+    const [selectedItems, setSelectedOptions] = useState<Array<ButtonState>>(initialState);
 
     function changeFileSource(key: FileSource) {
         if (!selectedItems[key]) {
 
             const newState = new Array(Object.keys(FileSource).length / 2);
-            newState.fill(false);
-            newState[key] = true;
+            newState.fill(ButtonState.inactive);
+            newState[key] = ButtonState.active;
 
             setSelectedOptions(newState);
             onClick(key);

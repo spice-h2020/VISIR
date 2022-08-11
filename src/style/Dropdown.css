@@ -130,6 +130,11 @@
     color: #FFFFFF;
 }
 
+.dropdown-content .btn.loading {
+    background-color: #ae00ff;
+    color: #FFFFFF;
+}
+
 
 
 

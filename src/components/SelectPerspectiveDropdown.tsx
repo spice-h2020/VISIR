@@ -2,23 +2,16 @@ import React, { useState, useEffect } from "react";
 
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
+import { AllPerspectives, ButtonState } from "../constants/toolbarOptions"
 
-export interface AllPerspectives {
-    names: string[];
-}
-
-//Function to make sure the AllPerspective object received is valid
-export function isAllPerspectivesValid(arg: any): arg is AllPerspectives {
-    return arg && arg.names && typeof (arg.names) == "object" && arg.names[0] && typeof (arg.names[0]) == "string";
-}
 
 interface SelectPerspectiveProps {
     //On click handler
     onClick: (perspectiveKey: string) => any;
     //Object that contains the name of all perspectives availables
-    allPerspectives: AllPerspectives;
-    //Validity state of the allPerspective item, if its not valid, the dropdown will be disabled
-    isValid: boolean;
+    allPerspectives?: AllPerspectives;
+    //Map that contains the relation between the name of a perspective and their visual state.
+    itemsState: Map<string, ButtonState>;
 }
 
 /**
@@ -26,21 +19,17 @@ interface SelectPerspectiveProps {
  */
 export const SelectPerspectiveDropdown = ({
     onClick,
-    isValid,
     allPerspectives,
+    itemsState,
 }: SelectPerspectiveProps) => {
 
-    const [selectedItems, setSelectedItems] = useState<Array<boolean>>([]);
+    const [selectedItems, setSelectedItems] = useState(itemsState);
 
     useEffect(() => {
-        if (isValid) {
-            const newState = new Array<boolean>(allPerspectives.names.length);
-            newState.fill(false);
-            setSelectedItems(newState);
-        }
-    }, [allPerspectives]);
+        setSelectedItems(itemsState);
+    }, [itemsState]);
 
-    if (!isValid) {
+    if (allPerspectives === undefined) {
         return (
             <Dropdown
                 items={[]}
@@ -49,12 +38,8 @@ export const SelectPerspectiveDropdown = ({
             />
         );
     }
-    
-    function selectPerspective(perspectiveKey: string, buttonId: number) {
-        const newState = Object.assign(new Array(), selectedItems);
-        newState[buttonId] = !newState[buttonId];
 
-        setSelectedItems(newState);
+    function selectPerspective(perspectiveKey: string, buttonId: number) {
 
         onClick(perspectiveKey);
     }
@@ -64,7 +49,7 @@ export const SelectPerspectiveDropdown = ({
         perspectivesButtons.push(
             <Button
                 content={allPerspectives.names[i]}
-                state={selectedItems[i]}
+                state={selectedItems.get(allPerspectives.names[i])}
                 onClick={(buttonId: number) => {
                     selectPerspective(allPerspectives.names[i], buttonId);
                 }}

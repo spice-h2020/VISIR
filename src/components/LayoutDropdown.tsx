@@ -22,35 +22,35 @@ export const LayoutDropdown = () => {
         }
     }
 
-    const [selectedItems, setSelectedOptions] = useState<Array<boolean>>(initialState);
+    // const [selectedItems, setSelectedOptions] = useState<Array<boolean>>(initialState);
 
-    function changeLayout(key: Layouts) {
-        switch (key) {
-            case Layouts.Horizontal:
-                console.log("Change to Horizontal");
-                setSelectedOptions([true, false]);
-                break;
-            case Layouts.Vertical:
-                console.log("Change to Vertical");
-                setSelectedOptions([false, true]);
-                break;
-        }
-    }
-    const LayoutButtons = [
-        <Button
-            content="Horizontal"
-            onClick={() => { changeLayout(Layouts.Horizontal) }}
-            state={selectedItems[0]}
-        />,
-        <Button
-            content="Vertical"
-            onClick={() => { changeLayout(Layouts.Vertical) }}
-            state={selectedItems[1]}
-        />]
+    // function changeLayout(key: Layouts) {
+    //     switch (key) {
+    //         case Layouts.Horizontal:
+    //             console.log("Change to Horizontal");
+    //             setSelectedOptions([true, false]);
+    //             break;
+    //         case Layouts.Vertical:
+    //             console.log("Change to Vertical");
+    //             setSelectedOptions([false, true]);
+    //             break;
+    //     }
+    // }
+    // const LayoutButtons = [
+    //     <Button
+    //         content="Horizontal"
+    //         onClick={() => { changeLayout(Layouts.Horizontal) }}
+    //         state={selectedItems[0]}
+    //     />,
+    //     <Button
+    //         content="Vertical"
+    //         onClick={() => { changeLayout(Layouts.Vertical) }}
+    //         state={selectedItems[1]}
+    //     />]
 
     return (
         <Dropdown
-            items={LayoutButtons}
+            items={[]}
             content="Layout"
             extraClassName="dropdown-light"
         />

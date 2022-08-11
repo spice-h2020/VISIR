@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import '../style/button.css';
+import { ButtonState } from '../constants/toolbarOptions';
 
 interface ButtonProps {
   //Button contents.
   content?: React.ReactNode;
   //Current visual state of the button.
-  state?: boolean;
+  state?: ButtonState;
   //Auto toggle state.
   autoToggle?: boolean;
   //On click handler
@@ -21,26 +22,31 @@ interface ButtonProps {
  */
 export const Button = ({
   content = "Button",
-  state = false,
+  state = ButtonState.inactive,
   autoToggle = false,
   onClick = (): void => { },
   buttonId,
-  extraClassName,
+  extraClassName ="",
 }: ButtonProps) => {
 
-  const [buttonState, setButtonState] = useState<boolean>(state);
+  const [buttonState, setButtonState] = useState<ButtonState>(state);
 
   useEffect(() => {
     setButtonState(state);
   }, [state]);
 
   return (
-    <button type="button" className={buttonState ? `btn ${extraClassName} active` : `btn ${extraClassName}`}
+    <button type="button" className={buttonState === ButtonState.active ? `btn ${extraClassName} active` : buttonState === ButtonState.inactive ? `btn ${extraClassName}` : `btn ${extraClassName} loading`}
       onClick={(): void => {
         onClick(buttonId);
 
-        if (autoToggle)
-          setButtonState(!buttonState);
+        if (autoToggle) {
+          if (buttonState === ButtonState.inactive)
+            setButtonState(ButtonState.active);
+          else
+            setButtonState(ButtonState.inactive);
+        }
+
       }}
     >
       {content}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { Button } from "./Button";
+import { ButtonState } from '../constants/toolbarOptions';
 import '../style/Dropdown.css';
 
 interface DropdownProps {
@@ -18,7 +19,7 @@ interface DropdownProps {
 export const Dropdown = ({
     items = [],
     content = "Dropdown",
-    extraClassName,
+    extraClassName ="",
 
 }: DropdownProps) => {
 
@@ -36,7 +37,7 @@ export const Dropdown = ({
             >
                 <Button
                     content={content}
-                    state={showDropDown}
+                    state={showDropDown ? ButtonState.active : ButtonState.inactive}
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
@@ -54,7 +55,7 @@ export const Dropdown = ({
             <div className={`dropdown ${extraClassName} disabled`} ref={ref}>
                 <Button
                     content={content}
-                    state={false}
+                    state={ButtonState.inactive}
                 />
             </div >
         );
