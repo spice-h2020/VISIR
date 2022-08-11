@@ -10,10 +10,14 @@ import { OptionsDropdown } from './components/OptionsDropdown';
 
 import RequestManager from './managers/requestManager';
 import { FileSource, tbOptions, AllPerspectives, isAllPerspectivesValid, ButtonState } from './constants/toolbarOptions';
+import { Layouts } from './constants/perspectivesTypes';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
+import { PerspectivesGroups } from './components/PerspectivesGroup';
+import LayoutManager from './managers/layoutManager';
 
 
 const requestManager = new RequestManager();
+const layoutManager = new LayoutManager();
 
 function App() {
 
@@ -21,8 +25,11 @@ function App() {
   const [availablePerspectives, setAvailablePerspectives] = useState<AllPerspectives>();
   const [fileSource, setFileSource] = useState<FileSource>(tbOptions.initialFileSource);
 
+  const [layout, setLayout] = useState<Layouts>(tbOptions.initialLayout);
+
   const perspectiveSelected = (perspectiveKey: string) => {
     const state = perspectivesState.get(perspectiveKey);
+
     if (state === ButtonState.inactive) {
 
       setPerspectivesState(new Map(perspectivesState.set(perspectiveKey, ButtonState.loading)));
@@ -30,6 +37,13 @@ function App() {
       requestManager.getPerspective(`${perspectiveKey}.json`)
         .then((response) => {
           if (response.status === 200) {
+
+
+            ///TODO: Validate that response.data has the correct format of a perspective
+
+
+            layoutManager.addPerspective(perspectiveKey, response.data);
+
             setPerspectivesState(new Map(perspectivesState.set(perspectiveKey, ButtonState.active)));
 
           } else {
@@ -43,6 +57,7 @@ function App() {
         });
 
     } else if (state === ButtonState.active) {
+      layoutManager.removePerspective(perspectiveKey);
       setPerspectivesState(new Map(perspectivesState.set(perspectiveKey, ButtonState.inactive)));
     }
   }
@@ -50,7 +65,8 @@ function App() {
   //Update all available perspectives when the source file changes
   useEffect(() => {
     requestManager.changeBaseURL(fileSource);
-
+    layoutManager.clearPerspectives();
+    
     requestManager.getAllPerspectives()
       .then((response) => {
         if (response.status === 200) {
@@ -81,6 +97,19 @@ function App() {
       });
   }, [fileSource])
 
+  useEffect(() => {
+    layoutManager.clearPerspectives();
+
+    //Clear active buttons
+    const newPerspectivesState = new Map<string, ButtonState>();
+    perspectivesState.forEach((value: ButtonState, key: string) => {
+      newPerspectivesState.set(key, ButtonState.inactive);
+    });
+    setPerspectivesState(newPerspectivesState);
+
+
+  }, [layout])
+
 
   return (
     <div>
@@ -94,7 +123,9 @@ function App() {
           <FileSourceDropdown
             onClick={setFileSource}
           />,
-          <LayoutDropdown />,
+          <LayoutDropdown
+            onClick={setLayout}
+          />,
           <OptionsDropdown />,
         ]}
         midAlignedItems={[
@@ -112,7 +143,10 @@ function App() {
         ]}
       />
       <h1> Communities Visualization</h1>
-
+      <PerspectivesGroups
+        perspectivePairs={layoutManager.activePerspectivePairs}
+        layout={layout}
+      />
     </div>
   );
 }

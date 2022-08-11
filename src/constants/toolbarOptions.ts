@@ -1,3 +1,5 @@
+import {Layouts} from "./perspectivesTypes"
+
 export enum FileSource {
     Main,       //Main SPICE_visualization repository
     Local,      //Using local data folder
@@ -13,7 +15,7 @@ export enum ButtonState {
 
 export const tbOptions = {
     initialFileSource: FileSource.Local,
-
+    initialLayout: Layouts.Horizontal,
 }
 
 export interface AllPerspectives {
