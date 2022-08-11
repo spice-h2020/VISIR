@@ -4,3 +4,25 @@ body {
     overflow-y: scroll;
     margin: auto;
 }
+
+.pairNetwork{
+    
+}
+
+.pairNetwork.Horizontal {
+    display: flex;
+    margin-bottom: 1%;
+}
+
+.pairNetwork.Horizontal>* {
+    width: 50%;
+    height: 40em;
+    border-style: dotted;
+}
+
+
+.pairNetwork.Vertical>* {
+    height: 30em;
+    border-style: dotted;
+    margin-bottom: 1%;
+}

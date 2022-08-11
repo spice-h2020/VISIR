@@ -4,19 +4,20 @@ import { PerspectiveView } from "./perspectiveView";
 import { Layouts } from "../constants/perspectivesTypes"
 
 interface PerspectivesGroupProps {
+    //Pairs of networks that wil be active and interactuable
     perspectivePairs: PerspectivePair[],
-    layout?: Layouts,
+    //Type of the layout of the pair networks
+    layout: Layouts,
 }
 
 /**
- * Dropdown component that holds the options to change the source of perspective files in the visualization tool
+ * Container that draw each active perspective
  */
 export const PerspectivesGroups = ({
     perspectivePairs,
     layout,
 }: PerspectivesGroupProps) => {
 
-    console.log("perspective group render")
     const [pairs, setPairs] = useState<PerspectivePair[]>(perspectivePairs);
 
     useEffect(() => {
@@ -41,7 +42,7 @@ export const PerspectivesGroups = ({
                 break;
             case 2:
                 perspectivesComponents.push(
-                    <div className="pairNetwork">
+                    <div className={`pairNetwork ${Layouts[layout]}`}>
                         <PerspectiveView
                             content={pairs[i].perspectives[0]?.key}
                         />

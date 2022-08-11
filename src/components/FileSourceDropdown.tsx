@@ -44,21 +44,25 @@ export const FileSourceDropdown = ({
             content="Github Main"
             onClick={() => { changeFileSource(FileSource.Main) }}
             state={selectedItems[0]}
+            key={0}
         />,
         <Button
             content="Local"
             onClick={() => { changeFileSource(FileSource.Local) }}
             state={selectedItems[1]}
+            key={1}
         />,
         <Button
             content="Github Develop"
             onClick={() => { changeFileSource(FileSource.Develop) }}
             state={selectedItems[2]}
+            key={2}
         />,
         <Button
             content="Use the API (WIP)"
             onClick={() => { changeFileSource(FileSource.Api) }}
             state={selectedItems[3]}
+            key={3}
         />]
 
     return (

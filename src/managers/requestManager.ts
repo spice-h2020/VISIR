@@ -13,6 +13,7 @@ export default class RequestManager {
     isActive: boolean;
     axios: Axios;
     keyToUrl: any;
+    
     /**
      * Constructor of the class
      */

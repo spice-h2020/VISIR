@@ -1,5 +1,5 @@
-//WIP component
-import React, { useState, useEffect } from "react";
+
+import { useState } from "react";
 
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
@@ -19,6 +19,9 @@ const init = () => {
 }
 init();
 
+/**
+ * Dropdown component that holds the options to change the visual layout of the perspectives
+ */
 export const LayoutDropdown = ({
     onClick,
 }: LayoutDropdownProps) => {

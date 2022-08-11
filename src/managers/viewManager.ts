@@ -1,21 +1,18 @@
 /**
- * @fileoverview This class Controls all GET petitions to obtain the json files with the networks data.
- * @package Requires Axios package to be able to send the GET petitions.  
+ * @fileoverview This class manages the active viewable perspectives. It works with pair perspectives so when any pair of perspectives are actives, u can see both and compare them
  * @author Marco Expósito Pérez
  */
 
 //Packages
 import { PerspectivePair, PerspectiveData } from "../constants/perspectivesTypes";
 
-export default class LayoutManager {
+export default class ViewManager {
 
     activePerspectivePairs: PerspectivePair[];
 
     constructor() {
         this.activePerspectivePairs = new Array<PerspectivePair>();
     }
-
-
 
     addPerspective(perspectiveKey: string, perspectiveData: string) {
         const newPerspectiveData = new PerspectiveData(perspectiveKey, perspectiveData);
@@ -34,7 +31,6 @@ export default class LayoutManager {
         }
     }
 
-
     removePerspective(perspectiveKey: string) {
         for (let i = 0; i < this.activePerspectivePairs.length; i++) {
             this.activePerspectivePairs[i].removePerspective(perspectiveKey);
@@ -42,7 +38,6 @@ export default class LayoutManager {
     }
 
     clearPerspectives() {
-        console.log("a")
         this.activePerspectivePairs = new Array<PerspectivePair>(); 
     }
 }

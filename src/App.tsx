@@ -13,11 +13,11 @@ import { FileSource, tbOptions, AllPerspectives, isAllPerspectivesValid, ButtonS
 import { Layouts } from './constants/perspectivesTypes';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
-import LayoutManager from './managers/layoutManager';
+import ViewManager from './managers/viewManager';
 
 
 const requestManager = new RequestManager();
-const layoutManager = new LayoutManager();
+const layoutManager = new ViewManager();
 
 function App() {
 
@@ -66,7 +66,7 @@ function App() {
   useEffect(() => {
     requestManager.changeBaseURL(fileSource);
     layoutManager.clearPerspectives();
-    
+
     requestManager.getAllPerspectives()
       .then((response) => {
         if (response.status === 200) {
@@ -96,20 +96,6 @@ function App() {
         alert(error.message);
       });
   }, [fileSource])
-
-  useEffect(() => {
-    layoutManager.clearPerspectives();
-
-    //Clear active buttons
-    const newPerspectivesState = new Map<string, ButtonState>();
-    perspectivesState.forEach((value: ButtonState, key: string) => {
-      newPerspectivesState.set(key, ButtonState.inactive);
-    });
-    setPerspectivesState(newPerspectivesState);
-
-
-  }, [layout])
-
 
   return (
     <div>
