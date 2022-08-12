@@ -4,8 +4,8 @@
  */
 
 //Packages
-import { PerspectivePair, PerspectiveData, PerspectiveNetworkData } from "../constants/perspectivesTypes";
-import { PerspectiveInfo } from "../constants/perspectiveValidation";
+import { PerspectivePair, PerspectiveData, PerspectiveNetworkData, PerspectiveInfo } from "../constants/perspectivesTypes";
+
 export default class ViewDataManager {
 
     activePerspectivePairs: PerspectivePair[];

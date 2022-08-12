@@ -1,10 +1,4 @@
-import { PerspectiveInfo } from "./perspectiveValidation";
-
-export enum Layouts {
-    Horizontal,
-    Vertical,
-}
-
+//Class that contains all posible info of a perspective
 export class PerspectiveData {
     info: PerspectiveInfo;
     data: PerspectiveNetworkData;
@@ -12,16 +6,54 @@ export class PerspectiveData {
     constructor(info: PerspectiveInfo, data: PerspectiveNetworkData) { this.info = info; this.data = data }
 }
 
-export interface PerspectiveNetworkData {
-    communities: string;
-    users: dataNode[];
-    similarity: string;
+//Data interfaces that containts the info of all perspectives together
+export interface AllPerspectives {
+    files: PerspectiveInfo[];
 }
 
-export interface dataNode {
-    id: string;
+export interface PerspectiveInfo {
+    id: number;
+    name: string;
+    algorithm: PerspectiveAlgorithm;
+    similarity_functions: SimFunction[];
+}
+
+export interface PerspectiveAlgorithm {
+    name: string;
+    params: any[];
+}
+
+export interface SimFunction {
+    name: string;
+    params: any[];
+    onAttribute: OnAttribute[];
+    weight: number;
+}
+
+export interface OnAttribute {
+    name: string;
+    type: string;
+}
+
+//Data interfaces that containts the data of a perspective used to draw the network
+export interface PerspectiveNetworkData {
+    communities: CommunityData[];
+    users: UserData[];
+    similarity: EdgeData[];
+}
+
+export interface CommunityData {
+    id: number;
+    community_type: string;
+    name: string;
+    explanation: string;
+    users: number[];
+}
+
+export interface UserData {
+    id: number;
     label: string;
-    group: string;
+    group: number;
     explicit_community: explicitCommunity[];
 }
 
@@ -30,6 +62,13 @@ export interface explicitCommunity {
     value: string;
 }
 
+export interface EdgeData {
+    u1: string;
+    u2: string;
+    value: number;
+}
+
+//Class that contains All the info about 2 diferent perspectives in order to draw the view layout in pairs of networks for easy comparison
 export class PerspectivePair {
     perspectives: (PerspectiveData | undefined)[];
     pairID: number;
@@ -89,3 +128,8 @@ export class PerspectivePair {
     }
 }
 
+//Possible layouts of the network
+export enum Layouts {
+    Horizontal,
+    Vertical,
+}

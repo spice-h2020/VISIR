@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import { ButtonState } from "../constants/toolbarOptions"
-import { AllPerspectives } from '../constants/perspectiveValidation';
+import { AllPerspectives } from '../constants/perspectivesTypes';
 
 interface SelectPerspectiveProps {
     //On click handler

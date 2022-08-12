@@ -10,11 +10,11 @@ import { OptionsDropdown } from './components/OptionsDropdown';
 
 import RequestManager from './managers/requestManager';
 import { FileSource, tbOptions, ButtonState, ViewOptions } from './constants/toolbarOptions';
-import { Layouts } from './constants/perspectivesTypes';
+import { Layouts, AllPerspectives, PerspectiveInfo } from './constants/perspectivesTypes';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
-import { AllPerspectives, PerspectiveInfo, validateAllPerspectivesFile } from './constants/perspectiveValidation';
+import {validateAllPerspectivesJSON, validatePerspectiveJSON } from './constants/perspectiveValidation';
 
 const requestManager = new RequestManager();
 const viewDataManager = new ViewDataManager();
@@ -66,14 +66,11 @@ function App() {
         .then((response) => {
           if (response.status === 200) {
 
-            const perspectiveFile = JSON.parse(response.data);
-
-            ///TODO: Validate that response.data has the correct format of a perspective
-
+            const perspectiveJson = validatePerspectiveJSON(JSON.parse(response.data));
             const perspectiveInfo = availablePerspectives?.files.find((element: PerspectiveInfo) => { return element.id === perspectiveId })
 
             if (perspectiveInfo) {
-              viewDataManager.addPerspective(perspectiveInfo, response.data);
+              viewDataManager.addPerspective(perspectiveInfo, perspectiveJson);
               setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.active)));
             }
             else
@@ -87,6 +84,7 @@ function App() {
         })
         .catch((error) => {
           setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.inactive)));
+
           console.log(error);
           alert(error.message);
         });
@@ -106,7 +104,7 @@ function App() {
       .then((response) => {
         if (response.status === 200) {
 
-          const allPerspectivesFile = validateAllPerspectivesFile(JSON.parse(response.data));
+          const allPerspectivesFile = validateAllPerspectivesJSON(JSON.parse(response.data));
 
           const newPerspectivesState = new Map<number, ButtonState>();
           for (let i = 0; i < allPerspectivesFile.files.length; i++) {
