@@ -5,8 +5,12 @@ body {
     margin: auto;
 }
 
-.pairNetwork{
-    
+h1{
+    text-align: center;
+}
+
+.row{
+    display: flex;
 }
 
 .pairNetwork.Horizontal {
@@ -17,12 +21,11 @@ body {
 .pairNetwork.Horizontal>* {
     width: 50%;
     height: 40em;
-    border-style: dotted;
+    border-style: dashed;
 }
-
 
 .pairNetwork.Vertical>* {
     height: 30em;
-    border-style: dotted;
+    border-style: dashed;
     margin-bottom: 1%;
 }

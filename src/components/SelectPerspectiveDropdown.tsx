@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
-import { AllPerspectives, ButtonState } from "../constants/toolbarOptions"
-
+import { ButtonState } from "../constants/toolbarOptions"
+import { AllPerspectives } from '../constants/perspectiveValidation';
 
 interface SelectPerspectiveProps {
     //On click handler
-    onClick: (perspectiveKey: string) => any;
+    onClick: (perspectiveId: number) => any;
     //Object that contains the name of all perspectives availables
     allPerspectives?: AllPerspectives;
     //Map that contains the relation between the name of a perspective and their visual state.
-    itemsState: Map<string, ButtonState>;
+    itemsState: Map<number, ButtonState>;
 }
 
 /**
@@ -39,21 +39,19 @@ export const SelectPerspectiveDropdown = ({
         );
     }
 
-    function selectPerspective(perspectiveKey: string, buttonId: number) {
-
-        onClick(perspectiveKey);
+    function selectPerspective(perspectiveId: number) {
+        onClick(perspectiveId);
     }
 
     const perspectivesButtons = new Array<React.ReactNode>();
-    for (let i = 0; i < allPerspectives.names.length; i++) {
+    for (let i = 0; i < allPerspectives.files.length; i++) {
         perspectivesButtons.push(
             <Button
-                content={allPerspectives.names[i]}
-                state={selectedItems.get(allPerspectives.names[i])}
-                onClick={(buttonId: number) => {
-                    selectPerspective(allPerspectives.names[i], buttonId);
+                content={allPerspectives.files[i].name}
+                state={selectedItems.get(allPerspectives.files[i].id)}
+                onClick={() => {
+                    selectPerspective(allPerspectives.files[i].id);
                 }}
-                buttonId={i}
             />
         )
     }

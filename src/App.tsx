@@ -9,82 +9,112 @@ import { LayoutDropdown } from './components/LayoutDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
 
 import RequestManager from './managers/requestManager';
-import { FileSource, tbOptions, AllPerspectives, isAllPerspectivesValid, ButtonState } from './constants/toolbarOptions';
+import { FileSource, tbOptions, ButtonState, ViewOptions } from './constants/toolbarOptions';
 import { Layouts } from './constants/perspectivesTypes';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
-import ViewManager from './managers/viewManager';
-
+import ViewDataManager from './managers/viewDataManager';
+import { AllPerspectives, PerspectiveInfo, validateAllPerspectivesFile } from './constants/perspectiveValidation';
 
 const requestManager = new RequestManager();
-const layoutManager = new ViewManager();
+const viewDataManager = new ViewDataManager();
 
 function App() {
 
-  const [perspectivesState, setPerspectivesState] = useState(new Map<string, ButtonState>());
+  const [perspectivesState, setPerspectivesState] = useState(new Map<number, ButtonState>());
   const [availablePerspectives, setAvailablePerspectives] = useState<AllPerspectives>();
   const [fileSource, setFileSource] = useState<FileSource>(tbOptions.initialFileSource);
-
+  const [viewOptions, setViewOptions] = useState<ViewOptions>(new ViewOptions());
   const [layout, setLayout] = useState<Layouts>(tbOptions.initialLayout);
 
-  const perspectiveSelected = (perspectiveKey: string) => {
-    const state = perspectivesState.get(perspectiveKey);
+  const onHideLabels = (newValue: boolean) => {
+    const newViewOptions = Object.assign({}, viewOptions);
+    newViewOptions.HideLabels = newValue;
+    setViewOptions(newViewOptions);
+    return true;
+  }
+
+  const onHideEdges = (newValue: boolean) => {
+    const newViewOptions = Object.assign({}, viewOptions);
+    newViewOptions.HideEdges = newValue;
+    setViewOptions(newViewOptions);
+    return true;
+  }
+
+  const onEdgeWidth = (newValue: boolean) => {
+    const newViewOptions = Object.assign({}, viewOptions);
+    newViewOptions.EdgeWidth = newValue;
+    setViewOptions(newViewOptions);
+    return true;
+  }
+
+  const onBorder = (newValue: boolean) => {
+    const newViewOptions = Object.assign({}, viewOptions);
+    newViewOptions.Border = newValue;
+    setViewOptions(newViewOptions);
+    return true;
+  }
+
+  const perspectiveSelected = (perspectiveId: number) => {
+    const state = perspectivesState.get(perspectiveId);
 
     if (state === ButtonState.inactive) {
 
-      setPerspectivesState(new Map(perspectivesState.set(perspectiveKey, ButtonState.loading)));
+      setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.loading)));
 
-      requestManager.getPerspective(`${perspectiveKey}.json`)
+      requestManager.getPerspective(`${perspectiveId}.json`)
         .then((response) => {
           if (response.status === 200) {
 
+            const perspectiveFile = JSON.parse(response.data);
 
             ///TODO: Validate that response.data has the correct format of a perspective
 
+            const perspectiveInfo = availablePerspectives?.files.find((element: PerspectiveInfo) => { return element.id === perspectiveId })
 
-            layoutManager.addPerspective(perspectiveKey, response.data);
+            if (perspectiveInfo) {
+              viewDataManager.addPerspective(perspectiveInfo, response.data);
+              setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.active)));
+            }
+            else
+              throw new Error(`Perspective info of perspective: ${perspectiveId} was not found`);
 
-            setPerspectivesState(new Map(perspectivesState.set(perspectiveKey, ButtonState.active)));
+
 
           } else {
-            throw new Error(`Perspective ${perspectiveKey} was ${response.statusText}`);
+            throw new Error(`Perspective ${perspectiveId} was ${response.statusText}`);
           }
         })
         .catch((error) => {
-          setPerspectivesState(new Map(perspectivesState.set(perspectiveKey, ButtonState.inactive)));
+          setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.inactive)));
           console.log(error);
           alert(error.message);
         });
 
     } else if (state === ButtonState.active) {
-      layoutManager.removePerspective(perspectiveKey);
-      setPerspectivesState(new Map(perspectivesState.set(perspectiveKey, ButtonState.inactive)));
+      viewDataManager.removePerspective(perspectiveId);
+      setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.inactive)));
     }
   }
 
   //Update all available perspectives when the source file changes
   useEffect(() => {
     requestManager.changeBaseURL(fileSource);
-    layoutManager.clearPerspectives();
+    viewDataManager.clearPerspectives();
 
     requestManager.getAllPerspectives()
       .then((response) => {
         if (response.status === 200) {
-          const allPerspectivesFile = JSON.parse(response.data);
 
-          if (isAllPerspectivesValid(allPerspectivesFile)) {
+          const allPerspectivesFile = validateAllPerspectivesFile(JSON.parse(response.data));
 
-            const newPerspectivesState = new Map<string, ButtonState>();
-            for (let i = 0; i < allPerspectivesFile.names.length; i++) {
-              newPerspectivesState.set(allPerspectivesFile.names[i], ButtonState.inactive);
-            }
-
-            setPerspectivesState(newPerspectivesState);
-            setAvailablePerspectives(allPerspectivesFile);
-
-          } else {
-            throw new Error(`The format of all perspectives is incorrect`);
+          const newPerspectivesState = new Map<number, ButtonState>();
+          for (let i = 0; i < allPerspectivesFile.files.length; i++) {
+            newPerspectivesState.set(allPerspectivesFile.files[i].id, ButtonState.inactive);
           }
+
+          setPerspectivesState(newPerspectivesState);
+          setAvailablePerspectives(allPerspectivesFile);
 
         } else {
           throw new Error(`All perspectives info was ${response.statusText}`);
@@ -112,7 +142,12 @@ function App() {
           <LayoutDropdown
             onClick={setLayout}
           />,
-          <OptionsDropdown />,
+          <OptionsDropdown
+            onHideLabels={onHideLabels}
+            onHideEdges={onHideEdges}
+            onEdgeWidth={onEdgeWidth}
+            onBorder={onBorder}
+          />,
         ]}
         midAlignedItems={[
           <SelectPerspectiveDropdown
@@ -130,8 +165,9 @@ function App() {
       />
       <h1> Communities Visualization</h1>
       <PerspectivesGroups
-        perspectivePairs={layoutManager.activePerspectivePairs}
+        perspectivePairs={viewDataManager.activePerspectivePairs}
         layout={layout}
+        viewOptions={viewOptions}
       />
     </div>
   );

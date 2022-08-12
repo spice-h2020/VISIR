@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { PerspectivePair, PerspectiveData } from "../constants/perspectivesTypes";
-import { PerspectiveView } from "./perspectiveView";
+import { PerspectiveView } from "./PerspectiveView";
+
 import { Layouts } from "../constants/perspectivesTypes"
+import { ViewOptions } from '../constants/toolbarOptions';
 
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable
     perspectivePairs: PerspectivePair[],
     //Type of the layout of the pair networks
     layout: Layouts,
+    //View options for all networks
+    viewOptions: ViewOptions,
 }
 
 /**
@@ -16,9 +20,12 @@ interface PerspectivesGroupProps {
 export const PerspectivesGroups = ({
     perspectivePairs,
     layout,
+    viewOptions,
 }: PerspectivesGroupProps) => {
 
     const [pairs, setPairs] = useState<PerspectivePair[]>(perspectivePairs);
+    const [selectedNode, setSelectedNode] = useState<number>();
+
 
     useEffect(() => {
         setPairs(perspectivePairs);
@@ -35,7 +42,10 @@ export const PerspectivesGroups = ({
                 perspectivesComponents.push(
                     <div className="singleNetwork">
                         <PerspectiveView
-                            content={perspective?.key}
+                            perspectiveInfo={perspective}
+                            viewOptions={viewOptions}
+                            selectedNode={selectedNode}
+                            setSelectedNode={setSelectedNode}
                         />
                     </div>
                 )
@@ -44,10 +54,18 @@ export const PerspectivesGroups = ({
                 perspectivesComponents.push(
                     <div className={`pairNetwork ${Layouts[layout]}`}>
                         <PerspectiveView
-                            content={pairs[i].perspectives[0]?.key}
+                            perspectiveInfo={pairs[i].perspectives[0]}
+                            viewOptions={viewOptions}
+                            isFirstPerspective={true}
+                            selectedNode={selectedNode}
+                            setSelectedNode={setSelectedNode}
                         />
                         <PerspectiveView
-                            content={pairs[i].perspectives[1]?.key}
+                            perspectiveInfo={pairs[i].perspectives[1]}
+                            viewOptions={viewOptions}
+                            isFirstPerspective={false}
+                            selectedNode={selectedNode}
+                            setSelectedNode={setSelectedNode}
                         />
                     </div>
                 )

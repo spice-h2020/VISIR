@@ -1,13 +1,33 @@
+import { PerspectiveInfo } from "./perspectiveValidation";
+
 export enum Layouts {
     Horizontal,
     Vertical,
 }
 
 export class PerspectiveData {
-    key: string;
-    data: string;
+    info: PerspectiveInfo;
+    data: PerspectiveNetworkData;
 
-    constructor(key: string, data: string) { this.key = key; this.data = data }
+    constructor(info: PerspectiveInfo, data: PerspectiveNetworkData) { this.info = info; this.data = data }
+}
+
+export interface PerspectiveNetworkData {
+    communities: string;
+    users: dataNode[];
+    similarity: string;
+}
+
+export interface dataNode {
+    id: string;
+    label: string;
+    group: string;
+    explicit_community: explicitCommunity[];
+}
+
+export interface explicitCommunity {
+    key: string;
+    value: string;
 }
 
 export class PerspectivePair {
@@ -31,9 +51,9 @@ export class PerspectivePair {
         }
     }
 
-    removePerspective(perspectiveKey: string) {
+    removePerspective(perspectiveId: number) {
         for (let i = 0; i < this.perspectives.length; i++) {
-            if (this.perspectives[i]?.key === perspectiveKey) {
+            if (this.perspectives[i]?.info.id === perspectiveId) {
                 this.perspectives[i] = undefined;
                 this.spacesAvailables[i] = true;
                 break;
@@ -68,3 +88,4 @@ export class PerspectivePair {
         }
     }
 }
+

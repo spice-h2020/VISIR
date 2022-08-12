@@ -46,6 +46,7 @@ export default class RequestManager {
      * @returns {Object} Returns the file
      */
     getPerspective(name: string) {
+
         return this.axios.get(name, {
             params: {}
         })

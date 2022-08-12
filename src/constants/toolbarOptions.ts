@@ -1,4 +1,4 @@
-import {Layouts} from "./perspectivesTypes"
+import { Layouts } from "./perspectivesTypes"
 
 export enum FileSource {
     Main,       //Main SPICE_visualization repository
@@ -16,13 +16,22 @@ export enum ButtonState {
 export const tbOptions = {
     initialFileSource: FileSource.Local,
     initialLayout: Layouts.Horizontal,
+    initialHideLabels: ButtonState.active,
+    initialHideEdges: ButtonState.inactive,
+    initialEdgeWidth: ButtonState.inactive,
+    initialBorder: ButtonState.inactive,
 }
 
-export interface AllPerspectives {
-    names: string[];
-}
+export class ViewOptions {
+    HideLabels: boolean;
+    HideEdges: boolean;
+    EdgeWidth: boolean;
+    Border: boolean;
 
-//Function to make sure the AllPerspective object received is valid
-export function isAllPerspectivesValid(arg: any): arg is AllPerspectives {
-    return arg && arg.names && typeof (arg.names) == "object" && arg.names[0] && typeof (arg.names[0]) == "string";
+    constructor() {
+        this.HideLabels = tbOptions.initialHideLabels === ButtonState.active;
+        this.HideEdges = tbOptions.initialHideEdges === ButtonState.active;
+        this.EdgeWidth = tbOptions.initialEdgeWidth === ButtonState.active;
+        this.Border = tbOptions.initialBorder === ButtonState.active;
+    }
 }

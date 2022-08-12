@@ -4,9 +4,9 @@
  */
 
 //Packages
-import { PerspectivePair, PerspectiveData } from "../constants/perspectivesTypes";
-
-export default class ViewManager {
+import { PerspectivePair, PerspectiveData, PerspectiveNetworkData } from "../constants/perspectivesTypes";
+import { PerspectiveInfo } from "../constants/perspectiveValidation";
+export default class ViewDataManager {
 
     activePerspectivePairs: PerspectivePair[];
 
@@ -14,8 +14,9 @@ export default class ViewManager {
         this.activePerspectivePairs = new Array<PerspectivePair>();
     }
 
-    addPerspective(perspectiveKey: string, perspectiveData: string) {
-        const newPerspectiveData = new PerspectiveData(perspectiveKey, perspectiveData);
+    addPerspective(perspectiveInfo: PerspectiveInfo, perspectiveData: PerspectiveNetworkData) {
+
+        const newPerspectiveData = new PerspectiveData(perspectiveInfo, perspectiveData);
         let isInserted = false;
 
         for (let i = 0; i < this.activePerspectivePairs.length; i++) {
@@ -31,9 +32,9 @@ export default class ViewManager {
         }
     }
 
-    removePerspective(perspectiveKey: string) {
+    removePerspective(perspectiveId: number) {
         for (let i = 0; i < this.activePerspectivePairs.length; i++) {
-            this.activePerspectivePairs[i].removePerspective(perspectiveKey);
+            this.activePerspectivePairs[i].removePerspective(perspectiveId);
         }
     }
 
