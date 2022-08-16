@@ -28,7 +28,12 @@ export const PerspectivesGroups = ({
 
 
     useEffect(() => {
+        console.log(perspectivePairs)
         setPairs(perspectivePairs);
+
+        if(perspectivePairs.length === 0){
+            setSelectedNode(undefined);
+        }
     }, [perspectivePairs]);
 
     const perspectivesComponents = new Array();

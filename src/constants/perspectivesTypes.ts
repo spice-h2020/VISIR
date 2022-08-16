@@ -53,13 +53,13 @@ export interface CommunityData {
 export interface UserData {
     id: number;
     label: string;
-    group: number;
+    implicit_community: number;
     explicit_community: any;
 }
 
 export interface EdgeData {
-    u1: string;
-    u2: string;
+    from: string;
+    to: string;
     value: number;
 }
 

@@ -29,6 +29,7 @@ h1 {
 }
 
 .pairNetwork.Horizontal>* {
+    height: 100%;
     width: 50%;
     height: var(--horizontal-height);
 }

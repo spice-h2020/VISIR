@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import { Network } from "vis-network";
+import { DataSet } from "vis-data";
+import { Data, Network, Node, Edge } from "vis-network";
 import { ButtonState, ViewOptions } from '../constants/toolbarOptions';
 import { Layouts, PerspectiveData } from '../constants/perspectivesTypes';
 import { DataColumn } from "./DataColumn";
@@ -20,6 +21,24 @@ interface PerspectiveViewProps {
     setSelectedNode: Function;
 }
 
+const options = {
+    autoResize: true,
+    groups: {
+        useDefaultGroups: false
+    },
+    physics: {
+        enabled: false,
+    },
+    interaction: {
+        zoomView: true,
+        dragView: true,
+        hover: false,
+        hoverConnectedEdges: false,
+    },
+    layout: {
+        improvedLayout: false,
+    }
+};
 /**
  * Basic UI component that execute a function when clicked
  */
@@ -32,35 +51,48 @@ export const PerspectiveView = ({
     setSelectedNode,
 }: PerspectiveViewProps) => {
 
+    const [info, setInfo] = useState<PerspectiveData | undefined>(perspectiveInfo); 
+
+    useEffect(() => {
+        setInfo(perspectiveInfo);
+    }, [perspectiveInfo]);
+
     //TODO enlazar el nodo/comunidad de la dataCol con el selectedNode/selectedCommunity
-    const dataCol = <DataColumn
-        tittle={perspectiveInfo?.info.name}
-        node={perspectiveInfo?.data.users[0]}
-        community={perspectiveInfo?.data.communities[0]}
-    />
 
-    const nodes = [
-        { id: 1, label: "Node 1" },
-        { id: 2, label: "Node 2" },
-        { id: 3, label: "Node 3" },
-        { id: 4, label: "Node 4" },
-        { id: 5, label: "Node 5" },
-    ];
 
-    const edges = [
-        { from: 1, to: 3 },
-        { from: 1, to: 2 },
-        { from: 2, to: 4 },
-        { from: 2, to: 5 },
-        { from: 3, to: 3 },
-    ];
+    const nodes = new DataSet(info?.data.users as Node[]);
+    const edges = new DataSet(info?.data.similarity as Edge[]);
+
+
+    const data = {
+        nodes,
+        edges
+    };
+
     const visJsRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         const network =
             visJsRef.current &&
-            new Network(visJsRef.current, { nodes, edges }, {});
+            new Network(visJsRef.current, data as Data, options);
+
+        network?.on("click", (event) => {
+
+            if (event.nodes.length > 0) {
+                const node = nodes.get(event.nodes[0]);
+                //TODO evitar hacer esto con los nodos
+                (node as any)["color"] = { background: "black" }
+                data.nodes.update(node);
+                setSelectedNode(node);
+            }
+        });
 
     }, [visJsRef, nodes, edges]);
+
+    const dataCol = <DataColumn
+        tittle={info?.info.name}
+        node={selectedNode}
+        community={info?.data.communities[0]}
+    />
 
     if (isFirstPerspective || layout === Layouts.Vertical) {
         return (

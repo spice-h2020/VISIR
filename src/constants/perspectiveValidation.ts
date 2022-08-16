@@ -360,7 +360,6 @@ function isUserDataValid(arg: any): types.UserData {
         }
 
         if (arg.group === undefined) {
-            console.log(arg);
             throw Error(`Group of the user (${arg.id}) is undefined`);
         }
 
@@ -370,6 +369,9 @@ function isUserDataValid(arg: any): types.UserData {
             if (arg.group === NaN)
                 throw Error(`Group of the user (${arg.id}) is not a number`);
         }
+
+        arg.implicit_community = arg.group;
+        delete arg.group;
 
         if (arg.explicit_community === undefined) {
             throw Error(`Explicit community of the user (${arg.id}) is undefined`);
@@ -394,9 +396,9 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
         }
 
         if (typeof (arg.value) !== "number") {
-            arg.id = Number(arg.id);
+            arg.value = Number(arg.ivalued);
 
-            if (arg.id === NaN)
+            if (arg.value === NaN)
                 throw Error(`Value is not a number`);
         }
 
@@ -412,6 +414,9 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
             }
         }
 
+        arg.from = arg.u1;
+        delete arg.u1;
+
         if (arg.u2 === undefined) {
             throw Error(`U2 of the edge with value (${arg.value}) is undefined`);
         }
@@ -422,7 +427,10 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
             } catch (e: any) {
                 throw Error(`U2 of the edge with value (${arg.value}) is not a string`);
             }
-        }
+        }  
+
+        arg.to = arg.u2;
+        delete arg.u2;
 
         return arg;
 

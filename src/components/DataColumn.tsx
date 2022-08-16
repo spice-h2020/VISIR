@@ -35,22 +35,19 @@ export const DataColumn = ({
 
     useEffect(() => {
         const newNodeData = new DatatableData();
-        if (node !== undefined) {
-            newNodeData.mainRows.push(new DataRow("Id", node.id))
-            newNodeData.mainRows.push(new DataRow("Label", node.label))
-            newNodeData.mainRows.push(new DataRow("Group", node.group))
 
+        newNodeData.mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""))
+        newNodeData.mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""))
+        newNodeData.mainRows.push(new DataRow("Implicit_community", node !== undefined ? node.implicit_community : ""))
+
+        if (node !== undefined) {
             const keys = Object.keys(node.explicit_community);
 
             for (let i = 0; i < keys.length; i++) {
                 newNodeData.subRows.push(new DataRow(keys[i], node.explicit_community[keys[i]]));
             }
-        } else {
-            newNodeData.mainRows.push(new DataRow("Id", ""))
-            newNodeData.mainRows.push(new DataRow("Label", ""))
-            newNodeData.mainRows.push(new DataRow("Group", ""))
         }
-
+        
         setNodeInfo(newNodeData);
     }, [node]);
 
