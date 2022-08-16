@@ -54,12 +54,7 @@ export interface UserData {
     id: number;
     label: string;
     group: number;
-    explicit_community: explicitCommunity[];
-}
-
-export interface explicitCommunity {
-    key: string;
-    value: string;
+    explicit_community: any;
 }
 
 export interface EdgeData {

@@ -84,7 +84,7 @@
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
-    position: absolute;
+    position: fixed;
     z-index: 10;
     padding: 0.5rem 0;
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import '../style/button.css';
+import '../style/Button.css';
 import { ButtonState } from '../constants/toolbarOptions';
 
 interface ButtonProps {

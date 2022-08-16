@@ -44,6 +44,7 @@ export const PerspectivesGroups = ({
                         <PerspectiveView
                             perspectiveInfo={perspective}
                             viewOptions={viewOptions}
+                            layout={layout}
                             selectedNode={selectedNode}
                             setSelectedNode={setSelectedNode}
                         />
@@ -56,6 +57,7 @@ export const PerspectivesGroups = ({
                         <PerspectiveView
                             perspectiveInfo={pairs[i].perspectives[0]}
                             viewOptions={viewOptions}
+                            layout={layout}
                             isFirstPerspective={true}
                             selectedNode={selectedNode}
                             setSelectedNode={setSelectedNode}
@@ -63,6 +65,7 @@ export const PerspectivesGroups = ({
                         <PerspectiveView
                             perspectiveInfo={pairs[i].perspectives[1]}
                             viewOptions={viewOptions}
+                            layout={layout}
                             isFirstPerspective={false}
                             selectedNode={selectedNode}
                             setSelectedNode={setSelectedNode}

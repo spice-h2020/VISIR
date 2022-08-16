@@ -1,3 +1,8 @@
+:root {
+    --horizontal-height: 80vh;
+    --vertical-height: 40vh;
+}
+
 body {
     background-color: rgb(204, 204, 204);
     color: rgb(53, 53, 53);
@@ -5,27 +10,49 @@ body {
     margin: auto;
 }
 
-h1{
+h1 {
     text-align: center;
 }
 
-.row{
+.row {
     display: flex;
 }
 
 .pairNetwork.Horizontal {
     display: flex;
-    margin-bottom: 1%;
+}
+
+.pairNetwork {
+    margin-bottom: 5vh;
+    padding-bottom: 1vh;
+    border-bottom: 1.5px black dotted;
 }
 
 .pairNetwork.Horizontal>* {
     width: 50%;
-    height: 40em;
-    border-style: dashed;
+    height: var(--horizontal-height);
 }
 
 .pairNetwork.Vertical>* {
-    height: 30em;
-    border-style: dashed;
-    margin-bottom: 1%;
+    height: 100%;
+    margin-bottom: 0.1%;
+}
+
+.pairNetwork.Vertical>*>*>.network-container {
+    height: var(--vertical-height);
+}
+
+.singleNetwork>*>*>.network-container,
+.pairNetwork.Horizontal>*>*>.network-container {
+    height: var(--horizontal-height);
+}
+
+
+.network-container {
+    margin: 0px 1.5% 15px 1.5%;
+}
+
+.vis-network>canvas {
+    border-style: dotted;
+    box-sizing: border-box;
 }

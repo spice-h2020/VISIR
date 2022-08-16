@@ -8,6 +8,10 @@
     padding-top: 0.7rem;
     padding-bottom: 0.7rem;
 
+    position: fixed;
+    top: 0;
+
+    z-index: 100;
     height: 70px;
     width: 100%;
 }
@@ -17,7 +21,11 @@
     height: 100%;
 }
 
-.align-center > *{
+/* .navbar>*>* {
+    position: fixed;
+} */
+
+.align-center>* {
     align-self: center;
 }
 

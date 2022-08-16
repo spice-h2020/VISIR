@@ -39,7 +39,7 @@ export function validateAllPerspectivesJSON(arg: any): types.AllPerspectives {
     }
 }
 
-export function isPerspectiveInfoValid(arg: any): types.PerspectiveInfo {
+function isPerspectiveInfoValid(arg: any): types.PerspectiveInfo {
     try {
         if (arg.id === undefined) {
             throw Error(`ID of the perspective is undefined`);
@@ -268,7 +268,7 @@ export function validatePerspectiveJSON(arg: any): types.PerspectiveNetworkData 
 }
 
 
-export function isCommunityDataValid(arg: any): types.CommunityData {
+function isCommunityDataValid(arg: any): types.CommunityData {
     try {
 
         if (arg.id === undefined) {
@@ -333,7 +333,7 @@ export function isCommunityDataValid(arg: any): types.CommunityData {
     }
 }
 
-export function isUserDataValid(arg: any): types.UserData {
+function isUserDataValid(arg: any): types.UserData {
     try {
 
         if (arg.id === undefined) {
@@ -386,7 +386,7 @@ export function isUserDataValid(arg: any): types.UserData {
     }
 }
 
-export function isSimilarityDataValid(arg: any): types.EdgeData {
+function isSimilarityDataValid(arg: any): types.EdgeData {
     try {
 
         if (arg.value === undefined) {

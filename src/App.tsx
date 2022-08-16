@@ -1,6 +1,6 @@
 //WIP component
 import React, { useEffect, useState } from 'react';
-import './style/base.css';
+import './style/Base.css';
 
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
