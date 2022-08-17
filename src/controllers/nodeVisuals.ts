@@ -1,5 +1,5 @@
-import { UserData } from "../constants/perspectivesTypes";
-import { Dimensions, DimAttribute } from "../constants/nodesConstants"
+import { PerspectiveData, PerspectiveNetworkData, UserData } from "../constants/perspectivesTypes";
+import { Dimensions, DimAttribute, node } from "../constants/nodesConstants"
 import NodeDimensionStrategy from "./dimensionStrategyController";
 
 class ExplicitData {
@@ -13,17 +13,33 @@ class ExplicitData {
     }
 }
 
+interface Point {
+    x: number;
+    y: number;
+}
+
+interface NodeGroup {
+    nodes: number[],
+    partition: {
+        center: Point,
+        nNodes: number
+    }
+}
+
 export default class UserVisuals {
 
     explicitData: ExplicitData[];
     dimensionsStrat: NodeDimensionStrategy | undefined;
 
-    constructor(UserData: UserData[]) {
+    constructor(PerspectiveInfo: PerspectiveData) {
         this.explicitData = new Array<ExplicitData>();
 
-        this.obtainExplicitData(UserData);
+        this.obtainExplicitData(PerspectiveInfo.data.users);
+        
         this.createNodeDimensionStrategy();
-        this.updateNodeDimensions(UserData);
+
+        this.updateNodeDimensions(PerspectiveInfo.data.users);
+        this.updateNodeLocation(PerspectiveInfo.data);
     }
 
     obtainExplicitData(UserData: UserData[]) {
@@ -94,103 +110,77 @@ export default class UserVisuals {
         }
     }
 
-    // /**
-    //  * Update the visuals of all nodes to match the current node Dimension Strategy
-    //  * @param {Dataset} nodes Dataset with the data of all nodes of the network
-    //  */
-    // updateNodeVisuals(nodes) {
-    //     const newNodes = new Array();
+    updateNodeLocation(networkData: PerspectiveNetworkData) {
+        const nAreas = networkData.communities.length;
 
-    //     nodes.forEach((node) => {
-    //         this.nodeDimensionStrategy.changeNodeVisuals(node);
-    //         newNodes.push(node);
-    //     });
+        const areaPartitions: Point[] = this.createNetworkPartitions(networkData.users.length, nAreas);
+        const nodesGrouped: Array<NodeGroup> = new Array<NodeGroup>();
 
-    //     nodes.update(newNodes);
-    // }
+        for (let i = 0; i < nAreas; i++) {
+            nodesGrouped.push({
+                nodes: new Array<number>(),
+                partition: {
+                    center: areaPartitions[i],
+                    nNodes: 0
+                }
+            })
+        }
 
-    // /**
-    //  * Returns the attributes that change visualization
-    //  * @returns {Object} Object with the attributes that change visualization
-    //  * Format-> {attr: (string), vals: (string[], dimension: (string))}
-    //  */
-    // getVisualizationAttributes() {
-    //     return this.nodeDimensionStrategy.attributes;
-    // }
+        //Insert the nodes in each nodeGroup
+        networkData.users.forEach((user) => {
+            const group = user.implicit_community;
 
-    // /**
-    //  * Hide all nodes that contain any of these filtered communities values
-    //  * @param {String[]} filter Array with the name of all values to be hidden
-    //  * @param {DataSet} nodes Dataset with the network's data of all nodes
-    //  */
-    // updateFilterActives(filter, nodes) {
-    //     const newNodes = new Array();
+            nodesGrouped[group].nodes.push(user.id);
+            nodesGrouped[group].partition.nNodes++;
+        });
 
-    //     nodes.forEach((node) => {
-    //         const explComms = node[comms.ExpUserKsonKey];
-    //         const keys = Object.keys(explComms);
+        //Set the location for all nodes
+        networkData.users.forEach((user) => {
 
-    //         let isHidden = false;
-    //         for (let i = 0; i < keys.length; i++) {
-    //             const value = explComms[keys[i]]
-    //             const key = keys[i];
+            const group = user.implicit_community;
+            const nodePos: Point = this.getNodePos(nodesGrouped[group], user.id);
 
-    //             if (filter.includes(`${key}_${value}`)) {
-    //                 isHidden = true;
-    //                 this.nodeDimensionStrategy.nodeVisualsToColorless(node);
-    //                 break;
-    //             }
-    //         }
-    //         if (!isHidden) {
-    //             this.nodeDimensionStrategy.nodeColorToDefault(node);
-    //         }
+            user.x = nodePos.x;
+            user.y = nodePos.y;
+        });
+    }
 
-    //         newNodes.push(node);
-    //     });
-    //     nodes.update(newNodes);
-    // }
+    createNetworkPartitions(nUsers: number, nAreas: number): Point[] {
+        const partitionsDistance = node.groupsBaseDistance * nUsers / 45;
+        const pi2 = (2 * Math.PI);
 
-    // /**
-    //  * Hide/Show the label of the nodes based on nodeLabelVisibility value
-    //  * @param {DataSet} nodes Dataset with the network's data of all nodes
-    //  */
-    // updateNodeLabelsVisibility(nodes) {
-    //     const newNodes = new Array();
+        //Separate the network area in as many angle slices as necesary
+        const angleSlice = pi2 / nAreas;
+        let targetAngle = 0;
 
-    //     nodes.forEach((node) => {
-    //         if (!this.nodeLabelVisibility)
-    //             node["font"].color = "#00000000";
-    //         else
-    //             node["font"].color = "#000000FF";
+        //Increase the target angle for every group, and set the location of each area partition
+        const areaPartitions = [];
+        for (let i = 0; targetAngle < pi2; i++) {
+            areaPartitions[i] = {
+                x: Math.cos(targetAngle) * (partitionsDistance * nAreas),
+                y: Math.sin(targetAngle) * (partitionsDistance * nAreas)
+            };
 
-    //         newNodes.push(node);
-    //     });
-    //     nodes.update(newNodes);
-    // }
+            targetAngle += angleSlice;
+        }
 
-    // /** 
-    //  * Function executed when a node is selected that update the node visual attributes
-    //  * @param {Object} values value of the parameters that will change
-    //  * @param {Integer} id id of the node (unused)
-    //  * @param {Boolean} selected Boolean that says if the node has been selected
-    //  * @param {Boolean} hovering Boolean that says if the node has been hovered (unused)
-    //  */
-    // nodeChosen(values, id, selected, hovering) {
-    //     if (selected) {
-    //         values.size = nodes.SelectedSize;
-    //     }
-    // }
 
-    // /** 
-    //  * Function executed when a node is selected that update node's attributes of its label
-    //  * @param {Object} values label's parameters that will change
-    //  * @param {Integer} id id of the node (unused)
-    //  * @param {Boolean} selected Boolean that says if the node has been selected
-    //  * @param {Boolean} hovering Boolean that says if the node has been hovered (unused)
-    //  */
-    // labelChosen(values, id, selected, hovering) {
-    //     if (selected) {
-    //         values.vadjust -= 10;
-    //     }
-    // }
+        return areaPartitions as Point[];
+    }
+
+    getNodePos(group: NodeGroup, nodeId: number) {
+        const size = group.partition.nNodes;
+        const center = group.partition.center;
+        const nodeIndex = group.nodes.indexOf(nodeId);;
+
+        const output = { x: 0, y: 0 };
+
+        const angleSlice = (2 * Math.PI) / size;
+        let targetAngle = angleSlice * nodeIndex;
+
+        output.x = center.x + Math.cos(targetAngle) * size * node.betweenNodesDistance;
+        output.y = center.y + Math.sin(targetAngle) * size * node.betweenNodesDistance;
+
+        return output;
+    }
 }

@@ -63,6 +63,7 @@ export interface EdgeData extends anyProperty{
     from: string;
     to: string;
     value: number;
+    id?: number;
 }
 
 //Class that contains All the info about 2 diferent perspectives in order to draw the view layout in pairs of networks for easy comparison

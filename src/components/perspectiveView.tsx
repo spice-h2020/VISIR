@@ -67,13 +67,12 @@ export const PerspectiveView = ({
 
     useEffect(() => {
         if (nodes === undefined){
-            const userVisuals = new UserVisuals(info.data.users);
+            const userVisuals = new UserVisuals(info);
             nodes = new DataSet(info.data.users);
         }
             
-            
         if (edges === undefined)
-            edges = new DataSet(info.data.similarity as Edge[]);
+            edges = new DataSet(info.data.similarity);
 
         if (network === undefined)
             network = visJsRef.current && new Network(visJsRef.current, { nodes, edges } as Data, options);
