@@ -12,8 +12,8 @@ export default class RequestManager {
 
     isActive: boolean;
     axios: Axios;
-    keyToUrl: any;
-    
+    keyToUrl: Map<FileSource, string>;
+
     /**
      * Constructor of the class
      */
@@ -33,11 +33,15 @@ export default class RequestManager {
      * Initialize axios API
      * @param {String} baseURL base url of all axios petitions
      */
-    init(baseURL: string) {
-        this.axios = new Axios({
-            baseURL: baseURL,
-        });
-        this.isActive = true;
+    init(baseURL: string | undefined) {
+        if (baseURL !== undefined) {
+            this.axios = new Axios({
+                baseURL: baseURL,
+            });
+            this.isActive = true;
+        }else
+            throw new Error("the new base url is undefined");
+        
     }
 
     /**

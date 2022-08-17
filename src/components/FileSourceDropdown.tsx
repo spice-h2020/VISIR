@@ -7,7 +7,7 @@ import { FileSource, tbOptions, ButtonState } from "../constants/toolbarOptions"
 
 interface FileSourceDropdownProps {
     //On click handler
-    onClick: (key: FileSource) => any;
+    onClick: (key: FileSource) => void;
 }
 
 //Calculate the initial state of the FileSourceDropdown on start

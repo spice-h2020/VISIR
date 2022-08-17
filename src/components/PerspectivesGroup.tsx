@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PerspectivePair, PerspectiveData } from "../constants/perspectivesTypes";
+import { PerspectivePair, PerspectiveData, UserData } from "../constants/perspectivesTypes";
 import { PerspectiveView } from "./PerspectiveView";
 
 import { Layouts } from "../constants/perspectivesTypes"
@@ -23,60 +23,60 @@ export const PerspectivesGroups = ({
     viewOptions,
 }: PerspectivesGroupProps) => {
 
-    const [pairs, setPairs] = useState<PerspectivePair[]>(perspectivePairs);
-    const [selectedNode, setSelectedNode] = useState<number>();
+    const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
 
-
-    useEffect(() => {
-        console.log(perspectivePairs)
-        setPairs(perspectivePairs);
-
-        if(perspectivePairs.length === 0){
-            setSelectedNode(undefined);
-        }
-    }, [perspectivePairs]);
+    if (perspectivePairs.length === 0 && selectedNode !== undefined) {
+        setSelectedNode(undefined);
+    }
 
     const perspectivesComponents = new Array();
 
-    for (let i = 0; i < pairs.length; i++) {
-        switch (pairs[i].size()) {
+    for (let i = 0; i < perspectivePairs.length; i++) {
+        switch (perspectivePairs[i].size()) {
             case 0:
                 break;
             case 1:
-                const perspective = pairs[i].getSingle();
-                perspectivesComponents.push(
-                    <div className="singleNetwork">
-                        <PerspectiveView
-                            perspectiveInfo={perspective}
-                            viewOptions={viewOptions}
-                            layout={layout}
-                            selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode}
-                        />
-                    </div>
-                )
+                const perspective = perspectivePairs[i].getSingle();
+                if (perspective !== undefined) {
+                    perspectivesComponents.push(
+                        <div className="singleNetwork">
+                            <PerspectiveView
+                                perspectiveInfo={perspective}
+                                viewOptions={viewOptions}
+                                layout={layout}
+                                selectedNode={selectedNode}
+                                setSelectedNode={setSelectedNode}
+                            />
+                        </div>
+                    )
+                }
                 break;
             case 2:
-                perspectivesComponents.push(
-                    <div className={`pairNetwork ${Layouts[layout]}`}>
-                        <PerspectiveView
-                            perspectiveInfo={pairs[i].perspectives[0]}
-                            viewOptions={viewOptions}
-                            layout={layout}
-                            isFirstPerspective={true}
-                            selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode}
-                        />
-                        <PerspectiveView
-                            perspectiveInfo={pairs[i].perspectives[1]}
-                            viewOptions={viewOptions}
-                            layout={layout}
-                            isFirstPerspective={false}
-                            selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode}
-                        />
-                    </div>
-                )
+                const perspectiveA = perspectivePairs[i].perspectives[0];
+                const perspectiveB = perspectivePairs[i].perspectives[1];
+
+                if (perspectiveA !== undefined && perspectiveB !== undefined) {
+                    perspectivesComponents.push(
+                        <div className={`pairNetwork ${Layouts[layout]}`}>
+                            <PerspectiveView
+                                perspectiveInfo={perspectiveA}
+                                viewOptions={viewOptions}
+                                layout={layout}
+                                isFirstPerspective={true}
+                                selectedNode={selectedNode}
+                                setSelectedNode={setSelectedNode}
+                            />
+                            <PerspectiveView
+                                perspectiveInfo={perspectiveB}
+                                viewOptions={viewOptions}
+                                layout={layout}
+                                isFirstPerspective={false}
+                                selectedNode={selectedNode}
+                                setSelectedNode={setSelectedNode}
+                            />
+                        </div>
+                    )
+                }
                 break;
         }
     }

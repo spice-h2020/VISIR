@@ -5,7 +5,7 @@ interface TresholdSliderProps {
     /**
      * Optional input handler
      */
-    onInput?: (value: number) => any;
+    onInput?: (value: number) => void;
 }
 
 const intialThreshold = 0.5;

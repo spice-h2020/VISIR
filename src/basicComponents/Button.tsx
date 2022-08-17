@@ -10,7 +10,7 @@ interface ButtonProps {
   //Auto toggle state.
   autoToggle?: boolean;
   //On click handler
-  onClick?: (params: any) => any;
+  onClick?: (params: any) => void;
   //Extra class name to add and change the CSS
   extraClassName?: string;
   //Button id that will be send as a parameter of the onclick handler

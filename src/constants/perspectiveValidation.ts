@@ -123,6 +123,7 @@ function isAlgorithmValid(arg: any): types.PerspectiveAlgorithm {
         if (typeof (arg.params) !== "object") {
             throw Error(`Params of the algorithm (${arg.name}) is not an object`);
         }
+
         return arg;
 
     } catch (e: any) {

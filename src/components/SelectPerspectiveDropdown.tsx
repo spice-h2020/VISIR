@@ -7,7 +7,7 @@ import { AllPerspectives } from '../constants/perspectivesTypes';
 
 interface SelectPerspectiveProps {
     //On click handler
-    onClick: (perspectiveId: number) => any;
+    onClick: (perspectiveId: number) => void;
     //Object that contains the name of all perspectives availables
     allPerspectives?: AllPerspectives;
     //Map that contains the relation between the name of a perspective and their visual state.

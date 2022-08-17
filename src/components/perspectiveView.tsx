@@ -3,12 +3,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { DataSet } from "vis-data";
 import { Data, Network, Node, Edge } from "vis-network";
 import { ButtonState, ViewOptions } from '../constants/toolbarOptions';
-import { Layouts, PerspectiveData } from '../constants/perspectivesTypes';
+import { Layouts, PerspectiveData, UserData } from '../constants/perspectivesTypes';
 import { DataColumn } from "./DataColumn";
+import UserVisuals from "../controllers/nodeVisuals";
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
-    perspectiveInfo: PerspectiveData | undefined;
+    perspectiveInfo: PerspectiveData;
     //Options that change the view of a perspective
     viewOptions: ViewOptions;
     //Function to select a node
@@ -16,7 +17,7 @@ interface PerspectiveViewProps {
     //Optional parameter to know if the its the first perspective of the pair, to mirror the table position in the horizontal layout
     isFirstPerspective?: boolean;
     //Current selected node
-    selectedNode: number | undefined;
+    selectedNode: UserData | undefined;
     //Function to select a node
     setSelectedNode: Function;
 }
@@ -39,6 +40,12 @@ const options = {
         improvedLayout: false,
     }
 };
+
+
+let network: Network | null | undefined = undefined;
+let nodes: DataSet<UserData, "id"> | undefined = undefined;
+let edges: DataSet<Edge, "id"> | undefined = undefined;
+
 /**
  * Basic UI component that execute a function when clicked
  */
@@ -51,42 +58,41 @@ export const PerspectiveView = ({
     setSelectedNode,
 }: PerspectiveViewProps) => {
 
-    const [info, setInfo] = useState<PerspectiveData | undefined>(perspectiveInfo); 
+    const [info, setInfo] = useState<PerspectiveData>(perspectiveInfo);
+    const visJsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setInfo(perspectiveInfo);
     }, [perspectiveInfo]);
 
-    //TODO enlazar el nodo/comunidad de la dataCol con el selectedNode/selectedCommunity
-
-
-    const nodes = new DataSet(info?.data.users as Node[]);
-    const edges = new DataSet(info?.data.similarity as Edge[]);
-
-
-    const data = {
-        nodes,
-        edges
-    };
-
-    const visJsRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        const network =
-            visJsRef.current &&
-            new Network(visJsRef.current, data as Data, options);
+        if (nodes === undefined){
+            const userVisuals = new UserVisuals(info.data.users);
+            nodes = new DataSet(info.data.users);
+        }
+            
+            
+        if (edges === undefined)
+            edges = new DataSet(info.data.similarity as Edge[]);
+
+        if (network === undefined)
+            network = visJsRef.current && new Network(visJsRef.current, { nodes, edges } as Data, options);
 
         network?.on("click", (event) => {
 
-            if (event.nodes.length > 0) {
-                const node = nodes.get(event.nodes[0]);
-                //TODO evitar hacer esto con los nodos
-                (node as any)["color"] = { background: "black" }
-                data.nodes.update(node);
+            if (event.nodes.length > 0 && nodes !== undefined) {
+                let node = nodes.get(event.nodes[0]) as unknown as UserData;
+                node.color = { background: "black" }
+                nodes.update(node);
+
                 setSelectedNode(node);
             }
         });
 
     }, [visJsRef, nodes, edges]);
+
+
+
 
     const dataCol = <DataColumn
         tittle={info?.info.name}

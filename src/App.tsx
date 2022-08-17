@@ -76,8 +76,6 @@ function App() {
             else
               throw new Error(`Perspective info of perspective: ${perspectiveId} was not found`);
 
-
-
           } else {
             throw new Error(`Perspective ${perspectiveId} was ${response.statusText}`);
           }

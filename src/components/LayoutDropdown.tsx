@@ -8,7 +8,7 @@ import { Layouts } from "../constants/perspectivesTypes"
 
 interface LayoutDropdownProps {
     //On click handler
-    onClick: (key: Layouts) => any;
+    onClick: (key: Layouts) => void;
 }
 
 //Calculate the initial state of the LayoutDropdown on start

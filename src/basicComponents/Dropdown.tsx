@@ -44,7 +44,7 @@ export const Dropdown = ({
                     extraClassName={extraClassName}
                 />
                 <div className="dropdown-content">
-                    {items.map((item: any, index: number): JSX.Element => {
+                    {items.map((item: React.ReactNode, index: number): JSX.Element => {
                         return (<React.Fragment key={index}>{item}</React.Fragment>);
                     })}
                 </div>

@@ -20,12 +20,12 @@ export interface PerspectiveInfo {
 
 export interface PerspectiveAlgorithm {
     name: string;
-    params: any[];
+    params: anyProperty;
 }
 
 export interface SimFunction {
     name: string;
-    params: any[];
+    params: anyProperty;
     onAttribute: OnAttribute[];
     weight: number;
 }
@@ -35,6 +35,8 @@ export interface OnAttribute {
     type: string;
 }
 
+export interface anyProperty extends Record<string, any>{}
+
 //Data interfaces that containts the data of a perspective used to draw the network
 export interface PerspectiveNetworkData {
     communities: CommunityData[];
@@ -42,7 +44,7 @@ export interface PerspectiveNetworkData {
     similarity: EdgeData[];
 }
 
-export interface CommunityData {
+export interface CommunityData extends anyProperty{
     id: number;
     community_type: string;
     name: string;
@@ -50,14 +52,14 @@ export interface CommunityData {
     users: number[];
 }
 
-export interface UserData {
+export interface UserData extends anyProperty{
     id: number;
     label: string;
     implicit_community: number;
-    explicit_community: any;
+    explicit_community: anyProperty; //TODO no utilizar el any
 }
 
-export interface EdgeData {
+export interface EdgeData extends anyProperty{
     from: string;
     to: string;
     value: number;
@@ -85,14 +87,20 @@ export class PerspectivePair {
         }
     }
 
-    removePerspective(perspectiveId: number) {
+    removePerspective(perspectiveId: number) : boolean {
         for (let i = 0; i < this.perspectives.length; i++) {
             if (this.perspectives[i]?.info.id === perspectiveId) {
                 this.perspectives[i] = undefined;
                 this.spacesAvailables[i] = true;
-                break;
+
+                if(this.spacesAvailables[0] && this.spacesAvailables[1]){
+                    return true;
+                }else{
+                    return false;
+                }
             }
         }
+        return false;
     }
 
     hasEmptySpace() {
@@ -123,7 +131,7 @@ export class PerspectivePair {
     }
 }
 
-//Possible layouts of the network
+//TODO move it to a better named file Possible layouts of the network
 export enum Layouts {
     Horizontal,
     Vertical,

@@ -1,106 +1,98 @@
+import { UserData } from "../constants/perspectivesTypes";
+import { Dimensions, DimAttribute } from "../constants/nodesConstants"
+import NodeDimensionStrategy from "./dimensionStrategyController";
 
-export default class NodeVisuals {
+class ExplicitData {
+    key: string;
+    values: string[];
 
-    /**
-     * Constructor of the class
-     * @param {Object} config Object with the initial configuration of this class
-     */
-    constructor() {
-    
+    constructor(key: string, value: string) {
+        this.key = key;
+        this.values = new Array<string>();
+        this.values.push(value);
+    }
+}
+
+export default class UserVisuals {
+
+    explicitData: ExplicitData[];
+    dimensionsStrat: NodeDimensionStrategy | undefined;
+
+    constructor(UserData: UserData[]) {
+        this.explicitData = new Array<ExplicitData>();
+
+        this.obtainExplicitData(UserData);
+        this.createNodeDimensionStrategy();
+        this.updateNodeDimensions(UserData);
     }
 
-    // /** 
-    //  * Execute while parsing nodes. It finds all explicit Communities and all its values
-    //  * @param {Object} node node with the explicit Community attribute
-    //  */
-    // findExplicitCommunities(node) {
-    //     if (this.validateExplicitCommunity(node)) {
-    //         const explicitData = node[comms.ExpUserKsonKey];
+    obtainExplicitData(UserData: UserData[]) {
+        UserData.forEach((user) => {
 
-    //         const keys = Object.keys(explicitData);
-    //         keys.forEach((key) => {
-    //             explicitData[key] = this.validateCommunityValue(explicitData[key]);
+            const explicitKeys = Object.keys(user.explicit_community);
+            explicitKeys.forEach((key) => {
 
-    //             if (explicitData[key] !== this.undefinedName) {
-    //                 if (this.communitiesData.length === 0) {
-    //                     this.communitiesData.push({ key: key, values: new Array(explicitData[key]) });
-    //                 } else {
-    //                     let community = this.communitiesData.find(element => element.key === key);
+                if (this.explicitData.length === 0) {
+                    this.explicitData.push(new ExplicitData(key, user.explicit_community[key]));
+                } else {
 
-    //                     if (community === undefined) {
-    //                         this.communitiesData.push({ key: key, values: new Array(explicitData[key]) });
+                    let keyValues = this.explicitData.find(element => element.key === key);
 
-    //                     } else {
-    //                         if (!community.values.includes(explicitData[key])) {
-    //                             community.values.push(explicitData[key]);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         });
-    //     }
-    // }
+                    if (keyValues !== undefined) {
+                        if (!keyValues.values.includes(user.explicit_community[key])) {
+                            keyValues.values.push(user.explicit_community[key]);
+                        }
+                    } else {
+                        this.explicitData.push(new ExplicitData(key, user.explicit_community[key]));
+                    }
+                }
+            });
+        });
+    }
 
-    // validateExplicitCommunity(node) {
-    //     if (node[comms.ExpUserKsonKey] === undefined ||
-    //         node[comms.ExpUserKsonKey] === null)
-    //         throw new Error(`node ${node[id]} doesnt have an explicit community attribute`);
+    createNodeDimensionStrategy() {
+        const attributes = new Array<DimAttribute>();
 
-    //     if (node[comms.ExpUserKsonKey] === "[]" ||
-    //         node[comms.ExpUserKsonKey] === "{}")
-    //         return false;
-    //     else
-    //         return true;
-    // }
+        if (this.explicitData[0] !== undefined) {
+            attributes.push({
+                key: this.explicitData[0].key,
+                values: this.explicitData[0].values,
+                dimension: Dimensions.Color,
+            })
+        }
 
-    // validateCommunityValue(value) {
-    //     const type = typeof (value);
+        if (this.explicitData[1] !== undefined) {
+            attributes.push({
+                key: this.explicitData[1].key,
+                values: this.explicitData[1].values,
+                dimension: Dimensions.Shape,
+            })
+        }
 
-    //     switch (type) {
-    //         case "string":
-    //             return value;
-    //         case "number":
-    //             return value.toString();
-    //         default:
-    //             return this.undefinedName;
-    //     }
-    // }
+        //TODO link the allow third dimension option tho this
+        if (this.explicitData[2] !== undefined && false) {
+            attributes.push({
+                key: this.explicitData[2].key,
+                values: this.explicitData[2].values,
+                dimension: Dimensions.Border,
+            })
+        }
 
-    // /**
-    //  * Create the node Dimension Strategy object based on a attributes object
-    //  * @param {Dataset} nods Dataset with the data of all nodes of the network
-    //  */
-    // createNodeDimensionStrategy(nods) {
-    //     const attributes = new Array();
+        this.dimensionsStrat = new NodeDimensionStrategy(attributes);
+    }
 
-    //     if (this.communitiesData[0] !== undefined) {
-    //         attributes.push({
-    //             attr: this.communitiesData[0].key,
-    //             vals: this.communitiesData[0].values,
-    //             dimension: nodes.nodeColorKey,
-    //         })
-    //     }
 
-    //     if (this.communitiesData[1] !== undefined) {
-    //         attributes.push({
-    //             attr: this.communitiesData[1].key,
-    //             vals: this.communitiesData[1].values,
-    //             dimension: nodes.nodeShapeKey,
-    //         })
-    //     }
+    updateNodeDimensions(UserData: UserData[]) {
+        if (this.dimensionsStrat !== undefined) {
 
-    //     if (this.communitiesData[2] !== undefined && this.activateThirdDimension) {
-    //         attributes.push({
-    //             attr: this.communitiesData[2].key,
-    //             vals: this.communitiesData[2].values,
-    //             dimension: nodes.nodeBorderKey,
-    //         })
-    //     }
+            UserData.forEach((user) => {
+                this.dimensionsStrat?.nodeToDefault(user);
+            });
 
-    //     this.nodeDimensionStrategy = new NodeDimensionStrategy(attributes);
-
-    //     this.updateNodeVisuals(nods);
-    // }
+        } else {
+            console.log("Trying to update node visuals without dimension strat being defined")
+        }
+    }
 
     // /**
     //  * Update the visuals of all nodes to match the current node Dimension Strategy
