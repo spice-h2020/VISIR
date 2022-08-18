@@ -1,3 +1,6 @@
+//TODO WIP component. Will be used to change the edge value threshold view options
+
+
 import React, { useEffect, useState } from "react";
 import '../style/button.css';
 

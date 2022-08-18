@@ -1,9 +1,16 @@
+/**
+ * @fileoverview This file creates a dropdown that changes activates/disactives diferent perspectives from the allPerspectives prop.
+ * @package It requires React package. 
+ * @author Marco Expósito Pérez
+ */
+//Namespaces
+import { ButtonState } from "../namespaces/ViewOptions"
+import { AllPerspectives } from '../namespaces/perspectivesTypes';
+//Packages
 import React, { useState, useEffect } from "react";
-
+//Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
-import { ButtonState } from "../constants/toolbarOptions"
-import { AllPerspectives } from '../constants/perspectivesTypes';
 
 interface SelectPerspectiveProps {
     //On click handler
@@ -28,7 +35,7 @@ export const SelectPerspectiveDropdown = ({
     useEffect(() => {
         setSelectedItems(itemsState);
     }, [itemsState]);
-
+    
     if (allPerspectives === undefined) {
         return (
             <Dropdown
@@ -43,6 +50,7 @@ export const SelectPerspectiveDropdown = ({
         onClick(perspectiveId);
     }
 
+    //Creates all perspective buttons components
     const perspectivesButtons = new Array<React.ReactNode>();
     for (let i = 0; i < allPerspectives.files.length; i++) {
         perspectivesButtons.push(

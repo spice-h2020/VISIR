@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Navbar } from '../basicComponents/Navbar';
 import { Button } from '../basicComponents/Button';
 import { Dropdown } from '../basicComponents/Dropdown';
-import { ButtonState } from '../constants/toolbarOptions';
+import { ButtonState } from '../namespaces/ViewOptions';
 
 export default {
   title: 'Example/Navbar',

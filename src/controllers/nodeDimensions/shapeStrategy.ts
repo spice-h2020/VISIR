@@ -1,21 +1,29 @@
-
-import { Dimensions, DimAttribute, node, shapeData } from "../../constants/nodesConstants";
-import { UserData } from "../../constants/perspectivesTypes";
+/**
+ * @fileoverview This class changes the shape and font vertical align of users/nodes.
+ * @author Marco Expósito Pérez
+ */
+//Namespaces
+import { Dimensions, DimAttribute, nodeConst, shapeData } from "../../namespaces/nodes";
+import { UserData } from "../../namespaces/perspectivesTypes";
+//Local files
 import DimensionStrategy from "./dimensionStrat";
 
 export default class ShapeStrategy extends DimensionStrategy {
 
     constructor(attributes: DimAttribute[]) {
-        super(attributes, Dimensions.Shape, node.nodeDimensions.getShape);
+        super(attributes, Dimensions.Shape, nodeConst.nodeDimensions.getShape);
     }
 
-
+    /**
+     * Changes the shape and font's vertical align
+     * @param user user to edit
+     */
     change(user: UserData) {
         if (this.key !== undefined) {
 
             const value = user.explicit_community[this.key];
 
-            const shape = this.dimensionMap.get(value);
+            const shape: shapeData = this.dimensionMap.get(value);
 
             if (shape !== undefined) {
 
@@ -31,13 +39,17 @@ export default class ShapeStrategy extends DimensionStrategy {
             }
 
         } else {
-            user["shape"] = node.defaultShape.name;
+            user["shape"] = nodeConst.defaultShape.name;
             user.font = {
-                vadjust: node.defaultShape.vAdjust,
-                selectedVAdjust: node.defaultShape.selectedVAdjust
+                vadjust: nodeConst.defaultShape.vAdjust,
+                selectedVAdjust: nodeConst.defaultShape.selectedVAdjust
             }
         }
     }
 
-    toColorless(user: UserData): void {}
+    /**
+     * This strategy doesnt do anything when a node turn colorless
+     * @param user 
+     */
+    toColorless(): void {}
 }

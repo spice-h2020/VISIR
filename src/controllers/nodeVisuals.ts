@@ -1,11 +1,25 @@
-import { PerspectiveData, PerspectiveNetworkData, UserData } from "../constants/perspectivesTypes";
-import { Dimensions, DimAttribute, node } from "../constants/nodesConstants"
-import NodeDimensionStrategy from "./dimensionStrategyController";
+/**
+ * @fileoverview This class find all explicit communities and its values in the user data of the perspective. 
+ * Then create a dimension strategy that changes how the network ndoes look based on the explicitData.
+ * Then it changes the node position in the canvas to create a circular distribution without node overlap.
+ * @author Marco Expósito Pérez
+ */
+//Namespaces
+import { PerspectiveInfo, PerspectiveData, UserData } from "../namespaces/perspectivesTypes";
+import { Dimensions, DimAttribute, nodeConst } from "../namespaces/nodes"
+//Local files
+import NodeDimensionStrategy from "./dimensionStratController";
 
+//Aux class to help mantain and collect all the values of an Explicit Community
 class ExplicitData {
     key: string;
     values: string[];
 
+    /**
+     * Constructor of the class
+     * @param key Key of the explicit community
+     * @param value Initial value of the explicit community
+     */
     constructor(key: string, value: string) {
         this.key = key;
         this.values = new Array<string>();
@@ -27,23 +41,32 @@ interface NodeGroup {
 }
 
 export default class UserVisuals {
-
+    //All explicit Data of the users
     explicitData: ExplicitData[];
-    dimensionsStrat: NodeDimensionStrategy | undefined;
+    //Current active dimensions strat
+    dimensionsStrat!: NodeDimensionStrategy;
 
-    constructor(PerspectiveInfo: PerspectiveData) {
+    /**
+     * Constructor of the class
+     * @param PerspectiveInfo Perspective info of the perspective that uses this object
+     */
+    constructor(PerspectiveInfo: PerspectiveInfo) {
         this.explicitData = new Array<ExplicitData>();
 
         this.obtainExplicitData(PerspectiveInfo.data.users);
-        
+
         this.createNodeDimensionStrategy();
 
-        this.updateNodeDimensions(PerspectiveInfo.data.users);
+        this.updateNodeDimensionsToDefault(PerspectiveInfo.data.users);
         this.updateNodeLocation(PerspectiveInfo.data);
     }
 
-    obtainExplicitData(UserData: UserData[]) {
-        UserData.forEach((user) => {
+    /**
+     * Ibtain the explicit data from the explicit communities of the UserData
+     * @param UsersData 
+     */
+    obtainExplicitData(UsersData: UserData[]) {
+        UsersData.forEach((user) => {
 
             const explicitKeys = Object.keys(user.explicit_community);
             explicitKeys.forEach((key) => {
@@ -66,6 +89,9 @@ export default class UserVisuals {
         });
     }
 
+    /**
+     * Create the node dimension strategy and its necesary attributes
+     */
     createNodeDimensionStrategy() {
         const attributes = new Array<DimAttribute>();
 
@@ -97,11 +123,14 @@ export default class UserVisuals {
         this.dimensionsStrat = new NodeDimensionStrategy(attributes);
     }
 
-
-    updateNodeDimensions(UserData: UserData[]) {
+    /**
+     * Update node dimensions to default state
+     * @param UsersData users to update
+     */
+    updateNodeDimensionsToDefault(UsersData: UserData[]) {
         if (this.dimensionsStrat !== undefined) {
 
-            UserData.forEach((user) => {
+            UsersData.forEach((user) => {
                 this.dimensionsStrat?.nodeToDefault(user);
             });
 
@@ -110,7 +139,11 @@ export default class UserVisuals {
         }
     }
 
-    updateNodeLocation(networkData: PerspectiveNetworkData) {
+    /**
+     * Update the location of the nodes in the canvas to resemble a circle without node overlaps
+     * @param networkData Data of the perspective
+     */
+    updateNodeLocation(networkData: PerspectiveData) {
         const nAreas = networkData.communities.length;
 
         const areaPartitions: Point[] = this.createNetworkPartitions(networkData.users.length, nAreas);
@@ -145,8 +178,14 @@ export default class UserVisuals {
         });
     }
 
+    /**
+     * Create partitions in a circle to slot every implicit community
+     * @param nUsers number of users
+     * @param nAreas number of areas to make
+     * @returns returns an array with the center poin of each partition
+     */
     createNetworkPartitions(nUsers: number, nAreas: number): Point[] {
-        const partitionsDistance = node.groupsBaseDistance * nUsers / 45;
+        const partitionsDistance = nodeConst.groupsBaseDistance * nUsers / 45;
         const pi2 = (2 * Math.PI);
 
         //Separate the network area in as many angle slices as necesary
@@ -168,7 +207,13 @@ export default class UserVisuals {
         return areaPartitions as Point[];
     }
 
-    getNodePos(group: NodeGroup, nodeId: number) {
+    /**
+     * Gets the exact node coordinates in the canvas
+     * @param group Node group of the node
+     * @param nodeId id of the node
+     * @returns point coordinates
+     */
+    getNodePos(group: NodeGroup, nodeId: number): Point {
         const size = group.partition.nNodes;
         const center = group.partition.center;
         const nodeIndex = group.nodes.indexOf(nodeId);;
@@ -178,8 +223,8 @@ export default class UserVisuals {
         const angleSlice = (2 * Math.PI) / size;
         let targetAngle = angleSlice * nodeIndex;
 
-        output.x = center.x + Math.cos(targetAngle) * size * node.betweenNodesDistance;
-        output.y = center.y + Math.sin(targetAngle) * size * node.betweenNodesDistance;
+        output.x = center.x + Math.cos(targetAngle) * size * nodeConst.betweenNodesDistance;
+        output.y = center.y + Math.sin(targetAngle) * size * nodeConst.betweenNodesDistance;
 
         return output;
     }

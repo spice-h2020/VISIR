@@ -1,31 +1,31 @@
-import { useState } from "react";
+/**
+ * @fileoverview This file creates a dropdown that changes the source of the files with All the info from all perspectives.
+ * @package It requires React package. 
+ * @author Marco Expósito Pérez
+ */
 
+//Namespaces
+import { FileSource, initialOptions, ButtonState } from "../namespaces/ViewOptions";
+//Packages
+import { useState } from "react";
+//Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 
-import { FileSource, tbOptions, ButtonState } from "../constants/toolbarOptions";
 
 interface FileSourceDropdownProps {
     //On click handler
-    onClick: (key: FileSource) => void;
+    setFileSource: (key: FileSource) => void;
 }
-
-//Calculate the initial state of the FileSourceDropdown on start
-const initialState = new Array(Object.keys(FileSource).length / 2);
-const init = () => {
-    initialState.fill(ButtonState.inactive);
-    initialState[tbOptions.initialFileSource] = ButtonState.active;
-}
-init();
 
 /**
  * Dropdown component that holds the options to change the source of perspective files in the visualization tool
  */
 export const FileSourceDropdown = ({
-    onClick,
+    setFileSource,
 }: FileSourceDropdownProps) => {
 
-    const [selectedItems, setSelectedOptions] = useState<Array<ButtonState>>(initialState);
+    const [selectedItems, setSelectedItems] = useState<Array<ButtonState>>(initialState);
 
     function changeFileSource(key: FileSource) {
         if (!selectedItems[key]) {
@@ -34,8 +34,8 @@ export const FileSourceDropdown = ({
             newState.fill(ButtonState.inactive);
             newState[key] = ButtonState.active;
 
-            setSelectedOptions(newState);
-            onClick(key);
+            setSelectedItems(newState);
+            setFileSource(key);
         }
     }
 
@@ -73,3 +73,13 @@ export const FileSourceDropdown = ({
         />
     );
 };
+
+/**
+ * Calculates the initial state of the dropdown
+ */
+const initialState = new Array(Object.keys(FileSource).length / 2);
+const init = () => {
+    initialState.fill(ButtonState.inactive);
+    initialState[initialOptions.fileSource] = ButtonState.active;
+}
+init();

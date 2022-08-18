@@ -9,12 +9,12 @@ import { LayoutDropdown } from './components/LayoutDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
 
 import RequestManager from './managers/requestManager';
-import { FileSource, tbOptions, ButtonState, ViewOptions } from './constants/toolbarOptions';
-import { Layouts, AllPerspectives, PerspectiveInfo } from './constants/perspectivesTypes';
+import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './namespaces/ViewOptions';
+import { AllPerspectives, PerspectiveDetails } from './namespaces/perspectivesTypes';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
-import {validateAllPerspectivesJSON, validatePerspectiveJSON } from './constants/perspectiveValidation';
+import {validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './namespaces/perspectiveValidation';
 
 const requestManager = new RequestManager();
 const viewDataManager = new ViewDataManager();
@@ -23,9 +23,9 @@ function App() {
 
   const [perspectivesState, setPerspectivesState] = useState(new Map<number, ButtonState>());
   const [availablePerspectives, setAvailablePerspectives] = useState<AllPerspectives>();
-  const [fileSource, setFileSource] = useState<FileSource>(tbOptions.initialFileSource);
+  const [fileSource, setFileSource] = useState<FileSource>(initialOptions.fileSource);
   const [viewOptions, setViewOptions] = useState<ViewOptions>(new ViewOptions());
-  const [layout, setLayout] = useState<Layouts>(tbOptions.initialLayout);
+  const [layout, setLayout] = useState<AppLayout>(initialOptions.layout);
 
   const onHideLabels = (newValue: boolean) => {
     const newViewOptions = Object.assign({}, viewOptions);
@@ -66,8 +66,8 @@ function App() {
         .then((response) => {
           if (response.status === 200) {
 
-            const perspectiveJson = validatePerspectiveJSON(JSON.parse(response.data));
-            const perspectiveInfo = availablePerspectives?.files.find((element: PerspectiveInfo) => { return element.id === perspectiveId })
+            const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
+            const perspectiveInfo = availablePerspectives?.files.find((element: PerspectiveDetails) => { return element.id === perspectiveId })
 
             if (perspectiveInfo) {
               viewDataManager.addPerspective(perspectiveInfo, perspectiveJson);
@@ -102,7 +102,7 @@ function App() {
       .then((response) => {
         if (response.status === 200) {
 
-          const allPerspectivesFile = validateAllPerspectivesJSON(JSON.parse(response.data));
+          const allPerspectivesFile = validateAllPerspectivesDetailsJSON(JSON.parse(response.data));
 
           const newPerspectivesState = new Map<number, ButtonState>();
           for (let i = 0; i < allPerspectivesFile.files.length; i++) {
@@ -133,10 +133,10 @@ function App() {
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown
-            onClick={setFileSource}
+            setFileSource={setFileSource}
           />,
           <LayoutDropdown
-            onClick={setLayout}
+            setLayout={setLayout}
           />,
           <OptionsDropdown
             onHideLabels={onHideLabels}

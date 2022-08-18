@@ -1,10 +1,10 @@
 /**
- * @fileoverview This class manages the active viewable perspectives. It works with pair perspectives so when any pair of perspectives are actives, u can see both and compare them
+ * @fileoverview This class manages the active perspectives. Active perspectives are the ones u can see in the app.
+ * It works with pair perspectives to later fit each pair in the same space for an easier comparison
  * @author Marco Expósito Pérez
  */
-
-//Packages
-import { PerspectivePair, PerspectiveData, PerspectiveNetworkData, PerspectiveInfo } from "../constants/perspectivesTypes";
+//Namespaces
+import { PerspectivePair, PerspectiveInfo, PerspectiveData, PerspectiveDetails } from "../namespaces/perspectivesTypes";
 
 export default class ViewDataManager {
 
@@ -14,9 +14,9 @@ export default class ViewDataManager {
         this.activePerspectivePairs = new Array<PerspectivePair>();
     }
 
-    addPerspective(perspectiveInfo: PerspectiveInfo, perspectiveData: PerspectiveNetworkData) {
+    addPerspective(perspectiveInfo: PerspectiveDetails, perspectiveData: PerspectiveData) {
 
-        const newPerspectiveData = new PerspectiveData(perspectiveInfo, perspectiveData);
+        const newPerspectiveData = new PerspectiveInfo(perspectiveInfo, perspectiveData);
         let isInserted = false;
 
         for (let i = 0; i < this.activePerspectivePairs.length; i++) {

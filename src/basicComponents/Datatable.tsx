@@ -1,11 +1,29 @@
-import React, { useEffect, useState } from "react";
+/**
+ * @fileoverview This file creates a table with 2 columns that contains the data from the rows shared as props.
+ * @package It requires React package. 
+ * @author Marco Expósito Pérez
+ */
+//Packages
+import React from "react";
+//Local files
 import '../style/Datatable.css';
 
+/**
+ * Aux class to streamline the data of each row. Key will be at the left of the row, value at the right
+ */
 export class DataRow {
     key: React.ReactNode;
     value: React.ReactNode;
+
+    /**
+     * Constructor of the class. There is no real distinction between the key param and the value param. 
+     * Current datatable implementation shows key at the left of the row, and value at the right
+     * @param key component of the row
+     * @param value another component of the row
+     */
     constructor(key: React.ReactNode, value: React.ReactNode) { this.key = key; this.value = value }
 }
+
 interface DatatableProps {
     //Tittle of the datatable.
     tittle?: React.ReactNode;
@@ -16,7 +34,7 @@ interface DatatableProps {
 }
 
 /**
- * Basic UI component that execute a function when clicked
+ * Basic UI component that show data in a table of 2 columns format
  */
 export const DataTable = ({
     tittle = "Datatable",

@@ -1,55 +1,52 @@
-
+/**
+ * @fileoverview This file creates a dropdown that changes the layout of the perspectives once there are more than one active.
+ * @package It requires React package. 
+ * @author Marco Expósito Pérez
+ */
+//Namespaces
+import { ButtonState, initialOptions, AppLayout } from "../namespaces/ViewOptions";
+//Packages
 import { useState } from "react";
-
+//Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
-import { ButtonState, tbOptions } from "../constants/toolbarOptions";
-import { Layouts } from "../constants/perspectivesTypes"
 
 interface LayoutDropdownProps {
     //On click handler
-    onClick: (key: Layouts) => void;
+    setLayout: (key: AppLayout) => void;
 }
-
-//Calculate the initial state of the LayoutDropdown on start
-const initialState = new Array(Object.keys(Layouts).length / 2);
-const init = () => {
-    initialState.fill(ButtonState.inactive);
-    initialState[tbOptions.initialLayout] = ButtonState.active;
-}
-init();
 
 /**
  * Dropdown component that holds the options to change the visual layout of the perspectives
  */
 export const LayoutDropdown = ({
-    onClick,
+    setLayout,
 }: LayoutDropdownProps) => {
 
-    const [selectedItems, setSelectedOptions] = useState<Array<ButtonState>>(initialState);
+    const [selectedItems, setSelectedItems] = useState<Array<ButtonState>>(initialState);
 
-    function changeLayout(key: Layouts) {
+    function changeLayout(key: AppLayout) {
         if (!selectedItems[key]) {
 
-            const newState = new Array(Object.keys(Layouts).length / 2);
+            const newState = new Array(Object.keys(AppLayout).length / 2);
             newState.fill(ButtonState.inactive);
             newState[key] = ButtonState.active;
 
-            setSelectedOptions(newState);
-            onClick(key);
+            setSelectedItems(newState);
+            setLayout(key);
         }
     }
 
     const LayoutButtons = [
         <Button
             content="Horizontal"
-            onClick={() => { changeLayout(Layouts.Horizontal) }}
+            onClick={() => { changeLayout(AppLayout.Horizontal) }}
             state={selectedItems[0]}
             key={0}
         />,
         <Button
             content="Vertical"
-            onClick={() => { changeLayout(Layouts.Vertical) }}
+            onClick={() => { changeLayout(AppLayout.Vertical) }}
             state={selectedItems[1]}
             key={1}
         />]
@@ -62,3 +59,13 @@ export const LayoutDropdown = ({
         />
     );
 };
+
+/**
+ * Calculates the initial state of the dropdown
+ */
+const initialState = new Array(Object.keys(AppLayout).length / 2);
+const init = () => {
+    initialState.fill(ButtonState.inactive);
+    initialState[initialOptions.layout] = ButtonState.active;
+}
+init();

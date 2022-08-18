@@ -1,16 +1,23 @@
-
-
-import { Dimensions, DimAttribute, node } from "../../constants/nodesConstants";
-import { UserData } from "../../constants/perspectivesTypes";
+/**
+ * @fileoverview This class changes the background color of users/nodes.
+ * @author Marco Expósito Pérez
+ */
+//Namespaces
+import { Dimensions, DimAttribute, nodeConst } from "../../namespaces/nodes";
+import { UserData } from "../../namespaces/perspectivesTypes";
+//Local files
 import DimensionStrategy from "./dimensionStrat";
 
 export default class ColorStrategy extends DimensionStrategy {
 
     constructor(attributes: DimAttribute[]) {
-        super(attributes, Dimensions.Color, node.nodeDimensions.getColor);
+        super(attributes, Dimensions.Color, nodeConst.nodeDimensions.getColor);
     }
 
-
+    /**
+     * Changes the background's color
+     * @param user user to edit
+     */
     change(user: UserData) {
         if (this.key !== undefined) {
 
@@ -22,20 +29,21 @@ export default class ColorStrategy extends DimensionStrategy {
 
         } else {
             user["color"] = {
-                background: node.defaultColor,
+                background: nodeConst.defaultColor,
             }
         }
-
-        user["borderWidth"] = 0;
-        user["borderWidthSelected"] = 0;
 
         user.defaultColor = true;
     }
 
+    /**
+     * Change the background's color
+     * @param user user to edit
+     */
     toColorless(user: UserData) {
         user.defaultColor = false;
 
-        user["color"]["background"] = node.NoFocusColor.Background;
+        user["color"]["background"] = nodeConst.NoFocusColor.Background;
     }
 
 }

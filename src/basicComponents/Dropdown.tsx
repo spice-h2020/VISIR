@@ -1,7 +1,14 @@
+/**
+ * @fileoverview This file creates a dropdown menu. A button that can be clicked and will show aditional buttons/items to interact with.
+ * @package It requires React package. 
+ * @author Marco Expósito Pérez
+ */
+//Namespaces
+import { ButtonState } from '../namespaces/ViewOptions';
+//Packages
 import React, { useState, useEffect } from "react";
-
+//Local files
 import { Button } from "./Button";
-import { ButtonState } from '../constants/toolbarOptions';
 import '../style/Dropdown.css';
 
 interface DropdownProps {
@@ -14,7 +21,7 @@ interface DropdownProps {
 }
 
 /**
- * Dropdown Menu that toggle items visibility when its main button is clicked. The items are closed if u click outside the dropdown 
+ * Dropdown Menu that toggle items visibility when the main button is clicked. The items are closed if u click outside the dropdown 
  */
 export const Dropdown = ({
     items = [],
@@ -25,6 +32,7 @@ export const Dropdown = ({
 
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
 
+    //Close the dropdown when u click outside of it
     const ref = React.useRef<HTMLDivElement>(null);
     useOutsideClick(showDropDown, ref, () => {
         setShowDropDown(false);
@@ -61,8 +69,14 @@ export const Dropdown = ({
         );
 };
 
-//Aux function that execute a callback function when u click outside of the ref component
-const useOutsideClick = (removeEvent: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function) => {
+
+/**
+ * Aux function that execute a callback function when u click outside of the ref component. 
+ * @param state State that will add/delete the events based on its value
+ * @param ref Reference of the html object of the component to detect a click outside it
+ * @param callback Function executed when the user clicks outside the ref component
+ */
+const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function) => {
 
     const handleClick = (ev: Event) => {
         if (ref.current && !ref.current.contains(ev.target as Node)) {
@@ -71,7 +85,7 @@ const useOutsideClick = (removeEvent: boolean, ref: React.RefObject<HTMLDivEleme
     };
 
     useEffect(() => {
-        if (removeEvent) {
+        if (state) {
             document.addEventListener("click", handleClick);
 
         } else {
@@ -82,5 +96,5 @@ const useOutsideClick = (removeEvent: boolean, ref: React.RefObject<HTMLDivEleme
         return () => {
             document.removeEventListener("click", handleClick);
         };
-    }, [removeEvent]);
+    }, [state]);
 };

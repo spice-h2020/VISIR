@@ -1,19 +1,33 @@
-import React, { useEffect, useState, useRef } from "react";
+/**
+ * @fileoverview This file creates a Vis.js network based on the perspectiveData and also mantains the dataColumn of this network
+ * @package It requires React package. 
+ * @package It requires vis-network package. 
+ * @package It requires vis-data package. 
+ * @author Marco Expósito Pérez
+ */
 
+//TODO currently is highly on development
+
+//Namespaces
+import { ViewOptions, AppLayout } from '../namespaces/ViewOptions';
+import { PerspectiveInfo, UserData } from '../namespaces/perspectivesTypes';
+
+//Packages
+import { useEffect, useState, useRef } from "react";
 import { DataSet } from "vis-data";
 import { Data, Network, Node, Edge } from "vis-network";
-import { ButtonState, ViewOptions } from '../constants/toolbarOptions';
-import { Layouts, PerspectiveData, UserData } from '../constants/perspectivesTypes';
+
+//Local files
 import { DataColumn } from "./DataColumn";
 import UserVisuals from "../controllers/nodeVisuals";
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
-    perspectiveInfo: PerspectiveData;
+    perspectiveInfo: PerspectiveInfo;
     //Options that change the view of a perspective
     viewOptions: ViewOptions;
     //Function to select a node
-    layout: Layouts;
+    layout: AppLayout;
     //Optional parameter to know if the its the first perspective of the pair, to mirror the table position in the horizontal layout
     isFirstPerspective?: boolean;
     //Current selected node
@@ -58,7 +72,7 @@ export const PerspectiveView = ({
     setSelectedNode,
 }: PerspectiveViewProps) => {
 
-    const [info, setInfo] = useState<PerspectiveData>(perspectiveInfo);
+    const [info, setInfo] = useState<PerspectiveInfo>(perspectiveInfo);
     const visJsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -66,11 +80,11 @@ export const PerspectiveView = ({
     }, [perspectiveInfo]);
 
     useEffect(() => {
-        if (nodes === undefined){
+        if (nodes === undefined) {
             const userVisuals = new UserVisuals(info);
             nodes = new DataSet(info.data.users);
         }
-            
+
         if (edges === undefined)
             edges = new DataSet(info.data.similarity);
 
@@ -99,7 +113,7 @@ export const PerspectiveView = ({
         community={info?.data.communities[0]}
     />
 
-    if (isFirstPerspective || layout === Layouts.Vertical) {
+    if (isFirstPerspective || layout === AppLayout.Vertical) {
         return (
             <div className="perspective row">
                 <div className="col-4">

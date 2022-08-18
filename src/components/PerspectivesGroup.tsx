@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { PerspectivePair, PerspectiveData, UserData } from "../constants/perspectivesTypes";
+/**
+ * @fileoverview This file creates all the perspective views and broadcast the necesary options, like the node that is selected, all perspective views need that to update their
+ * dataTables
+ * @package It requires React package. 
+ * @author Marco Expósito Pérez
+ */
+//Namespaces
+import { PerspectivePair, UserData } from "../namespaces/perspectivesTypes";
+import { AppLayout, ViewOptions } from "../namespaces/ViewOptions"
+//Packages
+import React, { useState } from "react";
+//Local files
 import { PerspectiveView } from "./PerspectiveView";
-
-import { Layouts } from "../constants/perspectivesTypes"
-import { ViewOptions } from '../constants/toolbarOptions';
 
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable
     perspectivePairs: PerspectivePair[],
     //Type of the layout of the pair networks
-    layout: Layouts,
+    layout: AppLayout,
     //View options for all networks
     viewOptions: ViewOptions,
 }
 
 /**
- * Container that draw each active perspective
+ * Component that draws each active perspective
  */
 export const PerspectivesGroups = ({
     perspectivePairs,
@@ -25,68 +32,82 @@ export const PerspectivesGroups = ({
 
     const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
 
+    //Reset the selectedNode to default when we clear all the active perspectives
     if (perspectivePairs.length === 0 && selectedNode !== undefined) {
         setSelectedNode(undefined);
     }
 
-    const perspectivesComponents = new Array();
-
-    for (let i = 0; i < perspectivePairs.length; i++) {
-        switch (perspectivePairs[i].size()) {
-            case 0:
-                break;
-            case 1:
-                const perspective = perspectivePairs[i].getSingle();
-                if (perspective !== undefined) {
-                    perspectivesComponents.push(
-                        <div className="singleNetwork">
-                            <PerspectiveView
-                                perspectiveInfo={perspective}
-                                viewOptions={viewOptions}
-                                layout={layout}
-                                selectedNode={selectedNode}
-                                setSelectedNode={setSelectedNode}
-                            />
-                        </div>
-                    )
-                }
-                break;
-            case 2:
-                const perspectiveA = perspectivePairs[i].perspectives[0];
-                const perspectiveB = perspectivePairs[i].perspectives[1];
-
-                if (perspectiveA !== undefined && perspectiveB !== undefined) {
-                    perspectivesComponents.push(
-                        <div className={`pairNetwork ${Layouts[layout]}`}>
-                            <PerspectiveView
-                                perspectiveInfo={perspectiveA}
-                                viewOptions={viewOptions}
-                                layout={layout}
-                                isFirstPerspective={true}
-                                selectedNode={selectedNode}
-                                setSelectedNode={setSelectedNode}
-                            />
-                            <PerspectiveView
-                                perspectiveInfo={perspectiveB}
-                                viewOptions={viewOptions}
-                                layout={layout}
-                                isFirstPerspective={false}
-                                selectedNode={selectedNode}
-                                setSelectedNode={setSelectedNode}
-                            />
-                        </div>
-                    )
-                }
-                break;
-        }
-    }
+    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode, setSelectedNode);
 
     return (
         <div className="perspectives-containers">
-            {perspectivesComponents.map((item: any, index: number): JSX.Element => {
+            {perspectivesComponents.map((item: React.ReactNode, index: number): JSX.Element => {
                 return (<React.Fragment key={index}>{item}</React.Fragment>);
             })}
-
         </div>
     );
 };
+
+/**
+ * Creates all active perspective components based on the perspective Pair parameter. Perspectives will have a diferent layour depending on if they are alone in a pair, 
+ * and if there are two perspectives in a pair it will depend on the layout parameter
+ * @param perspectivePairs Data of the active perspectives arranged in pairs
+ * @param viewOptions ViewOptions for the perspectives
+ * @param layout Layout options
+ * @param selectedNode Node that is currently selected between al perspectives
+ * @param setSelectedNode Function to update the selected node
+ * @returns An array with the react components created
+ */
+function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], viewOptions: ViewOptions, layout: AppLayout,
+    selectedNode: UserData | undefined, setSelectedNode: Function): React.ReactNode[] {
+
+    const perspectivesComponents = new Array<React.ReactNode>();
+
+    for (let i = 0; i < perspectivePairs.length; i++) {
+        if (perspectivePairs[i].hasEmptySpace()) {
+
+            const perspective = perspectivePairs[i].getSingle();
+            if (perspective !== undefined) {
+                perspectivesComponents.push(
+                    <div className="singleNetwork">
+                        <PerspectiveView
+                            perspectiveInfo={perspective}
+                            viewOptions={viewOptions}
+                            layout={layout}
+                            selectedNode={selectedNode}
+                            setSelectedNode={setSelectedNode} />
+                    </div>
+                );
+            }
+
+        } else {
+            const perspectiveA = perspectivePairs[i].perspectives[0];
+            const perspectiveB = perspectivePairs[i].perspectives[1];
+
+            if (perspectiveA !== undefined && perspectiveB !== undefined) {
+                perspectivesComponents.push(
+                    <div className={`pairNetwork ${AppLayout[layout]}`}>
+                        <PerspectiveView
+                            perspectiveInfo={perspectiveA}
+                            viewOptions={viewOptions}
+                            layout={layout}
+                            isFirstPerspective={true}
+                            selectedNode={selectedNode}
+                            setSelectedNode={setSelectedNode} />
+                        <PerspectiveView
+                            perspectiveInfo={perspectiveB}
+                            viewOptions={viewOptions}
+                            layout={layout}
+                            isFirstPerspective={false}
+                            selectedNode={selectedNode}
+                            setSelectedNode={setSelectedNode} />
+                    </div>
+                );
+            }
+            ;
+        }
+    }
+
+
+    return perspectivesComponents;
+}

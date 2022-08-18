@@ -1,22 +1,39 @@
+/**
+ * @fileoverview This file contains diferent aux classes and constant parameters related with the nodes/users of each perspective.
+ * @author Marco Expósito Pérez
+ */
+
+/**
+ * Contains the necesary info to change the shape of a node
+ */
 export interface shapeData {
     name: string,
     vAdjust: number,
     selectedVAdjust: number
 }
 
+/**
+ * Current available dimensions to change from nodes based on their explicit communities values
+ */
 export enum Dimensions {
     Color,
     Shape,
-    Border,
+    Border, //Color of the border
 }
 
+/**
+ * Attributes of a node dimensions and the community value data related to it. 
+ */
 export interface DimAttribute {
     key: string
     values: string[]
     dimension: Dimensions
 }
 
-export const node = {
+/**
+ * Constant values of configuration for the nodes
+ */
+export const nodeConst = {
 
     //--- Location Values ---
     groupsBaseDistance: 75,
@@ -93,17 +110,15 @@ export const node = {
 
 }
 
-
-
 /**
  * Returns a color for a node background
  * @param {number} n index of the returned color
  * @returns {string} Returns aa string similar to "rgb(255, 0, 0, 1)"
  */
 const getColorOfN = function (n: number): string {
-    n = n % node.BackgroundColors.length;
+    n = n % nodeConst.BackgroundColors.length;
 
-    return node.BackgroundColors[n];
+    return nodeConst.BackgroundColors[n];
 };
 
 /**
@@ -112,9 +127,9 @@ const getColorOfN = function (n: number): string {
  * @returns {Object} Returns an object in the format of { Shape: "dot", vOffset: -31, selOffset: -40 }
  */
 const getShapeOfN = function (n: number): shapeData {
-    n = n % node.AvailableShapes.length;
+    n = n % nodeConst.AvailableShapes.length;
 
-    return node.AvailableShapes[n];
+    return nodeConst.AvailableShapes[n];
 }
 
 /**
@@ -123,11 +138,12 @@ const getShapeOfN = function (n: number): shapeData {
  * @returns {String} Returns aa string similar to "rgb(255, 0, 0, 1)"
  */
 const getBorderOfN = function (n: number): string {
-    n = n % node.BoderColors.length;
+    n = n % nodeConst.BoderColors.length;
 
-    return node.BoderColors[n];
+    return nodeConst.BoderColors[n];
 };
 
+// TODO update this once the legend works
 // /**
 //  * Updates the html to match the class that its n-shape should have
 //  * @param {HTMLElement} html html to edit

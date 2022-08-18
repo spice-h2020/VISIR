@@ -1,13 +1,22 @@
+/**
+ * @fileoverview This file contains 2 functions to validate Files already parsed to JSON. One function for a file with All perspectives details, 
+ * and one for a file with the data of a single perspective
+ * @author Marco Expósito Pérez
+ */
+
+//Namespaces
 import * as types from "./perspectivesTypes";
 
 const checkSimilarityFunctions = false; //FOR DEBUG WITH TESTING DATAFILES
+
+//#region All perspectives JSON
 
 /**
  * Validate a JSON with all the perspectives info of all available perspectives
  * @param arg JSON with the data
  * @returns {types.AllPerspectives} returns the JSON parsed as a proper TS class
  */
-export function validateAllPerspectivesJSON(arg: any): types.AllPerspectives {
+export function validateAllPerspectivesDetailsJSON(arg: any): types.AllPerspectives {
     try {
         if (arg === undefined) {
             throw Error(`All perspectives file is undefined`);
@@ -39,7 +48,7 @@ export function validateAllPerspectivesJSON(arg: any): types.AllPerspectives {
     }
 }
 
-function isPerspectiveInfoValid(arg: any): types.PerspectiveInfo {
+function isPerspectiveInfoValid(arg: any): types.PerspectiveDetails {
     try {
         if (arg.id === undefined) {
             throw Error(`ID of the perspective is undefined`);
@@ -215,13 +224,16 @@ function isOnAttributeValid(arg: any): types.OnAttribute {
         throw Error(`OnAttribute is not valid: ${e.message}`);
     }
 }
+//#endregion
+
+//#region Perspective Data JSON
 
 /**
  * Validate a JSON with all the data to create the perspective network
  * @param arg JSON with the data
- * @returns {types.PerspectiveNetworkData} returns the file parsed as a proper TS class
+ * @returns {types.PerspectiveData} returns the file parsed as a proper TS class
  */
-export function validatePerspectiveJSON(arg: any): types.PerspectiveNetworkData {
+export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
     try {
         if (arg === undefined) {
             throw Error(`Perspective network data is undefined`);
@@ -267,7 +279,6 @@ export function validatePerspectiveJSON(arg: any): types.PerspectiveNetworkData 
         throw Error(`Perspective network data file is not valid: ${e.message}`);
     }
 }
-
 
 function isCommunityDataValid(arg: any): types.CommunityData {
     try {
@@ -439,5 +450,7 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
         throw Error(`Edge data is not valid: ${e.message}`);
     }
 }
+
+//#endregion 
 
 

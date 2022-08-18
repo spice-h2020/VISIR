@@ -1,10 +1,13 @@
-//WIP component
+//TODO WIP component. Will be used to change Vis.js networks options
+
+
+
 import React, { useState, useEffect } from "react";
 
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import { TresholdSlider } from "./tresholdSlider";
-import { ButtonState, tbOptions } from "../constants/toolbarOptions";
+import { ButtonState, initialOptions } from "../namespaces/ViewOptions";
 
 
 interface OptionsDropdownProps {
@@ -20,10 +23,10 @@ interface OptionsDropdownProps {
 
 const initialState = new Array();
 const init = () => {
-    initialState.push(tbOptions.initialHideLabels);
-    initialState.push(tbOptions.initialHideEdges);
-    initialState.push(tbOptions.initialEdgeWidth);
-    initialState.push(tbOptions.initialBorder);
+    initialState.push(initialOptions.hideLabels);
+    initialState.push(initialOptions.hideEdges);
+    initialState.push(initialOptions.edgeWidth);
+    initialState.push(initialOptions.border);
 }
 init();
 /**

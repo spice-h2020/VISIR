@@ -1,4 +1,7 @@
-//WIP component
+//TODO WIP component. Will be used to create the legend and to show node/community info on click
+
+
+
 import React, { useEffect, useState } from "react";
 
 import '../style/Tooltip.css';

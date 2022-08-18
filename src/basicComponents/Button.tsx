@@ -1,13 +1,21 @@
+/**
+ * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
+ * @package It requires React package. 
+ * @author Marco Expósito Pérez
+ */
+//Namespaces
+import { ButtonState } from '../namespaces/ViewOptions';
+//Packages
 import React, { useEffect, useState } from "react";
+//Local files
 import '../style/Button.css';
-import { ButtonState } from '../constants/toolbarOptions';
 
 interface ButtonProps {
   //Button contents.
   content?: React.ReactNode;
   //Current visual state of the button.
   state?: ButtonState;
-  //Auto toggle state.
+  //Auto toggle button state on click.
   autoToggle?: boolean;
   //On click handler
   onClick?: (params: any) => void;
@@ -26,7 +34,7 @@ export const Button = ({
   autoToggle = false,
   onClick = (): void => { },
   buttonId,
-  extraClassName ="",
+  extraClassName = "",
 }: ButtonProps) => {
 
   const [buttonState, setButtonState] = useState<ButtonState>(state);

@@ -1,15 +1,15 @@
 /**
- * @fileoverview This class Controls all GET petitions to obtain the json files with the networks data.
+ * @fileoverview This class manages all GET petitions to obtain the perspective files with the networks data.
  * @package Requires Axios package to be able to send the GET petitions.  
  * @author Marco Expósito Pérez
  */
-
+//Namespaces
+import { FileSource } from '../namespaces/ViewOptions';
 //Packages
 import { Axios } from 'axios'
-import { FileSource } from '../constants/toolbarOptions';
 
 export default class RequestManager {
-
+    
     isActive: boolean;
     axios: Axios;
     keyToUrl: Map<FileSource, string>;
@@ -26,7 +26,6 @@ export default class RequestManager {
         this.keyToUrl.set(FileSource.Local, "./data/");
         this.keyToUrl.set(FileSource.Develop, "https://raw.githubusercontent.com/gjimenezUCM/SPICE-visualization/develop/data/");
         this.keyToUrl.set(FileSource.Api, "API (WIP)");
-
     }
 
     /**
@@ -39,9 +38,9 @@ export default class RequestManager {
                 baseURL: baseURL,
             });
             this.isActive = true;
-        }else
+        } else
             throw new Error("the new base url is undefined");
-        
+
     }
 
     /**
