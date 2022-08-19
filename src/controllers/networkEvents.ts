@@ -45,9 +45,9 @@ export default class NetworkEvents {
 
     click(event: any, setSelNode: Function) {
         if (event.nodes.length > 0) {
-            this.nodeClicked(event.nodes[0], setSelNode);
+            this.nodeClicked(event, setSelNode);
         } else {
-            this.noNodeClicked();
+            this.noNodeClicked(event, setSelNode);
         }
     }
 
@@ -64,17 +64,18 @@ export default class NetworkEvents {
     }
 
 
-    nodeClicked(nodeId: number, setSelectedNode: Function) {
-        const node: UserData = this.nodes.get(nodeId) as UserData;
+    nodeClicked(event: any, setSelectedNode: Function) {
+        const node = this.nodes.get(event.nodes[0]) as unknown as UserData;
         setSelectedNode(node);
 
         //Search for the nodes that are connected to the selected Node
         const selectedNodes = new Array<string>();
-        selectedNodes.push(nodeId.toString())
+        selectedNodes.push(node.id.toString())
 
         const connected_edges_id = this.net.getConnectedEdges(selectedNodes[0]);
         const connectedEdges: Edge[] = this.edges.get(connected_edges_id);
 
+        const newEdges: Edge[] = new Array<Edge>();
         connectedEdges.forEach((edge: Edge) => {
             if (edge.value !== undefined && edge.value >= 0.5) {   //TODO link this with the threshold option
 
@@ -85,6 +86,7 @@ export default class NetworkEvents {
                     selectedNodes.push(edge.to as string);
 
                 edge.hidden = false;
+                newEdges.push(edge);
             }
         });
 
@@ -102,9 +104,11 @@ export default class NetworkEvents {
             this.edges.forEach((edge: Edge) => {
                 if (!connectedEdges.includes(edge)) {
                     edge.hidden = true;
+                    newEdges.push(edge);
                 }
             });
         }
+        this.edges.update(newEdges);
 
         //Update nodes's color acording to their selected status
         const newNodes = new Array();
@@ -118,12 +122,55 @@ export default class NetworkEvents {
 
             newNodes.push(node);
         });
-
         this.nodes.update(newNodes);
     }
 
 
-    noNodeClicked() {
+    noNodeClicked(event: any, setSelNode: Function) {
 
+        if (false) {  //TODO check if its clicking a bounding box
+
+
+        } else {
+
+            this.nothingSelected(setSelNode);
+        }
+    }
+
+
+    nothingSelected(setSelNode: Function) {
+        //Zoom out
+        const fitOptions: FitOptions = {
+            nodes: [],
+            animation: {
+                duration: nodeConst.ZoomDuration,
+            } as TimelineAnimationType,
+        }
+        this.net.fit(fitOptions);
+
+        //Hide edges
+        if (this.options.HideEdges) {
+            const newEdges: Edge[] = new Array<Edge>();
+            this.edges.forEach((edge: Edge) => {
+                edge.hidden = true;
+                newEdges.push(edge);
+            });
+            this.edges.update(newEdges);
+        }
+
+        //Deselect everything
+        this.net.unselectAll();
+
+        //Recolor all nodes
+        const newNodes = new Array();
+        this.nodes.forEach((node: Node) => {
+            this.visuals.dimensionsStrat.nodeToDefault(node as UserData);
+
+            newNodes.push(node);
+        });
+        this.nodes.update(newNodes);
+
+        //Clear datatables
+        setSelNode(undefined);
     }
 }

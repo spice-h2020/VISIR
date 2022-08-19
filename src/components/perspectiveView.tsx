@@ -110,6 +110,8 @@ export const PerspectiveView = ({
     useEffect(() => {
         if (selectedNode !== undefined && boundingBoxes !== undefined) {
             setSelectedCommunity(boundingBoxes.comData[selectedNode.implicit_community]);
+        }else{
+            setSelectedCommunity(undefined);
         }
     }, [selectedNode]);
 
