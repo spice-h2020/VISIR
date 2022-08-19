@@ -6,7 +6,7 @@
 import { Dimensions, DimAttribute, nodeConst, shapeData } from "../../namespaces/nodes";
 import { UserData } from "../../namespaces/perspectivesTypes";
 //Local files
-import DimensionStrategy from "./dimensionStrat";
+import DimensionStrategy from "./genericStrat";
 
 export default class ShapeStrategy extends DimensionStrategy {
 
@@ -45,6 +45,8 @@ export default class ShapeStrategy extends DimensionStrategy {
                 selectedVAdjust: nodeConst.defaultShape.selectedVAdjust
             }
         }
+
+        user.size = nodeConst.DefaultSize;
     }
 
     /**

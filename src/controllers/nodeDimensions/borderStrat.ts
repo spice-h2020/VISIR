@@ -6,7 +6,7 @@
 import { Dimensions, DimAttribute, nodeConst } from "../../namespaces/nodes";
 import { UserData } from "../../namespaces/perspectivesTypes";
 //Local files
-import DimensionStrategy from "./dimensionStrat";
+import DimensionStrategy from "./genericStrat";
 
 export default class BorderStrategy extends DimensionStrategy {
 

@@ -8,7 +8,7 @@
 import { PerspectiveInfo, PerspectiveData, UserData } from "../namespaces/perspectivesTypes";
 import { Dimensions, DimAttribute, nodeConst } from "../namespaces/nodes"
 //Local files
-import NodeDimensionStrategy from "./dimensionStratController";
+import NodeDimensionStrategy from "./dimensionStrategy";
 
 //Aux class to help mantain and collect all the values of an Explicit Community
 class ExplicitData {
@@ -32,6 +32,7 @@ interface Point {
     y: number;
 }
 
+//Aux class to help group nodes in their partition of the canvas's layout
 interface NodeGroup {
     nodes: number[],
     partition: {
@@ -40,7 +41,7 @@ interface NodeGroup {
     }
 }
 
-export default class UserVisuals {
+export default class NodeVisuals {
     //All explicit Data of the users
     explicitData: ExplicitData[];
     //Current active dimensions strat

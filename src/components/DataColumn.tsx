@@ -42,13 +42,21 @@ export const DataColumn = ({
 
     const [nodeInfo, setNodeInfo] = useState<DatatableData>(new DatatableData());
     const [commInfo, setCommInfo] = useState<DatatableData>(new DatatableData());
+    
 
     useEffect(() => {
 
         updateNodeInfo(node, setNodeInfo);
+       
+
+    }, [node]);
+
+    useEffect(() => {
+        
         updateCommInfo(community, setCommInfo);
 
-    }, [node, community]);
+    }, [community]);
+
 
     return (
         <div className="dataColumn">
@@ -109,6 +117,9 @@ function updateCommInfo(community: any, setCommInfo: Function) {
     newCommData.mainRows.push(new DataRow("Name", community !== undefined ? community.name : ""));
     newCommData.mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : ""));
 
+    if(community !== undefined && community.bb !== undefined){
+        newCommData.subRows.push(new DataRow("Color", community.bb.color.name) )
+    }
     setCommInfo(newCommData);
 
 }

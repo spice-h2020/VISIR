@@ -10,16 +10,19 @@
 
 //Namespaces
 import { ViewOptions, AppLayout } from '../namespaces/ViewOptions';
-import { PerspectiveInfo, UserData } from '../namespaces/perspectivesTypes';
+import { PerspectiveInfo, UserData, CommunityData } from '../namespaces/perspectivesTypes';
+import { edgeConst } from '../namespaces/edges';
 
 //Packages
 import { useEffect, useState, useRef } from "react";
 import { DataSet } from "vis-data";
-import { Data, Network, Node, Edge } from "vis-network";
+import { Data, Network, Edge, Options } from "vis-network";
 
 //Local files
 import { DataColumn } from "./DataColumn";
-import UserVisuals from "../controllers/nodeVisuals";
+import NodeVisuals from "../controllers/nodeVisuals";
+import BoundingBoxes from '../controllers/boundingBoxes';
+import NetworkEvents from '../controllers/networkEvents';
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
@@ -36,7 +39,29 @@ interface PerspectiveViewProps {
     setSelectedNode: Function;
 }
 
-const options = {
+const options: Options = {
+    edges: {
+        scaling: {
+            min: edgeConst.minWidth,
+            max: edgeConst.maxWidth,
+            label: {
+                enabled: false
+            }
+        },
+        color: {
+            color: edgeConst.defaultColor,
+            highlight: edgeConst.selectedColor
+        },
+        font: {
+            strokeWidth: edgeConst.LabelStrokeWidth,
+            size: edgeConst.LabelSize,
+            color: edgeConst.LabelColor,
+            strokeColor: edgeConst.LabelStrokeColor,
+            align: edgeConst.LabelAlign,
+            vadjust: edgeConst.labelVerticalAdjust
+        },
+        smooth: false
+    },
     autoResize: true,
     groups: {
         useDefaultGroups: false
@@ -59,7 +84,8 @@ const options = {
 let network: Network | null | undefined = undefined;
 let nodes: DataSet<UserData, "id"> | undefined = undefined;
 let edges: DataSet<Edge, "id"> | undefined = undefined;
-
+let boundingBoxes: BoundingBoxes;
+let userVisuals: NodeVisuals;
 /**
  * Basic UI component that execute a function when clicked
  */
@@ -72,6 +98,7 @@ export const PerspectiveView = ({
     setSelectedNode,
 }: PerspectiveViewProps) => {
 
+    const [selectedCommunity, setSelectedCommunity] = useState<CommunityData>();
     const [info, setInfo] = useState<PerspectiveInfo>(perspectiveInfo);
     const visJsRef = useRef<HTMLDivElement>(null);
 
@@ -79,38 +106,34 @@ export const PerspectiveView = ({
         setInfo(perspectiveInfo);
     }, [perspectiveInfo]);
 
+
+    useEffect(() => {
+        if (selectedNode !== undefined && boundingBoxes !== undefined) {
+            setSelectedCommunity(boundingBoxes.comData[selectedNode.implicit_community]);
+        }
+    }, [selectedNode]);
+
     useEffect(() => {
         if (nodes === undefined) {
-            const userVisuals = new UserVisuals(info);
+            userVisuals = new NodeVisuals(info);
             nodes = new DataSet(info.data.users);
         }
 
         if (edges === undefined)
             edges = new DataSet(info.data.similarity);
 
-        if (network === undefined)
+        if (network === undefined) {
             network = visJsRef.current && new Network(visJsRef.current, { nodes, edges } as Data, options);
-
-        network?.on("click", (event) => {
-
-            if (event.nodes.length > 0 && nodes !== undefined) {
-                let node = nodes.get(event.nodes[0]) as unknown as UserData;
-                node.color = { background: "black" }
-                nodes.update(node);
-
-                setSelectedNode(node);
-            }
-        });
+            boundingBoxes = new BoundingBoxes(info.data.communities, info.data.users, network!);
+            const networkEvents = new NetworkEvents(network!, nodes, edges, viewOptions, boundingBoxes, userVisuals, setSelectedNode);
+        }
 
     }, [visJsRef, nodes, edges]);
-
-
-
 
     const dataCol = <DataColumn
         tittle={info?.info.name}
         node={selectedNode}
-        community={info?.data.communities[0]}
+        community={selectedCommunity}
     />
 
     if (isFirstPerspective || layout === AppLayout.Vertical) {

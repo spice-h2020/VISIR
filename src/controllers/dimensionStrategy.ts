@@ -6,10 +6,10 @@
 import { DimAttribute } from "../namespaces/nodes"
 import { UserData } from "../namespaces/perspectivesTypes";
 //Local files
-import BorderStrategy from "./nodeDimensions/borderStrategy";
-import ColorStrategy from "./nodeDimensions/colorStrategy";
-import DimensionStrategy from "./nodeDimensions/dimensionStrat"
-import ShapeStrategy from "./nodeDimensions/shapeStrategy";
+import BorderStrategy from "./nodeDimensions/borderStrat";
+import ColorStrategy from "./nodeDimensions/colorStrat";
+import DimensionStrategy from "./nodeDimensions/genericStrat"
+import ShapeStrategy from "./nodeDimensions/shapeStrat";
 
 export default class NodeDimensionStrategy {
 
@@ -44,6 +44,7 @@ export default class NodeDimensionStrategy {
      * @param user node to edit
      */
     nodeToColorless(user: UserData) {
+        console.log(user);
         this.strategies.forEach((strat) => {
             strat.toColorless(user);
         });
