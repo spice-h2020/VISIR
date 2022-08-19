@@ -44,7 +44,6 @@ export default class NodeDimensionStrategy {
      * @param user node to edit
      */
     nodeToColorless(user: UserData) {
-        console.log(user);
         this.strategies.forEach((strat) => {
             strat.toColorless(user);
         });

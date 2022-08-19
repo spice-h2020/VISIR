@@ -127,7 +127,7 @@ export const PerspectiveView = ({
         if (network === undefined) {
             network = visJsRef.current && new Network(visJsRef.current, { nodes, edges } as Data, options);
             boundingBoxes = new BoundingBoxes(info.data.communities, info.data.users, network!);
-            const networkEvents = new NetworkEvents(network!, nodes, edges, viewOptions, boundingBoxes, userVisuals, setSelectedNode);
+            const networkEvents = new NetworkEvents(network!, nodes, edges, viewOptions, boundingBoxes, userVisuals, setSelectedNode, setSelectedCommunity);
         }
 
     }, [visJsRef, nodes, edges]);

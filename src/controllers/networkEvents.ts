@@ -4,7 +4,7 @@
  */
 //Namespaces
 import { ViewOptions } from "../namespaces/ViewOptions";
-import { EdgeData, UserData } from "../namespaces/perspectivesTypes";
+import { CommunityData, EdgeData, UserData } from "../namespaces/perspectivesTypes";
 import { nodeConst } from "../namespaces/nodes";
 //Packages
 import { DataSetEdges, DataSetNodes, Edge, Node, FitOptions, Network, TimelineAnimationType } from "vis-network";
@@ -26,7 +26,7 @@ export default class NetworkEvents {
     edges: DataSetEdges;
     options: ViewOptions;
 
-    constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, options: ViewOptions, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, setSelNode: Function) {
+    constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, options: ViewOptions, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, setSelNode: Function, setSelCom: Function) {
         this.bbs = boundingBoxes;
         this.visuals = nodeVisuals;
 
@@ -36,18 +36,18 @@ export default class NetworkEvents {
         this.options = options;
 
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
-        this.net.on("click", (event) => this.click(event, setSelNode));
+        this.net.on("click", (event) => this.click(event, setSelNode, setSelCom));
     }
 
     beforeDrawing(ctx: CanvasRenderingContext2D) {
         this.bbs.drawBoundingBoxes(ctx);
     }
 
-    click(event: any, setSelNode: Function) {
+    click(event: any, setSelNode: Function, setSelCom: Function) {
         if (event.nodes.length > 0) {
             this.nodeClicked(event, setSelNode);
         } else {
-            this.noNodeClicked(event, setSelNode);
+            this.noNodeClicked(event, setSelNode, setSelCom);
         }
     }
 
@@ -126,28 +126,47 @@ export default class NetworkEvents {
     }
 
 
-    noNodeClicked(event: any, setSelNode: Function) {
+    noNodeClicked(event: any, setSelNode: Function, setSelCom: Function) {
+        setSelNode(undefined);
 
-        if (false) {  //TODO check if its clicking a bounding box
+        const boundingBoxClicked = this.bbs.isBoundingBoxClicked(event);
 
+        if (boundingBoxClicked !== null) {
+            const community: CommunityData = this.bbs.comData[boundingBoxClicked]
 
+            //Update community datatable  
+            setSelCom(community);
+
+            //Zoom in to the community
+            const fitOptions: FitOptions = {
+                nodes: community.users,
+                animation: {
+                    duration: nodeConst.ZoomDuration,
+                } as TimelineAnimationType,
+            }
+            this.net.fit(fitOptions);
+
+            this.removeSelectedItems();
         } else {
 
-            this.nothingSelected(setSelNode);
+            //Zoom out from all nodes
+            const fitOptions: FitOptions = {
+                nodes: [],
+                animation: {
+                    duration: nodeConst.ZoomDuration,
+                } as TimelineAnimationType,
+            }
+            this.net.fit(fitOptions);
+
+            //Clear community datatable
+            setSelCom(undefined);
         }
+
+        this.removeSelectedItems();
     }
 
 
-    nothingSelected(setSelNode: Function) {
-        //Zoom out
-        const fitOptions: FitOptions = {
-            nodes: [],
-            animation: {
-                duration: nodeConst.ZoomDuration,
-            } as TimelineAnimationType,
-        }
-        this.net.fit(fitOptions);
-
+    removeSelectedItems() {
         //Hide edges
         if (this.options.HideEdges) {
             const newEdges: Edge[] = new Array<Edge>();
@@ -169,8 +188,5 @@ export default class NetworkEvents {
             newNodes.push(node);
         });
         this.nodes.update(newNodes);
-
-        //Clear datatables
-        setSelNode(undefined);
     }
 }

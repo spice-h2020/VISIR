@@ -96,7 +96,7 @@ export default class BoundingBoxes {
     drawBoundingBoxes(ctx: CanvasRenderingContext2D) {
         for (let i = 0; i < this.comData.length; i++) {
             if (this.comData[i].bb !== undefined) {
-                
+
                 const bb: BoundingBox = this.comData[i].bb;
 
                 //Draw Border
@@ -110,5 +110,21 @@ export default class BoundingBoxes {
                 ctx.fillRect(bb.left, bb.top, bb.right - bb.left, bb.bottom - bb.top);
             }
         }
+    }
+
+    isBoundingBoxClicked(event: any) {
+        const x = event.pointer.canvas.x;
+        const y = event.pointer.canvas.y;
+
+        for (let i = 0; i < this.comData.length; i++) {
+            if (this.clickInsideBox(this.comData[i].bb, x, y)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    clickInsideBox(bb: BoundingBox, x: number, y: number) {
+        return x > bb.left && x < bb.right && y > bb.top && y < bb.bottom;
     }
 }
