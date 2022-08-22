@@ -46,11 +46,14 @@ export class ViewOptions {
     EdgeWidth: boolean;
     Border: boolean;
 
+    LegendConfig: Map<string, boolean>
+
     constructor() {
         this.HideLabels = initialOptions.hideLabels === ButtonState.active;
         this.HideEdges = initialOptions.hideEdges === ButtonState.active;
         this.EdgeWidth = initialOptions.edgeWidth === ButtonState.active;
         this.Border = initialOptions.border === ButtonState.active;
+        this.LegendConfig = new Map<string, boolean>();
     }
 }
 

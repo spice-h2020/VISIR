@@ -14,7 +14,9 @@ import { AllPerspectives, PerspectiveDetails } from './namespaces/perspectivesTy
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
-import {validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './namespaces/perspectiveValidation';
+import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './namespaces/perspectiveValidation';
+import { LegendTooltip } from './components/LegendTooltip';
+import { DimAttribute } from './namespaces/nodes';
 
 const requestManager = new RequestManager();
 const viewDataManager = new ViewDataManager();
@@ -26,6 +28,19 @@ function App() {
   const [fileSource, setFileSource] = useState<FileSource>(initialOptions.fileSource);
   const [viewOptions, setViewOptions] = useState<ViewOptions>(new ViewOptions());
   const [layout, setLayout] = useState<AppLayout>(initialOptions.layout);
+  const [legendData, setLegendData] = useState<DimAttribute[]>([]);
+  const [viewActive, setViewActive] = useState<boolean>(false);
+  const [legendConfig, setLegendConfig] = useState(new Map<string, boolean>());
+
+  useEffect(() => {
+    if (viewOptions !== undefined) {
+      const newViewOptions = (JSON.parse(JSON.stringify(viewOptions))) as ViewOptions;
+;
+      newViewOptions.LegendConfig = legendConfig
+      setViewOptions(newViewOptions);
+    }
+
+  }, [legendConfig]);
 
   const onHideLabels = (newValue: boolean) => {
     const newViewOptions = Object.assign({}, viewOptions);
@@ -154,8 +169,10 @@ function App() {
 
         ]}
         rightAlignedItems={[
-          <Button
-            content={"Legend"}
+          <LegendTooltip
+            legendData={legendData}
+            state={viewActive}
+            updateLegendConfig={setLegendConfig}
           />,
         ]}
       />
@@ -164,6 +181,8 @@ function App() {
         perspectivePairs={viewDataManager.activePerspectivePairs}
         layout={layout}
         viewOptions={viewOptions}
+        setLegendData={setLegendData}
+        setViewActive={setViewActive}
       />
     </div>
   );

@@ -18,6 +18,8 @@ interface DropdownProps {
     content?: React.ReactNode;
     //Extra class name to add and change the CSS
     extraClassName?: string;
+    //Active close dropdown when outside click functionality
+    closeWhenOutsideClick?: boolean;
 }
 
 /**
@@ -26,8 +28,8 @@ interface DropdownProps {
 export const Dropdown = ({
     items = [],
     content = "Dropdown",
-    extraClassName ="",
-
+    extraClassName = "",
+    closeWhenOutsideClick = true,
 }: DropdownProps) => {
 
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -36,9 +38,9 @@ export const Dropdown = ({
     const ref = React.useRef<HTMLDivElement>(null);
     useOutsideClick(showDropDown, ref, () => {
         setShowDropDown(false);
-    });
+    }, closeWhenOutsideClick);
 
-    if (items.length !== 0)
+    if (items.length != 0)
         return (
             <div className={showDropDown ? `dropdown ${extraClassName} active` : `dropdown ${extraClassName}`}
                 ref={ref}
@@ -60,10 +62,13 @@ export const Dropdown = ({
         );
     else
         return (
-            <div className={`dropdown ${extraClassName} disabled`} ref={ref}>
+            <div className={showDropDown ? `dropdown ${extraClassName} active` : `dropdown ${extraClassName}`}
+                ref={ref}
+            >
                 <Button
                     content={content}
                     state={ButtonState.inactive}
+                    extraClassName={`${extraClassName} disabled`}
                 />
             </div >
         );
@@ -76,7 +81,7 @@ export const Dropdown = ({
  * @param ref Reference of the html object of the component to detect a click outside it
  * @param callback Function executed when the user clicks outside the ref component
  */
-const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function) => {
+const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function, closeWhenOutsideClick: boolean) => {
 
     const handleClick = (ev: Event) => {
         if (ref.current && !ref.current.contains(ev.target as Node)) {
@@ -85,16 +90,18 @@ const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, c
     };
 
     useEffect(() => {
-        if (state) {
-            document.addEventListener("click", handleClick);
+        if (closeWhenOutsideClick) {
+            if (state) {
+                document.addEventListener("click", handleClick);
 
-        } else {
-            document.removeEventListener("click", handleClick);
+            } else {
+                document.removeEventListener("click", handleClick);
+            }
+
+
+            return () => {
+                document.removeEventListener("click", handleClick);
+            };
         }
-
-
-        return () => {
-            document.removeEventListener("click", handleClick);
-        };
     }, [state]);
 };

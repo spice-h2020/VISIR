@@ -35,9 +35,7 @@ export default class ViewDataManager {
     removePerspective(perspectiveId: number) {
         for (let i = 0; i < this.activePerspectivePairs.length; i++) {
             if(this.activePerspectivePairs[i].removePerspective(perspectiveId)){
-                console.log(this.activePerspectivePairs)
                 this.activePerspectivePairs.splice(i, 1);
-                console.log(this.activePerspectivePairs)
             }
         }
     }

@@ -8,7 +8,7 @@
 import { PerspectivePair, UserData } from "../namespaces/perspectivesTypes";
 import { AppLayout, ViewOptions } from "../namespaces/ViewOptions"
 //Packages
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //Local files
 import { PerspectiveView } from "./PerspectiveView";
 
@@ -19,6 +19,10 @@ interface PerspectivesGroupProps {
     layout: AppLayout,
     //View options for all networks
     viewOptions: ViewOptions,
+    //Function to setup the legend's data
+    setLegendData: Function,
+    //Function to change the application to inactive when theres no active perspectives
+    setViewActive: Function
 }
 
 /**
@@ -28,16 +32,27 @@ export const PerspectivesGroups = ({
     perspectivePairs,
     layout,
     viewOptions,
+    setLegendData,
+    setViewActive,
 }: PerspectivesGroupProps) => {
 
     const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
 
-    //Reset the selectedNode to default when we clear all the active perspectives
-    if (perspectivePairs.length === 0 && selectedNode !== undefined) {
-        setSelectedNode(undefined);
-    }
+    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode, setSelectedNode, setLegendData);
 
-    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode, setSelectedNode);
+    useEffect(() => {
+        //Reset the selectedNode to default when we clear all the active perspectives
+        if (perspectivePairs.length === 0) {
+            setViewActive(false);
+
+            if (selectedNode !== undefined) {
+                setSelectedNode(undefined);
+            }
+        } else {
+            setViewActive(true);
+        }
+
+    }, [perspectivePairs.length]);
 
     return (
         <div className="perspectives-containers">
@@ -59,7 +74,7 @@ export const PerspectivesGroups = ({
  * @returns An array with the react components created
  */
 function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], viewOptions: ViewOptions, layout: AppLayout,
-    selectedNode: UserData | undefined, setSelectedNode: Function): React.ReactNode[] {
+    selectedNode: UserData | undefined, setSelectedNode: Function, setLegendData: Function): React.ReactNode[] {
 
     const perspectivesComponents = new Array<React.ReactNode>();
 
@@ -75,7 +90,8 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             viewOptions={viewOptions}
                             layout={layout}
                             selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode} />
+                            setSelectedNode={setSelectedNode}
+                            setLegendData={setLegendData} />
                     </div>
                 );
             }
@@ -93,14 +109,16 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             layout={layout}
                             isFirstPerspective={true}
                             selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode} />
+                            setSelectedNode={setSelectedNode}
+                            setLegendData={setLegendData} />
                         <PerspectiveView
                             perspectiveInfo={perspectiveB}
                             viewOptions={viewOptions}
                             layout={layout}
                             isFirstPerspective={false}
                             selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode} />
+                            setSelectedNode={setSelectedNode}
+                            setLegendData={setLegendData} />
                     </div>
                 );
             }

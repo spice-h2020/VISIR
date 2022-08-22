@@ -12,3 +12,11 @@
   background-color: rgb(255, 0, 0);
 }
 
+
+.btn.disabled{
+  background-color: rgb(208, 255, 0);
+}
+
+.btn.disabled:hover{
+  background-color: rgb(208, 255, 0);
+}

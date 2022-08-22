@@ -9,6 +9,8 @@ import { PerspectiveInfo, PerspectiveData, UserData } from "../namespaces/perspe
 import { Dimensions, DimAttribute, nodeConst } from "../namespaces/nodes"
 //Local files
 import NodeDimensionStrategy from "./dimensionStrategy";
+import { ViewOptions } from "../namespaces/ViewOptions";
+import { DataSet, DataSetNodes, Node } from "vis-network";
 
 //Aux class to help mantain and collect all the values of an Explicit Community
 class ExplicitData {
@@ -41,17 +43,21 @@ interface NodeGroup {
     }
 }
 
+//TODO update the initial node visuals with the view options
 export default class NodeVisuals {
+
     //All explicit Data of the users
     explicitData: ExplicitData[];
     //Current active dimensions strat
     dimensionsStrat!: NodeDimensionStrategy;
+    //Atributes with the relations between explicit communities and their dimensions
+    attributes!: DimAttribute[];
 
     /**
      * Constructor of the class
      * @param PerspectiveInfo Perspective info of the perspective that uses this object
      */
-    constructor(PerspectiveInfo: PerspectiveInfo) {
+    constructor(PerspectiveInfo: PerspectiveInfo, setLegendData: Function) {
         this.explicitData = new Array<ExplicitData>();
 
         this.obtainExplicitData(PerspectiveInfo.data.users);
@@ -60,6 +66,8 @@ export default class NodeVisuals {
 
         this.updateNodeDimensionsToDefault(PerspectiveInfo.data.users);
         this.updateNodeLocation(PerspectiveInfo.data);
+
+        setLegendData(this.attributes);
     }
 
     /**
@@ -94,10 +102,10 @@ export default class NodeVisuals {
      * Create the node dimension strategy and its necesary attributes
      */
     createNodeDimensionStrategy() {
-        const attributes = new Array<DimAttribute>();
+        this.attributes = new Array<DimAttribute>();
 
         if (this.explicitData[0] !== undefined) {
-            attributes.push({
+            this.attributes.push({
                 key: this.explicitData[0].key,
                 values: this.explicitData[0].values,
                 dimension: Dimensions.Color,
@@ -105,7 +113,7 @@ export default class NodeVisuals {
         }
 
         if (this.explicitData[1] !== undefined) {
-            attributes.push({
+            this.attributes.push({
                 key: this.explicitData[1].key,
                 values: this.explicitData[1].values,
                 dimension: Dimensions.Shape,
@@ -114,14 +122,14 @@ export default class NodeVisuals {
 
         //TODO link the allow third dimension option tho this
         if (this.explicitData[2] !== undefined && false) {
-            attributes.push({
+            this.attributes.push({
                 key: this.explicitData[2].key,
                 values: this.explicitData[2].values,
                 dimension: Dimensions.Border,
             })
         }
 
-        this.dimensionsStrat = new NodeDimensionStrategy(attributes);
+        this.dimensionsStrat = new NodeDimensionStrategy(this.attributes);
     }
 
     /**
@@ -229,4 +237,56 @@ export default class NodeVisuals {
 
         return output;
     }
+
+    //TODO dont color to default nodes that should be hidden by a node selection
+    /**
+     * Updates the visuals of all nodes to match the legend configuration
+     * @param legendConfig Legend configuration
+     * @param nodes nodes that will be edited
+     */
+    updateLegendConfig(legendConfig: Map<string, boolean>, nodes: DataSetNodes) {
+        if (legendConfig.size !== 0) {
+
+            const newNodes = new Array<UserData>();
+            nodes.forEach((node: Node) => {
+
+                const user: UserData = node as UserData;
+                const keys = Object.keys(user.explicit_community);
+
+                let toColorless = false;
+                for (let i = 0; i < keys.length && !toColorless; i++) {
+                    const value = user.explicit_community[keys[i]]
+                    if (legendConfig.get(value) === false)
+                        toColorless = true;
+                }
+
+                if (toColorless) {
+                    this.dimensionsStrat.nodeToColorless(user);
+                } else {
+                    this.dimensionsStrat.nodeToDefault(user);
+                }
+                newNodes.push(user);
+            });
+
+            nodes.update(newNodes)
+        }
+    }
+
+    hideLabels(HideLabels: boolean, nodes: DataSetNodes) {
+        const newNodes = new Array<UserData>();
+
+        nodes.forEach((node) => {
+            const user = node as UserData;
+
+            if (HideLabels)
+                user.font.color = "#00000000"
+            else
+                user.font.color = "#000000FF"
+
+            newNodes.push(user);
+        });
+        nodes.update(newNodes);
+    }
 }
+
+

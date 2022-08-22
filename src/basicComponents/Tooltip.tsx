@@ -32,7 +32,7 @@ interface TooltipProps {
  * Dropdown component
  */
 export const Tooltip = ({
-    alignment = "bottom",
+    alignment = "left",
     state = false,
     content,
     showArrow = true,

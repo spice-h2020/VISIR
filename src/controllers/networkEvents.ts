@@ -129,6 +129,12 @@ export default class NetworkEvents {
     noNodeClicked(event: any, setSelNode: Function, setSelCom: Function) {
         setSelNode(undefined);
 
+        const fitOptions: FitOptions = {
+            animation: {
+                duration: nodeConst.ZoomDuration,
+            } as TimelineAnimationType,
+        }
+
         const boundingBoxClicked = this.bbs.isBoundingBoxClicked(event);
 
         if (boundingBoxClicked !== null) {
@@ -138,24 +144,14 @@ export default class NetworkEvents {
             setSelCom(community);
 
             //Zoom in to the community
-            const fitOptions: FitOptions = {
-                nodes: community.users,
-                animation: {
-                    duration: nodeConst.ZoomDuration,
-                } as TimelineAnimationType,
-            }
+            fitOptions.nodes = community.users;
             this.net.fit(fitOptions);
 
             this.removeSelectedItems();
         } else {
 
             //Zoom out from all nodes
-            const fitOptions: FitOptions = {
-                nodes: [],
-                animation: {
-                    duration: nodeConst.ZoomDuration,
-                } as TimelineAnimationType,
-            }
+            fitOptions.nodes = [];
             this.net.fit(fitOptions);
 
             //Clear community datatable
