@@ -26,9 +26,8 @@ export default class NetworkEvents {
     net: Network;
     nodes: DataSetNodes;
     edges: DataSetEdges;
-    options: ViewOptions;
 
-    constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, options: ViewOptions, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, edgeVisuals: EdgeVisuals, setSelNode: Function, setSelCom: Function) {
+    constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, edgeVisuals: EdgeVisuals, setSelNode: Function, setSelCom: Function) {
         this.bbs = boundingBoxes;
         this.nodeVisuals = nodeVisuals;
         this.edgeVisuals = edgeVisuals;
@@ -36,7 +35,6 @@ export default class NetworkEvents {
         this.net = network;
         this.nodes = nodes;
         this.edges = edges;
-        this.options = options;
 
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
         this.net.on("click", (event) => this.click(event, setSelNode, setSelCom));

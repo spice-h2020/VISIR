@@ -7,10 +7,14 @@
 //Namespaces
 import { PerspectivePair, UserData } from "../namespaces/perspectivesTypes";
 import { AppLayout, ViewOptions } from "../namespaces/ViewOptions"
+import { TooltipInfo } from "../basicComponents/Tooltip";
+
 //Packages
 import React, { useEffect, useState } from "react";
 //Local files
 import { PerspectiveView } from "./PerspectiveView";
+
+
 
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable
@@ -37,6 +41,7 @@ export const PerspectivesGroups = ({
 }: PerspectivesGroupProps) => {
 
     const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
+    const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo | undefined>();
 
     const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode, setSelectedNode, setLegendData);
 

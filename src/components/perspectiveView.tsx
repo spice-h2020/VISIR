@@ -75,7 +75,7 @@ export const PerspectiveView = ({
 
     ViewOptionsUseEffect(viewOptions);
 
-    useEffect(() => {
+    useEffect(() => {   //TODO asegurarse de que la comunidad que se muestra en cada tabla  es la correspondiente a cada network
         if (selectedNode !== undefined && boundingBoxes !== undefined) {
             setSelectedCommunity(boundingBoxes.comData[selectedNode.implicit_community]);
         } else {
@@ -101,7 +101,7 @@ export const PerspectiveView = ({
         if (network === undefined) {
             network = visJsRef.current && new Network(visJsRef.current, { nodes, edges } as Data, options);
             boundingBoxes = new BoundingBoxes(info.data.communities, info.data.users, network!);
-            const networkEvents = new NetworkEvents(network!, nodes, edges, viewOptions, boundingBoxes, userVisuals, edgeVisuals, setSelectedNode, setSelectedCommunity);
+            const networkEvents = new NetworkEvents(network!, nodes, edges, boundingBoxes, userVisuals, edgeVisuals, setSelectedNode, setSelectedCommunity);
         }
 
     }, [visJsRef, nodes, edges]);
