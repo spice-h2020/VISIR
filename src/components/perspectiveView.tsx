@@ -96,13 +96,12 @@ export const PerspectiveView = ({
         if (edges === undefined) {
             edges = new DataSet(info.data.similarity);
             edgeVisuals = new EdgeVisuals(viewOptions, edges, options)
-
         }
 
         if (network === undefined) {
             network = visJsRef.current && new Network(visJsRef.current, { nodes, edges } as Data, options);
             boundingBoxes = new BoundingBoxes(info.data.communities, info.data.users, network!);
-            const networkEvents = new NetworkEvents(network!, nodes, edges, viewOptions, boundingBoxes, userVisuals, setSelectedNode, setSelectedCommunity);
+            const networkEvents = new NetworkEvents(network!, nodes, edges, viewOptions, boundingBoxes, userVisuals, edgeVisuals, setSelectedNode, setSelectedCommunity);
         }
 
     }, [visJsRef, nodes, edges]);
@@ -188,7 +187,7 @@ const getOptions = (viewOptions: ViewOptions, options: Options | undefined): Opt
 function ViewOptionsUseEffect(viewOptions: ViewOptions) {
     useEffect(() => {
         if (userVisuals !== undefined && nodes !== undefined) {
-            userVisuals.updateLegendConfig(viewOptions.LegendConfig);
+            userVisuals.updateNodeDimensions(viewOptions.LegendConfig);
         }
     }, [viewOptions.LegendConfig]);
 
@@ -200,13 +199,15 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions) {
 
     useEffect(() => {
         if (edgeVisuals !== undefined && nodes !== undefined) {
-            edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, edges, options, network);
+            edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, options);
+            network?.setOptions(options);
+            edges?.update(edges);
         }
     }, [viewOptions.EdgeWidth]);
 
     useEffect(() => {
         if (edgeVisuals !== undefined && nodes !== undefined) {
-            edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges, edges);
+            edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges);
         }
     }, [viewOptions.HideEdges]);
 

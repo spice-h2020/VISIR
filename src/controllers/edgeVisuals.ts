@@ -15,50 +15,63 @@ import { edgeConst } from "../namespaces/edges";
 
 
 export default class EdgeVisuals {
-
+    edges: DataSetEdges
 
     constructor(viewOptions: ViewOptions, Edges: DataSetEdges, options: Options) {
-        this.hideUnselectedEdges(viewOptions.HideEdges, Edges);
+        this.edges = Edges;
+        this.narrowEdges();
+
+        this.hideUnselectedEdges(viewOptions.HideEdges);
+        this.changeEdgeWidth(viewOptions.EdgeWidth, options)
     }
 
-    changeEdgeWidth(edgeWidth: boolean, edges: DataSetEdges | undefined, options: Options, network: Network | undefined | null) {
-        if (edges !== undefined && network !== undefined && network !== null) {
-            if (options.edges?.scaling?.max !== undefined) {
-                if (edgeWidth)
-                    options.edges.scaling.max = edgeConst.maxWidth;
-                else
-                    options.edges.scaling.max = edgeConst.minWidth;
+    narrowEdges(){
+        const edgesToDelete: Edge[] = new Array<Edge>();
+        this.edges.forEach((edge: Edge) => {
+            if(edge.value !== undefined && edge.value < 0.5){
+                edgesToDelete.push(edge);
             }
-
-
-            network.setOptions(options);
-            edges.update(edges);
+        })
+        this.edges.remove(edgesToDelete);
+    }
+    
+    changeEdgeWidth(edgeWidth: boolean, options: Options) {
+        if (options.edges?.scaling?.max !== undefined) {
+            if (edgeWidth)
+                options.edges.scaling.max = edgeConst.maxWidth;
+            else
+                options.edges.scaling.max = edgeConst.minWidth;
         }
     }
 
     //TODO, dont hide current selected edges
-    hideUnselectedEdges(HideEdges: boolean, edges: DataSetEdges | undefined) {
-        if (edges !== undefined) {
-            const newEdges = new Array();
+    hideUnselectedEdges(HideEdges: boolean) {
+        const newEdges = new Array();
 
-            edges.forEach((edge: Edge) => {
-                if (HideEdges) {
-                    edge["hidden"] = true;
-                } else {
-                    edge["hidden"] = false;
-                }
+        this.edges.forEach((edge: Edge) => {
+            if (HideEdges) {
+                edge["hidden"] = true;
+            } else {
+                edge["hidden"] = false;
+            }
 
+            newEdges.push(edge);
+        })
 
-                newEdges.push(edge);
-            })
-
-            edges.update(newEdges);
-        }
+        this.edges.update(newEdges);
     }
 
-
-
-
+    selectEdges(connectedEdges: Edge[], options: ViewOptions, newEdges: Edge[]) {
+        if (options.HideEdges) {
+            this.edges.forEach((edge: Edge) => {
+                if (!connectedEdges.includes(edge)) {
+                    edge.hidden = true;
+                    newEdges.push(edge);
+                }
+            });
+        }
+        this.edges.update(newEdges);
+    }
 }
 
 

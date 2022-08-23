@@ -12,6 +12,7 @@ import { DataSetEdges, DataSetNodes, Edge, Node, FitOptions, Network, TimelineAn
 //Local files
 import BoundingBoxes from "./boundingBoxes";
 import NodeVisuals from "./nodeVisuals";
+import EdgeVisuals from "./edgeVisuals";
 
 
 
@@ -19,16 +20,18 @@ import NodeVisuals from "./nodeVisuals";
 export default class NetworkEvents {
 
     bbs: BoundingBoxes;
-    visuals: NodeVisuals
+    nodeVisuals: NodeVisuals;
+    edgeVisuals: EdgeVisuals;
 
     net: Network;
     nodes: DataSetNodes;
     edges: DataSetEdges;
     options: ViewOptions;
 
-    constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, options: ViewOptions, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, setSelNode: Function, setSelCom: Function) {
+    constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, options: ViewOptions, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, edgeVisuals: EdgeVisuals, setSelNode: Function, setSelCom: Function) {
         this.bbs = boundingBoxes;
-        this.visuals = nodeVisuals;
+        this.nodeVisuals = nodeVisuals;
+        this.edgeVisuals = edgeVisuals;
 
         this.net = network;
         this.nodes = nodes;
@@ -87,6 +90,8 @@ export default class NetworkEvents {
 
                 edge.hidden = false;
                 newEdges.push(edge);
+            }else{
+                edge.hidden = true;
             }
         });
 
@@ -99,30 +104,11 @@ export default class NetworkEvents {
         }
         this.net.fit(fitOptions);
 
-        //Hide edges unconected 
-        if (this.options.HideEdges) {
-            this.edges.forEach((edge: Edge) => {
-                if (!connectedEdges.includes(edge)) {
-                    edge.hidden = true;
-                    newEdges.push(edge);
-                }
-            });
-        }
-        this.edges.update(newEdges);
+        //Hide edges unconected
+        this.edgeVisuals.selectEdges(connectedEdges, this.options, newEdges);
 
         //Update nodes's color acording to their selected status
-        const newNodes = new Array();
-        this.nodes.forEach((node: Node) => {
-
-            if (node.id !== undefined && selectedNodes.includes(node.id.toString())) {
-                this.visuals.dimensionsStrat.nodeToDefault(node as UserData);
-            } else {
-                this.visuals.dimensionsStrat.nodeToColorless(node as UserData);
-            }
-
-            newNodes.push(node);
-        });
-        this.nodes.update(newNodes);
+        this.nodeVisuals.selectNodes(selectedNodes);
     }
 
 
@@ -177,12 +163,13 @@ export default class NetworkEvents {
         this.net.unselectAll();
 
         //Recolor all nodes
-        const newNodes = new Array();
-        this.nodes.forEach((node: Node) => {
-            this.visuals.dimensionsStrat.nodeToDefault(node as UserData);
+        this.nodeVisuals.unselectNodes()
+        // const newNodes = new Array();
+        // this.nodes.forEach((node: Node) => {
+        //     this.nodeVisuals.dimensionsStrat.nodeToDefault(node as UserData);
 
-            newNodes.push(node);
-        });
-        this.nodes.update(newNodes);
+        //     newNodes.push(node);
+        // });
+        // this.nodes.update(newNodes);
     }
 }

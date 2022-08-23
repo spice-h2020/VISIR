@@ -54,6 +54,11 @@ export default class NodeVisuals {
     attributes!: DimAttribute[];
     //Nodes of the network
     nodes: DataSetNodes;
+    //Selected nodes of the network
+    selectedNodes?: string[];
+    //Visual configuration based on the legend options
+    legendConfig?: Map<string, boolean>
+
     /**
      * Constructor of the class
      * @param PerspectiveInfo Perspective info of the perspective that uses this object
@@ -122,7 +127,6 @@ export default class NodeVisuals {
             })
         }
 
-        //TODO link the allow third dimension option tho this
         if (this.explicitData[2] !== undefined && viewOptions.Border) {
             this.attributes.push({
                 key: this.explicitData[2].key,
@@ -132,7 +136,7 @@ export default class NodeVisuals {
         }
 
         this.dimensionsStrat = new NodeDimensionStrategy(this.attributes);
-        this.updateLegendConfig(viewOptions.LegendConfig);
+        this.updateNodeDimensions(viewOptions.LegendConfig);
     }
 
     /**
@@ -142,11 +146,12 @@ export default class NodeVisuals {
     updateNodeDimensionsToDefault() {
         if (this.dimensionsStrat !== undefined) {
 
-
+            const newNodes = new Array();
             this.nodes.forEach((node) => {
                 this.dimensionsStrat?.nodeToDefault(node as UserData);
+                newNodes.push(node)
             });
-
+            this.nodes.update(newNodes);
         } else {
             console.log("Trying to update node visuals without dimension strat being defined")
         }
@@ -243,40 +248,47 @@ export default class NodeVisuals {
         return output;
     }
 
-    //TODO dont color to default nodes that should be hidden by a node selection
+    updateNodeDimensions(legendConfig: Map<string, boolean> | undefined) {
+        if (legendConfig !== undefined)
+            this.legendConfig = legendConfig;
+
+        if (this.legendConfig !== undefined)
+            this.updateNodesBasedOnLegend();
+
+    }
     /**
      * Updates the visuals of all nodes to match the legend configuration
      * @param legendConfig Legend configuration
      * @param nodes nodes that will be edited
      */
-    updateLegendConfig(legendConfig: Map<string, boolean>) {
-        if (legendConfig.size !== 0) {
+    updateNodesBasedOnLegend() {
+        const newNodes = new Array<UserData>();
 
-            const newNodes = new Array<UserData>();
-            this.nodes.forEach((node: Node) => {
+        this.nodes.forEach((node: Node) => {
+            const user: UserData = node as UserData;
+            const keys = Object.keys(user.explicit_community);
 
-                const user: UserData = node as UserData;
-                const keys = Object.keys(user.explicit_community);
+            let toColorless = false;
+            for (let i = 0; i < keys.length && !toColorless; i++) {
+                const value = user.explicit_community[keys[i]]
+                if (this.legendConfig!.get(value) === false)
+                    toColorless = true;
+            }
 
-                let toColorless = false;
-                for (let i = 0; i < keys.length && !toColorless; i++) {
-                    const value = user.explicit_community[keys[i]]
-                    if (legendConfig.get(value) === false)
-                        toColorless = true;
-                }
+            if (toColorless) {
+                this.dimensionsStrat.nodeToColorless(user);
 
-                if (toColorless) {
-                    this.dimensionsStrat.nodeToColorless(user);
-                } else {
+            } else if (this.selectedNodes !== undefined && this.selectedNodes.length > 0) {
+                if (this.selectedNodes.includes(user.id.toString())) {
                     this.dimensionsStrat.nodeToDefault(user);
                 }
-                newNodes.push(user);
-            });
+            } else {
+                this.dimensionsStrat.nodeToDefault(user);
+            }
+            newNodes.push(user);
+        });
 
-            this.nodes.update(newNodes)
-        } else {
-            this.updateNodeDimensionsToDefault();
-        }
+        this.nodes.update(newNodes)
     }
 
     hideLabels(HideLabels: boolean) {
@@ -293,6 +305,16 @@ export default class NodeVisuals {
             newNodes.push(user);
         });
         this.nodes.update(newNodes);
+    }
+
+    selectNodes(selectedNodes: string[]) {
+        this.selectedNodes = selectedNodes;
+        this.updateNodeDimensions(undefined)
+    }
+
+    unselectNodes() {
+        this.selectedNodes = undefined;
+        this.updateNodeDimensions(undefined)
     }
 }
 
