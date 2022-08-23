@@ -75,11 +75,10 @@ export default class NetworkEvents {
         const selectedNodes = new Array<string>();
         selectedNodes.push(node.id.toString())
 
-        const connected_edges_id = this.net.getConnectedEdges(selectedNodes[0]);
-        const connectedEdges: Edge[] = this.edges.get(connected_edges_id);
+        const selected_edges_id = this.net.getConnectedEdges(selectedNodes[0]);
+        const selectedEdges: Edge[] = this.edges.get(selected_edges_id);
 
-        const newEdges: Edge[] = new Array<Edge>();
-        connectedEdges.forEach((edge: Edge) => {
+        selectedEdges.forEach((edge: Edge) => {
             if (edge.value !== undefined && edge.value >= 0.5) {   //TODO link this with the threshold option
 
                 if (edge.from != selectedNodes[0] && edge.to == selectedNodes[0])
@@ -88,10 +87,9 @@ export default class NetworkEvents {
                 else if (edge.to != selectedNodes[0] && edge.from == selectedNodes[0])
                     selectedNodes.push(edge.to as string);
 
-                edge.hidden = false;
-                newEdges.push(edge);
-            }else{
-                edge.hidden = true;
+            } else {
+                const index = selected_edges_id.indexOf(edge.id as string);
+                selected_edges_id.splice(index, 1);
             }
         });
 
@@ -105,7 +103,7 @@ export default class NetworkEvents {
         this.net.fit(fitOptions);
 
         //Hide edges unconected
-        this.edgeVisuals.selectEdges(connectedEdges, this.options, newEdges);
+        this.edgeVisuals.selectEdges(selected_edges_id as string[]);
 
         //Update nodes's color acording to their selected status
         this.nodeVisuals.selectNodes(selectedNodes);
@@ -149,27 +147,13 @@ export default class NetworkEvents {
 
 
     removeSelectedItems() {
-        //Hide edges
-        if (this.options.HideEdges) {
-            const newEdges: Edge[] = new Array<Edge>();
-            this.edges.forEach((edge: Edge) => {
-                edge.hidden = true;
-                newEdges.push(edge);
-            });
-            this.edges.update(newEdges);
-        }
-
         //Deselect everything
         this.net.unselectAll();
 
-        //Recolor all nodes
-        this.nodeVisuals.unselectNodes()
-        // const newNodes = new Array();
-        // this.nodes.forEach((node: Node) => {
-        //     this.nodeVisuals.dimensionsStrat.nodeToDefault(node as UserData);
+        //Hide edges
+        this.edgeVisuals.unselectEdges();
 
-        //     newNodes.push(node);
-        // });
-        // this.nodes.update(newNodes);
+        //Recolor all necesary nodes
+        this.nodeVisuals.unselectNodes()
     }
 }

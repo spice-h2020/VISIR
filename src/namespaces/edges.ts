@@ -5,6 +5,8 @@
 
  export const edgeConst = {
 
+    //Narrow number
+    narrowLimit: 0.5,
     //Edge Width limits
     minWidth: 1,
     maxWidth: 10,

@@ -15,26 +15,31 @@ import { edgeConst } from "../namespaces/edges";
 
 
 export default class EdgeVisuals {
-    edges: DataSetEdges
+    edges: DataSetEdges;
+    hideEdges: boolean;
+    //Selected edges of the network
+    selectedEdges?: string[];
 
     constructor(viewOptions: ViewOptions, Edges: DataSetEdges, options: Options) {
         this.edges = Edges;
+        this.hideEdges = viewOptions.HideEdges
+
         this.narrowEdges();
 
         this.hideUnselectedEdges(viewOptions.HideEdges);
         this.changeEdgeWidth(viewOptions.EdgeWidth, options)
     }
 
-    narrowEdges(){
+    narrowEdges() {
         const edgesToDelete: Edge[] = new Array<Edge>();
         this.edges.forEach((edge: Edge) => {
-            if(edge.value !== undefined && edge.value < 0.5){
+            if (edge.value !== undefined && edge.value < edgeConst.narrowLimit) {
                 edgesToDelete.push(edge);
             }
         })
         this.edges.remove(edgesToDelete);
     }
-    
+
     changeEdgeWidth(edgeWidth: boolean, options: Options) {
         if (options.edges?.scaling?.max !== undefined) {
             if (edgeWidth)
@@ -45,32 +50,50 @@ export default class EdgeVisuals {
     }
 
     //TODO, dont hide current selected edges
-    hideUnselectedEdges(HideEdges: boolean) {
+    hideUnselectedEdges(hideEdges: boolean) {
+        this.hideEdges = hideEdges;
+
         const newEdges = new Array();
 
-        this.edges.forEach((edge: Edge) => {
-            if (HideEdges) {
-                edge["hidden"] = true;
-            } else {
-                edge["hidden"] = false;
-            }
+        if (this.selectedEdges !== undefined && this.selectedEdges.length > 0) {
+            this.edges.forEach((edge: Edge) => {
+                if (hideEdges && !this.selectedEdges?.includes(edge.id as string)) {
+                    edge["hidden"] = true;
+                } else {
+                    edge["hidden"] = false;
+                }
 
-            newEdges.push(edge);
-        })
+                newEdges.push(edge);
+            })
 
+        } else {
+            this.edges.forEach((edge: Edge) => {
+                if (hideEdges) {
+                    edge["hidden"] = true;
+                } else {
+                    edge["hidden"] = false;
+                }
+
+                newEdges.push(edge);
+            })
+        }
         this.edges.update(newEdges);
     }
 
-    selectEdges(connectedEdges: Edge[], options: ViewOptions, newEdges: Edge[]) {
-        if (options.HideEdges) {
-            this.edges.forEach((edge: Edge) => {
-                if (!connectedEdges.includes(edge)) {
-                    edge.hidden = true;
-                    newEdges.push(edge);
-                }
-            });
+    selectEdges(connectedEdges: string[]) {
+        this.selectedEdges = connectedEdges;
+
+        if (this.hideEdges) {
+            this.hideUnselectedEdges(this.hideEdges)
         }
-        this.edges.update(newEdges);
+    }
+
+    unselectEdges() {
+        this.selectedEdges = undefined;
+
+        if (this.hideEdges) {
+            this.hideUnselectedEdges(this.hideEdges)
+        }
     }
 }
 

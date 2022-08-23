@@ -66,7 +66,8 @@ export default class NodeVisuals {
     constructor(PerspectiveData: PerspectiveData, nodes: DataSetNodes, setLegendData: Function, viewOptions: ViewOptions) {
         this.explicitData = new Array<ExplicitData>();
         this.nodes = nodes;
-
+        this.legendConfig = viewOptions.LegendConfig;
+        
         this.obtainExplicitData();
         this.createNodeDimensionStrategy(viewOptions);
 
