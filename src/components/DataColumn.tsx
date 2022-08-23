@@ -48,7 +48,6 @@ export const DataColumn = ({
 
         updateNodeInfo(node, setNodeInfo);
        
-
     }, [node]);
 
     useEffect(() => {
@@ -91,7 +90,7 @@ function updateNodeInfo(node: UserData | undefined, setNodeInfo: Function) {
 
     newNodeData.mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
     newNodeData.mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
-    newNodeData.mainRows.push(new DataRow("Implicit_community", node !== undefined ? node.implicit_community : ""));
+    newNodeData.mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community : ""));
 
     if (node !== undefined) {
         const keys = Object.keys(node.explicit_community);

@@ -2,6 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { DataRow } from '../basicComponents/Datatable';
 import { TooltipInfo, Tooltip } from '../basicComponents/Tooltip';
+import { Point } from '../controllers/nodeVisuals';
 import '../style/Base.css';
 
 export default {
@@ -30,13 +31,16 @@ const userContent: TooltipInfo = {
   tittle: "Citizen data",
   mainDataRow: mainNodeData,
   subDataRow: subNodeData,
+}
+const userPosition: Point = {
   x: 200,
   y: 150
-} 
+}
 
 userExample.args = {
   content: userContent,
-  state: true
+  state: true,
+  position: userPosition
 };
 
 export const commExample = Template.bind({});
@@ -51,13 +55,17 @@ const subCommData = new Array();
 const commContent: TooltipInfo = {
   tittle: "Community data",
   mainDataRow: mainCommData,
-  subDataRow: subCommData,
+  subDataRow: subCommData
+}
+
+const commPosition: Point = {
   x: 450,
   y: 100
-} 
+}
 
 commExample.args = {
   content: commContent,
-  state: true
+  state: true,
+  position: commPosition
 };
 

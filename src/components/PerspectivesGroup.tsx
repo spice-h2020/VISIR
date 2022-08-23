@@ -7,12 +7,13 @@
 //Namespaces
 import { PerspectivePair, UserData } from "../namespaces/perspectivesTypes";
 import { AppLayout, ViewOptions } from "../namespaces/ViewOptions"
-import { TooltipInfo } from "../basicComponents/Tooltip";
+import { Tooltip, TooltipInfo } from "../basicComponents/Tooltip";
 
 //Packages
 import React, { useEffect, useState } from "react";
 //Local files
 import { PerspectiveView } from "./PerspectiveView";
+import { Point } from "../controllers/nodeVisuals";
 
 
 
@@ -41,9 +42,13 @@ export const PerspectivesGroups = ({
 }: PerspectivesGroupProps) => {
 
     const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
-    const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo | undefined>();
 
-    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode, setSelectedNode, setLegendData);
+    const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo | undefined>();
+    const [tooltipState, setTooltipState] = useState<boolean>(true);
+    const [tooltipPos, setTooltipPos] = useState<Point | undefined>();
+
+    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode,
+        setSelectedNode, setLegendData, setTooltipInfo, setTooltipPos);
 
     useEffect(() => {
         //Reset the selectedNode to default when we clear all the active perspectives
@@ -61,6 +66,12 @@ export const PerspectivesGroups = ({
 
     return (
         <div className="perspectives-containers">
+            <Tooltip
+                state={tooltipState}
+                content={tooltipInfo}
+                position={tooltipPos}
+            />
+
             {perspectivesComponents.map((item: React.ReactNode, index: number): JSX.Element => {
                 return (<React.Fragment key={index}>{item}</React.Fragment>);
             })}
@@ -79,7 +90,7 @@ export const PerspectivesGroups = ({
  * @returns An array with the react components created
  */
 function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], viewOptions: ViewOptions, layout: AppLayout,
-    selectedNode: UserData | undefined, setSelectedNode: Function, setLegendData: Function): React.ReactNode[] {
+    selectedNode: UserData | undefined, setSelectedNode: Function, setLegendData: Function,setTooltipInfo: Function, setTooltipPos: Function): React.ReactNode[] {
 
     const perspectivesComponents = new Array<React.ReactNode>();
 
@@ -96,7 +107,11 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             layout={layout}
                             selectedNode={selectedNode}
                             setSelectedNode={setSelectedNode}
-                            setLegendData={setLegendData} />
+                            setLegendData={setLegendData}
+                            setTooltipInfo={setTooltipInfo}
+                            setTooltipPos={setTooltipPos}
+                        />
+
                     </div>
                 );
             }
@@ -115,7 +130,10 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             isFirstPerspective={true}
                             selectedNode={selectedNode}
                             setSelectedNode={setSelectedNode}
-                            setLegendData={setLegendData} />
+                            setLegendData={setLegendData}
+                            setTooltipInfo={setTooltipInfo}
+                            setTooltipPos={setTooltipPos}
+                        />
                         <PerspectiveView
                             perspectiveInfo={perspectiveB}
                             viewOptions={viewOptions}
@@ -123,7 +141,10 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             isFirstPerspective={false}
                             selectedNode={selectedNode}
                             setSelectedNode={setSelectedNode}
-                            setLegendData={setLegendData} />
+                            setLegendData={setLegendData}
+                            setTooltipInfo={setTooltipInfo}
+                            setTooltipPos={setTooltipPos}
+                        />
                     </div>
                 );
             }

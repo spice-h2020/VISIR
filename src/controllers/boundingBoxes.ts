@@ -36,7 +36,7 @@ const configuration = {
     ]
 }
 
-interface BoundingBox {
+export interface BoundingBox {
     top: number
     bottom: number
     left: number

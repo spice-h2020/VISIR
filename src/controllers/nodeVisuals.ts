@@ -29,7 +29,7 @@ class ExplicitData {
     }
 }
 
-interface Point {
+export interface Point {
     x: number;
     y: number;
 }
@@ -58,6 +58,8 @@ export default class NodeVisuals {
     selectedNodes?: string[];
     //Visual configuration based on the legend options
     legendConfig?: Map<string, boolean>
+    //Boolean that controls if labels should be hidden
+    hideLabel?: boolean
 
     /**
      * Constructor of the class
@@ -66,8 +68,7 @@ export default class NodeVisuals {
     constructor(PerspectiveData: PerspectiveData, nodes: DataSetNodes, setLegendData: Function, viewOptions: ViewOptions) {
         this.explicitData = new Array<ExplicitData>();
         this.nodes = nodes;
-        this.legendConfig = viewOptions.LegendConfig;
-        
+
         this.obtainExplicitData();
         this.createNodeDimensionStrategy(viewOptions);
 
@@ -292,13 +293,14 @@ export default class NodeVisuals {
         this.nodes.update(newNodes)
     }
 
-    hideLabels(HideLabels: boolean) {
+    hideLabels(hideLabels: boolean) {
         const newNodes = new Array<UserData>();
+        this.hideLabel = hideLabels;
 
         this.nodes.forEach((node) => {
             const user = node as UserData;
 
-            if (HideLabels)
+            if (hideLabels)
                 user.font.color = "#00000000"
             else
                 user.font.color = "#000000FF"
