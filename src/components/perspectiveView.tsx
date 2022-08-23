@@ -73,30 +73,7 @@ export const PerspectiveView = ({
         setInfo(perspectiveInfo);
     }, [perspectiveInfo]);
 
-    useEffect(() => {
-        if (userVisuals !== undefined && nodes !== undefined) {
-            userVisuals.updateLegendConfig(viewOptions.LegendConfig, nodes)
-        }
-    }, [viewOptions.LegendConfig]);
-
-    useEffect(() => {
-        if (userVisuals !== undefined && nodes !== undefined) {
-            userVisuals.hideLabels(viewOptions.HideLabels, nodes)
-        }
-    }, [viewOptions.HideLabels]);
-
-    useEffect(() => {
-        if (edgeVisuals !== undefined && nodes !== undefined) {
-            edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, edges, options, network);
-        }
-    }, [viewOptions.EdgeWidth]);
-
-    useEffect(() => {
-        if (edgeVisuals !== undefined && nodes !== undefined) {
-            edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges, edges);
-        }
-    }, [viewOptions.HideEdges]);
-
+    ViewOptionsUseEffect(viewOptions);
 
     useEffect(() => {
         if (selectedNode !== undefined && boundingBoxes !== undefined) {
@@ -107,13 +84,13 @@ export const PerspectiveView = ({
     }, [selectedNode]);
 
     useEffect(() => {
-        if(options === undefined){
+        if (options === undefined) {
             options = getOptions(viewOptions, options);
         }
 
         if (nodes === undefined) {
-            userVisuals = new NodeVisuals(info, setLegendData);
             nodes = new DataSet(info.data.users);
+            userVisuals = new NodeVisuals(info.data, nodes, setLegendData, viewOptions);
         }
 
         if (edges === undefined) {
@@ -206,4 +183,36 @@ const getOptions = (viewOptions: ViewOptions, options: Options | undefined): Opt
     };
 
     return options;
+}
+
+function ViewOptionsUseEffect(viewOptions: ViewOptions) {
+    useEffect(() => {
+        if (userVisuals !== undefined && nodes !== undefined) {
+            userVisuals.updateLegendConfig(viewOptions.LegendConfig);
+        }
+    }, [viewOptions.LegendConfig]);
+
+    useEffect(() => {
+        if (userVisuals !== undefined && nodes !== undefined) {
+            userVisuals.hideLabels(viewOptions.HideLabels);
+        }
+    }, [viewOptions.HideLabels]);
+
+    useEffect(() => {
+        if (edgeVisuals !== undefined && nodes !== undefined) {
+            edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, edges, options, network);
+        }
+    }, [viewOptions.EdgeWidth]);
+
+    useEffect(() => {
+        if (edgeVisuals !== undefined && nodes !== undefined) {
+            edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges, edges);
+        }
+    }, [viewOptions.HideEdges]);
+
+    useEffect(() => {
+        if (userVisuals !== undefined && nodes !== undefined) {
+            userVisuals.createNodeDimensionStrategy(viewOptions);
+        }
+    }, [viewOptions.Border]);
 }

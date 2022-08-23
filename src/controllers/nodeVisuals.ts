@@ -52,20 +52,21 @@ export default class NodeVisuals {
     dimensionsStrat!: NodeDimensionStrategy;
     //Atributes with the relations between explicit communities and their dimensions
     attributes!: DimAttribute[];
-
+    //Nodes of the network
+    nodes: DataSetNodes;
     /**
      * Constructor of the class
      * @param PerspectiveInfo Perspective info of the perspective that uses this object
      */
-    constructor(PerspectiveInfo: PerspectiveInfo, setLegendData: Function) {
+    constructor(PerspectiveData: PerspectiveData, nodes: DataSetNodes, setLegendData: Function, viewOptions: ViewOptions) {
         this.explicitData = new Array<ExplicitData>();
+        this.nodes = nodes;
 
-        this.obtainExplicitData(PerspectiveInfo.data.users);
+        this.obtainExplicitData();
+        this.createNodeDimensionStrategy(viewOptions);
 
-        this.createNodeDimensionStrategy();
-
-        this.updateNodeDimensionsToDefault(PerspectiveInfo.data.users);
-        this.updateNodeLocation(PerspectiveInfo.data);
+        this.updateNodeLocation(PerspectiveData);
+        this.hideLabels(viewOptions.HideLabels);
 
         setLegendData(this.attributes);
     }
@@ -74,8 +75,9 @@ export default class NodeVisuals {
      * Ibtain the explicit data from the explicit communities of the UserData
      * @param UsersData 
      */
-    obtainExplicitData(UsersData: UserData[]) {
-        UsersData.forEach((user) => {
+    obtainExplicitData() {
+        this.nodes.forEach((node) => {
+            const user = node as UserData;
 
             const explicitKeys = Object.keys(user.explicit_community);
             explicitKeys.forEach((key) => {
@@ -101,7 +103,7 @@ export default class NodeVisuals {
     /**
      * Create the node dimension strategy and its necesary attributes
      */
-    createNodeDimensionStrategy() {
+    createNodeDimensionStrategy(viewOptions: ViewOptions) {
         this.attributes = new Array<DimAttribute>();
 
         if (this.explicitData[0] !== undefined) {
@@ -121,7 +123,7 @@ export default class NodeVisuals {
         }
 
         //TODO link the allow third dimension option tho this
-        if (this.explicitData[2] !== undefined && false) {
+        if (this.explicitData[2] !== undefined && viewOptions.Border) {
             this.attributes.push({
                 key: this.explicitData[2].key,
                 values: this.explicitData[2].values,
@@ -130,17 +132,19 @@ export default class NodeVisuals {
         }
 
         this.dimensionsStrat = new NodeDimensionStrategy(this.attributes);
+        this.updateLegendConfig(viewOptions.LegendConfig);
     }
 
     /**
      * Update node dimensions to default state
      * @param UsersData users to update
      */
-    updateNodeDimensionsToDefault(UsersData: UserData[]) {
+    updateNodeDimensionsToDefault() {
         if (this.dimensionsStrat !== undefined) {
 
-            UsersData.forEach((user) => {
-                this.dimensionsStrat?.nodeToDefault(user);
+
+            this.nodes.forEach((node) => {
+                this.dimensionsStrat?.nodeToDefault(node as UserData);
             });
 
         } else {
@@ -169,7 +173,8 @@ export default class NodeVisuals {
         }
 
         //Insert the nodes in each nodeGroup
-        networkData.users.forEach((user) => {
+        this.nodes.forEach((node) => {
+            const user = node as UserData;
             const group = user.implicit_community;
 
             nodesGrouped[group].nodes.push(user.id);
@@ -177,8 +182,8 @@ export default class NodeVisuals {
         });
 
         //Set the location for all nodes
-        networkData.users.forEach((user) => {
-
+        this.nodes.forEach((node) => {
+            const user = node as UserData;
             const group = user.implicit_community;
             const nodePos: Point = this.getNodePos(nodesGrouped[group], user.id);
 
@@ -244,11 +249,11 @@ export default class NodeVisuals {
      * @param legendConfig Legend configuration
      * @param nodes nodes that will be edited
      */
-    updateLegendConfig(legendConfig: Map<string, boolean>, nodes: DataSetNodes) {
+    updateLegendConfig(legendConfig: Map<string, boolean>) {
         if (legendConfig.size !== 0) {
 
             const newNodes = new Array<UserData>();
-            nodes.forEach((node: Node) => {
+            this.nodes.forEach((node: Node) => {
 
                 const user: UserData = node as UserData;
                 const keys = Object.keys(user.explicit_community);
@@ -268,14 +273,16 @@ export default class NodeVisuals {
                 newNodes.push(user);
             });
 
-            nodes.update(newNodes)
+            this.nodes.update(newNodes)
+        } else {
+            this.updateNodeDimensionsToDefault();
         }
     }
 
-    hideLabels(HideLabels: boolean, nodes: DataSetNodes) {
+    hideLabels(HideLabels: boolean) {
         const newNodes = new Array<UserData>();
 
-        nodes.forEach((node) => {
+        this.nodes.forEach((node) => {
             const user = node as UserData;
 
             if (HideLabels)
@@ -285,7 +292,7 @@ export default class NodeVisuals {
 
             newNodes.push(user);
         });
-        nodes.update(newNodes);
+        this.nodes.update(newNodes);
     }
 }
 
