@@ -37,19 +37,7 @@ export const LayoutDropdown = ({
         }
     }
 
-    const LayoutButtons = [
-        <Button
-            content="Horizontal"
-            onClick={() => { changeLayout(AppLayout.Horizontal) }}
-            state={selectedItems[0]}
-            key={0}
-        />,
-        <Button
-            content="Vertical"
-            onClick={() => { changeLayout(AppLayout.Vertical) }}
-            state={selectedItems[1]}
-            key={1}
-        />]
+    const LayoutButtons: React.ReactNode[] = getButtons(changeLayout, selectedItems)
 
     return (
         <Dropdown
@@ -69,3 +57,24 @@ const init = () => {
     initialState[initialOptions.layout] = ButtonState.active;
 }
 init();
+
+/**
+ * Returns the buttons-reactComponents of the layout dropdown
+ * @param changeLayout On click function for the buttons
+ * @param selectedItems State of the buttons
+ * @returns returns an array of React components
+ */
+function getButtons(changeLayout: (key: AppLayout) => void, selectedItems: ButtonState[]): React.ReactNode[] {
+    return [
+        <Button
+            content="Horizontal"
+            onClick={() => { changeLayout(AppLayout.Horizontal); }}
+            state={selectedItems[0]}
+            key={0} />,
+        <Button
+            content="Vertical"
+            onClick={() => { changeLayout(AppLayout.Vertical); }}
+            state={selectedItems[1]}
+            key={1} />
+    ];
+}

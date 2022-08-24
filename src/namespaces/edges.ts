@@ -5,7 +5,7 @@
 
  export const edgeConst = {
 
-    //Narrow number
+    //Number that decides the minimum limit of edges to not be deleted 
     narrowLimit: 0.5,
     //Edge Width limits
     minWidth: 1,

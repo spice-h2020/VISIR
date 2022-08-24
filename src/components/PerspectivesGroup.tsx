@@ -15,8 +15,6 @@ import React, { useEffect, useState } from "react";
 import { PerspectiveView } from "./PerspectiveView";
 import { Point } from "../controllers/nodeVisuals";
 
-
-
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable
     perspectivePairs: PerspectivePair[],
@@ -155,7 +153,6 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
             ;
         }
     }
-
 
     return perspectivesComponents;
 }

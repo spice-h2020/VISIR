@@ -1,5 +1,5 @@
 /**
- * @fileoverview This class creates all strategies and broadcast the dimension change functions.
+ * @fileoverview This class creates all dimension strategies and broadcast the dimension change functions.
  * @author Marco Expósito Pérez
  */
 //Namespaces

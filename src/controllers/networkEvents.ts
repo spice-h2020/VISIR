@@ -1,43 +1,63 @@
 /**
- * @fileoverview .
+ * @fileoverview This file adds all necesary callback functions of events a vis.js network
+ * @package It requires vis network package.
+ * @package It requires react package.
  * @author Marco Expósito Pérez
  */
 //Namespaces
-import { ViewOptions } from "../namespaces/ViewOptions";
-import { CommunityData, EdgeData, UserData } from "../namespaces/perspectivesTypes";
+import { CommunityData, UserData } from "../namespaces/perspectivesTypes";
 import { nodeConst } from "../namespaces/nodes";
 //Packages
-import { DataSetEdges, DataSetNodes, Edge, Node, FitOptions, Network, TimelineAnimationType } from "vis-network";
-import React from "react";
+import { RefObject } from "react";
+import { DataSetEdges, DataSetNodes, Edge, FitOptions, Network, TimelineAnimationType } from "vis-network";
 //Local files
 import BoundingBoxes, { BoundingBox } from "./boundingBoxes";
 import NodeVisuals, { Point } from "./nodeVisuals";
 import EdgeVisuals from "./edgeVisuals";
 import { getHTMLPosition, TooltipInfo } from "../basicComponents/Tooltip";
 import { DataRow } from "../basicComponents/Datatable";
-import { RefObject } from "react";
-
-
 
 
 export default class NetworkEvents {
-
-    bbs: BoundingBoxes;
+    //Bounding boxes controller
+    bbController: BoundingBoxes;
+    //Node visuals controller
     nodeVisuals: NodeVisuals;
+    //Edge visuals controller
     edgeVisuals: EdgeVisuals;
 
+    //Reference to the network canvas
     refHTML: RefObject<HTMLDivElement>;
 
+    //Vis.js network object
     net: Network;
+    //Nodes of the network
     nodes: DataSetNodes;
+    //Edges of the network
     edges: DataSetEdges;
 
+    //Current tooltip data before being parsed
     tooltipData?: UserData | CommunityData;
 
+    /**
+     * Constructor of the class
+     * @param network 
+     * @param nodes 
+     * @param edges 
+     * @param boundingBoxes 
+     * @param nodeVisuals 
+     * @param edgeVisuals 
+     * @param visJsRef 
+     * @param setSelNode 
+     * @param setSelCom 
+     * @param setTooltipInfo 
+     * @param setTooltipPos 
+     * @param setTooltipState 
+     */
     constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, edgeVisuals: EdgeVisuals, visJsRef: RefObject<HTMLDivElement>,
         setSelNode: Function, setSelCom: Function, setTooltipInfo: Function, setTooltipPos: Function, setTooltipState: Function) {
 
-        this.bbs = boundingBoxes;
+        this.bbController = boundingBoxes;
         this.nodeVisuals = nodeVisuals;
         this.edgeVisuals = edgeVisuals;
 
@@ -55,10 +75,22 @@ export default class NetworkEvents {
         this.net.on("dragging", () => this.dragging(setTooltipPos, setTooltipState));
     }
 
+    /**
+     * Before drawing event callback
+     * @param ctx Context of the network's canvas
+     */
     beforeDrawing(ctx: CanvasRenderingContext2D) {
-        this.bbs.drawBoundingBoxes(ctx);
+        this.bbController.drawBoundingBoxes(ctx);
     }
 
+    /**
+     * Click event callback
+     * @param event click event
+     * @param setSelNode 
+     * @param setSelCom 
+     * @param setTooltipInfo 
+     * @param setTooltipState 
+     */
     click(event: any, setSelNode: Function, setSelCom: Function, setTooltipInfo: Function, setTooltipState: Function) {
         setTooltipState(false);
 
@@ -69,21 +101,40 @@ export default class NetworkEvents {
         }
     }
 
+    /**
+     * Animation finished event callback
+     * @param setTooltipPos 
+     * @param setTooltipState 
+     */
     animationFinished(setTooltipPos: Function, setTooltipState: Function) {
         this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
-
-
-
+    /**
+     * Zoom event callback
+     * @param setTooltipPos 
+     * @param setTooltipState 
+     */
     zoom(setTooltipPos: Function, setTooltipState: Function) {
         this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
+    /**
+     * Canvas dragging event callback
+     * @param setTooltipPos 
+     * @param setTooltipState 
+     */
     dragging(setTooltipPos: Function, setTooltipState: Function) {
         this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
+    /**
+     * Update the tooltip and datatable info with this node data, look for the connected edges and nodes, change their visual state 
+     * and zoom in to fit all these nodes in the canvas
+     * @param event click event
+     * @param setSelectedNode 
+     * @param setTooltipInfo 
+     */
     nodeClicked(event: any, setSelectedNode: Function, setTooltipInfo: Function) {
         const node = this.nodes.get(event.nodes[0]) as unknown as UserData;
         setSelectedNode(node);
@@ -128,46 +179,28 @@ export default class NetworkEvents {
         this.nodeVisuals.selectNodes(selectedNodes);
     }
 
-    setNodeAsTooltip(setTooltipInfo: Function, node: UserData) {
-        const mainRows: DataRow[] = new Array<DataRow>();
-
-        if (!this.nodeVisuals.hideLabel) {
-            mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
-            mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
-        }
-        mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community : ""));
-
-        const subRows: DataRow[] = new Array<DataRow>();
-
-        const keys = Object.keys(node.explicit_community);
-        for (let i = 0; i < keys.length; i++) {
-            subRows.push(new DataRow(keys[i], node.explicit_community[keys[i]]));
-        }
-
-        const tooltipInfo = {
-            tittle: "Citizen data",
-            mainDataRow: mainRows,
-            subDataRow: subRows
-        } as TooltipInfo;
-
-        setTooltipInfo(tooltipInfo)
-
-        this.tooltipData = node;
-    }
-
+    /**
+     * Remove all selected nodes and edges and update their visuals. 
+     * If a community has been clicked, zoom in and update the dataTables and tooltip with its data
+     * @param event click event
+     * @param setSelNode 
+     * @param setSelCom 
+     * @param setTooltipInfo 
+     */
     noNodeClicked(event: any, setSelNode: Function, setSelCom: Function, setTooltipInfo: Function) {
         setSelNode(undefined);
 
+        //Basic zoom options
         const fitOptions: FitOptions = {
             animation: {
                 duration: nodeConst.ZoomDuration,
             } as TimelineAnimationType,
         }
 
-        const boundingBoxClicked = this.bbs.isBoundingBoxClicked(event);
+        const boundingBoxClicked = this.bbController.isBoundingBoxClicked(event);
 
         if (boundingBoxClicked !== null) {
-            const community: CommunityData = this.bbs.comData[boundingBoxClicked]
+            const community: CommunityData = this.bbController.comData[boundingBoxClicked]
 
             //Update community datatable  
             setSelCom(community);
@@ -195,7 +228,44 @@ export default class NetworkEvents {
 
         this.removeSelectedItems();
     }
-    //(<strong> Explanation </strong> {community.explanation})
+
+    /**
+     * Parse a node info to work as a real tooltip info, and update the tooltip info state
+     * @param setTooltipInfo 
+     * @param node node to be parsed
+     */
+    setNodeAsTooltip(setTooltipInfo: Function, node: UserData) {
+        const mainRows: DataRow[] = new Array<DataRow>();
+
+        if (!this.nodeVisuals.hideLabel) {
+            mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
+            mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
+        }
+        mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community : ""));
+
+        const subRows: DataRow[] = new Array<DataRow>();
+
+        const keys = Object.keys(node.explicit_community);
+        for (let i = 0; i < keys.length; i++) {
+            subRows.push(new DataRow(keys[i], node.explicit_community[keys[i]]));
+        }
+
+        const tooltipInfo = {
+            tittle: "Citizen data",
+            mainDataRow: mainRows,
+            subDataRow: subRows
+        } as TooltipInfo;
+
+        setTooltipInfo(tooltipInfo)
+
+        this.tooltipData = node;
+    }
+
+    /**
+     * Parse a community info to work as a real tooltip info, and update the tooltip info state
+     * @param setTooltipInfo 
+     * @param community community to be parsed
+     */
     setCommunityAsTooltip(setTooltipInfo: Function, community: CommunityData) {
         const mainRows: DataRow[] = new Array<DataRow>();
 
@@ -219,7 +289,9 @@ export default class NetworkEvents {
         this.tooltipData = community;
     }
 
-
+    /**
+     * Remove all selected nodes and edges of the network
+     */
     removeSelectedItems() {
         //Deselect everything
         this.net.unselectAll();
@@ -229,9 +301,13 @@ export default class NetworkEvents {
 
         //Recolor all necesary nodes
         this.nodeVisuals.unselectNodes()
-
     }
 
+    /**
+     * Updates the tooltip position based on the saved tooltip data
+     * @param setTooltipPos 
+     * @param setTooltipState 
+     */
     updateTooltipPosition(setTooltipPos: Function, setTooltipState: Function) {
         if (this.refHTML.current !== null && this.tooltipData !== undefined) {
 
@@ -240,11 +316,13 @@ export default class NetworkEvents {
             let x: number;
             let y: number;
 
+            //If the tooltip data is a node
             if (this.tooltipData?.explanation === undefined) {
                 const node = this.tooltipData as UserData;
 
                 const nodePositionInDOM = this.net.canvasToDOM(this.net.getPosition(node.id));
 
+                //Depending on the zoom level and node size, we add offset to the coordinates of the tooltip
                 x = nodePositionInDOM.x + refPosition.left + 18 + 1.6 * (node.size * this.net.getScale());
                 y = nodePositionInDOM.y + refPosition.top - 5 - 0.2 * (node.size * this.net.getScale());
 
@@ -262,6 +340,7 @@ export default class NetworkEvents {
                     y: bb.bottom
                 });
 
+                //Position the tooltip at the right of the bounding box
                 x = bbRight.x + refPosition.left + 15;
                 y = bbLeft.y + (bbRight.y - bbLeft.y) / 2 + refPosition.top;
 
@@ -273,6 +352,7 @@ export default class NetworkEvents {
 
                 setTooltipPos({ x: x, y: y } as Point);
                 setTooltipState(true);
+                
             } else {
                 setTooltipState(false);
             }

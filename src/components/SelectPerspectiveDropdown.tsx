@@ -35,7 +35,7 @@ export const SelectPerspectiveDropdown = ({
     useEffect(() => {
         setSelectedItems(itemsState);
     }, [itemsState]);
-    
+
     if (allPerspectives === undefined) {
         return (
             <Dropdown
@@ -51,18 +51,8 @@ export const SelectPerspectiveDropdown = ({
     }
 
     //Creates all perspective buttons components
-    const perspectivesButtons = new Array<React.ReactNode>();
-    for (let i = 0; i < allPerspectives.files.length; i++) {
-        perspectivesButtons.push(
-            <Button
-                content={allPerspectives.files[i].name}
-                state={selectedItems.get(allPerspectives.files[i].id)}
-                onClick={() => {
-                    selectPerspective(allPerspectives.files[i].id);
-                }}
-            />
-        )
-    }
+    const perspectivesButtons: React.ReactNode[] = getButtons(allPerspectives, selectedItems, selectPerspective);
+
 
     return (
         <Dropdown
@@ -73,4 +63,21 @@ export const SelectPerspectiveDropdown = ({
     );
 };
 
+
+function getButtons(allPerspectives: AllPerspectives, selectedItems: Map<number, ButtonState>, selectPerspective: (perspectiveId: number) => void): React.ReactNode[] {
+    const buttons = new Array<React.ReactNode>();
+
+    for (let i = 0; i < allPerspectives.files.length; i++) {
+        buttons.push(
+            <Button
+                content={allPerspectives.files[i].name}
+                state={selectedItems.get(allPerspectives.files[i].id)}
+                onClick={() => {
+                    selectPerspective(allPerspectives.files[i].id);
+                }} />
+        );
+    }
+    
+    return buttons;
+}
 

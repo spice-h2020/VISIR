@@ -49,7 +49,7 @@ interface PerspectiveViewProps {
 }
 
 
-
+//TODO make one of them per new perspective
 let options: Options;
 let network: Network | null | undefined = undefined;
 let nodes: DataSet<UserData, "id"> | undefined = undefined;

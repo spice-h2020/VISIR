@@ -43,7 +43,6 @@ interface NodeGroup {
     }
 }
 
-//TODO update the initial node visuals with the view options
 export default class NodeVisuals {
 
     //All explicit Data of the users
@@ -250,7 +249,11 @@ export default class NodeVisuals {
         return output;
     }
 
-    updateNodeDimensions(legendConfig: Map<string, boolean> | undefined) {
+    /**
+     * Update all nodes dimensions based on the legend config
+     * @param legendConfig (Optional) new legend config
+     */
+    updateNodeDimensions(legendConfig: Map<string, boolean> | undefined = undefined) {
         if (legendConfig !== undefined)
             this.legendConfig = legendConfig;
 
@@ -259,7 +262,7 @@ export default class NodeVisuals {
 
     }
     /**
-     * Updates the visuals of all nodes to match the legend configuration
+     * Updates the visuals of all nodes to match the legend configuration and the selected status
      * @param legendConfig Legend configuration
      * @param nodes nodes that will be edited
      */
@@ -270,6 +273,7 @@ export default class NodeVisuals {
             const user: UserData = node as UserData;
             const keys = Object.keys(user.explicit_community);
 
+            //Find if the node must be colorless
             let toColorless = false;
             for (let i = 0; i < keys.length && !toColorless; i++) {
                 const value = user.explicit_community[keys[i]]
@@ -279,8 +283,9 @@ export default class NodeVisuals {
 
             if (toColorless) {
                 this.dimensionsStrat.nodeToColorless(user);
-
+                //If it must not be colorless, check if there are selected Nodes
             } else if (this.selectedNodes !== undefined && this.selectedNodes.length > 0) {
+                //If there are selected nodes, we only move to default color the ones that are selecteds
                 if (this.selectedNodes.includes(user.id.toString())) {
                     this.dimensionsStrat.nodeToDefault(user);
                 }
@@ -293,6 +298,10 @@ export default class NodeVisuals {
         this.nodes.update(newNodes)
     }
 
+    /**
+     * Hide the label/id of all nodes
+     * @param hideLabels new value of hide labels option
+     */
     hideLabels(hideLabels: boolean) {
         const newNodes = new Array<UserData>();
         this.hideLabel = hideLabels;
@@ -310,14 +319,21 @@ export default class NodeVisuals {
         this.nodes.update(newNodes);
     }
 
+    /**
+     * Update selected node list and all node visuals
+     * @param selectedNodes new selected nodes
+     */
     selectNodes(selectedNodes: string[]) {
         this.selectedNodes = selectedNodes;
-        this.updateNodeDimensions(undefined)
+        this.updateNodeDimensions()
     }
 
+    /**
+     * Clear the selected node list and update all node visuals
+     */
     unselectNodes() {
         this.selectedNodes = undefined;
-        this.updateNodeDimensions(undefined)
+        this.updateNodeDimensions()
     }
 }
 

@@ -113,20 +113,18 @@ export interface EdgeData extends anyProperty {
  * in order to show them on the app view layout as such.
  */
 export class PerspectivePair {
+    //Info of both perspectives in the pair or undefined if there is an empty space
     perspectives: (PerspectiveInfo | undefined)[];
-    pairID: number;
+    //Controls where there is an empty space in the perspectives Array
     spacesAvailables: boolean[];
 
     /**
      * Constructor of the class
      * @param newPerspective Perspective Info of the first perpsective in this pair
-     * @param pairId id of the pair
      */
     constructor(newPerspective: PerspectiveInfo, pairId: number) {
         //Data of the perspectives
         this.perspectives = [newPerspective, undefined];
-        //Id of this pair of perspectives
-        this.pairID = pairId;
         //Works as a dirty attribute for this.perspectives, to know if the value inside its an active perspective or useless data
         this.spacesAvailables = [false, true];
     }
@@ -168,7 +166,7 @@ export class PerspectivePair {
 
     /**
      * Check if the pair has any empty space
-     * @returns 
+     * @returns true if there is an available space
      */
     hasEmptySpace() {
         for (let i = 0; i < this.spacesAvailables.length; i++) {

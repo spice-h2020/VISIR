@@ -3,7 +3,6 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-
 //Namespaces
 import { FileSource, initialOptions, ButtonState } from "../namespaces/ViewOptions";
 //Packages
@@ -11,7 +10,6 @@ import { useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
-
 
 interface FileSourceDropdownProps {
     //On click handler
@@ -39,31 +37,7 @@ export const FileSourceDropdown = ({
         }
     }
 
-    const fileSourceButtons = [
-        <Button
-            content="Github Main"
-            onClick={() => { changeFileSource(FileSource.Main) }}
-            state={selectedItems[0]}
-            key={0}
-        />,
-        <Button
-            content="Local"
-            onClick={() => { changeFileSource(FileSource.Local) }}
-            state={selectedItems[1]}
-            key={1}
-        />,
-        <Button
-            content="Github Develop"
-            onClick={() => { changeFileSource(FileSource.Develop) }}
-            state={selectedItems[2]}
-            key={2}
-        />,
-        <Button
-            content="Use the API (WIP)"
-            onClick={() => { changeFileSource(FileSource.Api) }}
-            state={selectedItems[3]}
-            key={3}
-        />]
+    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, selectedItems)
 
     return (
         <Dropdown
@@ -83,3 +57,34 @@ const init = () => {
     initialState[initialOptions.fileSource] = ButtonState.active;
 }
 init();
+
+/**
+ * Returns the buttons-reactComponents of the file source dropdown
+ * @param changeFileSource On click function for the buttons
+ * @param selectedItems State of the buttons
+ * @returns returns an array of React components
+ */
+function getButtons(changeFileSource: (key: FileSource) => void, selectedItems: ButtonState[]): React.ReactNode[] {
+    return [
+        <Button
+            content="Github Main"
+            onClick={() => { changeFileSource(FileSource.Main); }}
+            state={selectedItems[0]}
+            key={0} />,
+        <Button
+            content="Local"
+            onClick={() => { changeFileSource(FileSource.Local); }}
+            state={selectedItems[1]}
+            key={1} />,
+        <Button
+            content="Github Develop"
+            onClick={() => { changeFileSource(FileSource.Develop); }}
+            state={selectedItems[2]}
+            key={2} />,
+        <Button
+            content="Use the API (WIP)"
+            onClick={() => { changeFileSource(FileSource.Api); }}
+            state={selectedItems[3]}
+            key={3} />
+    ];
+}

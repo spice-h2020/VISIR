@@ -68,16 +68,18 @@ export const DataTable = ({
                 {MainRows.map((item: DataRow, index: number): JSX.Element => {
                     return (
                         <div key={index} className="main-row row">
-                            <strong className="col-6"> <React.Fragment >{item.key}</React.Fragment> </strong>
-                            <div className="col-6"> <React.Fragment >{item.value}</React.Fragment> </div>
+                            <strong> <React.Fragment >{item.getKey()}</React.Fragment> </strong>
+                            {"\u00a0\u00a0"}
+                            <React.Fragment >{item.getValue(true)}</React.Fragment>
                         </div>
                     );
                 })}
                 {SubRows.map((item: DataRow, index: number): JSX.Element => {
                     return (
                         <div key={index} className="sub-row row">
-                            <div className="col-6"> <React.Fragment >{item.key}</React.Fragment> </div>
-                            <div className="col-6"> <React.Fragment >{item.value}</React.Fragment> </div>
+                            <React.Fragment >{item.getKey()}</React.Fragment>
+                            {"\u00a0\u00a0"}
+                            <React.Fragment >{item.getValue()}</React.Fragment>
                         </div>
                     );
                 })}

@@ -1,12 +1,12 @@
 /**
- * @fileoverview This file creates a button that show/hides a tooltip with the legend of the active networks.
+ * @fileoverview This file creates a button that show/hides a dropdown with the legend of the active networks.
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
 //Namespaces
 import { DimAttribute, Dimensions, nodeConst } from '../namespaces/nodes';
 //Packages
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 //Local files
 import '../style/Legend.css';
 import { Dropdown } from '../basicComponents/Dropdown';
@@ -22,7 +22,7 @@ interface LegendTooltipProps {
 }
 
 /**
- * Basic UI component that execute a function when clicked
+ * Legend component
  */
 export const LegendTooltip = ({
     legendData,
@@ -31,7 +31,9 @@ export const LegendTooltip = ({
 }: LegendTooltipProps) => {
 
     const [isActive, setIsActive] = useState<boolean>(false);
+    //Data that will be seen in the legend
     const [data, setData] = useState<DimAttribute[]>(legendData);
+    //Configuration that tells the component what option is selected and what not
     const [legendConfig, setLegendConfig] = useState(new Map<string, boolean>());
 
     useEffect(() => {
@@ -54,53 +56,25 @@ export const LegendTooltip = ({
                     newMap.set(legendData[i].values[j], true);
                 }
             }
-            
+
             setLegendConfig(newMap);
         }
     }, [legendData]);
-
-    const buttonClick = (value: string) => {
-        setLegendConfig(new Map(legendConfig.set(value, !legendConfig.get(value))));
-    }
 
     useEffect(() => {
         updateLegendConfig(legendConfig)
     }, [legendConfig]);
 
-
-
-
-    const testButtons = new Array<React.ReactNode>();
-
-    for (let i = 0; i < data.length; i++) {
-
-        const buttons = new Array<React.ReactNode>();
-        for (let j = 0; j < data[i].values.length; j++) {
-            buttons.push(
-                <Button key={j}
-                    content={getButtonContent(data[i].values[j], data[i].dimension, j)}
-                    autoToggle={true}
-                    onClick={() => {
-                        buttonClick(data[i].values[j])
-                    }}
-                />
-            )
-        }
-        const colum =
-            <div className='col' key={i}>
-                <h3>{data[i].key} </h3>
-                <div className="legend-content">
-                    {buttons}
-                </div>
-            </div>
-
-        testButtons.push(colum);
+    const buttonClick = (value: string) => {
+        setLegendConfig(new Map(legendConfig.set(value, !legendConfig.get(value))));
     }
 
-    if (testButtons.length > 0) {
+    const legendRows: React.ReactNode[] = getButtons(buttonClick, data);
+
+    if (legendRows.length > 0) {
         return (
             <Dropdown
-                items={[<div className='row'>{testButtons}</div>]}
+                items={[<div className='row'>{legendRows}</div>]}
                 content="Legend"
                 extraClassName="dropdown-dark legend-dropdown"
                 closeWhenOutsideClick={false}
@@ -118,6 +92,47 @@ export const LegendTooltip = ({
     }
 };
 
+/**
+ * Returns the reactComponents of each row of the legend
+ * @param buttonClick On click function for the buttons
+ * @param data Content of the buttons
+ * @returns returns an array of React components
+ */
+function getButtons(buttonClick: (value: string) => void, data: DimAttribute[],): React.ReactNode[] {
+    const rows = new Array<React.ReactNode>();
+
+    for (let i = 0; i < data.length; i++) {
+        const buttons = new Array<React.ReactNode>();
+        for (let j = 0; j < data[i].values.length; j++) {
+            buttons.push(
+                <Button key={j}
+                    content={getButtonContent(data[i].values[j], data[i].dimension, j)}
+                    autoToggle={true}
+                    onClick={() => {
+                        buttonClick(data[i].values[j]);
+                    }} />
+            );
+        }
+        const colum = <div className='col' key={i}>
+            <h3>{data[i].key} </h3>
+            <div className="legend-content">
+                {buttons}
+            </div>
+        </div>;
+
+        rows.push(colum);
+    }
+
+    return rows;
+}
+
+/**
+ * Returns the content of a legend button based on data from a community and its related values and dimensions
+ * @param value value of the attribute of this row
+ * @param dim dimension of the attribute of this row
+ * @param index index of the community
+ * @returns a react component
+ */
 const getButtonContent = (value: string, dim: Dimensions, index: number): React.ReactNode => {
     switch (dim) {
         case Dimensions.Color:

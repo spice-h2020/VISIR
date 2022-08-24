@@ -35,7 +35,7 @@ export interface DimAttribute {
  */
 export const nodeConst = {
 
-    //--- Location Values ---
+    //--- Node circular location Values ---
     groupsBaseDistance: 75,
     betweenNodesDistance: 8,
 
@@ -69,10 +69,6 @@ export const nodeConst = {
         getShape: (n: number) => getShapeOfN(n),
         getBorder: (n: number) => getBorderOfN(n),
     },
-
-    //--- Legends Helpers ---
-
-    //getShapehtml: (html, index) => getShapehtml(html, index),
 
     //Characteristics that change based on the explicit communities
 
@@ -142,15 +138,3 @@ const getBorderOfN = function (n: number): string {
 
     return nodeConst.BoderColors[n];
 };
-
-// TODO update this once the legend works
-// /**
-//  * Updates the html to match the class that its n-shape should have
-//  * @param {HTMLElement} html html to edit
-//  * @param {number} n n of the shape
-//  */
-// const getShapehtml = function (html, n) {
-//     let shape = getShapeOfN(n).Shape;
-
-//     html.className = `LegendShape ${shape}`;
-// }

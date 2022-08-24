@@ -1,10 +1,17 @@
-//TODO WIP component. Will be used to create the legend and to show node/community info on click
+/**
+ * @fileoverview This file creates a Tooltip fixated in a position. A floating container with some transparency and a button to close it.
+ * @package It requires React package. 
+ * @author Marco Expósito Pérez
+ */
+//Packages
 import React, { useEffect, useRef, useState } from "react";
+//Local files
 import { Point } from "../controllers/nodeVisuals";
 import '../style/Tooltip.css';
 import { Button } from "./Button";
 import { DataRow } from "./Datatable";
 
+//Interface that contains all the necesary info to show in a tooltip
 export interface TooltipInfo {
     tittle: string;
     mainDataRow: DataRow[];
@@ -12,24 +19,16 @@ export interface TooltipInfo {
 }
 
 interface TooltipProps {
-    /**
-     * Active state of the tooltip
-     */
+    //Active state of the tooltip
     state?: boolean;
-
-    /**
-     * Content of the tooltip
-     */
+    //Content of the tooltip
     content: TooltipInfo | undefined;
-
-    /**
-     * Coordinates of the tooltip
-     */
+    //Coordinates of the tooltip
     position?: Point;
 }
 
 /**
- * Dropdown component
+ * Tooltip component
  */
 export const Tooltip = ({
     state = false,
@@ -40,6 +39,8 @@ export const Tooltip = ({
     const [tooltipState, setTooltipState] = useState<boolean>(state);
     const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo | undefined>(content);
     const [pos, setPosition] = useState<Point | undefined>(position);
+
+    //In order to center the arrow on the position, the tooltip needs vertical offset based on its own height
     const [yOffset, setYOffset] = useState<number>(0);
 
     const elementRef = useRef(null);
@@ -58,6 +59,7 @@ export const Tooltip = ({
     }, [content]);
 
     useEffect(() => {
+        //Calculates the offset
         const ref = elementRef as any;
         const pRef = parentRef.current as any;
 
@@ -116,8 +118,11 @@ export const Tooltip = ({
     }
 };
 
-
-
+/**
+ * Gets the position of a HTML element in the DOM
+ * @param element element to get the position from
+ * @returns returns an object with the format { top: number, left: number, right: number, bottom: number}
+ */
 export const getHTMLPosition = (element: HTMLDivElement) => {
     const cs = window.getComputedStyle(element);
     const marginTop = cs.getPropertyValue('margin-top');

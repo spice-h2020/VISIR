@@ -114,7 +114,7 @@ function updateCommInfo(community: any, setCommInfo: Function) {
 
     newCommData.mainRows.push(new DataRow("Id", community !== undefined ? community.id : ""));
     newCommData.mainRows.push(new DataRow("Name", community !== undefined ? community.name : ""));
-    newCommData.mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : ""));
+    newCommData.mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : "", true));
 
     if(community !== undefined && community.bb !== undefined){
         newCommData.subRows.push(new DataRow("Color", community.bb.color.name) )
