@@ -6,8 +6,6 @@
  * @author Marco Expósito Pérez
  */
 
-//TODO currently is highly on development
-
 //Namespaces
 import { ViewOptions, AppLayout } from '../namespaces/ViewOptions';
 import { PerspectiveInfo, UserData, CommunityData } from '../namespaces/perspectivesTypes';
@@ -84,7 +82,8 @@ export const PerspectiveView = ({
 
     ViewOptionsUseEffect(viewOptions);
 
-    useEffect(() => {   //TODO asegurarse de que la comunidad que se muestra en cada tabla  es la correspondiente a cada network
+    useEffect(() => {  
+        //TODO asegurarse de que la comunidad que se muestra en cada tabla  es la correspondiente a cada network
         if (selectedNode !== undefined && boundingBoxes !== undefined) {
             setSelectedCommunity(boundingBoxes.comData[selectedNode.implicit_community]);
         } else {

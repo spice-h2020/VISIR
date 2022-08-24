@@ -149,7 +149,7 @@ export default class NetworkEvents {
         const selectedEdges: Edge[] = this.edges.get(selected_edges_id);
 
         selectedEdges.forEach((edge: Edge) => {
-            if (edge.value !== undefined && edge.value >= 0.5) {   //TODO link this with the threshold option
+            if (edge.value !== undefined && edge.value >= 0.5) {   //TODO link this with the threshold option once the slider works
 
                 if (edge.from != selectedNodes[0] && edge.to == selectedNodes[0])
                     selectedNodes.push(edge.from as string);

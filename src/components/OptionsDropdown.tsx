@@ -35,20 +35,28 @@ export const OptionsDropdown = ({
 
     const [selectedItems, setSelectedOptions] = useState<Array<ButtonState>>(initialState);
 
-    //TODO Check this
     const onClick = (index: number, realOnclick: Function) => {
         if (selectedItems[index] !== ButtonState.loading) {
+
+            //Save the old state of the option clicked
             const savedState = selectedItems[index];
 
+            //Update its state to loading
             const newSelected = Object.assign(new Array(), selectedItems);
             newSelected[index] = ButtonState.loading;
             setSelectedOptions(newSelected);
 
+            //Once the real clock finish, it will return true if the button option was succesfuly executed
             if (realOnclick(savedState !== ButtonState.active)) {
+
+                //Update the state to the oposite of what the saved state is, because the click worked
                 const newSelected = Object.assign(new Array(), selectedItems);
                 newSelected[index] = savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active;
                 setSelectedOptions(newSelected);
+
             } else {
+
+                //Update the state to the the saved state, because the click didnt worked
                 const newSelected = Object.assign(new Array(), selectedItems);
                 newSelected[index] = savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active;
                 setSelectedOptions(newSelected);
