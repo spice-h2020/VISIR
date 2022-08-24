@@ -8,7 +8,7 @@
                     "name": "agglomerative",
                     "params": {
                         "param0": "dummyValue 0",
-                        "param1": "dummyValue 1"
+                        "param1": "dummyValue 1" 
                     }
                 },
                 "similarity_functions": [

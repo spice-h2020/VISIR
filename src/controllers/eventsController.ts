@@ -16,9 +16,10 @@ import NodeVisuals, { Point } from "./nodeVisuals";
 import EdgeVisuals from "./edgeVisuals";
 import { getHTMLPosition, TooltipInfo } from "../basicComponents/Tooltip";
 import { DataRow } from "../basicComponents/Datatable";
+import NetworkController, { StateFunctions } from "./networkController";
 
 
-export default class NetworkEvents {
+export default class EventsController {
     //Bounding boxes controller
     bbController: BoundingBoxes;
     //Node visuals controller
@@ -41,38 +42,25 @@ export default class NetworkEvents {
 
     /**
      * Constructor of the class
-     * @param network 
-     * @param nodes 
-     * @param edges 
-     * @param boundingBoxes 
-     * @param nodeVisuals 
-     * @param edgeVisuals 
-     * @param visJsRef 
-     * @param setSelNode 
-     * @param setSelCom 
-     * @param setTooltipInfo 
-     * @param setTooltipPos 
-     * @param setTooltipState 
      */
-    constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, edgeVisuals: EdgeVisuals, visJsRef: RefObject<HTMLDivElement>,
-        setSelNode: Function, setSelCom: Function, setTooltipInfo: Function, setTooltipPos: Function, setTooltipState: Function) {
+    constructor(networkManager: NetworkController, htmlRef: RefObject<HTMLDivElement>, sf: StateFunctions) {
 
-        this.bbController = boundingBoxes;
-        this.nodeVisuals = nodeVisuals;
-        this.edgeVisuals = edgeVisuals;
+        this.bbController = networkManager.bbController;
+        this.nodeVisuals = networkManager.nodeVisuals;
+        this.edgeVisuals = networkManager.edgeVisuals;
 
-        this.refHTML = visJsRef;
+        this.refHTML = htmlRef;
 
-        this.net = network;
-        this.nodes = nodes;
-        this.edges = edges;
+        this.net = networkManager.net;
+        this.nodes = networkManager.nodes;
+        this.edges = networkManager.edges;
 
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
-        this.net.on("click", (event) => this.click(event, setSelNode, setSelCom, setTooltipInfo, setTooltipState));
-        this.net.on("animationFinished", () => this.animationFinished(setTooltipPos, setTooltipState));
+        this.net.on("click", (event) => this.click(event, sf.setSelectedNode, sf.setSelectedCommunity, sf.setTooltipInfo, sf.setTooltipState));
+        this.net.on("animationFinished", () => this.animationFinished(sf.setTooltipPosition, sf.setTooltipState));
 
-        this.net.on("zoom", () => this.zoom(setTooltipPos, setTooltipState));
-        this.net.on("dragging", () => this.dragging(setTooltipPos, setTooltipState));
+        this.net.on("zoom", () => this.zoom(sf.setTooltipPosition, sf.setTooltipState));
+        this.net.on("dragging", () => this.dragging(sf.setTooltipPosition, sf.setTooltipState));
     }
 
     /**

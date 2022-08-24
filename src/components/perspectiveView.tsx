@@ -20,8 +20,9 @@ import { Data, Network, Edge, Options } from "vis-network";
 import { DataColumn } from "./DataColumn";
 import NodeVisuals from "../controllers/nodeVisuals";
 import BoundingBoxes from '../controllers/boundingBoxes';
-import NetworkEvents from '../controllers/networkEvents';
+import EventsController from '../controllers/eventsController';
 import EdgeVisuals from '../controllers/edgeVisuals';
+import NetworkController, { StateFunctions } from '../controllers/networkController';
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
@@ -47,14 +48,7 @@ interface PerspectiveViewProps {
 }
 
 
-//TODO make one of them per new perspective
-let options: Options;
-let network: Network | null | undefined = undefined;
-let nodes: DataSet<UserData, "id"> | undefined = undefined;
-let edges: DataSet<Edge, "id"> | undefined = undefined;
-let boundingBoxes: BoundingBoxes;
-let userVisuals: NodeVisuals;
-let edgeVisuals: EdgeVisuals;
+let netMan: NetworkController | undefined;
 
 /**
  * Basic UI component that execute a function when clicked
@@ -82,38 +76,28 @@ export const PerspectiveView = ({
 
     ViewOptionsUseEffect(viewOptions);
 
-    useEffect(() => {  
+    useEffect(() => {
         //TODO asegurarse de que la comunidad que se muestra en cada tabla  es la correspondiente a cada network
-        if (selectedNode !== undefined && boundingBoxes !== undefined) {
-            setSelectedCommunity(boundingBoxes.comData[selectedNode.implicit_community]);
+        if (selectedNode !== undefined && netMan !== undefined) {
+            setSelectedCommunity(netMan.bbController.comData[selectedNode.implicit_community]);
         } else {
             setSelectedCommunity(undefined);
         }
     }, [selectedNode]);
 
     useEffect(() => {
-        if (options === undefined) {
-            options = getOptions(viewOptions, options);
+        const sf: StateFunctions = {
+            setSelectedCommunity: setSelectedCommunity,
+            setSelectedNode: setSelectedNode,
+            setTooltipInfo: setTooltipInfo,
+            setTooltipPosition: setTooltipPos,
+            setTooltipState: setTooltipState,
+            setLegendData: setLegendData
         }
 
-        if (nodes === undefined) {
-            nodes = new DataSet(info.data.users);
-            userVisuals = new NodeVisuals(info.data, nodes, setLegendData, viewOptions);
-        }
+        netMan = new NetworkController(info, visJsRef, viewOptions, sf);
 
-        if (edges === undefined) {
-            edges = new DataSet(info.data.similarity);
-            edgeVisuals = new EdgeVisuals(viewOptions, edges, options)
-        }
-
-        if (network === undefined) {
-            network = visJsRef.current && new Network(visJsRef.current, { nodes, edges } as Data, options);
-            boundingBoxes = new BoundingBoxes(info.data.communities, info.data.users, network!);
-            const networkEvents = new NetworkEvents(network!, nodes, edges, boundingBoxes, userVisuals, edgeVisuals, visJsRef, 
-                setSelectedNode, setSelectedCommunity, setTooltipInfo, setTooltipPos, setTooltipState);
-        }
-
-    }, [visJsRef, nodes, edges]);
+    }, [visJsRef]);
 
     const dataCol = <DataColumn
         tittle={info?.info.name}
@@ -147,82 +131,36 @@ export const PerspectiveView = ({
 };
 
 
-
-const getOptions = (viewOptions: ViewOptions, options: Options | undefined): Options => {
-    options = {
-        edges: {
-            scaling: {
-                min: edgeConst.minWidth,
-                max: viewOptions.EdgeWidth ? edgeConst.maxWidth : edgeConst.minWidth,
-                label: {
-                    enabled: false
-                }
-            },
-            color: {
-                color: edgeConst.defaultColor,
-                highlight: edgeConst.selectedColor
-            },
-            font: {
-                strokeWidth: edgeConst.LabelStrokeWidth,
-                size: edgeConst.LabelSize,
-                color: edgeConst.LabelColor,
-                strokeColor: edgeConst.LabelStrokeColor,
-                align: edgeConst.LabelAlign,
-                vadjust: edgeConst.labelVerticalAdjust
-            },
-            smooth: false
-        },
-        autoResize: true,
-        groups: {
-            useDefaultGroups: false
-        },
-        physics: {
-            enabled: false,
-        },
-        interaction: {
-            zoomView: true,
-            dragView: true,
-            hover: false,
-            hoverConnectedEdges: false,
-        },
-        layout: {
-            improvedLayout: false,
-        }
-    };
-
-    return options;
-}
-
 function ViewOptionsUseEffect(viewOptions: ViewOptions) {
     useEffect(() => {
-        if (userVisuals !== undefined && nodes !== undefined) {
-            userVisuals.updateNodeDimensions(viewOptions.LegendConfig);
+        if (netMan !== undefined ) {
+            netMan.nodeVisuals.updateNodeDimensions(viewOptions.LegendConfig);
         }
     }, [viewOptions.LegendConfig]);
 
     useEffect(() => {
-        if (userVisuals !== undefined && nodes !== undefined) {
-            userVisuals.hideLabels(viewOptions.HideLabels);
+        if (netMan !== undefined) {
+            netMan.nodeVisuals.hideLabels(viewOptions.HideLabels);
         }
     }, [viewOptions.HideLabels]);
 
     useEffect(() => {
-        if (edgeVisuals !== undefined && nodes !== undefined) {
-            edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, options);
-            network?.setOptions(options);
-            edges?.update(edges);
+        if (netMan !== undefined) {
+            netMan.edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, netMan.options);
+            netMan.net.setOptions(netMan.options);
+            netMan.edges.update(netMan.edges);
         }
     }, [viewOptions.EdgeWidth]);
 
     useEffect(() => {
-        if (edgeVisuals !== undefined && nodes !== undefined) {
-            edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges);
+        if (netMan !== undefined) {
+            netMan.edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges);
         }
     }, [viewOptions.HideEdges]);
 
     useEffect(() => {
-        if (userVisuals !== undefined && nodes !== undefined) {
-            userVisuals.createNodeDimensionStrategy(viewOptions);
+        if (netMan !== undefined) {
+            netMan.nodeVisuals.createNodeDimensionStrategy(viewOptions);
         }
     }, [viewOptions.Border]);
 }

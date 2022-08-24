@@ -19,11 +19,11 @@ export default class EdgeVisuals {
 
     /**
      * Constructor of the class
-     * @param viewOptions Initial view Options
      * @param Edges 
+     * @param viewOptions Initial view Options
      * @param options Initial edge options
      */
-    constructor(viewOptions: ViewOptions, Edges: DataSetEdges, options: Options) {
+    constructor(Edges: DataSetEdges, viewOptions: ViewOptions, options: Options) {
         this.edges = Edges;
         this.hideEdges = viewOptions.HideEdges
 
