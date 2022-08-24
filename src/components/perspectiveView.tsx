@@ -44,6 +44,8 @@ interface PerspectiveViewProps {
     setTooltipInfo: Function,
     //Function to setup the tooltip position
     setTooltipPos: Function,
+    //Function to activate/disable the tooltip
+    setTooltipState: Function,
 }
 
 
@@ -69,6 +71,7 @@ export const PerspectiveView = ({
     setLegendData,
     setTooltipInfo,
     setTooltipPos,
+    setTooltipState,
 }: PerspectiveViewProps) => {
 
     const [selectedCommunity, setSelectedCommunity] = useState<CommunityData>();
@@ -108,7 +111,7 @@ export const PerspectiveView = ({
             network = visJsRef.current && new Network(visJsRef.current, { nodes, edges } as Data, options);
             boundingBoxes = new BoundingBoxes(info.data.communities, info.data.users, network!);
             const networkEvents = new NetworkEvents(network!, nodes, edges, boundingBoxes, userVisuals, edgeVisuals, visJsRef, 
-                setSelectedNode, setSelectedCommunity, setTooltipInfo, setTooltipPos);
+                setSelectedNode, setSelectedCommunity, setTooltipInfo, setTooltipPos, setTooltipState);
         }
 
     }, [visJsRef, nodes, edges]);

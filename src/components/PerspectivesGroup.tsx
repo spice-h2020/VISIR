@@ -48,7 +48,7 @@ export const PerspectivesGroups = ({
     const [tooltipPos, setTooltipPos] = useState<Point | undefined>();
 
     const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode,
-        setSelectedNode, setLegendData, setTooltipInfo, setTooltipPos);
+        setSelectedNode, setLegendData, setTooltipInfo, setTooltipPos, setTooltipState);
 
     useEffect(() => {
         //Reset the selectedNode to default when we clear all the active perspectives
@@ -90,7 +90,8 @@ export const PerspectivesGroups = ({
  * @returns An array with the react components created
  */
 function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], viewOptions: ViewOptions, layout: AppLayout,
-    selectedNode: UserData | undefined, setSelectedNode: Function, setLegendData: Function,setTooltipInfo: Function, setTooltipPos: Function): React.ReactNode[] {
+    selectedNode: UserData | undefined, setSelectedNode: Function, setLegendData: Function,
+    setTooltipInfo: Function, setTooltipPos: Function, setTooltipState: Function): React.ReactNode[] {
 
     const perspectivesComponents = new Array<React.ReactNode>();
 
@@ -110,6 +111,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             setLegendData={setLegendData}
                             setTooltipInfo={setTooltipInfo}
                             setTooltipPos={setTooltipPos}
+                            setTooltipState={setTooltipState}
                         />
 
                     </div>
@@ -133,6 +135,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             setLegendData={setLegendData}
                             setTooltipInfo={setTooltipInfo}
                             setTooltipPos={setTooltipPos}
+                            setTooltipState={setTooltipState}
                         />
                         <PerspectiveView
                             perspectiveInfo={perspectiveB}
@@ -144,6 +147,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             setLegendData={setLegendData}
                             setTooltipInfo={setTooltipInfo}
                             setTooltipPos={setTooltipPos}
+                            setTooltipState={setTooltipState}
                         />
                     </div>
                 );

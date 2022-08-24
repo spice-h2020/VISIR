@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Point } from "../controllers/nodeVisuals";
 import '../style/Tooltip.css';
+import { Button } from "./Button";
 import { DataRow } from "./Datatable";
 
 export interface TooltipInfo {
@@ -78,26 +79,32 @@ export const Tooltip = ({
                 style={style}
             >
                 <div ref={elementRef} className={`tooltip-content right`}>
-                    <div className={"tooltip-header"}>
-                        <h3> {tooltipInfo.tittle} </h3>
-
+                    <div className={"tooltip-header row"}>
+                        <h3 className="col-10"> {tooltipInfo.tittle} </h3>
+                        <Button
+                            content=""
+                            extraClassName="col-2 btn-close"
+                            onClick={() =>{
+                                setTooltipState(false);
+                            }}
+                        />
                     </div>
                     <div className={"tooltip-body"}>
                         {tooltipInfo.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
                             return (
                                 <div key={index} className="main-row row">
-                                    <strong> <React.Fragment >{item.key}</React.Fragment></strong>
+                                    <strong> <React.Fragment >{item.getKey()}</React.Fragment></strong>
                                     {"\u00a0\u00a0"}
-                                    <React.Fragment >{item.value}</React.Fragment>
+                                    <React.Fragment >{item.getValue(true)}</React.Fragment>
                                 </div>
                             );
                         })}
                         {tooltipInfo.subDataRow.map((item: DataRow, index: number): JSX.Element => {
                             return (
                                 <div key={index} className="sub-row row">
-                                    <React.Fragment >{item.key}</React.Fragment>
+                                    <React.Fragment >{item.getKey()}</React.Fragment>
                                     {"\u00a0\u00a0"}
-                                    <React.Fragment >{item.value}</React.Fragment>
+                                    <React.Fragment >{item.getValue()}</React.Fragment>
                                 </div>
                             );
                         })}

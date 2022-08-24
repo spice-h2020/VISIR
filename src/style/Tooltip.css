@@ -6,9 +6,7 @@
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
-
-    
+    border-bottom: 1px dotted black; 
 }
 
 /* Tooltip content */
@@ -17,7 +15,9 @@
     position: absolute;
     z-index: 1;
 
-    max-width: 30rem;
+    min-width: 12rem;
+    max-width: 14rem;
+
     opacity: 85%;
 }
 
@@ -48,11 +48,26 @@
     font-size: 1rem;
 }
 
+.tooltip-header>.btn-close::after{
+    display: inline-block;
+    content: "X"; 
+    font-size: large;
+
+    height: 20px;
+    width: 20px;
+
+    margin: 0cm;
+    padding: 0cm;
+}
+
+.tooltip-header>.btn-close{
+    text-align: right;
+}
+
 /* Tooltip body */
 .tooltip-body{
     background-color: var(--body-color);
     padding: 1rem 1rem;
-    white-space: nowrap;
 
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;

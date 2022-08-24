@@ -8,7 +8,7 @@ import { CommunityData, EdgeData, UserData } from "../namespaces/perspectivesTyp
 import { nodeConst } from "../namespaces/nodes";
 //Packages
 import { DataSetEdges, DataSetNodes, Edge, Node, FitOptions, Network, TimelineAnimationType } from "vis-network";
-
+import React from "react";
 //Local files
 import BoundingBoxes, { BoundingBox } from "./boundingBoxes";
 import NodeVisuals, { Point } from "./nodeVisuals";
@@ -35,7 +35,7 @@ export default class NetworkEvents {
     tooltipData?: UserData | CommunityData;
 
     constructor(network: Network, nodes: DataSetNodes, edges: DataSetEdges, boundingBoxes: BoundingBoxes, nodeVisuals: NodeVisuals, edgeVisuals: EdgeVisuals, visJsRef: RefObject<HTMLDivElement>,
-        setSelNode: Function, setSelCom: Function, setTooltipInfo: Function, setTooltipPos: Function) {
+        setSelNode: Function, setSelCom: Function, setTooltipInfo: Function, setTooltipPos: Function, setTooltipState: Function) {
 
         this.bbs = boundingBoxes;
         this.nodeVisuals = nodeVisuals;
@@ -48,15 +48,20 @@ export default class NetworkEvents {
         this.edges = edges;
 
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
-        this.net.on("click", (event) => this.click(event, setSelNode, setSelCom, setTooltipInfo));
-        this.net.on("animationFinished", () => this.animationFinished(setTooltipPos));
+        this.net.on("click", (event) => this.click(event, setSelNode, setSelCom, setTooltipInfo, setTooltipState));
+        this.net.on("animationFinished", () => this.animationFinished(setTooltipPos, setTooltipState));
+
+        this.net.on("zoom", () => this.zoom(setTooltipPos, setTooltipState));
+        this.net.on("dragging", () => this.dragging(setTooltipPos, setTooltipState));
     }
 
     beforeDrawing(ctx: CanvasRenderingContext2D) {
         this.bbs.drawBoundingBoxes(ctx);
     }
 
-    click(event: any, setSelNode: Function, setSelCom: Function, setTooltipInfo: Function) {
+    click(event: any, setSelNode: Function, setSelCom: Function, setTooltipInfo: Function, setTooltipState: Function) {
+        setTooltipState(false);
+
         if (event.nodes.length > 0) {
             this.nodeClicked(event, setSelNode, setTooltipInfo);
         } else {
@@ -64,54 +69,20 @@ export default class NetworkEvents {
         }
     }
 
-    zoom() {
-
+    animationFinished(setTooltipPos: Function, setTooltipState: Function) {
+        this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
-    dragging() {
 
+
+
+    zoom(setTooltipPos: Function, setTooltipState: Function) {
+        this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
-    animationFinished(setTooltipPos: Function) {
-        if (this.refHTML.current !== null && this.tooltipData !== undefined) {
-            
-            const refPosition = getHTMLPosition(this.refHTML.current);
-
-            let x: number;
-            let y: number;
-
-            if (this.tooltipData?.explanation === undefined) {
-                const node = this.tooltipData as UserData;
-
-                const nodePositionInDOM = this.net.canvasToDOM(this.net.getPosition(node.id));
-
-                x = nodePositionInDOM.x + refPosition.left + (node.size * this.net.getScale() * 6);
-                y = nodePositionInDOM.y + refPosition.top - (node.size * this.net.getScale());
-
-            } else {
-                const community = this.tooltipData as CommunityData;
-
-                const bb = community.bb as BoundingBox;
-
-                const bbLeft = this.net.canvasToDOM({
-                    x: bb.left,
-                    y: bb.top
-                });
-                const bbRight = this.net.canvasToDOM({
-                    x: bb.right,
-                    y: bb.bottom
-                });
-
-                x = bbRight.x + refPosition.left + 30;
-                y = bbLeft.y + (bbRight.y - bbLeft.y) / 2 + refPosition.top;
-
-            }
-
-            setTooltipPos({ x: x, y: y } as Point);
-        }
-
+    dragging(setTooltipPos: Function, setTooltipState: Function) {
+        this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
-
 
     nodeClicked(event: any, setSelectedNode: Function, setTooltipInfo: Function) {
         const node = this.nodes.get(event.nodes[0]) as unknown as UserData;
@@ -224,13 +195,13 @@ export default class NetworkEvents {
 
         this.removeSelectedItems();
     }
-
+    //(<strong> Explanation </strong> {community.explanation})
     setCommunityAsTooltip(setTooltipInfo: Function, community: CommunityData) {
         const mainRows: DataRow[] = new Array<DataRow>();
 
         mainRows.push(new DataRow("Id", community !== undefined ? community.id : ""));
         mainRows.push(new DataRow("Name", community !== undefined ? community.name : ""));
-        mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : ""));
+        mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : "", true));
 
         const subRows: DataRow[] = new Array<DataRow>();
         if (community !== undefined && community.bb !== undefined) {
@@ -259,5 +230,52 @@ export default class NetworkEvents {
         //Recolor all necesary nodes
         this.nodeVisuals.unselectNodes()
 
+    }
+
+    updateTooltipPosition(setTooltipPos: Function, setTooltipState: Function) {
+        if (this.refHTML.current !== null && this.tooltipData !== undefined) {
+
+            const refPosition = getHTMLPosition(this.refHTML.current);
+
+            let x: number;
+            let y: number;
+
+            if (this.tooltipData?.explanation === undefined) {
+                const node = this.tooltipData as UserData;
+
+                const nodePositionInDOM = this.net.canvasToDOM(this.net.getPosition(node.id));
+
+                x = nodePositionInDOM.x + refPosition.left + 18 + 1.6 * (node.size * this.net.getScale());
+                y = nodePositionInDOM.y + refPosition.top - 5 - 0.2 * (node.size * this.net.getScale());
+
+            } else {
+                const community = this.tooltipData as CommunityData;
+
+                const bb = community.bb as BoundingBox;
+
+                const bbLeft = this.net.canvasToDOM({
+                    x: bb.left,
+                    y: bb.top
+                });
+                const bbRight = this.net.canvasToDOM({
+                    x: bb.right,
+                    y: bb.bottom
+                });
+
+                x = bbRight.x + refPosition.left + 15;
+                y = bbLeft.y + (bbRight.y - bbLeft.y) / 2 + refPosition.top;
+
+            }
+
+            //Check if the tooltip is inside the canvas
+            if (y > refPosition.top && y < refPosition.bottom &&
+                x > refPosition.left && x < refPosition.right) {
+
+                setTooltipPos({ x: x, y: y } as Point);
+                setTooltipState(true);
+            } else {
+                setTooltipState(false);
+            }
+        }
     }
 }

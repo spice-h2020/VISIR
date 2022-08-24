@@ -14,14 +14,33 @@ import '../style/Datatable.css';
 export class DataRow {
     key: React.ReactNode;
     value: React.ReactNode;
-
+    combineBoth: boolean;
     /**
      * Constructor of the class. There is no real distinction between the key param and the value param. 
      * Current datatable implementation shows key at the left of the row, and value at the right
      * @param key component of the row
      * @param value another component of the row
      */
-    constructor(key: React.ReactNode, value: React.ReactNode) { this.key = key; this.value = value }
+    constructor(key: React.ReactNode, value: React.ReactNode, combineBoth: boolean = false) { this.key = key; this.value = value; this.combineBoth = combineBoth; }
+
+    getKey(): React.ReactNode {
+        if (!this.combineBoth) {
+            return this.key;
+        } else {
+            return "";
+        }
+    }
+
+    getValue(strongKey: boolean = false): React.ReactNode {
+        if (!this.combineBoth) {
+            return this.value;
+        } else if (strongKey) {
+            return (<div><strong> {this.key} </strong> {this.value}</div>)
+        } else {
+            return (<div>{this.key}{this.value}</div>)
+        }
+
+    }
 }
 
 interface DatatableProps {
