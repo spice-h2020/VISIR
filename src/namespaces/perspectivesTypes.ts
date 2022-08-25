@@ -21,13 +21,6 @@ export class PerspectiveInfo {
 //#region All perspectives file
 
 /**
- * Interface with all the details from all perspective files.
- */
-export interface AllPerspectives {
-    files: PerspectiveDetails[];
-}
-
-/**
  * Interface with all the details of a single perspective.
  */
 export interface PerspectiveDetails {

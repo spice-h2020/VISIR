@@ -20,7 +20,7 @@
 }
 
 .main-row:not(:last-child){
-    border-bottom: 2px black inset;
+    border-bottom: 1px black inset;
 }
 
 .sub-row:not(:last-child){

@@ -5,7 +5,7 @@
  */
 //Namespaces
 import { ButtonState } from "../namespaces/ViewOptions"
-import { AllPerspectives } from '../namespaces/perspectivesTypes';
+import { PerspectiveDetails } from '../namespaces/perspectivesTypes';
 //Packages
 import React, { useState, useEffect } from "react";
 //Local files
@@ -16,7 +16,7 @@ interface SelectPerspectiveProps {
     //On click handler
     onClick: (perspectiveId: number) => void;
     //Object that contains the name of all perspectives availables
-    allPerspectives?: AllPerspectives;
+    allPerspectives?: PerspectiveDetails[];
     //Map that contains the relation between the name of a perspective and their visual state.
     itemsState: Map<number, ButtonState>;
 }
@@ -64,16 +64,16 @@ export const SelectPerspectiveDropdown = ({
 };
 
 
-function getButtons(allPerspectives: AllPerspectives, selectedItems: Map<number, ButtonState>, selectPerspective: (perspectiveId: number) => void): React.ReactNode[] {
+function getButtons(allPerspectives: PerspectiveDetails[], selectedItems: Map<number, ButtonState>, selectPerspective: (perspectiveId: number) => void): React.ReactNode[] {
     const buttons = new Array<React.ReactNode>();
 
-    for (let i = 0; i < allPerspectives.files.length; i++) {
+    for (let i = 0; i < allPerspectives.length; i++) {
         buttons.push(
             <Button
-                content={allPerspectives.files[i].name}
-                state={selectedItems.get(allPerspectives.files[i].id)}
+                content={allPerspectives[i].name}
+                state={selectedItems.get(allPerspectives[i].id)}
                 onClick={() => {
-                    selectPerspective(allPerspectives.files[i].id);
+                    selectPerspective(allPerspectives[i].id);
                 }} />
         );
     }

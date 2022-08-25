@@ -10,7 +10,7 @@ import { OptionsDropdown } from './components/OptionsDropdown';
 
 import RequestManager from './managers/requestManager';
 import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './namespaces/ViewOptions';
-import { AllPerspectives, PerspectiveDetails } from './namespaces/perspectivesTypes';
+import { PerspectiveDetails } from './namespaces/perspectivesTypes';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
@@ -24,7 +24,7 @@ const viewDataManager = new ViewDataManager();
 function App() {
 
   const [perspectivesState, setPerspectivesState] = useState(new Map<number, ButtonState>());
-  const [availablePerspectives, setAvailablePerspectives] = useState<AllPerspectives>();
+  const [availablePerspectives, setAvailablePerspectives] = useState<PerspectiveDetails[]>();
   const [fileSource, setFileSource] = useState<FileSource>(initialOptions.fileSource);
   const [viewOptions, setViewOptions] = useState<ViewOptions>(new ViewOptions());
   const [layout, setLayout] = useState<AppLayout>(initialOptions.layout);
@@ -35,7 +35,7 @@ function App() {
   useEffect(() => {
     if (viewOptions !== undefined) {
       const newViewOptions = (JSON.parse(JSON.stringify(viewOptions))) as ViewOptions;
-;
+      ;
       newViewOptions.LegendConfig = legendConfig
       setViewOptions(newViewOptions);
     }
@@ -77,12 +77,12 @@ function App() {
 
       setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.loading)));
 
-      requestManager.getPerspective(`${perspectiveId}.json`)
+      requestManager.getPerspective(perspectiveId)
         .then((response) => {
           if (response.status === 200) {
 
             const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
-            const perspectiveInfo = availablePerspectives?.files.find((element: PerspectiveDetails) => { return element.id === perspectiveId })
+            const perspectiveInfo = availablePerspectives?.find((element: PerspectiveDetails) => { return element.id === perspectiveId })
 
             if (perspectiveInfo) {
               viewDataManager.addPerspective(perspectiveInfo, perspectiveJson);
@@ -116,12 +116,11 @@ function App() {
     requestManager.getAllPerspectives()
       .then((response) => {
         if (response.status === 200) {
-
           const allPerspectivesFile = validateAllPerspectivesDetailsJSON(JSON.parse(response.data));
 
           const newPerspectivesState = new Map<number, ButtonState>();
-          for (let i = 0; i < allPerspectivesFile.files.length; i++) {
-            newPerspectivesState.set(allPerspectivesFile.files[i].id, ButtonState.inactive);
+          for (let i = 0; i < allPerspectivesFile.length; i++) {
+            newPerspectivesState.set(allPerspectivesFile[i].id, ButtonState.inactive);
           }
 
           setPerspectivesState(newPerspectivesState);

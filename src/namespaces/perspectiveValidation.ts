@@ -14,38 +14,41 @@ const checkSimilarityFunctions = false; //FOR DEBUG WITH TESTING DATAFILES
 /**
  * Validate a JSON with all the perspectives info of all available perspectives
  * @param arg JSON with the data
- * @returns {types.AllPerspectives} returns the JSON parsed as a proper TS class
+ * @returns {types.PerspectiveDetails} returns the JSON parsed as a proper TS class
  */
-export function validateAllPerspectivesDetailsJSON(arg: any): types.AllPerspectives {
+export function validateAllPerspectivesDetailsJSON(arg: any): types.PerspectiveDetails[] {
     try {
         if (arg === undefined) {
             throw Error(`All perspectives file is undefined`);
         }
 
-        if (arg.files === undefined) {
-            throw Error(`Files of Allperspectives file is undefined`);
+        if (typeof (arg) !== "object") {
+            throw Error(`All perspectives file is not an object`);
         }
 
-        if (typeof (arg.files) !== "object") {
-            throw Error(`Files of Allperspectives file is not an object`);
+        if (arg.length === undefined || arg.length <= 0) {
+            throw Error(`All perspectives file does not have any perspective`);
         }
 
-        for (let i = 0; i < arg.files.length; i++) {
-            if (arg.files[i].perspective === undefined) {
+        for (let i = 0; i < arg.length; i++) {
+            if (arg[i] === undefined) {
                 throw Error(`A perspective of Allperspectives file is undefined`);
             }
 
-            if (typeof (arg.files[i].perspective) !== "object") {
+            if (typeof (arg[i]) !== "object") {
                 throw Error(`A perspective of Allperspectives file is not an object`);
             }
 
-            arg.files[i] = isPerspectiveInfoValid(arg.files[i].perspective);
+            arg[i] = isPerspectiveInfoValid(arg[i]);
         }
 
+        console.log("All perspectives file validation has been completed");
         return arg;
     } catch (e: any) {
         throw Error(`All perspectives file is not valid: ${e.message}`);
     }
+
+    
 }
 
 function isPerspectiveInfoValid(arg: any): types.PerspectiveDetails {

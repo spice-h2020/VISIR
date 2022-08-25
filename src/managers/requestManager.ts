@@ -13,19 +13,21 @@ export default class RequestManager {
     isActive: boolean;
     axios: Axios;
     keyToUrl: Map<FileSource, string>;
-
+    usingAPI: boolean;
     /**
      * Constructor of the class
      */
     constructor() {
         this.isActive = false;
+        this.usingAPI = false;
+
         this.axios = new Axios();
 
         this.keyToUrl = new Map<FileSource, string>();
         this.keyToUrl.set(FileSource.Main, "https://raw.githubusercontent.com/gjimenezUCM/SPICE-visualization/main/data/");
         this.keyToUrl.set(FileSource.Local, "./data/");
         this.keyToUrl.set(FileSource.Develop, "https://raw.githubusercontent.com/gjimenezUCM/SPICE-visualization/develop/data/");
-        this.keyToUrl.set(FileSource.Api, "API (WIP)");
+        this.keyToUrl.set(FileSource.Api, "http://localhost:8090/");
     }
 
     /**
@@ -45,12 +47,13 @@ export default class RequestManager {
 
     /**
      * Send a GET petition to obtain a singleFile in a directory
-     * @param {String} name Name of the file we want to get. It needs to include the extension
+     * @param {number} id Id of the file we want to get. It needs to include the extension
      * @returns {Object} Returns the file
      */
-    getPerspective(name: string) {
+    getPerspective(id: number) {
+        const realID = this.usingAPI ? `file/${id}` : `${id}.json`;
 
-        return this.axios.get(name, {
+        return this.axios.get(realID, {
             params: {}
         })
             .then((response) => {
@@ -66,7 +69,8 @@ export default class RequestManager {
      * @returns {Object} returns the information of all perspectives
      */
     getAllPerspectives() {
-        const perspectiveFilesName = "dataList.json";
+        const perspectiveFilesName = this.usingAPI ? "/file/all" : "dataList.json";
+
         return this.axios.get(perspectiveFilesName, {
             params: {}
         })
@@ -84,6 +88,8 @@ export default class RequestManager {
      */
     changeBaseURL(newKey: FileSource) {
         const newUrl = this.keyToUrl.get(newKey);
+
+        this.usingAPI = newKey === FileSource.Api;
 
         if (this.isActive && this.axios) {
             this.axios.defaults.baseURL = newUrl;
