@@ -8,7 +8,6 @@
 import { CommunityData, UserData } from "../namespaces/perspectivesTypes";
 import { nodeConst } from "../namespaces/nodes";
 //Packages
-import { RefObject } from "react";
 import { DataSetEdges, DataSetNodes, Edge, FitOptions, Network, TimelineAnimationType } from "vis-network";
 //Local files
 import BoundingBoxes, { BoundingBox } from "./boundingBoxes";
@@ -28,7 +27,7 @@ export default class EventsController {
     edgeVisuals: EdgeVisuals;
 
     //Reference to the network canvas
-    refHTML: RefObject<HTMLDivElement>;
+    refHTML: HTMLDivElement;
 
     //Vis.js network object
     net: Network;
@@ -43,7 +42,7 @@ export default class EventsController {
     /**
      * Constructor of the class
      */
-    constructor(networkManager: NetworkController, htmlRef: RefObject<HTMLDivElement>, sf: StateFunctions) {
+    constructor(networkManager: NetworkController, htmlRef: HTMLDivElement, sf: StateFunctions) {
 
         this.bbController = networkManager.bbController;
         this.nodeVisuals = networkManager.nodeVisuals;
@@ -56,7 +55,7 @@ export default class EventsController {
         this.edges = networkManager.edges;
 
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
-        this.net.on("click", (event) => this.click(event, sf.setSelectedNode, sf.setSelectedCommunity, sf.setTooltipInfo, sf.setTooltipState));
+        this.net.on("click", (event) => this.click(event, sf.setSelectedNode, sf.setSelectedCommunity!, sf.setTooltipInfo, sf.setTooltipState));
         this.net.on("animationFinished", () => this.animationFinished(sf.setTooltipPosition, sf.setTooltipState));
 
         this.net.on("zoom", () => this.zoom(sf.setTooltipPosition, sf.setTooltipState));
@@ -155,7 +154,7 @@ export default class EventsController {
         const fitOptions: FitOptions = {
             nodes: selectedNodes,
             animation: {
-                duration: nodeConst.ZoomDuration,
+                duration: nodeConst.zoomDuration,
             } as TimelineAnimationType,
         }
         this.net.fit(fitOptions);
@@ -181,7 +180,7 @@ export default class EventsController {
         //Basic zoom options
         const fitOptions: FitOptions = {
             animation: {
-                duration: nodeConst.ZoomDuration,
+                duration: nodeConst.zoomDuration,
             } as TimelineAnimationType,
         }
 
@@ -297,9 +296,9 @@ export default class EventsController {
      * @param setTooltipState 
      */
     updateTooltipPosition(setTooltipPos: Function, setTooltipState: Function) {
-        if (this.refHTML.current !== null && this.tooltipData !== undefined) {
+        if (this.tooltipData !== undefined) {
 
-            const refPosition = getHTMLPosition(this.refHTML.current);
+            const refPosition = getHTMLPosition(this.refHTML);
 
             let x: number;
             let y: number;
@@ -340,7 +339,7 @@ export default class EventsController {
 
                 setTooltipPos({ x: x, y: y } as Point);
                 setTooltipState(true);
-                
+
             } else {
                 setTooltipState(false);
             }

@@ -42,7 +42,9 @@ export function validateAllPerspectivesDetailsJSON(arg: any): types.PerspectiveD
             arg[i] = isPerspectiveInfoValid(arg[i]);
         }
 
-        console.log("All perspectives file validation has been completed");
+        console.log(`All perspectives file validation has been completed -> `);
+        console.log(arg as types.PerspectiveDetails[]);
+
         return arg;
     } catch (e: any) {
         throw Error(`All perspectives file is not valid: ${e.message}`);
@@ -276,6 +278,9 @@ export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
             arg.similarity[i] = isSimilarityDataValid(arg.similarity[i]);
         }
 
+        console.log(`Perspective file validation has been completed -> `);
+        console.log(arg as types.PerspectiveData);
+
         return arg;
 
     } catch (e: any) {
@@ -446,6 +451,8 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
 
         arg.to = arg.u2;
         delete arg.u2;
+
+        arg.label = arg.value.toString();   //TODO Esta optcion activa las labels de los edges que reducen el rendimiento bastante
 
         return arg;
 

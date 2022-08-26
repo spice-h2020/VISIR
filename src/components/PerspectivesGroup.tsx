@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 //Local files
 import { PerspectiveView } from "./PerspectiveView";
 import { Point } from "../controllers/nodeVisuals";
+import { StateFunctions } from "../controllers/networkController";
 
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable
@@ -45,8 +46,14 @@ export const PerspectivesGroups = ({
     const [tooltipState, setTooltipState] = useState<boolean>(true);
     const [tooltipPos, setTooltipPos] = useState<Point | undefined>();
 
-    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode,
-        setSelectedNode, setLegendData, setTooltipInfo, setTooltipPos, setTooltipState);
+    const sf: StateFunctions = {
+        setSelectedNode: setSelectedNode,
+        setTooltipInfo: setTooltipInfo,
+        setTooltipPosition: setTooltipPos,
+        setTooltipState: setTooltipState,
+        setLegendData: setLegendData
+    }
+    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode, sf);
 
     useEffect(() => {
         //Reset the selectedNode to default when we clear all the active perspectives
@@ -84,12 +91,11 @@ export const PerspectivesGroups = ({
  * @param viewOptions ViewOptions for the perspectives
  * @param layout Layout options
  * @param selectedNode Node that is currently selected between al perspectives
- * @param setSelectedNode Function to update the selected node
+ * @param sf Object with all functions that change the state of a perspective
  * @returns An array with the react components created
  */
 function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], viewOptions: ViewOptions, layout: AppLayout,
-    selectedNode: UserData | undefined, setSelectedNode: Function, setLegendData: Function,
-    setTooltipInfo: Function, setTooltipPos: Function, setTooltipState: Function): React.ReactNode[] {
+    selectedNode: UserData | undefined, sf: StateFunctions): React.ReactNode[] {
 
     const perspectivesComponents = new Array<React.ReactNode>();
 
@@ -105,11 +111,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             viewOptions={viewOptions}
                             layout={layout}
                             selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode}
-                            setLegendData={setLegendData}
-                            setTooltipInfo={setTooltipInfo}
-                            setTooltipPos={setTooltipPos}
-                            setTooltipState={setTooltipState}
+                            sf={sf}
                         />
 
                     </div>
@@ -129,11 +131,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             layout={layout}
                             isFirstPerspective={true}
                             selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode}
-                            setLegendData={setLegendData}
-                            setTooltipInfo={setTooltipInfo}
-                            setTooltipPos={setTooltipPos}
-                            setTooltipState={setTooltipState}
+                            sf={sf}
                         />
                         <PerspectiveView
                             perspectiveInfo={perspectiveB}
@@ -141,11 +139,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             layout={layout}
                             isFirstPerspective={false}
                             selectedNode={selectedNode}
-                            setSelectedNode={setSelectedNode}
-                            setLegendData={setLegendData}
-                            setTooltipInfo={setTooltipInfo}
-                            setTooltipPos={setTooltipPos}
-                            setTooltipState={setTooltipState}
+                            sf={sf}
                         />
                     </div>
                 );

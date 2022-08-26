@@ -1,27 +1,16 @@
 /**
- * @fileoverview This file creates a Vis.js network based on the perspectiveData and also mantains the dataColumn of this network
+ * @fileoverview This file creates a network controller based on the perspectiveData. Also mantains the dataColumn of this network
  * @package It requires React package. 
- * @package It requires vis-network package. 
- * @package It requires vis-data package. 
  * @author Marco Expósito Pérez
  */
 
 //Namespaces
 import { ViewOptions, AppLayout } from '../namespaces/ViewOptions';
 import { PerspectiveInfo, UserData, CommunityData } from '../namespaces/perspectivesTypes';
-import { edgeConst } from '../namespaces/edges';
-
 //Packages
 import { useEffect, useState, useRef } from "react";
-import { DataSet } from "vis-data";
-import { Data, Network, Edge, Options } from "vis-network";
-
 //Local files
 import { DataColumn } from "./DataColumn";
-import NodeVisuals from "../controllers/nodeVisuals";
-import BoundingBoxes from '../controllers/boundingBoxes';
-import EventsController from '../controllers/eventsController';
-import EdgeVisuals from '../controllers/edgeVisuals';
 import NetworkController, { StateFunctions } from '../controllers/networkController';
 
 interface PerspectiveViewProps {
@@ -33,22 +22,11 @@ interface PerspectiveViewProps {
     layout: AppLayout;
     //Optional parameter to know if the its the first perspective of the pair, to mirror the table position in the horizontal layout
     isFirstPerspective?: boolean;
+    //Object with all the functions that will change the state of the network
+    sf: StateFunctions;
     //Current selected node
     selectedNode: UserData | undefined;
-    //Function to select a node
-    setSelectedNode: Function;
-    //Function to setup the legend's data
-    setLegendData: Function,
-    //Function to setup the tooltip info
-    setTooltipInfo: Function,
-    //Function to setup the tooltip position
-    setTooltipPos: Function,
-    //Function to activate/disable the tooltip
-    setTooltipState: Function,
 }
-
-
-let netMan: NetworkController | undefined;
 
 /**
  * Basic UI component that execute a function when clicked
@@ -58,14 +36,12 @@ export const PerspectiveView = ({
     viewOptions,
     layout,
     isFirstPerspective = true,
+    sf,
     selectedNode,
-    setSelectedNode,
-    setLegendData,
-    setTooltipInfo,
-    setTooltipPos,
-    setTooltipState,
 }: PerspectiveViewProps) => {
 
+
+    const [netManager, setNetManager] = useState<NetworkController | undefined>();
     const [selectedCommunity, setSelectedCommunity] = useState<CommunityData>();
     const [info, setInfo] = useState<PerspectiveInfo>(perspectiveInfo);
     const visJsRef = useRef<HTMLDivElement>(null);
@@ -74,35 +50,31 @@ export const PerspectiveView = ({
         setInfo(perspectiveInfo);
     }, [perspectiveInfo]);
 
-    ViewOptionsUseEffect(viewOptions);
+    ViewOptionsUseEffect(viewOptions, netManager);
 
     useEffect(() => {
         //TODO asegurarse de que la comunidad que se muestra en cada tabla  es la correspondiente a cada network
-        if (selectedNode !== undefined && netMan !== undefined) {
-            setSelectedCommunity(netMan.bbController.comData[selectedNode.implicit_community]);
+        if (selectedNode !== undefined && netManager !== undefined) {
+            setSelectedCommunity(netManager.bbController.comData[selectedNode.implicit_community]);
         } else {
             setSelectedCommunity(undefined);
         }
     }, [selectedNode]);
 
     useEffect(() => {
-        const sf: StateFunctions = {
-            setSelectedCommunity: setSelectedCommunity,
-            setSelectedNode: setSelectedNode,
-            setTooltipInfo: setTooltipInfo,
-            setTooltipPosition: setTooltipPos,
-            setTooltipState: setTooltipState,
-            setLegendData: setLegendData
+        if (netManager === undefined && visJsRef !== null && visJsRef !== undefined){
+            sf.setSelectedCommunity = setSelectedCommunity;
+
+            setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf));
         }
-
-        netMan = new NetworkController(info, visJsRef, viewOptions, sf);
-
+        
     }, [visJsRef]);
 
     const dataCol = <DataColumn
         tittle={info?.info.name}
         node={selectedNode}
         community={selectedCommunity}
+        viewOptions={viewOptions}
     />
 
     if (isFirstPerspective || layout === AppLayout.Vertical) {
@@ -131,36 +103,36 @@ export const PerspectiveView = ({
 };
 
 
-function ViewOptionsUseEffect(viewOptions: ViewOptions) {
+function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined) {
     useEffect(() => {
-        if (netMan !== undefined ) {
-            netMan.nodeVisuals.updateNodeDimensions(viewOptions.LegendConfig);
+        if (netManager !== undefined) {
+            netManager.nodeVisuals.updateNodeDimensions(viewOptions.LegendConfig);
         }
     }, [viewOptions.LegendConfig]);
 
     useEffect(() => {
-        if (netMan !== undefined) {
-            netMan.nodeVisuals.hideLabels(viewOptions.HideLabels);
+        if (netManager !== undefined) {
+            netManager.nodeVisuals.hideLabels(viewOptions.HideLabels);
         }
     }, [viewOptions.HideLabels]);
 
     useEffect(() => {
-        if (netMan !== undefined) {
-            netMan.edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, netMan.options);
-            netMan.net.setOptions(netMan.options);
-            netMan.edges.update(netMan.edges);
+        if (netManager !== undefined) {
+            netManager.edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, netManager.options);
+            netManager.net.setOptions(netManager.options);
+            netManager.edges.update(netManager.edges);
         }
     }, [viewOptions.EdgeWidth]);
 
     useEffect(() => {
-        if (netMan !== undefined) {
-            netMan.edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges);
+        if (netManager !== undefined) {
+            netManager.edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges);
         }
     }, [viewOptions.HideEdges]);
 
     useEffect(() => {
-        if (netMan !== undefined) {
-            netMan.nodeVisuals.createNodeDimensionStrategy(viewOptions);
+        if (netManager !== undefined) {
+            netManager.nodeVisuals.createNodeDimensionStrategy(viewOptions);
         }
     }, [viewOptions.Border]);
 }

@@ -10,7 +10,7 @@ import { Dimensions, DimAttribute, nodeConst } from "../namespaces/nodes"
 //Local files
 import NodeDimensionStrategy from "./dimensionStrategy";
 import { ViewOptions } from "../namespaces/ViewOptions";
-import { DataSet, DataSetNodes, Node } from "vis-network";
+import { ChosenLabelValues, ChosenNodeValues, DataSet, DataSetNodes, Node } from "vis-network";
 
 //Aux class to help mantain and collect all the values of an Explicit Community
 class ExplicitData {
@@ -334,6 +334,33 @@ export default class NodeVisuals {
     unselectNodes() {
         this.selectedNodes = undefined;
         this.updateNodeDimensions()
+    }
+
+
+    /** 
+     * Function executed when a node is selected that update the node visual attributes
+     * @param {Object} values value of the parameters that will change
+     * @param {Integer} id id of the node (unused)
+     * @param {Boolean} selected Boolean that says if the node has been selected
+     * @param {Boolean} hovering Boolean that says if the node has been hovered (unused)
+     */
+    nodeChosen(values: ChosenNodeValues, id: number, selected: boolean, hovering: boolean) {
+        if (selected) {
+            values.size = nodeConst.selectedSize;
+        }
+    }
+
+    /** 
+     * Function executed when a node is selected that update node's attributes of its label
+     * @param {Object} values label's parameters that will change
+     * @param {Integer} id id of the node (unused)
+     * @param {Boolean} selected Boolean that says if the node has been selected
+     * @param {Boolean} hovering Boolean that says if the node has been hovered (unused)
+     */
+    labelChosen(values: ChosenLabelValues, id: number, selected: boolean, hovering: boolean) {
+        if (selected) {
+            values.vadjust -= 10;
+        }
     }
 }
 

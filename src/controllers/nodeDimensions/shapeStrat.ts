@@ -31,7 +31,6 @@ export default class ShapeStrategy extends DimensionStrategy {
                 
                 user.font = {
                     vadjust: shape.vAdjust,
-                    selectedVAdjust: shape.selectedVAdjust
                 }
 
             } else {
@@ -42,11 +41,10 @@ export default class ShapeStrategy extends DimensionStrategy {
             user["shape"] = nodeConst.defaultShape.name;
             user.font = {
                 vadjust: nodeConst.defaultShape.vAdjust,
-                selectedVAdjust: nodeConst.defaultShape.selectedVAdjust
             }
         }
 
-        user.size = nodeConst.DefaultSize;
+        user.size = nodeConst.defaultSize;
     }
 
     /**

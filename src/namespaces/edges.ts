@@ -5,6 +5,9 @@
 
  export const edgeConst = {
 
+    //DEBUG VALUE
+    hideEdgeLabels: true,
+
     //Number that decides the minimum limit of edges to not be deleted 
     narrowLimit: 0.5,
     //Edge Width limits
@@ -28,5 +31,5 @@
     //Labels when its edge is selected
     LabelColorSelected: "#000000",
     LabelStrokeColorSelected:"#ffffff",
-    LabelStrokeWidthSelected: 1,
+    LabelStrokeWidthSelected: 2,
 }

@@ -1,32 +1,34 @@
 
+/**
+ * @fileoverview This file controlls all functions related to a Vis.js network. Changing node visuals and edge, reacting to vis.js events and viewOptions and drawing bounding boxes
+ * @package It requires vis network package.
+ * @package It requires vis data package.
+ * @author Marco Expósito Pérez
+ */
 //Namespace
 import { edgeConst } from "../namespaces/edges";
 import { PerspectiveInfo } from "../namespaces/perspectivesTypes";
 import { ViewOptions } from "../namespaces/ViewOptions";
 //Package
-import { RefObject } from "react";
-import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network";
+import { Data, DataSetEdges, DataSetNodes, EdgeOptions, Network, NodeChosenLabelFunction, NodeChosenNodeFunction, Options } from "vis-network";
 import { DataSet } from "vis-data";
 //Local Files
 import EdgeVisuals from "./edgeVisuals";
 import NodeVisuals from "./nodeVisuals";
 import BoundingBoxes from "./boundingBoxes";
 import EventsController from "./eventsController";
+import { nodeConst } from "../namespaces/nodes";
 
-
-
-export interface StateFunctions{
+export interface StateFunctions {    //TODO move this interface to some other place
     setSelectedNode: Function;
-    setSelectedCommunity: Function;
+    setSelectedCommunity?: Function;
     setTooltipInfo: Function;
     setTooltipPosition: Function;
     setTooltipState: Function;
     setLegendData: Function;
 }
 
-
 export default class NetworkController {
-
     //Options of the vis.js network
     options!: Options;
     //Node visuals controller
@@ -45,19 +47,19 @@ export default class NetworkController {
     //Edges of the network
     edges: DataSetEdges;
 
-    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: RefObject<HTMLDivElement>, viewOptions: ViewOptions, sf: StateFunctions) {
-        console.log("new manager")
+    key: number;
+    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions) {
+        this.key = Math.random();
 
-        this.createOptions(viewOptions);
         this.nodes = new DataSet(perspectiveInfo.data.users);
         this.edges = new DataSet(perspectiveInfo.data.similarity);
 
         this.nodeVisuals = new NodeVisuals(perspectiveInfo.data, this.nodes, sf.setLegendData, viewOptions);
+        this.createOptions(viewOptions);
         this.edgeVisuals = new EdgeVisuals(this.edges, viewOptions, this.options)
 
-        if (htmlRef.current !== null)
-            this.net = new Network(htmlRef.current, {nodes: this.nodes, edges: this.edges} as Data, this.options);
-        
+        this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
+
         this.bbController = new BoundingBoxes(perspectiveInfo.data.communities, perspectiveInfo.data.users, this.net);
 
         this.eventsController = new EventsController(this, htmlRef, sf);
@@ -69,6 +71,7 @@ export default class NetworkController {
      */
     createOptions(viewOptions: ViewOptions) {
         this.options = {
+            autoResize: true,
             edges: {
                 scaling: {
                     min: edgeConst.minWidth,
@@ -91,7 +94,27 @@ export default class NetworkController {
                 },
                 smooth: false
             },
-            autoResize: true,
+            nodes: {
+                shape: nodeConst.defaultShape.name,
+                shapeProperties: {
+                    interpolation: false,
+                },
+                borderWidth: nodeConst.defaultBorderWidth,
+                borderWidthSelected: nodeConst.defaultBorderWidth,
+                size: nodeConst.defaultSize,
+                chosen: {
+                    node: this.nodeVisuals.nodeChosen.bind(this.nodeVisuals) as NodeChosenNodeFunction,
+                    label: this.nodeVisuals.labelChosen.bind(this.nodeVisuals) as NodeChosenLabelFunction,
+                },
+                color: {
+                    background: nodeConst.defaultColor,
+                    border: nodeConst.defaultColor,
+                },
+                font: {
+                    vadjust: nodeConst.labelvOffset,
+                    size: nodeConst.labelSize,
+                }
+            },
             groups: {
                 useDefaultGroups: false
             },
@@ -107,6 +130,6 @@ export default class NetworkController {
             layout: {
                 improvedLayout: false,
             }
-        };
+        } as Options;
     }
 }

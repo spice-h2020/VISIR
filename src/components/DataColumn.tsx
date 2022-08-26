@@ -9,6 +9,7 @@ import { UserData } from "../namespaces/perspectivesTypes";
 import { useState, useEffect } from "react";
 //Local files
 import { DataTable, DataRow } from "../basicComponents/Datatable";
+import { ViewOptions } from "../namespaces/ViewOptions";
 
 /**
  * local aux class to hold the all the info of a datatable
@@ -27,31 +28,32 @@ interface DataColumnProps {
     tittle: React.ReactNode
     node: UserData | undefined,
 
+    viewOptions: ViewOptions,
     community: any,
 }
 
-
 /**
- * Component that creates 2 datatables and tell them what datarow to show
+ * Component that creates 2 datatables and tell them what datarows to show
  */
 export const DataColumn = ({
     tittle,
     node,
+    viewOptions,
     community,
 }: DataColumnProps) => {
 
     const [nodeInfo, setNodeInfo] = useState<DatatableData>(new DatatableData());
     const [commInfo, setCommInfo] = useState<DatatableData>(new DatatableData());
-    
+
 
     useEffect(() => {
 
-        updateNodeInfo(node, setNodeInfo);
-       
-    }, [node]);
+        updateNodeInfo(node, setNodeInfo, viewOptions);
+
+    }, [node, viewOptions]);
 
     useEffect(() => {
-        
+
         updateCommInfo(community, setCommInfo);
 
     }, [community]);
@@ -83,13 +85,16 @@ export const DataColumn = ({
  * Updates the nodeInfo state when the node prop changes
  * @param node node prop
  * @param setNodeInfo function to update the nodeInfo state
+ * @param viewOptions options that will change what attributes to visualize
  */
 
-function updateNodeInfo(node: UserData | undefined, setNodeInfo: Function) {
+function updateNodeInfo(node: UserData | undefined, setNodeInfo: Function, viewOptions: ViewOptions) {
     const newNodeData = new DatatableData();
 
-    newNodeData.mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
-    newNodeData.mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
+    if (!viewOptions.HideLabels) {
+        newNodeData.mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
+        newNodeData.mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
+    }
     newNodeData.mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community : ""));
 
     if (node !== undefined) {
@@ -116,8 +121,8 @@ function updateCommInfo(community: any, setCommInfo: Function) {
     newCommData.mainRows.push(new DataRow("Name", community !== undefined ? community.name : ""));
     newCommData.mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : "", true));
 
-    if(community !== undefined && community.bb !== undefined){
-        newCommData.subRows.push(new DataRow("Color", community.bb.color.name) )
+    if (community !== undefined && community.bb !== undefined) {
+        newCommData.subRows.push(new DataRow("Color", community.bb.color.name))
     }
     setCommInfo(newCommData);
 

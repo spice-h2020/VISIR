@@ -40,16 +40,16 @@ export const nodeConst = {
     betweenNodesDistance: 8,
 
     //--- Default Configuration Values ---
-    ZoomDuration: 300,
+    zoomDuration: 300,
 
     //Sizes
-    DefaultSize: 20,
-    SelectedSize: 30,
+    defaultSize: 20,
+    selectedSize: 30,
 
     //Default value for a background color when the explicit community doesnt change it
     defaultColor: "rgb(30, 236, 164, 1)",
     //Color when another node is being focused
-    NoFocusColor: { Background: "rgba(155, 155, 155, 0.3)", Border: "rgba(100, 100, 100, 0.3)" },
+    noFocusColor: { background: "rgba(155, 155, 155, 0.3)", border: "rgba(100, 100, 100, 0.3)" },
 
 
     //Default shape in case explicit community doesnt change it
@@ -62,6 +62,7 @@ export const nodeConst = {
     selectedBorderColorWidth: 4,
 
     labelSize: 13,
+    labelvOffset: -31,
 
     //Node dimensions that change based on its explicit Community
     nodeDimensions: {
@@ -94,7 +95,7 @@ export const nodeConst = {
         "rgb(15, 118, 82, 1)", //green-blue
     ],
 
-    AvailableShapes: [
+    AvailableShapes: [  //SelectedVAdjust is not being used
         { name: "dot", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
         { name: "diamond", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
         { name: "star", vAdjust: -34, selectedVAdjust: -40 } as shapeData,

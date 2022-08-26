@@ -82,7 +82,7 @@ export default class EdgeVisuals {
             })
 
         } else {
-        //If there are no selected edges, we toggle all edges
+            //If there are no selected edges, we toggle all edges
             this.edges.forEach((edge: Edge) => {
                 if (hideEdges) {
                     edge["hidden"] = true;
@@ -106,6 +106,8 @@ export default class EdgeVisuals {
         if (this.hideEdges) {
             this.hideUnselectedEdges(this.hideEdges)
         }
+
+        this.edgeChosenVisuals();
     }
 
     /**
@@ -116,6 +118,36 @@ export default class EdgeVisuals {
 
         if (this.hideEdges) {
             this.hideUnselectedEdges(this.hideEdges)
+        }
+
+        this.edgeChosenVisuals();
+    }
+
+
+    edgeChosenVisuals() {
+        if (!edgeConst.hideEdgeLabels) {
+            const newEdges = new Array();
+
+            this.edges.forEach((edge: Edge) => {
+                if (this.selectedEdges?.includes(edge.id as string)) {
+                    edge.font = {
+                        color: edgeConst.LabelColorSelected,
+                        strokeColor: edgeConst.LabelStrokeColorSelected,
+                        strokeWidth: edgeConst.LabelStrokeWidthSelected
+                    }
+                } else {
+                    edge.font = {
+                        color: edgeConst.LabelColor,
+                        strokeColor: edgeConst.LabelStrokeColor,
+                        strokeWidth: edgeConst.LabelStrokeWidth,
+                    }
+                }
+
+                console.log(edge.font);
+                newEdges.push(edge);
+            })
+
+            this.edges.update(newEdges);
         }
     }
 }

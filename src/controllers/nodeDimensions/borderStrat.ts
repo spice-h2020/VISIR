@@ -42,6 +42,6 @@ export default class BorderStrategy extends DimensionStrategy {
      * @param user user to edit
      */
     toColorless(user: UserData) {
-        user["color"]["background"] = nodeConst.NoFocusColor.Border;
+        user["color"]["background"] = nodeConst.noFocusColor.border;
     }
 }

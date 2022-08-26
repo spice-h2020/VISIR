@@ -43,7 +43,7 @@ export default class ColorStrategy extends DimensionStrategy {
     toColorless(user: UserData) {
         user.defaultColor = false;
 
-        user["color"]["background"] = nodeConst.NoFocusColor.Background;
+        user["color"]["background"] = nodeConst.noFocusColor.background;
     }
 
 }
