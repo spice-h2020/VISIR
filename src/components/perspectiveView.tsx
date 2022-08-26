@@ -25,7 +25,7 @@ interface PerspectiveViewProps {
     //Object with all the functions that will change the state of the network
     sf: StateFunctions;
     //Current selected node
-    selectedNode: UserData | undefined;
+    selectedNodeId: undefined | number;
 }
 
 /**
@@ -37,12 +37,15 @@ export const PerspectiveView = ({
     layout,
     isFirstPerspective = true,
     sf,
-    selectedNode,
+    selectedNodeId,
 }: PerspectiveViewProps) => {
 
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
+
     const [selectedCommunity, setSelectedCommunity] = useState<CommunityData>();
+    const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
+
     const [info, setInfo] = useState<PerspectiveInfo>(perspectiveInfo);
     const visJsRef = useRef<HTMLDivElement>(null);
 
@@ -53,21 +56,25 @@ export const PerspectiveView = ({
     ViewOptionsUseEffect(viewOptions, netManager);
 
     useEffect(() => {
-        //TODO asegurarse de que la comunidad que se muestra en cada tabla  es la correspondiente a cada network
-        if (selectedNode !== undefined && netManager !== undefined) {
-            setSelectedCommunity(netManager.bbController.comData[selectedNode.implicit_community]);
+        if (selectedNodeId === undefined) {
+            //If no node id is selected, we clear the node dataTable info
+            setSelectedNode(undefined);
+
         } else {
-            setSelectedCommunity(undefined);
+            //If its a number, it means the user clicked a node in some perspective. So we update the node table and the community table
+            const nodeData = netManager!.eventsController.nodeClicked(selectedNodeId);
+            setSelectedNode(nodeData);
+            setSelectedCommunity(netManager!.bbController.comData[nodeData.implicit_community]);
         }
-    }, [selectedNode]);
+    }, [selectedNodeId]);
 
     useEffect(() => {
-        if (netManager === undefined && visJsRef !== null && visJsRef !== undefined){
+        if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
             sf.setSelectedCommunity = setSelectedCommunity;
 
             setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf));
         }
-        
+
     }, [visJsRef]);
 
     const dataCol = <DataColumn

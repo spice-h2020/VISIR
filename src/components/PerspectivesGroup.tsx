@@ -40,28 +40,28 @@ export const PerspectivesGroups = ({
     setViewActive,
 }: PerspectivesGroupProps) => {
 
-    const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
+    const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();
 
     const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo | undefined>();
     const [tooltipState, setTooltipState] = useState<boolean>(true);
     const [tooltipPos, setTooltipPos] = useState<Point | undefined>();
 
     const sf: StateFunctions = {
-        setSelectedNode: setSelectedNode,
+        setSelectedNodeId: setSelectedNodeId,
         setTooltipInfo: setTooltipInfo,
         setTooltipPosition: setTooltipPos,
         setTooltipState: setTooltipState,
         setLegendData: setLegendData
     }
-    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNode, sf);
+    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNodeId, sf);
 
     useEffect(() => {
         //Reset the selectedNode to default when we clear all the active perspectives
         if (perspectivePairs.length === 0) {
             setViewActive(false);
 
-            if (selectedNode !== undefined) {
-                setSelectedNode(undefined);
+            if (selectedNodeId !== undefined) {
+                setSelectedNodeId(undefined);
             }
         } else {
             setViewActive(true);
@@ -90,12 +90,12 @@ export const PerspectivesGroups = ({
  * @param perspectivePairs Data of the active perspectives arranged in pairs
  * @param viewOptions ViewOptions for the perspectives
  * @param layout Layout options
- * @param selectedNode Node that is currently selected between al perspectives
+ * @param selectedNodeId Id of the node that is currently selected between all perspectives
  * @param sf Object with all functions that change the state of a perspective
  * @returns An array with the react components created
  */
 function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], viewOptions: ViewOptions, layout: AppLayout,
-    selectedNode: UserData | undefined, sf: StateFunctions): React.ReactNode[] {
+    selectedNodeId: undefined | number, sf: StateFunctions): React.ReactNode[] {
 
     const perspectivesComponents = new Array<React.ReactNode>();
 
@@ -110,7 +110,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             perspectiveInfo={perspective}
                             viewOptions={viewOptions}
                             layout={layout}
-                            selectedNode={selectedNode}
+                            selectedNodeId={selectedNodeId}
                             sf={sf}
                         />
 
@@ -130,7 +130,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             viewOptions={viewOptions}
                             layout={layout}
                             isFirstPerspective={true}
-                            selectedNode={selectedNode}
+                            selectedNodeId={selectedNodeId}
                             sf={sf}
                         />
                         <PerspectiveView
@@ -138,7 +138,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             viewOptions={viewOptions}
                             layout={layout}
                             isFirstPerspective={false}
-                            selectedNode={selectedNode}
+                            selectedNodeId={selectedNodeId}
                             sf={sf}
                         />
                     </div>

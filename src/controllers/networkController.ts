@@ -20,7 +20,7 @@ import EventsController from "./eventsController";
 import { nodeConst } from "../namespaces/nodes";
 
 export interface StateFunctions {    //TODO move this interface to some other place
-    setSelectedNode: Function;
+    setSelectedNodeId: Function;
     setSelectedCommunity?: Function;
     setTooltipInfo: Function;
     setTooltipPosition: Function;

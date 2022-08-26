@@ -38,6 +38,8 @@ export default class EventsController {
 
     //Current tooltip data before being parsed
     tooltipData?: UserData | CommunityData;
+    //Is the tooltip active in this perspective
+    isTooltipActive: boolean;
 
     /**
      * Constructor of the class
@@ -54,8 +56,10 @@ export default class EventsController {
         this.nodes = networkManager.nodes;
         this.edges = networkManager.edges;
 
+        this.isTooltipActive = false;
+
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
-        this.net.on("click", (event) => this.click(event, sf.setSelectedNode, sf.setSelectedCommunity!, sf.setTooltipInfo, sf.setTooltipState));
+        this.net.on("click", (event) => this.click(event, sf));
         this.net.on("animationFinished", () => this.animationFinished(sf.setTooltipPosition, sf.setTooltipState));
 
         this.net.on("zoom", () => this.zoom(sf.setTooltipPosition, sf.setTooltipState));
@@ -73,18 +77,19 @@ export default class EventsController {
     /**
      * Click event callback
      * @param event click event
-     * @param setSelNode 
-     * @param setSelCom 
-     * @param setTooltipInfo 
-     * @param setTooltipState 
+     * @param sf Object with all functions that change the state
      */
-    click(event: any, setSelNode: Function, setSelCom: Function, setTooltipInfo: Function, setTooltipState: Function) {
-        setTooltipState(false);
+    click(event: any, sf: StateFunctions) {
+        this.isTooltipActive = true;
+        sf.setTooltipState(false);
 
         if (event.nodes.length > 0) {
-            this.nodeClicked(event, setSelNode, setTooltipInfo);
+            sf.setSelectedNodeId(event.nodes[0]);
+            this.setNodeAsTooltip(sf.setTooltipInfo, event.nodes[0]);
+
         } else {
-            this.noNodeClicked(event, setSelNode, setSelCom, setTooltipInfo);
+            sf.setSelectedNodeId(undefined);
+            this.noNodeClicked(event, sf);
         }
     }
 
@@ -94,7 +99,10 @@ export default class EventsController {
      * @param setTooltipState 
      */
     animationFinished(setTooltipPos: Function, setTooltipState: Function) {
-        this.updateTooltipPosition(setTooltipPos, setTooltipState);
+        if (this.isTooltipActive)
+            this.updateTooltipPosition(setTooltipPos, setTooltipState);
+
+        this.isTooltipActive = false;
     }
 
     /**
@@ -116,17 +124,11 @@ export default class EventsController {
     }
 
     /**
-     * Update the tooltip and datatable info with this node data, look for the connected edges and nodes, change their visual state 
-     * and zoom in to fit all these nodes in the canvas
-     * @param event click event
-     * @param setSelectedNode 
-     * @param setTooltipInfo 
+     * Change the visual state of all nodes depending on their conection to the clicked node. Do the same for the edges
+     * @param nodeId Id of the node clicked
      */
-    nodeClicked(event: any, setSelectedNode: Function, setTooltipInfo: Function) {
-        const node = this.nodes.get(event.nodes[0]) as unknown as UserData;
-        setSelectedNode(node);
-
-        this.setNodeAsTooltip(setTooltipInfo, node);
+    nodeClicked(nodeId: any) {
+        const node = this.nodes.get(nodeId) as unknown as UserData;
 
         //Search for the nodes that are connected to the selected Node
         const selectedNodes = new Array<string>();
@@ -164,19 +166,17 @@ export default class EventsController {
 
         //Update nodes's color acording to their selected status
         this.nodeVisuals.selectNodes(selectedNodes);
+
+        return node;
     }
 
     /**
      * Remove all selected nodes and edges and update their visuals. 
      * If a community has been clicked, zoom in and update the dataTables and tooltip with its data
      * @param event click event
-     * @param setSelNode 
-     * @param setSelCom 
-     * @param setTooltipInfo 
+     * @param sf Object with all functions that change the state
      */
-    noNodeClicked(event: any, setSelNode: Function, setSelCom: Function, setTooltipInfo: Function) {
-        setSelNode(undefined);
-
+    noNodeClicked(event: any, sf: StateFunctions) {
         //Basic zoom options
         const fitOptions: FitOptions = {
             animation: {
@@ -190,10 +190,10 @@ export default class EventsController {
             const community: CommunityData = this.bbController.comData[boundingBoxClicked]
 
             //Update community datatable  
-            setSelCom(community);
+            sf.setSelectedCommunity!(community);
 
             //Update tooltip
-            this.setCommunityAsTooltip(setTooltipInfo, community);
+            this.setCommunityAsTooltip(sf.setTooltipInfo, community);
 
             //Zoom in to the community
             fitOptions.nodes = community.users;
@@ -207,10 +207,10 @@ export default class EventsController {
             this.net.fit(fitOptions);
 
             //Clear community datatable
-            setSelCom(undefined);
+            sf.setSelectedCommunity!(undefined);
 
             //Clear tooltip data
-            setTooltipInfo(undefined);
+            sf.setTooltipInfo(undefined);
         }
 
         this.removeSelectedItems();
@@ -221,7 +221,9 @@ export default class EventsController {
      * @param setTooltipInfo 
      * @param node node to be parsed
      */
-    setNodeAsTooltip(setTooltipInfo: Function, node: UserData) {
+    setNodeAsTooltip(setTooltipInfo: Function, nodeId: number) {
+        const node = this.nodes.get(nodeId) as unknown as UserData;
+
         const mainRows: DataRow[] = new Array<DataRow>();
 
         if (!this.nodeVisuals.hideLabel) {
