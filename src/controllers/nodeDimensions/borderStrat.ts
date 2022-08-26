@@ -6,9 +6,9 @@
 import { Dimensions, DimAttribute, nodeConst } from "../../namespaces/nodes";
 import { UserData } from "../../namespaces/perspectivesTypes";
 //Local files
-import DimensionStrategy from "./genericStrat";
+import GenericStrategy from "./genericStrat";
 
-export default class BorderStrategy extends DimensionStrategy {
+export default class BorderStrategy extends GenericStrategy {
 
     constructor(attributes: DimAttribute[]) {
         super(attributes, Dimensions.Border, nodeConst.nodeDimensions.getBorder);

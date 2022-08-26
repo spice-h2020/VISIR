@@ -11,6 +11,8 @@ import { Dimensions, DimAttribute, nodeConst } from "../namespaces/nodes"
 import NodeDimensionStrategy from "./dimensionStrategy";
 import { ViewOptions } from "../namespaces/ViewOptions";
 import { ChosenLabelValues, ChosenNodeValues, DataSet, DataSetNodes, Node } from "vis-network";
+import GenericStrategy from "./nodeDimensions/genericStrat";
+import { StateFunctions } from "./networkController";
 
 //Aux class to help mantain and collect all the values of an Explicit Community
 class ExplicitData {
@@ -64,17 +66,23 @@ export default class NodeVisuals {
      * Constructor of the class
      * @param PerspectiveInfo Perspective info of the perspective that uses this object
      */
-    constructor(PerspectiveData: PerspectiveData, nodes: DataSetNodes, setLegendData: Function, viewOptions: ViewOptions) {
+    constructor(PerspectiveData: PerspectiveData, nodes: DataSetNodes, sf: StateFunctions, viewOptions: ViewOptions, dimStrat: NodeDimensionStrategy | undefined) {
         this.explicitData = new Array<ExplicitData>();
         this.nodes = nodes;
 
-        this.obtainExplicitData();
-        this.createNodeDimensionStrategy(viewOptions);
+        if (dimStrat === undefined) {
+            this.obtainExplicitData();
+            this.createNodeDimensionStrategy(viewOptions);
+            sf.setDimensionStrategy(this.dimensionsStrat);
+        } else
+            this.dimensionsStrat = dimStrat;
+
+        this.updateNodeDimensions(viewOptions.LegendConfig);
 
         this.updateNodeLocation(PerspectiveData);
         this.hideLabels(viewOptions.HideLabels);
 
-        setLegendData(this.attributes);
+        sf.setLegendData(this.attributes);
     }
 
     /**
@@ -137,7 +145,6 @@ export default class NodeVisuals {
         }
 
         this.dimensionsStrat = new NodeDimensionStrategy(this.attributes);
-        this.updateNodeDimensions(viewOptions.LegendConfig);
     }
 
     /**

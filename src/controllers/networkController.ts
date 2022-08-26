@@ -9,23 +9,25 @@
 import { edgeConst } from "../namespaces/edges";
 import { PerspectiveInfo } from "../namespaces/perspectivesTypes";
 import { ViewOptions } from "../namespaces/ViewOptions";
+import { nodeConst } from "../namespaces/nodes";
 //Package
-import { Data, DataSetEdges, DataSetNodes, EdgeOptions, Network, NodeChosenLabelFunction, NodeChosenNodeFunction, Options } from "vis-network";
+import { Data, DataSetEdges, DataSetNodes, Network, NodeChosenLabelFunction, NodeChosenNodeFunction, Options } from "vis-network";
 import { DataSet } from "vis-data";
 //Local Files
 import EdgeVisuals from "./edgeVisuals";
 import NodeVisuals from "./nodeVisuals";
 import BoundingBoxes from "./boundingBoxes";
 import EventsController from "./eventsController";
-import { nodeConst } from "../namespaces/nodes";
+import NodeDimensionStrategy from "./dimensionStrategy";
 
 export interface StateFunctions {    //TODO move this interface to some other place
     setSelectedNodeId: Function;
-    setSelectedCommunity?: Function;
     setTooltipInfo: Function;
     setTooltipPosition: Function;
     setTooltipState: Function;
     setLegendData: Function;
+    setDimensionStrategy: Function;
+    setSelectedCommunity?: Function;
 }
 
 export default class NetworkController {
@@ -48,13 +50,13 @@ export default class NetworkController {
     edges: DataSetEdges;
 
     key: number;
-    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions) {
+    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, dimStrat : NodeDimensionStrategy | undefined) {
         this.key = Math.random();
 
         this.nodes = new DataSet(perspectiveInfo.data.users);
         this.edges = new DataSet(perspectiveInfo.data.similarity);
 
-        this.nodeVisuals = new NodeVisuals(perspectiveInfo.data, this.nodes, sf.setLegendData, viewOptions);
+        this.nodeVisuals = new NodeVisuals(perspectiveInfo.data, this.nodes, sf, viewOptions, dimStrat);
         this.createOptions(viewOptions);
         this.edgeVisuals = new EdgeVisuals(this.edges, viewOptions, this.options)
 

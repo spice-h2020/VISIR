@@ -12,6 +12,7 @@ import { useEffect, useState, useRef } from "react";
 //Local files
 import { DataColumn } from "./DataColumn";
 import NetworkController, { StateFunctions } from '../controllers/networkController';
+import NodeDimensionStrategy from '../controllers/dimensionStrategy';
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
@@ -26,6 +27,8 @@ interface PerspectiveViewProps {
     sf: StateFunctions;
     //Current selected node
     selectedNodeId: undefined | number;
+    //Current node dimension strategy
+    dimStrat: NodeDimensionStrategy | undefined;
 }
 
 /**
@@ -38,6 +41,7 @@ export const PerspectiveView = ({
     isFirstPerspective = true,
     sf,
     selectedNodeId,
+    dimStrat,
 }: PerspectiveViewProps) => {
 
 
@@ -59,7 +63,10 @@ export const PerspectiveView = ({
         if (selectedNodeId === undefined) {
             //If no node id is selected, we clear the node dataTable info
             setSelectedNode(undefined);
-
+            if (netManager !== undefined) {
+                netManager.eventsController.removeSelectedItems();
+                netManager.eventsController.zoomOut();
+            }
         } else {
             //If its a number, it means the user clicked a node in some perspective. So we update the node table and the community table
             const nodeData = netManager!.eventsController.nodeClicked(selectedNodeId);
@@ -72,7 +79,7 @@ export const PerspectiveView = ({
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
             sf.setSelectedCommunity = setSelectedCommunity;
 
-            setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf));
+            setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf, dimStrat));
         }
 
     }, [visJsRef]);

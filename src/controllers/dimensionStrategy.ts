@@ -8,20 +8,20 @@ import { UserData } from "../namespaces/perspectivesTypes";
 //Local files
 import BorderStrategy from "./nodeDimensions/borderStrat";
 import ColorStrategy from "./nodeDimensions/colorStrat";
-import DimensionStrategy from "./nodeDimensions/genericStrat"
+import GenericStrategy from "./nodeDimensions/genericStrat"
 import ShapeStrategy from "./nodeDimensions/shapeStrat";
 
 export default class NodeDimensionStrategy {
 
     //Array with all available strategies
-    strategies: DimensionStrategy[];
+    strategies: GenericStrategy[];
 
     /**
      * Constructor of the class
      * @param attributesArray Array with all Dimension attributes 
      */
     constructor(attributesArray: DimAttribute[]) {
-        this.strategies = new Array<DimensionStrategy>();
+        this.strategies = new Array<GenericStrategy>();
 
         this.strategies.push(new ColorStrategy(attributesArray));
         this.strategies.push(new ShapeStrategy(attributesArray));

@@ -7,7 +7,7 @@ import { DimAttribute, Dimensions } from "../../namespaces/nodes";
 import { UserData } from "../../namespaces/perspectivesTypes";
 
 
-export default abstract class DimensionStrategy {
+export default abstract class GenericStrategy {
     //Key of the attribute that changes each strategy.
     key: string | undefined
     //Map with the relation "Value of the attribute whose key is this.key" -> "The corresponding dimension value for each dimensions strat"

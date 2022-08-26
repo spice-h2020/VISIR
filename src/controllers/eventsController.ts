@@ -8,7 +8,7 @@
 import { CommunityData, UserData } from "../namespaces/perspectivesTypes";
 import { nodeConst } from "../namespaces/nodes";
 //Packages
-import { DataSetEdges, DataSetNodes, Edge, FitOptions, Network, TimelineAnimationType } from "vis-network";
+import { DataSetEdges, DataSetNodes, Edge, FitOptions, IdType, Network, TimelineAnimationType } from "vis-network";
 //Local files
 import BoundingBoxes, { BoundingBox } from "./boundingBoxes";
 import NodeVisuals, { Point } from "./nodeVisuals";
@@ -64,6 +64,8 @@ export default class EventsController {
 
         this.net.on("zoom", () => this.zoom(sf.setTooltipPosition, sf.setTooltipState));
         this.net.on("dragging", () => this.dragging(sf.setTooltipPosition, sf.setTooltipState));
+
+        this.net.on("resize", () => this.zoomOut());
     }
 
     /**
@@ -102,7 +104,7 @@ export default class EventsController {
         if (this.isTooltipActive)
             this.updateTooltipPosition(setTooltipPos, setTooltipState);
 
-        this.isTooltipActive = false;
+
     }
 
     /**
@@ -111,7 +113,8 @@ export default class EventsController {
      * @param setTooltipState 
      */
     zoom(setTooltipPos: Function, setTooltipState: Function) {
-        this.updateTooltipPosition(setTooltipPos, setTooltipState);
+        if (this.isTooltipActive)
+            this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
     /**
@@ -120,7 +123,8 @@ export default class EventsController {
      * @param setTooltipState 
      */
     dragging(setTooltipPos: Function, setTooltipState: Function) {
-        this.updateTooltipPosition(setTooltipPos, setTooltipState);
+        if (this.isTooltipActive)
+            this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
     /**
@@ -162,9 +166,11 @@ export default class EventsController {
         this.net.fit(fitOptions);
 
         //Hide edges unconected
+        this.net.selectEdges(selected_edges_id);
         this.edgeVisuals.selectEdges(selected_edges_id as string[]);
 
         //Update nodes's color acording to their selected status
+        this.net.selectNodes([node.id] as IdType[])
         this.nodeVisuals.selectNodes(selectedNodes);
 
         return node;
@@ -178,11 +184,7 @@ export default class EventsController {
      */
     noNodeClicked(event: any, sf: StateFunctions) {
         //Basic zoom options
-        const fitOptions: FitOptions = {
-            animation: {
-                duration: nodeConst.zoomDuration,
-            } as TimelineAnimationType,
-        }
+
 
         const boundingBoxClicked = this.bbController.isBoundingBoxClicked(event);
 
@@ -196,15 +198,22 @@ export default class EventsController {
             this.setCommunityAsTooltip(sf.setTooltipInfo, community);
 
             //Zoom in to the community
-            fitOptions.nodes = community.users;
+            const fitOptions: FitOptions = {
+                animation: {
+                    duration: nodeConst.zoomDuration
+                } as TimelineAnimationType,
+                nodes: community.users
+            }
+
             this.net.fit(fitOptions);
 
             this.removeSelectedItems();
         } else {
+            this.isTooltipActive = false;
 
             //Zoom out from all nodes
-            fitOptions.nodes = [];
-            this.net.fit(fitOptions);
+            this.zoomOut();
+
 
             //Clear community datatable
             sf.setSelectedCommunity!(undefined);
@@ -214,6 +223,19 @@ export default class EventsController {
         }
 
         this.removeSelectedItems();
+    }
+
+    /**
+     * Zoom out to fit all nodes in the image
+     */
+    zoomOut() {
+        const fitOptions: FitOptions = {
+            animation: {
+                duration: nodeConst.zoomDuration,
+            } as TimelineAnimationType,
+            nodes: []
+        }
+        this.net.fit(fitOptions);
     }
 
     /**
@@ -268,7 +290,7 @@ export default class EventsController {
         }
 
         const tooltipInfo = {
-            tittle: "Citizen data",
+            tittle: "Community data",
             mainDataRow: mainRows,
             subDataRow: subRows
         } as TooltipInfo;
