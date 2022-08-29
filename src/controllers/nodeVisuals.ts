@@ -4,17 +4,18 @@
  * Then it changes the node position in the canvas to create a circular distribution without node overlap.
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { PerspectiveInfo, PerspectiveData, UserData } from "../namespaces/perspectivesTypes";
-import { Dimensions, DimAttribute, nodeConst } from "../namespaces/nodes"
+//Constants
+import { PerspectiveData, UserData } from "../constants/perspectivesTypes";
+import { Dimensions, DimAttribute, nodeConst } from "../constants/nodes"
+import { ViewOptions } from "../constants/viewOptions";
+import { Point, StateFunctions } from "../constants/auxTypes";
+//Packages
+import { ChosenLabelValues, ChosenNodeValues, DataSetNodes, Node } from "vis-network";
 //Local files
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
-import { ViewOptions } from "../namespaces/ViewOptions";
-import { ChosenLabelValues, ChosenNodeValues, DataSet, DataSetNodes, Node } from "vis-network";
-import GenericStrategy from "../managers/nodeDimensions/genericStrat";
-import { StateFunctions } from "./networkController";
 
-//Aux class to help mantain and collect all the values of an Explicit Community
+
+//Local aux class to help mantain and collect all the values of an Explicit Community
 class ExplicitData {
     key: string;
     values: string[];
@@ -31,12 +32,7 @@ class ExplicitData {
     }
 }
 
-export interface Point {
-    x: number;
-    y: number;
-}
-
-//Aux class to help group nodes in their partition of the canvas's layout
+//Local aux interface to help group nodes in their partition of the canvas's layout
 interface NodeGroup {
     nodes: string[],
     partition: {
@@ -64,16 +60,23 @@ export default class NodeVisuals {
 
     /**
      * Constructor of the class
-     * @param PerspectiveInfo Perspective info of the perspective that uses this object
+     * @param PerspectiveData Perspective info of the perspective that uses this object
+     * @param nodes All nodes of the network
+     * @param sf All functions that change the state
+     * @param viewOptions All options that change visuals
+     * @param dimStrat Dimenstion strategy object that is being used by all networks
      */
     constructor(PerspectiveData: PerspectiveData, nodes: DataSetNodes, sf: StateFunctions, viewOptions: ViewOptions, dimStrat: NodeDimensionStrategy | undefined) {
         this.explicitData = new Array<ExplicitData>();
         this.nodes = nodes;
 
+
         if (dimStrat === undefined) {
+
             this.obtainExplicitData();
-            this.createNodeDimensionStrategy(viewOptions);
+            this.createNodeDimensionStrategy(viewOptions.Border);
             sf.setDimensionStrategy(this.dimensionsStrat);
+
         } else
             this.dimensionsStrat = dimStrat;
 
@@ -86,8 +89,7 @@ export default class NodeVisuals {
     }
 
     /**
-     * Ibtain the explicit data from the explicit communities of the UserData
-     * @param UsersData 
+     * Obtain the explicit data from the explicit communities of the nodes of the network
      */
     obtainExplicitData() {
         this.nodes.forEach((node) => {
@@ -116,8 +118,9 @@ export default class NodeVisuals {
 
     /**
      * Create the node dimension strategy and its necesary attributes
+     * @param showBorder Boolean with the activate third dimension/border option
      */
-    createNodeDimensionStrategy(viewOptions: ViewOptions) {
+    createNodeDimensionStrategy(showBorder: boolean) {
         this.attributes = new Array<DimAttribute>();
 
         if (this.explicitData[0] !== undefined) {
@@ -136,7 +139,7 @@ export default class NodeVisuals {
             })
         }
 
-        if (this.explicitData[2] !== undefined && viewOptions.Border) {
+        if (this.explicitData[2] !== undefined && showBorder) {
             this.attributes.push({
                 key: this.explicitData[2].key,
                 values: this.explicitData[2].values,
@@ -145,24 +148,6 @@ export default class NodeVisuals {
         }
 
         this.dimensionsStrat = new NodeDimensionStrategy(this.attributes);
-    }
-
-    /**
-     * Update node dimensions to default state
-     * @param UsersData users to update
-     */
-    updateNodeDimensionsToDefault() {
-        if (this.dimensionsStrat !== undefined) {
-
-            const newNodes = new Array();
-            this.nodes.forEach((node) => {
-                this.dimensionsStrat?.nodeToDefault(node as UserData);
-                newNodes.push(node)
-            });
-            this.nodes.update(newNodes);
-        } else {
-            console.log("Trying to update node visuals without dimension strat being defined")
-        }
     }
 
     /**
@@ -269,9 +254,7 @@ export default class NodeVisuals {
 
     }
     /**
-     * Updates the visuals of all nodes to match the legend configuration and the selected status
-     * @param legendConfig Legend configuration
-     * @param nodes nodes that will be edited
+     * Updates the visuals of all nodes to match the legend configuration and nodes's selected status
      */
     updateNodesBasedOnLegend() {
         const newNodes = new Array<UserData>();
@@ -290,9 +273,11 @@ export default class NodeVisuals {
 
             if (toColorless) {
                 this.dimensionsStrat.nodeToColorless(user);
+
                 //If it must not be colorless, check if there are selected Nodes
             } else if (this.selectedNodes !== undefined && this.selectedNodes.length > 0) {
-                //If there are selected nodes, we only move to default color the ones that are selecteds
+
+                //If there are selected nodes, we only move to default color the ones that are selected
                 if (this.selectedNodes.includes(user.id.toString())) {
                     this.dimensionsStrat.nodeToDefault(user);
                 }
@@ -343,7 +328,6 @@ export default class NodeVisuals {
         this.updateNodeDimensions()
     }
 
-
     /** 
      * Function executed when a node is selected that update the node visual attributes
      * @param {Object} values value of the parameters that will change
@@ -356,7 +340,7 @@ export default class NodeVisuals {
 
             values.size = nodeConst.selectedSize;
 
-            if(values.borderColor ==="transparent"){
+            if (values.borderColor === "transparent") {
                 values.borderColor = "#000000";
                 values.borderWidth = nodeConst.selectedBorderWidth
             }

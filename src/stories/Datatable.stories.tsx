@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { DataTable, DataRow } from '../basicComponents/Datatable';
+import { DataTable } from '../basicComponents/Datatable';
+import { DataRow } from '../constants/auxTypes';
 import '../style/Base.css';
 
 export default {

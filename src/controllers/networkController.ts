@@ -5,31 +5,22 @@
  * @package It requires vis data package.
  * @author Marco Expósito Pérez
  */
-//Namespace
-import { edgeConst } from "../namespaces/edges";
-import { EdgeData, PerspectiveInfo } from "../namespaces/perspectivesTypes";
-import { ViewOptions } from "../namespaces/ViewOptions";
-import { nodeConst } from "../namespaces/nodes";
+//Constants
+import { edgeConst } from "../constants/edges";
+import { EdgeData, PerspectiveInfo } from "../constants/perspectivesTypes";
+import { ViewOptions } from "../constants/viewOptions";
+import { nodeConst } from "../constants/nodes";
+import { StateFunctions } from "../constants/auxTypes";
 //Package
 import { Data, DataSetEdges, DataSetNodes, Network, NodeChosenLabelFunction, NodeChosenNodeFunction, Options } from "vis-network";
 import { DataSet } from "vis-data";
 //Local Files
 import EdgeVisuals from "./edgeVisuals";
 import NodeVisuals from "./nodeVisuals";
-import BoundingBoxes from "./boundingBoxes";
+import BoxesController from "./boundingBoxes";
 import EventsController from "./eventsController";
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
 
-export interface StateFunctions {    //TODO move this interface to some other place
-    setSelectedNodeId: Function;
-    setTooltipInfo: Function;
-    setTooltipPosition: Function;
-    setTooltipState: Function;
-    setLegendData: Function;
-    setDimensionStrategy: Function;
-    setNetowkrFocusId: Function;
-    setSelectedCommunity?: Function;
-}
 
 export default class NetworkController {
     //Options of the vis.js network
@@ -39,7 +30,7 @@ export default class NetworkController {
     //Edge visuals controller
     edgeVisuals!: EdgeVisuals;
     //Bounding boxes controller
-    bbController: BoundingBoxes
+    bbController: BoxesController
     //Network event controller
     eventsController: EventsController
 
@@ -50,6 +41,15 @@ export default class NetworkController {
     //Edges of the network
     edges: DataSetEdges;
 
+    /**
+     * Constructor of the class 
+     * @param perspectiveInfo All the information of this perspective
+     * @param htmlRef HTMLDiv element where the canvas of the network will be holded
+     * @param viewOptions Object with the view options
+     * @param sf Obkect with the functions that change the state
+     * @param dimStrat Current dimension strategy
+     * @param networkFocusID ID of the current network with the tooltip focus
+     */
     constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, dimStrat: NodeDimensionStrategy | undefined, networkFocusID: number) {
 
         this.nodes = new DataSet(perspectiveInfo.data.users);
@@ -63,7 +63,7 @@ export default class NetworkController {
 
         this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
 
-        this.bbController = new BoundingBoxes(perspectiveInfo.data.communities, perspectiveInfo.data.users, this.net);
+        this.bbController = new BoxesController(perspectiveInfo.data.communities, perspectiveInfo.data.users, this.net);
 
         this.eventsController = new EventsController(this, htmlRef, sf, networkFocusID, perspectiveInfo.details.id);
     }
@@ -137,7 +137,12 @@ export default class NetworkController {
     }
 }
 
-
+/**
+ * Function that compares EdgeData.
+ * @param a EdgeData A
+ * @param b EdgeData B
+ * @returns Returns 1 if A has higher value. Returns 0 if both have the same value. Returns -1 if B has higher value
+ */
 const sortEdges = (a: EdgeData, b: EdgeData) => {
     if (a.value > b.value) {
         return 1;

@@ -3,8 +3,8 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { ButtonState } from '../namespaces/ViewOptions';
+//Constants
+import { ButtonState } from "../constants/viewOptions";
 //Packages
 import React, { useEffect, useState } from "react";
 //Local files

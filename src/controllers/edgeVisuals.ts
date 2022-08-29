@@ -3,9 +3,9 @@
  * @package It requires vis network package.
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { ViewOptions } from "../namespaces/ViewOptions";
-import { edgeConst } from "../namespaces/edges";
+//Constants
+import { ViewOptions } from "../constants/viewOptions";
+import { edgeConst } from "../constants/edges";
 //Package
 import { DataSetEdges, Edge, Options } from "vis-network";
 
@@ -19,7 +19,7 @@ export default class EdgeVisuals {
 
     /**
      * Constructor of the class
-     * @param Edges 
+     * @param Edges Data of all edges of the network sorted by increasing value
      * @param viewOptions Initial view Options
      * @param options Initial edge options
      */
@@ -102,7 +102,7 @@ export default class EdgeVisuals {
     }
 
     /**
-     * Save the edges as selected and update all edges visuals based on the option
+     * Save the edges as selected and update all edges visuals
      * @param selectedEdges edges to select
      */
     selectEdges(selectedEdges: string[]) {
@@ -128,7 +128,9 @@ export default class EdgeVisuals {
         this.edgeChosenVisuals();
     }
 
-
+    /**
+     * Update the visuals of all selected edges
+     */
     edgeChosenVisuals() {
         const newEdges = new Array();
 

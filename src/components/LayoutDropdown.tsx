@@ -3,8 +3,8 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { ButtonState, initialOptions, AppLayout } from "../namespaces/ViewOptions";
+//Constants
+import { ButtonState, initialOptions, AppLayout } from "../constants/viewOptions";
 //Packages
 import { useState } from "react";
 //Local files
@@ -23,21 +23,22 @@ export const LayoutDropdown = ({
     setLayout,
 }: LayoutDropdownProps) => {
 
-    const [selectedItems, setSelectedItems] = useState<Array<ButtonState>>(initialState);
+     //State with the state of all items
+    const [itemsState, setItemsState] = useState<Array<ButtonState>>(initialState);
 
-    function changeLayout(key: AppLayout) {
-        if (!selectedItems[key]) {
+    const changeLayout = (key: AppLayout) => {
+        if (!itemsState[key]) {
 
             const newState = new Array(Object.keys(AppLayout).length / 2);
             newState.fill(ButtonState.inactive);
             newState[key] = ButtonState.active;
 
-            setSelectedItems(newState);
+            setItemsState(newState);
             setLayout(key);
         }
     }
 
-    const LayoutButtons: React.ReactNode[] = getButtons(changeLayout, selectedItems)
+    const LayoutButtons: React.ReactNode[] = getButtons(changeLayout, itemsState)
 
     return (
         <Dropdown
@@ -60,11 +61,11 @@ init();
 
 /**
  * Returns the buttons-reactComponents of the layout dropdown
- * @param changeLayout On click function for the buttons
+ * @param changeLayout On click function for the buttons. Will receive a AppLayout parameter as an argument
  * @param selectedItems State of the buttons
  * @returns returns an array of React components
  */
-function getButtons(changeLayout: (key: AppLayout) => void, selectedItems: ButtonState[]): React.ReactNode[] {
+function getButtons(changeLayout: Function, selectedItems: ButtonState[]): React.ReactNode[] {
     return [
         <Button
             content="Horizontal"

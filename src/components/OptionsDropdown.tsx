@@ -3,10 +3,10 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { ButtonState, initialOptions } from "../namespaces/ViewOptions";
+//Constants
+import { ButtonState, initialOptions } from "../constants/viewOptions";
 //Packages
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
@@ -22,7 +22,6 @@ interface OptionsDropdownProps {
     onBorder: (newValue: boolean) => boolean;
 }
 
-
 /**
  * Dropdown component
  */
@@ -33,38 +32,71 @@ export const OptionsDropdown = ({
     onBorder,
 }: OptionsDropdownProps) => {
 
-    const [selectedItems, setSelectedOptions] = useState<Array<ButtonState>>(initialState);
+    const [itemsState, setItemsState] = useState<Array<ButtonState>>(initialState);
 
     const onClick = (index: number, realOnclick: Function) => {
-        if (selectedItems[index] !== ButtonState.loading) {
+        if (itemsState[index] !== ButtonState.loading) {
 
-            //Save the old state of the option clicked
-            const savedState = selectedItems[index];
+            const savedState = itemsState[index];
 
-            //Update its state to loading
-            const newSelected = Object.assign(new Array(), selectedItems);
+            //Update the state to loading
+            const newSelected = Object.assign(new Array(), itemsState);
             newSelected[index] = ButtonState.loading;
-            setSelectedOptions(newSelected);
+            setItemsState(newSelected);
 
-            //Once the real clock finish, it will return true if the button option was succesfuly executed
+            //Once the real onClick function finish, it will return true if the button option was succesfuly executed
             if (realOnclick(savedState !== ButtonState.active)) {
 
                 //Update the state to the oposite of what the saved state is, because the click worked
-                const newSelected = Object.assign(new Array(), selectedItems);
+                const newSelected = Object.assign(new Array(), itemsState);
                 newSelected[index] = savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active;
-                setSelectedOptions(newSelected);
+                setItemsState(newSelected);
 
             } else {
 
                 //Update the state to the the saved state, because the click didnt worked
-                const newSelected = Object.assign(new Array(), selectedItems);
+                const newSelected = Object.assign(new Array(), itemsState);
                 newSelected[index] = savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active;
-                setSelectedOptions(newSelected);
+                setItemsState(newSelected);
             }
         }
     }
 
-    const optionsButtons: React.ReactNode[] = getButtons(onClick, onHideLabels, onHideEdges, onEdgeWidth, onBorder, selectedItems)
+    /**
+     * Returns the buttons-reactComponents of the options dropdown
+     * @param onClick On click function for the buttons. Will receive the index of the component and a function as arguments
+     * @returns returns an array of React components
+     */
+    const getButtons = (onClick: Function): React.ReactNode[] => {
+        return [
+            <Button
+                content="Hide node labels"
+                onClick={() => { onClick(0, onHideLabels); }}
+                state={itemsState[0]}
+                key={0} />,
+            <Button
+                content="Hide unselected Edges"
+                onClick={() => { onClick(1, onHideEdges); }}
+                state={itemsState[1]}
+                key={1} />,
+            <hr key={2} />,
+            //TODO Add the threshold slider or similar option
+            <hr key={3} />,
+            <Button
+                content="Make edge width variable"
+                onClick={() => { onClick(2, onEdgeWidth); }}
+                state={itemsState[2]}
+                key={4} />,
+            <hr key={5} />,
+            <Button
+                content="Activate nodes borders"
+                onClick={() => { onClick(3, onBorder); }}
+                state={itemsState[3]}
+                key={6} />
+        ];
+    }
+
+    const optionsButtons: React.ReactNode[] = getButtons(onClick);
 
     return (
         <Dropdown
@@ -96,33 +128,4 @@ init();
  * @param selectedItems state of the buttons
  * @returns 
  */
-function getButtons(onClick: (index: number, realOnclick: Function) => void, onHideLabels: (newValue: boolean) => boolean, onHideEdges: (newValue: boolean) => boolean,
-    onEdgeWidth: (newValue: boolean) => boolean, onBorder: (newValue: boolean) => boolean, selectedItems: ButtonState[]): React.ReactNode[] {
 
-    return [
-        <Button
-            content="Hide node labels"
-            onClick={() => { onClick(0, onHideLabels); }}
-            state={selectedItems[0]}
-            key={0} />,
-        <Button
-            content="Hide unselected Edges"
-            onClick={() => { onClick(1, onHideEdges); }}
-            state={selectedItems[1]}
-            key={1} />,
-        <hr key={2} />,
-        //TODO Add the threshold slider
-        <hr key={3} />,
-        <Button
-            content="Make edge width variable"
-            onClick={() => { onClick(2, onEdgeWidth); }}
-            state={selectedItems[2]}
-            key={4} />,
-        <hr key={5} />,
-        <Button
-            content="Activate nodes borders"
-            onClick={() => { onClick(3, onBorder); }}
-            state={selectedItems[3]}
-            key={6} />
-    ];
-}

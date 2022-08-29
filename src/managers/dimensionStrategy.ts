@@ -3,8 +3,8 @@
  * @author Marco Expósito Pérez
  */
 //Namespaces
-import { DimAttribute } from "../namespaces/nodes"
-import { UserData } from "../namespaces/perspectivesTypes";
+import { DimAttribute } from "../constants/nodes"
+import { UserData } from "../constants/perspectivesTypes";
 //Local files
 import BorderStrategy from "./nodeDimensions/borderStrat";
 import ColorStrategy from "./nodeDimensions/colorStrat";

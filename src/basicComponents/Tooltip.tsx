@@ -3,20 +3,13 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
+//Constants
+import { DataRow, TooltipInfo, Point } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
 //Local files
-import { Point } from "../controllers/nodeVisuals";
-import '../style/Tooltip.css';
 import { Button } from "./Button";
-import { DataRow } from "./Datatable";
-
-//Interface that contains all the necesary info to show in a tooltip
-export interface TooltipInfo {
-    tittle: string;
-    mainDataRow: DataRow[];
-    subDataRow: DataRow[];
-}
+import '../style/Tooltip.css';
 
 interface TooltipProps {
     //Active state of the tooltip
@@ -35,64 +28,66 @@ export const Tooltip = ({
     content,
     position,
 }: TooltipProps) => {
-
-    const [tooltipState, setTooltipState] = useState<boolean>(state);
-    const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo | undefined>(content);
-    const [pos, setPosition] = useState<Point | undefined>(position);
+    
+    //States to activate/disactivate the tooltip, hold tooltip info and change the tooltip position
+    const [tState, setTState] = useState<boolean>(state);
+    const [info, setInfo] = useState<TooltipInfo | undefined>(content);
+    const [pos, setPos] = useState<Point | undefined>(position);
 
     //In order to center the arrow on the position, the tooltip needs vertical offset based on its own height
     const [yOffset, setYOffset] = useState<number>(0);
 
-    const elementRef = useRef(null);
-    const parentRef = useRef(null);
+    //Reference of the tooltip body and this component. Used to calculate the vertical offset of the tooltip
+    const bodyRef = useRef(null);
+    const compRef = useRef(null);
 
     useEffect(() => {
-        setTooltipState(state);
+        setTState(state);
     }, [state]);
 
     useEffect(() => {
-        setPosition(position);
+        setPos(position);
     }, [position]);
 
     useEffect(() => {
-        setTooltipInfo(content);
+        setInfo(content);
     }, [content]);
 
     useEffect(() => {
         //Calculates the offset
-        const ref = elementRef as any;
-        const pRef = parentRef.current as any;
+        const ref = bodyRef as any;
+        const pRef = bodyRef.current as any;
 
         if (ref.current !== null) {
             const parentPosition = getHTMLPosition(pRef.parentElement);
             setYOffset(ref.current.clientHeight/2 + parentPosition.top);
         }
-    }, [tooltipInfo]);
-
+    }, [info]);
+    
     const style = pos !== undefined ? { top: pos.y - yOffset, left: pos.x } : {};
 
-    if (tooltipInfo === undefined) {
+    if (info === undefined) {
         return <div className={`tooltip`}></div>
     } else {
         return (
             <div
-                ref={parentRef}
-                className={`tooltip ${tooltipState ? "active" : ""}`}
+                ref={compRef}
+                className={`tooltip ${state ? "active" : ""}`}
                 style={style}
             >
-                <div ref={elementRef} className={`tooltip-content right`}>
+                <div ref={bodyRef} className={`tooltip-content right`}>
                     <div className={"tooltip-header row"}>
-                        <h3 className="col-10"> {tooltipInfo.tittle} </h3>
+                        <h3 className="col-10"> {info.tittle} </h3>
                         <Button
                             content=""
                             extraClassName="col-2 btn-close"
                             onClick={() =>{
-                                setTooltipState(false);
+                                setTState(false);
                             }}
                         />
                     </div>
                     <div className={"tooltip-body"}>
-                        {tooltipInfo.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
+                        {info.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
                             return (
                                 <div key={index} className="main-row row">
                                     <strong> <React.Fragment >{item.getKey()}</React.Fragment></strong>
@@ -101,7 +96,7 @@ export const Tooltip = ({
                                 </div>
                             );
                         })}
-                        {tooltipInfo.subDataRow.map((item: DataRow, index: number): JSX.Element => {
+                        {info.subDataRow.map((item: DataRow, index: number): JSX.Element => {
                             return (
                                 <div key={index} className="sub-row row">
                                     <React.Fragment >{item.getKey()}</React.Fragment>

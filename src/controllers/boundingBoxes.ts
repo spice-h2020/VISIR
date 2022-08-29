@@ -3,12 +3,15 @@
  * @package It requires vis network package.
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { CommunityData, UserData } from "../namespaces/perspectivesTypes";
+//Constants
+import { CommunityData, UserData } from "../constants/perspectivesTypes";
+import { BoundingBox } from "../constants/auxTypes";
 //Packages
 import { Network } from "vis-network";
-//Local files
 
+/**
+ * Configuration of the bounding boxes
+ */
 const configuration = {
     //Padding to make bounding boxes a bit bigger than the nodes they bound
     padding: 15,
@@ -36,28 +39,15 @@ const configuration = {
     ]
 }
 
-export interface BoundingBox {
-    top: number
-    bottom: number
-    left: number
-    right: number
-
-    color?: {
-        color: string
-        border: string
-        name: string
-    }
-}
-
-export default class BoundingBoxes {
+export default class BoxesController {
     //Data of all communities of the network
     comData: CommunityData[]
 
     /**
      * Constructor of the class
-     * @param communityData 
-     * @param uData 
-     * @param network 
+     * @param communityData Data of all communities of the network
+     * @param uData Data of all users of the network
+     * @param network Vis.js network object 
      */
     constructor(communityData: CommunityData[], uData: UserData[], network: Network) {
         this.comData = communityData;
@@ -67,8 +57,8 @@ export default class BoundingBoxes {
 
     /**
      * Calculates the boundaries of each bounding box and add them to their own community
-     * @param uData 
-     * @param network 
+     * @param uData Data of all users of the network
+     * @param network Vis.js network object 
      */
     calculateBoundingBoxes(uData: UserData[], network: Network) {
 
@@ -106,7 +96,7 @@ export default class BoundingBoxes {
 
     /**
      * Draw the bounding boxes in the canvas
-     * @param ctx 
+     * @param ctx CanvasRenderingContext2D of the network/canvas where we are going to draw
      */
     drawBoundingBoxes(ctx: CanvasRenderingContext2D) {
         for (let i = 0; i < this.comData.length; i++) {
@@ -129,7 +119,7 @@ export default class BoundingBoxes {
 
     /**
      * Check if a Vis.js click event has clicked a bounding box
-     * @param event 
+     * @param event Vis.js click event object
      * @returns returns the index of the clicked bounding box or null if the event doesnt click any bounding box
      */
     isBoundingBoxClicked(event: any) {

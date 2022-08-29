@@ -3,14 +3,14 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { DimAttribute, Dimensions, nodeConst } from '../namespaces/nodes';
+//Constants
+import { DimAttribute, Dimensions, nodeConst } from '../constants/nodes';
 //Packages
-import React, { ReactNode, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 //Local files
-import '../style/Legend.css';
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
+import '../style/Legend.css';
 
 interface LegendTooltipProps {
     //Content of the legend
@@ -30,6 +30,7 @@ export const LegendTooltip = ({
     updateLegendConfig,
 }: LegendTooltipProps) => {
 
+    //activates/disactivates the button that shows the legend
     const [isActive, setIsActive] = useState<boolean>(false);
     //Data that will be seen in the legend
     const [data, setData] = useState<DimAttribute[]>(legendData);
@@ -45,6 +46,7 @@ export const LegendTooltip = ({
         }
     }, [state]);
 
+    //When legendData changes, automaticaly activates and init the legend
     useEffect(() => {
         if (!isActive) {
             setIsActive(state);
@@ -69,7 +71,7 @@ export const LegendTooltip = ({
         setLegendConfig(new Map(legendConfig.set(value, !legendConfig.get(value))));
     }
 
-    const legendRows: React.ReactNode[] = getButtons(buttonClick, data);
+    const legendRows: React.ReactNode[] = getLegendRows(buttonClick, data);
 
     if (legendRows.length > 0) {
         return (
@@ -98,7 +100,7 @@ export const LegendTooltip = ({
  * @param data Content of the buttons
  * @returns returns an array of React components
  */
-function getButtons(buttonClick: (value: string) => void, data: DimAttribute[],): React.ReactNode[] {
+function getLegendRows(buttonClick: Function, data: DimAttribute[]): React.ReactNode[] {
     const rows = new Array<React.ReactNode>();
 
     for (let i = 0; i < data.length; i++) {

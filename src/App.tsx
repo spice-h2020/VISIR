@@ -9,14 +9,14 @@ import { LayoutDropdown } from './components/LayoutDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
 
 import RequestManager from './managers/requestManager';
-import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './namespaces/ViewOptions';
-import { PerspectiveDetails } from './namespaces/perspectivesTypes';
+import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './constants/viewOptions';
+import { PerspectiveDetails } from './constants/perspectivesTypes';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
-import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './namespaces/perspectiveValidation';
+import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/perspectiveValidation';
 import { LegendTooltip } from './components/LegendTooltip';
-import { DimAttribute } from './namespaces/nodes';
+import { DimAttribute } from './constants/nodes';
 
 const requestManager = new RequestManager();
 const viewDataManager = new ViewDataManager();

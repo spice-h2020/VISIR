@@ -4,7 +4,7 @@
  * @author Marco Expósito Pérez
  */
 //Namespaces
-import { PerspectivePair, PerspectiveInfo, PerspectiveData, PerspectiveDetails } from "../namespaces/perspectivesTypes";
+import { PerspectivePair, PerspectiveInfo, PerspectiveData, PerspectiveDetails } from "../constants/perspectivesTypes";
 
 export default class ViewDataManager {
     //Current active perspective pairs

@@ -1,8 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Tooltip } from '../basicComponents/Tooltip';
+import { DataRow, Point, TooltipInfo } from '../constants/auxTypes';
 
-import { DataRow } from '../basicComponents/Datatable';
-import { TooltipInfo, Tooltip } from '../basicComponents/Tooltip';
-import { Point } from '../controllers/nodeVisuals';
 import '../style/Base.css';
 
 export default {

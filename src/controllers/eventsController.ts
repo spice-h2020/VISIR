@@ -1,26 +1,24 @@
 /**
  * @fileoverview This file adds all necesary callback functions of events a vis.js network
  * @package It requires vis network package.
- * @package It requires react package.
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { CommunityData, UserData } from "../namespaces/perspectivesTypes";
-import { nodeConst } from "../namespaces/nodes";
+//Constants
+import { CommunityData, UserData } from "../constants/perspectivesTypes";
+import { nodeConst } from "../constants/nodes";
+import { DataRow, Point, StateFunctions, TooltipInfo } from "../constants/auxTypes";
 //Packages
-import { DataSetEdges, DataSetNodes, Edge, FitOptions, IdType, network, Network, TimelineAnimationType } from "vis-network";
+import { BoundingBox, DataSetEdges, DataSetNodes, Edge, FitOptions, IdType, Network, TimelineAnimationType } from "vis-network";
 //Local files
-import BoundingBoxes, { BoundingBox } from "./boundingBoxes";
-import NodeVisuals, { Point } from "./nodeVisuals";
+import BoxesController from "./boundingBoxes";
+import NodeVisuals from "./nodeVisuals";
 import EdgeVisuals from "./edgeVisuals";
-import { getHTMLPosition, TooltipInfo } from "../basicComponents/Tooltip";
-import { DataRow } from "../basicComponents/Datatable";
-import NetworkController, { StateFunctions } from "./networkController";
-
+import { getHTMLPosition } from "../basicComponents/Tooltip";
+import NetworkController from "./networkController";
 
 export default class EventsController {
     //Bounding boxes controller
-    bbController: BoundingBoxes;
+    bbController: BoxesController;
     //Node visuals controller
     nodeVisuals: NodeVisuals;
     //Edge visuals controller
@@ -45,18 +43,23 @@ export default class EventsController {
 
     /**
      * Constructor of the class
+     * @param networkController parent object of this eventsController
+     * @param htmlRef Div element where the network canvas is stored
+     * @param sf State functions object
+     * @param networkFocusID ID of the current network with the focus of the tooltip
+     * @param networkID ID of this network
      */
-    constructor(networkManager: NetworkController, htmlRef: HTMLDivElement, sf: StateFunctions, networkFocusID: number, networkID: number) {
+    constructor(networkController: NetworkController, htmlRef: HTMLDivElement, sf: StateFunctions, networkFocusID: number, networkID: number) {
 
-        this.bbController = networkManager.bbController;
-        this.nodeVisuals = networkManager.nodeVisuals;
-        this.edgeVisuals = networkManager.edgeVisuals;
+        this.bbController = networkController.bbController;
+        this.nodeVisuals = networkController.nodeVisuals;
+        this.edgeVisuals = networkController.edgeVisuals;
 
         this.refHTML = htmlRef;
 
-        this.net = networkManager.net;
-        this.nodes = networkManager.nodes;
-        this.edges = networkManager.edges;
+        this.net = networkController.net;
+        this.nodes = networkController.nodes;
+        this.edges = networkController.edges;
 
         this.networkFocusID = networkFocusID;
         this.networkID = networkID;
@@ -88,7 +91,7 @@ export default class EventsController {
         sf.setTooltipState(false);
 
         if (event.nodes.length > 0) {
-            sf.setNetowkrFocusId(this.networkID);
+            sf.setNetworkFocusId(this.networkID);
 
             sf.setSelectedNodeId(event.nodes[0]);
             this.setNodeAsTooltip(sf.setTooltipInfo, event.nodes[0]);
@@ -101,20 +104,18 @@ export default class EventsController {
 
     /**
      * Animation finished event callback
-     * @param setTooltipPos 
-     * @param setTooltipState 
+     * @param setTooltipPos function that changes tooltip position
+     * @param setTooltipState function that changes tooltip active/disabled state
      */
     animationFinished(setTooltipPos: Function, setTooltipState: Function) {
         if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltipPos, setTooltipState);
-
-
     }
 
     /**
      * Zoom event callback
-     * @param setTooltipPos 
-     * @param setTooltipState 
+     * @param setTooltipPos function that changes tooltip position
+     * @param setTooltipState function that changes tooltip active/disabled state
      */
     zoom(setTooltipPos: Function, setTooltipState: Function) {
         if (this.networkID === this.networkFocusID)
@@ -123,8 +124,8 @@ export default class EventsController {
 
     /**
      * Canvas dragging event callback
-     * @param setTooltipPos 
-     * @param setTooltipState 
+     * @param setTooltipPos function that changes tooltip position
+     * @param setTooltipState function that changes tooltip active/disabled state
      */
     dragging(setTooltipPos: Function, setTooltipState: Function) {
         if (this.networkID === this.networkFocusID)
@@ -135,7 +136,7 @@ export default class EventsController {
      * Change the visual state of all nodes depending on their conection to the clicked node. Do the same for the edges
      * @param nodeId Id of the node clicked
      */
-    nodeClicked(nodeId: any) {
+    nodeClicked(nodeId: number) {
         const node = this.nodes.get(nodeId) as unknown as UserData;
 
         //Search for the nodes that are connected to the selected Node
@@ -192,7 +193,7 @@ export default class EventsController {
         if (boundingBoxClicked !== null) {
             const community: CommunityData = this.bbController.comData[boundingBoxClicked]
 
-            sf.setNetowkrFocusId(this.networkID);
+            sf.setNetworkFocusId(this.networkID);
 
             //Update community datatable  
             sf.setSelectedCommunity!(community);
@@ -238,8 +239,8 @@ export default class EventsController {
 
     /**
      * Parse a node info to work as a real tooltip info, and update the tooltip info state
-     * @param setTooltipInfo 
-     * @param node node to be parsed
+     * @param setTooltipInfo Function to update tooltip info
+     * @param nodeId node to be parsed
      */
     setNodeAsTooltip(setTooltipInfo: Function, nodeId: number) {
         const node = this.nodes.get(nodeId) as unknown as UserData;
@@ -272,7 +273,7 @@ export default class EventsController {
 
     /**
      * Parse a community info to work as a real tooltip info, and update the tooltip info state
-     * @param setTooltipInfo 
+     * @param setTooltipInfo Function to update tooltip info
      * @param community community to be parsed
      */
     setCommunityAsTooltip(setTooltipInfo: Function, community: CommunityData) {
@@ -314,8 +315,8 @@ export default class EventsController {
 
     /**
      * Updates the tooltip position based on the saved tooltip data
-     * @param setTooltipPos 
-     * @param setTooltipState 
+     * @param setTooltipPos function that changes tooltip position
+     * @param setTooltipState function that changes tooltip active/disabled state
      */
     updateTooltipPosition(setTooltipPos: Function, setTooltipState: Function) {
         if (this.tooltipData !== undefined) {

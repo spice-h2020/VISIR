@@ -4,17 +4,17 @@
  * @author Marco Expósito Pérez
  */
 
-//Namespaces
-import { ViewOptions, AppLayout } from '../namespaces/ViewOptions';
-import { PerspectiveInfo, UserData, CommunityData } from '../namespaces/perspectivesTypes';
+//Constants
+import { ViewOptions, AppLayout } from '../constants/viewOptions';
+import { PerspectiveInfo, UserData, CommunityData } from '../constants/perspectivesTypes';
+import { StateFunctions } from '../constants/auxTypes';
 //Packages
 import { useEffect, useState, useRef } from "react";
 //Local files
 import { DataColumn } from "./DataColumn";
-import NetworkController, { StateFunctions } from '../controllers/networkController';
+import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/dimensionStrategy';
-import { Tooltip, TooltipInfo } from '../basicComponents/Tooltip';
-import { Point } from '../controllers/nodeVisuals';
+
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
@@ -67,6 +67,7 @@ export const PerspectiveView = ({
         }
 
     }, [networkFocusID])
+
     ViewOptionsUseEffect(viewOptions, netManager);
 
     useEffect(() => {
@@ -94,7 +95,7 @@ export const PerspectiveView = ({
             sf.setSelectedCommunity = setSelectedCommunity;
 
             if (networkFocusID === undefined) {
-                sf.setNetowkrFocusId(info.details.id);
+                sf.setNetworkFocusId(info.details.id);
             }
             setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
         }
@@ -134,7 +135,11 @@ export const PerspectiveView = ({
     }
 };
 
-
+/**
+ * Creates a series of UseEffect functions that will be executed when viewOptions object changes. They will update the network in diferent ways depending on the option
+ * @param viewOptions object that will trigger the useEffects.
+ * @param netManager will execute the changes once useEffects are triggered
+ */
 function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined) {
     useEffect(() => {
         if (netManager !== undefined) {
@@ -164,7 +169,7 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.nodeVisuals.createNodeDimensionStrategy(viewOptions);
+            netManager.nodeVisuals.createNodeDimensionStrategy(viewOptions.Border);
         }
     }, [viewOptions.Border]);
 }

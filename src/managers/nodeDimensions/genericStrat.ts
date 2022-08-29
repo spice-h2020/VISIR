@@ -3,8 +3,8 @@
  * @author Marco Expósito Pérez
  */
 //Namespaces
-import { DimAttribute, Dimensions } from "../../namespaces/nodes";
-import { UserData } from "../../namespaces/perspectivesTypes";
+import { DimAttribute, Dimensions } from "../../constants/nodes";
+import { UserData } from "../../constants/perspectivesTypes";
 
 
 export default abstract class GenericStrategy {

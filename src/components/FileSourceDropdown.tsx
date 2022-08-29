@@ -3,8 +3,8 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { FileSource, initialOptions, ButtonState } from "../namespaces/ViewOptions";
+//Constants
+import { FileSource, initialOptions, ButtonState } from "../constants/viewOptions";
 //Packages
 import { useState } from "react";
 //Local files
@@ -23,21 +23,22 @@ export const FileSourceDropdown = ({
     setFileSource,
 }: FileSourceDropdownProps) => {
 
-    const [selectedItems, setSelectedItems] = useState<Array<ButtonState>>(initialState);
+    //State with the state of all items
+    const [itemsState, setItemsState] = useState<Array<ButtonState>>(initialState);
 
-    function changeFileSource(key: FileSource) {
-        if (!selectedItems[key]) {
+    const changeFileSource = (key: FileSource) => {
+        if (!itemsState[key]) {
 
             const newState = new Array(Object.keys(FileSource).length / 2);
             newState.fill(ButtonState.inactive);
             newState[key] = ButtonState.active;
 
-            setSelectedItems(newState);
+            setItemsState(newState);
             setFileSource(key);
         }
     }
 
-    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, selectedItems)
+    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, itemsState)
 
     return (
         <Dropdown
@@ -60,11 +61,11 @@ init();
 
 /**
  * Returns the buttons-reactComponents of the file source dropdown
- * @param changeFileSource On click function for the buttons
+ * @param changeFileSource On click function for the buttons. Will receive a FIleSource parameter as an argument
  * @param selectedItems State of the buttons
  * @returns returns an array of React components
  */
-function getButtons(changeFileSource: (key: FileSource) => void, selectedItems: ButtonState[]): React.ReactNode[] {
+function getButtons(changeFileSource:Function, selectedItems: ButtonState[]): React.ReactNode[] {
     return [
         <Button
             content="Github Main"

@@ -4,18 +4,16 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { PerspectivePair, UserData } from "../namespaces/perspectivesTypes";
-import { AppLayout, ViewOptions } from "../namespaces/ViewOptions"
-import { Tooltip, TooltipInfo } from "../basicComponents/Tooltip";
-
+//Constants
+import { PerspectivePair } from "../constants/perspectivesTypes";
+import { AppLayout, ViewOptions } from "../constants/viewOptions"
+import { Point, StateFunctions, TooltipInfo } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useState } from "react";
 //Local files
 import { PerspectiveView } from "./PerspectiveView";
-import { Point } from "../controllers/nodeVisuals";
-import { StateFunctions } from "../controllers/networkController";
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
+import { Tooltip } from "../basicComponents/Tooltip";
 
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable
@@ -42,7 +40,7 @@ export const PerspectivesGroups = ({
 }: PerspectivesGroupProps) => {
 
     const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();
-
+    
     const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo | undefined>();
     const [tooltipState, setTooltipState] = useState<boolean>(true);
     const [tooltipPos, setTooltipPos] = useState<Point | undefined>();
@@ -57,12 +55,13 @@ export const PerspectivesGroups = ({
         setTooltipState: setTooltipState,
         setLegendData: setLegendData,
         setDimensionStrategy: setDimensionStrategy,
-        setNetowkrFocusId: setNetworkFocusID
+        setNetworkFocusId: setNetworkFocusID
     }
+
     const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNodeId, sf, dimensionStrategy, networkFocusID);
 
     useEffect(() => {
-        //Reset the selectedNode to default when we clear all the active perspectives
+        //Reset some states to default when we clear all the active perspectives
         if (perspectivePairs.length === 0) {
             setViewActive(false);
 
@@ -101,6 +100,8 @@ export const PerspectivesGroups = ({
  * @param layout Layout options
  * @param selectedNodeId Id of the node that is currently selected between all perspectives
  * @param sf Object with all functions that change the state of a perspective
+ * @param dimStrat Dimension strat that will be used for all perspectives
+ * @param networkFocusID Id of the current network with the control of the tooltip
  * @returns An array with the react components created
  */
 function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], viewOptions: ViewOptions, layout: AppLayout,
@@ -109,6 +110,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
     const perspectivesComponents = new Array<React.ReactNode>();
 
     for (let i = 0; i < perspectivePairs.length; i++) {
+        
         if (perspectivePairs[i].hasEmptySpace()) {
 
             const perspective = perspectivePairs[i].getSingle();

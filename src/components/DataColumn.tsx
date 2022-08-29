@@ -3,13 +3,14 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { UserData } from "../namespaces/perspectivesTypes";
+//Constants
+import { CommunityData, UserData } from "../constants/perspectivesTypes";
+import { DataRow } from "../constants/auxTypes";
 //Packages
 import { useState, useEffect } from "react";
 //Local files
-import { DataTable, DataRow } from "../basicComponents/Datatable";
-import { ViewOptions } from "../namespaces/ViewOptions";
+import { DataTable } from "../basicComponents/Datatable";
+import { ViewOptions } from "../constants/viewOptions";
 
 /**
  * local aux class to hold the all the info of a datatable
@@ -25,11 +26,13 @@ class DatatableData {
 }
 
 interface DataColumnProps {
+    //Tittle shown above both tables
     tittle: React.ReactNode
+    //Data of both tables
     node: UserData | undefined,
-
+    community: CommunityData | undefined,
+    //Options that may hide some of the rows values
     viewOptions: ViewOptions,
-    community: any,
 }
 
 /**
@@ -42,20 +45,17 @@ export const DataColumn = ({
     community,
 }: DataColumnProps) => {
 
+    //States that hold the info of the node and community datatables
     const [nodeInfo, setNodeInfo] = useState<DatatableData>(new DatatableData());
     const [commInfo, setCommInfo] = useState<DatatableData>(new DatatableData());
 
 
     useEffect(() => {
-
         updateNodeInfo(node, setNodeInfo, viewOptions);
-
     }, [node, viewOptions]);
 
     useEffect(() => {
-
         updateCommInfo(community, setCommInfo);
-
     }, [community]);
 
 

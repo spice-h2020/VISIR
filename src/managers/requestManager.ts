@@ -4,7 +4,7 @@
  * @author Marco Expósito Pérez
  */
 //Namespaces
-import { FileSource } from '../namespaces/ViewOptions';
+import { FileSource } from '../constants/viewOptions';
 //Packages
 import { Axios } from 'axios'
 
@@ -14,6 +14,7 @@ export default class RequestManager {
     axios: Axios;
     keyToUrl: Map<FileSource, string>;
     usingAPI: boolean;
+
     /**
      * Constructor of the class
      */

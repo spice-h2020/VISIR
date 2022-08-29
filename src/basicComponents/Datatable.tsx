@@ -3,45 +3,12 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
+//Constants
+import { DataRow } from "../constants/auxTypes";
 //Packages
 import React from "react";
 //Local files
 import '../style/Datatable.css';
-
-/**
- * Aux class to streamline the data of each row. Key will be at the left of the row, value at the right
- */
-export class DataRow {
-    key: React.ReactNode;
-    value: React.ReactNode;
-    combineBoth: boolean;
-    /**
-     * Constructor of the class. There is no real distinction between the key param and the value param. 
-     * Current datatable implementation shows key at the left of the row, and value at the right
-     * @param key component of the row
-     * @param value another component of the row
-     */
-    constructor(key: React.ReactNode, value: React.ReactNode, combineBoth: boolean = false) { this.key = key; this.value = value; this.combineBoth = combineBoth; }
-
-    getKey(): React.ReactNode {
-        if (!this.combineBoth) {
-            return this.key;
-        } else {
-            return "";
-        }
-    }
-
-    getValue(strongKey: boolean = false): React.ReactNode {
-        if (!this.combineBoth) {
-            return this.value;
-        } else if (strongKey) {
-            return (<div><strong> {this.key} </strong> {this.value}</div>)
-        } else {
-            return (<div>{this.key}{this.value}</div>)
-        }
-
-    }
-}
 
 interface DatatableProps {
     //Tittle of the datatable.

@@ -3,8 +3,8 @@
  * @author Marco Expósito Pérez
  */
 //Namespaces
-import { Dimensions, DimAttribute, nodeConst } from "../../namespaces/nodes";
-import { UserData } from "../../namespaces/perspectivesTypes";
+import { Dimensions, DimAttribute, nodeConst } from "../../constants/nodes";
+import { UserData } from "../../constants/perspectivesTypes";
 //Local files
 import GenericStrategy from "./genericStrat";
 

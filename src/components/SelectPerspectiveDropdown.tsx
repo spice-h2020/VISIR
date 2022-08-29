@@ -3,9 +3,9 @@
  * @package It requires React package. 
  * @author Marco Expósito Pérez
  */
-//Namespaces
-import { ButtonState } from "../namespaces/ViewOptions"
-import { PerspectiveDetails } from '../namespaces/perspectivesTypes';
+//Constants
+import { ButtonState } from "../constants/viewOptions"
+import { PerspectiveDetails } from '../constants/perspectivesTypes';
 //Packages
 import React, { useState, useEffect } from "react";
 //Local files
@@ -27,14 +27,14 @@ interface SelectPerspectiveProps {
 export const SelectPerspectiveDropdown = ({
     onClick,
     allPerspectives,
-    itemsState,
+    itemsState: states,
 }: SelectPerspectiveProps) => {
 
-    const [selectedItems, setSelectedItems] = useState(itemsState);
+    const [itemsState, setItemsState] = useState(states);
 
     useEffect(() => {
-        setSelectedItems(itemsState);
-    }, [itemsState]);
+        setItemsState(states);
+    }, [states]);
 
     if (allPerspectives === undefined) {
         return (
@@ -46,12 +46,8 @@ export const SelectPerspectiveDropdown = ({
         );
     }
 
-    function selectPerspective(perspectiveId: number) {
-        onClick(perspectiveId);
-    }
-
     //Creates all perspective buttons components
-    const perspectivesButtons: React.ReactNode[] = getButtons(allPerspectives, selectedItems, selectPerspective);
+    const perspectivesButtons: React.ReactNode[] = getButtons(allPerspectives, states, onClick);
 
 
     return (
@@ -63,21 +59,27 @@ export const SelectPerspectiveDropdown = ({
     );
 };
 
-
-function getButtons(allPerspectives: PerspectiveDetails[], selectedItems: Map<number, ButtonState>, selectPerspective: (perspectiveId: number) => void): React.ReactNode[] {
+/**
+ * Returns the buttons-reactComponents of the Select perspective dropdown
+ * @param allPerspectives Array that contains all perspectiveDetails available to the user
+ * @param itemsState Active/disabled state of all items
+ * @param onClick Function executed when any button is clicked
+ * @returns returns an array of React components
+ */
+function getButtons(allPerspectives: PerspectiveDetails[], itemsState: Map<number, ButtonState>, onClick: Function): React.ReactNode[] {
     const buttons = new Array<React.ReactNode>();
 
     for (let i = 0; i < allPerspectives.length; i++) {
         buttons.push(
             <Button
                 content={allPerspectives[i].name}
-                state={selectedItems.get(allPerspectives[i].id)}
+                state={itemsState.get(allPerspectives[i].id)}
                 onClick={() => {
-                    selectPerspective(allPerspectives[i].id);
+                    onClick(allPerspectives[i].id);
                 }} />
         );
     }
-    
+
     return buttons;
 }
 
