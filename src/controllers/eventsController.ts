@@ -214,11 +214,11 @@ export default class EventsController {
             this.removeSelectedItems();
         } else {
             this.zoomOut();
+
+            sf.setTooltipInfo(undefined);
+            
             //Clear community datatable
             sf.setSelectedCommunity!(undefined);
-
-            //Clear tooltip data
-            sf.setTooltipInfo(undefined);
         }
 
         this.removeSelectedItems();

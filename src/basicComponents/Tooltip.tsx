@@ -28,7 +28,7 @@ export const Tooltip = ({
     content,
     position,
 }: TooltipProps) => {
-    
+
     //States to activate/disactivate the tooltip, hold tooltip info and change the tooltip position
     const [tState, setTState] = useState<boolean>(state);
     const [info, setInfo] = useState<TooltipInfo | undefined>(content);
@@ -47,6 +47,7 @@ export const Tooltip = ({
 
     useEffect(() => {
         setPos(position);
+
     }, [position]);
 
     useEffect(() => {
@@ -54,16 +55,18 @@ export const Tooltip = ({
     }, [content]);
 
     useEffect(() => {
-        //Calculates the offset
+
+        //Calculates the vertical offset
         const ref = bodyRef as any;
-        const pRef = bodyRef.current as any;
+        const pRef = compRef.current as any;
 
         if (ref.current !== null) {
             const parentPosition = getHTMLPosition(pRef.parentElement);
-            setYOffset(ref.current.clientHeight/2 + parentPosition.top);
+            setYOffset(ref.current.clientHeight / 2 + parentPosition.top);
         }
+
     }, [info]);
-    
+
     const style = pos !== undefined ? { top: pos.y - yOffset, left: pos.x } : {};
 
     if (info === undefined) {
@@ -72,7 +75,7 @@ export const Tooltip = ({
         return (
             <div
                 ref={compRef}
-                className={`tooltip ${state ? "active" : ""}`}
+                className={`tooltip ${tState ? "active" : ""}`}
                 style={style}
             >
                 <div ref={bodyRef} className={`tooltip-content right`}>
@@ -81,7 +84,7 @@ export const Tooltip = ({
                         <Button
                             content=""
                             extraClassName="col-2 btn-close"
-                            onClick={() =>{
+                            onClick={() => {
                                 setTState(false);
                             }}
                         />
