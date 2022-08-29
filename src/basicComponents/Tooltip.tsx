@@ -65,7 +65,7 @@ export const Tooltip = ({
 
         if (ref.current !== null) {
             const parentPosition = getHTMLPosition(pRef.parentElement);
-            setYOffset(ref.current.clientHeight / 2 + parentPosition.top);
+            setYOffset(ref.current.clientHeight/2 + parentPosition.top);
         }
     }, [tooltipInfo]);
 

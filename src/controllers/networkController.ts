@@ -18,7 +18,7 @@ import EdgeVisuals from "./edgeVisuals";
 import NodeVisuals from "./nodeVisuals";
 import BoundingBoxes from "./boundingBoxes";
 import EventsController from "./eventsController";
-import NodeDimensionStrategy from "./dimensionStrategy";
+import NodeDimensionStrategy from "../managers/dimensionStrategy";
 
 export interface StateFunctions {    //TODO move this interface to some other place
     setSelectedNodeId: Function;
@@ -27,6 +27,7 @@ export interface StateFunctions {    //TODO move this interface to some other pl
     setTooltipState: Function;
     setLegendData: Function;
     setDimensionStrategy: Function;
+    setNetowkrFocusId: Function;
     setSelectedCommunity?: Function;
 }
 
@@ -49,9 +50,7 @@ export default class NetworkController {
     //Edges of the network
     edges: DataSetEdges;
 
-    key: number;
-    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, dimStrat : NodeDimensionStrategy | undefined) {
-        this.key = Math.random();
+    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, dimStrat : NodeDimensionStrategy | undefined, networkFocusID : number) {
 
         this.nodes = new DataSet(perspectiveInfo.data.users);
         this.edges = new DataSet(perspectiveInfo.data.similarity);
@@ -64,7 +63,7 @@ export default class NetworkController {
 
         this.bbController = new BoundingBoxes(perspectiveInfo.data.communities, perspectiveInfo.data.users, this.net);
 
-        this.eventsController = new EventsController(this, htmlRef, sf);
+        this.eventsController = new EventsController(this, htmlRef, sf, networkFocusID, perspectiveInfo.details.id);
     }
 
     /**

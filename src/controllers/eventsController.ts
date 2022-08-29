@@ -8,7 +8,7 @@
 import { CommunityData, UserData } from "../namespaces/perspectivesTypes";
 import { nodeConst } from "../namespaces/nodes";
 //Packages
-import { DataSetEdges, DataSetNodes, Edge, FitOptions, IdType, Network, TimelineAnimationType } from "vis-network";
+import { DataSetEdges, DataSetNodes, Edge, FitOptions, IdType, network, Network, TimelineAnimationType } from "vis-network";
 //Local files
 import BoundingBoxes, { BoundingBox } from "./boundingBoxes";
 import NodeVisuals, { Point } from "./nodeVisuals";
@@ -38,13 +38,15 @@ export default class EventsController {
 
     //Current tooltip data before being parsed
     tooltipData?: UserData | CommunityData;
-    //Is the tooltip active in this perspective
-    isTooltipActive: boolean;
+    //ID of the current focused network
+    networkFocusID: number;
+    //Id of this network
+    networkID: number;
 
     /**
      * Constructor of the class
      */
-    constructor(networkManager: NetworkController, htmlRef: HTMLDivElement, sf: StateFunctions) {
+    constructor(networkManager: NetworkController, htmlRef: HTMLDivElement, sf: StateFunctions, networkFocusID: number, networkID: number) {
 
         this.bbController = networkManager.bbController;
         this.nodeVisuals = networkManager.nodeVisuals;
@@ -56,7 +58,8 @@ export default class EventsController {
         this.nodes = networkManager.nodes;
         this.edges = networkManager.edges;
 
-        this.isTooltipActive = false;
+        this.networkFocusID = networkFocusID;
+        this.networkID = networkID;
 
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
         this.net.on("click", (event) => this.click(event, sf));
@@ -82,10 +85,11 @@ export default class EventsController {
      * @param sf Object with all functions that change the state
      */
     click(event: any, sf: StateFunctions) {
-        this.isTooltipActive = true;
         sf.setTooltipState(false);
 
         if (event.nodes.length > 0) {
+            sf.setNetowkrFocusId(this.networkID);
+
             sf.setSelectedNodeId(event.nodes[0]);
             this.setNodeAsTooltip(sf.setTooltipInfo, event.nodes[0]);
 
@@ -101,7 +105,7 @@ export default class EventsController {
      * @param setTooltipState 
      */
     animationFinished(setTooltipPos: Function, setTooltipState: Function) {
-        if (this.isTooltipActive)
+        if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltipPos, setTooltipState);
 
 
@@ -113,7 +117,7 @@ export default class EventsController {
      * @param setTooltipState 
      */
     zoom(setTooltipPos: Function, setTooltipState: Function) {
-        if (this.isTooltipActive)
+        if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
@@ -123,7 +127,7 @@ export default class EventsController {
      * @param setTooltipState 
      */
     dragging(setTooltipPos: Function, setTooltipState: Function) {
-        if (this.isTooltipActive)
+        if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltipPos, setTooltipState);
     }
 
@@ -183,13 +187,12 @@ export default class EventsController {
      * @param sf Object with all functions that change the state
      */
     noNodeClicked(event: any, sf: StateFunctions) {
-        //Basic zoom options
-
-
         const boundingBoxClicked = this.bbController.isBoundingBoxClicked(event);
 
         if (boundingBoxClicked !== null) {
             const community: CommunityData = this.bbController.comData[boundingBoxClicked]
+
+            sf.setNetowkrFocusId(this.networkID);
 
             //Update community datatable  
             sf.setSelectedCommunity!(community);
@@ -209,12 +212,7 @@ export default class EventsController {
 
             this.removeSelectedItems();
         } else {
-            this.isTooltipActive = false;
-
-            //Zoom out from all nodes
             this.zoomOut();
-
-
             //Clear community datatable
             sf.setSelectedCommunity!(undefined);
 
@@ -335,7 +333,7 @@ export default class EventsController {
 
                 //Depending on the zoom level and node size, we add offset to the coordinates of the tooltip
                 x = nodePositionInDOM.x + refPosition.left + 18 + 1.6 * (node.size * this.net.getScale());
-                y = nodePositionInDOM.y + refPosition.top - 5 - 0.2 * (node.size * this.net.getScale());
+                y = nodePositionInDOM.y + refPosition.top + -5 - 0.2 * (node.size * this.net.getScale());
 
             } else {
                 const community = this.tooltipData as CommunityData;
@@ -352,7 +350,7 @@ export default class EventsController {
                 });
 
                 //Position the tooltip at the right of the bounding box
-                x = bbRight.x + refPosition.left + 15;
+                x = bbRight.x + refPosition.left + 16;
                 y = bbLeft.y + (bbRight.y - bbLeft.y) / 2 + refPosition.top;
 
             }

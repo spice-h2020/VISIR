@@ -12,7 +12,9 @@ import { useEffect, useState, useRef } from "react";
 //Local files
 import { DataColumn } from "./DataColumn";
 import NetworkController, { StateFunctions } from '../controllers/networkController';
-import NodeDimensionStrategy from '../controllers/dimensionStrategy';
+import NodeDimensionStrategy from '../managers/dimensionStrategy';
+import { Tooltip, TooltipInfo } from '../basicComponents/Tooltip';
+import { Point } from '../controllers/nodeVisuals';
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
@@ -29,6 +31,8 @@ interface PerspectiveViewProps {
     selectedNodeId: undefined | number;
     //Current node dimension strategy
     dimStrat: NodeDimensionStrategy | undefined;
+    //Id of the current network on the focus
+    networkFocusID: undefined | number
 }
 
 /**
@@ -42,8 +46,8 @@ export const PerspectiveView = ({
     sf,
     selectedNodeId,
     dimStrat,
+    networkFocusID,
 }: PerspectiveViewProps) => {
-
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
 
@@ -57,6 +61,15 @@ export const PerspectiveView = ({
         setInfo(perspectiveInfo);
     }, [perspectiveInfo]);
 
+    useEffect(() => {
+        console.log(networkFocusID);
+
+        if (netManager !== undefined && networkFocusID !== undefined){
+            netManager.eventsController.networkFocusID = networkFocusID;
+            console.log(netManager.eventsController.networkFocusID);
+        }
+        
+    }, [networkFocusID])
     ViewOptionsUseEffect(viewOptions, netManager);
 
     useEffect(() => {
@@ -79,19 +92,22 @@ export const PerspectiveView = ({
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
             sf.setSelectedCommunity = setSelectedCommunity;
 
-            setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf, dimStrat));
+            if (networkFocusID === undefined) {
+                sf.setNetowkrFocusId(info.details.id);
+            }
+            setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
         }
 
     }, [visJsRef]);
 
     const dataCol = <DataColumn
-        tittle={info?.info.name}
+        tittle={info?.details.name}
         node={selectedNode}
         community={selectedCommunity}
         viewOptions={viewOptions}
     />
 
-    if (isFirstPerspective || layout === AppLayout.Vertical) {
+    if (isFirstPerspective === undefined || isFirstPerspective === true || layout === AppLayout.Vertical) {
         return (
             <div className="perspective row">
                 <div className="col-4">
@@ -101,6 +117,7 @@ export const PerspectiveView = ({
                     <div className="network-container" ref={visJsRef} />
                 </div>
             </div >
+
         );
     } else {
         return (

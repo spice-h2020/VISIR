@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import { PerspectiveView } from "./PerspectiveView";
 import { Point } from "../controllers/nodeVisuals";
 import { StateFunctions } from "../controllers/networkController";
-import NodeDimensionStrategy from "../controllers/dimensionStrategy";
+import NodeDimensionStrategy from "../managers/dimensionStrategy";
 
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable
@@ -47,6 +47,7 @@ export const PerspectivesGroups = ({
     const [tooltipState, setTooltipState] = useState<boolean>(true);
     const [tooltipPos, setTooltipPos] = useState<Point | undefined>();
 
+    const [networkFocusID, setNetworkFocusID] = useState<number | undefined>();
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
 
     const sf: StateFunctions = {
@@ -55,9 +56,10 @@ export const PerspectivesGroups = ({
         setTooltipPosition: setTooltipPos,
         setTooltipState: setTooltipState,
         setLegendData: setLegendData,
-        setDimensionStrategy: setDimensionStrategy
+        setDimensionStrategy: setDimensionStrategy,
+        setNetowkrFocusId: setNetworkFocusID
     }
-    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNodeId, sf, dimensionStrategy);
+    const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNodeId, sf, dimensionStrategy, networkFocusID);
 
     useEffect(() => {
         //Reset the selectedNode to default when we clear all the active perspectives
@@ -68,6 +70,7 @@ export const PerspectivesGroups = ({
                 setSelectedNodeId(undefined);
             }
 
+            setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
         } else {
             setViewActive(true);
@@ -77,11 +80,11 @@ export const PerspectivesGroups = ({
 
     return (
         <div className="perspectives-containers">
-            <Tooltip
+            {<Tooltip
                 state={tooltipState}
                 content={tooltipInfo}
                 position={tooltipPos}
-            />
+            />}
 
             {perspectivesComponents.map((item: React.ReactNode, index: number): JSX.Element => {
                 return (<React.Fragment key={index}>{item}</React.Fragment>);
@@ -101,7 +104,7 @@ export const PerspectivesGroups = ({
  * @returns An array with the react components created
  */
 function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], viewOptions: ViewOptions, layout: AppLayout,
-    selectedNodeId: undefined | number, sf: StateFunctions, dimStrat : NodeDimensionStrategy | undefined): React.ReactNode[] {
+    selectedNodeId: undefined | number, sf: StateFunctions, dimStrat: NodeDimensionStrategy | undefined, networkFocusID: number | undefined): React.ReactNode[] {
 
     const perspectivesComponents = new Array<React.ReactNode>();
 
@@ -119,6 +122,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             selectedNodeId={selectedNodeId}
                             sf={sf}
                             dimStrat={dimStrat}
+                            networkFocusID={networkFocusID}
                         />
 
                     </div>
@@ -140,6 +144,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             selectedNodeId={selectedNodeId}
                             sf={sf}
                             dimStrat={dimStrat}
+                            networkFocusID={networkFocusID}
                         />
                         <PerspectiveView
                             perspectiveInfo={perspectiveB}
@@ -149,6 +154,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             selectedNodeId={selectedNodeId}
                             sf={sf}
                             dimStrat={dimStrat}
+                            networkFocusID={networkFocusID}
                         />
                     </div>
                 );

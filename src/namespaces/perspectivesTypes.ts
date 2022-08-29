@@ -12,10 +12,10 @@
  * Class that contains all the information of a perspective, including its details from the All perspectives file and its data from the own perspective file.
  */
 export class PerspectiveInfo {
-    info: PerspectiveDetails;
+    details: PerspectiveDetails;
     data: PerspectiveData;
 
-    constructor(info: PerspectiveDetails, data: PerspectiveData) { this.info = info; this.data = data }
+    constructor(details: PerspectiveDetails, data: PerspectiveData) { this.details = details; this.data = data }
 }
 
 //#region All perspectives file
@@ -143,7 +143,7 @@ export class PerspectivePair {
      */
     removePerspective(perspectiveId: number): boolean {
         for (let i = 0; i < this.perspectives.length; i++) {
-            if (this.perspectives[i]?.info.id === perspectiveId) {
+            if (this.perspectives[i]?.details.id === perspectiveId) {
                 this.perspectives[i] = undefined;
                 this.spacesAvailables[i] = true;
 

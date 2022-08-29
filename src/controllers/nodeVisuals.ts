@@ -8,10 +8,10 @@
 import { PerspectiveInfo, PerspectiveData, UserData } from "../namespaces/perspectivesTypes";
 import { Dimensions, DimAttribute, nodeConst } from "../namespaces/nodes"
 //Local files
-import NodeDimensionStrategy from "./dimensionStrategy";
+import NodeDimensionStrategy from "../managers/dimensionStrategy";
 import { ViewOptions } from "../namespaces/ViewOptions";
 import { ChosenLabelValues, ChosenNodeValues, DataSet, DataSetNodes, Node } from "vis-network";
-import GenericStrategy from "./nodeDimensions/genericStrat";
+import GenericStrategy from "../managers/nodeDimensions/genericStrat";
 import { StateFunctions } from "./networkController";
 
 //Aux class to help mantain and collect all the values of an Explicit Community
