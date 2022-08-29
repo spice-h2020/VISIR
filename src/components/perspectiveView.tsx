@@ -75,7 +75,9 @@ export const PerspectiveView = ({
             setSelectedNode(undefined);
             if (netManager !== undefined) {
                 netManager.eventsController.removeSelectedItems();
-                netManager.eventsController.zoomOut();
+
+                if (networkFocusID !== info.details.id)
+                    netManager.eventsController.zoomOut();
             }
         } else {
             //If its a number, it means the user clicked a node in some perspective. So we update the node table and the community table

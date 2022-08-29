@@ -5,6 +5,7 @@
  */
 
 //Namespaces
+import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 
 const checkSimilarityFunctions = false; //FOR DEBUG WITH TESTING DATAFILES
@@ -360,11 +361,13 @@ function isUserDataValid(arg: any): types.UserData {
             throw Error(`Id is undefined`);
         }
 
-        if (typeof (arg.id) !== "number") {
-            arg.id = Number(arg.id);
-
-            if (arg.id === NaN)
-                throw Error(`ID of the user (${arg.id}) is not a number`);
+        
+        if (typeof (arg.id) !== "string") {
+            try {
+                arg.id = String(arg.id);
+            } catch (e: any) {
+                throw Error(`Label of the user (${arg.id}) is not a string`);
+            }
         }
 
         if (arg.label === undefined) {
@@ -397,8 +400,9 @@ function isUserDataValid(arg: any): types.UserData {
             throw Error(`Explicit community of the user (${arg.id}) is undefined`);
         }
 
+        console.log( typeof (arg.explicit_community) )
         if (typeof (arg.explicit_community) !== "object") {
-            throw Error(`Explicit community of the user (${arg.id}) is not an object`);
+            throw Error(`Explicit community of the user (${arg.id}) is not an object. There may not be any explicit community values`);
         }
 
         return arg;
@@ -452,7 +456,7 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
         arg.to = arg.u2;
         delete arg.u2;
 
-        arg.label = arg.value.toString();   //TODO Esta optcion activa las labels de los edges que reducen el rendimiento bastante
+        arg.label = arg.value.toString();
 
         return arg;
 

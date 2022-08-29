@@ -7,7 +7,7 @@
  */
 //Namespace
 import { edgeConst } from "../namespaces/edges";
-import { PerspectiveInfo } from "../namespaces/perspectivesTypes";
+import { EdgeData, PerspectiveInfo } from "../namespaces/perspectivesTypes";
 import { ViewOptions } from "../namespaces/ViewOptions";
 import { nodeConst } from "../namespaces/nodes";
 //Package
@@ -50,9 +50,11 @@ export default class NetworkController {
     //Edges of the network
     edges: DataSetEdges;
 
-    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, dimStrat : NodeDimensionStrategy | undefined, networkFocusID : number) {
+    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, dimStrat: NodeDimensionStrategy | undefined, networkFocusID: number) {
 
         this.nodes = new DataSet(perspectiveInfo.data.users);
+
+        perspectiveInfo.data.similarity.sort(sortEdges);
         this.edges = new DataSet(perspectiveInfo.data.similarity);
 
         this.nodeVisuals = new NodeVisuals(perspectiveInfo.data, this.nodes, sf, viewOptions, dimStrat);
@@ -133,4 +135,15 @@ export default class NetworkController {
             }
         } as Options;
     }
+}
+
+
+const sortEdges = (a: EdgeData, b: EdgeData) => {
+    if (a.value > b.value) {
+        return 1;
+    }
+    if (a.value < b.value) {
+        return -1;
+    }
+    return 0;
 }

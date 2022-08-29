@@ -38,7 +38,7 @@ export interface Point {
 
 //Aux class to help group nodes in their partition of the canvas's layout
 interface NodeGroup {
-    nodes: number[],
+    nodes: string[],
     partition: {
         center: Point,
         nNodes: number
@@ -177,7 +177,7 @@ export default class NodeVisuals {
 
         for (let i = 0; i < nAreas; i++) {
             nodesGrouped.push({
-                nodes: new Array<number>(),
+                nodes: new Array<string>(),
                 partition: {
                     center: areaPartitions[i],
                     nNodes: 0
@@ -240,7 +240,7 @@ export default class NodeVisuals {
      * @param nodeId id of the node
      * @returns point coordinates
      */
-    getNodePos(group: NodeGroup, nodeId: number): Point {
+    getNodePos(group: NodeGroup, nodeId: string): Point {
         const size = group.partition.nNodes;
         const center = group.partition.center;
         const nodeIndex = group.nodes.indexOf(nodeId);;
@@ -353,7 +353,7 @@ export default class NodeVisuals {
      */
     nodeChosen(values: ChosenNodeValues, id: number, selected: boolean, hovering: boolean) {
         if (selected) {
-            
+
             values.size = nodeConst.selectedSize;
 
             if(values.borderColor ==="transparent"){

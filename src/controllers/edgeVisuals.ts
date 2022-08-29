@@ -34,12 +34,17 @@ export default class EdgeVisuals {
     }
 
     /**
-     * Delete all edges that doesnt have a minimum of value
+     * Delete a % of all edges of the network. Lower value edges will be deleted first
      */
     narrowEdges() {
         const edgesToDelete: Edge[] = new Array<Edge>();
+        const nToDelete = this.edges.length * edgeConst.deleteLimit;
+
+        let i = 0;
         this.edges.forEach((edge: Edge) => {
-            if (edge.value !== undefined && edge.value < edgeConst.narrowLimit) {
+
+            if (edge.value !== undefined && i <= nToDelete) {
+                i++;
                 edgesToDelete.push(edge);
             }
         })
@@ -125,30 +130,27 @@ export default class EdgeVisuals {
 
 
     edgeChosenVisuals() {
-        if (!edgeConst.hideEdgeLabels) {
-            const newEdges = new Array();
+        const newEdges = new Array();
 
-            this.edges.forEach((edge: Edge) => {
-                if (this.selectedEdges?.includes(edge.id as string)) {
-                    edge.font = {
-                        color: edgeConst.LabelColorSelected,
-                        strokeColor: edgeConst.LabelStrokeColorSelected,
-                        strokeWidth: edgeConst.LabelStrokeWidthSelected
-                    }
-                } else {
-                    edge.font = {
-                        color: edgeConst.LabelColor,
-                        strokeColor: edgeConst.LabelStrokeColor,
-                        strokeWidth: edgeConst.LabelStrokeWidth,
-                    }
+        this.edges.forEach((edge: Edge) => {
+            if (this.selectedEdges?.includes(edge.id as string)) {
+                edge.font = {
+                    color: edgeConst.LabelColorSelected,
+                    strokeColor: edgeConst.LabelStrokeColorSelected,
+                    strokeWidth: edgeConst.LabelStrokeWidthSelected
                 }
+            } else {
+                edge.font = {
+                    color: edgeConst.LabelColor,
+                    strokeColor: edgeConst.LabelStrokeColor,
+                    strokeWidth: edgeConst.LabelStrokeWidth,
+                }
+            }
 
-                console.log(edge.font);
-                newEdges.push(edge);
-            })
+            newEdges.push(edge);
+        })
 
-            this.edges.update(newEdges);
-        }
+        this.edges.update(newEdges);
     }
 }
 

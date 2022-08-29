@@ -83,7 +83,7 @@ export interface CommunityData extends anyProperty {
  * Interface of the data of a user/node.
  */
 export interface UserData extends anyProperty {
-    id: number;
+    id: string;
     label: string;
     implicit_community: number;
     explicit_community: anyProperty;
