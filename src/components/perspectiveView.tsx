@@ -62,13 +62,10 @@ export const PerspectiveView = ({
     }, [perspectiveInfo]);
 
     useEffect(() => {
-        console.log(networkFocusID);
-
-        if (netManager !== undefined && networkFocusID !== undefined){
+        if (netManager !== undefined && networkFocusID !== undefined) {
             netManager.eventsController.networkFocusID = networkFocusID;
-            console.log(netManager.eventsController.networkFocusID);
         }
-        
+
     }, [networkFocusID])
     ViewOptionsUseEffect(viewOptions, netManager);
 
@@ -82,9 +79,11 @@ export const PerspectiveView = ({
             }
         } else {
             //If its a number, it means the user clicked a node in some perspective. So we update the node table and the community table
-            const nodeData = netManager!.eventsController.nodeClicked(selectedNodeId);
-            setSelectedNode(nodeData);
-            setSelectedCommunity(netManager!.bbController.comData[nodeData.implicit_community]);
+            if (netManager !== undefined) {
+                const nodeData = netManager.eventsController.nodeClicked(selectedNodeId);
+                setSelectedNode(nodeData);
+                setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
+            }
         }
     }, [selectedNodeId]);
 

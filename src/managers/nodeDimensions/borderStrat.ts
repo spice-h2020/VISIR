@@ -42,6 +42,6 @@ export default class BorderStrategy extends GenericStrategy {
      * @param user user to edit
      */
     toColorless(user: UserData) {
-        user["color"]["background"] = nodeConst.noFocusColor.border;
+        user["color"]["border"] = nodeConst.noFocusColor.border;
     }
 }

@@ -37,14 +37,14 @@ export const nodeConst = {
 
     //--- Node circular location Values ---
     groupsBaseDistance: 75,
-    betweenNodesDistance: 8,
+    betweenNodesDistance: 9,
 
     //--- Default Configuration Values ---
     zoomDuration: 300,
 
     //Sizes
     defaultSize: 20,
-    selectedSize: 30,
+    selectedSize: 35,
 
     //Default value for a background color when the explicit community doesnt change it
     defaultColor: "rgb(30, 236, 164, 1)",
@@ -56,10 +56,10 @@ export const nodeConst = {
     defaultShape: { name: "dot", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
 
     defaultBorderWidth: 0,
-    selectedBorderWidth: 0,
+    selectedBorderWidth: 2,
 
     defaultBorderColorWidth: 4,
-    selectedBorderColorWidth: 4,
+    selectedBorderColorWidth: 20,
 
     labelSize: 13,
     labelvOffset: -31,

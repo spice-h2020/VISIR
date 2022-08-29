@@ -101,7 +101,7 @@ export default class NetworkController {
                     interpolation: false,
                 },
                 borderWidth: nodeConst.defaultBorderWidth,
-                borderWidthSelected: nodeConst.defaultBorderWidth,
+                borderWidthSelected: nodeConst.selectedBorderWidth,
                 size: nodeConst.defaultSize,
                 chosen: {
                     node: this.nodeVisuals.nodeChosen.bind(this.nodeVisuals) as NodeChosenNodeFunction,

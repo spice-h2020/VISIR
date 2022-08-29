@@ -353,7 +353,13 @@ export default class NodeVisuals {
      */
     nodeChosen(values: ChosenNodeValues, id: number, selected: boolean, hovering: boolean) {
         if (selected) {
+            
             values.size = nodeConst.selectedSize;
+
+            if(values.borderColor ==="transparent"){
+                values.borderColor = "#000000";
+                values.borderWidth = nodeConst.selectedBorderWidth
+            }
         }
     }
 

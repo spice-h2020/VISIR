@@ -170,12 +170,12 @@ export default class EventsController {
         this.net.fit(fitOptions);
 
         //Hide edges unconected
-        this.net.selectEdges(selected_edges_id);
         this.edgeVisuals.selectEdges(selected_edges_id as string[]);
+        this.net.selectEdges(selected_edges_id);
 
         //Update nodes's color acording to their selected status
-        this.net.selectNodes([node.id] as IdType[])
         this.nodeVisuals.selectNodes(selectedNodes);
+        this.net.selectNodes([node.id] as IdType[])
 
         return node;
     }
@@ -332,7 +332,7 @@ export default class EventsController {
                 const nodePositionInDOM = this.net.canvasToDOM(this.net.getPosition(node.id));
 
                 //Depending on the zoom level and node size, we add offset to the coordinates of the tooltip
-                x = nodePositionInDOM.x + refPosition.left + 18 + 1.6 * (node.size * this.net.getScale());
+                x = nodePositionInDOM.x + refPosition.left + 18 + 1.7 * (node.size * this.net.getScale());
                 y = nodePositionInDOM.y + refPosition.top + -5 - 0.2 * (node.size * this.net.getScale());
 
             } else {
