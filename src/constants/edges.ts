@@ -9,7 +9,7 @@
     narrowLimit: 0.5,
 
     //% of edges that will be deleted. Lowest similarity edges will be deleted first
-    deleteLimit: 0.85,
+    deleteLimit: 0.00, //0.85,
 
     //Edge Width limits
     minWidth: 1,

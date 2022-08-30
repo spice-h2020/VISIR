@@ -25,12 +25,12 @@ export default class EdgeVisuals {
      */
     constructor(Edges: DataSetEdges, viewOptions: ViewOptions, options: Options) {
         this.edges = Edges;
-        this.hideEdges = viewOptions.HideEdges
+        this.hideEdges = viewOptions.hideEdges
 
         this.narrowEdges();
 
-        this.hideUnselectedEdges(viewOptions.HideEdges);
-        this.changeEdgeWidth(viewOptions.EdgeWidth, options)
+        this.hideUnselectedEdges(viewOptions.hideEdges);
+        this.changeEdgeWidth(viewOptions.edgeWidth, options)
     }
 
     /**
@@ -98,6 +98,32 @@ export default class EdgeVisuals {
                 newEdges.push(edge);
             })
         }
+        this.edges.update(newEdges);
+    }
+
+    /**
+     * Update the edge Threshold value to hide edges below that value
+     * @param {Number} valueThreshold new value
+     */
+    updateEdgesThreshold(valueThreshold: number) {
+
+        const newEdges = new Array();
+        this.edges.forEach((edge: Edge) => {
+
+            if (edge.value !== undefined && edge.value < valueThreshold) {
+                edge["hidden"] = true;
+            } else if (this.hideEdges) {
+                if (this.selectedEdges?.includes(edge.id as string)) {
+                    edge["hidden"] = false;
+                } else {
+                    edge["hidden"] = true;
+                }
+            } else {
+                edge["hidden"] = false;
+            }
+
+            newEdges.push(edge);
+        })
         this.edges.update(newEdges);
     }
 

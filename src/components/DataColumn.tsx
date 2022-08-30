@@ -91,7 +91,7 @@ export const DataColumn = ({
 function updateNodeInfo(node: UserData | undefined, setNodeInfo: Function, viewOptions: ViewOptions) {
     const newNodeData = new DatatableData();
 
-    if (!viewOptions.HideLabels) {
+    if (!viewOptions.hideLabels) {
         newNodeData.mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
         newNodeData.mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
     }

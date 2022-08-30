@@ -400,7 +400,6 @@ function isUserDataValid(arg: any): types.UserData {
             throw Error(`Explicit community of the user (${arg.id}) is undefined`);
         }
 
-        console.log( typeof (arg.explicit_community) )
         if (typeof (arg.explicit_community) !== "object") {
             throw Error(`Explicit community of the user (${arg.id}) is not an object. There may not be any explicit community values`);
         }

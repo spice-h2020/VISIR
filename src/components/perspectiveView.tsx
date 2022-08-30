@@ -143,33 +143,39 @@ export const PerspectiveView = ({
 function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined) {
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.nodeVisuals.updateNodeDimensions(viewOptions.LegendConfig);
+            netManager.nodeVisuals.updateNodeDimensions(viewOptions.legendConfig);
         }
-    }, [viewOptions.LegendConfig]);
+    }, [viewOptions.legendConfig]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.nodeVisuals.hideLabels(viewOptions.HideLabels);
+            netManager.nodeVisuals.hideLabels(viewOptions.hideLabels);
         }
-    }, [viewOptions.HideLabels]);
+    }, [viewOptions.hideLabels]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.edgeVisuals.changeEdgeWidth(viewOptions.EdgeWidth, netManager.options);
+            netManager.edgeVisuals.changeEdgeWidth(viewOptions.edgeWidth, netManager.options);
             netManager.net.setOptions(netManager.options);
             netManager.edges.update(netManager.edges);
         }
-    }, [viewOptions.EdgeWidth]);
+    }, [viewOptions.edgeWidth]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.edgeVisuals.hideUnselectedEdges(viewOptions.HideEdges);
+            netManager.edgeVisuals.hideUnselectedEdges(viewOptions.hideEdges);
         }
-    }, [viewOptions.HideEdges]);
+    }, [viewOptions.hideEdges]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.nodeVisuals.createNodeDimensionStrategy(viewOptions.Border);
+            netManager.nodeVisuals.createNodeDimensionStrategy(viewOptions.border);
         }
-    }, [viewOptions.Border]);
+    }, [viewOptions.border]);
+
+    useEffect(() => {
+        if (netManager !== undefined) {
+            netManager.edgeVisuals.updateEdgesThreshold(viewOptions.edgeThreshold);
+        }
+    }, [viewOptions.edgeThreshold]);
 }

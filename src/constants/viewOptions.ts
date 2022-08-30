@@ -35,25 +35,31 @@ export const initialOptions = {
     hideEdges: ButtonState.inactive,
     edgeWidth: ButtonState.inactive,
     border: ButtonState.inactive,
+    edgeThreshold: 0.5,
+    deleteEdges: 0
 }
 
 /**
  * Aux class to mantain the view options of the perspectives
  */
 export class ViewOptions {
-    HideLabels: boolean;
-    HideEdges: boolean;
-    EdgeWidth: boolean;
-    Border: boolean;
+    hideLabels: boolean;
+    hideEdges: boolean;
+    edgeWidth: boolean;
+    edgeThreshold: number;
+    deleteEdges: number;
+    border: boolean;
 
-    LegendConfig: Map<string, boolean>
+    legendConfig: Map<string, boolean>
 
     constructor() {
-        this.HideLabels = initialOptions.hideLabels === ButtonState.active;
-        this.HideEdges = initialOptions.hideEdges === ButtonState.active;
-        this.EdgeWidth = initialOptions.edgeWidth === ButtonState.active;
-        this.Border = initialOptions.border === ButtonState.active;
-        this.LegendConfig = new Map<string, boolean>();
+        this.hideLabels = initialOptions.hideLabels === ButtonState.active;
+        this.hideEdges = initialOptions.hideEdges === ButtonState.active;
+        this.edgeWidth = initialOptions.edgeWidth === ButtonState.active;
+        this.border = initialOptions.border === ButtonState.active;
+        this.legendConfig = new Map<string, boolean>();
+        this.edgeThreshold = initialOptions.edgeThreshold;
+        this.deleteEdges = initialOptions.deleteEdges;
     }
 }
 

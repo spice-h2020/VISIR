@@ -40,7 +40,7 @@ export const nodeConst = {
     betweenNodesDistance: 9,
 
     //--- Default Configuration Values ---
-    zoomDuration: 300,
+    zoomDuration: 400,
 
     //Sizes
     defaultSize: 20,

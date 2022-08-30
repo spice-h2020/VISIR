@@ -74,16 +74,16 @@ export default class NodeVisuals {
         if (dimStrat === undefined) {
 
             this.obtainExplicitData();
-            this.createNodeDimensionStrategy(viewOptions.Border);
+            this.createNodeDimensionStrategy(viewOptions.border);
             sf.setDimensionStrategy(this.dimensionsStrat);
 
         } else
             this.dimensionsStrat = dimStrat;
 
-        this.updateNodeDimensions(viewOptions.LegendConfig);
+        this.updateNodeDimensions(viewOptions.legendConfig);
 
         this.updateNodeLocation(PerspectiveData);
-        this.hideLabels(viewOptions.HideLabels);
+        this.hideLabels(viewOptions.hideLabels);
 
         sf.setLegendData(this.attributes);
     }

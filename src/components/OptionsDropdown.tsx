@@ -10,16 +10,21 @@ import React, { useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
+import { TresholdSlider } from "./tresholdSlider";
 
 interface OptionsDropdownProps {
     //On click handler for hide labels option
-    onHideLabels: (newValue: boolean) => boolean;
+    onHideLabels: Function;
     //On click handler for hide edges option
-    onHideEdges: (newValue: boolean) => boolean;
+    onHideEdges: Function;
     //On click handler for variable edge width option
-    onEdgeWidth: (newValue: boolean) => boolean;
+    onEdgeWidth: Function;
     //On click handler for border option
-    onBorder: (newValue: boolean) => boolean;
+    onBorder: Function;
+    //On change handler for threshold option
+    onThreshold: Function;
+    //On change handler for delete edges option
+    onDeleteEdges: Function;
 }
 
 /**
@@ -30,6 +35,8 @@ export const OptionsDropdown = ({
     onHideEdges,
     onEdgeWidth,
     onBorder,
+    onThreshold,
+    onDeleteEdges: onDeleteEdges,
 }: OptionsDropdownProps) => {
 
     const [itemsState, setItemsState] = useState<Array<ButtonState>>(initialState);
@@ -62,41 +69,46 @@ export const OptionsDropdown = ({
         }
     }
 
-    /**
-     * Returns the buttons-reactComponents of the options dropdown
-     * @param onClick On click function for the buttons. Will receive the index of the component and a function as arguments
-     * @returns returns an array of React components
-     */
-    const getButtons = (onClick: Function): React.ReactNode[] => {
-        return [
-            <Button
-                content="Hide node labels"
-                onClick={() => { onClick(0, onHideLabels); }}
-                state={itemsState[0]}
-                key={0} />,
-            <Button
-                content="Hide unselected Edges"
-                onClick={() => { onClick(1, onHideEdges); }}
-                state={itemsState[1]}
-                key={1} />,
-            <hr key={2} />,
-            //TODO Add the threshold slider or similar option
-            <hr key={3} />,
-            <Button
-                content="Make edge width variable"
-                onClick={() => { onClick(2, onEdgeWidth); }}
-                state={itemsState[2]}
-                key={4} />,
-            <hr key={5} />,
-            <Button
-                content="Activate nodes borders"
-                onClick={() => { onClick(3, onBorder); }}
-                state={itemsState[3]}
-                key={6} />
-        ];
-    }
-
-    const optionsButtons: React.ReactNode[] = getButtons(onClick);
+    const optionsButtons: React.ReactNode[] = [
+        <Button
+            content="Hide node labels"
+            onClick={() => { onClick(0, onHideLabels); }}
+            state={itemsState[0]}
+            key={0} />,
+        <Button
+            content="Hide unselected Edges"
+            onClick={() => { onClick(1, onHideEdges); }}
+            state={itemsState[1]}
+            key={1} />,
+        <hr key={2} />,
+        <TresholdSlider
+            content="Minimum similarity:"
+            onInput={onThreshold}
+            key={3}
+        />,
+        <hr key={4} />,
+        <TresholdSlider
+            content="Remove % of edges:"
+            contentUnit="%"
+            minimum={0}
+            maximum={100}
+            step={10}
+            onInput={onDeleteEdges}
+            key={5}
+        />,
+        <hr key={6} />,
+        <Button
+            content="Make edge width variable"
+            onClick={() => { onClick(2, onEdgeWidth); }}
+            state={itemsState[2]}
+            key={7} />,
+        <hr key={8} />,
+        <Button
+            content="Activate nodes borders"
+            onClick={() => { onClick(3, onBorder); }}
+            state={itemsState[3]}
+            key={9} />
+    ];
 
     return (
         <Dropdown

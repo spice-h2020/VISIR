@@ -36,7 +36,7 @@ function App() {
     if (viewOptions !== undefined) {
       const newViewOptions = (JSON.parse(JSON.stringify(viewOptions))) as ViewOptions;
       ;
-      newViewOptions.LegendConfig = legendConfig
+      newViewOptions.legendConfig = legendConfig
       setViewOptions(newViewOptions);
     }
 
@@ -44,30 +44,40 @@ function App() {
 
   const onHideLabels = (newValue: boolean) => {
     const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.HideLabels = newValue;
+    newViewOptions.hideLabels = newValue;
     setViewOptions(newViewOptions);
     return true;
   }
 
   const onHideEdges = (newValue: boolean) => {
     const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.HideEdges = newValue;
+    newViewOptions.hideEdges = newValue;
     setViewOptions(newViewOptions);
     return true;
   }
 
   const onEdgeWidth = (newValue: boolean) => {
     const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.EdgeWidth = newValue;
+    newViewOptions.edgeWidth = newValue;
     setViewOptions(newViewOptions);
     return true;
   }
 
   const onBorder = (newValue: boolean) => {
     const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.Border = newValue;
+    newViewOptions.border = newValue;
     setViewOptions(newViewOptions);
     return true;
+  }
+
+  const onThreshold = (newValue: number) => {
+    const newViewOptions = Object.assign({}, viewOptions);
+    newViewOptions.edgeThreshold = newValue;
+    setViewOptions(newViewOptions);
+  }
+
+  const onDeleteEdges = () => {
+    console.log("On delete");
   }
 
   const perspectiveSelected = (perspectiveId: number) => {
@@ -157,6 +167,8 @@ function App() {
             onHideEdges={onHideEdges}
             onEdgeWidth={onEdgeWidth}
             onBorder={onBorder}
+            onThreshold={onThreshold}
+            onDeleteEdges={onDeleteEdges}
           />,
         ]}
         midAlignedItems={[

@@ -2,42 +2,72 @@
 
 
 import React, { useEffect, useState } from "react";
-import '../style/button.css';
+import "../style/Slider.css"
 
 interface TresholdSliderProps {
     /**
      * Optional input handler
      */
-    onInput?: (value: number) => void;
+    content?: string;
+    contentUnit?: string;
+    minimum?: number;
+    maximum?: number;
+    step?: number;
+
+    /**
+     * Optional input handler
+     */
+    onInput: Function;
 }
 
-const intialThreshold = 0.5;
+
 /**
  * Primary UI component for user interaction
  */
 export const TresholdSlider = ({
-    onInput = (value: number): void => {
-        console.log(`Slider input ${value}`);
-    },
+    content,
+    contentUnit = "",
+    minimum = 0.0,
+    maximum = 1.0,
+    step = 0.1,
+    onInput
 }: TresholdSliderProps) => {
 
-    const [currentValue, setCurrentValue] = useState<number>(intialThreshold);
+    const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>(setTimeout(() => '', 10));
+    const [value, setValue] = useState<string>("0");
 
+    useEffect(() => {
+
+        if (timer !== undefined && timer !== null) 
+            clearTimeout(timer);
+        
+        setTimer(setTimeout(() => onInput(value), 200));
+    }, [value]);
+
+    const label = getContent(content, contentUnit, value);
 
     return (
-        <div>
-            Minimum Similarity:
-            <span> {currentValue} </span>
+        <div className="slider-container">
+            {label}
             <input type="range"
-                min="0.0" max="1.0" step="0.1"
-                value={currentValue}
-                onInput={(): void => {
-                    //setCurrentValue(value);
-                }}
-                onChange={(): void => {
-                    onInput(currentValue);
+                min={minimum} max={maximum} step={step}
+                value={value}
+                onChange={(e) => {
+                    if (e.target.value !== undefined)
+                        setValue(e.target.value);
                 }}
             />
         </div>
     );
 };
+
+
+
+function getContent(content: string | undefined, contentUnit: string, value: string) {
+    if (contentUnit === "")
+        return content === undefined ? "" : `${content} ${value === "0" ? "0" : value === "1" ? "1.0" : value}`;
+
+    //if (contentUnit === "%") Commented because there are no other options
+    return content === undefined ? "" : `${content} ${value === "0" ? `00 ${contentUnit}` : `${value} ${contentUnit}`}`;
+}
+

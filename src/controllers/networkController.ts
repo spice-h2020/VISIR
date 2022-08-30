@@ -78,7 +78,7 @@ export default class NetworkController {
             edges: {
                 scaling: {
                     min: edgeConst.minWidth,
-                    max: viewOptions.EdgeWidth ? edgeConst.maxWidth : edgeConst.minWidth,
+                    max: viewOptions.edgeWidth ? edgeConst.maxWidth : edgeConst.minWidth,
                     label: {
                         enabled: false
                     }
