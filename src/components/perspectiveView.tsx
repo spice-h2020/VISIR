@@ -178,4 +178,10 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
             netManager.edgeVisuals.updateEdgesThreshold(viewOptions.edgeThreshold);
         }
     }, [viewOptions.edgeThreshold]);
+
+    useEffect(() => {
+        if (netManager !== undefined) {
+            netManager.edgeVisuals.deleteEdges(viewOptions);
+        }
+    }, [viewOptions.deleteEdges]);
 }

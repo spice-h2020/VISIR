@@ -103,6 +103,9 @@ export const LegendTooltip = ({
 function getLegendRows(buttonClick: Function, data: DimAttribute[]): React.ReactNode[] {
     const rows = new Array<React.ReactNode>();
 
+    if(data === undefined)
+        return rows;
+        
     for (let i = 0; i < data.length; i++) {
         const buttons = new Array<React.ReactNode>();
         for (let j = 0; j < data[i].values.length; j++) {

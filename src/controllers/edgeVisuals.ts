@@ -8,8 +8,11 @@ import { ViewOptions } from "../constants/viewOptions";
 import { edgeConst } from "../constants/edges";
 //Package
 import { DataSetEdges, Edge, Options } from "vis-network";
+import { EdgeData } from "../constants/perspectivesTypes";
 
 export default class EdgeVisuals {
+    //Data of all edges of the perspective, even if they are not shown or loaded in the dataset
+    allEdges: EdgeData[];
     //Data of all edges of the network
     edges: DataSetEdges;
     //Hide edges view option value
@@ -19,36 +22,38 @@ export default class EdgeVisuals {
 
     /**
      * Constructor of the class
-     * @param Edges Data of all edges of the network sorted by increasing value
+     * @param edges Data of all edges of the network sorted by increasing value
      * @param viewOptions Initial view Options
      * @param options Initial edge options
      */
-    constructor(Edges: DataSetEdges, viewOptions: ViewOptions, options: Options) {
-        this.edges = Edges;
+    constructor(edges: DataSetEdges, allEdges: EdgeData[], viewOptions: ViewOptions, options: Options) {
+        this.edges = edges;
         this.hideEdges = viewOptions.hideEdges
-
-        this.narrowEdges();
+        this.allEdges = allEdges;
 
         this.hideUnselectedEdges(viewOptions.hideEdges);
-        this.changeEdgeWidth(viewOptions.edgeWidth, options)
+        this.updateEdgesThreshold(viewOptions.edgeThreshold);
+        this.changeEdgeWidth(viewOptions.edgeWidth, options);
     }
 
     /**
      * Delete a % of all edges of the network. Lower value edges will be deleted first
      */
-    narrowEdges() {
-        const edgesToDelete: Edge[] = new Array<Edge>();
-        const nToDelete = this.edges.length * edgeConst.deleteLimit;
+    deleteEdges(viewOptions: ViewOptions) {
+        this.edges.clear();
 
-        let i = 0;
-        this.edges.forEach((edge: Edge) => {
+        const newEdges: Edge[] = Object.assign([], this.allEdges);
+ 
+        const n = newEdges.length - this.allEdges.length * viewOptions.deleteEdges / 100;
 
-            if (edge.value !== undefined && i <= nToDelete) {
-                i++;
-                edgesToDelete.push(edge);
-            }
-        })
-        this.edges.remove(edgesToDelete);
+        for (var i = newEdges.length - 1; i >= n; i--) {
+            newEdges.splice(Math.floor(Math.random() * newEdges.length), 1);
+        }
+
+        this.edges.add(newEdges);
+
+        this.hideUnselectedEdges(viewOptions.hideEdges);
+        this.updateEdgesThreshold(viewOptions.edgeThreshold);
     }
 
     /**

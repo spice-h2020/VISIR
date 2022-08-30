@@ -59,7 +59,7 @@ export default class NetworkController {
 
         this.nodeVisuals = new NodeVisuals(perspectiveInfo.data, this.nodes, sf, viewOptions, dimStrat);
         this.createOptions(viewOptions);
-        this.edgeVisuals = new EdgeVisuals(this.edges, viewOptions, this.options)
+        this.edgeVisuals = new EdgeVisuals(this.edges, perspectiveInfo.data.similarity, viewOptions, this.options)
 
         this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
 

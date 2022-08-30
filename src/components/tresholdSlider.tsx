@@ -13,6 +13,7 @@ interface TresholdSliderProps {
     minimum?: number;
     maximum?: number;
     step?: number;
+    initialValue: number;
 
     /**
      * Optional input handler
@@ -30,19 +31,20 @@ export const TresholdSlider = ({
     minimum = 0.0,
     maximum = 1.0,
     step = 0.1,
+    initialValue,
     onInput
 }: TresholdSliderProps) => {
 
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>(setTimeout(() => '', 10));
-    const [value, setValue] = useState<string>("0");
+    const [value, setValue] = useState<string>(initialValue.toString());
 
-    useEffect(() => {
-
-        if (timer !== undefined && timer !== null) 
+    useEffect( () => {
+        if (timer !== undefined && timer !== null)
             clearTimeout(timer);
-        
+
         setTimer(setTimeout(() => onInput(value), 200));
     }, [value]);
+    
 
     const label = getContent(content, contentUnit, value);
 
@@ -53,8 +55,9 @@ export const TresholdSlider = ({
                 min={minimum} max={maximum} step={step}
                 value={value}
                 onChange={(e) => {
-                    if (e.target.value !== undefined)
+                    if (e.target.value !== undefined){
                         setValue(e.target.value);
+                    }
                 }}
             />
         </div>
@@ -65,9 +68,9 @@ export const TresholdSlider = ({
 
 function getContent(content: string | undefined, contentUnit: string, value: string) {
     if (contentUnit === "")
-        return content === undefined ? "" : `${content} ${value === "0" ? "0" : value === "1" ? "1.0" : value}`;
+        return content === undefined ? "" : `${content} ${value === "0" ? "0.0" : value === "1" ? "1.0" : value}`;
 
     //if (contentUnit === "%") Commented because there are no other options
-    return content === undefined ? "" : `${content} ${value === "0" ? `00 ${contentUnit}` : `${value} ${contentUnit}`}`;
+    return content === undefined ? "" : `${content} ${value === "0" ? `0 ${contentUnit}` : `${value} ${contentUnit}`}`;
 }
 

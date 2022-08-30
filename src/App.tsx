@@ -76,8 +76,10 @@ function App() {
     setViewOptions(newViewOptions);
   }
 
-  const onDeleteEdges = () => {
-    console.log("On delete");
+  const onDeleteEdges = (newValue: number) => {
+    const newViewOptions = Object.assign({}, viewOptions);
+    newViewOptions.deleteEdges = newValue;
+    setViewOptions(newViewOptions);
   }
 
   const perspectiveSelected = (perspectiveId: number) => {

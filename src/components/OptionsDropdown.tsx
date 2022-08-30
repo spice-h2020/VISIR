@@ -84,6 +84,7 @@ export const OptionsDropdown = ({
         <TresholdSlider
             content="Minimum similarity:"
             onInput={onThreshold}
+            initialValue={initialOptions.edgeThreshold}
             key={3}
         />,
         <hr key={4} />,
@@ -93,6 +94,7 @@ export const OptionsDropdown = ({
             minimum={0}
             maximum={100}
             step={10}
+            initialValue={initialOptions.deleteEdges}
             onInput={onDeleteEdges}
             key={5}
         />,
@@ -130,14 +132,3 @@ const init = () => {
     initialState.push(initialOptions.border);
 }
 init();
-/**
- * Returns the buttons-reactComponents of the option dropdown and link each one of them with their corresponding on click function
- * @param onClick 
- * @param onHideLabels 
- * @param onHideEdges 
- * @param onEdgeWidth 
- * @param onBorder 
- * @param selectedItems state of the buttons
- * @returns 
- */
-
