@@ -95,7 +95,9 @@ export const Tooltip = ({
                                 <div key={index} className="main-row row">
                                     <strong> <React.Fragment >{item.getKey()}</React.Fragment></strong>
                                     {"\u00a0\u00a0"}
-                                    <React.Fragment >{item.getValue(true)}</React.Fragment>
+                                    {item.getValue(true).map((item: React.ReactNode, index: number): JSX.Element => {
+                                        return (<React.Fragment key={index}>{item} {"\u00a0\u00a0"} </React.Fragment>);
+                                    })}
                                 </div>
                             );
                         })}
@@ -104,7 +106,9 @@ export const Tooltip = ({
                                 <div key={index} className="sub-row row">
                                     <React.Fragment >{item.getKey()}</React.Fragment>
                                     {"\u00a0\u00a0"}
-                                    <React.Fragment >{item.getValue()}</React.Fragment>
+                                    {item.getValue().map((item: React.ReactNode, index: number): JSX.Element => {
+                                        return (<React.Fragment key={index}>{item} {"\u00a0\u00a0"} </React.Fragment>);
+                                    })}
                                 </div>
                             );
                         })}

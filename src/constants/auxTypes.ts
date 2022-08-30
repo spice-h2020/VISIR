@@ -43,13 +43,16 @@ export class DataRow {
      * @param strongKey if true, the key value in the div will have <strong> tag
      * @returns the value or the key + value div
      */
-    getValue(strongKey: boolean = false): React.ReactNode {
+    getValue(strongKey: boolean = false): React.ReactNode[] {
         if (!this.combineBoth) {
-            return this.value;
+            return [this.value];
         } else if (strongKey) {
-            return React.createElement('div', null, `<strong> ${this.key} </strong> ${this.value}`);
+            const keyComp = React.createElement("strong", { key: 1 }, this.key);
+            const valueComp = React.createElement("div", { key: 2 }, this.value);
+
+            return [keyComp, valueComp]
         } else {
-            return React.createElement('div', null, `{this.key}{this.value}`);
+            return [React.createElement('div', null, `${this.key}${this.value}`)];
         }
     }
 }
