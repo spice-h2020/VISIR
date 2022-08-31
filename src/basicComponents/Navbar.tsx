@@ -6,7 +6,7 @@
 //Packages
 import React from "react";
 //Local files
-import '../style/Navbar.css';
+import '../style/navbar.css';
 
 interface NavbarProps {
     //Components aligned to the left of the navBar

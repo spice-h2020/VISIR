@@ -8,7 +8,7 @@ import { ButtonState } from "../constants/viewOptions";
 //Packages
 import React, { useEffect, useState } from "react";
 //Local files
-import '../style/Button.css';
+import '../style/button.css';
 
 interface ButtonProps {
   //Button contents.
