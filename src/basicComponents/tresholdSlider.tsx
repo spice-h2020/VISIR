@@ -2,7 +2,7 @@
 
 
 import { useEffect, useState } from "react";
-import "../style/slider.css"
+import "../style/Slider.css"
 
 interface TresholdSliderProps {
     /**

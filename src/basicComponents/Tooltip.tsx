@@ -9,7 +9,7 @@ import { DataRow, TooltipInfo, Point } from "../constants/auxTypes";
 import React, { useEffect, useRef, useState } from "react";
 //Local files
 import { Button } from "./Button";
-import '../style/tooltip.css';
+import '../style/Tooltip.css';
 
 interface TooltipProps {
     //Active state of the tooltip
