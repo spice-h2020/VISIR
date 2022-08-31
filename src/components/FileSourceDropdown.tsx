@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a dropdown that changes the source of the files with All the info from all perspectives.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants

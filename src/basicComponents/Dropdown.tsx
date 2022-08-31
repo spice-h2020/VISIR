@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a dropdown menu. A button that can be clicked and will show aditional buttons/items to interact with.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants

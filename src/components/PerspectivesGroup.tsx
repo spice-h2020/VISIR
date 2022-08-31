@@ -1,7 +1,7 @@
 /**
  * @fileoverview This file creates all the perspective views and broadcast the necesary options, like the node that is selected, all perspective views need that to update their
  * dataTables
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants

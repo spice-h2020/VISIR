@@ -1,16 +1,17 @@
 /**
  * @fileoverview This file creates two diferent datatables one on top of the other in a column. The props that contain the info will be parsed to decide what info to show.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { CommunityData, UserData } from "../constants/perspectivesTypes";
 import { DataRow } from "../constants/auxTypes";
+import { ViewOptions } from "../constants/viewOptions";
 //Packages
 import { useState, useEffect } from "react";
 //Local files
 import { DataTable } from "../basicComponents/Datatable";
-import { ViewOptions } from "../constants/viewOptions";
+
 
 /**
  * local aux class to hold the all the info of a datatable

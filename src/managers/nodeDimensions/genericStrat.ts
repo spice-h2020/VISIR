@@ -2,7 +2,7 @@
  * @fileoverview This abstract class is the parent of all diferent dimensions strats executing the generic functions.
  * @author Marco Expósito Pérez
  */
-//Namespaces
+//Constants
 import { DimAttribute, Dimensions } from "../../constants/nodes";
 import { UserData } from "../../constants/perspectivesTypes";
 

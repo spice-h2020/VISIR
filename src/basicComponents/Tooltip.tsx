@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a Tooltip fixated in a position. A floating container with some transparency and a button to close it.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants

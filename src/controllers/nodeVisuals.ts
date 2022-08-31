@@ -2,6 +2,7 @@
  * @fileoverview This class find all explicit communities and its values in the user data of the perspective. 
  * Then create a dimension strategy that changes how the network ndoes look based on the explicitData.
  * Then it changes the node position in the canvas to create a circular distribution without node overlap.
+ * @package Requires vis network package.
  * @author Marco Expósito Pérez
  */
 //Constants

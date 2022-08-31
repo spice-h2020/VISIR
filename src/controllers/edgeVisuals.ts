@@ -1,14 +1,15 @@
 /**
  * @fileoverview This class filters some of the edges with low value and change the edges visuals to match view options and selected status.
- * @package It requires vis network package.
+ * @package Requires vis network package.
  * @author Marco Expósito Pérez
  */
 //Constants
 import { ViewOptions } from "../constants/viewOptions";
 import { edgeConst } from "../constants/edges";
+import { EdgeData } from "../constants/perspectivesTypes";
 //Package
 import { DataSetEdges, Edge, Options } from "vis-network";
-import { EdgeData } from "../constants/perspectivesTypes";
+
 
 export default class EdgeVisuals {
     //Data of all edges of the perspective, even if they are not shown or loaded in the dataset

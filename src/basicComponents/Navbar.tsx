@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a NavBar. A menu at the top of the page to use as toolbar that can hold any other react item, generaly buttons and dropdowns.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Packages

@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file adds all necesary callback functions of events a vis.js network
- * @package It requires vis network package.
+ * @package Requires vis network package.
  * @author Marco Expósito Pérez
  */
 //Constants

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Calculate and draw the bounding boxes of users with the same implicit community.
- * @package It requires vis network package.
+ * @package Requires vis network package.
  * @author Marco Expósito Pérez
  */
 //Constants

@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a network controller based on the perspectiveData. Also mantains the dataColumn of this network
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 

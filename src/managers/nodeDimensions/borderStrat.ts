@@ -2,7 +2,7 @@
  * @fileoverview This class changes the border color of users/nodes.
  * @author Marco Expósito Pérez
  */
-//Namespaces
+//Constants
 import { Dimensions, DimAttribute, nodeConst } from "../../constants/nodes";
 import { UserData } from "../../constants/perspectivesTypes";
 //Local files

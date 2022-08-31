@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a button that show/hides a dropdown with the legend of the active networks.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants

@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a dropdown that changes the layout of the perspectives once there are more than one active.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants

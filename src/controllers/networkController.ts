@@ -1,8 +1,8 @@
 
 /**
  * @fileoverview This file controlls all functions related to a Vis.js network. Changing node visuals and edge, reacting to vis.js events and viewOptions and drawing bounding boxes
- * @package It requires vis network package.
- * @package It requires vis data package.
+ * @package Requires vis network package.
+ * @package Requires vis data package.
  * @author Marco Expósito Pérez
  */
 //Constants

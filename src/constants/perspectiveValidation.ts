@@ -3,12 +3,10 @@
  * and one for a file with the data of a single perspective
  * @author Marco Expósito Pérez
  */
-
 //Namespaces
-import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 
-const checkSimilarityFunctions = false; //FOR DEBUG WITH TESTING DATAFILES
+const checkSimilarityFunctions = true; //FOR DEBUG WITH TESTING DATAFILES if active, will validate the similarity options 
 
 //#region All perspectives JSON
 

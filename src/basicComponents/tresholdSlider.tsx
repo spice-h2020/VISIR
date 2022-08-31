@@ -1,7 +1,7 @@
 //TODO WIP component. Will be used to change the edge value threshold view options
 
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../style/Slider.css"
 
 interface TresholdSliderProps {
@@ -38,13 +38,13 @@ export const TresholdSlider = ({
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>(setTimeout(() => '', 10));
     const [value, setValue] = useState<string>(initialValue.toString());
 
-    useEffect( () => {
+    useEffect(() => {
         if (timer !== undefined && timer !== null)
             clearTimeout(timer);
 
         setTimer(setTimeout(() => onInput(value), 200));
     }, [value]);
-    
+
 
     const label = getContent(content, contentUnit, value);
 
@@ -55,7 +55,7 @@ export const TresholdSlider = ({
                 min={minimum} max={maximum} step={step}
                 value={value}
                 onChange={(e) => {
-                    if (e.target.value !== undefined){
+                    if (e.target.value !== undefined) {
                         setValue(e.target.value);
                     }
                 }}

@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants

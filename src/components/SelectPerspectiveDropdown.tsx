@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a dropdown that changes activates/disactives diferent perspectives from the allPerspectives prop.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -14,7 +14,7 @@ import { Dropdown } from "../basicComponents/Dropdown";
 
 interface SelectPerspectiveProps {
     //On click handler
-    onClick: (perspectiveId: number) => void;
+    onClick: Function;
     //Object that contains the name of all perspectives availables
     allPerspectives?: PerspectiveDetails[];
     //Map that contains the relation between the name of a perspective and their visual state.

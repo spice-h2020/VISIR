@@ -3,7 +3,7 @@
  * @package Requires Axios package to be able to send the GET petitions.  
  * @author Marco Expósito Pérez
  */
-//Namespaces
+//Constants
 import { FileSource } from '../constants/viewOptions';
 //Packages
 import { Axios } from 'axios'

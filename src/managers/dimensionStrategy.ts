@@ -2,7 +2,7 @@
  * @fileoverview This class creates all dimension strategies and broadcast the dimension change functions.
  * @author Marco Expósito Pérez
  */
-//Namespaces
+//Constants
 import { DimAttribute } from "../constants/nodes"
 import { UserData } from "../constants/perspectivesTypes";
 //Local files

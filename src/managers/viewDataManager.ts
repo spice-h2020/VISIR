@@ -3,7 +3,7 @@
  * It works with pair perspectives to later fit each pair in the same space for an easier comparison
  * @author Marco Expósito Pérez
  */
-//Namespaces
+//Constants
 import { PerspectivePair, PerspectiveInfo, PerspectiveData, PerspectiveDetails } from "../constants/perspectivesTypes";
 
 export default class ViewDataManager {

@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a table with 2 columns that contains the data from the rows shared as props.
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants

@@ -2,7 +2,7 @@
  * @fileoverview This class changes the shape and font vertical align of users/nodes.
  * @author Marco Expósito Pérez
  */
-//Namespaces
+//Constants
 import { Dimensions, DimAttribute, nodeConst, shapeData } from "../../constants/nodes";
 import { UserData } from "../../constants/perspectivesTypes";
 //Local files

@@ -1,5 +1,6 @@
 /**
  * @fileoverview This File contains diferent unrelated auxiliary classes/interfaces that doesnt need a unique file for them.
+ * @package Requires react package
  * @author Marco Expósito Pérez
  */
 

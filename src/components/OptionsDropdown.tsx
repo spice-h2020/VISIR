@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a dropdown that changes some of the view options of the network
- * @package It requires React package. 
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -10,7 +10,7 @@ import React, { useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
-import { TresholdSlider } from "./tresholdSlider";
+import { TresholdSlider } from "../basicComponents/tresholdSlider";
 
 interface OptionsDropdownProps {
     //On click handler for hide labels option
