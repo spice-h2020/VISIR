@@ -5,23 +5,23 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './constants/viewOptions';
-import { PerspectiveDetails } from './constants/perspectivesTypes';
-import { DimAttribute } from './constants/nodes';
-import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/perspectiveValidation';
+import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './constants/viewOptions.js';
+import { PerspectiveDetails } from './constants/perspectivesTypes.js';
+import { DimAttribute } from './constants/nodes.js';
+import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/perspectiveValidation.js';
 //Packages
 import React, { useEffect, useState } from 'react';
 //Local files
-import { Navbar } from './basicComponents/navbar';
-import { Button } from './basicComponents/button';
-import { FileSourceDropdown } from './components/fileSourceDropdown';
-import { LayoutDropdown } from './components/layoutDropdown';
-import { OptionsDropdown } from './components/optionsDropdown';
-import RequestManager from './managers/requestManager';
-import { SelectPerspectiveDropdown } from './components/selectPerspectiveDropdown';
-import { PerspectivesGroups } from './components/perspectivesGroup';
-import ViewDataManager from './managers/viewDataManager';
-import { LegendTooltip } from './components/legendTooltip';
+import { Navbar } from './basicComponents/navbar.js';
+import { Button } from './basicComponents/button.js';
+import { FileSourceDropdown } from './components/fileSourceDropdown.js';
+import { LayoutDropdown } from './components/layoutDropdown.js';
+import { OptionsDropdown } from './components/optionsDropdown.js';
+import RequestManager from './managers/requestManager.js';
+import { SelectPerspectiveDropdown } from './components/selectPerspectiveDropdown.js';
+import { PerspectivesGroups } from './components/perspectivesGroup.js';
+import ViewDataManager from './managers/viewDataManager.js';
+import { LegendTooltip } from './components/legendTooltip.js';
 import './style/base.css';
 
 const requestManager = new RequestManager();
