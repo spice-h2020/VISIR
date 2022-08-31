@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { DataTable } from '../basicComponents/Datatable';
 import { DataRow } from '../constants/auxTypes';
-import '../style/base.css';
+import '../style/Base.css';
 
 export default {
   title: 'Example/Datatable',
