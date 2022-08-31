@@ -8,7 +8,7 @@ import { ButtonState } from '../constants/viewOptions';
 //Packages
 import React, { useState, useEffect } from "react";
 //Local files
-import { Button } from "./Button";
+import { Button } from "./button";
 //import '../style/dropdown.css';
 
 interface DropdownProps {

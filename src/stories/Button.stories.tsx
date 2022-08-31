@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { Button } from '../basicComponents/Button';
+import { Button } from '../basicComponents/button';
 import { ButtonState } from '../constants/viewOptions';
 
 import '../style/Navbar.css';

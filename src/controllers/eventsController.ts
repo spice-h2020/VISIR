@@ -13,7 +13,7 @@ import { BoundingBox, DataSetEdges, DataSetNodes, Edge, FitOptions, IdType, Netw
 import BoxesController from "./boundingBoxes";
 import NodeVisuals from "./nodeVisuals";
 import EdgeVisuals from "./edgeVisuals";
-import { getHTMLPosition } from "../basicComponents/Tooltip";
+import { getHTMLPosition } from "../basicComponents/tooltip";
 import NetworkController from "./networkController";
 
 export default class EventsController {

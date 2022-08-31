@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { Tooltip } from '../basicComponents/Tooltip';
+import { Tooltip } from '../basicComponents/tooltip';
 import { DataRow, Point, TooltipInfo } from '../constants/auxTypes';
 
 import '../style/Base.css';

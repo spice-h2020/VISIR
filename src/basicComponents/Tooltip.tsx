@@ -8,7 +8,7 @@ import { DataRow, TooltipInfo, Point } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
 //Local files
-import { Button } from "./Button";
+import { Button } from "./button";
 //import '../style/tooltip.css';
 
 interface TooltipProps {

@@ -11,9 +11,9 @@ import { Point, StateFunctions, TooltipInfo } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useState } from "react";
 //Local files
-import { PerspectiveView } from "./PerspectiveView";
+import { PerspectiveView } from "./perspectiveView";
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
-import { Tooltip } from "../basicComponents/Tooltip";
+import { Tooltip } from "../basicComponents/tooltip";
 
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable

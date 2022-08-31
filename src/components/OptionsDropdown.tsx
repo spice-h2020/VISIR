@@ -8,8 +8,8 @@ import { ButtonState, initialOptions } from "../constants/viewOptions";
 //Packages
 import React, { useState } from "react";
 //Local files
-import { Button } from "../basicComponents/Button";
-import { Dropdown } from "../basicComponents/Dropdown";
+import { Button } from "../basicComponents/button";
+import { Dropdown } from "../basicComponents/dropdown";
 import { TresholdSlider } from "../basicComponents/tresholdSlider";
 
 interface OptionsDropdownProps {
