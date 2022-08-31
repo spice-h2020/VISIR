@@ -8,7 +8,7 @@ import { DataRow } from "../constants/auxTypes";
 //Packages
 import React from "react";
 //Local files
-import '../style/Datatable.css';
+import '../style/datatable.css';
 
 interface DatatableProps {
     //Tittle of the datatable.
