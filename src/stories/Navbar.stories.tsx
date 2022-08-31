@@ -1,8 +1,8 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Navbar } from '../basicComponents/navbar';
-import { Button } from '../basicComponents/button';
-import { Dropdown } from '../basicComponents/dropdown';
+import { Navbar } from '../basicComponents/Navbar';
+import { Button } from '../basicComponents/Button';
+import { Dropdown } from '../basicComponents/Dropdown';
 import { ButtonState } from '../constants/viewOptions';
 
 export default {

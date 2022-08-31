@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Dropdown } from '../basicComponents/dropdown';
-import { Button } from '../basicComponents/button';
+import { Dropdown } from '../basicComponents/Dropdown';
+import { Button } from '../basicComponents/Button';
 import { ButtonState } from '../constants/viewOptions';
 
 export default {

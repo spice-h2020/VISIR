@@ -8,8 +8,8 @@ import { ButtonState, initialOptions, AppLayout } from "../constants/viewOptions
 //Packages
 import { useState } from "react";
 //Local files
-import { Button } from "../basicComponents/button";
-import { Dropdown } from "../basicComponents/dropdown";
+import { Button } from "../basicComponents/Button";
+import { Dropdown } from "../basicComponents/Dropdown";
 
 interface LayoutDropdownProps {
     //On click handler

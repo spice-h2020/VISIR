@@ -11,7 +11,7 @@ import { StateFunctions } from '../constants/auxTypes';
 //Packages
 import { useEffect, useState, useRef } from "react";
 //Local files
-import { DataColumn } from "./dataColumn";
+import { DataColumn } from "./DataColumn";
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/dimensionStrategy';
 

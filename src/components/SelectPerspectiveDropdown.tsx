@@ -9,8 +9,8 @@ import { PerspectiveDetails } from '../constants/perspectivesTypes';
 //Packages
 import React, { useState, useEffect } from "react";
 //Local files
-import { Button } from "../basicComponents/button";
-import { Dropdown } from "../basicComponents/dropdown";
+import { Button } from "../basicComponents/Button";
+import { Dropdown } from "../basicComponents/Dropdown";
 
 interface SelectPerspectiveProps {
     //On click handler

@@ -8,8 +8,8 @@ import { DimAttribute, Dimensions, nodeConst } from '../constants/nodes';
 //Packages
 import React, {useEffect, useState } from "react";
 //Local files
-import { Dropdown } from '../basicComponents/dropdown';
-import { Button } from '../basicComponents/button';
+import { Dropdown } from '../basicComponents/Dropdown';
+import { Button } from '../basicComponents/Button';
 import '../style/legend.css';
 
 interface LegendTooltipProps {

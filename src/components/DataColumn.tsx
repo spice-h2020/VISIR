@@ -10,7 +10,7 @@ import { ViewOptions } from "../constants/viewOptions";
 //Packages
 import { useState, useEffect } from "react";
 //Local files
-import { DataTable } from "../basicComponents/datatable";
+import { DataTable } from "../basicComponents/Datatable";
 
 
 /**

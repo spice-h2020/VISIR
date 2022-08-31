@@ -12,16 +12,16 @@ import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from 
 //Packages
 import React, { useEffect, useState } from 'react';
 //Local files
-import { Navbar } from './basicComponents/navbar';
-import { Button } from './basicComponents/button';
-import { FileSourceDropdown } from './components/fileSourceDropdown';
-import { LayoutDropdown } from './components/layoutDropdown';
-import { OptionsDropdown } from './components/optionsDropdown';
+import { Navbar } from './basicComponents/Navbar';
+import { Button } from './basicComponents/Button';
+import { FileSourceDropdown } from './components/FileSourceDropdown';
+import { LayoutDropdown } from './components/LayoutDropdown';
+import { OptionsDropdown } from './components/OptionsDropdown';
 import RequestManager from './managers/requestManager';
-import { SelectPerspectiveDropdown } from './components/selectPerspectiveDropdown';
-import { PerspectivesGroups } from './components/perspectivesGroup';
+import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
+import { PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
-import { LegendTooltip } from './components/legendTooltip';
+import { LegendTooltip } from './components/LegendTooltip';
 import './style/base.css';
 
 const requestManager = new RequestManager();
