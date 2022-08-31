@@ -10,7 +10,7 @@ import React, {useEffect, useState } from "react";
 //Local files
 import { Dropdown } from '../basicComponents/dropdown';
 import { Button } from '../basicComponents/button';
-//import '../style/legend.css';
+import '../style/legend.css';
 
 interface LegendTooltipProps {
     //Content of the legend

@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Tooltip } from '../basicComponents/tooltip';
 import { DataRow, Point, TooltipInfo } from '../constants/auxTypes';
 
-//import '../style/base.css';
+import '../style/base.css';
 
 export default {
   title: 'Example/Tooltip',

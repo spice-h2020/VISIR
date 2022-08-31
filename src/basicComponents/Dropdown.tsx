@@ -9,7 +9,7 @@ import { ButtonState } from '../constants/viewOptions';
 import React, { useState, useEffect } from "react";
 //Local files
 import { Button } from "./button";
-//import '../style/dropdown.css';
+import '../style/dropdown.css';
 
 interface DropdownProps {
     //Items inside the dropdown

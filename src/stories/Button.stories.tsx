@@ -2,8 +2,8 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Button } from '../basicComponents/button';
 import { ButtonState } from '../constants/viewOptions';
 
-//import '../style/navbar.css';
-//import '../style/dropdown.css';
+import '../style/navbar.css';
+import '../style/dropdown.css';
 
 export default {
   title: 'Example/Button',
