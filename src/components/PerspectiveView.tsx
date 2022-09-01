@@ -67,7 +67,7 @@ export const PerspectiveView = ({
 
     }, [networkFocusID])
 
-    ViewOptionsUseEffect(viewOptions, netManager);
+    ViewOptionsUseEffect(viewOptions, netManager, sf);
 
     useEffect(() => {
         if (selectedNodeId === undefined) {
@@ -139,7 +139,7 @@ export const PerspectiveView = ({
  * @param viewOptions object that will trigger the useEffects.
  * @param netManager will execute the changes once useEffects are triggered
  */
-function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined) {
+function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined, sf: StateFunctions) {
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.nodeVisuals.updateNodeDimensions(viewOptions.legendConfig);
@@ -168,7 +168,8 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.nodeVisuals.createNodeDimensionStrategy(viewOptions.border);
+            netManager.nodeVisuals.createNodeDimensionStrategy(viewOptions.border, sf.setLegendData);
+            netManager.nodeVisuals.updateNodeDimensions();
         }
     }, [viewOptions.border]);
 

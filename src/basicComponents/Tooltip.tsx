@@ -51,7 +51,6 @@ export const Tooltip = ({
     }, [position]);
 
     useEffect(() => {
-        console.log(content);
         setInfo(content);
     }, [content]);
 
@@ -73,7 +72,6 @@ export const Tooltip = ({
     if (info === undefined) {
         return <div className={`tooltip`}></div>
     } else {
-        console.log(info.mainDataRow);
         return (
             <div
                 ref={compRef}

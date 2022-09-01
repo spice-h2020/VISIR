@@ -55,10 +55,14 @@ export default class NodeVisuals {
     //Selected nodes of the network
     selectedNodes?: string[];
     //Visual configuration based on the legend options
-    legendConfig?: Map<string, boolean>
+    legendConfig?: Map<string, boolean>;
     //Boolean that controls if labels should be hidden
-    hideLabel?: boolean
+    hideLabel!: boolean;
+    //Border activated
+    borderActive!:boolean;
 
+    //Set/Update dimension strat
+    setDimStrat: Function;
     /**
      * Constructor of the class
      * @param PerspectiveData Perspective info of the perspective that uses this object
@@ -70,13 +74,12 @@ export default class NodeVisuals {
     constructor(PerspectiveData: PerspectiveData, nodes: DataSetNodes, sf: StateFunctions, viewOptions: ViewOptions, dimStrat: NodeDimensionStrategy | undefined) {
         this.explicitData = new Array<ExplicitData>();
         this.nodes = nodes;
-
+        this.setDimStrat = sf.setDimensionStrategy;
 
         if (dimStrat === undefined) {
 
             this.obtainExplicitData();
-            this.createNodeDimensionStrategy(viewOptions.border);
-            sf.setDimensionStrategy(this.dimensionsStrat);
+            this.createNodeDimensionStrategy(viewOptions.border, sf.setLegendData);
 
         } else
             this.dimensionsStrat = dimStrat;
@@ -85,8 +88,6 @@ export default class NodeVisuals {
 
         this.updateNodeLocation(PerspectiveData);
         this.hideLabels(viewOptions.hideLabels);
-
-        sf.setLegendData(this.attributes);
     }
 
     /**
@@ -121,8 +122,9 @@ export default class NodeVisuals {
      * Create the node dimension strategy and its necesary attributes
      * @param showBorder Boolean with the activate third dimension/border option
      */
-    createNodeDimensionStrategy(showBorder: boolean) {
+    createNodeDimensionStrategy(showBorder: boolean, setLegendData: Function) {
         this.attributes = new Array<DimAttribute>();
+        this.borderActive = showBorder;
 
         if (this.explicitData[0] !== undefined) {
             this.attributes.push({
@@ -149,6 +151,9 @@ export default class NodeVisuals {
         }
 
         this.dimensionsStrat = new NodeDimensionStrategy(this.attributes);
+        
+        this.setDimStrat(this.dimensionsStrat);
+        setLegendData(this.attributes);
     }
 
     /**
@@ -341,6 +346,10 @@ export default class NodeVisuals {
 
             values.size = nodeConst.selectedSize;
 
+            if(this.borderActive){
+                values.borderWidth = nodeConst.selectedBorderColorWidth;
+            }
+            
             if (values.borderColor === "transparent") {
                 values.borderColor = "#000000";
                 values.borderWidth = nodeConst.selectedBorderWidth

@@ -46,21 +46,23 @@ export const LegendTooltip = ({
         }
     }, [state]);
 
-    //When legendData changes, automaticaly activates and init the legend
+    //When legendData changes
     useEffect(() => {
         if (!isActive) {
             setIsActive(state);
-            setData(legendData);
-
-            const newMap = new Map<string, boolean>();
-            for (let i = 0; i < legendData.length; i++) {
-                for (let j = 0; j < legendData[i].values.length; j++) {
-                    newMap.set(legendData[i].values[j], true);
-                }
-            }
-
-            setLegendConfig(newMap);
         }
+
+        setData(legendData);
+
+        const newMap = new Map<string, boolean>();
+        for (let i = 0; i < legendData.length; i++) {
+            for (let j = 0; j < legendData[i].values.length; j++) {
+                newMap.set(legendData[i].values[j], true);
+            }
+        }
+
+        setLegendConfig(newMap);
+
     }, [legendData]);
 
     useEffect(() => {

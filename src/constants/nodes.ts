@@ -58,8 +58,8 @@ export const nodeConst = {
     defaultBorderWidth: 0,
     selectedBorderWidth: 2,
 
-    defaultBorderColorWidth: 4,
-    selectedBorderColorWidth: 20,
+    defaultBorderColorWidth: 2,
+    selectedBorderColorWidth: 4,
 
     labelSize: 13,
     labelvOffset: -31,
@@ -86,12 +86,12 @@ export const nodeConst = {
 
     BoderColors: [
         "rgb(128, 126, 13, 1)", //Yellow
-        "rgb(0, 128, 36, 1)", //Green
+        "rgb(62, 6, 116, 1)", //Purple
+        "rgb(117, 5, 60, 1)", //Pink
         "rgb(13, 84, 128, 1)", //Blue
         "rgb(128, 0, 0, 1)", //Red
-        "rgb(62, 6, 116, 1)", //Purple
         "rgb(116, 67, 6, 1)", //Orange
-        "rgb(117, 5, 60, 1)", //Pink
+        "rgb(0, 128, 36, 1)", //Green
         "rgb(15, 118, 82, 1)", //green-blue
     ],
 
