@@ -3,7 +3,7 @@
  * and one for a file with the data of a single perspective
  * @author Marco Expósito Pérez
  */
-//Namespaces
+//Constants
 import * as types from "./perspectivesTypes";
 
 const checkSimilarityFunctions = true; //FOR DEBUG WITH TESTING DATAFILES if active, will validate the similarity options 

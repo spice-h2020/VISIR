@@ -7,8 +7,7 @@
  * Available file sources
  */
 export enum FileSource {
-    Main,       //Main SPICE_visualization repository
-    Local,      //Using local data folder
+    Local,      //Using local app data folder
     Develop,    //Develop SPICE_visualization repository
     Api,        //Conecting to the API (WIP)
 }

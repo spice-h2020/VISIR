@@ -68,24 +68,19 @@ init();
 function getButtons(changeFileSource:Function, selectedItems: ButtonState[]): React.ReactNode[] {
     return [
         <Button
-            content="Github Main"
-            onClick={() => { changeFileSource(FileSource.Main); }}
-            state={selectedItems[0]}
-            key={0} />,
-        <Button
-            content="Local"
+            content="Local app files"
             onClick={() => { changeFileSource(FileSource.Local); }}
-            state={selectedItems[1]}
+            state={selectedItems[FileSource.Local]}
             key={1} />,
         <Button
             content="Github Develop"
             onClick={() => { changeFileSource(FileSource.Develop); }}
-            state={selectedItems[2]}
+            state={selectedItems[FileSource.Develop]}
             key={2} />,
         <Button
             content="Use the API (WIP)"
             onClick={() => { changeFileSource(FileSource.Api); }}
-            state={selectedItems[3]}
+            state={selectedItems[FileSource.Api]}
             key={3} />
     ];
 }

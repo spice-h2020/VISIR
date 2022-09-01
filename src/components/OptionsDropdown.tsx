@@ -10,7 +10,7 @@ import React, { useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
-import { TresholdSlider } from "../basicComponents/TresholdSlider";
+import { Slider } from "../basicComponents/Slider";
 
 interface OptionsDropdownProps {
     //On click handler for hide labels option
@@ -81,14 +81,14 @@ export const OptionsDropdown = ({
             state={itemsState[1]}
             key={1} />,
         <hr key={2} />,
-        <TresholdSlider
+        <Slider
             content="Minimum similarity:"
             onInput={onThreshold}
             initialValue={initialOptions.edgeThreshold}
             key={3}
         />,
         <hr key={4} />,
-        <TresholdSlider
+        <Slider
             content="Remove % of edges:"
             contentUnit="%"
             minimum={0}

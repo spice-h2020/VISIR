@@ -3,7 +3,6 @@
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
-
 //Constants
 import { ViewOptions, AppLayout } from '../constants/viewOptions';
 import { PerspectiveInfo, UserData, CommunityData } from '../constants/perspectivesTypes';

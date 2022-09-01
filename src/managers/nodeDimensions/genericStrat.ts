@@ -6,7 +6,6 @@
 import { DimAttribute, Dimensions } from "../../constants/nodes";
 import { UserData } from "../../constants/perspectivesTypes";
 
-
 export default abstract class GenericStrategy {
     //Key of the attribute that changes each strategy.
     key: string | undefined
