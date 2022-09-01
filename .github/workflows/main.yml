@@ -7,7 +7,7 @@ on:
 
 env:
   CI: ""
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,11 +18,8 @@ jobs:
 
       - name: install
         run: npm install
-        
-      - name: build
-        run: npm run build
 
-      - name: Deploy
+      - name: Build and Deploy
         run: |
           git config --global user.name $user_name
           git config --global user.email $user_email
