@@ -275,6 +275,7 @@ export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
         }
         for (let i = 0; i < arg.similarity.length; i++) {
             arg.similarity[i] = isSimilarityDataValid(arg.similarity[i]);
+            arg.similarity[i].id = i;
         }
 
         console.log(`Perspective file validation has been completed -> `);

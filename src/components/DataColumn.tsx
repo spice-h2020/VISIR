@@ -96,7 +96,7 @@ function updateNodeInfo(node: UserData | undefined, setNodeInfo: Function, viewO
         newNodeData.mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
         newNodeData.mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
     }
-    newNodeData.mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community : ""));
+    newNodeData.mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community.toString() : ""));
 
     if (node !== undefined) {
         const keys = Object.keys(node.explicit_community);
@@ -118,7 +118,7 @@ function updateCommInfo(community: any, setCommInfo: Function) {
 
     const newCommData = new DatatableData();
 
-    newCommData.mainRows.push(new DataRow("Id", community !== undefined ? community.id : ""));
+    newCommData.mainRows.push(new DataRow("Id", community !== undefined ? community.id.toString() : ""));
     newCommData.mainRows.push(new DataRow("Name", community !== undefined ? community.name : ""));
     newCommData.mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : "", true));
 

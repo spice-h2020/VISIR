@@ -19,12 +19,19 @@
     font-size: x-large;
 }
 
+.main-row{
+    flex-flow: wrap;
+}
+.sub-row{
+    flex-flow: wrap;
+}
+
 .main-row:not(:last-child){
     border-bottom: 1px black inset;
 }
 
 .sub-row:not(:last-child){
-    border-bottom: 1px white inset;
+    border-bottom: 1px rgb(150, 150, 150) inset;
 }
 
 .datatable-content>*{

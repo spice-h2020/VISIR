@@ -140,26 +140,9 @@ export default class EventsController {
         const node = this.nodes.get(nodeId) as unknown as UserData;
 
         //Search for the nodes that are connected to the selected Node
-        const selectedNodes = new Array<string>();
-        selectedNodes.push(node.id.toString())
+        const { selectedNodes, selected_edges_id } = this.edgeVisuals.getSelectedNodesAndEdges( this.net.getConnectedEdges(nodeId) as string[]);
 
-        const selected_edges_id = this.net.getConnectedEdges(selectedNodes[0]);
-        const selectedEdges: Edge[] = this.edges.get(selected_edges_id);
-
-        selectedEdges.forEach((edge: Edge) => {
-            if (edge.value !== undefined && edge.value >= 0.5) {   //TODO link this with the threshold option once the slider works
-
-                if (edge.from != selectedNodes[0] && edge.to == selectedNodes[0])
-                    selectedNodes.push(edge.from as string);
-
-                else if (edge.to != selectedNodes[0] && edge.from == selectedNodes[0])
-                    selectedNodes.push(edge.to as string);
-
-            } else {
-                const index = selected_edges_id.indexOf(edge.id as string);
-                selected_edges_id.splice(index, 1);
-            }
-        });
+        selectedNodes.push(node.id.toString());
 
         //Move the "camera" to focus on these nodes
         const fitOptions: FitOptions = {
@@ -216,7 +199,7 @@ export default class EventsController {
             this.zoomOut();
 
             sf.setTooltipInfo(undefined);
-            
+
             //Clear community datatable
             sf.setSelectedCommunity!(undefined);
         }
@@ -251,7 +234,7 @@ export default class EventsController {
             mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
             mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
         }
-        mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community : ""));
+        mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community.toString() : ""));
 
         const subRows: DataRow[] = new Array<DataRow>();
 
@@ -279,7 +262,7 @@ export default class EventsController {
     setCommunityAsTooltip(setTooltipInfo: Function, community: CommunityData) {
         const mainRows: DataRow[] = new Array<DataRow>();
 
-        mainRows.push(new DataRow("Id", community !== undefined ? community.id : ""));
+        mainRows.push(new DataRow("Id", community !== undefined ? community.id.toString() : ""));
         mainRows.push(new DataRow("Name", community !== undefined ? community.name : ""));
         mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : "", true));
 
@@ -369,3 +352,5 @@ export default class EventsController {
         }
     }
 }
+
+

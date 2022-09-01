@@ -61,7 +61,8 @@ export default class NetworkController {
         this.edgeVisuals = new EdgeVisuals(this.edges, perspectiveInfo.data.similarity, viewOptions, this.options)
 
         this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
-
+        this.edgeVisuals.net = this.net;
+        
         this.bbController = new BoxesController(perspectiveInfo.data.communities, perspectiveInfo.data.users, this.net);
 
         this.eventsController = new EventsController(this, htmlRef, sf, networkFocusID, perspectiveInfo.details.id);

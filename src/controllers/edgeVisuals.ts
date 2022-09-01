@@ -8,7 +8,7 @@ import { ViewOptions } from "../constants/viewOptions";
 import { edgeConst } from "../constants/edges";
 import { EdgeData } from "../constants/perspectivesTypes";
 //Package
-import { DataSetEdges, Edge, Options } from "vis-network";
+import { DataSetEdges, Edge, IdType, Network, Options } from "vis-network";
 
 
 export default class EdgeVisuals {
@@ -18,8 +18,14 @@ export default class EdgeVisuals {
     edges: DataSetEdges;
     //Hide edges view option value
     hideEdges: boolean;
+    //Threshold edge veiw option value
+    threshold: number;
     //Selected edges of the network
-    selectedEdges?: string[];
+    filteredSelectedEdges?: string[];
+    //Selected edges of the network
+    allSelectedEdges?: string[];
+    //Network that contains the edges
+    net!: Network;
 
     /**
      * Constructor of the class
@@ -29,12 +35,14 @@ export default class EdgeVisuals {
      */
     constructor(edges: DataSetEdges, allEdges: EdgeData[], viewOptions: ViewOptions, options: Options) {
         this.edges = edges;
-        this.hideEdges = viewOptions.hideEdges
+        this.hideEdges = viewOptions.hideEdges;
+        this.threshold = viewOptions.edgeThreshold;
         this.allEdges = allEdges;
 
         this.hideUnselectedEdges(viewOptions.hideEdges);
         this.updateEdgesThreshold(viewOptions.edgeThreshold);
         this.changeEdgeWidth(viewOptions.edgeWidth, options);
+
     }
 
     /**
@@ -44,17 +52,27 @@ export default class EdgeVisuals {
         this.edges.clear();
 
         const newEdges: Edge[] = Object.assign([], this.allEdges);
- 
+
         const n = newEdges.length - this.allEdges.length * viewOptions.deleteEdges / 100;
+        this.filteredSelectedEdges = JSON.parse(JSON.stringify(this.allSelectedEdges));
 
         for (var i = newEdges.length - 1; i >= n; i--) {
-            newEdges.splice(Math.floor(Math.random() * newEdges.length), 1);
+            const deletedEdge: Edge[] = newEdges.splice(Math.floor(Math.random() * newEdges.length), 1);
+
+            if (this.filteredSelectedEdges !== undefined && this.filteredSelectedEdges.includes(deletedEdge[0].id as string)) {
+                const index = this.filteredSelectedEdges.indexOf(deletedEdge[0].id as string);
+                this.filteredSelectedEdges.splice(index, 1);
+            }
         }
 
         this.edges.add(newEdges);
-
         this.hideUnselectedEdges(viewOptions.hideEdges);
-        this.updateEdgesThreshold(viewOptions.edgeThreshold);
+
+        if (this.filteredSelectedEdges !== undefined) {
+            this.edgeChosenVisuals();
+            this.net.selectNodes(this.net.getSelectedNodes());
+        }
+
     }
 
     /**
@@ -77,32 +95,30 @@ export default class EdgeVisuals {
      */
     hideUnselectedEdges(hideEdges: boolean) {
         this.hideEdges = hideEdges;
-
         const newEdges = new Array();
 
-        //If currently there are selected edges, we wont hide them
-        if (this.selectedEdges !== undefined && this.selectedEdges.length > 0) {
-            this.edges.forEach((edge: Edge) => {
-                if (hideEdges && !this.selectedEdges?.includes(edge.id as string)) {
+        if (this.hideEdges === true) {
+            //If currently there are selected edges, we wont hide them
+            if (this.filteredSelectedEdges !== undefined && this.filteredSelectedEdges.length > 0) {
+                this.edges.forEach((edge: Edge) => {
+                    if (!this.filteredSelectedEdges?.includes(edge.id as string)) {
+                        edge["hidden"] = true;
+                    } else {
+                        edge["hidden"] = false;
+                    }
+
+                    newEdges.push(edge);
+                })
+
+            } else {
+                //If there are no selected edges, we toggle all edges
+                this.edges.forEach((edge: Edge) => {
                     edge["hidden"] = true;
-                } else {
-                    edge["hidden"] = false;
-                }
-
-                newEdges.push(edge);
-            })
-
+                    newEdges.push(edge);
+                })
+            }
         } else {
-            //If there are no selected edges, we toggle all edges
-            this.edges.forEach((edge: Edge) => {
-                if (hideEdges) {
-                    edge["hidden"] = true;
-                } else {
-                    edge["hidden"] = false;
-                }
-
-                newEdges.push(edge);
-            })
+            this.updateEdgesThreshold(this.threshold);
         }
         this.edges.update(newEdges);
     }
@@ -112,14 +128,15 @@ export default class EdgeVisuals {
      * @param {Number} valueThreshold new value
      */
     updateEdgesThreshold(valueThreshold: number) {
+        this.threshold = valueThreshold;
 
         const newEdges = new Array();
         this.edges.forEach((edge: Edge) => {
 
-            if (edge.value !== undefined && edge.value < valueThreshold) {
+            if (edge.value !== undefined && edge.value < this.threshold) {
                 edge["hidden"] = true;
             } else if (this.hideEdges) {
-                if (this.selectedEdges?.includes(edge.id as string)) {
+                if (this.filteredSelectedEdges?.includes(edge.id as string)) {
                     edge["hidden"] = false;
                 } else {
                     edge["hidden"] = true;
@@ -138,7 +155,7 @@ export default class EdgeVisuals {
      * @param selectedEdges edges to select
      */
     selectEdges(selectedEdges: string[]) {
-        this.selectedEdges = selectedEdges;
+        this.filteredSelectedEdges = selectedEdges;
 
         if (this.hideEdges) {
             this.hideUnselectedEdges(this.hideEdges)
@@ -151,7 +168,8 @@ export default class EdgeVisuals {
      * Unselect all edges and update all edges visuals
      */
     unselectEdges() {
-        this.selectedEdges = undefined;
+        this.filteredSelectedEdges = undefined;
+        this.allSelectedEdges = undefined;
 
         if (this.hideEdges) {
             this.hideUnselectedEdges(this.hideEdges)
@@ -167,7 +185,7 @@ export default class EdgeVisuals {
         const newEdges = new Array();
 
         this.edges.forEach((edge: Edge) => {
-            if (this.selectedEdges?.includes(edge.id as string)) {
+            if (this.filteredSelectedEdges?.includes(edge.id as string)) {
                 edge.font = {
                     color: edgeConst.LabelColorSelected,
                     strokeColor: edgeConst.LabelStrokeColorSelected,
@@ -185,6 +203,29 @@ export default class EdgeVisuals {
         })
 
         this.edges.update(newEdges);
+    }
+
+    getSelectedNodesAndEdges(selected_edges_id: string[]): { selectedNodes: string[], selected_edges_id: string[] } {
+        const selectedNodes = new Array<string>();
+        this.allSelectedEdges = selected_edges_id;
+       
+        this.edges.get(selected_edges_id).forEach((edge: Edge) => {
+            if (edge.value !== undefined && edge.value >= this.threshold) { //TODO link this with the threshold option once the slider works
+
+                if (edge.from != selectedNodes[0] && edge.to == selectedNodes[0])
+                    selectedNodes.push(edge.from as string);
+
+                else if (edge.to != selectedNodes[0] && edge.from == selectedNodes[0])
+                    selectedNodes.push(edge.to as string);
+
+            } else {
+                const index = selected_edges_id.indexOf(edge.id as string);
+                selected_edges_id.splice(index, 1);
+            }
+
+        });
+
+        return { selectedNodes, selected_edges_id };
     }
 }
 

@@ -34,23 +34,17 @@ export const DataTable = ({
             <div className="datatable-content">
                 {MainRows.map((item: DataRow, index: number): JSX.Element => {
                     return (
-                        <div key={index} className="main-row row">
-                            <strong> <React.Fragment >{item.getKey()}</React.Fragment> </strong>
-                            {"\u00a0\u00a0"}
-                            {item.getValue(true).map((item: React.ReactNode, index: number): JSX.Element => {
-                                return (<React.Fragment key={index}>{item} {"\u00a0\u00a0"} </React.Fragment> );
-                            })}
+                        <div key={index} className="main-row row"
+                            dangerouslySetInnerHTML={{ __html: `${item.getKey()} &nbsp; ${item.getValue(true)}` }}
+                        >
                         </div>
                     );
                 })}
                 {SubRows.map((item: DataRow, index: number): JSX.Element => {
                     return (
-                        <div key={index} className="sub-row row">
-                            <React.Fragment >{item.getKey()}</React.Fragment>
-                            {"\u00a0\u00a0"}
-                            {item.getValue().map((item: React.ReactNode, index: number): JSX.Element => {
-                                return (<React.Fragment key={index}>{item} {"\u00a0\u00a0"} </React.Fragment>);
-                            })}
+                        <div key={index} className="sub-row row"
+                            dangerouslySetInnerHTML={{ __html: `${item.getKey(false)} &nbsp; ${item.getValue()}` }}
+                            >
                         </div>
                     );
                 })}

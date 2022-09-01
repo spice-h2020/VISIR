@@ -51,6 +51,7 @@ export const Tooltip = ({
     }, [position]);
 
     useEffect(() => {
+        console.log(content);
         setInfo(content);
     }, [content]);
 
@@ -68,10 +69,11 @@ export const Tooltip = ({
     }, [info]);
 
     const style = pos !== undefined ? { top: pos.y - yOffset, left: pos.x } : {};
-
+    
     if (info === undefined) {
         return <div className={`tooltip`}></div>
     } else {
+        console.log(info.mainDataRow);
         return (
             <div
                 ref={compRef}
@@ -92,23 +94,17 @@ export const Tooltip = ({
                     <div className={"tooltip-body"}>
                         {info.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
                             return (
-                                <div key={index} className="main-row row">
-                                    <strong> <React.Fragment >{item.getKey()}</React.Fragment></strong>
-                                    {"\u00a0\u00a0"}
-                                    {item.getValue(true).map((item: React.ReactNode, index: number): JSX.Element => {
-                                        return (<React.Fragment key={index}>{item} {"\u00a0\u00a0"} </React.Fragment>);
-                                    })}
+                                <div key={index} className="main-row row"
+                                    dangerouslySetInnerHTML={{ __html: `${item.getKey()} &nbsp; ${item.getValue(true)}` }}
+                                >
                                 </div>
                             );
                         })}
                         {info.subDataRow.map((item: DataRow, index: number): JSX.Element => {
                             return (
-                                <div key={index} className="sub-row row">
-                                    <React.Fragment >{item.getKey()}</React.Fragment>
-                                    {"\u00a0\u00a0"}
-                                    {item.getValue().map((item: React.ReactNode, index: number): JSX.Element => {
-                                        return (<React.Fragment key={index}>{item} {"\u00a0\u00a0"} </React.Fragment>);
-                                    })}
+                                <div key={index} className="sub-row row"
+                                    dangerouslySetInnerHTML={{ __html: `${item.getKey(false)} &nbsp; ${item.getValue()}` }}
+                                >
                                 </div>
                             );
                         })}

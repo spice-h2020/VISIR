@@ -11,9 +11,9 @@ import React from "react";
  */
 export class DataRow {
     //Key of the row
-    key: React.ReactNode;
+    key: string;
     //Value of the row
-    value: React.ReactNode;
+    value: string;
     //If true, getKey will return nothing and getValue will return key and value in the same react component
     combineBoth: boolean;
 
@@ -24,15 +24,18 @@ export class DataRow {
      * @param value another component of the row
      * @param combineBoth If true, getKey will return nothing and getValue will return key and value in the same react component.
      */
-    constructor(key: React.ReactNode, value: React.ReactNode, combineBoth: boolean = false) { this.key = key; this.value = value; this.combineBoth = combineBoth; }
+    constructor(key: string, value: string, combineBoth: boolean = false) { this.key = key; this.value = value; this.combineBoth = combineBoth; }
 
     /**
      * Returns the key of the row if combine both is false
      * @returns the key or "" 
      */
-    getKey(): React.ReactNode {
+    getKey(strongKey: boolean = true): string {
         if (!this.combineBoth) {
-            return this.key;
+            if (strongKey)
+                return `<strong> ${this.key}: </strong>`;
+            else
+                return `${this.key}: `;
         } else {
             return "";
         }
@@ -44,16 +47,13 @@ export class DataRow {
      * @param strongKey if true, the key value in the div will have <strong> tag
      * @returns the value or the key + value div
      */
-    getValue(strongKey: boolean = false): React.ReactNode[] {
+    getValue(strongKey: boolean = false): string {
         if (!this.combineBoth) {
-            return [this.value];
+            return ` ${this.value} `;
         } else if (strongKey) {
-            const keyComp = React.createElement("strong", { key: 1 }, this.key);
-            const valueComp = React.createElement("div", { key: 2 }, this.value);
-
-            return [keyComp, valueComp]
+            return `<strong>${this.key}: </strong> &nbsp; ${this.value}`;
         } else {
-            return [React.createElement('div', null, `${this.key}${this.value}`)];
+            return `${this.key}: ${this.value}`;
         }
     }
 }
