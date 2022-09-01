@@ -70,7 +70,7 @@ export function App() {
       <Navbar
         leftAlignedItems={[
           <Button
-            content="Visualization module"
+            content="Visualization module A"
             extraClassName="navBar-mainBtn"
             onClick={() => { window.location.reload() }}
           />,
