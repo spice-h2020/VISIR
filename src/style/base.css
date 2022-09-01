@@ -1,0 +1,59 @@
+:root {
+    --horizontal-height: 80vh;
+    --vertical-height: 40vh;
+}
+
+body {
+    background-color: rgb(204, 204, 204);
+    color: rgb(53, 53, 53);
+    overflow-y: scroll;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+.row {
+    display: flex;
+}
+
+.pairNetwork.Horizontal {
+    display: flex;
+}
+
+.pairNetwork {
+    margin-bottom: 5vh;
+    padding-bottom: 1vh;
+    border-bottom: 1.5px black dotted;
+}
+
+.pairNetwork.Horizontal>* {
+    height: 100%;
+    width: 50%;
+    height: var(--horizontal-height);
+}
+
+.pairNetwork.Vertical>* {
+    height: 100%;
+    margin-bottom: 0.1%;
+}
+
+.pairNetwork.Vertical>*>*>.network-container {
+    height: var(--vertical-height);
+}
+
+.singleNetwork>*>*>.network-container,
+.pairNetwork.Horizontal>*>*>.network-container {
+    height: var(--horizontal-height);
+}
+
+
+.network-container {
+    margin: 0px 1.5% 15px 1.5%;
+}
+
+.vis-network>canvas {
+    border-style: dotted;
+    box-sizing: border-box;
+}

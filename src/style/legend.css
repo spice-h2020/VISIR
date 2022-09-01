@@ -1,0 +1,97 @@
+/* Legend dropdown */
+.legend-dropdown {
+    direction: rtl;
+}
+
+.legend-dropdown>* {
+    direction: ltr;
+}
+
+/* Legend dropdown content */
+/* .legend-dropdown>.dropdown-content {
+
+} */
+
+/* Legend column */
+.legend-dropdown>*>*>.col:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+/* Legend colum tittle */
+.legend-dropdown>*>*>*>h3 {
+    white-space: nowrap;
+    margin: 5px 10px;
+    padding-bottom: 5px;
+    border-bottom: black 1px inset;
+}
+
+/* Legend row */
+.legend-row{
+    align-items: self-end;
+}
+
+/* Legend button */
+.legend-content>.btn.active{
+    color: black;
+    background-color: white;
+}
+
+.legend-content>.btn.active:hover{
+    background-color: rgba(0, 0, 0, 0.10);
+}
+
+/* Legend button content */
+.legend-content>.btn.active>*{
+    opacity: 25%;
+}
+
+
+/*--- LEGEND DIMENSIONS HTML ---*/
+/* box shape with border color*/
+.box {
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin: auto;
+    padding: 0px !important;
+    border: 1px solid black;
+    clear: both;
+}
+
+/*Parent shape*/
+.legend-shape {
+    width: 20px;
+    height: 20px;
+    background: rgb(0, 0, 0);
+}
+
+/*All available shapes*/
+.triangle {
+    --path: 50% 0, 100% 100%, 0 100%;
+    /*Second number is the height, starting with 0 at the top of the div*/
+    clip-path: polygon(var(--path));
+}
+
+.diamond {
+    --path: 50% 0, 0% 50%, 50% 100%, 100% 50%;
+    clip-path: polygon(var(--path));
+}
+
+.dot {
+    border-radius: 50%;
+}
+
+.star {
+    --path: 50% 5%, 61% 40%, 98% 40%, 68% 62%, 79% 96%, 50% 75%, 21% 96%, 32% 62%, 2% 40%, 39% 40%;
+    clip-path: polygon(var(--path));
+}
+
+.triangleDown {
+    --path: 0% 0%, 50% 100%, 100% 0%;
+    clip-path: polygon(var(--path));
+}
+
+.hexagon {
+    --path: 25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%;
+    clip-path: polygon(var(--path));
+}

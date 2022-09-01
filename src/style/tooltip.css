@@ -1,0 +1,93 @@
+:root {
+    --body-color: white;
+}
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; 
+}
+
+/* Tooltip content */
+.tooltip .tooltip-content {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1;
+
+    min-width: 12rem;
+    max-width: 14rem;
+
+    opacity: 85%;
+}
+
+.tooltip.active .tooltip-content {
+    visibility: visible;
+}
+
+.tooltip-content.right {
+    top: -5px;
+    left: 105%;
+}
+
+/* Tooltip header */
+.tooltip-header{
+    padding: 0.5rem 1rem;
+    margin-bottom: 0;
+
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+    background-color: #f0f0f0;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip-header > h3{
+    padding: 0px;
+    margin: 0px;
+    font-size: 1rem;
+}
+
+.tooltip-header>.btn-close::after{
+    display: inline-block;
+    content: "X"; 
+    font-size: large;
+
+    height: 20px;
+    width: 20px;
+
+    margin: 0cm;
+    padding: 0cm;
+}
+
+.tooltip-header>.btn-close{
+    text-align: right;
+}
+
+/* Tooltip body */
+.tooltip-body{
+    background-color: var(--body-color);
+    padding: 1rem 1rem;
+
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+
+/* Tooltip arrow */
+.tooltip-arrow {
+    content: " ";
+    position: absolute;
+    border-width: 5px;
+    border-style: solid;
+}
+
+.tooltip-content.right .tooltip-arrow {
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-color: transparent var(--body-color) transparent transparent;
+}
+
+
+
