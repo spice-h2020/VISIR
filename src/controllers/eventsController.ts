@@ -140,9 +140,7 @@ export default class EventsController {
         const node = this.nodes.get(nodeId) as unknown as UserData;
 
         //Search for the nodes that are connected to the selected Node
-        const { selectedNodes, selected_edges_id } = this.edgeVisuals.getSelectedNodesAndEdges( this.net.getConnectedEdges(nodeId) as string[]);
-
-        selectedNodes.push(node.id.toString());
+        const { selectedNodes, selected_edges_id } = this.edgeVisuals.getSelectedNodesAndEdges( nodeId.toString());
 
         //Move the "camera" to focus on these nodes
         const fitOptions: FitOptions = {
@@ -155,9 +153,10 @@ export default class EventsController {
 
         //Hide edges unconected
         this.edgeVisuals.selectEdges(selected_edges_id as string[]);
-        this.net.selectEdges(selected_edges_id);
 
         //Update nodes's color acording to their selected status
+        console.log(selectedNodes);
+        
         this.nodeVisuals.selectNodes(selectedNodes);
         this.net.selectNodes([node.id] as IdType[])
 

@@ -264,6 +264,7 @@ export default class NodeVisuals {
      */
     updateNodesBasedOnLegend() {
         const newNodes = new Array<UserData>();
+        console.log(this.selectedNodes);
 
         this.nodes.forEach((node: Node) => {
             const user: UserData = node as UserData;
@@ -273,8 +274,11 @@ export default class NodeVisuals {
             let toColorless = false;
             for (let i = 0; i < keys.length && !toColorless; i++) {
                 const value = user.explicit_community[keys[i]]
-                if (this.legendConfig!.get(value) === false)
+
+                if (this.legendConfig!.get(value) === false ){
                     toColorless = true;
+                }
+                    
             }
 
             if (toColorless) {
@@ -282,10 +286,12 @@ export default class NodeVisuals {
 
                 //If it must not be colorless, check if there are selected Nodes
             } else if (this.selectedNodes !== undefined && this.selectedNodes.length > 0) {
-
+        
                 //If there are selected nodes, we only move to default color the ones that are selected
                 if (this.selectedNodes.includes(user.id.toString())) {
                     this.dimensionsStrat.nodeToDefault(user);
+                }else{
+                    this.dimensionsStrat.nodeToColorless(user);
                 }
             } else {
                 this.dimensionsStrat.nodeToDefault(user);

@@ -205,10 +205,14 @@ export default class EdgeVisuals {
         this.edges.update(newEdges);
     }
 
-    getSelectedNodesAndEdges(selected_edges_id: string[]): { selectedNodes: string[], selected_edges_id: string[] } {
+    getSelectedNodesAndEdges(sourceNode: string): { selectedNodes: string[], selected_edges_id: IdType[] } {
         const selectedNodes = new Array<string>();
-        this.allSelectedEdges = selected_edges_id;
-       
+        selectedNodes.push(sourceNode);
+
+        const selected_edges_id = this.net.getConnectedEdges(sourceNode);
+
+        this.allSelectedEdges = selected_edges_id as string[];
+
         this.edges.get(selected_edges_id).forEach((edge: Edge) => {
             if (edge.value !== undefined && edge.value >= this.threshold) { //TODO link this with the threshold option once the slider works
 
