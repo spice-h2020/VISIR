@@ -12,3 +12,6 @@ _________________________
 
 - Both IMMA_country_taxonomy perspectives dont have explicit communitys in their users.
     Makes the application crash when loading one of the perspectives.
+
+- Opening 2 perspectives at the same time and closing the first opened perspective close the second one instead despite UI showing otherwise.
+    Surprisingly doesnt break anything.
