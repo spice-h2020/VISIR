@@ -22,6 +22,7 @@ import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdow
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
 import { LegendTooltip } from './components/LegendTooltip';
+
 import './style/base.css';
 
 const requestManager = new RequestManager();
@@ -70,7 +71,7 @@ export function App() {
       <Navbar
         leftAlignedItems={[
           <Button
-            content="Visualization module"
+            content="Visualization module A"
             extraClassName="navBar-mainBtn"
             onClick={() => { window.location.reload() }}
           />,
