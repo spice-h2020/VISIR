@@ -5,6 +5,9 @@ on:
     branches:
       - pagesTesting
 
+env:
+  CI: ""
+  
 jobs:
   build:
     runs-on: ubuntu-latest
