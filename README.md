@@ -17,4 +17,4 @@ _________________________
 - Opening 2 perspectives at the same time and closing the first opened perspective close the second one instead despite UI showing otherwise.
     Surprisingly doesnt break anything.
     
-- Deleting edges before clicking a node breaks the app.
+- Deleting edges if a node is not clicked breaks the app.
