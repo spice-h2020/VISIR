@@ -54,7 +54,9 @@ export default class EdgeVisuals {
         const newEdges: Edge[] = Object.assign([], this.allEdges);
 
         const n = newEdges.length - this.allEdges.length * viewOptions.deleteEdges / 100;
-        this.filteredSelectedEdges = JSON.parse(JSON.stringify(this.allSelectedEdges));
+
+        if (this.allSelectedEdges !== undefined)
+            this.filteredSelectedEdges = JSON.parse(JSON.stringify(this.allSelectedEdges));
 
         for (var i = newEdges.length - 1; i >= n; i--) {
             const deletedEdge: Edge[] = newEdges.splice(Math.floor(Math.random() * newEdges.length), 1);
