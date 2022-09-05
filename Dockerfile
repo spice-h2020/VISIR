@@ -12,7 +12,4 @@ EXPOSE 3000
 # Start the app
 CMD ["npm", "start"]
 
-
-# docker build -t spice_vis .
-# docker run it -p 8080:80 -rm spice_vis
 # docker-compose -f docker-compose.dev.yml up
