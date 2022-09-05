@@ -3,7 +3,8 @@ Port of https://github.com/gjimenezUCM/SPICE-visualization to react and typescri
 
 
 
-
+Access to the github pages deployment:
+https://marcoexpper.github.io/SPICE-visualization-ReactPort/
 _________________________
 #### Known Errors
 
@@ -15,3 +16,5 @@ _________________________
 
 - Opening 2 perspectives at the same time and closing the first opened perspective close the second one instead despite UI showing otherwise.
     Surprisingly doesnt break anything.
+    
+- Deleting edges if a node is not clicked breaks the app.
