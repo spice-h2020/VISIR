@@ -1,7 +1,7 @@
 services:
   app:
-    container_name: spice-visualization
-    image: spice-visualization
+    container_name: spice-visualization-react
+    image: spice-visualization-react
     build:
       context: .
       target: development
