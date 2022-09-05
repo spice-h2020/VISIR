@@ -30,7 +30,7 @@ Prerequisite: [Docker](https://www.docker.com/).
 ### Using Node.js and NPM. 
 Prerequisite: [Node](https://nodejs.org/en/).
 
-3. Use powershell to go to the downloaded programm folder and install all packages with the following command `npm install`
+3. Use powershell to go to the downloaded program folder and install all packages with the following command `npm install`
 
 4. Launch the local server with the following command `npm run start`
 
