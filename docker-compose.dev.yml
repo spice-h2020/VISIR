@@ -1,0 +1,11 @@
+services:
+  app:
+    container_name: spice-visualization
+    image: spice-visualization
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 3000:3000
