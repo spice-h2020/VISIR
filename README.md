@@ -1,23 +1,42 @@
 # SPICE-visualization-ReactPort
 Port of [SPICE-visualization repository](https://github.com/gjimenezUCM/SPICE-visualization) to react and typescript.
 
-
 Access to the [github pages deployment](https://marcoexpper.github.io/SPICE-visualization-ReactPort/). 
 
+#### Index
+1. [How to run the application localy](#How-to-run-the-application-localy)
+    1. [Using Docker](#Using-Docker)
+    2. [Using Node.js and NPM](#Using-Node.js-and-NPM)
+2. [How to use the app](#How-to-use-the-app)
+3. [How to add more testing files](#How-to-add-more-testing-files)
+4. [Known Errors](#Known-Errors)
+
 ## How to run the application localy
+There are 2 ways of running the application. Docker allows for an easy one command instalation, Node.js allows to introduce new testing files. Both options start with these steps.
+
+Prerequisite: [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell) or any similar command prompt to execute commands.
 
 1. Download all the code of [this repository](https://codeload.github.com/MarcoExpPer/SPICE-visualization-ReactPort/zip/refs/heads/main).
 
-### Using NPM package manager and Node.js
-Prerequisite: Download NPM package manager and Node.js. Powershell or a similar program its also necesary to use the NPM commands.
+2. Go to the project forlder inside PowerShell or similars.
 
-2. Use powershell to go to the downloaded programm folder and install all packages with the following command `npm install`
+### Using Docker.
+Prerequisite: [Docker](https://www.docker.com/).
 
-3. Launch the local server with the following command `npm run start`
+3. Create and run the docker container with the following command `docker-compose -f docker-compose.dev.yml up` inside the project folder.
 
-4. The app will automaticaly be opened by your web browser in the localhost port 3000. If it hasn't opened, try manualy opening the page `http://localhost:3000/`
+4. The app will be automaticaly launched in `http://localhost:3000/` once the previous command finishes.
 
+### Using Node.js and NPM. 
+Prerequisite: [Node](https://nodejs.org/en/).
 
+3. Use powershell to go to the downloaded programm folder and install all packages with the following command `npm install`
+
+4. Launch the local server with the following command `npm run start`
+
+5. The app will automaticaly be opened by your web browser in the localhost port 3000. If it hasn't opened, try manualy opening the page `http://localhost:3000/`
+
+______________________
 ## How to use the app.
 
 1. Select the desired File Source from the FileSource dropdown. (local app files is the default option)
@@ -34,7 +53,7 @@ Prerequisite: Download NPM package manager and Node.js. Powershell or a similar 
 
 6. All nodes will have diferent colours and shapes. Legend dropdown allows u to understand what does every colour/shape means. If u click any of the legend rows, all nodes that contain that characteristic will be made less obstrusive to the visualization.
 
-### Other options
+#### Other options
 Options dropdown has several diferent options to change how the visualization is shown.
 
 - Hide node labels is activated by default. Hides the label and id of the nodes both in the dataTables/tooltip and in the visualized network.
@@ -49,7 +68,7 @@ Options dropdown has several diferent options to change how the visualization is
 
 - Activate node borders. Add a third visualization dimension to all nodes when possible. Depending on one characteristic, all nodes' border colour will change. The legend dropdown will be updated with this new characteristic and the new border colours.
 
-
+______________________
 ## How to add more testing files
 
 - Localfiles: Move any new file to ./public/data/ directory and update the dataList.json file with its perspective details. The new file and the perspective details must follow the format that all others perspectives are following. Now the app should be able to see that file after refreshing the browser and selecting local app files as the file source.
