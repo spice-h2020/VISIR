@@ -23,9 +23,9 @@ Prerequisite: [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting
 ### Using Docker.
 Prerequisite: [Docker](https://www.docker.com/).
 
-3. Create and run the docker container with the following command `docker-compose -f docker-compose.dev.yml up` inside the project folder.
+3. Run the docker container with the following command `docker-compose -f docker-compose.dev.yml up` inside the project folder.
 
-4. The app will be automaticaly launched in `http://localhost:3000/` once the previous command finishes.
+4. The app will be automaticaly launched in `http://localhost:3000/` once the previous command finishes, so open that URL in your web browser.
 
 ### Using Node.js and NPM. 
 Prerequisite: [Node](https://nodejs.org/en/).
