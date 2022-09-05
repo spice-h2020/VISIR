@@ -70,18 +70,13 @@ Options dropdown has several diferent options to change how the visualization is
 
 ______________________
 ## How to add more testing files
+To add testing files, Node.js instalation is required.
 
-- Localfiles: Move any new file to ./public/data/ directory and update the dataList.json file with its perspective details. The new file and the perspective details must follow the format that all others perspectives are following. Now the app should be able to see that file after refreshing the browser and selecting local app files as the file source.
+- Localfiles: Move any new file to ./public/data/ directory and update the dataList.json file with its perspective details. The new file and the perspective details must follow the format that all others perspectives are following. Make sure the name of the new file is the same as its perspective ID. Now the app should be able to see that file after refreshing the browser and selecting local app files as the file source.
 
 - API (WIP): Currently theres no way to upload new files or perspectives to the API.
-_________________________
+_______________________
 #### Known Errors
-
-- Community data from all HECHT and MNCN are incorrect. The users ID array inside each community are diferent of the user ID inside each user in users array.
-    This crashes the application when clicking a bounding box.
-
-- Both IMMA_country_taxonomy perspectives dont have explicit communitys in their users.
-    Makes the application crash when loading one of the perspectives.
 
 - Opening 2 perspectives at the same time and closing the first opened perspective close the second one instead despite UI showing otherwise.
     Surprisingly doesnt break anything.
