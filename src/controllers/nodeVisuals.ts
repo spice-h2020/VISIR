@@ -264,7 +264,6 @@ export default class NodeVisuals {
      */
     updateNodesBasedOnLegend() {
         const newNodes = new Array<UserData>();
-        console.log(this.selectedNodes);
 
         this.nodes.forEach((node: Node) => {
             const user: UserData = node as UserData;
