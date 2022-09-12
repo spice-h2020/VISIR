@@ -43,7 +43,14 @@ export default class ColorStrategy extends GenericStrategy {
     toColorless(user: UserData) {
         user.defaultColor = false;
 
-        user["color"]["background"] = nodeConst.noFocusColor.background;
+        if (user["color"] === undefined) {
+            user["color"] = {
+                background: nodeConst.noFocusColor.background,
+            }
+        } else {
+            user.color.background = nodeConst.noFocusColor.background;
+        }
+
     }
 
 }

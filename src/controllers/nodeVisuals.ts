@@ -314,10 +314,24 @@ export default class NodeVisuals {
         this.nodes.forEach((node) => {
             const user = node as UserData;
 
-            if (hideLabels)
-                user.font.color = "#00000000"
-            else
-                user.font.color = "#000000FF"
+            if (hideLabels) {
+                if (user.font !== undefined) {
+                    user.font.color = "#00000000"
+                } else {
+                    user.font = {
+                        color: "#00000000"
+                    }
+                }
+            }
+            else {
+                if (user.font !== undefined) {
+                    user.font.color = "#000000FF"
+                } else {
+                    user.font = {
+                        color: "#000000FF"
+                    }
+                }
+            }
 
             newNodes.push(user);
         });
