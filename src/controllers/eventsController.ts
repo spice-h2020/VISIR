@@ -155,7 +155,6 @@ export default class EventsController {
         this.edgeVisuals.selectEdges(selected_edges_id as string[]);
 
         //Update nodes's color acording to their selected status
-        console.log(selectedNodes);
         
         this.nodeVisuals.selectNodes(selectedNodes);
         this.net.selectNodes([node.id] as IdType[])

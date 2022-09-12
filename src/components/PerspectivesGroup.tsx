@@ -30,18 +30,19 @@ interface PerspectivesGroupProps {
     setViewActive: Function
 }
 
-let counter = 0;
 /**
  * Component that draws each active perspective
  */
 export const PerspectivesGroups = ({
     perspectivePairs,
     nPerspectives,
-    layout,
+    layout: ly,
     viewOptions,
     setLegendData,
     setViewActive,
 }: PerspectivesGroupProps) => {
+
+    const [layout, setLayout] = useState<AppLayout>(ly);
 
     const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();
 
@@ -65,7 +66,10 @@ export const PerspectivesGroups = ({
     const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNodeId, sf, dimensionStrategy, networkFocusID);
 
     useEffect(() => {
-        counter = counter + 1;
+        setLayout(ly);
+    }, [ly]);
+
+    useEffect(() => {
         //Reset some states to default when we clear all the active perspectives
         if (nPerspectives === 0) {
             setViewActive(false);

@@ -27,7 +27,7 @@ export default class RequestManager {
         this.keyToUrl = new Map<FileSource, string>();
 
         this.keyToUrl.set(FileSource.Local, "./data/");
-        this.keyToUrl.set(FileSource.Develop, "https://raw.githubusercontent.com/gjimenezUCM/SPICE-visualization/develop/data/");
+        this.keyToUrl.set(FileSource.Develop, "https://raw.githubusercontent.com/MarcoExpPer/SPICE-visualization-ReactPort/develop/public/data/");
         this.keyToUrl.set(FileSource.Api, "http://localhost:8090/");
     }
 

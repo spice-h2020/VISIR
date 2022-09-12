@@ -40,13 +40,15 @@ interface PerspectiveViewProps {
 export const PerspectiveView = ({
     perspectiveInfo,
     viewOptions,
-    layout,
+    layout: ly,
     isFirstPerspective = true,
     sf,
     selectedNodeId,
     dimStrat,
     networkFocusID,
 }: PerspectiveViewProps) => {
+
+    const [layout, setLayout] = useState<AppLayout>(ly);
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
 
@@ -59,6 +61,11 @@ export const PerspectiveView = ({
     useEffect(() => {
         setInfo(perspectiveInfo);
     }, [perspectiveInfo]);
+
+
+    useEffect(() => {
+        setLayout(ly);
+    }, [ly]);
 
     useEffect(() => {
         if (netManager !== undefined && networkFocusID !== undefined) {
@@ -108,25 +115,27 @@ export const PerspectiveView = ({
         viewOptions={viewOptions}
     />
 
+    const networkContainer = <div className="network-container" key={1} ref={visJsRef} />
+
     if (isFirstPerspective === undefined || isFirstPerspective === true || layout === AppLayout.Vertical) {
         return (
-            <div className="perspective row">
-                <div className="col-4">
+            <div className="perspective row" key={10}>
+                <div className="col-4" key={1}>
                     {dataCol}
                 </div>
-                <div className="col-8">
-                    <div className="network-container" ref={visJsRef} />
+                <div className="col-8" key={0}>
+                    {networkContainer}
                 </div>
             </div >
 
         );
     } else {
         return (
-            <div className="perspective row">
-                <div className="col-8">
-                    <div className="network-container" ref={visJsRef} />
+            <div className="perspective row" key={10}>
+                <div className="col-8" key={0}>
+                    {networkContainer}
                 </div>
-                <div className="col-4">
+                <div className="col-4" key={1}>
                     {dataCol}
                 </div>
             </div >

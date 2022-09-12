@@ -55,7 +55,10 @@ export default class NodeDimensionStrategy {
         });
     }
 
-
+    /**
+     * Toggle the state of the border strategy 
+     * @param newValue 
+     */
     toggleBorderStat(newValue: boolean){
         const attributes = new Array<DimAttribute>();
 
