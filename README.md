@@ -3,6 +3,8 @@ Port of [SPICE-visualization repository](https://github.com/gjimenezUCM/SPICE-vi
 
 Access to the [github pages deployment](https://marcoexpper.github.io/SPICE-visualization-ReactPort/). 
 
+Documentation explained in the [wiki](https://github.com/MarcoExpPer/SPICE-visualization-ReactPort/wiki)
+
 #### Index
 1. [How to run the application localy](#How-to-run-the-application-localy)
     1. [Using Docker](#Using-Docker)
