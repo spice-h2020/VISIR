@@ -6,11 +6,12 @@
 //Constants
 import { DimAttribute, Dimensions, nodeConst } from '../constants/nodes';
 //Packages
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 //Local files
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
 import '../style/legend.css';
+import { ButtonState } from '../constants/viewOptions';
 
 interface LegendTooltipProps {
     //Content of the legend
@@ -21,6 +22,7 @@ interface LegendTooltipProps {
     updateLegendConfig: Function
 }
 
+let counter = 0;
 /**
  * Legend component
  */
@@ -48,6 +50,7 @@ export const LegendTooltip = ({
 
     //When legendData changes
     useEffect(() => {
+        counter = counter + 1;
         if (!isActive) {
             setIsActive(state);
         }
@@ -105,29 +108,33 @@ export const LegendTooltip = ({
 function getLegendRows(buttonClick: Function, data: DimAttribute[]): React.ReactNode[] {
     const rows = new Array<React.ReactNode>();
 
-    if(data === undefined)
+    if (data === undefined)
         return rows;
-        
-    for (let i = 0; i < data.length; i++) {
-        const buttons = new Array<React.ReactNode>();
-        for (let j = 0; j < data[i].values.length; j++) {
-            buttons.push(
-                <Button key={j}
-                    content={getButtonContent(data[i].values[j], data[i].dimension, j)}
-                    autoToggle={true}
-                    onClick={() => {
-                        buttonClick(data[i].values[j]);
-                    }} />
-            );
-        }
-        const colum = <div className='col' key={i}>
-            <h3>{data[i].key} </h3>
-            <div className="legend-content">
-                {buttons}
-            </div>
-        </div>;
 
-        rows.push(colum);
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].active) {
+            const buttons = new Array<React.ReactNode>();
+            for (let j = 0; j < data[i].values.length; j++) {
+                buttons.push(
+                    <Button
+                        key={counter * 100 + j}
+                        content={getButtonContent(data[i].values[j], data[i].dimension, j)}
+                        state={ButtonState.inactive}
+                        autoToggle={true}
+                        onClick={() => {
+                            buttonClick(data[i].values[j]);
+                        }} />
+                );
+            }
+            const colum = <div className='col' key={i}>
+                <h3>{data[i].key} </h3>
+                <div className="legend-content">
+                    {buttons}
+                </div>
+            </div>;
+
+            rows.push(colum);
+        }
     }
 
     return rows;

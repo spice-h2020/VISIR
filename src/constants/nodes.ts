@@ -28,6 +28,7 @@ export interface DimAttribute {
     key: string
     values: string[]
     dimension: Dimensions
+    active: boolean
 }
 
 /**

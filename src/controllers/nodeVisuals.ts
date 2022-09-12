@@ -59,7 +59,7 @@ export default class NodeVisuals {
     //Boolean that controls if labels should be hidden
     hideLabel!: boolean;
     //Border activated
-    borderActive!:boolean;
+    borderActive!: boolean;
 
     //Set/Update dimension strat
     setDimStrat: Function;
@@ -131,6 +131,7 @@ export default class NodeVisuals {
                 key: this.explicitData[0].key,
                 values: this.explicitData[0].values,
                 dimension: Dimensions.Color,
+                active: true
             })
         }
 
@@ -139,21 +140,22 @@ export default class NodeVisuals {
                 key: this.explicitData[1].key,
                 values: this.explicitData[1].values,
                 dimension: Dimensions.Shape,
+                active: true
             })
         }
 
-        if (this.explicitData[2] !== undefined && showBorder) {
+        if (this.explicitData[2] !== undefined) {
             this.attributes.push({
                 key: this.explicitData[2].key,
                 values: this.explicitData[2].values,
                 dimension: Dimensions.Border,
+                active: showBorder
             })
         }
 
-        this.dimensionsStrat = new NodeDimensionStrategy(this.attributes);
-        
+        this.dimensionsStrat = new NodeDimensionStrategy(this.attributes, setLegendData);
+
         this.setDimStrat(this.dimensionsStrat);
-        setLegendData(this.attributes);
     }
 
     /**
@@ -274,10 +276,10 @@ export default class NodeVisuals {
             for (let i = 0; i < keys.length && !toColorless; i++) {
                 const value = user.explicit_community[keys[i]]
 
-                if (this.legendConfig!.get(value) === false ){
+                if (this.legendConfig!.get(value) === false) {
                     toColorless = true;
                 }
-                    
+
             }
 
             if (toColorless) {
@@ -285,11 +287,11 @@ export default class NodeVisuals {
 
                 //If it must not be colorless, check if there are selected Nodes
             } else if (this.selectedNodes !== undefined && this.selectedNodes.length > 0) {
-        
+
                 //If there are selected nodes, we only move to default color the ones that are selected
                 if (this.selectedNodes.includes(user.id.toString())) {
                     this.dimensionsStrat.nodeToDefault(user);
-                }else{
+                } else {
                     this.dimensionsStrat.nodeToColorless(user);
                 }
             } else {
@@ -351,10 +353,10 @@ export default class NodeVisuals {
 
             values.size = nodeConst.selectedSize;
 
-            if(this.borderActive){
+            if (this.borderActive) {
                 values.borderWidth = nodeConst.selectedBorderColorWidth;
             }
-            
+
             if (values.borderColor === "transparent") {
                 values.borderColor = "#000000";
                 values.borderWidth = nodeConst.selectedBorderWidth

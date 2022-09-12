@@ -3,7 +3,8 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { DimAttribute } from "../constants/nodes"
+import { stat } from "fs";
+import { DimAttribute, Dimensions } from "../constants/nodes"
 import { UserData } from "../constants/perspectivesTypes";
 //Local files
 import BorderStrategy from "./nodeDimensions/borderStrat";
@@ -15,18 +16,23 @@ export default class NodeDimensionStrategy {
 
     //Array with all available strategies
     strategies: GenericStrategy[];
+    //Function to set the legend configuration
+    setLegendData: Function;
 
     /**
      * Constructor of the class
      * @param attributesArray Array with all Dimension attributes 
      */
-    constructor(attributesArray: DimAttribute[]) {
+    constructor(attributesArray: DimAttribute[], setLegendData: Function) {
+        this.setLegendData = setLegendData;
+
         this.strategies = new Array<GenericStrategy>();
 
         this.strategies.push(new ColorStrategy(attributesArray));
         this.strategies.push(new ShapeStrategy(attributesArray));
         this.strategies.push(new BorderStrategy(attributesArray));
 
+        this.setLegendData(attributesArray);
     }
 
     /**
@@ -47,5 +53,19 @@ export default class NodeDimensionStrategy {
         this.strategies.forEach((strat) => {
             strat.toColorless(user);
         });
+    }
+
+
+    toggleBorderStat(newValue: boolean){
+        const attributes = new Array<DimAttribute>();
+
+        this.strategies.forEach((strat) => {
+            if(strat.attr.dimension === Dimensions.Border){
+                strat.attr.active = newValue;
+            }
+            attributes.push(strat.attr)
+        });
+
+        this.setLegendData(attributes);
     }
 }

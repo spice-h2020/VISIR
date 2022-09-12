@@ -7,11 +7,12 @@ import { DimAttribute, Dimensions } from "../../constants/nodes";
 import { UserData } from "../../constants/perspectivesTypes";
 
 export default abstract class GenericStrategy {
-    //Key of the attribute that changes each strategy.
-    key: string | undefined
+    //Attribute of this strategy.
+    attr: DimAttribute;
     //Map with the relation "Value of the attribute whose key is this.key" -> "The corresponding dimension value for each dimensions strat"
     dimensionMap: Map<string, any>
 
+   
     /**
      * Constructor of the class
      * @param attributesArray Array with all Dimension attributes 
@@ -20,13 +21,12 @@ export default abstract class GenericStrategy {
      */
     constructor(attributesArray: DimAttribute[], dimension: Dimensions, getDimension: Function) {
 
-        const attribute = attributesArray.filter(attr => attr.dimension === dimension)[0];
+        this.attr = attributesArray.filter(attr => attr.dimension === dimension)[0];
 
         this.dimensionMap = new Map<string, string>();
-        if (attribute !== undefined) {
+        if (this.attr !== undefined) {
 
-            this.key = attribute.key;
-            this.fillMap(attribute.values, getDimension);
+            this.fillMap(getDimension);
 
         }
     }
@@ -36,10 +36,10 @@ export default abstract class GenericStrategy {
      * @param values values that will be a key in the map
      * @param getDimension function that returns the value for each key in the map
      */
-    fillMap(values: string[], getDimension: Function) {
-        for (let i = 0; i < values.length; i++) {
+    fillMap(getDimension: Function) {
+        for (let i = 0; i < this.attr.values.length; i++) {
             const color = getDimension(i);
-            this.dimensionMap.set(values[i], color);
+            this.dimensionMap.set(this.attr.values[i], color);
         }
     }
 

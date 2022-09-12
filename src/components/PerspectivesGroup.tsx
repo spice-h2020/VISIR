@@ -40,7 +40,7 @@ export const PerspectivesGroups = ({
 }: PerspectivesGroupProps) => {
 
     const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();
-    
+
     const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo | undefined>();
     const [tooltipState, setTooltipState] = useState<boolean>(true);
     const [tooltipPos, setTooltipPos] = useState<Point | undefined>();
@@ -77,6 +77,11 @@ export const PerspectivesGroups = ({
 
     }, [perspectivePairs.length]);
 
+    useEffect(() => {
+        dimensionStrategy?.toggleBorderStat(viewOptions.border);
+
+    }, [viewOptions.border]);
+
     return (
         <div className="perspectives-containers">
             {<Tooltip
@@ -110,7 +115,7 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
     const perspectivesComponents = new Array<React.ReactNode>();
 
     for (let i = 0; i < perspectivePairs.length; i++) {
-        
+
         if (perspectivePairs[i].hasEmptySpace()) {
 
             const perspective = perspectivePairs[i].getSingle();

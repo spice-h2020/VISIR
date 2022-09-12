@@ -168,13 +168,6 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.nodeVisuals.createNodeDimensionStrategy(viewOptions.border, sf.setLegendData);
-            netManager.nodeVisuals.updateNodeDimensions();
-        }
-    }, [viewOptions.border]);
-
-    useEffect(() => {
-        if (netManager !== undefined) {
             netManager.edgeVisuals.updateEdgesThreshold(viewOptions.edgeThreshold);
         }
     }, [viewOptions.edgeThreshold]);

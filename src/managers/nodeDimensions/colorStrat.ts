@@ -19,9 +19,9 @@ export default class ColorStrategy extends GenericStrategy {
      * @param user user to edit
      */
     change(user: UserData) {
-        if (this.key !== undefined) {
+        if (this.attr !== undefined && this.attr.active) {
 
-            const value = user.explicit_community[this.key];
+            const value = user.explicit_community[this.attr.key];
 
             user["color"] = {
                 background: this.dimensionMap.get(value),
