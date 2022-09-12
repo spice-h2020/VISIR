@@ -76,7 +76,3 @@ To add testing files, Node.js instalation is required.
 
 - API (WIP): Currently theres no way to upload new files or perspectives to the API.
 _______________________
-#### Known Errors
-
-- Opening 2 perspectives at the same time and closing the first opened perspective close the second one instead despite UI showing otherwise.
-    Surprisingly doesnt break anything.

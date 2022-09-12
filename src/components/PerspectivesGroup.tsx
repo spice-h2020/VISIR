@@ -18,6 +18,8 @@ import { Tooltip } from "../basicComponents/Tooltip";
 interface PerspectivesGroupProps {
     //Pairs of networks that wil be active and interactuable
     perspectivePairs: PerspectivePair[],
+    //total number of active networks
+    nPerspectives: number,
     //Type of the layout of the pair networks
     layout: AppLayout,
     //View options for all networks
@@ -28,11 +30,13 @@ interface PerspectivesGroupProps {
     setViewActive: Function
 }
 
+let counter = 0;
 /**
  * Component that draws each active perspective
  */
 export const PerspectivesGroups = ({
     perspectivePairs,
+    nPerspectives,
     layout,
     viewOptions,
     setLegendData,
@@ -61,8 +65,9 @@ export const PerspectivesGroups = ({
     const perspectivesComponents: React.ReactNode[] = getActivePerspectivesComponents(perspectivePairs, viewOptions, layout, selectedNodeId, sf, dimensionStrategy, networkFocusID);
 
     useEffect(() => {
+        counter = counter + 1;
         //Reset some states to default when we clear all the active perspectives
-        if (perspectivePairs.length === 0) {
+        if (nPerspectives === 0) {
             setViewActive(false);
 
             if (selectedNodeId !== undefined) {
@@ -75,7 +80,7 @@ export const PerspectivesGroups = ({
             setViewActive(true);
         }
 
-    }, [perspectivePairs.length]);
+    }, [nPerspectives]);
 
     useEffect(() => {
         dimensionStrategy?.toggleBorderStat(viewOptions.border);
@@ -90,9 +95,7 @@ export const PerspectivesGroups = ({
                 position={tooltipPos}
             />}
 
-            {perspectivesComponents.map((item: React.ReactNode, index: number): JSX.Element => {
-                return (<React.Fragment key={index}>{item}</React.Fragment>);
-            })}
+            {perspectivesComponents}
         </div>
     );
 };
@@ -121,8 +124,9 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
             const perspective = perspectivePairs[i].getSingle();
             if (perspective !== undefined) {
                 perspectivesComponents.push(
-                    <div className="singleNetwork">
+                    <div className="singleNetwork" key={perspective.details.id}>
                         <PerspectiveView
+                            key={perspective.details.id}
                             perspectiveInfo={perspective}
                             viewOptions={viewOptions}
                             layout={layout}
@@ -131,7 +135,6 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             dimStrat={dimStrat}
                             networkFocusID={networkFocusID}
                         />
-
                     </div>
                 );
             }
@@ -142,8 +145,11 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
 
             if (perspectiveA !== undefined && perspectiveB !== undefined) {
                 perspectivesComponents.push(
-                    <div className={`pairNetwork ${AppLayout[layout]}`}>
+                    <div className={`pairNetwork ${AppLayout[layout]}`}
+                        key={`${perspectiveA.details.id}:${perspectiveB.details.id}`}>
                         <PerspectiveView
+                            key={perspectiveA.details.id}
+
                             perspectiveInfo={perspectiveA}
                             viewOptions={viewOptions}
                             layout={layout}
@@ -154,6 +160,8 @@ function getActivePerspectivesComponents(perspectivePairs: PerspectivePair[], vi
                             networkFocusID={networkFocusID}
                         />
                         <PerspectiveView
+                            key={perspectiveB.details.id}
+
                             perspectiveInfo={perspectiveB}
                             viewOptions={viewOptions}
                             layout={layout}

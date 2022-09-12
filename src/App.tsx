@@ -108,6 +108,7 @@ export function App() {
       <h1> Communities Visualization</h1>
       <PerspectivesGroups
         perspectivePairs={viewDataManager.activePerspectivePairs}
+        nPerspectives={viewDataManager.getNumberOfPerspectives()}
         layout={layout}
         viewOptions={viewOptions}
         setLegendData={setLegendData}

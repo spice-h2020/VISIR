@@ -47,7 +47,7 @@ export default class ViewDataManager {
     removePerspective(perspectiveId: number) {
         for (let i = 0; i < this.activePerspectivePairs.length; i++) {
             //If the returns its true, the perspectivePair its empty and we must clear it
-            if(this.activePerspectivePairs[i].removePerspective(perspectiveId)){
+            if (this.activePerspectivePairs[i].removePerspective(perspectiveId)) {
                 this.activePerspectivePairs.splice(i, 1);
                 i = this.activePerspectivePairs.length;
             }
@@ -58,6 +58,22 @@ export default class ViewDataManager {
      * Clear the active perspectives pairs array
      */
     clearPerspectives() {
-        this.activePerspectivePairs = new Array<PerspectivePair>(); 
+        this.activePerspectivePairs = new Array<PerspectivePair>();
+    }
+
+    /**
+     * Returns the total number of active perspectives
+     */
+    getNumberOfPerspectives(): number {
+        let nPerspectives: number = 0;
+        for (let i = 0; i < this.activePerspectivePairs.length; i++) {
+            if (this.activePerspectivePairs[i].hasEmptySpace()) {
+                nPerspectives += 1;
+            } else {
+                nPerspectives += 2;
+            }
+        }
+
+        return nPerspectives;
     }
 }
