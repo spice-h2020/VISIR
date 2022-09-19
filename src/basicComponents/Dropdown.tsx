@@ -40,7 +40,7 @@ export const Dropdown = ({
         setShowDropDown(false);
     }, closeWhenOutsideClick);
 
-    if (items.length != 0)
+    if (items.length !== 0)
         return (
             <div className={showDropDown ? `dropdown ${extraClassName} active` : `dropdown ${extraClassName}`}
                 ref={ref}
@@ -83,13 +83,13 @@ export const Dropdown = ({
  */
 const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function, closeWhenOutsideClick: boolean) => {
 
-    const handleClick = (ev: Event) => {
-        if (ref.current && !ref.current.contains(ev.target as Node)) {
-            callback();
-        }
-    };
-
     useEffect(() => {
+        const handleClick = (ev: Event) => {
+            if (ref.current && !ref.current.contains(ev.target as Node)) {
+                callback();
+            }
+        };
+
         if (closeWhenOutsideClick) {
             if (state) {
                 document.addEventListener("click", handleClick);
@@ -103,5 +103,6 @@ const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, c
                 document.removeEventListener("click", handleClick);
             };
         }
-    }, [state]);
+
+    }, [state, closeWhenOutsideClick, ref, callback]);
 };

@@ -41,8 +41,6 @@ export function App() {
   const [layout, setLayout] = useState<AppLayout>(initialOptions.layout);
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useState<DimAttribute[]>([]);
-  //Tracks what button from the legend has been clicked or not
-  const [legendConfig, setLegendConfig] = useState(new Map<string, boolean>());
   //Tracks if there is any perspective active in the view area
   const [viewActive, setViewActive] = useState<boolean>(false);
 
@@ -51,15 +49,14 @@ export function App() {
 
   const perspectiveSelected: Function = singlePerspectiveSelected(perspectivesState, setPerspectivesState, availablePerspectives);
 
-  useEffect(() => {
+  const updateLegendConfig = (newConfig: Map<string, boolean>) =>{
     if (viewOptions !== undefined) {
       const newViewOptions = (JSON.parse(JSON.stringify(viewOptions))) as ViewOptions;
 
-      newViewOptions.legendConfig = legendConfig
+      newViewOptions.legendConfig = newConfig
       setViewOptions(newViewOptions);
     }
-
-  }, [legendConfig]);
+  }
 
   useEffect(() => {
     updateAllAvailablePerspectives(fileSource, setPerspectivesState, setAvailablePerspectives);
@@ -100,8 +97,8 @@ export function App() {
         rightAlignedItems={[
           <LegendTooltip
             legendData={legendData}
-            state={viewActive}
-            updateLegendConfig={setLegendConfig}
+            activeState={viewActive}
+            updateLegendConfig={updateLegendConfig}
           />,
         ]}
       />

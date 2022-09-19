@@ -97,7 +97,7 @@ export default class EdgeVisuals {
      */
     hideUnselectedEdges(hideEdges: boolean) {
         this.hideEdges = hideEdges;
-        const newEdges = new Array();
+        const newEdges: Edge[] = [];
 
         if (this.hideEdges === true) {
             //If currently there are selected edges, we wont hide them
@@ -132,7 +132,7 @@ export default class EdgeVisuals {
     updateEdgesThreshold(valueThreshold: number) {
         this.threshold = valueThreshold;
 
-        const newEdges = new Array();
+        const newEdges: Edge[] = [];
         this.edges.forEach((edge: Edge) => {
 
             if (edge.value !== undefined && edge.value < this.threshold) {
@@ -184,7 +184,7 @@ export default class EdgeVisuals {
      * Update the visuals of all selected edges
      */
     edgeChosenVisuals() {
-        const newEdges = new Array();
+        const newEdges: Edge[] = [];
 
         this.edges.forEach((edge: Edge) => {
             if (this.filteredSelectedEdges?.includes(edge.id as string)) {
@@ -218,10 +218,10 @@ export default class EdgeVisuals {
         this.edges.get(selected_edges_id).forEach((edge: Edge) => {
             if (edge.value !== undefined && edge.value >= this.threshold) { //TODO link this with the threshold option once the slider works
 
-                if (edge.from != selectedNodes[0] && edge.to == selectedNodes[0])
+                if (edge.from !== selectedNodes[0] && edge.to === selectedNodes[0])
                     selectedNodes.push(edge.from as string);
 
-                else if (edge.to != selectedNodes[0] && edge.from == selectedNodes[0])
+                else if (edge.to !== selectedNodes[0] && edge.from === selectedNodes[0])
                     selectedNodes.push(edge.to as string);
 
             } else {

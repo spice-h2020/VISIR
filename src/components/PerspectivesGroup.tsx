@@ -74,22 +74,20 @@ export const PerspectivesGroups = ({
         if (nPerspectives === 0) {
             setViewActive(false);
 
-            if (selectedNodeId !== undefined) {
-                setSelectedNodeId(undefined);
-            }
-
+            setSelectedNodeId(undefined);
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
+
         } else {
             setViewActive(true);
         }
 
-    }, [nPerspectives]);
+    }, [nPerspectives, setViewActive]);
 
     useEffect(() => {
         dimensionStrategy?.toggleBorderStat(viewOptions.border);
 
-    }, [viewOptions.border]);
+    }, [viewOptions.border, dimensionStrategy]);
 
     return (
         <div className="perspectives-containers">

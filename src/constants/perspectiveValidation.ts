@@ -61,7 +61,7 @@ function isPerspectiveInfoValid(arg: any): types.PerspectiveDetails {
         if (typeof (arg.id) !== "number") {
             arg.id = Number(arg.id);
 
-            if (arg.id === NaN)
+            if (isNaN(arg.id))
                 throw Error(`ID of the perspective (${arg.id}) is not a number`);
         }
 
@@ -182,7 +182,7 @@ function isSimilarityFunctionValid(arg: any): types.SimFunction {
         if (typeof (arg.weight) !== "number") {
             arg.weight = Number(arg.weight);
 
-            if (arg.weight === NaN)
+            if (isNaN(arg.weight))
                 throw Error(`Weight of the Similarity function (${arg.name}) is not a number`);
 
         }
@@ -298,7 +298,7 @@ function isCommunityDataValid(arg: any): types.CommunityData {
         if (typeof (arg.id) !== "number") {
             arg.id = Number(arg.id);
 
-            if (arg.id === NaN)
+            if (isNaN(arg.id))
                 throw Error(`ID of the community (${arg.id}) is not a number`);
         }
 
@@ -388,7 +388,7 @@ function isUserDataValid(arg: any): types.UserData {
         if (typeof (arg.group) !== "number") {
             arg.group = Number(arg.group);
 
-            if (arg.group === NaN)
+            if (isNaN(arg.group))
                 throw Error(`Group of the user (${arg.id}) is not a number`);
         }
 
@@ -420,7 +420,7 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
         if (typeof (arg.value) !== "number") {
             arg.value = Number(arg.ivalued);
 
-            if (arg.value === NaN)
+            if (isNaN(arg.value))
                 throw Error(`Value is not a number`);
         }
 

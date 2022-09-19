@@ -21,8 +21,8 @@ class DatatableData {
     subRows: DataRow[]
 
     constructor() {
-        this.mainRows = new Array();
-        this.subRows = new Array();
+        this.mainRows = [];
+        this.subRows = [];
     }
 }
 

@@ -3,7 +3,6 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { stat } from "fs";
 import { DimAttribute, Dimensions } from "../constants/nodes"
 import { UserData } from "../constants/perspectivesTypes";
 //Local files

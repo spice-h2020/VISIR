@@ -72,7 +72,7 @@ export const PerspectiveView = ({
             netManager.eventsController.networkFocusID = networkFocusID;
         }
 
-    }, [networkFocusID])
+    }, [networkFocusID, netManager])
 
     ViewOptionsUseEffect(viewOptions, netManager, sf);
 
@@ -94,7 +94,7 @@ export const PerspectiveView = ({
                 setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
             }
         }
-    }, [selectedNodeId]);
+    }, [selectedNodeId, info.details.id, netManager, networkFocusID]);
 
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
@@ -105,7 +105,7 @@ export const PerspectiveView = ({
             }
             setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
         }
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
 
     const dataCol = <DataColumn
@@ -153,13 +153,13 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
         if (netManager !== undefined) {
             netManager.nodeVisuals.updateNodeDimensions(viewOptions.legendConfig);
         }
-    }, [viewOptions.legendConfig]);
+    }, [viewOptions.legendConfig, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.nodeVisuals.hideLabels(viewOptions.hideLabels);
         }
-    }, [viewOptions.hideLabels]);
+    }, [viewOptions.hideLabels, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
@@ -167,23 +167,24 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
             netManager.net.setOptions(netManager.options);
             netManager.edges.update(netManager.edges);
         }
-    }, [viewOptions.edgeWidth]);
+    }, [viewOptions.edgeWidth, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.edgeVisuals.hideUnselectedEdges(viewOptions.hideEdges);
         }
-    }, [viewOptions.hideEdges]);
+    }, [viewOptions.hideEdges, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.edgeVisuals.updateEdgesThreshold(viewOptions.edgeThreshold);
         }
-    }, [viewOptions.edgeThreshold]);
+    }, [viewOptions.edgeThreshold, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.edgeVisuals.deleteEdges(viewOptions);
         }
-    }, [viewOptions.deleteEdges]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [viewOptions.deleteEdges, netManager]);
 }

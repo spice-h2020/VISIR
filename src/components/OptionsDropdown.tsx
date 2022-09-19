@@ -36,7 +36,7 @@ export const OptionsDropdown = ({
     onEdgeWidth,
     onBorder,
     onThreshold,
-    onDeleteEdges: onDeleteEdges,
+    onDeleteEdges,
 }: OptionsDropdownProps) => {
 
     const [itemsState, setItemsState] = useState<Array<ButtonState>>(initialState);
@@ -47,23 +47,25 @@ export const OptionsDropdown = ({
             const savedState = itemsState[index];
 
             //Update the state to loading
-            const newSelected = Object.assign(new Array(), itemsState);
+            const newSelected: ButtonState[] = Object.assign([], itemsState);
             newSelected[index] = ButtonState.loading;
+
             setItemsState(newSelected);
 
             //Once the real onClick function finish, it will return true if the button option was succesfuly executed
             if (realOnclick(savedState !== ButtonState.active)) {
 
                 //Update the state to the oposite of what the saved state is, because the click worked
-                const newSelected = Object.assign(new Array(), itemsState);
+                const newSelected: ButtonState[] = Object.assign([], itemsState);
                 newSelected[index] = savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active;
-                setItemsState(newSelected);
 
+                setItemsState(newSelected);
             } else {
 
                 //Update the state to the the saved state, because the click didnt worked
-                const newSelected = Object.assign(new Array(), itemsState);
+                const newSelected: ButtonState[] = Object.assign([], itemsState);
                 newSelected[index] = savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active;
+
                 setItemsState(newSelected);
             }
         }
@@ -124,7 +126,7 @@ export const OptionsDropdown = ({
 /**
  * Calculates the initial state of the dropdown
  */
-const initialState = new Array();
+const initialState: ButtonState[] = [];
 const init = () => {
     initialState.push(initialOptions.hideLabels);
     initialState.push(initialOptions.hideEdges);

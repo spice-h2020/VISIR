@@ -7,7 +7,7 @@
 import { ButtonState } from "../constants/viewOptions"
 import { PerspectiveDetails } from '../constants/perspectivesTypes';
 //Packages
-import React, { useState, useEffect } from "react";
+import React from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
@@ -29,12 +29,6 @@ export const SelectPerspectiveDropdown = ({
     allPerspectives,
     itemsState: states,
 }: SelectPerspectiveProps) => {
-
-    const [itemsState, setItemsState] = useState(states);
-
-    useEffect(() => {
-        setItemsState(states);
-    }, [states]);
 
     if (allPerspectives === undefined) {
         return (

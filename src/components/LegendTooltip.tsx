@@ -17,7 +17,7 @@ interface LegendTooltipProps {
     //Content of the legend
     legendData: DimAttribute[]
     //Activates / disable the legend
-    state: boolean
+    activeState: boolean
     //Function to change the legend configuration that will change how nodes will be seen
     updateLegendConfig: Function
 }
@@ -28,35 +28,27 @@ let counter = 0;
  */
 export const LegendTooltip = ({
     legendData,
-    state,
+    activeState,
     updateLegendConfig,
 }: LegendTooltipProps) => {
 
-    //activates/disactivates the button that shows the legend
-    const [isActive, setIsActive] = useState<boolean>(false);
     //Data that will be seen in the legend
     const [data, setData] = useState<DimAttribute[]>(legendData);
     //Configuration that tells the component what option is selected and what not
     const [legendConfig, setLegendConfig] = useState(new Map<string, boolean>());
 
     useEffect(() => {
-        setIsActive(state);
-
-        if (state === false) {
+        if (activeState === false) {
             setData([]);
             setLegendConfig(new Map<string, boolean>())
         }
-    }, [state]);
+    }, [activeState]);
 
     //When legendData changes
     useEffect(() => {
         counter = counter + 1;
-        if (!isActive) {
-            setIsActive(state);
-        }
 
         setData(legendData);
-
         const newMap = new Map<string, boolean>();
         for (let i = 0; i < legendData.length; i++) {
             for (let j = 0; j < legendData[i].values.length; j++) {
@@ -65,12 +57,11 @@ export const LegendTooltip = ({
         }
 
         setLegendConfig(newMap);
-
     }, [legendData]);
 
     useEffect(() => {
         updateLegendConfig(legendConfig)
-    }, [legendConfig]);
+    }, [legendConfig, updateLegendConfig]);
 
     const buttonClick = (value: string) => {
         setLegendConfig(new Map(legendConfig.set(value, !legendConfig.get(value))));

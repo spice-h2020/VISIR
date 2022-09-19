@@ -8,7 +8,7 @@ import { CommunityData, UserData } from "../constants/perspectivesTypes";
 import { nodeConst } from "../constants/nodes";
 import { DataRow, Point, StateFunctions, TooltipInfo } from "../constants/auxTypes";
 //Packages
-import { BoundingBox, DataSetEdges, DataSetNodes, Edge, FitOptions, IdType, Network, TimelineAnimationType } from "vis-network";
+import { BoundingBox, DataSetEdges, DataSetNodes, FitOptions, IdType, Network, TimelineAnimationType } from "vis-network";
 //Local files
 import BoxesController from "./boundingBoxes";
 import NodeVisuals from "./nodeVisuals";
