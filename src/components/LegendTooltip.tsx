@@ -59,9 +59,9 @@ export const LegendTooltip = ({
         setLegendConfig(newMap);
     }, [legendData]);
 
-    useEffect(() => {
-        updateLegendConfig(legendConfig)
-    }, [legendConfig, updateLegendConfig]);
+    // useEffect(() => {
+    //     updateLegendConfig(legendConfig)
+    // }, [legendConfig, updateLegendConfig]);
 
     const buttonClick = (value: string) => {
         setLegendConfig(new Map(legendConfig.set(value, !legendConfig.get(value))));

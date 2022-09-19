@@ -85,7 +85,8 @@ export const PerspectivesGroups = ({
     }, [nPerspectives, setViewActive]);
 
     useEffect(() => {
-        dimensionStrategy?.toggleBorderStat(viewOptions.border);
+        if(dimensionStrategy !== undefined)
+            dimensionStrategy.toggleBorderStat(viewOptions.border);
 
     }, [viewOptions.border, dimensionStrategy]);
 

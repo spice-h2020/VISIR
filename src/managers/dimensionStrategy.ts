@@ -60,12 +60,14 @@ export default class NodeDimensionStrategy {
      */
     toggleBorderStat(newValue: boolean){
         const attributes = new Array<DimAttribute>();
-
+        
         this.strategies.forEach((strat) => {
-            if(strat.attr.dimension === Dimensions.Border){
-                strat.attr.active = newValue;
+            if(strat.attr !== undefined){
+                if(strat.attr.dimension === Dimensions.Border)
+                    strat.attr.active = newValue;
+
+                attributes.push(strat.attr)
             }
-            attributes.push(strat.attr)
         });
 
         this.setLegendData(attributes);
