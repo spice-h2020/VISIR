@@ -66,6 +66,7 @@ export interface PerspectiveData {
     communities: CommunityData[];
     users: UserData[];
     similarity: EdgeData[];
+    artworks: ArtworkData[],
 }
 
 /**
@@ -73,7 +74,6 @@ export interface PerspectiveData {
  */
 export interface CommunityData extends anyProperty {
     id: number;
-    community_type: string;
     name: string;
     explanation: string;
     users: number[];
@@ -87,6 +87,16 @@ export interface UserData extends anyProperty {
     label: string;
     implicit_community: number;
     explicit_community: anyProperty;
+    interactions: Interaction[];
+}
+
+/**
+ * Interface of the data of a user interaction.
+ */
+ export interface Interaction extends anyProperty {
+    artwork_id: string;
+    feelings: string;
+    sophia_extracted_emotions: anyProperty;
 }
 
 /**
@@ -98,8 +108,21 @@ export interface EdgeData extends anyProperty {
     value: number;
     id?: number;
 }
+
+/**
+ * Interface of the data of an artwork.
+ */
+ export interface ArtworkData {
+    id: string;
+    tittle: string;
+    author: string;
+    year: number;
+    image: string
+}
+
 //#endregion
 
+//Interface 
 //Class that contains All the info about 2 diferent perspectives in order to draw the view layout in pairs of networks for easy comparison
 /**
  * Class with the Perspective info of 2 (or just 1) perspectives, and several utility functions to ease its use. Its used to know what perspectives are in a pair

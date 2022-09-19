@@ -8,7 +8,7 @@
 import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './constants/viewOptions';
 import { PerspectiveDetails } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
-import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/perspectiveValidation';
+import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/ValidateFiles';
 //Packages
 import React, { useEffect, useState } from 'react';
 //Local files

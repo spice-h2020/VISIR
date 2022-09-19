@@ -18,11 +18,11 @@
                 "comunidad1": string,       //Explicit community in the format "community name" -> "user's value"
                 "comunidad2": string
             },
-            "interactions": [       //All interactions and its info are visible from the app
+            "interactions": [       //All interactions and its info are visible from the app. Can be empty
                 {
                     "artwork_id": string,           
                     "feelings": string,             //Feelings/comentaries written by the author of the interaction
-                    "sophia_extracted_emotions": {  
+                    "sophia_extracted_emotions": {  //Can be empty
                         "emotion1": float/number,             //Emotions in the format "emotion name" -> "value of the emotion"
                         "emotion2": float/number,
                     }
@@ -43,7 +43,7 @@
             "id": string,       //Related with the "artwork_id" field, inside an interaction in "interactions" inside a user inside "users"
             "tittle": string,   //Tittle and only the ittle of the artwork
             "author": string,   //Author's name and surnames and only the author's name and surnames of the artwork
-            "year": string,     //Year of the artwork.
+            "year": number,     //Year of the artwork.
             "image": string,    //URL to an image of the artwork
         },
     ]
