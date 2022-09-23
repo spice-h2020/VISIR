@@ -4,12 +4,16 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FileSource } from '../constants/viewOptions';
+import { ButtonState, FileSource } from '../constants/viewOptions';
 //Packages
 import { Axios } from 'axios'
+import { PerspectiveDetails } from '../constants/perspectivesTypes';
+import { Dispatch } from 'react';
+import { selectPerspectiveAction } from '../components/SelectPerspectiveDropdown';
+import { validatePerspectiveDataJSON } from '../constants/ValidateFiles';
 
 export default class RequestManager {
-    
+
     isActive: boolean;
     axios: Axios;
     keyToUrl: Map<FileSource, string>;
@@ -45,6 +49,43 @@ export default class RequestManager {
             throw new Error("the new base url is undefined");
 
     }
+
+    selectPerspective(currentState: ButtonState, perspectiveDetails: PerspectiveDetails, setStates: Dispatch<selectPerspectiveAction>,
+        onFinish: Function) {
+            
+            console.log("Request")
+            console.log(currentState + " " + perspectiveDetails.localId)
+
+        if (currentState === ButtonState.inactive) {
+
+            setStates({ id: perspectiveDetails.localId, newState: ButtonState.loading });
+
+            this.getPerspective(perspectiveDetails.id)
+                .then((response) => {
+                    if (response.status === 200) {
+                        const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
+                        
+                        //onFinish({ data: perspectiveJson, details: perspectiveDetails });//TODO ADD
+                        setStates({ id: perspectiveDetails.localId, newState: ButtonState.active });
+
+                    } else {
+                        throw new Error(`Perspective ${perspectiveDetails.id} was ${response.statusText}`);
+                    }
+                })
+                .catch((error) => {
+
+                    setStates({ id: perspectiveDetails.localId, newState: ButtonState.inactive });
+
+                    console.log(error);
+                    alert(error.message);
+                });
+
+        } else {
+            //onFinish(perspectiveDetails.id); //TODO REMOVE PERSPECTIVE
+            setStates({ id: perspectiveDetails.localId, newState: ButtonState.inactive });
+        }
+    }
+
 
     /**
      * Send a GET petition to obtain a singleFile in a directory

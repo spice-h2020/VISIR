@@ -6,7 +6,7 @@
 //Constants
 import { FileSource, initialOptions, ButtonState } from "../constants/viewOptions";
 //Packages
-import { useState } from "react";
+import { useReducer, useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
@@ -16,6 +16,14 @@ interface FileSourceDropdownProps {
     setFileSource: (key: FileSource) => void;
 }
 
+function fileSourceReducer(state: ButtonState[],  key: FileSource) {
+
+    state.fill(ButtonState.inactive);
+    state[key] = ButtonState.active;
+
+    return state;
+}
+
 /**
  * Dropdown component that holds the options to change the source of perspective files in the visualization tool
  */
@@ -23,22 +31,19 @@ export const FileSourceDropdown = ({
     setFileSource,
 }: FileSourceDropdownProps) => {
 
-    //State with the state of all items
-    const [itemsState, setItemsState] = useState<Array<ButtonState>>(initialState);
+    //State of all items
+    const [states, setStates] = useReducer(fileSourceReducer, init());
 
     const changeFileSource = (key: FileSource) => {
-        if (!itemsState[key]) {
+        if (states[key] === ButtonState.inactive) {
 
-            const newState = new Array(Object.keys(FileSource).length / 2);
-            newState.fill(ButtonState.inactive);
-            newState[key] = ButtonState.active;
-
-            setItemsState(newState);
+            setStates(key);
             setFileSource(key);
+
         }
     }
 
-    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, itemsState)
+    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states)
 
     return (
         <Dropdown
@@ -52,12 +57,14 @@ export const FileSourceDropdown = ({
 /**
  * Calculates the initial state of the dropdown
  */
-const initialState = new Array(Object.keys(FileSource).length / 2);
-const init = () => {
+const init = (): ButtonState[] => {
+    const initialState = new Array(Object.keys(FileSource).length / 2);
+
     initialState.fill(ButtonState.inactive);
     initialState[initialOptions.fileSource] = ButtonState.active;
+
+    return initialState;
 }
-init();
 
 /**
  * Returns the buttons-reactComponents of the file source dropdown
@@ -65,7 +72,7 @@ init();
  * @param selectedItems State of the buttons
  * @returns returns an array of React components
  */
-function getButtons(changeFileSource:Function, selectedItems: ButtonState[]): React.ReactNode[] {
+function getButtons(changeFileSource: Function, selectedItems: ButtonState[]): React.ReactNode[] {
     return [
         <Button
             content="Local app files"

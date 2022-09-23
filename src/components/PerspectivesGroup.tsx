@@ -41,7 +41,7 @@ export const PerspectivesGroups = ({
     setLegendData,
     setViewActive,
 }: PerspectivesGroupProps) => {
-
+    console.log("re rendeeer");
     const [layout, setLayout] = useState<AppLayout>(ly);
 
     const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();

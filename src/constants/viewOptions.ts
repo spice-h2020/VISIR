@@ -53,7 +53,7 @@ export class ViewOptions {
     border: boolean;        //Activate the border option of nodes that adds a third dimension that changes based on an explicit community
     edgeThreshold: number;  //Threshold that controls the minimum value edges must have to be shown. Selected edges have priority above this
     deleteEdges: number;    //% of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
-    
+
     legendConfig: Map<string, boolean>  //Configuration based on the legend options that will change some nodes to colorless based on their explicit communities
 
     /**
@@ -70,3 +70,22 @@ export class ViewOptions {
     }
 }
 
+export interface ViewOptionAction {
+    updateType: keyof ViewOptions;
+    newValue?: number | undefined;
+}
+
+export function viewOptionsReducer(state: ViewOptions, action: ViewOptionAction) {
+    const { updateType, newValue } = action;
+
+    if (newValue === undefined)
+        return {
+            ...state,
+            [updateType]: !state[updateType],
+        };
+
+    return {
+        ...state,
+        [updateType]: newValue,
+    };
+}

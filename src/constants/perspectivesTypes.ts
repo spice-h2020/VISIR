@@ -28,6 +28,7 @@ export interface PerspectiveDetails {
     name: string;
     algorithm: PerspectiveAlgorithm;
     similarity_functions: SimFunction[];
+    localId: number;
 }
 
 /**

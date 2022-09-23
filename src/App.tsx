@@ -5,12 +5,12 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './constants/viewOptions';
+import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout, viewOptionsReducer } from './constants/viewOptions';
 import { PerspectiveDetails } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
 import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/ValidateFiles';
 //Packages
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -28,7 +28,6 @@ const requestManager = new RequestManager();
 const viewDataManager = new ViewDataManager();
 
 export function App() {
-
   //State that mantains what perspectives are active, loading or inactive
   const [perspectivesState, setPerspectivesState] = useState(new Map<number, ButtonState>());
   //Holds the details of all available perspectives 
@@ -36,26 +35,21 @@ export function App() {
   //Current file source option of all GET requests
   const [fileSource, setFileSource] = useState<FileSource>(initialOptions.fileSource);
   //Current options that change how the user view each perspective
-  const [viewOptions, setViewOptions] = useState<ViewOptions>(new ViewOptions());
+  const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
   //Current layout of the active perspectives
-  const [layout, setLayout] = useState<AppLayout>(initialOptions.layout);
+  const layout = initialOptions.layout;
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useState<DimAttribute[]>([]);
   //Tracks if there is any perspective active in the view area
   const [viewActive, setViewActive] = useState<boolean>(false);
 
-  //All options dropdown on click functions
-  const { onHideLabels, onHideEdges, onEdgeWidth, onBorder, onThreshold, onDeleteEdges } = optionsOnClick(viewOptions, setViewOptions);
+  const updateLegendConfig = (newConfig: Map<string, boolean>) => {
+    // if (viewOptions !== undefined) {
+    //   const newViewOptions = (JSON.parse(JSON.stringify(viewOptions))) as ViewOptions;
 
-  const perspectiveSelected: Function = singlePerspectiveSelected(perspectivesState, setPerspectivesState, availablePerspectives);
-
-  const updateLegendConfig = (newConfig: Map<string, boolean>) =>{
-    if (viewOptions !== undefined) {
-      const newViewOptions = (JSON.parse(JSON.stringify(viewOptions))) as ViewOptions;
-
-      newViewOptions.legendConfig = newConfig
-      setViewOptions(newViewOptions);
-    }
+    //   newViewOptions.legendConfig = newConfig
+    //   setViewOptions(newViewOptions);
+    // }
   }
 
   useEffect(() => {
@@ -74,23 +68,15 @@ export function App() {
           <FileSourceDropdown
             setFileSource={setFileSource}
           />,
-          <LayoutDropdown
-            setLayout={setLayout}
-          />,
           <OptionsDropdown
-            onHideLabels={onHideLabels}
-            onHideEdges={onHideEdges}
-            onEdgeWidth={onEdgeWidth}
-            onBorder={onBorder}
-            onThreshold={onThreshold}
-            onDeleteEdges={onDeleteEdges}
+            setViewOptions={setViewOptions}
           />,
         ]}
         midAlignedItems={[
           <SelectPerspectiveDropdown
-            onClick={perspectiveSelected}
+            onClick={singlePerspectiveSelected}
             allPerspectives={availablePerspectives}
-            itemsState={perspectivesState}
+            requestManager={requestManager}
           />,
 
         ]}
@@ -149,102 +135,6 @@ function updateAllAvailablePerspectives(fileSource: FileSource, setPerspectivesS
     });
 }
 
-/**
- * Returns a function executed when a perspective from the select perspective dropdown is clicked
- * @param perspectivesState The state of all active/disabled perspectives
- * @param setPerspectivesState Function to set the state of the previous parameter
- * @param availablePerspectives State with the details of all available perspectives
- * @returns a function that request the perspective, validate the perspective data and make its state active
- */
-function singlePerspectiveSelected(perspectivesState: Map<number, ButtonState>, setPerspectivesState: React.Dispatch<React.SetStateAction<Map<number, ButtonState>>>,
-  availablePerspectives: PerspectiveDetails[] | undefined) {
-
-  return (perspectiveId: number) => {
-    const state = perspectivesState.get(perspectiveId);
-
-    if (state === ButtonState.inactive) {
-
-      setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.loading)));
-
-      requestManager.getPerspective(perspectiveId)
-        .then((response) => {
-          if (response.status === 200) {
-
-            const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
-            const perspectiveInfo = availablePerspectives?.find((element: PerspectiveDetails) => { return element.id === perspectiveId; });
-
-            if (perspectiveInfo) {
-              viewDataManager.addPerspective(perspectiveInfo, perspectiveJson);
-              setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.active)));
-            }
-
-            else
-              throw new Error(`Perspective info of perspective: ${perspectiveId} was not found`);
-
-          } else {
-            throw new Error(`Perspective ${perspectiveId} was ${response.statusText}`);
-          }
-        })
-        .catch((error) => {
-          setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.inactive)));
-
-          console.log(error);
-          alert(error.message);
-        });
-
-    } else if (state === ButtonState.active) {
-      viewDataManager.removePerspective(perspectiveId);
-      setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.inactive)));
-    }
-  };
+const singlePerspectiveSelected = (a: any) => {
+  console.log(a);
 }
-
-/**
- * Returns the functions for each of the onClick options of the options dropdown
- * @param viewOptions Object with the viewoptions
- * @param setViewOptions Function to set viewOptions react state
- * @returns all functions in this order { onHideLabels, onHideEdges, onEdgeWidth, onBorder, onThreshold, onDeleteEdges }
- */
-function optionsOnClick(viewOptions: ViewOptions, setViewOptions: React.Dispatch<React.SetStateAction<ViewOptions>>) {
-  const onHideLabels = (newValue: boolean) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.hideLabels = newValue;
-    setViewOptions(newViewOptions);
-    return true;
-  };
-
-  const onHideEdges = (newValue: boolean) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.hideEdges = newValue;
-    setViewOptions(newViewOptions);
-    return true;
-  };
-
-  const onEdgeWidth = (newValue: boolean) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.edgeWidth = newValue;
-    setViewOptions(newViewOptions);
-    return true;
-  };
-
-  const onBorder = (newValue: boolean) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.border = newValue;
-    setViewOptions(newViewOptions);
-    return true;
-  };
-
-  const onThreshold = (newValue: number) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.edgeThreshold = newValue;
-    setViewOptions(newViewOptions);
-  };
-
-  const onDeleteEdges = (newValue: number) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.deleteEdges = newValue;
-    setViewOptions(newViewOptions);
-  };
-  return { onHideLabels, onHideEdges, onEdgeWidth, onBorder, onThreshold, onDeleteEdges };
-}
-

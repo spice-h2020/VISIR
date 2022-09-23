@@ -1,3 +1,5 @@
+//CURRENTLY NOT USED. WAITING FOR THE FINAL DECISION ON THE LAYOUT
+
 /**
  * @fileoverview This file creates a dropdown that changes the layout of the perspectives once there are more than one active.
  * @package Requires React package. 

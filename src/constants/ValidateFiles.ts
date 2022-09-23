@@ -39,6 +39,7 @@ export function validateAllPerspectivesDetailsJSON(arg: any): types.PerspectiveD
             }
 
             arg[i] = isPerspectiveInfoValid(arg[i]);
+            arg[i].localId = i;
         }
 
         console.log(`All perspectives file validation has been completed -> `);
