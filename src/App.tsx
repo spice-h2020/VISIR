@@ -6,11 +6,11 @@
  */
 //Constants
 import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout, viewOptionsReducer } from './constants/viewOptions';
-import { PerspectiveDetails } from './constants/perspectivesTypes';
+import { PerspectiveDetails, PerspectiveInfo } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
 import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/ValidateFiles';
 //Packages
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { Dispatch, useEffect, useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -23,17 +23,19 @@ import { PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
 import { LegendTooltip } from './components/LegendTooltip';
 import './style/base.css';
+import { bStateArrayAction } from './constants/auxTypes';
 
 const requestManager = new RequestManager();
 const viewDataManager = new ViewDataManager();
 
 export function App() {
-  //State that mantains what perspectives are active, loading or inactive
-  const [perspectivesState, setPerspectivesState] = useState(new Map<number, ButtonState>());
-  //Holds the details of all available perspectives 
-  const [availablePerspectives, setAvailablePerspectives] = useState<PerspectiveDetails[]>();
-  //Current file source option of all GET requests
-  const [fileSource, setFileSource] = useState<FileSource>(initialOptions.fileSource);
+  //All available perspectives that the user can select to view
+  const [allPerspectives, setAllPerspectives] = useState<PerspectiveDetails[]>();
+
+  //Current Active perspectives in the view group
+  const [leftPerspective, setLeftPerspective] = useState<PerspectiveInfo>();
+  const [rightPerspective, setRightPerspective] = useState<PerspectiveInfo>();
+
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
   //Current layout of the active perspectives
@@ -53,8 +55,24 @@ export function App() {
   }
 
   useEffect(() => {
-    updateAllAvailablePerspectives(fileSource, setPerspectivesState, setAvailablePerspectives);
-  }, [fileSource])
+
+    setLeftPerspective(undefined);
+    setRightPerspective(undefined);
+
+  }, [allPerspectives])
+
+  useEffect(() => {
+
+    console.log("Left");
+
+  }, [leftPerspective])
+
+
+  useEffect(() => {
+
+    console.log("right");
+
+  }, [rightPerspective])
 
   return (
     <div>
@@ -66,7 +84,9 @@ export function App() {
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown
-            setFileSource={setFileSource}
+            setFileSource={(fileSource: FileSource, setFileSource: Dispatch<bStateArrayAction>) => {
+              requestManager.requestAllPerspectivesDetails(fileSource, setFileSource, setAllPerspectives);
+            }}
           />,
           <OptionsDropdown
             setViewOptions={setViewOptions}
@@ -74,8 +94,15 @@ export function App() {
         ]}
         midAlignedItems={[
           <SelectPerspectiveDropdown
-            onClick={singlePerspectiveSelected}
-            allPerspectives={availablePerspectives}
+            tittle='Left Perspective'
+            onClick={setLeftPerspective}
+            allPerspectives={allPerspectives}
+            requestManager={requestManager}
+          />,
+          <SelectPerspectiveDropdown
+            tittle='Right Perspective'
+            onClick={setRightPerspective}
+            allPerspectives={allPerspectives}
             requestManager={requestManager}
           />,
 
@@ -99,40 +126,6 @@ export function App() {
       />
     </div>
   );
-}
-
-/**
- * Request a new all available perspectives based on the fileSource state and update the state with all available perspectives if the requested file validation was succesfull
- * @param fileSource FileSource of allPerspectives file
- * @param setPerspectivesState Function to set the state of all new perspectives
- * @param setAvailablePerspectives Function to set the state of all available perspectives details
- */
-function updateAllAvailablePerspectives(fileSource: FileSource, setPerspectivesState: React.Dispatch<React.SetStateAction<Map<number, ButtonState>>>, setAvailablePerspectives: React.Dispatch<React.SetStateAction<PerspectiveDetails[] | undefined>>) {
-  requestManager.changeBaseURL(fileSource);
-  viewDataManager.clearPerspectives();
-
-  requestManager.getAllPerspectives()
-    .then((response) => {
-      if (response.status === 200) {
-        const allPerspectivesFile = validateAllPerspectivesDetailsJSON(JSON.parse(response.data));
-
-        const newPerspectivesState = new Map<number, ButtonState>();
-        for (let i = 0; i < allPerspectivesFile.length; i++) {
-          newPerspectivesState.set(allPerspectivesFile[i].id, ButtonState.inactive);
-        }
-
-        setPerspectivesState(newPerspectivesState);
-        setAvailablePerspectives(allPerspectivesFile);
-
-      } else {
-        throw new Error(`All perspectives info was ${response.statusText}`);
-      }
-    })
-    .catch((error) => {
-      setAvailablePerspectives(undefined);
-      console.log(error);
-      alert(error.message);
-    });
 }
 
 const singlePerspectiveSelected = (a: any) => {

@@ -141,6 +141,7 @@ export function bStateArrayReducer(state: ButtonState[], stateAction: bStateArra
         case bStateArrayActionEnum.activeOne:
             state.fill(ButtonState.inactive);
             state[index] = newState;
+            state = JSON.parse(JSON.stringify(state));
             break;
 
         case bStateArrayActionEnum.reset:

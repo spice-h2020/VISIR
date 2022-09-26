@@ -16,6 +16,8 @@ import RequestManager from "../managers/requestManager";
 import { bStateArrayReducer, bStateArrayActionEnum, bStateArrayAction } from "../constants/auxTypes";
 
 interface SelectPerspectiveProps {
+    //tittle of the dropdown
+    tittle: string;
     //On click handler
     onClick: Function;
     //Object that contains the name of all perspectives availables
@@ -28,6 +30,7 @@ interface SelectPerspectiveProps {
  * Dropdown component that holds the options to add/hide perspectives to the application
  */
 export const SelectPerspectiveDropdown = ({
+    tittle,
     onClick,
     allPerspectives,
     requestManager,
@@ -58,7 +61,7 @@ export const SelectPerspectiveDropdown = ({
     return (
         <Dropdown
             items={perspectivesButtons}
-            content="Select Perspective"
+            content={tittle}
             extraClassName="dropdown-dark"
         />
     );

@@ -6,7 +6,7 @@
  */
 //Constants
 import { ButtonState, FileSource } from '../constants/viewOptions';
-import { validatePerspectiveDataJSON } from '../constants/ValidateFiles';
+import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from '../constants/ValidateFiles';
 import { bStateArrayActionEnum, bStateArrayAction } from '../constants/auxTypes';
 import { PerspectiveDetails } from '../constants/perspectivesTypes';
 //Packages
@@ -63,7 +63,7 @@ export default class RequestManager {
                 .then((response) => {
                     if (response.status === 200) {
                         const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
-                        
+
                         onFinish({ data: perspectiveJson, details: perspectiveDetails });//TODO ADD
                         setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.active });
 
@@ -83,6 +83,35 @@ export default class RequestManager {
             //onFinish(perspectiveDetails.id); //TODO REMOVE PERSPECTIVE
             setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.inactive });
         }
+    }
+
+    requestAllPerspectivesDetails(newFileSource: FileSource, setFileSource: Dispatch<bStateArrayAction>,
+        onFinish: Function) {
+
+        setFileSource({ action: bStateArrayActionEnum.activeOne, index: newFileSource, newState: ButtonState.loading });
+
+        this.changeBaseURL(newFileSource);
+
+        this.getAllPerspectives()
+            .then((response) => {
+                if (response.status === 200) {
+                    const allPerspectivesFile: PerspectiveDetails[] = validateAllPerspectivesDetailsJSON(JSON.parse(response.data));
+
+                    setFileSource({ action: bStateArrayActionEnum.activeOne, index: newFileSource, newState: ButtonState.active });
+                    onFinish(allPerspectivesFile);
+
+                } else {
+                    throw new Error(`All perspectives info was ${response.statusText}`);
+                }
+            })
+            .catch((error) => {
+
+                setFileSource({ action: bStateArrayActionEnum.activeOne, index: newFileSource, newState: ButtonState.active });
+                onFinish();
+
+                console.log(error);
+                alert(error.message);
+            });
     }
 
 
