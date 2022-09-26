@@ -64,7 +64,7 @@ export default class RequestManager {
                     if (response.status === 200) {
                         const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
 
-                        onFinish({ data: perspectiveJson, details: perspectiveDetails });//TODO ADD
+                        onFinish({ data: perspectiveJson, details: perspectiveDetails });
                         setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.active });
 
                     } else {
@@ -80,7 +80,7 @@ export default class RequestManager {
                 });
 
         } else {
-            //onFinish(perspectiveDetails.id); //TODO REMOVE PERSPECTIVE
+            onFinish(undefined);
             setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.inactive });
         }
     }
@@ -107,7 +107,7 @@ export default class RequestManager {
             .catch((error) => {
 
                 setFileSource({ action: bStateArrayActionEnum.activeOne, index: newFileSource, newState: ButtonState.active });
-                onFinish();
+                onFinish(undefined);
 
                 console.log(error);
                 alert(error.message);

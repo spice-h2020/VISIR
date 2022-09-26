@@ -46,8 +46,6 @@ export const LegendTooltip = ({
 
     //When legendData changes
     useEffect(() => {
-        counter = counter + 1;
-
         setData(legendData);
         const newMap = new Map<string, boolean>();
         for (let i = 0; i < legendData.length; i++) {
@@ -72,7 +70,7 @@ export const LegendTooltip = ({
     if (legendRows.length > 0) {
         return (
             <Dropdown
-                items={[<div className='row'>{legendRows}</div>]}
+                items={[<div className='row' key={-2}>{legendRows}</div>]}
                 content="Legend"
                 extraClassName="dropdown-dark legend-dropdown"
                 closeWhenOutsideClick={false}
@@ -108,7 +106,7 @@ function getLegendRows(buttonClick: Function, data: DimAttribute[]): React.React
             for (let j = 0; j < data[i].values.length; j++) {
                 buttons.push(
                     <Button
-                        key={counter * 100 + j}
+                        key={i * 10 + j}
                         content={getButtonContent(data[i].values[j], data[i].dimension, j)}
                         state={ButtonState.inactive}
                         autoToggle={true}
@@ -117,12 +115,13 @@ function getLegendRows(buttonClick: Function, data: DimAttribute[]): React.React
                         }} />
                 );
             }
-            const colum = <div className='col' key={i}>
-                <h3>{data[i].key} </h3>
-                <div className="legend-content">
-                    {buttons}
-                </div>
-            </div>;
+            const colum =
+                <div className='col' key={i}>
+                    <h3>{data[i].key} </h3>
+                    <div className="legend-content">
+                        {buttons}
+                    </div>
+                </div>;
 
             rows.push(colum);
         }

@@ -1,0 +1,39 @@
+/* 
+unactive,
+activeSingle,
+activeBoth,
+activeBig,
+collapsed, 
+*/
+
+.perspectives-containers {
+    display: flex;
+
+    margin-bottom: 5vh;
+    padding-bottom: 1vh;
+    border-bottom: 1.5px black dotted;
+}
+
+.perspectives-containers>.activeBoth {
+    height: 100%;
+    width: 50%;
+    height: var(--horizontal-height);
+}
+
+.perspectives-containers>.activeBoth:last-child>.row {
+    flex-direction: row-reverse;
+}
+
+.pairNetwork.Horizontal {
+    display: flex;
+}
+
+.network-container {
+    margin: 0px 1.5% 15px 1.5%;
+    height: var(--horizontal-height);
+}
+
+.vis-network>canvas {
+    border-style: dotted;
+    box-sizing: border-box;
+}

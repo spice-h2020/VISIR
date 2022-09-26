@@ -46,6 +46,7 @@ export const Dropdown = ({
                 ref={ref}
             >
                 <Button
+                    key={-1}
                     content={content}
                     state={showDropDown ? ButtonState.active : ButtonState.inactive}
                     onClick={() => {

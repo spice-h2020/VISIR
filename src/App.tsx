@@ -25,10 +25,14 @@ import { LegendTooltip } from './components/LegendTooltip';
 import './style/base.css';
 import { bStateArrayAction } from './constants/auxTypes';
 
+
 const requestManager = new RequestManager();
 const viewDataManager = new ViewDataManager();
 
 export function App() {
+  //Current options that change how the user view each perspective
+  const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
+
   //All available perspectives that the user can select to view
   const [allPerspectives, setAllPerspectives] = useState<PerspectiveDetails[]>();
 
@@ -36,14 +40,8 @@ export function App() {
   const [leftPerspective, setLeftPerspective] = useState<PerspectiveInfo>();
   const [rightPerspective, setRightPerspective] = useState<PerspectiveInfo>();
 
-  //Current options that change how the user view each perspective
-  const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
-  //Current layout of the active perspectives
-  const layout = initialOptions.layout;
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useState<DimAttribute[]>([]);
-  //Tracks if there is any perspective active in the view area
-  const [viewActive, setViewActive] = useState<boolean>(false);
 
   const updateLegendConfig = (newConfig: Map<string, boolean>) => {
     // if (viewOptions !== undefined) {
@@ -60,19 +58,6 @@ export function App() {
     setRightPerspective(undefined);
 
   }, [allPerspectives])
-
-  useEffect(() => {
-
-    console.log("Left");
-
-  }, [leftPerspective])
-
-
-  useEffect(() => {
-
-    console.log("right");
-
-  }, [rightPerspective])
 
   return (
     <div>
@@ -110,19 +95,18 @@ export function App() {
         rightAlignedItems={[
           <LegendTooltip
             legendData={legendData}
-            activeState={viewActive}
+            activeState={true}
             updateLegendConfig={updateLegendConfig}
           />,
         ]}
       />
       <h1> Communities Visualization</h1>
       <PerspectivesGroups
-        perspectivePairs={viewDataManager.activePerspectivePairs}
-        nPerspectives={viewDataManager.getNumberOfPerspectives()}
-        layout={layout}
+        leftPerspective={leftPerspective}
+        rightPerspective={rightPerspective}
+
         viewOptions={viewOptions}
         setLegendData={setLegendData}
-        setViewActive={setViewActive}
       />
     </div>
   );
