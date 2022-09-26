@@ -19,15 +19,25 @@ import { LayoutDropdown } from './components/LayoutDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
 import RequestManager from './managers/requestManager';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
-import { PerspectivesGroups } from './components/PerspectivesGroup';
+import { collapsedState, PerspectivesGroups } from './components/PerspectivesGroup';
 import ViewDataManager from './managers/viewDataManager';
 import { LegendTooltip } from './components/LegendTooltip';
 import './style/base.css';
 import { bStateArrayAction } from './constants/auxTypes';
 
-
 const requestManager = new RequestManager();
-const viewDataManager = new ViewDataManager();
+
+function collapseReducer(state: collapsedState, stateAction: collapsedState) {
+  if (state === collapsedState.unCollapsed) {
+    state = stateAction
+  } else if ((state === collapsedState.toTheLeft && stateAction === collapsedState.toTheRight)
+    || (state === collapsedState.toTheRight && stateAction === collapsedState.toTheLeft)) {
+
+    state = collapsedState.unCollapsed;
+  }
+
+  return state;
+}
 
 export function App() {
   //Current options that change how the user view each perspective
@@ -39,6 +49,8 @@ export function App() {
   //Current Active perspectives in the view group
   const [leftPerspective, setLeftPerspective] = useState<PerspectiveInfo>();
   const [rightPerspective, setRightPerspective] = useState<PerspectiveInfo>();
+  //Current state of the perspectives collapse buttons
+  const [collapseState, setCollapseState] = useReducer(collapseReducer, collapsedState.unCollapsed);
 
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useState<DimAttribute[]>([]);
@@ -51,6 +63,7 @@ export function App() {
     //   setViewOptions(newViewOptions);
     // }
   }
+
 
   useEffect(() => {
 
@@ -79,13 +92,33 @@ export function App() {
         ]}
         midAlignedItems={[
           <SelectPerspectiveDropdown
-            tittle='Left Perspective'
+            tittle='Select A'
             onClick={setLeftPerspective}
             allPerspectives={allPerspectives}
             requestManager={requestManager}
           />,
+          <Button
+            content="<<"
+            onClick={(state: ButtonState) => {
+              if (state !== ButtonState.disabled) {
+                setCollapseState(collapsedState.toTheLeft);
+              }
+            }}
+            extraClassName={`first dropdown-dark`}
+            state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
+          />,
+          <Button
+            content=">>"
+            extraClassName={`second dropdown-dark`}
+            onClick={(state: ButtonState) => {
+              if (state !== ButtonState.disabled) {
+                setCollapseState(collapsedState.toTheRight);
+              }
+            }}
+            state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
+          />,
           <SelectPerspectiveDropdown
-            tittle='Right Perspective'
+            tittle='Select B'
             onClick={setRightPerspective}
             allPerspectives={allPerspectives}
             requestManager={requestManager}
@@ -104,7 +137,7 @@ export function App() {
       <PerspectivesGroups
         leftPerspective={leftPerspective}
         rightPerspective={rightPerspective}
-
+        collapsedState={collapseState}
         viewOptions={viewOptions}
         setLegendData={setLegendData}
       />

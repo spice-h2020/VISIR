@@ -41,7 +41,7 @@ export const SelectPerspectiveDropdown = ({
 
     useEffect(() => {
         if (allPerspectives !== undefined)
-            setStates({ action: bStateArrayActionEnum.reset, index: allPerspectives.length, newState: ButtonState.inactive });
+            setStates({ action: bStateArrayActionEnum.reset, index: allPerspectives.length, newState: ButtonState.unactive });
 
     }, [allPerspectives]);
 

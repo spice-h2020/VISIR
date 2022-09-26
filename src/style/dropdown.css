@@ -7,6 +7,9 @@
 .dropdown {
     float: left;
     overflow: hidden;
+
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .dropdown>.btn::after {
@@ -49,6 +52,7 @@
     color: rgba(0, 0, 0, 0.55);
     background-color: transparent;
 }
+
 .dropdown-light.btn.disabled:hover {
     opacity: 75%;
 
@@ -153,11 +157,16 @@
     color: #FFFFFF;
 }
 
-
-
-
 .dropdown-content>hr {
     margin: 0.1rem 0;
     border-bottom: 1px;
     border-color: black;
+}
+
+/*verticalHR*/
+hr.vertical {
+    border: none;
+    border-left: 1px solid black;
+    height: 80%;
+    width: 1px;
 }

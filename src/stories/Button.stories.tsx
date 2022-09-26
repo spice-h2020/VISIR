@@ -16,7 +16,7 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 export const Default = Template.bind({});
 Default.args = {
   content: "Default Button",
-  state: ButtonState.inactive,
+  state: ButtonState.unactive,
   autoToggle: true,
 };
 
@@ -24,7 +24,7 @@ Default.args = {
 export const NavBarBtn = Template.bind({});
 NavBarBtn.args = {
   content: "NavBar Button",
-  state: ButtonState.inactive,
+  state: ButtonState.unactive,
   autoToggle: false,
   extraClassName:"navBar-mainBtn",
 };
@@ -34,14 +34,14 @@ NavBarBtn.args = {
 export const DropdownLightBtn = Template.bind({});
 DropdownLightBtn.args = {
   content: "Light Button",
-  state: ButtonState.inactive,
+  state: ButtonState.unactive,
   autoToggle: true,
   extraClassName:"dropdown-light",
 };
 export const DropdownDarkBtn = Template.bind({});
 DropdownDarkBtn.args = {
   content: "Dark Button",
-  state: ButtonState.inactive,
+  state: ButtonState.unactive,
   autoToggle: true,
   extraClassName:"dropdown-dark",
 };

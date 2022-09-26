@@ -3,22 +3,27 @@
   border: none;
 }
 
-
-.btn.active{
+.btn.active {
   background-color: aqua;
 }
 
-.btn.loading{
+.btn.loading {
   background-color: rgb(255, 0, 0);
 }
 
 
-.btn.disabled{
+.btn.disabled {
   background-color: rgb(208, 255, 0);
 }
 
-.btn.disabled:hover{
+.btn.disabled:hover {
   background-color: rgb(208, 255, 0);
 }
 
+.first.btn{
+  border-radius: 5px 0px 0px 5px !important; 
+}
 
+.second.btn{
+  border-radius: 0px 5px 5px 0px !important;
+}

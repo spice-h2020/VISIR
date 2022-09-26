@@ -30,7 +30,7 @@ interface ButtonProps {
  */
 export const Button = ({
   content = "Button",
-  state = ButtonState.inactive,
+  state = ButtonState.unactive,
   autoToggle = false,
   onClick = (): void => { },
   buttonId,
@@ -43,16 +43,18 @@ export const Button = ({
     setButtonState(state);
   }, [state]);
 
+  const buttonClassState = buttonState !== ButtonState.unactive ? ButtonState[buttonState] : "";
+
   return (
-    <button type="button" className={buttonState === ButtonState.active ? `btn ${extraClassName} active` : buttonState === ButtonState.inactive ? `btn ${extraClassName}` : `btn ${extraClassName} loading`}
+    <button type="button" className={`btn ${extraClassName} ${buttonClassState}`}
       onClick={(): void => {
-        onClick(buttonId);
+        onClick(buttonState);
 
         if (autoToggle) {
-          if (buttonState === ButtonState.inactive)
+          if (buttonState === ButtonState.unactive)
             setButtonState(ButtonState.active);
           else
-            setButtonState(ButtonState.inactive);
+            setButtonState(ButtonState.unactive);
         }
 
       }}

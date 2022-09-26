@@ -1,8 +1,3 @@
-:root {
-    --horizontal-height: 80vh;
-    --vertical-height: 40vh;
-}
-
 body {
     background-color: rgb(204, 204, 204);
     color: rgb(53, 53, 53);

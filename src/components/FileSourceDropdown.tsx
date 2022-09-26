@@ -28,7 +28,7 @@ export const FileSourceDropdown = ({
     const [states, setStates] = useReducer(bStateArrayReducer, init());
 
     const changeFileSource = (newFileSource: FileSource) => {
-        if (states[newFileSource] === ButtonState.inactive) {
+        if (states[newFileSource] === ButtonState.unactive) {
             setFileSource(newFileSource, setStates);
         }
     }
@@ -55,7 +55,7 @@ export const FileSourceDropdown = ({
 const init = (): ButtonState[] => {
     const initialState = new Array(Object.keys(FileSource).length / 2);
 
-    initialState.fill(ButtonState.inactive);
+    initialState.fill(ButtonState.unactive);
     initialState[initialOptions.fileSource] = ButtonState.active;
 
     return initialState;

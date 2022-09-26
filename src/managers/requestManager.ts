@@ -55,9 +55,9 @@ export default class RequestManager {
     selectPerspective(currentState: ButtonState, perspectiveDetails: PerspectiveDetails, setStates: Dispatch<bStateArrayAction>,
         onFinish: Function) {
 
-        if (currentState === ButtonState.inactive) {
+        if (currentState === ButtonState.unactive) {
 
-            setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.loading });
+            setStates({ action: bStateArrayActionEnum.activeOne, index: perspectiveDetails.localId, newState: ButtonState.loading });
 
             this.getPerspective(perspectiveDetails.id)
                 .then((response) => {
@@ -65,7 +65,7 @@ export default class RequestManager {
                         const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
 
                         onFinish({ data: perspectiveJson, details: perspectiveDetails });
-                        setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.active });
+                        setStates({ action: bStateArrayActionEnum.activeOne, index: perspectiveDetails.localId, newState: ButtonState.active });
 
                     } else {
                         throw new Error(`Perspective ${perspectiveDetails.id} was ${response.statusText}`);
@@ -73,7 +73,7 @@ export default class RequestManager {
                 })
                 .catch((error) => {
 
-                    setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.inactive });
+                    setStates({ action: bStateArrayActionEnum.activeOne, index: perspectiveDetails.localId, newState: ButtonState.unactive });
 
                     console.log(error);
                     alert(error.message);
@@ -81,7 +81,7 @@ export default class RequestManager {
 
         } else {
             onFinish(undefined);
-            setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.inactive });
+            setStates({ action: bStateArrayActionEnum.activeOne, index: perspectiveDetails.localId, newState: ButtonState.unactive });
         }
     }
 

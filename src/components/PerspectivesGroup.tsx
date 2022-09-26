@@ -23,6 +23,7 @@ interface PerspectivesGroupProps {
     leftPerspective?: PerspectiveInfo,
     rightPerspective?: PerspectiveInfo,
 
+    collapsedState: collapsedState,
     //View options for all networks
     viewOptions: ViewOptions,
     //Function to setup the legend's data
@@ -37,7 +38,7 @@ enum perspectiveState {
     collapsed,
 }
 
-enum collapsedState {
+export enum collapsedState {
     unCollapsed,
     toTheLeft,
     toTheRight,
@@ -49,11 +50,10 @@ enum collapsedState {
 export const PerspectivesGroups = ({
     leftPerspective,
     rightPerspective,
+    collapsedState,
     viewOptions,
     setLegendData,
 }: PerspectivesGroupProps) => {
-
-    const [collapsed, setCollapsed] = useState<collapsedState>(collapsedState.unCollapsed);
 
     const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();
 
@@ -98,7 +98,7 @@ export const PerspectivesGroups = ({
     // }, [viewOptions.border, dimensionStrategy]);
 
 
-    const { leftState, rightState } = calculatePerspectiveState(leftPerspective, rightPerspective, collapsed);
+    const { leftState, rightState } = calculatePerspectiveState(leftPerspective, rightPerspective, collapsedState);
 
     const leftComponent = leftPerspective === undefined ? "" :
         <PerspectiveView
@@ -130,12 +130,12 @@ export const PerspectivesGroups = ({
                 position={tooltipPos}
             />} */}
             <div className={perspectiveState[leftState]}
-                key={leftPerspective === undefined ? -1 : leftPerspective.details.id}>
+                key={leftPerspective === undefined ? -1 : `first${leftPerspective.details.id}`}>
                 {leftComponent}
             </div>
 
             <div className={perspectiveState[rightState]}
-                key={rightPerspective === undefined ? -2 : rightPerspective.details.id}>
+                key={rightPerspective === undefined ? -2 : `second${rightPerspective.details.id}`}>
                 {rightComponent}
 
             </div>

@@ -48,7 +48,7 @@ export const Dropdown = ({
                 <Button
                     key={-1}
                     content={content}
-                    state={showDropDown ? ButtonState.active : ButtonState.inactive}
+                    state={showDropDown ? ButtonState.active : ButtonState.unactive}
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
@@ -66,8 +66,8 @@ export const Dropdown = ({
             >
                 <Button
                     content={content}
-                    state={ButtonState.inactive}
-                    extraClassName={`${extraClassName} disabled`}
+                    state={ButtonState.disabled}
+                    extraClassName={extraClassName}
                 />
             </div >
         );

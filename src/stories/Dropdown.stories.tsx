@@ -9,7 +9,7 @@ export default {
     component: Dropdown,
 } as ComponentMeta<typeof Dropdown>;
 
-const selectedItems = [ButtonState.inactive, ButtonState.inactive, ButtonState.active];
+const selectedItems = [ButtonState.unactive, ButtonState.unactive, ButtonState.active];
 const testButtons = [
     <Button
         content="Option A"

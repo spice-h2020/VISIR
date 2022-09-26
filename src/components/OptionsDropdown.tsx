@@ -35,7 +35,7 @@ export const OptionsDropdown = ({
 
             try {
                 setViewOptions({ updateType: updateType })
-                setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active });
+                setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState === ButtonState.active ? ButtonState.unactive : ButtonState.active });
 
             } catch (e: any) {
                 setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState });

@@ -32,7 +32,7 @@ export const LayoutDropdown = ({
         if (!itemsState[key]) {
 
             const newState = new Array(Object.keys(AppLayout).length / 2);
-            newState.fill(ButtonState.inactive);
+            newState.fill(ButtonState.unactive);
             newState[key] = ButtonState.active;
 
             setItemsState(newState);
@@ -56,7 +56,7 @@ export const LayoutDropdown = ({
  */
 const initialState = new Array(Object.keys(AppLayout).length / 2);
 const init = () => {
-    initialState.fill(ButtonState.inactive);
+    initialState.fill(ButtonState.unactive);
     initialState[initialOptions.layout] = ButtonState.active;
 }
 init();

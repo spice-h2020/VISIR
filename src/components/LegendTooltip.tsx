@@ -108,7 +108,7 @@ function getLegendRows(buttonClick: Function, data: DimAttribute[]): React.React
                     <Button
                         key={i * 10 + j}
                         content={getButtonContent(data[i].values[j], data[i].dimension, j)}
-                        state={ButtonState.inactive}
+                        state={ButtonState.unactive}
                         autoToggle={true}
                         onClick={() => {
                             buttonClick(data[i].values[j]);

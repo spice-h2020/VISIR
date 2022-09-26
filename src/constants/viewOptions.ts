@@ -16,9 +16,10 @@ export enum FileSource {
  * Posible states of a button
  */
 export enum ButtonState {
-    inactive,   //The perspective is not active and user cant see it
-    loading,    //The perspective is loading and we dont know yet if it had any problem while creating the perspective view
-    active,     //The perspective is active and user can see it and interact with it
+    disabled,   //The button is disabled. user cant interact with it.
+    unactive,   //The button is inactive, user can click it to activate it.
+    loading,    //The button is loading something and user cant interact with it
+    active,     //The button is active, user can click it to disactivate it
 }
 
 /**
@@ -36,9 +37,9 @@ export const initialOptions = {
     fileSource: FileSource.Local,       //What type of URL will be picked to GET requests. Request Manager has the map that relates each fileSource option with its url
     layout: AppLayout.Horizontal,       //Decides how the active perspectives stacks when there are more than 2.
     hideLabels: ButtonState.active,     //Hide the labels of all nodes in the canvas and in the tooltip and datatable
-    hideEdges: ButtonState.inactive,    //Hide all edges except when a node is selected, in such case, only conected edges will be shown
-    edgeWidth: ButtonState.inactive,    //Change the width of all edges based on their similarity/value parameter
-    border: ButtonState.inactive,       //Activate the border option of nodes that adds a third dimension that changes based on an explicit community
+    hideEdges: ButtonState.unactive,    //Hide all edges except when a node is selected, in such case, only conected edges will be shown
+    edgeWidth: ButtonState.unactive,    //Change the width of all edges based on their similarity/value parameter
+    border: ButtonState.unactive,       //Activate the border option of nodes that adds a third dimension that changes based on an explicit community
     edgeThreshold: 0.5,                 //Threshold that controls the minimum value edges must have to be shown. Selected edges have priority above this
     deleteEdges: 0                      //% of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
 }
