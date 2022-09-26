@@ -55,8 +55,8 @@ export default class NodeDimensionStrategy {
     }
 
     /**
-     * Toggle the state of the border strategy 
-     * @param newValue 
+     * Toggle the state of the border strategy based on the newValue
+     * @param newValue new toggle border value
      */
     toggleBorderStat(newValue: boolean){
         const attributes = new Array<DimAttribute>();

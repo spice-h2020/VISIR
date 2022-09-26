@@ -66,10 +66,10 @@ export default class EventsController {
 
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
         this.net.on("click", (event) => this.click(event, sf));
-        this.net.on("animationFinished", () => this.animationFinished(sf.setTooltipPosition, sf.setTooltipState));
 
-        this.net.on("zoom", () => this.zoom(sf.setTooltipPosition, sf.setTooltipState));
-        this.net.on("dragging", () => this.dragging(sf.setTooltipPosition, sf.setTooltipState));
+        this.net.on("animationFinished", () => this.animationFinished(sf.setTooltip));
+        this.net.on("zoom", () => this.zoom(sf.setTooltip));
+        this.net.on("dragging", () => this.dragging(sf.setTooltip));
 
         this.net.on("resize", () => this.zoomOut());
     }
@@ -104,32 +104,29 @@ export default class EventsController {
 
     /**
      * Animation finished event callback
-     * @param setTooltipPos function that changes tooltip position
-     * @param setTooltipState function that changes tooltip active/disabled state
+     * @param setTooltip function that updates the tooltip
      */
-    animationFinished(setTooltipPos: Function, setTooltipState: Function) {
+    animationFinished(setTooltip: Function) {
         if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setTooltipPos, setTooltipState);
+            this.updateTooltipPosition(setTooltip);
     }
 
     /**
      * Zoom event callback
-     * @param setTooltipPos function that changes tooltip position
-     * @param setTooltipState function that changes tooltip active/disabled state
+     * @param setTooltip function that updates the tooltip
      */
-    zoom(setTooltipPos: Function, setTooltipState: Function) {
+    zoom(setTooltip: Function) {
         if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setTooltipPos, setTooltipState);
+            this.updateTooltipPosition(setTooltip);
     }
 
     /**
      * Canvas dragging event callback
-     * @param setTooltipPos function that changes tooltip position
-     * @param setTooltipState function that changes tooltip active/disabled state
+     * @param setTooltip function that updates the tooltip
      */
-    dragging(setTooltipPos: Function, setTooltipState: Function) {
+    dragging(setTooltip: Function) {
         if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setTooltipPos, setTooltipState);
+            this.updateTooltipPosition(setTooltip);
     }
 
     /**
@@ -296,10 +293,9 @@ export default class EventsController {
 
     /**
      * Updates the tooltip position based on the saved tooltip data
-     * @param setTooltipPos function that changes tooltip position
-     * @param setTooltipState function that changes tooltip active/disabled state
+     * @param setTooltip function that updates the tooltip
      */
-    updateTooltipPosition(setTooltipPos: Function, setTooltipState: Function) {
+    updateTooltipPosition(setTooltip: Function) {
         if (this.tooltipData !== undefined) {
 
             const refPosition = getHTMLPosition(this.refHTML);

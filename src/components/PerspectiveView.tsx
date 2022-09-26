@@ -20,10 +20,6 @@ interface PerspectiveViewProps {
     perspectiveInfo: PerspectiveInfo;
     //Options that change the view of a perspective
     viewOptions: ViewOptions;
-    //Function to select a node
-    layout: AppLayout;
-    //Optional parameter to know if the its the first perspective of the pair, to mirror the table position in the horizontal layout
-    isFirstPerspective?: boolean;
     //Object with all the functions that will change the state of the network
     sf: StateFunctions;
     //Current selected node
@@ -40,15 +36,11 @@ interface PerspectiveViewProps {
 export const PerspectiveView = ({
     perspectiveInfo,
     viewOptions,
-    layout: ly,
-    isFirstPerspective = true,
     sf,
     selectedNodeId,
     dimStrat,
     networkFocusID,
 }: PerspectiveViewProps) => {
-
-    const [layout, setLayout] = useState<AppLayout>(ly);
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
 
@@ -61,11 +53,6 @@ export const PerspectiveView = ({
     useEffect(() => {
         setInfo(perspectiveInfo);
     }, [perspectiveInfo]);
-
-
-    useEffect(() => {
-        setLayout(ly);
-    }, [ly]);
 
     useEffect(() => {
         if (netManager !== undefined && networkFocusID !== undefined) {
@@ -105,7 +92,7 @@ export const PerspectiveView = ({
             }
             setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
 
     const dataCol = <DataColumn
@@ -117,30 +104,16 @@ export const PerspectiveView = ({
 
     const networkContainer = <div className="network-container" key={1} ref={visJsRef} />
 
-    if (isFirstPerspective === undefined || isFirstPerspective === true || layout === AppLayout.Vertical) {
-        return (
-            <div className="perspective row" key={10}>
-                <div className="col-4" key={1}>
-                    {dataCol}
-                </div>
-                <div className="col-8" key={0}>
-                    {networkContainer}
-                </div>
-            </div >
-
-        );
-    } else {
-        return (
-            <div className="perspective row" key={10}>
-                <div className="col-8" key={0}>
-                    {networkContainer}
-                </div>
-                <div className="col-4" key={1}>
-                    {dataCol}
-                </div>
-            </div >
-        );
-    }
+    return (
+        <div className="perspective row" key={10}>
+            <div className="col-4" key={1}>
+                {dataCol}
+            </div>
+            <div className="col-8" key={0}>
+                {networkContainer}
+            </div>
+        </div >
+    );
 };
 
 /**

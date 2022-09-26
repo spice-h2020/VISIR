@@ -16,58 +16,33 @@ import { ButtonState } from '../constants/viewOptions';
 interface LegendTooltipProps {
     //Content of the legend
     legendData: DimAttribute[]
-    //Activates / disable the legend
-    activeState: boolean
+    //Current legend configuration
+    legendConf: Map<string, boolean>
     //Function to change the legend configuration that will change how nodes will be seen
-    updateLegendConfig: Function
+    onLegendClick: Function
 }
 
-let counter = 0;
 /**
  * Legend component
  */
 export const LegendTooltip = ({
     legendData,
-    activeState,
-    updateLegendConfig,
+    legendConf,
+    onLegendClick,
 }: LegendTooltipProps) => {
 
-    //Data that will be seen in the legend
-    const [data, setData] = useState<DimAttribute[]>(legendData);
-    //Configuration that tells the component what option is selected and what not
-    const [legendConfig, setLegendConfig] = useState(new Map<string, boolean>());
+    if (legendData === undefined) {
+        return (<Dropdown
+            items={[]}
+            content="Unactive Legend"
+            extraClassName="dropdown-dark legend-dropdown"
+            closeWhenOutsideClick={false}
+        />)
 
-    useEffect(() => {
-        if (activeState === false) {
-            setData([]);
-            setLegendConfig(new Map<string, boolean>())
-        }
-    }, [activeState]);
+    } else {
 
-    //When legendData changes
-    useEffect(() => {
-        setData(legendData);
-        const newMap = new Map<string, boolean>();
-        for (let i = 0; i < legendData.length; i++) {
-            for (let j = 0; j < legendData[i].values.length; j++) {
-                newMap.set(legendData[i].values[j], true);
-            }
-        }
+        const legendRows: React.ReactNode[] = getLegendButtons(legendData, legendConf, onLegendClick);
 
-        setLegendConfig(newMap);
-    }, [legendData]);
-
-    // useEffect(() => {
-    //     updateLegendConfig(legendConfig)
-    // }, [legendConfig, updateLegendConfig]);
-
-    const buttonClick = (value: string) => {
-        setLegendConfig(new Map(legendConfig.set(value, !legendConfig.get(value))));
-    }
-
-    const legendRows: React.ReactNode[] = getLegendRows(buttonClick, data);
-
-    if (legendRows.length > 0) {
         return (
             <Dropdown
                 items={[<div className='row' key={-2}>{legendRows}</div>]}
@@ -76,50 +51,46 @@ export const LegendTooltip = ({
                 closeWhenOutsideClick={false}
             />
         );
-    } else {
-        return (
-            <Dropdown
-                items={[]}
-                content="Unactive Legend"
-                extraClassName="dropdown-dark legend-dropdown"
-                closeWhenOutsideClick={false}
-            />
-        );
     }
 };
 
 /**
- * Returns the reactComponents of each row of the legend
- * @param buttonClick On click function for the buttons
- * @param data Content of the buttons
- * @returns returns an array of React components
+ * Get all the buttons that creates the legend tooltip
+ * @param legendData Data that creates the legend
+ * @param legendConf Configuration of what is active/inactive in the legend
+ * @param onClick Function executed when a legend row is clicked
+ * @returns all the column buttons
  */
-function getLegendRows(buttonClick: Function, data: DimAttribute[]): React.ReactNode[] {
+function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, boolean>,
+    onClick: Function): React.ReactNode[] {
+
     const rows = new Array<React.ReactNode>();
 
-    if (data === undefined)
-        return rows;
+    for (let i = 0; i < legendData.length; i++) {
+        if (legendData[i].active) {
+            const buttonsColumn = new Array<React.ReactNode>();
 
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].active) {
-            const buttons = new Array<React.ReactNode>();
-            for (let j = 0; j < data[i].values.length; j++) {
-                buttons.push(
+            for (let j = 0; j < legendData[i].values.length; j++) {
+                const value = legendData[i].values[j];
+
+                buttonsColumn.push(
                     <Button
                         key={i * 10 + j}
-                        content={getButtonContent(data[i].values[j], data[i].dimension, j)}
-                        state={ButtonState.unactive}
-                        autoToggle={true}
+                        content={getButtonContent(value, legendData[i].dimension, j)}
+                        state={legendConf.get(value) ? ButtonState.active : ButtonState.unactive}
+
                         onClick={() => {
-                            buttonClick(data[i].values[j]);
+                            legendConf.set(value, !legendConf.get(value));
+                            onClick(legendConf);
                         }} />
                 );
             }
+
             const colum =
                 <div className='col' key={i}>
-                    <h3>{data[i].key} </h3>
+                    <h3>{legendData[i].key} </h3>
                     <div className="legend-content">
-                        {buttons}
+                        {buttonsColumn}
                     </div>
                 </div>;
 
@@ -165,3 +136,5 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
 }
+
+

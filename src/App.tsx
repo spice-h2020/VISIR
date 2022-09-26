@@ -43,27 +43,18 @@ export function App() {
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
 
+  //Current dimension attributes data to create the legend buttons/options
+  const [legendData, setLegendData] = useState<DimAttribute[]>([]);
+
   //All available perspectives that the user can select to view
   const [allPerspectives, setAllPerspectives] = useState<PerspectiveDetails[]>();
 
   //Current Active perspectives in the view group
   const [leftPerspective, setLeftPerspective] = useState<PerspectiveInfo>();
   const [rightPerspective, setRightPerspective] = useState<PerspectiveInfo>();
+
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, collapsedState.unCollapsed);
-
-  //Current dimension attributes data to create the legend buttons/options
-  const [legendData, setLegendData] = useState<DimAttribute[]>([]);
-
-  const updateLegendConfig = (newConfig: Map<string, boolean>) => {
-    // if (viewOptions !== undefined) {
-    //   const newViewOptions = (JSON.parse(JSON.stringify(viewOptions))) as ViewOptions;
-
-    //   newViewOptions.legendConfig = newConfig
-    //   setViewOptions(newViewOptions);
-    // }
-  }
-
 
   useEffect(() => {
 
@@ -128,8 +119,10 @@ export function App() {
         rightAlignedItems={[
           <LegendTooltip
             legendData={legendData}
-            activeState={true}
-            updateLegendConfig={updateLegendConfig}
+            legendConf={viewOptions.legendConfig}
+            onLegendClick={(newMap: Map<string, boolean>) => {
+              setViewOptions({ updateType: "legendConfig", newValue: newMap, });
+            }}
           />,
         ]}
       />

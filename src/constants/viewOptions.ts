@@ -73,7 +73,7 @@ export class ViewOptions {
 
 export interface ViewOptionAction {
     updateType: keyof ViewOptions;
-    newValue?: number | undefined;
+    newValue?: number | Map<string, boolean> | undefined;
 }
 
 export function viewOptionsReducer(state: ViewOptions, action: ViewOptionAction) {
