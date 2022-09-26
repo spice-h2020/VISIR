@@ -11,24 +11,10 @@ import React, { Dispatch, useEffect, useReducer, useState } from "react";
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import { Slider } from "../basicComponents/Slider";
+import { bStateArrayReducer, bStateArrayActionEnum } from "../constants/auxTypes";
 
 interface OptionsDropdownProps {
     setViewOptions: Dispatch<ViewOptionAction>;
-}
-
-interface OptionsAction {
-    index: number,
-    newState: ButtonState
-}
-
-function OptionsReducer(state: ButtonState[], action: OptionsAction) {
-    const { index, newState } = action;
-
-    
-    state[index] = newState;
-    state = JSON.parse(JSON.stringify(state));
-    
-    return state;
 }
 
 /**
@@ -39,20 +25,20 @@ export const OptionsDropdown = ({
 }: OptionsDropdownProps) => {
 
     //State of all items
-    const [states, setStates] = useReducer(OptionsReducer, init());
-    
+    const [states, setStates] = useReducer(bStateArrayReducer, init());
+
     const onClick = (index: number, updateType: keyof ViewOptions) => {
         if (states[index] !== ButtonState.loading) {
 
             const savedState = states[index];
-            setStates({ index: index, newState: ButtonState.loading });
+            setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: ButtonState.loading });
 
             try {
                 setViewOptions({ updateType: updateType })
-                setStates({ index: index, newState: savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active });
+                setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active });
 
             } catch (e: any) {
-                setStates({ index: index, newState: savedState });
+                setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState });
             }
         }
     }

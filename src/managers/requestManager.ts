@@ -1,16 +1,18 @@
 /**
  * @fileoverview This class manages all GET petitions to obtain the perspective files with the networks data.
  * @package Requires Axios package to be able to send the GET petitions.  
+ * @package Requires React package to execute Dispatch functions. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { ButtonState, FileSource } from '../constants/viewOptions';
+import { validatePerspectiveDataJSON } from '../constants/ValidateFiles';
+import { bStateArrayActionEnum, bStateArrayAction } from '../constants/auxTypes';
+import { PerspectiveDetails } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
-import { PerspectiveDetails } from '../constants/perspectivesTypes';
 import { Dispatch } from 'react';
-import { selectPerspectiveAction } from '../components/SelectPerspectiveDropdown';
-import { validatePerspectiveDataJSON } from '../constants/ValidateFiles';
+
 
 export default class RequestManager {
 
@@ -50,23 +52,20 @@ export default class RequestManager {
 
     }
 
-    selectPerspective(currentState: ButtonState, perspectiveDetails: PerspectiveDetails, setStates: Dispatch<selectPerspectiveAction>,
+    selectPerspective(currentState: ButtonState, perspectiveDetails: PerspectiveDetails, setStates: Dispatch<bStateArrayAction>,
         onFinish: Function) {
-            
-            console.log("Request")
-            console.log(currentState + " " + perspectiveDetails.localId)
 
         if (currentState === ButtonState.inactive) {
 
-            setStates({ id: perspectiveDetails.localId, newState: ButtonState.loading });
+            setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.loading });
 
             this.getPerspective(perspectiveDetails.id)
                 .then((response) => {
                     if (response.status === 200) {
                         const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
                         
-                        //onFinish({ data: perspectiveJson, details: perspectiveDetails });//TODO ADD
-                        setStates({ id: perspectiveDetails.localId, newState: ButtonState.active });
+                        onFinish({ data: perspectiveJson, details: perspectiveDetails });//TODO ADD
+                        setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.active });
 
                     } else {
                         throw new Error(`Perspective ${perspectiveDetails.id} was ${response.statusText}`);
@@ -74,7 +73,7 @@ export default class RequestManager {
                 })
                 .catch((error) => {
 
-                    setStates({ id: perspectiveDetails.localId, newState: ButtonState.inactive });
+                    setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.inactive });
 
                     console.log(error);
                     alert(error.message);
@@ -82,7 +81,7 @@ export default class RequestManager {
 
         } else {
             //onFinish(perspectiveDetails.id); //TODO REMOVE PERSPECTIVE
-            setStates({ id: perspectiveDetails.localId, newState: ButtonState.inactive });
+            setStates({ action: bStateArrayActionEnum.changeOne, index: perspectiveDetails.localId, newState: ButtonState.inactive });
         }
     }
 

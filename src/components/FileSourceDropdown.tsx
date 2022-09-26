@@ -10,18 +10,11 @@ import { useReducer, useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
+import { bStateArrayActionEnum, bStateArrayReducer } from "../constants/auxTypes";
 
 interface FileSourceDropdownProps {
     //On click handler
     setFileSource: (key: FileSource) => void;
-}
-
-function fileSourceReducer(state: ButtonState[],  key: FileSource) {
-
-    state.fill(ButtonState.inactive);
-    state[key] = ButtonState.active;
-
-    return state;
 }
 
 /**
@@ -32,12 +25,12 @@ export const FileSourceDropdown = ({
 }: FileSourceDropdownProps) => {
 
     //State of all items
-    const [states, setStates] = useReducer(fileSourceReducer, init());
+    const [states, setStates] = useReducer(bStateArrayReducer, init());
 
     const changeFileSource = (key: FileSource) => {
         if (states[key] === ButtonState.inactive) {
 
-            setStates(key);
+            setStates({ action: bStateArrayActionEnum.activeOne, index: key, newState: ButtonState.active });
             setFileSource(key);
 
         }

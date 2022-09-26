@@ -3,6 +3,9 @@
  * @author Marco Expósito Pérez
  */
 
+import { readlink } from "fs";
+import { ButtonState } from "./viewOptions";
+
 /**
  * Class to streamline the data of a row that will be shown to the user. Key will be at the left of the row, value at the right
  */
@@ -100,4 +103,51 @@ export interface StateFunctions {
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
     setSelectedCommunity?: Function;
+}
+
+/**
+ * Available actions for a buttonState array action
+ */
+export enum bStateArrayActionEnum {
+    changeOne,  //Change the index of the array with the newState value
+    activeOne,  //Change the index of the array with the newState value and turn inactive all other values of the array
+    reset,      //Reset the array to a new array of size index and value newState
+}
+
+/**
+ * Interface of a button state Array action to tell the reducer function what to do
+ */
+export interface bStateArrayAction {
+    action: bStateArrayActionEnum,
+    index: number,
+    newState: ButtonState
+}
+
+/**
+ * Function that executes the bStateArrayAction
+ * @param state state to edit
+ * @param stateAction action to execute
+ * @returns the state edited by the action
+ */
+export function bStateArrayReducer(state: ButtonState[], stateAction: bStateArrayAction) {
+    const { action, index, newState } = stateAction;
+
+    switch (action) {
+        case bStateArrayActionEnum.changeOne:
+            state[index] = newState;
+            state = JSON.parse(JSON.stringify(state));
+            break;
+
+        case bStateArrayActionEnum.activeOne:
+            state.fill(ButtonState.inactive);
+            state[index] = newState;
+            break;
+
+        case bStateArrayActionEnum.reset:
+            state = new Array<ButtonState>(index);
+            state.fill(newState);
+            break;
+    }
+
+    return state;
 }

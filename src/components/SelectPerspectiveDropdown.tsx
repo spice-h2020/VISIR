@@ -13,7 +13,7 @@ import React, { Dispatch, useEffect, useReducer } from "react";
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import RequestManager from "../managers/requestManager";
-import { validatePerspectiveDataJSON } from "../constants/ValidateFiles";
+import { bStateArrayReducer, bStateArrayActionEnum, bStateArrayAction } from "../constants/auxTypes";
 
 interface SelectPerspectiveProps {
     //On click handler
@@ -23,28 +23,6 @@ interface SelectPerspectiveProps {
     //Request Manager
     requestManager: RequestManager;
 }
-
-export interface selectPerspectiveAction {
-    id: number,
-    newState: ButtonState
-}
-
-function SelectReducer(state: ButtonState[], action: selectPerspectiveAction) {
-    const { id, newState } = action;
-
-    if (id < 0) {
-        state = new Array<ButtonState>(-id);
-        state.fill(ButtonState.inactive);
-        
-        return state;
-    } else {
-        state[id] = newState;
-        state = JSON.parse(JSON.stringify(state));
-    }
-
-    return state;
-}
-
 
 /**
  * Dropdown component that holds the options to add/hide perspectives to the application
@@ -56,24 +34,13 @@ export const SelectPerspectiveDropdown = ({
 }: SelectPerspectiveProps) => {
 
     //State of all items
-    const [states, setStates] = useReducer(SelectReducer, []);
+    const [states, setStates] = useReducer(bStateArrayReducer, []);
 
     useEffect(() => {
         if (allPerspectives !== undefined)
-            setStates({ id: -allPerspectives.length, newState: ButtonState.inactive });
+            setStates({ action: bStateArrayActionEnum.reset, index: allPerspectives.length, newState: ButtonState.inactive });
 
     }, [allPerspectives]);
-
-
-    useEffect(() => {
-        console.log("wtf")
-    }, [states[4]]);
-    // console.log(states);
-    // useEffect(() => {
-    //     console.log("States changed");
-    //     console.log(states);
-
-    // }, [JSON.stringify(states)])
 
     if (allPerspectives === undefined || states.length === 0) {
         return (
@@ -95,34 +62,6 @@ export const SelectPerspectiveDropdown = ({
             extraClassName="dropdown-dark"
         />
     );
-
-
-    function getBut(): React.ReactNode[] {
-        if (allPerspectives !== undefined) {
-            const buttons = new Array<React.ReactNode>();
-
-            for (let i = 0; i < allPerspectives.length; i++) {
-                const state: ButtonState = states[allPerspectives[i].localId];
-                console.log(state + " " + allPerspectives[i].localId)
-
-                buttons.push(
-                    <Button
-                        key={allPerspectives[i].id}
-                        content={allPerspectives[i].name}
-                        state={state}
-                        onClick={() => {
-                            setStates({
-                                id: allPerspectives[i].localId,
-                                newState: ButtonState.active
-                            });
-                            requestManager.selectPerspective(state, allPerspectives[i], setStates, onClick);
-                        }} />
-                );
-            }
-            return buttons;
-        }
-        return []
-    }
 };
 
 /**
@@ -133,14 +72,13 @@ export const SelectPerspectiveDropdown = ({
  * @returns returns an array of React components
  */
 function getButtons(allPerspectives: PerspectiveDetails[], states: ButtonState[],
-    setStates: Dispatch<selectPerspectiveAction>, onClick: Function,
+    setStates: Dispatch<bStateArrayAction>, onClick: Function,
     requestManager: RequestManager): React.ReactNode[] {
 
     const buttons = new Array<React.ReactNode>();
 
     for (let i = 0; i < allPerspectives.length; i++) {
         const state: ButtonState = states[allPerspectives[i].localId];
-        console.log(state + " " + allPerspectives[i].localId)
 
         buttons.push(
             <Button
@@ -148,10 +86,6 @@ function getButtons(allPerspectives: PerspectiveDetails[], states: ButtonState[]
                 content={allPerspectives[i].name}
                 state={state}
                 onClick={() => {
-                    setStates({
-                        id: allPerspectives[i].localId,
-                        newState: ButtonState.active
-                    });
                     requestManager.selectPerspective(state, allPerspectives[i], setStates, onClick);
                 }} />
         );
