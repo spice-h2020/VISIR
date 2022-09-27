@@ -4,26 +4,33 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { DataRow, TooltipInfo, Point } from "../constants/auxTypes";
+import { DataRow, TooltipInfo, Point, SelectedObject, parseSelectedObjectIntoRows } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
 //Local files
 import { Button } from "./Button";
 import '../style/tooltip.css';
 
+
 interface TooltipProps {
     //All important information about the tooltip
-    tooltipInfo: TooltipInfo | undefined;
+    selectedObject: SelectedObject | undefined;
+
+    hideLabels: boolean;
 }
 
 /**
  * Tooltip component
  */
 export const Tooltip = ({
-    tooltipInfo
+    selectedObject,
+    hideLabels,
 }: TooltipProps) => {
+
     const [isActive, setActive] = useState<Boolean>(false);
     const [yOffset, setYoffset] = useState<number>(0);
+
+    const [tooltipInfo, setTooltipInfo] = useState<TooltipInfo>();
 
     const bodyRef = useRef(null);
     const componentRef = useRef(null);
@@ -40,51 +47,62 @@ export const Tooltip = ({
             setYoffset(ref.current.clientHeight / 2 + parentPosition.top);
         }
 
-    }, [tooltipInfo?.position]);
+    }, [selectedObject?.position]);
 
-    if (tooltipInfo === undefined || tooltipInfo.position === undefined || !isActive || Object.keys(tooltipInfo).length <= 3) {
-        return <div className={`tooltip`}></div>
-    }
+    useEffect(() => {
+        const result = parseSelectedObjectIntoRows(selectedObject, hideLabels);
+        if (result === undefined)
+            setTooltipInfo(undefined);
+        else {
+            setTooltipInfo({ tittle: result.tittle, mainDataRow: result.main, subDataRow: result.sub });
+        }
 
-    const style = { top: tooltipInfo.position.y - yOffset, left: tooltipInfo.position.x };
+    }, [selectedObject?.obj])
 
-    return (
-        <div
-            ref={componentRef}
-            className="tooltip active"
-            style={style}
-        >
-            <div ref={bodyRef} className={`tooltip-content right`}>
-                <div className={"tooltip-header row"}>
-                    <h3 className="col-10"> {tooltipInfo.tittle} </h3>
-                    <Button
-                        content=""
-                        extraClassName="col-2 btn-close"
-                        onClick={() => { setActive(false); }}
-                    />
-                </div>
-                <div className={"tooltip-body"}>
-                    {tooltipInfo.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
-                        return (
-                            <div key={index} className="main-row row"
-                                dangerouslySetInnerHTML={{ __html: `${item.getKey()} &nbsp; ${item.getValue(true)}` }}
-                            >
-                            </div>
-                        );
-                    })}
-                    {tooltipInfo.subDataRow.map((item: DataRow, index: number): JSX.Element => {
-                        return (
-                            <div key={index} className="sub-row row"
-                                dangerouslySetInnerHTML={{ __html: `${item.getKey(false)} &nbsp; ${item.getValue()}` }}
-                            >
-                            </div>
-                        );
-                    })}
-                </div>
-                <div className="tooltip-arrow"> </div>
+    if (tooltipInfo !== undefined && selectedObject !== undefined && selectedObject.position !== undefined && isActive) {
+
+        const style = { top: selectedObject.position.y - yOffset, left: selectedObject.position.x };
+
+        return (
+            <div
+                ref={componentRef}
+                className="tooltip active"
+                style={style}
+            >
+                <div ref={bodyRef} className={`tooltip-content right`}>
+                    <div className={"tooltip-header row"}>
+                        <h3 className="col-10"> {tooltipInfo.tittle} </h3>
+                        <Button
+                            content=""
+                            extraClassName="col-2 btn-close"
+                            onClick={() => { setActive(false); }}
+                        />
+                    </div>
+                    <div className={"tooltip-body"}>
+                        {tooltipInfo.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
+                            return (
+                                <div key={index} className="main-row row"
+                                    dangerouslySetInnerHTML={{ __html: `${item.getKey()} &nbsp; ${item.getValue(true)}` }}
+                                >
+                                </div>
+                            );
+                        })}
+                        {tooltipInfo.subDataRow.map((item: DataRow, index: number): JSX.Element => {
+                            return (
+                                <div key={index} className="sub-row row"
+                                    dangerouslySetInnerHTML={{ __html: `${item.getKey(false)} &nbsp; ${item.getValue()}` }}
+                                >
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className="tooltip-arrow"> </div>
+                </div >
             </div >
-        </div >
-    );
+        );
+    } else
+        return <div className={`tooltip`}></div>
+
 }
 
 

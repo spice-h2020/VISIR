@@ -5,9 +5,9 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { PerspectiveInfo, PerspectivePair } from "../constants/perspectivesTypes";
+import { CommunityData, PerspectiveInfo, PerspectivePair, UserData } from "../constants/perspectivesTypes";
 import { AppLayout, initialOptions, ViewOptions } from "../constants/viewOptions"
-import { Point, StateFunctions, TooltipInfo, tooltipInfoReducer } from "../constants/auxTypes";
+import { DataRow, Point, selectedObjectReducer, StateFunctions, TooltipInfo } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useReducer, useState } from "react";
 //Local files
@@ -44,6 +44,8 @@ export enum collapsedState {
     toTheRight,
 }
 
+
+
 /**
  * Component that draws each active perspective
  */
@@ -59,19 +61,19 @@ export const PerspectivesGroups = ({
 
     const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();
     const [networkFocusID, setNetworkFocusID] = useState<number | undefined>();
-    const [tooltip, setTooltip] = useReducer(tooltipInfoReducer, undefined);
+
+    const [selectedObject, setSelectedObject] = useReducer(selectedObjectReducer, undefined);
 
     const sf: StateFunctions = {
         setSelectedNodeId: setSelectedNodeId,
-        setTooltip: setTooltip,
         setLegendData: setLegendData,
         setDimensionStrategy: setDimensionStrategy,
-        setNetworkFocusId: setNetworkFocusID
+        setNetworkFocusId: setNetworkFocusID,
+        setSelectedObject: setSelectedObject,
     }
 
-    
     useEffect(() => {
-        setTooltip({ action: "clear", newValue: undefined });
+        setSelectedObject({action: "clear", newValue: undefined, sourceID: 0 });
         setNetworkFocusID(undefined);
         setSelectedNodeId(undefined);
 
@@ -80,7 +82,7 @@ export const PerspectivesGroups = ({
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
 
-            setTooltip({ action: "clear", newValue: undefined });
+            setSelectedObject({action: "clear", newValue: undefined, sourceID: 0 });
             setSelectedNodeId(undefined);
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
@@ -120,7 +122,8 @@ export const PerspectivesGroups = ({
     return (
         <div className="perspectives-containers">
             < Tooltip
-                tooltipInfo={tooltip}
+                selectedObject={selectedObject}
+                hideLabels={viewOptions.hideLabels}
             />
             <div className={perspectiveState[leftState]}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.details.id}`}>
@@ -176,3 +179,5 @@ function calculatePerspectiveState(leftPerspective: PerspectiveInfo | undefined,
     }
     return { leftState, rightState };
 }
+
+

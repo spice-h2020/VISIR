@@ -6,7 +6,7 @@
 //Constants
 import { CommunityData, UserData } from "../constants/perspectivesTypes";
 import { nodeConst } from "../constants/nodes";
-import { DataRow, Point, StateFunctions, TooltipInfo, TooltipInfoAction } from "../constants/auxTypes";
+import { DataRow, Point, selectedObjectAction, StateFunctions, TooltipInfo } from "../constants/auxTypes";
 //Packages
 import { BoundingBox, DataSetEdges, DataSetNodes, FitOptions, IdType, Network, TimelineAnimationType } from "vis-network";
 //Local files
@@ -68,9 +68,9 @@ export default class EventsController {
         this.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
         this.net.on("click", (event) => this.click(event, sf));
 
-        this.net.on("animationFinished", () => this.animationFinished(sf.setTooltip));
-        this.net.on("zoom", () => this.zoom(sf.setTooltip));
-        this.net.on("dragging", () => this.dragging(sf.setTooltip));
+        this.net.on("animationFinished", () => this.animationFinished(sf.setSelectedObject));
+        this.net.on("zoom", () => this.zoom(sf.setSelectedObject));
+        this.net.on("dragging", () => this.dragging(sf.setSelectedObject));
 
         this.net.on("resize", () => this.zoomOut());
     }
@@ -89,12 +89,18 @@ export default class EventsController {
      * @param sf Object with all functions that change the state
      */
     click(event: any, sf: StateFunctions) {
+        sf.setSelectedObject({ action: "clear", newValue: undefined, sourceID: this.networkID });
+
+
         if (event.nodes.length > 0) {
             sf.setNetworkFocusId(this.networkID);
 
             sf.setSelectedNodeId(event.nodes[0]);
-            this.setNodeAsTooltip(sf.setTooltip, event.nodes[0]);
 
+            const node = this.nodes.get(event.nodes[0]) as unknown as UserData;
+
+            sf.setSelectedObject({ action: "object", newValue: node, sourceID: 0 });
+            this.tooltipData = node;
         } else {
             sf.setSelectedNodeId(undefined);
             this.noNodeClicked(event, sf);
@@ -103,33 +109,33 @@ export default class EventsController {
 
     /**
      * Animation finished event callback
-     * @param setTooltip function that updates the tooltip
+     * @param setSelectedObject function that updates the tooltip
      */
-    animationFinished(setTooltip: Dispatch<TooltipInfoAction>) {
+    animationFinished(setSelectedObject: Dispatch<selectedObjectAction>) {
         if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setTooltip);
+            this.updateTooltipPosition(setSelectedObject);
         else
             this.tooltipData = undefined;
     }
 
     /**
      * Zoom event callback
-     * @param setTooltip function that updates the tooltip
+     * @param setSelectedObject function that updates the tooltip
      */
-    zoom(setTooltip: Dispatch<TooltipInfoAction>) {
+    zoom(setSelectedObject: Dispatch<selectedObjectAction>) {
         if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setTooltip);
+            this.updateTooltipPosition(setSelectedObject);
         else
             this.tooltipData = undefined;
     }
 
     /**
      * Canvas dragging event callback
-     * @param setTooltip function that updates the tooltip
+     * @param setSelectedObject function that updates the tooltip
      */
-    dragging(setTooltip: Dispatch<TooltipInfoAction>) {
+    dragging(setSelectedObject: Dispatch<selectedObjectAction>) {
         if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setTooltip);
+            this.updateTooltipPosition(setSelectedObject);
         else
             this.tooltipData = undefined;
     }
@@ -182,7 +188,8 @@ export default class EventsController {
             sf.setSelectedCommunity!(community);
 
             //Update tooltip
-            this.setCommunityAsTooltip(sf.setTooltip, community);
+            sf.setSelectedObject({ action: "object", newValue: community, sourceID: this.networkID });
+            this.tooltipData = community;
 
             //Zoom in to the community
             const fitOptions: FitOptions = {
@@ -199,7 +206,6 @@ export default class EventsController {
             this.zoomOut();
 
             this.tooltipData = undefined;
-            sf.setTooltip({ action: "clear", newValue: undefined });
 
             //Clear community datatable
             sf.setSelectedCommunity!(undefined);
@@ -222,68 +228,6 @@ export default class EventsController {
     }
 
     /**
-     * Parse a node info to work as a real tooltip info, and update the tooltip info state
-     * @param setTooltipInfo Function to update tooltip info
-     * @param nodeId node to be parsed
-     */
-    setNodeAsTooltip(setTooltip: Dispatch<TooltipInfoAction>, nodeId: number) {
-        const node = this.nodes.get(nodeId) as unknown as UserData;
-
-        const mainRows: DataRow[] = new Array<DataRow>();
-
-        if (!this.nodeVisuals.hideLabel) {
-            mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
-            mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
-        }
-        mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community.toString() : ""));
-
-        const subRows: DataRow[] = new Array<DataRow>();
-
-        const keys = Object.keys(node.explicit_community);
-        for (let i = 0; i < keys.length; i++) {
-            subRows.push(new DataRow(keys[i], node.explicit_community[keys[i]]));
-        }
-
-        const tooltipInfo = {
-            tittle: "Citizen data",
-            mainDataRow: mainRows,
-            subDataRow: subRows
-        } as TooltipInfo;
-
-        setTooltip({ action: "info", newValue: tooltipInfo });
-
-        this.tooltipData = node;
-    }
-
-    /**
-     * Parse a community info to work as a real tooltip info, and update the tooltip info state
-     * @param setTooltipInfo Function to update tooltip info
-     * @param community community to be parsed
-     */
-    setCommunityAsTooltip(setTooltip: Dispatch<TooltipInfoAction>, community: CommunityData) {
-        const mainRows: DataRow[] = new Array<DataRow>();
-
-        mainRows.push(new DataRow("Id", community !== undefined ? community.id.toString() : ""));
-        mainRows.push(new DataRow("Name", community !== undefined ? community.name : ""));
-        mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : "", true));
-
-        const subRows: DataRow[] = new Array<DataRow>();
-        if (community !== undefined && community.bb !== undefined) {
-            subRows.push(new DataRow("Color", community.bb.color.name))
-        }
-
-        const tooltipInfo = {
-            tittle: "Community data",
-            mainDataRow: mainRows,
-            subDataRow: subRows
-        } as TooltipInfo;
-
-        setTooltip({ action: "info", newValue: tooltipInfo });
-
-        this.tooltipData = community;
-    }
-
-    /**
      * Remove all selected nodes and edges of the network
      */
     removeSelectedItems() {
@@ -299,9 +243,9 @@ export default class EventsController {
 
     /**
      * Updates the tooltip position based on the saved tooltip data
-     * @param setTooltip function that updates the tooltip
+     * @param setSelectedObject function that updates the tooltip
      */
-    updateTooltipPosition(setTooltip: Dispatch<TooltipInfoAction>) {
+    updateTooltipPosition(setSelectedObject: Dispatch<selectedObjectAction>) {
         if (this.networkID === this.networkFocusID) {
             if (this.tooltipData !== undefined) {
 
@@ -343,11 +287,11 @@ export default class EventsController {
                 //Check if the tooltip is inside the canvas
                 if (y > refPosition.top && y < refPosition.bottom &&
                     x > refPosition.left && x < refPosition.right) {
-
-                    setTooltip({ action: "position", newValue: { x: x, y: y } });
+                        
+                    setSelectedObject({ action: "position", newValue: { x: x, y: y }, sourceID: this.networkID });
 
                 } else {
-                    setTooltip({ action: "position", newValue: undefined });
+                    setSelectedObject({ action: "position", newValue: undefined, sourceID: this.networkID });
                 }
             }
 

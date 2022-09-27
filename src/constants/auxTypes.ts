@@ -3,7 +3,8 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { Dispatch } from "react";
+import { Dispatch, SetStateAction } from "react";
+import { CommunityData, UserData } from "./perspectivesTypes";
 import { ButtonState } from "./viewOptions";
 
 /**
@@ -58,35 +59,6 @@ export class DataRow {
     }
 }
 
-export interface TooltipInfoAction {
-    action: "position" | "info" | "clear";
-    newValue: Point | undefined | TooltipInfo;
-}
-
-export function tooltipInfoReducer(state: TooltipInfo | undefined, stateAction: TooltipInfoAction) {
-    const { action, newValue } = stateAction;
-
-    switch (action) {
-        case "position":
-            return {
-                ...state,
-                ["position"]: newValue,
-            } as TooltipInfo;
-        case "info":
-            state = {
-                tittle: (newValue as TooltipInfo).tittle,
-                mainDataRow: (newValue as TooltipInfo).mainDataRow,
-                subDataRow: (newValue as TooltipInfo).subDataRow
-            }
-            break;
-        case "clear":
-            state = undefined;
-            break;
-    }
-
-    return state;
-}
-
 /**
  * Interface that contains all the info to show in a tooltip
  */
@@ -96,6 +68,41 @@ export interface TooltipInfo {
     subDataRow: DataRow[];
 
     position?: Point;
+}
+
+export interface SelectedObject {
+    obj: CommunityData | UserData | undefined;
+    position?: Point;
+    sourceID?: number;
+}
+
+export interface selectedObjectAction {
+    action: "position" | "object" | "clear";
+    newValue: Point | CommunityData | UserData | undefined;
+    sourceID: number;
+}
+
+export function selectedObjectReducer(state: SelectedObject | undefined, stateAction: selectedObjectAction) {
+    const { action, newValue, sourceID } = stateAction;
+
+    console.log(stateAction);
+    
+    switch (action) {
+        case "position":
+            return {
+                ...state,
+                position: newValue,
+            } as SelectedObject;
+        case "object":
+            return {
+                position: state?.position,
+                obj: newValue,
+                sourceID: sourceID,
+            } as SelectedObject;
+        case "clear":
+            state = undefined;
+            return state;
+    }
 }
 
 /**
@@ -127,11 +134,11 @@ export interface Point {
  */
 export interface StateFunctions {
     setSelectedNodeId: Function;
-    setTooltip: Dispatch<TooltipInfoAction>;
     setLegendData: Function;
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
     setSelectedCommunity?: Function;
+    setSelectedObject: Dispatch<selectedObjectAction>;
 }
 
 /**
@@ -180,4 +187,55 @@ export function bStateArrayReducer(state: ButtonState[], stateAction: bStateArra
     }
 
     return state;
+}
+
+
+export function parseSelectedObjectIntoRows(selectedObject: SelectedObject | undefined, hideLabel: boolean) {
+
+    if (selectedObject !== undefined && selectedObject.obj !== undefined) {
+        if (selectedObject.obj.explanation === undefined) { //If its userData{
+            const { tittle, main, sub } = parseNodeIntoRows(selectedObject.obj as UserData, hideLabel);
+            return { tittle, main, sub };
+        } else {
+            const { tittle, main, sub } = parseCommunityIntoRows(selectedObject.obj as UserData);
+            return { tittle, main, sub };
+        }
+    } else {
+        return undefined;
+    }
+}
+
+export function parseNodeIntoRows(node: UserData, hideLabels: boolean) {
+
+    const mainRows: DataRow[] = new Array<DataRow>();
+
+    if (!hideLabels) {
+        mainRows.push(new DataRow("Id", node !== undefined ? node.id : ""));
+        mainRows.push(new DataRow("Label", node !== undefined ? node.label : ""));
+    }
+    mainRows.push(new DataRow("Community", node !== undefined ? node.implicit_community.toString() : ""));
+
+    const subRows: DataRow[] = new Array<DataRow>();
+
+    const keys = Object.keys(node.explicit_community);
+    for (let i = 0; i < keys.length; i++) {
+        subRows.push(new DataRow(keys[i], node.explicit_community[keys[i]]));
+    }
+
+    return { tittle: "Citizen data", main: mainRows, sub: subRows }
+}
+
+export function parseCommunityIntoRows(community: UserData) {
+    const mainRows: DataRow[] = new Array<DataRow>();
+
+    mainRows.push(new DataRow("Id", community !== undefined ? community.id.toString() : ""));
+    mainRows.push(new DataRow("Name", community !== undefined ? community.name : ""));
+    mainRows.push(new DataRow("Explanation", community !== undefined ? community.explanation : "", true));
+
+    const subRows: DataRow[] = new Array<DataRow>();
+    if (community !== undefined && community.bb !== undefined) {
+        subRows.push(new DataRow("Color", community.bb.color.name))
+    }
+
+    return { tittle: "Community data", main: mainRows, sub: subRows }
 }
