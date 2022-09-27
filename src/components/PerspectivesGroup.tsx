@@ -7,9 +7,9 @@
 //Constants
 import { PerspectiveInfo, PerspectivePair } from "../constants/perspectivesTypes";
 import { AppLayout, initialOptions, ViewOptions } from "../constants/viewOptions"
-import { Point, StateFunctions, TooltipInfo } from "../constants/auxTypes";
+import { Point, StateFunctions, TooltipInfo, tooltipInfoReducer } from "../constants/auxTypes";
 //Packages
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 //Local files
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
@@ -59,7 +59,7 @@ export const PerspectivesGroups = ({
 
     const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();
     const [networkFocusID, setNetworkFocusID] = useState<number | undefined>();
-    const [tooltip, setTooltip] = useState<TooltipInfo | undefined>();
+    const [tooltip, setTooltip] = useReducer(tooltipInfoReducer, undefined);
 
     const sf: StateFunctions = {
         setSelectedNodeId: setSelectedNodeId,
@@ -109,11 +109,9 @@ export const PerspectivesGroups = ({
 
     return (
         <div className="perspectives-containers">
-            {/* {<Tooltip
-                state={tooltipState}
-                content={tooltipInfo}
-                position={tooltipPos}
-            />} */}
+            < Tooltip
+                tooltipInfo={tooltip} 
+            />
             <div className={perspectiveState[leftState]}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.details.id}`}>
                 {leftComponent}

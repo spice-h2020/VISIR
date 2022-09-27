@@ -12,107 +12,86 @@ import { Button } from "./Button";
 import '../style/tooltip.css';
 
 interface TooltipProps {
-    //Active state of the tooltip
-    state?: boolean;
-    //Content of the tooltip
-    content: TooltipInfo | undefined;
-    //Coordinates of the tooltip
-    position?: Point;
+    //All important information about the tooltip
+    tooltipInfo: TooltipInfo | undefined;
 }
 
 /**
  * Tooltip component
  */
 export const Tooltip = ({
-    state = false,
-    content,
-    position,
+    tooltipInfo
 }: TooltipProps) => {
 
-    //States to activate/disactivate the tooltip, hold tooltip info and change the tooltip position
-    const [tState, setTState] = useState<boolean>(state);
-    const [info, setInfo] = useState<TooltipInfo | undefined>(content);
-    const [pos, setPos] = useState<Point | undefined>(position);
+    console.log(tooltipInfo);
 
-    //In order to center the arrow on the position, the tooltip needs vertical offset based on its own height
-    const [yOffset, setYOffset] = useState<number>(0);
+    const [isActive, setActive] = useState<Boolean>(false);
+    const [yOffset, setYoffset] = useState<number>(0);
 
-    //Reference of the tooltip body and this component. Used to calculate the vertical offset of the tooltip
     const bodyRef = useRef(null);
-    const compRef = useRef(null);
+    const componentRef = useRef(null);
 
     useEffect(() => {
-        setTState(state);
-    }, [state]);
-
-    useEffect(() => {
-        setPos(position);
-
-    }, [position]);
-
-    useEffect(() => {
-        setInfo(content);
-    }, [content]);
-
-    useEffect(() => {
+        setActive(true);
 
         //Calculates the vertical offset
         const ref = bodyRef as any;
-        const pRef = compRef.current as any;
+        const pRef = componentRef.current as any;
 
         if (ref.current !== null) {
             const parentPosition = getHTMLPosition(pRef.parentElement);
-            setYOffset(ref.current.clientHeight / 2 + parentPosition.top);
+            setYoffset(ref.current.clientHeight / 2 + parentPosition.top);
         }
 
-    }, [info]);
+    }, [tooltipInfo?.position]);
 
-    const style = pos !== undefined ? { top: pos.y - yOffset, left: pos.x } : {};
-    
-    if (info === undefined) {
+
+
+    if (tooltipInfo === undefined || tooltipInfo.position === undefined || !isActive) {
         return <div className={`tooltip`}></div>
-    } else {
-        return (
-            <div
-                ref={compRef}
-                className={`tooltip ${tState ? "active" : ""}`}
-                style={style}
-            >
-                <div ref={bodyRef} className={`tooltip-content right`}>
-                    <div className={"tooltip-header row"}>
-                        <h3 className="col-10"> {info.tittle} </h3>
-                        <Button
-                            content=""
-                            extraClassName="col-2 btn-close"
-                            onClick={() => {
-                                setTState(false);
-                            }}
-                        />
-                    </div>
-                    <div className={"tooltip-body"}>
-                        {info.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
-                            return (
-                                <div key={index} className="main-row row"
-                                    dangerouslySetInnerHTML={{ __html: `${item.getKey()} &nbsp; ${item.getValue(true)}` }}
-                                >
-                                </div>
-                            );
-                        })}
-                        {info.subDataRow.map((item: DataRow, index: number): JSX.Element => {
-                            return (
-                                <div key={index} className="sub-row row"
-                                    dangerouslySetInnerHTML={{ __html: `${item.getKey(false)} &nbsp; ${item.getValue()}` }}
-                                >
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <div className="tooltip-arrow"> </div>
-                </div >
-            </div >
-        );
     }
-};
+
+    const style = { top: tooltipInfo.position.y - yOffset, left: tooltipInfo.position.x };
+
+    return (
+        <div
+            ref={componentRef}
+            className="tooltip active"
+            style={style}
+        >
+            <div ref={bodyRef} className={`tooltip-content right`}>
+                <div className={"tooltip-header row"}>
+                    <h3 className="col-10"> {tooltipInfo.tittle} </h3>
+                    <Button
+                        content=""
+                        extraClassName="col-2 btn-close"
+                        onClick={() => { setActive(false); }}
+                    />
+                </div>
+                <div className={"tooltip-body"}>
+                    {tooltipInfo.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
+                        return (
+                            <div key={index} className="main-row row"
+                                dangerouslySetInnerHTML={{ __html: `${item.getKey()} &nbsp; ${item.getValue(true)}` }}
+                            >
+                            </div>
+                        );
+                    })}
+                    {tooltipInfo.subDataRow.map((item: DataRow, index: number): JSX.Element => {
+                        return (
+                            <div key={index} className="sub-row row"
+                                dangerouslySetInnerHTML={{ __html: `${item.getKey(false)} &nbsp; ${item.getValue()}` }}
+                            >
+                            </div>
+                        );
+                    })}
+                </div>
+                <div className="tooltip-arrow"> </div>
+            </div >
+        </div >
+    );
+}
+
 
 /**
  * Gets the position of a HTML element in the DOM

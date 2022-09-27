@@ -6,7 +6,7 @@
 //Constants
 import { CommunityData, UserData } from "../constants/perspectivesTypes";
 import { nodeConst } from "../constants/nodes";
-import { DataRow, Point, StateFunctions, TooltipInfo } from "../constants/auxTypes";
+import { DataRow, Point, StateFunctions, TooltipInfo, TooltipInfoAction } from "../constants/auxTypes";
 //Packages
 import { BoundingBox, DataSetEdges, DataSetNodes, FitOptions, IdType, Network, TimelineAnimationType } from "vis-network";
 //Local files
@@ -15,6 +15,7 @@ import NodeVisuals from "./nodeVisuals";
 import EdgeVisuals from "./edgeVisuals";
 import { getHTMLPosition } from "../basicComponents/Tooltip";
 import NetworkController from "./networkController";
+import { Dispatch } from "react";
 
 export default class EventsController {
     //Bounding boxes controller
@@ -88,13 +89,11 @@ export default class EventsController {
      * @param sf Object with all functions that change the state
      */
     click(event: any, sf: StateFunctions) {
-        sf.setTooltipState(false);
-
         if (event.nodes.length > 0) {
             sf.setNetworkFocusId(this.networkID);
 
             sf.setSelectedNodeId(event.nodes[0]);
-            this.setNodeAsTooltip(sf.setTooltipInfo, event.nodes[0]);
+            this.setNodeAsTooltip(sf.setTooltip, event.nodes[0]);
 
         } else {
             sf.setSelectedNodeId(undefined);
@@ -106,7 +105,7 @@ export default class EventsController {
      * Animation finished event callback
      * @param setTooltip function that updates the tooltip
      */
-    animationFinished(setTooltip: Function) {
+    animationFinished(setTooltip: Dispatch<TooltipInfoAction>) {
         if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltip);
     }
@@ -115,7 +114,7 @@ export default class EventsController {
      * Zoom event callback
      * @param setTooltip function that updates the tooltip
      */
-    zoom(setTooltip: Function) {
+    zoom(setTooltip: Dispatch<TooltipInfoAction>) {
         if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltip);
     }
@@ -124,7 +123,7 @@ export default class EventsController {
      * Canvas dragging event callback
      * @param setTooltip function that updates the tooltip
      */
-    dragging(setTooltip: Function) {
+    dragging(setTooltip: Dispatch<TooltipInfoAction>) {
         if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltip);
     }
@@ -137,7 +136,7 @@ export default class EventsController {
         const node = this.nodes.get(nodeId) as unknown as UserData;
 
         //Search for the nodes that are connected to the selected Node
-        const { selectedNodes, selected_edges_id } = this.edgeVisuals.getSelectedNodesAndEdges( nodeId.toString());
+        const { selectedNodes, selected_edges_id } = this.edgeVisuals.getSelectedNodesAndEdges(nodeId.toString());
 
         //Move the "camera" to focus on these nodes
         const fitOptions: FitOptions = {
@@ -152,7 +151,7 @@ export default class EventsController {
         this.edgeVisuals.selectEdges(selected_edges_id as string[]);
 
         //Update nodes's color acording to their selected status
-        
+
         this.nodeVisuals.selectNodes(selectedNodes);
         this.net.selectNodes([node.id] as IdType[])
 
@@ -177,7 +176,7 @@ export default class EventsController {
             sf.setSelectedCommunity!(community);
 
             //Update tooltip
-            this.setCommunityAsTooltip(sf.setTooltipInfo, community);
+            this.setCommunityAsTooltip(sf.setTooltip, community);
 
             //Zoom in to the community
             const fitOptions: FitOptions = {
@@ -193,7 +192,8 @@ export default class EventsController {
         } else {
             this.zoomOut();
 
-            sf.setTooltipInfo(undefined);
+            this.tooltipData = undefined;
+            sf.setTooltip({ action: "clear", newValue: undefined });
 
             //Clear community datatable
             sf.setSelectedCommunity!(undefined);
@@ -220,7 +220,7 @@ export default class EventsController {
      * @param setTooltipInfo Function to update tooltip info
      * @param nodeId node to be parsed
      */
-    setNodeAsTooltip(setTooltipInfo: Function, nodeId: number) {
+    setNodeAsTooltip(setTooltip: Dispatch<TooltipInfoAction>, nodeId: number) {
         const node = this.nodes.get(nodeId) as unknown as UserData;
 
         const mainRows: DataRow[] = new Array<DataRow>();
@@ -244,7 +244,7 @@ export default class EventsController {
             subDataRow: subRows
         } as TooltipInfo;
 
-        setTooltipInfo(tooltipInfo)
+        setTooltip({ action: "info", newValue: tooltipInfo });
 
         this.tooltipData = node;
     }
@@ -254,7 +254,7 @@ export default class EventsController {
      * @param setTooltipInfo Function to update tooltip info
      * @param community community to be parsed
      */
-    setCommunityAsTooltip(setTooltipInfo: Function, community: CommunityData) {
+    setCommunityAsTooltip(setTooltip: Dispatch<TooltipInfoAction>, community: CommunityData) {
         const mainRows: DataRow[] = new Array<DataRow>();
 
         mainRows.push(new DataRow("Id", community !== undefined ? community.id.toString() : ""));
@@ -272,7 +272,7 @@ export default class EventsController {
             subDataRow: subRows
         } as TooltipInfo;
 
-        setTooltipInfo(tooltipInfo)
+        setTooltip({ action: "info", newValue: tooltipInfo });
 
         this.tooltipData = community;
     }
@@ -295,7 +295,7 @@ export default class EventsController {
      * Updates the tooltip position based on the saved tooltip data
      * @param setTooltip function that updates the tooltip
      */
-    updateTooltipPosition(setTooltip: Function) {
+    updateTooltipPosition(setTooltip: Dispatch<TooltipInfoAction>) {
         if (this.tooltipData !== undefined) {
 
             const refPosition = getHTMLPosition(this.refHTML);
@@ -311,7 +311,7 @@ export default class EventsController {
 
                 //Depending on the zoom level and node size, we add offset to the coordinates of the tooltip
                 x = nodePositionInDOM.x + refPosition.left + 18 + 1.7 * (node.size * this.net.getScale());
-                y = nodePositionInDOM.y + refPosition.top + -5 - 0.2 * (node.size * this.net.getScale());
+                y = nodePositionInDOM.y + refPosition.top + node.size/2 - 3; // + -15 - 0.2 * (node.size * this.net.getScale());
 
             } else {
                 const community = this.tooltipData as CommunityData;
@@ -337,11 +337,10 @@ export default class EventsController {
             if (y > refPosition.top && y < refPosition.bottom &&
                 x > refPosition.left && x < refPosition.right) {
 
-                setTooltipPos({ x: x, y: y } as Point);
-                setTooltipState(true);
+                setTooltip({ action: "position", newValue: { x: x, y: y } });
 
             } else {
-                setTooltipState(false);
+                setTooltip({ action: "position", newValue: undefined });
             }
         }
     }

@@ -12,7 +12,6 @@ export default {
 
 const Template: ComponentStory<typeof Tooltip> = (args) => <Tooltip {...args} />;
 
-
 export const userExample = Template.bind({});
 const mainNodeData = new Array();
 
@@ -26,20 +25,20 @@ subNodeData.push(new DataRow("Selected language", "FIN"))
 subNodeData.push(new DataRow("Selected age", "GenX"))
 subNodeData.push(new DataRow("Selected avatar", "p\u00e4ssi"))
 
-const userContent: TooltipInfo = {
-  tittle: "Citizen data",
-  mainDataRow: mainNodeData,
-  subDataRow: subNodeData,
-}
 const userPosition: Point = {
   x: 200,
   y: 150
 }
 
+const userContent: TooltipInfo = {
+  tittle: "Citizen data",
+  mainDataRow: mainNodeData,
+  subDataRow: subNodeData,
+  position: userPosition,
+}
+
 userExample.args = {
-  content: userContent,
-  state: true,
-  position: userPosition
+  tooltipInfo: userContent
 };
 
 export const commExample = Template.bind({});
@@ -51,20 +50,17 @@ mainCommData.push(new DataRow("Explanation", "Representative Properties: {'Artef
 
 const subCommData = new Array();
 
-const commContent: TooltipInfo = {
-  tittle: "Community data",
-  mainDataRow: mainCommData,
-  subDataRow: subCommData
-}
-
 const commPosition: Point = {
   x: 450,
   y: 100
 }
 
-commExample.args = {
-  content: commContent,
-  state: true,
-  position: commPosition
-};
+const commContent: TooltipInfo = {
+  tittle: "Community data",
+  mainDataRow: mainCommData,
+  subDataRow: subCommData,
+  position: commPosition,
+}
+
+commExample.args = { tooltipInfo: commContent };
 

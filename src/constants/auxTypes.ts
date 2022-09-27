@@ -3,6 +3,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
+import { Dispatch } from "react";
 import { ButtonState } from "./viewOptions";
 
 /**
@@ -57,6 +58,35 @@ export class DataRow {
     }
 }
 
+export interface TooltipInfoAction {
+    action: "position" | "info" | "clear";
+    newValue: Point | undefined | TooltipInfo;
+}
+
+export function tooltipInfoReducer(state: TooltipInfo | undefined, stateAction: TooltipInfoAction) {
+    const { action, newValue } = stateAction;
+
+    switch (action) {
+        case "position":
+            return {
+                ...state,
+                ["position"]: newValue,
+            } as TooltipInfo;
+        case "info":
+            state = {
+                tittle: (newValue as TooltipInfo).tittle,
+                mainDataRow: (newValue as TooltipInfo).mainDataRow,
+                subDataRow: (newValue as TooltipInfo).subDataRow
+            }
+            break;
+        case "clear":
+            state = undefined;
+            break;
+    }
+
+    return state;
+}
+
 /**
  * Interface that contains all the info to show in a tooltip
  */
@@ -64,6 +94,8 @@ export interface TooltipInfo {
     tittle: string;
     mainDataRow: DataRow[];
     subDataRow: DataRow[];
+
+    position?: Point;
 }
 
 /**
@@ -95,9 +127,7 @@ export interface Point {
  */
 export interface StateFunctions {
     setSelectedNodeId: Function;
-    setTooltipInfo: Function;
-    setTooltipPosition: Function;
-    setTooltipState: Function;
+    setTooltip: Dispatch<TooltipInfoAction>;
     setLegendData: Function;
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
