@@ -13,6 +13,7 @@ import { Button } from '../basicComponents/Button';
 import '../style/legend.css';
 import { ButtonState } from '../constants/viewOptions';
 
+//TODO fix the legend that is not working at all. Maybe border option is not working for similar reasons.
 interface LegendTooltipProps {
     //Content of the legend
     legendData: DimAttribute[]

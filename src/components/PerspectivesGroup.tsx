@@ -16,9 +16,6 @@ import NodeDimensionStrategy from "../managers/dimensionStrategy";
 import { Tooltip } from "../basicComponents/Tooltip";
 import '../style/network.css';
 
-//Current layout of the active perspectives.
-const layout = initialOptions.layout;
-
 interface PerspectivesGroupProps {
     leftPerspective?: PerspectiveInfo,
     rightPerspective?: PerspectiveInfo,
@@ -105,6 +102,7 @@ export const PerspectivesGroups = ({
             viewOptions={viewOptions}
             sf={sf}
             selectedNodeId={selectedNodeId}
+            selectedObject={selectedObject}
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
         />
@@ -115,6 +113,7 @@ export const PerspectivesGroups = ({
             viewOptions={viewOptions}
             sf={sf}
             selectedNodeId={selectedNodeId}
+            selectedObject={selectedObject}
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
         />

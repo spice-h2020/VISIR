@@ -216,7 +216,7 @@ export default class EdgeVisuals {
         this.allSelectedEdges = selected_edges_id as string[];
 
         this.edges.get(selected_edges_id).forEach((edge: Edge) => {
-            if (edge.value !== undefined && edge.value >= this.threshold) { //TODO link this with the threshold option once the slider works
+            if (edge.value !== undefined && edge.value >= this.threshold) {
 
                 if (edge.from !== selectedNodes[0] && edge.to === selectedNodes[0])
                     selectedNodes.push(edge.from as string);

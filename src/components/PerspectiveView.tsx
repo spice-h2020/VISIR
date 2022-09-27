@@ -6,7 +6,7 @@
 //Constants
 import { ViewOptions, AppLayout } from '../constants/viewOptions';
 import { PerspectiveInfo, UserData, CommunityData } from '../constants/perspectivesTypes';
-import { StateFunctions } from '../constants/auxTypes';
+import { SelectedObject, StateFunctions } from '../constants/auxTypes';
 //Packages
 import { useEffect, useState, useRef } from "react";
 //Local files
@@ -24,6 +24,7 @@ interface PerspectiveViewProps {
     sf: StateFunctions;
     //Current selected node
     selectedNodeId: undefined | number;
+    selectedObject: SelectedObject | undefined;
     //Current node dimension strategy
     dimStrat: NodeDimensionStrategy | undefined;
     //Id of the current network on the focus
@@ -38,6 +39,7 @@ export const PerspectiveView = ({
     viewOptions,
     sf,
     selectedNodeId,
+    selectedObject,
     dimStrat,
     networkFocusID,
 }: PerspectiveViewProps) => {
@@ -61,26 +63,66 @@ export const PerspectiveView = ({
 
     ViewOptionsUseEffect(viewOptions, netManager);
 
+    // useEffect(() => {
+    //     if (selectedNodeId === undefined) {
+    //         //If no node id is selected, we clear the node dataTable info
+    //         setSelectedNode(undefined);
+    //         if (netManager !== undefined) {
+    //             netManager.eventsController.removeSelectedItems();
+
+    //             if (networkFocusID !== perspectiveInfo.details.id)
+    //                 netManager.eventsController.zoomOut();
+    //         }
+    //     } else {
+    //         //If its a number, it means the user clicked a node in some perspective. So we update the node table and the community table
+    //         if (netManager !== undefined) {
+    //             const nodeData = netManager.eventsController.nodeClicked(selectedNodeId);
+    //             setSelectedNode(nodeData);
+    //             setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
+    //         }
+    //     }
+    // }, [selectedNodeId, netManager, networkFocusID]);
+
     useEffect(() => {
-        if (selectedNodeId === undefined) {
-            //If no node id is selected, we clear the node dataTable info
+        if (selectedObject !== undefined && selectedObject.obj !== undefined && netManager !== undefined) { //Something is selected
+            if (selectedObject.obj.explanation === undefined) {   //a node has been selected
+
+                const nodeData = netManager.eventsController.nodeClicked(selectedObject.obj.id as number);
+
+                setSelectedNode(nodeData as UserData);
+                setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
+
+            } else {//A community has been selected
+                if (selectedObject.sourceID === perspectiveInfo.details.id) { //The community is from this network
+
+                    setSelectedNode(undefined);
+                    setSelectedCommunity(selectedObject.obj as CommunityData);
+
+                } else {    //The community is not from this network
+                    
+                    //Clear dataTable
+                    setSelectedNode(undefined);
+                    setSelectedCommunity(undefined);
+
+                    if (netManager !== undefined) {
+                        netManager.eventsController.removeSelectedItems();
+                        netManager.eventsController.zoomOut();
+                    }
+                }
+            }
+        } else { //Nothing is selected
+            
+            //Clear dataTable
             setSelectedNode(undefined);
+            setSelectedCommunity(undefined);
+
             if (netManager !== undefined) {
                 netManager.eventsController.removeSelectedItems();
-
-                if (networkFocusID !== perspectiveInfo.details.id)
-                    netManager.eventsController.zoomOut();
-            }
-        } else {
-            //If its a number, it means the user clicked a node in some perspective. So we update the node table and the community table
-            if (netManager !== undefined) {
-                const nodeData = netManager.eventsController.nodeClicked(selectedNodeId);
-                setSelectedNode(nodeData);
-                setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
+                netManager.eventsController.zoomOut();
             }
         }
-    }, [selectedNodeId, netManager, networkFocusID]);
 
+    }, [selectedObject?.obj, selectedObject?.sourceID]);
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
             sf.setSelectedCommunity = setSelectedCommunity;

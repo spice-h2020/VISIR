@@ -91,16 +91,13 @@ export default class EventsController {
     click(event: any, sf: StateFunctions) {
         sf.setSelectedObject({ action: "clear", newValue: undefined, sourceID: this.networkID });
 
-
         if (event.nodes.length > 0) {
             sf.setNetworkFocusId(this.networkID);
-
             sf.setSelectedNodeId(event.nodes[0]);
 
             const node = this.nodes.get(event.nodes[0]) as unknown as UserData;
-
-            sf.setSelectedObject({ action: "object", newValue: node, sourceID: 0 });
-            this.tooltipData = node;
+            sf.setSelectedObject({ action: "object", newValue: node, sourceID: this.networkID});
+            
         } else {
             sf.setSelectedNodeId(undefined);
             this.noNodeClicked(event, sf);
@@ -112,10 +109,7 @@ export default class EventsController {
      * @param setSelectedObject function that updates the tooltip
      */
     animationFinished(setSelectedObject: Dispatch<selectedObjectAction>) {
-        if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setSelectedObject);
-        else
-            this.tooltipData = undefined;
+        this.updateTooltipPosition(setSelectedObject);
     }
 
     /**
@@ -123,10 +117,7 @@ export default class EventsController {
      * @param setSelectedObject function that updates the tooltip
      */
     zoom(setSelectedObject: Dispatch<selectedObjectAction>) {
-        if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setSelectedObject);
-        else
-            this.tooltipData = undefined;
+        this.updateTooltipPosition(setSelectedObject);
     }
 
     /**
@@ -134,10 +125,7 @@ export default class EventsController {
      * @param setSelectedObject function that updates the tooltip
      */
     dragging(setSelectedObject: Dispatch<selectedObjectAction>) {
-        if (this.networkID === this.networkFocusID)
-            this.updateTooltipPosition(setSelectedObject);
-        else
-            this.tooltipData = undefined;
+        this.updateTooltipPosition(setSelectedObject);
     }
 
     /**
@@ -146,6 +134,8 @@ export default class EventsController {
      */
     nodeClicked(nodeId: number) {
         const node = this.nodes.get(nodeId) as unknown as UserData;
+
+        this.tooltipData = node;
 
         //Search for the nodes that are connected to the selected Node
         const { selectedNodes, selected_edges_id } = this.edgeVisuals.getSelectedNodesAndEdges(nodeId.toString());
@@ -203,7 +193,7 @@ export default class EventsController {
 
             this.removeSelectedItems();
         } else {
-            this.zoomOut();
+            //this.zoomOut();
 
             this.tooltipData = undefined;
 
@@ -248,7 +238,7 @@ export default class EventsController {
     updateTooltipPosition(setSelectedObject: Dispatch<selectedObjectAction>) {
         if (this.networkID === this.networkFocusID) {
             if (this.tooltipData !== undefined) {
-
+                
                 const refPosition = getHTMLPosition(this.refHTML);
 
                 let x: number;
@@ -262,7 +252,7 @@ export default class EventsController {
 
                     //Depending on the zoom level and node size, we add offset to the coordinates of the tooltip
                     x = nodePositionInDOM.x + refPosition.left + 18 + 1.7 * (node.size * this.net.getScale());
-                    y = nodePositionInDOM.y + refPosition.top + node.size / 2 - 3; // + -15 - 0.2 * (node.size * this.net.getScale());
+                    y = nodePositionInDOM.y + refPosition.top + node.size / 2 - 3;
 
                 } else {
                     const community = this.tooltipData as CommunityData;

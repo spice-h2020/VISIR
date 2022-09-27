@@ -85,8 +85,6 @@ export interface selectedObjectAction {
 export function selectedObjectReducer(state: SelectedObject | undefined, stateAction: selectedObjectAction) {
     const { action, newValue, sourceID } = stateAction;
 
-    console.log(stateAction);
-    
     switch (action) {
         case "position":
             return {

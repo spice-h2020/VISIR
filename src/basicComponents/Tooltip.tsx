@@ -26,7 +26,8 @@ export const Tooltip = ({
     selectedObject,
     hideLabels,
 }: TooltipProps) => {
-
+    console.log(selectedObject);
+    
     const [isActive, setActive] = useState<Boolean>(false);
     const [yOffset, setYoffset] = useState<number>(0);
 
