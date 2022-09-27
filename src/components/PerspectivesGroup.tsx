@@ -69,8 +69,18 @@ export const PerspectivesGroups = ({
         setNetworkFocusId: setNetworkFocusID
     }
 
+    
+    useEffect(() => {
+        setTooltip({ action: "clear", newValue: undefined });
+        setNetworkFocusID(undefined);
+        setSelectedNodeId(undefined);
+
+    }, [collapsedState]);
+
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
+
+            setTooltip({ action: "clear", newValue: undefined });
             setSelectedNodeId(undefined);
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
@@ -110,7 +120,7 @@ export const PerspectivesGroups = ({
     return (
         <div className="perspectives-containers">
             < Tooltip
-                tooltipInfo={tooltip} 
+                tooltipInfo={tooltip}
             />
             <div className={perspectiveState[leftState]}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.details.id}`}>

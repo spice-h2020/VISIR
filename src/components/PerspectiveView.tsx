@@ -47,21 +47,19 @@ export const PerspectiveView = ({
     const [selectedCommunity, setSelectedCommunity] = useState<CommunityData>();
     const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
 
-    const [info, setInfo] = useState<PerspectiveInfo>(perspectiveInfo);
     const visJsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setInfo(perspectiveInfo);
-    }, [perspectiveInfo]);
-
-    useEffect(() => {
-        if (netManager !== undefined && networkFocusID !== undefined) {
-            netManager.eventsController.networkFocusID = networkFocusID;
+        if (netManager !== undefined) {
+            if (networkFocusID === undefined) {
+                netManager.eventsController.networkFocusID = -1;
+            } else
+                netManager.eventsController.networkFocusID = networkFocusID;
         }
 
     }, [networkFocusID, netManager])
 
-    ViewOptionsUseEffect(viewOptions, netManager, sf);
+    ViewOptionsUseEffect(viewOptions, netManager);
 
     useEffect(() => {
         if (selectedNodeId === undefined) {
@@ -70,7 +68,7 @@ export const PerspectiveView = ({
             if (netManager !== undefined) {
                 netManager.eventsController.removeSelectedItems();
 
-                if (networkFocusID !== info.details.id)
+                if (networkFocusID !== perspectiveInfo.details.id)
                     netManager.eventsController.zoomOut();
             }
         } else {
@@ -81,22 +79,22 @@ export const PerspectiveView = ({
                 setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
             }
         }
-    }, [selectedNodeId, info.details.id, netManager, networkFocusID]);
+    }, [selectedNodeId, netManager, networkFocusID]);
 
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
             sf.setSelectedCommunity = setSelectedCommunity;
 
             if (networkFocusID === undefined) {
-                sf.setNetworkFocusId(info.details.id);
+                sf.setNetworkFocusId(perspectiveInfo.details.id);
             }
-            setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
+            setNetManager(new NetworkController(perspectiveInfo, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
 
     const dataCol = <DataColumn
-        tittle={info?.details.name}
+        tittle={perspectiveInfo?.details.name}
         node={selectedNode}
         community={selectedCommunity}
         viewOptions={viewOptions}
@@ -121,7 +119,7 @@ export const PerspectiveView = ({
  * @param viewOptions object that will trigger the useEffects.
  * @param netManager will execute the changes once useEffects are triggered
  */
-function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined, sf: StateFunctions) {
+function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined) {
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.nodeVisuals.updateNodeDimensions(viewOptions.legendConfig);

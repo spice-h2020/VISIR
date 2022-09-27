@@ -137,7 +137,3 @@ export function App() {
     </div>
   );
 }
-
-const singlePerspectiveSelected = (a: any) => {
-  console.log(a);
-}

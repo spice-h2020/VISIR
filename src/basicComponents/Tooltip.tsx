@@ -22,9 +22,6 @@ interface TooltipProps {
 export const Tooltip = ({
     tooltipInfo
 }: TooltipProps) => {
-
-    console.log(tooltipInfo);
-
     const [isActive, setActive] = useState<Boolean>(false);
     const [yOffset, setYoffset] = useState<number>(0);
 
@@ -45,9 +42,7 @@ export const Tooltip = ({
 
     }, [tooltipInfo?.position]);
 
-
-
-    if (tooltipInfo === undefined || tooltipInfo.position === undefined || !isActive) {
+    if (tooltipInfo === undefined || tooltipInfo.position === undefined || !isActive || Object.keys(tooltipInfo).length <= 3) {
         return <div className={`tooltip`}></div>
     }
 

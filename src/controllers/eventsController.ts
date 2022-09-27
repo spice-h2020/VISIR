@@ -108,6 +108,8 @@ export default class EventsController {
     animationFinished(setTooltip: Dispatch<TooltipInfoAction>) {
         if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltip);
+        else
+            this.tooltipData = undefined;
     }
 
     /**
@@ -117,6 +119,8 @@ export default class EventsController {
     zoom(setTooltip: Dispatch<TooltipInfoAction>) {
         if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltip);
+        else
+            this.tooltipData = undefined;
     }
 
     /**
@@ -126,6 +130,8 @@ export default class EventsController {
     dragging(setTooltip: Dispatch<TooltipInfoAction>) {
         if (this.networkID === this.networkFocusID)
             this.updateTooltipPosition(setTooltip);
+        else
+            this.tooltipData = undefined;
     }
 
     /**
@@ -296,53 +302,58 @@ export default class EventsController {
      * @param setTooltip function that updates the tooltip
      */
     updateTooltipPosition(setTooltip: Dispatch<TooltipInfoAction>) {
-        if (this.tooltipData !== undefined) {
+        if (this.networkID === this.networkFocusID) {
+            if (this.tooltipData !== undefined) {
 
-            const refPosition = getHTMLPosition(this.refHTML);
+                const refPosition = getHTMLPosition(this.refHTML);
 
-            let x: number;
-            let y: number;
+                let x: number;
+                let y: number;
 
-            //If the tooltip data is a node
-            if (this.tooltipData?.explanation === undefined) {
-                const node = this.tooltipData as UserData;
+                //If the tooltip data is a node
+                if (this.tooltipData?.explanation === undefined) {
+                    const node = this.tooltipData as UserData;
 
-                const nodePositionInDOM = this.net.canvasToDOM(this.net.getPosition(node.id));
+                    const nodePositionInDOM = this.net.canvasToDOM(this.net.getPosition(node.id));
 
-                //Depending on the zoom level and node size, we add offset to the coordinates of the tooltip
-                x = nodePositionInDOM.x + refPosition.left + 18 + 1.7 * (node.size * this.net.getScale());
-                y = nodePositionInDOM.y + refPosition.top + node.size/2 - 3; // + -15 - 0.2 * (node.size * this.net.getScale());
+                    //Depending on the zoom level and node size, we add offset to the coordinates of the tooltip
+                    x = nodePositionInDOM.x + refPosition.left + 18 + 1.7 * (node.size * this.net.getScale());
+                    y = nodePositionInDOM.y + refPosition.top + node.size / 2 - 3; // + -15 - 0.2 * (node.size * this.net.getScale());
 
-            } else {
-                const community = this.tooltipData as CommunityData;
+                } else {
+                    const community = this.tooltipData as CommunityData;
 
-                const bb = community.bb as BoundingBox;
+                    const bb = community.bb as BoundingBox;
 
-                const bbLeft = this.net.canvasToDOM({
-                    x: bb.left,
-                    y: bb.top
-                });
-                const bbRight = this.net.canvasToDOM({
-                    x: bb.right,
-                    y: bb.bottom
-                });
+                    const bbLeft = this.net.canvasToDOM({
+                        x: bb.left,
+                        y: bb.top
+                    });
+                    const bbRight = this.net.canvasToDOM({
+                        x: bb.right,
+                        y: bb.bottom
+                    });
 
-                //Position the tooltip at the right of the bounding box
-                x = bbRight.x + refPosition.left + 16;
-                y = bbLeft.y + (bbRight.y - bbLeft.y) / 2 + refPosition.top;
+                    //Position the tooltip at the right of the bounding box
+                    x = bbRight.x + refPosition.left + 16;
+                    y = bbLeft.y + (bbRight.y - bbLeft.y) / 2 + refPosition.top;
 
+                }
+
+                //Check if the tooltip is inside the canvas
+                if (y > refPosition.top && y < refPosition.bottom &&
+                    x > refPosition.left && x < refPosition.right) {
+
+                    setTooltip({ action: "position", newValue: { x: x, y: y } });
+
+                } else {
+                    setTooltip({ action: "position", newValue: undefined });
+                }
             }
 
-            //Check if the tooltip is inside the canvas
-            if (y > refPosition.top && y < refPosition.bottom &&
-                x > refPosition.left && x < refPosition.right) {
+        } else
+            this.tooltipData = undefined;
 
-                setTooltip({ action: "position", newValue: { x: x, y: y } });
-
-            } else {
-                setTooltip({ action: "position", newValue: undefined });
-            }
-        }
     }
 }
 
