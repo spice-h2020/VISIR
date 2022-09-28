@@ -5,35 +5,33 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout, viewOptionsReducer } from './constants/viewOptions';
+import { FileSource, ButtonState, ViewOptions, viewOptionsReducer, CollapsedState } from './constants/viewOptions';
 import { PerspectiveDetails, PerspectiveInfo } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
-import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/ValidateFiles';
+import { bStateArrayAction } from './constants/auxTypes';
 //Packages
-import React, { Dispatch, useEffect, useReducer, useState } from 'react';
+import { Dispatch, useEffect, useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
 import { FileSourceDropdown } from './components/FileSourceDropdown';
-import { LayoutDropdown } from './components/LayoutDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
-import RequestManager from './managers/requestManager';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
-import { collapsedState, PerspectivesGroups } from './components/PerspectivesGroup';
-import ViewDataManager from './managers/viewDataManager';
+import { PerspectivesGroups } from './components/PerspectivesGroup';
 import { LegendTooltip } from './components/LegendTooltip';
+import RequestManager from './managers/requestManager';
 import './style/base.css';
-import { bStateArrayAction } from './constants/auxTypes';
+
 
 const requestManager = new RequestManager();
 
-function collapseReducer(state: collapsedState, stateAction: collapsedState) {
-  if (state === collapsedState.unCollapsed) {
+function collapseReducer(state: CollapsedState, stateAction: CollapsedState) {
+  if (state === CollapsedState.unCollapsed) {
     state = stateAction
-  } else if ((state === collapsedState.toTheLeft && stateAction === collapsedState.toTheRight)
-    || (state === collapsedState.toTheRight && stateAction === collapsedState.toTheLeft)) {
+  } else if ((state === CollapsedState.toTheLeft && stateAction === CollapsedState.toTheRight)
+    || (state === CollapsedState.toTheRight && stateAction === CollapsedState.toTheLeft)) {
 
-    state = collapsedState.unCollapsed;
+    state = CollapsedState.unCollapsed;
   }
 
   return state;
@@ -54,7 +52,7 @@ export function App() {
   const [rightPerspective, setRightPerspective] = useState<PerspectiveInfo>();
 
   //Current state of the perspectives collapse buttons
-  const [collapseState, setCollapseState] = useReducer(collapseReducer, collapsedState.unCollapsed);
+  const [collapseState, setCollapseState] = useReducer(collapseReducer, CollapsedState.unCollapsed);
 
   useEffect(() => {
 
@@ -92,7 +90,7 @@ export function App() {
             content="<<"
             onClick={(state: ButtonState) => {
               if (state !== ButtonState.disabled) {
-                setCollapseState(collapsedState.toTheLeft);
+                setCollapseState(CollapsedState.toTheLeft);
               }
             }}
             extraClassName={`first dropdown-dark`}
@@ -103,7 +101,7 @@ export function App() {
             extraClassName={`second dropdown-dark`}
             onClick={(state: ButtonState) => {
               if (state !== ButtonState.disabled) {
-                setCollapseState(collapsedState.toTheRight);
+                setCollapseState(CollapsedState.toTheRight);
               }
             }}
             state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}

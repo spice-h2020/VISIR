@@ -7,13 +7,13 @@
 //Constants
 import { ButtonState } from "../constants/viewOptions"
 import { PerspectiveDetails } from '../constants/perspectivesTypes';
+import { bStateArrayReducer, bStateArrayActionEnum, bStateArrayAction } from "../constants/auxTypes";
 //Packages
 import React, { Dispatch, useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import RequestManager from "../managers/requestManager";
-import { bStateArrayReducer, bStateArrayActionEnum, bStateArrayAction } from "../constants/auxTypes";
 
 interface SelectPerspectiveProps {
     //tittle of the dropdown
@@ -55,7 +55,6 @@ export const SelectPerspectiveDropdown = ({
         );
     }
 
-    //Creates all perspective buttons components
     const perspectivesButtons: React.ReactNode[] = getButtons(allPerspectives, states, setStates, onClick, requestManager);
 
     return (
@@ -68,11 +67,13 @@ export const SelectPerspectiveDropdown = ({
 };
 
 /**
- * Returns the buttons-reactComponents of the Select perspective dropdown
- * @param allPerspectives Array that contains all perspectiveDetails available to the user
- * @param itemsState Active/disabled state of all items
- * @param onClick Function executed when any button is clicked
- * @returns returns an array of React components
+ * Return all buttons/react components of the select perspective dropdown
+ * @param allPerspectives all available perspective details
+ * @param states current state of all buttons
+ * @param setStates function to set the state of all buttons
+ * @param onClick function executed when a button is clicked
+ * @param requestManager object to request the diferent files once a button is clicked
+ * @returns returns an array of react components
  */
 function getButtons(allPerspectives: PerspectiveDetails[], states: ButtonState[],
     setStates: Dispatch<bStateArrayAction>, onClick: Function,
@@ -89,11 +90,10 @@ function getButtons(allPerspectives: PerspectiveDetails[], states: ButtonState[]
                 content={allPerspectives[i].name}
                 state={state}
                 onClick={() => {
-                    requestManager.selectPerspective(state, allPerspectives[i], setStates, onClick);
+                    requestManager.requestPerspectiveFIle(state, allPerspectives[i], setStates, onClick);
                 }} />
         );
     }
-
     return buttons;
 }
 

@@ -5,12 +5,12 @@
  */
 //Constants
 import { FileSource, initialOptions, ButtonState } from "../constants/viewOptions";
+import { bStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
-import { Dispatch, useEffect, useReducer, useState } from "react";
+import { Dispatch, useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
-import { bStateArrayAction, bStateArrayActionEnum, bStateArrayReducer } from "../constants/auxTypes";
 
 interface FileSourceDropdownProps {
     //On click handler
@@ -36,7 +36,7 @@ export const FileSourceDropdown = ({
     //Init the app with the initial option executed.
     useEffect(() => {
         setFileSource(initialOptions.fileSource, setStates);
-    }, []);
+    }, [setFileSource]);
 
     const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states)
 

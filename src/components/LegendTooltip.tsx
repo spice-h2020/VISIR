@@ -5,13 +5,14 @@
  */
 //Constants
 import { DimAttribute, Dimensions, nodeConst } from '../constants/nodes';
+import { ButtonState } from '../constants/viewOptions';
 //Packages
-import React, { useEffect, useState } from "react";
+import React from "react";
 //Local files
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
 import '../style/legend.css';
-import { ButtonState } from '../constants/viewOptions';
+
 
 interface LegendTooltipProps {
     //Content of the legend

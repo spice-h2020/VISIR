@@ -5,43 +5,27 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { CommunityData, PerspectiveInfo, PerspectivePair, UserData } from "../constants/perspectivesTypes";
-import { AppLayout, initialOptions, ViewOptions } from "../constants/viewOptions"
-import { DataRow, Point, selectedObjectReducer, StateFunctions, TooltipInfo } from "../constants/auxTypes";
+import { PerspectiveInfo, PerspectiveState } from "../constants/perspectivesTypes";
+import { ViewOptions, CollapsedState } from "../constants/viewOptions"
+import { SelectedObjectActionEnum, selectedObjectReducer, StateFunctions } from "../constants/auxTypes";
 //Packages
-import React, { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 //Local files
+import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
-import { Tooltip } from "../basicComponents/Tooltip";
 import '../style/network.css';
 
 interface PerspectivesGroupProps {
     leftPerspective?: PerspectiveInfo,
     rightPerspective?: PerspectiveInfo,
 
-    collapsedState: collapsedState,
+    collapsedState: CollapsedState,
     //View options for all networks
     viewOptions: ViewOptions,
     //Function to setup the legend's data
     setLegendData: Function,
 }
-
-enum perspectiveState {
-    unactive,
-    activeSingle,
-    activeBoth,
-    activeBig,
-    collapsed,
-}
-
-export enum collapsedState {
-    unCollapsed,
-    toTheLeft,
-    toTheRight,
-}
-
-
 
 /**
  * Component that draws each active perspective
@@ -55,14 +39,10 @@ export const PerspectivesGroups = ({
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
-
-    const [selectedNodeId, setSelectedNodeId] = useState<number | undefined>();
     const [networkFocusID, setNetworkFocusID] = useState<number | undefined>();
-
     const [selectedObject, setSelectedObject] = useReducer(selectedObjectReducer, undefined);
 
     const sf: StateFunctions = {
-        setSelectedNodeId: setSelectedNodeId,
         setLegendData: setLegendData,
         setDimensionStrategy: setDimensionStrategy,
         setNetworkFocusId: setNetworkFocusID,
@@ -70,29 +50,24 @@ export const PerspectivesGroups = ({
     }
 
     useEffect(() => {
-        setSelectedObject({action: "clear", newValue: undefined, sourceID: 0 });
+        setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: 0 });
         setNetworkFocusID(undefined);
-        setSelectedNodeId(undefined);
-
     }, [collapsedState]);
 
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
 
-            setSelectedObject({action: "clear", newValue: undefined, sourceID: 0 });
-            setSelectedNodeId(undefined);
+            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: 0 });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
         }
-
     }, [leftPerspective, rightPerspective]);
 
     useEffect(() => {
         if (dimensionStrategy !== undefined)
             dimensionStrategy.toggleBorderStat(viewOptions.border);
 
-    }, [viewOptions.border]);
-
+    }, [viewOptions.border, dimensionStrategy]);
 
     const { leftState, rightState } = calculatePerspectiveState(leftPerspective, rightPerspective, collapsedState);
 
@@ -122,12 +97,12 @@ export const PerspectivesGroups = ({
                 selectedObject={selectedObject}
                 hideLabels={viewOptions.hideLabels}
             />
-            <div className={perspectiveState[leftState]}
+            <div className={PerspectiveState[leftState]}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.details.id}`}>
                 {leftComponent}
             </div>
 
-            <div className={perspectiveState[rightState]}
+            <div className={PerspectiveState[rightState]}
                 key={rightPerspective === undefined ? -2 : `second${rightPerspective.details.id}`}>
                 {rightComponent}
             </div>
@@ -135,43 +110,50 @@ export const PerspectivesGroups = ({
     );
 };
 
+/**
+ * Returns the state of both perspectives
+ * @param leftPerspective 
+ * @param rightPerspective 
+ * @param collapsedState 
+ * @returns returns two perspective states, {left, right}
+ */
 function calculatePerspectiveState(leftPerspective: PerspectiveInfo | undefined, rightPerspective: PerspectiveInfo | undefined,
-    collapsed: collapsedState) {
+    collapsedState: CollapsedState) {
 
-    let leftState: perspectiveState = perspectiveState.unactive;
-    let rightState: perspectiveState = perspectiveState.unactive;
+    let leftState: PerspectiveState = PerspectiveState.unactive;
+    let rightState: PerspectiveState = PerspectiveState.unactive;
 
     switch (true) {
         case leftPerspective === undefined:
-            leftState = perspectiveState.unactive;
+            leftState = PerspectiveState.unactive;
 
             if (rightPerspective === undefined)
-                rightState = perspectiveState.unactive;
+                rightState = PerspectiveState.unactive;
 
             else
-                rightState = perspectiveState.activeSingle;
+                rightState = PerspectiveState.activeSingle;
             break;
 
         case rightPerspective === undefined:
-            leftState = perspectiveState.activeSingle;
-            rightState = perspectiveState.unactive;
+            leftState = PerspectiveState.activeSingle;
+            rightState = PerspectiveState.unactive;
             break;
 
-        case collapsed === collapsedState.toTheLeft:
-            leftState = perspectiveState.collapsed;
-            rightState = perspectiveState.activeBig;
-
-            break;
-
-        case collapsed === collapsedState.toTheRight:
-            leftState = perspectiveState.activeBig;
-            rightState = perspectiveState.collapsed;
+        case collapsedState === CollapsedState.toTheLeft:
+            leftState = PerspectiveState.collapsed;
+            rightState = PerspectiveState.activeBig;
 
             break;
 
-        case collapsed === collapsedState.unCollapsed:
-            leftState = perspectiveState.activeBoth;
-            rightState = perspectiveState.activeBoth;
+        case collapsedState === CollapsedState.toTheRight:
+            leftState = PerspectiveState.activeBig;
+            rightState = PerspectiveState.collapsed;
+
+            break;
+
+        case collapsedState === CollapsedState.unCollapsed:
+            leftState = PerspectiveState.activeBoth;
+            rightState = PerspectiveState.activeBoth;
             break;
     }
     return { leftState, rightState };

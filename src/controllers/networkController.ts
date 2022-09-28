@@ -1,5 +1,6 @@
 /**
- * @fileoverview This file controlls all functions related to a Vis.js network. Changing node visuals and edge, reacting to vis.js events and viewOptions and drawing bounding boxes
+ * @fileoverview This file creates all objects related to a Vis.js network. 
+ * Aditionaly creates the initial vis.js network's configuration
  * @package Requires vis network package.
  * @package Requires vis data package.
  * @author Marco Expósito Pérez
@@ -19,7 +20,6 @@ import NodeVisuals from "./nodeVisuals";
 import BoxesController from "./boundingBoxes";
 import EventsController from "./eventsController";
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
-
 
 export default class NetworkController {
     //Options of the vis.js network

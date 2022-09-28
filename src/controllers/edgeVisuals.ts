@@ -10,7 +10,6 @@ import { EdgeData } from "../constants/perspectivesTypes";
 //Package
 import { DataSetEdges, Edge, IdType, Network, Options } from "vis-network";
 
-
 export default class EdgeVisuals {
     //Data of all edges of the perspective, even if they are not shown or loaded in the dataset
     allEdges: EdgeData[];
@@ -184,27 +183,29 @@ export default class EdgeVisuals {
      * Update the visuals of all selected edges
      */
     edgeChosenVisuals() {
-        const newEdges: Edge[] = [];
+        if (edgeConst.allowLabels) {
+            const newEdges: Edge[] = [];
 
-        this.edges.forEach((edge: Edge) => {
-            if (this.filteredSelectedEdges?.includes(edge.id as string)) {
-                edge.font = {
-                    color: edgeConst.LabelColorSelected,
-                    strokeColor: edgeConst.LabelStrokeColorSelected,
-                    strokeWidth: edgeConst.LabelStrokeWidthSelected
+            this.edges.forEach((edge: Edge) => {
+                if (this.filteredSelectedEdges?.includes(edge.id as string)) {
+                    edge.font = {
+                        color: edgeConst.LabelColorSelected,
+                        strokeColor: edgeConst.LabelStrokeColorSelected,
+                        strokeWidth: edgeConst.LabelStrokeWidthSelected
+                    }
+                } else {
+                    edge.font = {
+                        color: edgeConst.LabelColor,
+                        strokeColor: edgeConst.LabelStrokeColor,
+                        strokeWidth: edgeConst.LabelStrokeWidth,
+                    }
                 }
-            } else {
-                edge.font = {
-                    color: edgeConst.LabelColor,
-                    strokeColor: edgeConst.LabelStrokeColor,
-                    strokeWidth: edgeConst.LabelStrokeWidth,
-                }
-            }
 
-            newEdges.push(edge);
-        })
+                newEdges.push(edge);
+            })
 
-        this.edges.update(newEdges);
+            this.edges.update(newEdges);
+        }
     }
 
     getSelectedNodesAndEdges(sourceNode: string): { selectedNodes: string[], selected_edges_id: IdType[] } {

@@ -4,12 +4,8 @@
  */
 
  export const edgeConst = {
-
-    //Number that decides the minimum limit of edges to not be deleted 
-    narrowLimit: 0.5,
-
-    //% of edges that will be deleted. Lowest similarity edges will be deleted first
-    deleteLimit: 0.00, //0.85,
+    //Allow edge labels
+    allowLabels: false,
 
     //Edge Width limits
     minWidth: 1,

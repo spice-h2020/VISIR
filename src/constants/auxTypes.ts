@@ -3,7 +3,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 import { CommunityData, UserData } from "./perspectivesTypes";
 import { ButtonState } from "./viewOptions";
 
@@ -60,7 +60,8 @@ export class DataRow {
 }
 
 /**
- * Interface that contains all the info to show in a tooltip
+ * Interface that contains all the necesary information that a tooltip needs to be shown. 
+ * If the position is undefined, tooltip wont be shown
  */
 export interface TooltipInfo {
     tittle: string;
@@ -68,39 +69,6 @@ export interface TooltipInfo {
     subDataRow: DataRow[];
 
     position?: Point;
-}
-
-export interface SelectedObject {
-    obj: CommunityData | UserData | undefined;
-    position?: Point;
-    sourceID?: number;
-}
-
-export interface selectedObjectAction {
-    action: "position" | "object" | "clear";
-    newValue: Point | CommunityData | UserData | undefined;
-    sourceID: number;
-}
-
-export function selectedObjectReducer(state: SelectedObject | undefined, stateAction: selectedObjectAction) {
-    const { action, newValue, sourceID } = stateAction;
-
-    switch (action) {
-        case "position":
-            return {
-                ...state,
-                position: newValue,
-            } as SelectedObject;
-        case "object":
-            return {
-                position: state?.position,
-                obj: newValue,
-                sourceID: sourceID,
-            } as SelectedObject;
-        case "clear":
-            state = undefined;
-            return state;
-    }
 }
 
 /**
@@ -131,34 +99,107 @@ export interface Point {
  * Interface with all functions that change the state of one/all perspectives in the application
  */
 export interface StateFunctions {
-    setSelectedNodeId: Function;
     setLegendData: Function;
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
     setSelectedCommunity?: Function;
-    setSelectedObject: Dispatch<selectedObjectAction>;
+    setSelectedObject: Dispatch<SelectedObjectAction>;
+}
+
+/**
+ * Interface of an object selected by the user. It can be a community, a user node or nothing
+ */
+export interface SelectedObject {
+    obj: CommunityData | UserData | undefined;
+    position?: Point;
+    sourceID?: number;
+}
+
+//#region Reducer types/function
+
+/**
+ * Available actions for SelectedObjectAction. 
+ */
+export enum SelectedObjectActionEnum {
+    /**
+     * changes the position of the selected object. (Usefull for the tooltip.)
+     */
+    position,
+    /**
+     * Changes the selected object
+     */
+    object,
+    /**
+     * clears the object and its position
+     */
+    clear,
+}
+
+/**
+ * Available actions for the selectedObjectReducer function
+ */
+export interface SelectedObjectAction {
+    action: SelectedObjectActionEnum;
+    newValue: Point | CommunityData | UserData | undefined;
+    sourceID: number;
+}
+
+/**
+ * Function that simplify states updates of a SelectedObject state
+ * @param state current state
+ * @param stateAction action to execute
+ * @returns the new state
+ */
+export function selectedObjectReducer(state: SelectedObject | undefined, stateAction: SelectedObjectAction) {
+    const { action, newValue, sourceID } = stateAction;
+
+    switch (action) {
+        case SelectedObjectActionEnum.position:
+            return {
+                ...state,
+                position: newValue,
+            } as SelectedObject;
+        case SelectedObjectActionEnum.object:
+            return {
+                position: state?.position,
+                obj: newValue,
+                sourceID: sourceID,
+            } as SelectedObject;
+        case SelectedObjectActionEnum.clear:
+            state = undefined;
+            return state;
+    }
 }
 
 /**
  * Available actions for a buttonState array action
  */
 export enum bStateArrayActionEnum {
-    changeOne,  //Change the index of the array with the newState value
-    activeOne,  //Change the index of the array with the newState value and turn inactive all other values of the array
-    reset,      //Reset the array to a new array of size index and value newState
+    /**
+     * Change the index of the array with the newState value
+     */
+    changeOne,
+    /**
+     * Change the index of the array with the newState value and turn inactive all other values of the array
+     */
+    activeOne,
+    /**
+     * Reset the array to a new array of size index and value newState
+     */
+    reset,
 }
 
 /**
  * Interface of a button state Array action to tell the reducer function what to do
  */
 export interface bStateArrayAction {
-    action: bStateArrayActionEnum,
-    index: number,
-    newState: ButtonState
+    action: bStateArrayActionEnum;
+    index: number;
+    newState: ButtonState;
 }
 
 /**
- * Function that executes the bStateArrayAction
+ * Function that simplify states updates of a ButtonState array state
  * @param state state to edit
  * @param stateAction action to execute
  * @returns the state edited by the action
@@ -187,15 +228,22 @@ export function bStateArrayReducer(state: ButtonState[], stateAction: bStateArra
     return state;
 }
 
+/**
+ * Function that parses a selected object into diferent rows to show the user
+ * @param selectedObject object to be parsed
+ * @param hideLabel boolean that decides if the rows will include the ID and label of a userData selected obejct
+ * @returns an object with the format {tittle: string, main: DataRow[], sub: DataRow[]}. 
+ * If selected object is not valid, will return undefined
+ */
 
-export function parseSelectedObjectIntoRows(selectedObject: SelectedObject | undefined, hideLabel: boolean) {
+export function parseSelectedObjectIntoRows(selectedObject: CommunityData | UserData | undefined | undefined, hideLabel: boolean) {
 
-    if (selectedObject !== undefined && selectedObject.obj !== undefined) {
-        if (selectedObject.obj.explanation === undefined) { //If its userData{
-            const { tittle, main, sub } = parseNodeIntoRows(selectedObject.obj as UserData, hideLabel);
+    if (selectedObject !== undefined) {
+        if (selectedObject.explanation === undefined) { //If its userData{
+            const { tittle, main, sub } = parseNodeIntoRows(selectedObject as UserData, hideLabel);
             return { tittle, main, sub };
         } else {
-            const { tittle, main, sub } = parseCommunityIntoRows(selectedObject.obj as UserData);
+            const { tittle, main, sub } = parseCommunityIntoRows(selectedObject as CommunityData);
             return { tittle, main, sub };
         }
     } else {
@@ -223,7 +271,7 @@ export function parseNodeIntoRows(node: UserData, hideLabels: boolean) {
     return { tittle: "Citizen data", main: mainRows, sub: subRows }
 }
 
-export function parseCommunityIntoRows(community: UserData) {
+export function parseCommunityIntoRows(community: CommunityData) {
     const mainRows: DataRow[] = new Array<DataRow>();
 
     mainRows.push(new DataRow("Id", community !== undefined ? community.id.toString() : ""));

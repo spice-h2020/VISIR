@@ -4,9 +4,9 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { DataRow, TooltipInfo, Point, SelectedObject, parseSelectedObjectIntoRows } from "../constants/auxTypes";
+import { DataRow, TooltipInfo, SelectedObject, parseSelectedObjectIntoRows } from "../constants/auxTypes";
 //Packages
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 //Local files
 import { Button } from "./Button";
 import '../style/tooltip.css';
@@ -15,7 +15,7 @@ import '../style/tooltip.css';
 interface TooltipProps {
     //All important information about the tooltip
     selectedObject: SelectedObject | undefined;
-
+    //If the tooltip should hide users' labels and ids when shown 
     hideLabels: boolean;
 }
 
@@ -35,9 +35,8 @@ export const Tooltip = ({
     const bodyRef = useRef(null);
     const componentRef = useRef(null);
 
+    //Calculates the vertical offset based on the height of the tooltip to center it around the focused object
     useEffect(() => {
-        setActive(true);
-
         //Calculates the vertical offset
         const ref = bodyRef as any;
         const pRef = componentRef.current as any;
@@ -49,20 +48,22 @@ export const Tooltip = ({
 
     }, [selectedObject?.position]);
 
+    //Update the data of the tooltip
     useEffect(() => {
-        const result = parseSelectedObjectIntoRows(selectedObject, hideLabels);
+        setActive(true);
+        
+        const result = parseSelectedObjectIntoRows(selectedObject?.obj, hideLabels);
         if (result === undefined)
             setTooltipInfo(undefined);
         else {
             setTooltipInfo({ tittle: result.tittle, mainDataRow: result.main, subDataRow: result.sub });
         }
 
-    }, [selectedObject?.obj])
+    }, [selectedObject?.obj, hideLabels])
 
     if (tooltipInfo !== undefined && selectedObject !== undefined && selectedObject.position !== undefined && isActive) {
 
         const style = { top: selectedObject.position.y - yOffset, left: selectedObject.position.x };
-
         return (
             <div
                 ref={componentRef}
@@ -100,6 +101,7 @@ export const Tooltip = ({
                 </div >
             </div >
         );
+
     } else
         return <div className={`tooltip`}></div>
 

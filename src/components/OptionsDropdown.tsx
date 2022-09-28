@@ -5,13 +5,13 @@
  */
 //Constants
 import { ButtonState, initialOptions, ViewOptionAction, ViewOptions } from "../constants/viewOptions";
+import { bStateArrayReducer, bStateArrayActionEnum } from "../constants/auxTypes";
 //Packages
-import React, { Dispatch, useEffect, useReducer, useState } from "react";
+import React, { Dispatch, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import { Slider } from "../basicComponents/Slider";
-import { bStateArrayReducer, bStateArrayActionEnum } from "../constants/auxTypes";
 
 interface OptionsDropdownProps {
     setViewOptions: Dispatch<ViewOptionAction>;
@@ -41,10 +41,6 @@ export const OptionsDropdown = ({
                 setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState });
             }
         }
-    }
-
-    const onSlide = (updateType: keyof ViewOptions, newValue: number) => {
-        setViewOptions({ updateType: updateType, newValue: newValue })
     }
 
     const optionsButtons: React.ReactNode[] = [

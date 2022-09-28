@@ -52,7 +52,15 @@ export default class RequestManager {
 
     }
 
-    selectPerspective(currentState: ButtonState, perspectiveDetails: PerspectiveDetails, setStates: Dispatch<bStateArrayAction>,
+    /**
+     * Send a request for the data file of a perspective and update the selectPerspective dropdown state.
+     * If the requested perspective is already active, its removed.
+     * @param currentState current state of the perspective to request
+     * @param perspectiveDetails details of the perspective to request
+     * @param setStates function to update the selectPerspective dropdown state
+     * @param onFinish function executed when the request ends, updating the activePerspectives if necesary
+     */
+    requestPerspectiveFIle(currentState: ButtonState, perspectiveDetails: PerspectiveDetails, setStates: Dispatch<bStateArrayAction>,
         onFinish: Function) {
 
         if (currentState === ButtonState.unactive) {
@@ -85,6 +93,13 @@ export default class RequestManager {
         }
     }
 
+    /**
+     * Send a request for a new allPerspectives file, a file with all perspective details. 
+     * Aditionaly, updates the fileSource dropdown state
+     * @param newFileSource new file source
+     * @param setFileSource function to update file source dropdown state
+     * @param onFinish function executed when the request ends
+     */
     requestAllPerspectivesDetails(newFileSource: FileSource, setFileSource: Dispatch<bStateArrayAction>,
         onFinish: Function) {
 

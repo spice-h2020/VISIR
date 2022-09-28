@@ -4,9 +4,10 @@
  * @author Marco Expósito Pérez
  */
 //Constants
+import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 
-const checkSimilarityFunctions = true; //FOR DEBUG WITH TESTING DATAFILES if active, will validate the similarity options 
+const checkSimilarityFunctions = true; //FOR DEBUG WITH TESTING DATAFILES if active, will validate the similarity options of the perspective details
 
 //#region All perspectives JSON
 
@@ -507,7 +508,8 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
         arg.to = arg.u2;
         delete arg.u2;
 
-        arg.label = arg.value.toString();
+        if (edgeConst.allowLabels)
+            arg.label = arg.value.toString();
 
         return arg;
 

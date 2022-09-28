@@ -1,21 +1,22 @@
 /**
  * @fileoverview This file adds all necesary callback functions of events a vis.js network
  * @package Requires vis network package.
+ * @package Requires react package for the dispatch type.
  * @author Marco Expósito Pérez
  */
 //Constants
 import { CommunityData, UserData } from "../constants/perspectivesTypes";
 import { nodeConst } from "../constants/nodes";
-import { DataRow, Point, selectedObjectAction, StateFunctions, TooltipInfo } from "../constants/auxTypes";
+import { SelectedObjectAction, SelectedObjectActionEnum, StateFunctions } from "../constants/auxTypes";
 //Packages
 import { BoundingBox, DataSetEdges, DataSetNodes, FitOptions, IdType, Network, TimelineAnimationType } from "vis-network";
+import { Dispatch } from "react";
 //Local files
+import { getHTMLPosition } from "../basicComponents/Tooltip";
+import NetworkController from "./networkController";
 import BoxesController from "./boundingBoxes";
 import NodeVisuals from "./nodeVisuals";
 import EdgeVisuals from "./edgeVisuals";
-import { getHTMLPosition } from "../basicComponents/Tooltip";
-import NetworkController from "./networkController";
-import { Dispatch } from "react";
 
 export default class EventsController {
     //Bounding boxes controller
@@ -89,17 +90,15 @@ export default class EventsController {
      * @param sf Object with all functions that change the state
      */
     click(event: any, sf: StateFunctions) {
-        sf.setSelectedObject({ action: "clear", newValue: undefined, sourceID: this.networkID });
+        sf.setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: this.networkID });
 
         if (event.nodes.length > 0) {
             sf.setNetworkFocusId(this.networkID);
-            sf.setSelectedNodeId(event.nodes[0]);
 
             const node = this.nodes.get(event.nodes[0]) as unknown as UserData;
-            sf.setSelectedObject({ action: "object", newValue: node, sourceID: this.networkID});
+            sf.setSelectedObject({ action: SelectedObjectActionEnum.object, newValue: node, sourceID: this.networkID});
             
         } else {
-            sf.setSelectedNodeId(undefined);
             this.noNodeClicked(event, sf);
         }
     }
@@ -108,7 +107,7 @@ export default class EventsController {
      * Animation finished event callback
      * @param setSelectedObject function that updates the tooltip
      */
-    animationFinished(setSelectedObject: Dispatch<selectedObjectAction>) {
+    animationFinished(setSelectedObject: Dispatch<SelectedObjectAction>) {
         this.updateTooltipPosition(setSelectedObject);
     }
 
@@ -116,7 +115,7 @@ export default class EventsController {
      * Zoom event callback
      * @param setSelectedObject function that updates the tooltip
      */
-    zoom(setSelectedObject: Dispatch<selectedObjectAction>) {
+    zoom(setSelectedObject: Dispatch<SelectedObjectAction>) {
         this.updateTooltipPosition(setSelectedObject);
     }
 
@@ -124,7 +123,7 @@ export default class EventsController {
      * Canvas dragging event callback
      * @param setSelectedObject function that updates the tooltip
      */
-    dragging(setSelectedObject: Dispatch<selectedObjectAction>) {
+    dragging(setSelectedObject: Dispatch<SelectedObjectAction>) {
         this.updateTooltipPosition(setSelectedObject);
     }
 
@@ -178,7 +177,7 @@ export default class EventsController {
             sf.setSelectedCommunity!(community);
 
             //Update tooltip
-            sf.setSelectedObject({ action: "object", newValue: community, sourceID: this.networkID });
+            sf.setSelectedObject({ action: SelectedObjectActionEnum.object, newValue: community, sourceID: this.networkID });
             this.tooltipData = community;
 
             //Zoom in to the community
@@ -235,7 +234,7 @@ export default class EventsController {
      * Updates the tooltip position based on the saved tooltip data
      * @param setSelectedObject function that updates the tooltip
      */
-    updateTooltipPosition(setSelectedObject: Dispatch<selectedObjectAction>) {
+    updateTooltipPosition(setSelectedObject: Dispatch<SelectedObjectAction>) {
         if (this.networkID === this.networkFocusID) {
             if (this.tooltipData !== undefined) {
                 
@@ -278,10 +277,10 @@ export default class EventsController {
                 if (y > refPosition.top && y < refPosition.bottom &&
                     x > refPosition.left && x < refPosition.right) {
                         
-                    setSelectedObject({ action: "position", newValue: { x: x, y: y }, sourceID: this.networkID });
+                    setSelectedObject({ action: SelectedObjectActionEnum.position, newValue: { x: x, y: y }, sourceID: this.networkID });
 
                 } else {
-                    setSelectedObject({ action: "position", newValue: undefined, sourceID: this.networkID });
+                    setSelectedObject({ action: SelectedObjectActionEnum.position, newValue: undefined, sourceID: this.networkID });
                 }
             }
 
