@@ -1,9 +1,9 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Tooltip } from '../basicComponents/Tooltip';
-import { DataRow, Point, SelectedObject, TooltipInfo } from '../constants/auxTypes';
+import { SelectedObject } from '../constants/auxTypes';
 import { CommunityData, UserData } from '../constants/perspectivesTypes';
 
-import '../style/Base.css';
+import '../style/base.css';
 
 export default {
   title: 'Example/Tooltip',
