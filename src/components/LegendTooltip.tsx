@@ -13,7 +13,6 @@ import { Button } from '../basicComponents/Button';
 import '../style/legend.css';
 import { ButtonState } from '../constants/viewOptions';
 
-//TODO fix the legend that is not working at all. Maybe border option is not working for similar reasons.
 interface LegendTooltipProps {
     //Content of the legend
     legendData: DimAttribute[]
@@ -82,7 +81,12 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
 
                         onClick={() => {
                             legendConf.set(value, !legendConf.get(value));
-                            onClick(legendConf);
+                            
+                            const newMap = new Map(JSON.parse(
+                                JSON.stringify(Array.from(legendConf))
+                            ));
+
+                            onClick(newMap);
                         }} />
                 );
             }

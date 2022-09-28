@@ -22,8 +22,7 @@ interface PerspectiveViewProps {
     viewOptions: ViewOptions;
     //Object with all the functions that will change the state of the network
     sf: StateFunctions;
-    //Current selected node
-    selectedNodeId: undefined | number;
+    //Current selected Object. Can be nothing, a node or a community
     selectedObject: SelectedObject | undefined;
     //Current node dimension strategy
     dimStrat: NodeDimensionStrategy | undefined;
@@ -38,7 +37,6 @@ export const PerspectiveView = ({
     perspectiveInfo,
     viewOptions,
     sf,
-    selectedNodeId,
     selectedObject,
     dimStrat,
     networkFocusID,

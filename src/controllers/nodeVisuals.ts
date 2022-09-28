@@ -276,9 +276,8 @@ export default class NodeVisuals {
             for (let i = 0; i < keys.length && !toColorless; i++) {
                 const value = user.explicit_community[keys[i]]
 
-                if (this.legendConfig!.get(value) === false) {
+                if (this.legendConfig!.get(value))
                     toColorless = true;
-                }
 
             }
 
