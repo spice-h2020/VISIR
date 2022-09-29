@@ -1,0 +1,19 @@
+.accordion-menu {
+    width: 20%;
+}
+
+.accordion-header>.btn{
+    width: 100%;
+    text-align: left;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.panel {
+
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
