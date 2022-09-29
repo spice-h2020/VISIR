@@ -117,7 +117,8 @@ export const PerspectiveView = ({
     }, [visJsRef]);
 
     const dataCol = <DataColumn
-        tittle={perspectiveInfo?.details.name}
+        tittle={perspectiveInfo.details.name}
+        artworks={perspectiveInfo.data.artworks}
         node={selectedNode}
         community={selectedCommunity}
         viewOptions={viewOptions}

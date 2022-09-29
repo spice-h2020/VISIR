@@ -11,20 +11,18 @@ import { useEffect, useState } from "react";
 import '../style/interactions.css';
 
 
-interface InteractionDataProps {
+interface InteractionPanelProps {
     artworksData: ArtworkData[];
     interaction: Interaction;
-    state: boolean;
 }
 
 /**
  * Basic UI component that shows an interaction data
  */
-export const InteractionData = ({
+export const InteractionPanel = ({
     artworksData,
     interaction,
-    state,
-}: InteractionDataProps) => {
+}: InteractionPanelProps) => {
 
     const [artworkData, setArtworkData] = useState<ArtworkData>();
 
@@ -34,10 +32,10 @@ export const InteractionData = ({
 
     }, [interaction, artworksData]);
 
-    if (state && artworkData !== undefined) {
+    if (artworkData !== undefined) {
         return (
             <div className="interaction">
-                <div className="row">
+                <div className="row artwork-data">
                     <div className="col">
                         <div className="author"> {artworkData.author} </div>
 

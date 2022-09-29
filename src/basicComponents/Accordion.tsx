@@ -10,15 +10,12 @@ import { bStateArrayAction, bStateArrayActionEnum, bStateArrayReducer } from "..
 import { ButtonState } from "../constants/viewOptions";
 //Local files
 import '../style/accordion.css';
+import { AccordionItem } from "./AccordionItem";
 import { Button } from "./Button";
 
-export interface AccordionItem {
-    tittle: string,
-    item: React.ReactNode,
-}
-
 interface AccordionProps {
-    items: AccordionItem[];
+    items: React.ReactNode[];
+    tittles: string[];
 }
 
 /**
@@ -26,54 +23,34 @@ interface AccordionProps {
  * to click one of them to expand them and collapse the others
  */
 export const Accordion = ({
-    items
+    items,
+    tittles
 }: AccordionProps) => {
 
-    const [states, setStates] = useReducer(bStateArrayReducer, [ButtonState.unactive, ButtonState.unactive]);
+    const [states, setStates] = useReducer(bStateArrayReducer, new Array(items.length).fill(ButtonState.unactive));
 
     return (
         <div className="accordion-group">
-            {getCollapseMenus(items, states, setStates)}
+            {getCollapseMenus(items, tittles, states, setStates)}
         </div>
     );
 };
 
-
-function getCollapseMenus(items: AccordionItem[], states: ButtonState[], setStates: Dispatch<bStateArrayAction>) {
+function getCollapseMenus(items: React.ReactNode[], tittles: string[], states: ButtonState[], setStates: Dispatch<bStateArrayAction>) {
 
     const components: React.ReactNode[] = [];
 
     for (let i = 0; i < items.length; i++) {
-        const contentRef = useRef(null);
-        const maxHeight = calculateElementMaxHeight(contentRef);
-
         components.push(
-            <div className="accordion-menu" key={i}>
-                <div className="accordion-header">
-                    <Button
-                        content={items[i].tittle}
-                        state={states[i]}
-                        onClick={() => {
-                            setStates({ action: bStateArrayActionEnum.activeOne, index: i, newState: states[i] === ButtonState.active ? ButtonState.unactive : ButtonState.active })
-                        }}
-                    />
-                </div>
-                <div className={`panel ${states[i] === ButtonState.active ? "panel-open" : "panel-close"}`}
-                    ref={contentRef} 
-                    style={{ maxHeight: states[i] === ButtonState.active ? `${maxHeight}px` : "0px" }}
-                >
-                    {items[i].item}
-                </div>
-            </div >);
+            <AccordionItem
+                key={i}
+                item={items[i]}
+                tittle={tittles[i]}
+                state={states[i]}
+                index={i}
+                onClick={setStates} />
+        );
     }
 
     return components;
-}
-
-function calculateElementMaxHeight(ref: React.MutableRefObject<null>){
-    if(ref !== undefined && ref.current !== null){
-        return (ref.current as unknown as HTMLElement).scrollHeight;
-    }else{
-        return 0;
-    }
 }

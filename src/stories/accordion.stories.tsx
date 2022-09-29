@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { Accordion, AccordionItem } from '../basicComponents/Accordion';
-import { InteractionData } from '../basicComponents/Interaction';
+import { Accordion } from '../basicComponents/Accordion';
+import { InteractionPanel } from '../basicComponents/Interaction';
 import { ArtworkData, Interaction } from '../constants/perspectivesTypes';
 
 export default {
@@ -35,12 +35,7 @@ const artworkData: ArtworkData[] = [
         image: "https://www.gamtorino.it/sites/default/files/opere/MALINCONIA-%20BOSWELL%20Le%20tre%20finestre.jpg"
     },
 ]
-
-export const ExampleA = Template.bind({});
-
-const components: AccordionItem[] = [];
-
-const interaction: Interaction = {
+const interactions: Interaction[] = [{
     artwork_id: '1',
     feelings: 'scettico',
     sophia_extracted_emotions: {
@@ -48,18 +43,8 @@ const interaction: Interaction = {
         "Trust": 0.3,
         "Fear": 0.5
     }
-}
-
-components.push({
-    tittle: artworkData[0].tittle,
-    item: < InteractionData
-        artworksData={artworkData}
-        interaction={interaction}
-        state={true}
-    />
-})
-
-const interactionB: Interaction = {
+},
+{
     artwork_id: '2',
     feelings: 'Vociare, odori, curiosità, calore',
     sophia_extracted_emotions: {
@@ -68,18 +53,8 @@ const interactionB: Interaction = {
         "Disgust": 1,
         "Love": 1
     }
-}
-
-components.push({
-    tittle: artworkData[1].tittle,
-    item: <InteractionData
-        artworksData={artworkData}
-        interaction={interactionB}
-        state={true}
-    />
-})
-
-const interactionC: Interaction = {
+},
+{
     artwork_id: '3',
     feelings: loreIpsum,
     sophia_extracted_emotions: {
@@ -88,17 +63,32 @@ const interactionC: Interaction = {
         "Disgust": 1,
         "Love": 1
     }
-}
+}]
 
-components.push({
-    tittle: artworkData[2].tittle,
-    item: <InteractionData
+export const ExampleA = Template.bind({});
+
+const items: React.ReactNode[] = [
+    < InteractionPanel
         artworksData={artworkData}
-        interaction={interactionC}
-        state={true}
+        interaction={interactions[0]}
+    />,
+    < InteractionPanel
+        artworksData={artworkData}
+        interaction={interactions[1]}
+    />,
+    < InteractionPanel
+        artworksData={artworkData}
+        interaction={interactions[2]}
     />
-})
+];
+
+const tittles: string[] = [
+    artworkData[0].tittle,
+    artworkData[1].tittle,
+    artworkData[2].tittle,
+]
 
 ExampleA.args = {
-    items: components
+    items: items,
+    tittles: tittles,
 };

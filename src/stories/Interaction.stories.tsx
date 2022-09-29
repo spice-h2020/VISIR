@@ -1,14 +1,14 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { InteractionData } from '../basicComponents/Interaction';
+import { InteractionPanel } from '../basicComponents/Interaction';
 import { ArtworkData, Interaction } from '../constants/perspectivesTypes';
 
 export default {
   title: 'Example/Interaction',
-  component: InteractionData,
+  component: InteractionPanel,
 
-} as ComponentMeta<typeof InteractionData>;
+} as ComponentMeta<typeof InteractionPanel>;
 
-const Template: ComponentStory<typeof InteractionData> = (args) => <InteractionData {...args} />;
+const Template: ComponentStory<typeof InteractionPanel> = (args) => <InteractionPanel {...args} />;
 
 const artworkData: ArtworkData[] = [
   {
@@ -42,7 +42,6 @@ const interaction: Interaction = {
 ExampleA.args = {
   artworksData: artworkData,
   interaction: interaction,
-  state: true
 };
 
 export const ExampleB = Template.bind({});
@@ -62,5 +61,4 @@ const interactionB: Interaction = {
 ExampleB.args = {
   artworksData: artworkData,
   interaction: interactionB,
-  state: true
 };

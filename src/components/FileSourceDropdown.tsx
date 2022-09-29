@@ -36,7 +36,8 @@ export const FileSourceDropdown = ({
     //Init the app with the initial option executed.
     useEffect(() => {
         setFileSource(initialOptions.fileSource, setStates);
-    }, [setFileSource]);
+    // eslint-disable-next-line
+    }, []);
 
     const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states)
 

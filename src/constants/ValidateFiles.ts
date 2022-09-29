@@ -4,6 +4,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
+import { unescape } from "querystring";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 
@@ -579,9 +580,10 @@ function isArtworkDataValid(arg: any): types.ArtworkData {
                 throw Error(`Image of the artwork (${arg.id}) is not a string`);
             }
         }
-
-        arg.image = decodeURI(arg.image);
-
+        console.log(arg.image);
+        arg.image =decodeURIComponent(decodeURIComponent(arg.image))
+        console.log(arg.image);
+        
         return arg;
 
     } catch (e: any) {

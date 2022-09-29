@@ -52,7 +52,7 @@ export const Dropdown = ({
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
-                    extraClassName={extraClassName}
+                    extraClassName={`down-arrow ${extraClassName}`}
                 />
                 <div className="dropdown-content">
                     {items}
@@ -67,7 +67,7 @@ export const Dropdown = ({
                 <Button
                     content={content}
                     state={ButtonState.disabled}
-                    extraClassName={extraClassName}
+                    extraClassName={`down-arrow ${extraClassName}`}
                 />
             </div >
         );

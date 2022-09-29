@@ -11,7 +11,6 @@
   background-color: rgb(255, 0, 0);
 }
 
-
 .btn.disabled {
   background-color: rgb(208, 255, 0);
 }
@@ -26,4 +25,15 @@
 
 .second.btn{
   border-radius: 0px 5px 5px 0px !important;
+}
+
+.btn.down-arrow::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
 }

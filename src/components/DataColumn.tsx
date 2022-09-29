@@ -4,14 +4,15 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { CommunityData, UserData } from "../constants/perspectivesTypes";
+import { ArtworkData, CommunityData, UserData } from "../constants/perspectivesTypes";
 import { DataRow } from "../constants/auxTypes";
 import { ViewOptions } from "../constants/viewOptions";
 //Packages
 import { useState, useEffect } from "react";
 //Local files
 import { DataTable } from "../basicComponents/Datatable";
-
+import { InteractionPanel } from "../basicComponents/Interaction";
+import { Accordion } from "../basicComponents/Accordion";
 
 /**
  * local aux class to hold the all the info of a datatable
@@ -30,6 +31,7 @@ interface DataColumnProps {
     //Tittle shown above both tables
     tittle: React.ReactNode
     //Data of both tables
+    artworks: ArtworkData[],
     node: UserData | undefined,
     community: CommunityData | undefined,
     //Options that may hide some of the rows values
@@ -41,6 +43,7 @@ interface DataColumnProps {
  */
 export const DataColumn = ({
     tittle,
+    artworks,
     node,
     viewOptions,
     community,
@@ -50,7 +53,6 @@ export const DataColumn = ({
     const [nodeInfo, setNodeInfo] = useState<DatatableData>(new DatatableData());
     const [commInfo, setCommInfo] = useState<DatatableData>(new DatatableData());
 
-
     useEffect(() => {
         updateNodeInfo(node, setNodeInfo, viewOptions);
     }, [node, viewOptions]);
@@ -59,6 +61,7 @@ export const DataColumn = ({
         updateCommInfo(community, setCommInfo);
     }, [community]);
 
+    const { tittles, interactions } = getInteractions(node, artworks);
 
     return (
         <div className="dataColumn">
@@ -69,6 +72,12 @@ export const DataColumn = ({
                     tittle={"Citizen Attributes"}
                     MainRows={nodeInfo.mainRows}
                     SubRows={nodeInfo.subRows}
+                />
+            </div>
+            <div>
+                <Accordion
+                    items={interactions}
+                    tittles={tittles}
                 />
             </div>
             <div>
@@ -127,4 +136,29 @@ function updateCommInfo(community: any, setCommInfo: Function) {
     }
     setCommInfo(newCommData);
 
+}
+
+function getInteractions(nodeData: UserData | undefined, artworks: ArtworkData[]) {
+    const tittles: string[] = [];
+    const interactions: React.ReactNode[] = [];
+
+    if (nodeData !== undefined && nodeData.interactions !== undefined) {
+        for (let i = 0; i < nodeData.interactions.length; i++) {
+
+            const interaction = nodeData.interactions[i];
+            const artwork = artworks.find((element: ArtworkData) => { return element.id === interaction.artwork_id });
+
+            if (artwork !== undefined) {
+                tittles.push(artwork.tittle);
+                interactions.push(
+                    <InteractionPanel
+                        artworksData={artworks}
+                        interaction={interaction}
+                    />
+                );
+            }
+        }
+    }
+
+    return {tittles, interactions};
 }
