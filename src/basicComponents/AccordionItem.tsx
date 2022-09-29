@@ -1,16 +1,17 @@
 /**
- * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
+ * @fileoverview This file creates a button and a hidden component. They are intended to work inside an accordion component
+ * were a click will hide all visible components and will make this component unhidden.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-//Packages
-import React, { Dispatch, MutableRefObject, useEffect, useReducer, useRef, useState } from "react";
-import { bStateArrayAction, bStateArrayActionEnum, bStateArrayReducer } from "../constants/auxTypes";
+import { bStateArrayAction, bStateArrayActionEnum } from "../constants/auxTypes";
 import { ButtonState } from "../constants/viewOptions";
+//Packages
+import React, { Dispatch, useRef } from "react";
 //Local files
-import '../style/accordion.css';
 import { Button } from "./Button";
+import '../style/accordion.css';
 
 interface AccordionItemProps {
     item: React.ReactNode;
@@ -21,8 +22,7 @@ interface AccordionItemProps {
 }
 
 /**
- * Basic UI element that shows the user the tittle of diferent panels and allows the user 
- * to click one of them to expand them and collapse the others
+ * Basic UI element formed by a button that toggles the item state and hide all other active items in the accordion
  */
 export const AccordionItem = ({
     item,
@@ -59,6 +59,11 @@ export const AccordionItem = ({
         </div >);
 };
 
+/**
+ * Calculates the max Height of an HTML element
+ * @param ref ref of the HTML element
+ * @returns the height
+ */
 function calculateElementMaxHeight(ref: React.MutableRefObject<null>) {
     if (ref !== undefined && ref.current !== null) {
         return (ref.current as unknown as HTMLElement).scrollHeight;

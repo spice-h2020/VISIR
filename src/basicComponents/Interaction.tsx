@@ -1,5 +1,5 @@
 /**
- * @fileoverview This file creates an interaction information panel.
+ * @fileoverview This file creates a panel with the information of a user interaction with an artwork.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -17,7 +17,7 @@ interface InteractionPanelProps {
 }
 
 /**
- * Basic UI component that shows an interaction data
+ * Basic UI component that shows the information about a single interaction of a user with an artwork
  */
 export const InteractionPanel = ({
     artworksData,
@@ -46,7 +46,9 @@ export const InteractionPanel = ({
                         </div>
                     </div>
                     <div className="col">
-                        <img src={artworkData.image} />
+                        <img src={artworkData.image}
+                            alt={artworkData.tittle}
+                        />
                     </div>
                 </div>
                 <div className="row">
@@ -68,6 +70,11 @@ export const InteractionPanel = ({
         );
 };
 
+/**
+ * Function to parse shopia emotions to a readable string. Currently does nothing but parsing its text to string
+ * @param emotions shopia emotion results
+ * @returns a string with the translation
+ */
 function shopiaToString(emotions: anyProperty) {
     if (emotions !== undefined) {
         return JSON.stringify(emotions);

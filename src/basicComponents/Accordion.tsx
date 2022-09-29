@@ -1,17 +1,18 @@
 /**
- * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
+ * @fileoverview This file creates a group of buttons, each one with a hidden component. 
+ * When a button is clicked, all components will be hided except the component of th ebutton clicked, that one will be shown.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-//Packages
-import React, { Dispatch, MutableRefObject, useEffect, useReducer, useRef, useState } from "react";
-import { bStateArrayAction, bStateArrayActionEnum, bStateArrayReducer } from "../constants/auxTypes";
+import { bStateArrayReducer } from "../constants/auxTypes";
 import { ButtonState } from "../constants/viewOptions";
+//Packages
+import React, { useReducer} from "react";
 //Local files
-import '../style/accordion.css';
 import { AccordionItem } from "./AccordionItem";
-import { Button } from "./Button";
+
+import '../style/accordion.css';
 
 interface AccordionProps {
     items: React.ReactNode[];
@@ -29,15 +30,6 @@ export const Accordion = ({
 
     const [states, setStates] = useReducer(bStateArrayReducer, new Array(items.length).fill(ButtonState.unactive));
 
-    return (
-        <div className="accordion-group">
-            {getCollapseMenus(items, tittles, states, setStates)}
-        </div>
-    );
-};
-
-function getCollapseMenus(items: React.ReactNode[], tittles: string[], states: ButtonState[], setStates: Dispatch<bStateArrayAction>) {
-
     const components: React.ReactNode[] = [];
 
     for (let i = 0; i < items.length; i++) {
@@ -52,5 +44,9 @@ function getCollapseMenus(items: React.ReactNode[], tittles: string[], states: B
         );
     }
 
-    return components;
-}
+    return (
+        <div className="accordion-group">
+            {components}
+        </div>
+    );
+};
