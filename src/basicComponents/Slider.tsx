@@ -6,7 +6,7 @@
 //Packages
 import { useState } from "react";
 //Local files
-import "../style/slider.css"
+import "../style/base.css"
 
 interface SliderProps {
     //Text above the slider
@@ -52,11 +52,13 @@ export const Slider = ({
     }
 
     const label = getContent(content, contentUnit, value);
+    const size = (parseFloat(value) - minimum) * 100 / (maximum - minimum) + '% 100%';
 
     return (
         <div className="slider-container">
             {label}
             <input type="range"
+            style={{backgroundSize: size}}
                 min={minimum} max={maximum} step={step}
                 value={value}
                 onChange={(e) => {

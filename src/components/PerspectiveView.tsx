@@ -10,9 +10,9 @@ import { SelectedObject, StateFunctions } from '../constants/auxTypes';
 //Packages
 import { useEffect, useState, useRef } from "react";
 //Local files
-import { DataColumn } from "./DataColumn";
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/dimensionStrategy';
+import { DataTable } from '../basicComponents/Datatable';
 
 
 interface PerspectiveViewProps {
@@ -116,12 +116,12 @@ export const PerspectiveView = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
 
-    const dataCol = <DataColumn
+    const dataCol = <DataTable
         tittle={perspectiveInfo.details.name}
-        artworks={perspectiveInfo.data.artworks}
         node={selectedNode}
         community={selectedCommunity}
-        viewOptions={viewOptions}
+        artworks={perspectiveInfo.data.artworks}
+        hideLabel={viewOptions.hideLabels}
     />
 
     const networkContainer = <div className="network-container" key={1} ref={visJsRef} />

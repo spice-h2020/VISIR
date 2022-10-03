@@ -11,7 +11,7 @@ import { ButtonState } from "../constants/viewOptions";
 import React, { Dispatch, useRef } from "react";
 //Local files
 import { Button } from "./Button";
-import '../style/accordion.css';
+import '../style/base.css';
 
 interface AccordionItemProps {
     item: React.ReactNode;
@@ -34,12 +34,20 @@ export const AccordionItem = ({
 
     const contentRef = useRef(null);
     const maxHeight = calculateElementMaxHeight(contentRef);
-
+    
     return (
         <div className="accordion-menu">
             <div className="accordion-header">
                 <Button
-                    content={tittle}
+                    content={
+                    <div className="row"> 
+                        <div className="btn-text">
+                            {tittle}
+                        </div>
+                        <div className="btn-icon plus">
+                            {state === ButtonState.active ? "-" : "+"}
+                        </div>
+                    </div>}
                     state={state}
                     onClick={() => {
                         onClick({

@@ -74,7 +74,8 @@ function getButtons(changeFileSource: Function, selectedItems: ButtonState[]): R
             content="Local app files"
             onClick={() => { changeFileSource(FileSource.Local); }}
             state={selectedItems[FileSource.Local]}
-            key={1} />,
+            key={1} 
+            />,
         <Button
             content="Github Develop"
             onClick={() => { changeFileSource(FileSource.Develop); }}

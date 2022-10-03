@@ -1,5 +1,5 @@
 {
-    "communities": [
+    "communities": [ //JSON scheme
         { 
             "id" : string ,             
             "name": string,         //Visible from the app.

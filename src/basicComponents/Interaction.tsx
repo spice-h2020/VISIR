@@ -8,7 +8,7 @@ import { anyProperty, ArtworkData, Interaction } from "../constants/perspectives
 //Packages
 import { useEffect, useState } from "react";
 //Local files
-import '../style/interactions.css';
+import '../style/base.css';
 
 
 interface InteractionPanelProps {

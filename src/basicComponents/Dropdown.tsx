@@ -9,7 +9,7 @@ import { ButtonState } from '../constants/viewOptions';
 import React, { useState, useEffect } from "react";
 //Local files
 import { Button } from "./Button";
-import '../style/dropdown.css';
+import '../style/base.css';
 
 interface DropdownProps {
     //Items inside the dropdown
@@ -40,6 +40,8 @@ export const Dropdown = ({
         setShowDropDown(false);
     }, closeWhenOutsideClick);
 
+    const buttonClass = extraClassName === "dropdown-light" ? "transparent" : "primary";
+
     if (items.length !== 0)
         return (
             <div className={showDropDown ? `dropdown ${extraClassName} active` : `dropdown ${extraClassName}`}
@@ -52,7 +54,7 @@ export const Dropdown = ({
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
-                    extraClassName={`down-arrow ${extraClassName}`}
+                    extraClassName={`down-arrow ${buttonClass}`}
                 />
                 <div className="dropdown-content">
                     {items}
@@ -67,7 +69,7 @@ export const Dropdown = ({
                 <Button
                     content={content}
                     state={ButtonState.disabled}
-                    extraClassName={`down-arrow ${extraClassName}`}
+                    extraClassName={`down-arrow ${buttonClass}`}
                 />
             </div >
         );

@@ -31,16 +31,8 @@ export const LegendTooltip = ({
     legendConf,
     onLegendClick,
 }: LegendTooltipProps) => {
-
-    if (legendData === undefined) {
-        return (<Dropdown
-            items={[]}
-            content="Unactive Legend"
-            extraClassName="dropdown-dark legend-dropdown"
-            closeWhenOutsideClick={false}
-        />)
-
-    } else {
+    console.log(legendData)
+    if (legendData !== undefined && legendData.length > 0) {
 
         const legendRows: React.ReactNode[] = getLegendButtons(legendData, legendConf, onLegendClick);
 
@@ -52,6 +44,15 @@ export const LegendTooltip = ({
                 closeWhenOutsideClick={false}
             />
         );
+
+    } else {
+        return (<Dropdown
+            items={[]}
+            content="Unactive Legend"
+            extraClassName="dropdown-dark legend-dropdown"
+            closeWhenOutsideClick={false}
+        />)
+
     }
 };
 
@@ -82,7 +83,7 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
 
                         onClick={() => {
                             legendConf.set(value, !legendConf.get(value));
-                            
+
                             const newMap = new Map(JSON.parse(
                                 JSON.stringify(Array.from(legendConf))
                             ));

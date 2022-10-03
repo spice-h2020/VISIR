@@ -67,7 +67,7 @@ export function App() {
         leftAlignedItems={[
           <Button
             content="Visualization module"
-            extraClassName="navBar-mainBtn"
+            extraClassName="transparent tittle"
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown
@@ -124,7 +124,7 @@ export function App() {
           />,
         ]}
       />
-      <h1> Communities Visualization</h1>
+      <span style={{height: "70px", display: "flex"}}></span>
       <PerspectivesGroups
         leftPerspective={leftPerspective}
         rightPerspective={rightPerspective}
@@ -135,3 +135,5 @@ export function App() {
     </div>
   );
 }
+
+

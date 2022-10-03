@@ -12,7 +12,7 @@ import React, { useReducer} from "react";
 //Local files
 import { AccordionItem } from "./AccordionItem";
 
-import '../style/accordion.css';
+import '../style/base.css';
 
 interface AccordionProps {
     items: React.ReactNode[];
