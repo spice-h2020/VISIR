@@ -64,7 +64,6 @@ export const PerspectiveView = ({
 
     ViewOptionsUseEffect(viewOptions, netManager);
 
-
     useEffect(() => {
         //If something is selected
         if (selectedObject?.obj !== undefined && netManager !== undefined) {
@@ -90,7 +89,7 @@ export const PerspectiveView = ({
 
                     if (netManager !== undefined) {
                         netManager.eventsController.removeSelectedItems();
-                        netManager.eventsController.zoomOut();
+                        netManager.eventsController.selectNodesByID(selectedObject.obj.users);
                     }
                 }
             }

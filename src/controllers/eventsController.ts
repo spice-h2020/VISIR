@@ -19,6 +19,7 @@ import NodeVisuals from "./nodeVisuals";
 import EdgeVisuals from "./edgeVisuals";
 
 export default class EventsController {
+
     //Bounding boxes controller
     bbController: BoxesController;
     //Node visuals controller
@@ -287,6 +288,19 @@ export default class EventsController {
         } else
             this.tooltipData = undefined;
 
+    }
+
+    selectNodesByID(users: number[]) {
+        this.net.selectNodes(users);
+
+        const fitOptions: FitOptions = {
+            animation: {
+                duration: nodeConst.zoomDuration,
+            } as TimelineAnimationType,
+            nodes: users
+        }
+
+        this.net.fit(fitOptions);
     }
 }
 

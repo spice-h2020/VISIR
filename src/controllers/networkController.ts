@@ -87,6 +87,7 @@ export default class NetworkController {
                     color: edgeConst.defaultColor,
                     highlight: edgeConst.selectedColor
                 },
+                chosen: false,
                 font: {
                     strokeWidth: edgeConst.LabelStrokeWidth,
                     size: edgeConst.LabelSize,

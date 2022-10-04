@@ -193,12 +193,28 @@ export default class EdgeVisuals {
                         strokeColor: edgeConst.LabelStrokeColorSelected,
                         strokeWidth: edgeConst.LabelStrokeWidthSelected
                     }
+                    edge.color = edgeConst.selectedColor;
                 } else {
                     edge.font = {
                         color: edgeConst.LabelColor,
                         strokeColor: edgeConst.LabelStrokeColor,
                         strokeWidth: edgeConst.LabelStrokeWidth,
                     }
+                    edge.color = edgeConst.defaultColor;
+                }
+
+                newEdges.push(edge);
+            })
+
+            this.edges.update(newEdges);
+        } else {
+            const newEdges: Edge[] = [];
+
+            this.edges.forEach((edge: Edge) => {
+                if (this.filteredSelectedEdges?.includes(edge.id as string)) {
+                    edge.color = edgeConst.selectedColor;
+                } else {
+                    edge.color = edgeConst.defaultColor;
                 }
 
                 newEdges.push(edge);
@@ -229,7 +245,6 @@ export default class EdgeVisuals {
                 const index = selected_edges_id.indexOf(edge.id as string);
                 selected_edges_id.splice(index, 1);
             }
-
         });
 
         return { selectedNodes, selected_edges_id };

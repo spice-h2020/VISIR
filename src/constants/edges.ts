@@ -5,16 +5,17 @@
 
  export const edgeConst = {
     //Allow edge labels
-    allowLabels: false,
+    allowLabels: true,
 
     //Edge Width limits
     minWidth: 1,
     maxWidth: 10,
 
     //Default color of the edge when is not selected
-    defaultColor: "#A4A4A4",
+    defaultColor: "rgba(164,164,164, 0.2)",
     //Color when the edge is being selected
     selectedColor: "#000000",
+    selectedExtraWidth: 2, 
 
     //--- Labels ---
     //Default values

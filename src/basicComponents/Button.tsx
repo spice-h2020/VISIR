@@ -56,7 +56,6 @@ export const Button = ({
           else
             setButtonState(ButtonState.unactive);
         }
-
       }}
     >
       {content}
