@@ -5,7 +5,7 @@
  */
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
-import { PerspectiveInfo, UserData, CommunityData } from '../constants/perspectivesTypes';
+import { PerspectiveInfo, UserData, CommunityData, PerspectiveState } from '../constants/perspectivesTypes';
 import { SelectedObject, StateFunctions } from '../constants/auxTypes';
 //Packages
 import { useEffect, useState, useRef } from "react";
@@ -27,7 +27,9 @@ interface PerspectiveViewProps {
     //Current node dimension strategy
     dimStrat: NodeDimensionStrategy | undefined;
     //Id of the current network on the focus
-    networkFocusID: undefined | number
+    networkFocusID: undefined | number;
+
+    perspectiveState: PerspectiveState
 }
 
 /**
@@ -40,6 +42,7 @@ export const PerspectiveView = ({
     selectedObject,
     dimStrat,
     networkFocusID,
+    perspectiveState,
 }: PerspectiveViewProps) => {
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
@@ -116,26 +119,43 @@ export const PerspectiveView = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
 
-    const dataCol = <DataTable
-        tittle={perspectiveInfo.details.name}
-        node={selectedNode}
-        community={selectedCommunity}
-        artworks={perspectiveInfo.data.artworks}
-        hideLabel={viewOptions.hideLabels}
-    />
+    let networkState = "";
+    if (netManager !== undefined && networkFocusID === netManager?.eventsController.networkID)
+        networkState = "active";
 
-    const networkContainer = <div className="network-container" key={1} ref={visJsRef} />
+    const networkContainer = <div className={`network-container ${networkState}`} key={1} ref={visJsRef} />
 
-    return (
-        <div className="perspective row" key={10}>
-            <div className="col-4" key={1}>
-                {dataCol}
-            </div>
-            <div className="col-8" key={0}>
-                {networkContainer}
-            </div>
-        </div >
-    );
+    if (perspectiveState !== PerspectiveState.collapsed) {
+        const dataCol = <DataTable
+            tittle={perspectiveInfo.details.name}
+            node={selectedNode}
+            community={selectedCommunity}
+            artworks={perspectiveInfo.data.artworks}
+            hideLabel={viewOptions.hideLabels}
+            state={networkState}
+        />
+
+        return (
+            <div className="row" key={10}>
+                <div className="col-4" key={1}>
+                    {dataCol}
+                </div>
+                <div className="col-8" key={0}>
+                    {networkContainer}
+                </div>
+            </div >
+        );
+    } else {
+        return (
+            <div className="row" key={10}>
+                <div className="col-12" key={0}>
+                    {networkContainer}
+                </div>
+            </div >
+        );
+    }
+
+
 };
 
 /**

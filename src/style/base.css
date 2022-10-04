@@ -86,12 +86,15 @@ body {
 }
 
 .btn:hover {
-    box-shadow: rgb(0 0 0 / 100%) 0px 0px 0.75rem 0px;
     opacity: 90%;
 }
 
 .btn.disabled {
     opacity: 40%;
+    cursor: auto;
+}
+.btn.disabled:hover {
+    box-shadow: none !important;
     cursor: auto;
 }
 
@@ -101,6 +104,14 @@ body {
 
 .secondary {
     background-color: var(--secondaryButtonColor);
+}
+
+.dark {
+    background-color: #555;
+}
+
+.circle {
+    border-radius: 100%;
 }
 
 .transparent {
@@ -117,12 +128,11 @@ body {
 
 /*Buttons of the collapse perspective options*/
 .first.btn {
-    border-radius: 5px 0px 0px 5px !important;
-    background-color: #555;
+    border-radius: 100% 0px 0px 100%     !important;
 }
+
 .second.btn {
-    border-radius: 0px 5px 5px 0px !important;
-    background-color: #555;
+    border-radius: 0px 100% 100% 0px !important;
 }
 
 /*Little triangle after a dropdown */
@@ -136,6 +146,20 @@ body {
     border-bottom: 0;
     border-left: 0.3em solid transparent;
 }
+
+.btn.plus::after {
+    margin-left: 5px;
+    scale: 1.5;
+    display: inline-block;
+    content: "+";
+}
+.btn.plus.active::after {
+    margin-left: 5px;
+    scale: 1.5;
+    display: inline-block;
+    content: "-";
+}
+
 
 :root {
     --btn-no-hover-opacity: 0.85;
@@ -310,9 +334,8 @@ input[type="range"]::-ms-track {
  <--- DATATABLE CSS --->
  */
 
- .dataColumn {
-    margin-top: 10px;
-    margin-left: 5px;
+.dataColumn {
+    margin: auto;
     padding: 16px 16px 24px 16px;
 
     background-color: white;
@@ -333,7 +356,7 @@ input[type="range"]::-ms-track {
 /**
  <--- ACCORDION CSS --->
  */
- .accordion-header>.btn {
+.accordion-header>.btn {
     padding: 18px;
     width: 100%;
 
@@ -352,6 +375,7 @@ input[type="range"]::-ms-track {
 .accordion-menu:first-child>.accordion-header>.btn {
     border-radius: 10px 10px 0px 0px;
 }
+
 .accordion-menu:last-child>.accordion-header>.btn {
     border-radius: 0px 0px 10px 10px;
 }
@@ -405,32 +429,32 @@ input[type="range"]::-ms-track {
     padding: 5px;
 }
 
-.artwork-data{
+.artwork-data {
     max-height: 20vh;
 }
 
-.author{
+.author {
     font-size: 80%;
 }
 
 .feelings {
     width: 80%;
     margin: 15px auto;
-    
+
     border: 2px dashed var(--primaryButtonColor);
-    
+
     box-sizing: border-box;
     text-align: center;
 }
 
-.emotions{
+.emotions {
     overflow-wrap: anywhere;
 }
 
 img {
     max-height: 100%;
     max-width: 100%;
-    
+
     border: 2px solid var(--grayLineColor);
 }
 
@@ -443,7 +467,7 @@ img {
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black; 
+    border-bottom: 1px dotted black;
 }
 
 /* Tooltip content */
@@ -455,7 +479,8 @@ img {
     min-width: 12rem;
     max-width: 14rem;
 
-    opacity: 85%;
+    opacity: 90%;
+
 }
 
 .tooltip.active .tooltip-content {
@@ -468,29 +493,29 @@ img {
 }
 
 /* Tooltip header */
-.tooltip-header{
+.tooltip-header {
     padding-left: 10px;
     margin-bottom: 0;
 
     border-radius: 6px 6px 0px 0px;
 
     background-color: var(--headerBackground);
-    border-bottom: 1px dotted black;
+    border: 2px solid var(--grayLineColor);
 }
 
-.tooltip-header > h3{
+.tooltip-header>h3 {
     padding: 0px;
     margin: 0px;
     font-size: 1rem;
 }
 
-.tooltip-header>.btn-close::after{
+.tooltip-header>.btn-close::after {
     display: inline-block;
-    content: "X"; 
+    content: "X";
     font-size: large;
 
     text-align: center;
-    
+
     color: black;
     height: 20px;
     width: 20px;
@@ -499,17 +524,20 @@ img {
     padding: 0cm;
 }
 
-.tooltip-header>.btn-close{
+.tooltip-header>.btn-close {
     text-align: right;
 }
 
-.tooltip-header>.btn-close:hover{
+.tooltip-header>.btn-close:hover {
     box-shadow: none;
 }
 
 /* Tooltip body */
-.tooltip-body{
+.tooltip-body {
     background-color: var(--textAreaBackground);
+
+    border: 2px solid var(--grayLineColor);
+    border-top: none;
     padding: 1rem 1rem;
 
     border-bottom-left-radius: 6px;
@@ -531,5 +559,70 @@ img {
     border-color: transparent var(--textAreaBackground) transparent transparent;
 }
 
+/**
+ <--- NETWORK LAYOUT CSS --->
+ */
 
+/* Container of both perspectives */
+.perspectives-containers {
+    display: flex;
 
+    margin-bottom: 5vh;
+    padding-bottom: 1vh;
+}
+
+/* Fixed height for all perspectives */
+.perspectives-containers>* {
+    height: 80vh;
+}
+
+/* The second perspective has its dataTable fliped horizontaly*/
+.perspectives-containers>*:last-child>.row {
+    flex-direction: row-reverse;
+}
+
+/* PERSPECTIVE STATES */
+/*This perspective is not active and viewable*/
+.perspectives-containers>.unactive {
+    width: 0%;
+}
+
+/*Only one perspective is active and viewable*/
+.perspectives-containers>.activeSingle {
+    width: 100%;
+}
+
+/*Both perspectives are active and viewable*/
+.perspectives-containers>.activeBoth {
+    width: 50%;
+}
+
+/*This perspective is bigger because the other one is collapsed*/
+.perspectives-containers>.activeBig {
+    width: 80%;
+}
+
+/*This perspective is the collapsed one*/
+.perspectives-containers>.collapsed {
+    width: 20%;
+
+}
+
+.perspectives-containers>.collapsed>*>*>.network-container {
+    width: auto;
+    border-top: 1px solid var(--grayLineColor);
+}
+
+/* This changes the container of the vis.js network */
+.network-container {
+    margin: 0px 1.5% 15px 1.5%;
+    height: 80vh;
+}
+
+.network-container {
+    border-radius: 10px;
+    border: 1px solid var(--grayLineColor);
+    border-top: 5px solid var(--primaryButtonColor);
+    box-sizing: border-box;
+    background-color: var(--headerBackground);    
+}

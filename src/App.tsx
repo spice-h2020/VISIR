@@ -21,7 +21,6 @@ import { PerspectivesGroups } from './components/PerspectivesGroup';
 import { LegendTooltip } from './components/LegendTooltip';
 import RequestManager from './managers/requestManager';
 import './style/base.css';
-import { ColorStain } from './basicComponents/ColorStain';
 
 const requestManager = new RequestManager();
 
@@ -93,12 +92,12 @@ export function App() {
                 setCollapseState(CollapsedState.toTheLeft);
               }
             }}
-            extraClassName={`first dropdown-dark`}
+            extraClassName={`first dark`}
             state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
           />,
           <Button
             content=">>"
-            extraClassName={`second dropdown-dark`}
+            extraClassName={`second dark`}
             onClick={(state: ButtonState) => {
               if (state !== ButtonState.disabled) {
                 setCollapseState(CollapsedState.toTheRight);

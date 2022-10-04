@@ -13,7 +13,7 @@ interface ColorStainProps {
 }
 
 /**
- * Basic UI component that execute a function when clicked
+ * SVG component that draws a color stain
  */
 export const ColorStain = ({
     color,

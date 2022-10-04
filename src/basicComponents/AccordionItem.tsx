@@ -56,6 +56,7 @@ export const AccordionItem = ({
                             newState: state === ButtonState.active ? ButtonState.unactive : ButtonState.active
                         });
                     }}
+                    hoverText={tittle}
                 />
             </div>
             <div className={`panel ${state === ButtonState.active ? "panel-open" : "panel-close"}`}

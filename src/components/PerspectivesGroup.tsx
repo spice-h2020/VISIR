@@ -14,7 +14,6 @@ import { useEffect, useReducer, useState } from "react";
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
-import '../style/network.css';
 
 interface PerspectivesGroupProps {
     leftPerspective?: PerspectiveInfo,
@@ -79,6 +78,7 @@ export const PerspectivesGroups = ({
             selectedObject={selectedObject}
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
+            perspectiveState={leftState}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -89,6 +89,7 @@ export const PerspectivesGroups = ({
             selectedObject={selectedObject}
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
+            perspectiveState={rightState}
         />
 
     return (

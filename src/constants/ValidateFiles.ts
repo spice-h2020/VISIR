@@ -579,9 +579,8 @@ function isArtworkDataValid(arg: any): types.ArtworkData {
                 throw Error(`Image of the artwork (${arg.id}) is not a string`);
             }
         }
-        console.log(arg.image);
+
         arg.image =decodeURIComponent(decodeURIComponent(arg.image))
-        console.log(arg.image);
 
         return arg;
 

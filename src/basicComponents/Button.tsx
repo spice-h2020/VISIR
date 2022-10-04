@@ -21,8 +21,8 @@ interface ButtonProps {
   onClick?: (params: any) => void;
   //Extra class name to add and change the CSS
   extraClassName?: string;
-  //Button id that will be send as a parameter of the onclick handler
-  buttonId?: number;
+  //Text that will be shown to the user when hovering the button
+  hoverText?: string;
 }
 
 /**
@@ -33,8 +33,8 @@ export const Button = ({
   state = ButtonState.unactive,
   autoToggle = false,
   onClick = (): void => { },
-  buttonId,
   extraClassName = "",
+  hoverText = "",
 }: ButtonProps) => {
 
   const [buttonState, setButtonState] = useState<ButtonState>(state);
@@ -46,7 +46,7 @@ export const Button = ({
   const buttonClassState = buttonState !== ButtonState.unactive ? ButtonState[buttonState] : "";
 
   return (
-    <button type="button" className={`btn ${extraClassName} ${buttonClassState}`}
+    <button title={hoverText} type="button" className={`btn ${extraClassName} ${buttonClassState}`}
       onClick={(): void => {
         onClick(buttonState);
 

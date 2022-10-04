@@ -30,6 +30,7 @@ interface DataTableProps {
     artworks: ArtworkData[];
 
     hideLabel: boolean;
+    state: string;
 }
 
 /**
@@ -40,16 +41,16 @@ export const DataTable = ({
     node,
     community,
     artworks,
-    hideLabel
+    hideLabel,
+    state,
 }: DataTableProps) => {
 
     const nodePanel = getNodePanel(node, hideLabel);
     const interactions = getInteractionsAccordion(node, artworks);
     const communities = getCommunityPanel(community)
 
-
     return (
-        <div className= {`dataColumn ${node !== undefined && community !== undefined ? "active" : ""}`}>
+        <div className= {`dataColumn ${state}`}>
             <h2 className="tittle"> {tittle} </h2>
             {nodePanel}
             {interactions}
@@ -131,9 +132,6 @@ function getCommunityPanel(community: CommunityData | undefined) {
         content.push(<div className="row" key={-1}> <strong> Name: </strong> &nbsp; {community.name} </div>);
         content.push(<div className="row" key={-2}> <strong> Explanation: </strong> &nbsp; {community.explanation} </div>);
 
-        if (community.bb !== undefined) {
-            content.push(<div className="row" key={-3}> {`Color: ${community.bb.color.name}`}</div>);
-        }
         const users = community.users.toString();
         content.push(<div className="row" key={-4}> {` Users: ${users.replace(/,/g, ', ')}`} </div>);
     }

@@ -42,6 +42,7 @@ export const LegendTooltip = ({
                 items={[<div className='row' key={-2}>{legendRows}</div>]}
                 content="Legend"
                 extraClassName="dropdown-dark legend-dropdown"
+                extraClassButton="plus"
                 closeWhenOutsideClick={false}
             />
         );
@@ -51,6 +52,7 @@ export const LegendTooltip = ({
             items={[]}
             content="Unactive Legend"
             extraClassName="dropdown-dark legend-dropdown"
+            extraClassButton="plus"
             closeWhenOutsideClick={false}
         />)
 

@@ -20,6 +20,8 @@ interface DropdownProps {
     extraClassName?: string;
     //Active close dropdown when outside click functionality
     closeWhenOutsideClick?: boolean;
+    //Extra class name to add to the dropdown button
+    extraClassButton?: string;
 }
 
 /**
@@ -29,7 +31,9 @@ export const Dropdown = ({
     items = [],
     content = "Dropdown",
     extraClassName = "",
+    extraClassButton = "down-arrow",
     closeWhenOutsideClick = true,
+
 }: DropdownProps) => {
 
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -54,7 +58,7 @@ export const Dropdown = ({
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
-                    extraClassName={`down-arrow ${buttonClass}`}
+                    extraClassName={`${extraClassButton} ${buttonClass}`}
                 />
                 <div className="dropdown-content">
                     {items}
@@ -69,7 +73,7 @@ export const Dropdown = ({
                 <Button
                     content={content}
                     state={ButtonState.disabled}
-                    extraClassName={`down-arrow ${buttonClass}`}
+                    extraClassName={`${extraClassButton} ${buttonClass}`}
                 />
             </div >
         );
