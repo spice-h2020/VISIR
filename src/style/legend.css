@@ -7,10 +7,6 @@
     direction: ltr;
 }
 
-/* Legend dropdown content */
-/* .legend-dropdown>.dropdown-content {
-
-} */
 
 /* Legend column */
 .legend-dropdown>*>*>.col:not(:last-child) {

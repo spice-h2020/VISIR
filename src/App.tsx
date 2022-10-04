@@ -21,7 +21,7 @@ import { PerspectivesGroups } from './components/PerspectivesGroup';
 import { LegendTooltip } from './components/LegendTooltip';
 import RequestManager from './managers/requestManager';
 import './style/base.css';
-
+import { ColorStain } from './basicComponents/ColorStain';
 
 const requestManager = new RequestManager();
 
@@ -124,7 +124,7 @@ export function App() {
           />,
         ]}
       />
-      <span style={{height: "70px", display: "flex"}}></span>
+      <span style={{ height: "75px", display: "flex" }}></span>
       <PerspectivesGroups
         leftPerspective={leftPerspective}
         rightPerspective={rightPerspective}

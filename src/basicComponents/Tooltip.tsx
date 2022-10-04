@@ -60,7 +60,7 @@ export const Tooltip = ({
     const tooltipTittle: React.ReactNode = getTooltipTittle(selectObject);
     const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, hideLabels);
 
-    if (selectedObject !== undefined && selectedObject.position !== undefined && isActive) {
+    if (selectedObject !== undefined && selectedObject.obj !== undefined && selectedObject.position !== undefined && isActive) {
 
         const style = { top: selectedObject.position.y - yOffset, left: selectedObject.position.x };
         return (

@@ -62,4 +62,5 @@ collapsed,
 .vis-network>canvas {
     border-style: dotted;
     box-sizing: border-box;
+    background-color: #E5E5E5;    
 }

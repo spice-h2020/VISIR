@@ -12,6 +12,7 @@ import React from "react";
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
 import '../style/legend.css';
+import { ColorStain } from '../basicComponents/ColorStain';
 
 
 interface LegendTooltipProps {
@@ -31,7 +32,7 @@ export const LegendTooltip = ({
     legendConf,
     onLegendClick,
 }: LegendTooltipProps) => {
-    console.log(legendData)
+
     if (legendData !== undefined && legendData.length > 0) {
 
         const legendRows: React.ReactNode[] = getLegendButtons(legendData, legendConf, onLegendClick);
@@ -120,8 +121,13 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
         case Dimensions.Color:
             return (
                 <div className="legend-row row" key={index}>
-                    <div className="col-9"> {value} </div>
-                    <div className="col-3 box" style={{ backgroundColor: nodeConst.nodeDimensions.getColor(index) }}></div>
+                    <div className="col-9" style={{alignSelf: "center"}}> {value} </div>
+                    <div className="col-3">
+                        <ColorStain
+                            color={nodeConst.nodeDimensions.getColor(index)}
+                            scale={1.3}
+                        />
+                    </div>
                 </div>
             );
 
