@@ -5,8 +5,15 @@
  */
 //Packages
 import { useState } from "react";
-//Local files
-import "../style/base.css"
+
+const sliderContainer: React.CSSProperties = {
+    padding: "12px 16px",
+    margin: "0px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    fontSize: "1rem"
+}
 
 interface SliderProps {
     //Text above the slider
@@ -55,10 +62,10 @@ export const Slider = ({
     const size = (parseFloat(value) - minimum) * 100 / (maximum - minimum) + '% 100%';
 
     return (
-        <div className="slider-container">
+        <div style={sliderContainer}>
             {label}
             <input type="range"
-            style={{backgroundSize: size}}
+                style={{ backgroundSize: size }}
                 min={minimum} max={maximum} step={step}
                 value={value}
                 onChange={(e) => {
@@ -81,7 +88,7 @@ export const Slider = ({
  * @returns a react node with the text that will go above the slider
  */
 function getContent(content: string | undefined, contentUnit: string, value: string): React.ReactNode {
-    
+
     if (contentUnit === "")
         return content === undefined ? "" : `${content} ${value === "0" ? "0.0" : value === "1" ? "1.0" : value}`;
 

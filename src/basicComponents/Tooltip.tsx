@@ -5,13 +5,60 @@
  */
 //Constants
 import { SelectedObject } from "../constants/auxTypes";
+import { CommunityData, UserData } from "../constants/perspectivesTypes";
 //Packages
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 //Local files
 import { Button } from "./Button";
-import '../style/base.css';
-import { CommunityData, UserData } from "../constants/perspectivesTypes";
 
+const tooltipContainer: React.CSSProperties = {
+    position: "relative",
+    display: "inline-block",
+    borderBottom: "1px dotted black"
+}
+
+const tooltipContent: React.CSSProperties = {
+    position: "absolute",
+    zIndex: "1",
+    minWidth: "12rem",
+    maxWidth: "14rem",
+    opacity: "90%",
+}
+
+const tooltipHeader: React.CSSProperties = {
+    paddingLeft: "10px",
+    marginBottom: "0",
+    borderRadius: "6px 6px 0px 0px",
+    backgroundColor: "var(--headerBackground)",
+    border: "2px solid var(--grayLineColor)",
+}
+
+const tooltipTittleStyle: React.CSSProperties = {
+    padding: "0px",
+    margin: "0px",
+    fontSize: "1rem",
+    alignSelf: "center",
+    whiteSpace: "nowrap"
+}
+
+const tooltipBodyStyle: React.CSSProperties = {
+    backgroundColor: "var(--textAreaBackground)",
+    border: "2px solid var(--grayLineColor)",
+    borderTop: "none",
+    padding: "1rem 1rem",
+    borderBottomLeftRadius: "6px",
+    borderBottomRightRadius: "6px",
+}
+
+const tooltipArrow: React.CSSProperties = {
+    position: "absolute",
+    borderWidth: "5px",
+    borderStyle: "solid",
+    top: "50%",
+    right: "100%",
+    marginTop: "-5px",
+    borderColor: "transparent black transparent transparent",
+}
 
 interface TooltipProps {
     //All important information about the tooltip
@@ -61,33 +108,34 @@ export const Tooltip = ({
     const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, hideLabels);
 
     if (selectedObject !== undefined && selectedObject.obj !== undefined && selectedObject.position !== undefined && isActive) {
+        const style: React.CSSProperties = JSON.parse(JSON.stringify(tooltipContainer));
+        style.top = selectedObject.position.y - yOffset;
+        style.left = selectedObject.position.x;
 
-        const style = { top: selectedObject.position.y - yOffset, left: selectedObject.position.x };
         return (
             <div
                 ref={componentRef}
-                className="tooltip active"
                 style={style}
             >
-                <div ref={bodyRef} className={`tooltip-content`}>
-                    <div className={"tooltip-header row"}>
-                        <h3 style={{alignSelf: "center", whiteSpace: "nowrap"}}> {tooltipTittle} </h3>
+                <div ref={bodyRef} style={tooltipContent}>
+                    <div className="row" style={tooltipHeader}>
+                        <h3 style={tooltipTittleStyle}> {tooltipTittle} </h3>
                         <Button
                             content=""
                             extraClassName="btn-close transparent"
                             onClick={() => { setActive(false); }}
                         />
                     </div>
-                    <div className={"tooltip-body"}>
+                    <div style={tooltipBodyStyle}>
                         {tooltipBody}
                     </div>
-                    <div className="tooltip-arrow"> </div>
+                    <div style={tooltipArrow}/>
                 </div >
             </div >
         );
 
     } else
-        return <div className={`tooltip`}></div>
+        return <React.Fragment/>;
 
 }
 
@@ -112,26 +160,20 @@ export const getHTMLPosition = (element: HTMLDivElement) => {
 function getTooltipBody(selectedObject: CommunityData | UserData | undefined, hideLabel: boolean) {
     const body: React.ReactNode[] = []
 
-    if(selectedObject !== undefined){
+    if (selectedObject !== undefined) {
         if (selectedObject?.users) {
-            
+
             body.push(<div className="row" key={-1}> <strong> Name: </strong> &nbsp; {selectedObject.name} </div>);
             body.push(<div className="row" key={-2}> <strong> Explanation: </strong> &nbsp; {selectedObject.explanation} </div>);
-    
-            // if (selectedObject.bb !== undefined) {
-            //     body.push(<div className="row" key={-3}> {`Color: ${selectedObject.bb.color.name}`}</div>);
-            // }
-            // const users = selectedObject.users.toString();
-            // body.push(<div className="row" key={-4}> {` Users: ${users.replace(/,/g, ', ')}`} </div>);
 
-        }else{
+        } else {
 
             if (!hideLabel) {
                 body.push(<div className="row" key={-1}> <strong> Label: </strong> &nbsp; {selectedObject.label} </div>);
             }
-    
+
             const keys = Object.keys(selectedObject.explicit_community);
-    
+
             for (let i = 0; i < keys.length; i++) {
                 body.push(<div className="row" key={i}> {`${keys[i]}: ${selectedObject.explicit_community[keys[i]]}`} </div>);
             }

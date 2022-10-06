@@ -8,12 +8,21 @@ import { ViewOptions } from '../constants/viewOptions';
 import { PerspectiveInfo, UserData, CommunityData, PerspectiveState } from '../constants/perspectivesTypes';
 import { SelectedObject, StateFunctions } from '../constants/auxTypes';
 //Packages
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 //Local files
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/dimensionStrategy';
-import { DataTable } from '../basicComponents/Datatable';
+import { DataTable } from './Datatable';
 
+const networkContainer: React.CSSProperties = {
+    margin: "0px 1.5% 15px 1.5%",
+    height: "80vh",
+    borderRadius: "10px",
+    border: "1px solid var(--grayLineColor)",
+    borderTop: "5px solid var(--primaryButtonColor)",
+    boxSizing: "border-box",
+    backgroundColor: "var(--headerBackground)",
+}
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
@@ -29,7 +38,9 @@ interface PerspectiveViewProps {
     //Id of the current network on the focus
     networkFocusID: undefined | number;
 
-    perspectiveState: PerspectiveState
+    perspectiveState: PerspectiveState;
+
+    mirror?: boolean;
 }
 
 /**
@@ -43,6 +54,7 @@ export const PerspectiveView = ({
     dimStrat,
     networkFocusID,
     perspectiveState,
+    mirror = false,
 }: PerspectiveViewProps) => {
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
@@ -64,6 +76,20 @@ export const PerspectiveView = ({
 
     ViewOptionsUseEffect(viewOptions, netManager);
 
+    /**
+     * Cuando se seleccione algo que no es de esta perspectiva, es necesario buscar si el nodo/community esta en esta perspectiva,
+     * para ello, no hay mas que,
+     * 
+     * 
+     * Dropdown (morelesss) para configurar perspectivas etc.
+     * 
+     * similar emotions in same artworks
+     * ______   ________     ____     ___________
+     * same      values     similar     attribute1
+     * distinct  thematics  distinct    attribute2
+     *                                  attribute3
+     * ___________________________________________
+     */
     useEffect(() => {
         //If something is selected
         if (selectedObject?.obj !== undefined && netManager !== undefined) {
@@ -122,7 +148,7 @@ export const PerspectiveView = ({
     if (netManager !== undefined && networkFocusID === netManager?.eventsController.networkID)
         networkState = "active";
 
-    const networkContainer = <div className={`network-container ${networkState}`} key={1} ref={visJsRef} />
+    const networkContainer = <div style={getNetworkContainerStyle(perspectiveState)} key={1} ref={visJsRef} />
 
     if (perspectiveState !== PerspectiveState.collapsed) {
         const dataCol = <DataTable
@@ -135,7 +161,7 @@ export const PerspectiveView = ({
         />
 
         return (
-            <div className="row" key={10}>
+            <div className="row" style={{ flexDirection: mirror ? "row-reverse" : "row" }} key={10}>
                 <div className="col-4" key={1}>
                     {dataCol}
                 </div>
@@ -201,4 +227,15 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [viewOptions.deleteEdges, netManager]);
+}
+
+
+function getNetworkContainerStyle(perspectiveState: PerspectiveState): React.CSSProperties {
+    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(networkContainer)));
+
+    if (perspectiveState === PerspectiveState.collapsed) {
+        newStyle.borderTop = "none";
+    }
+
+    return newStyle;
 }

@@ -15,6 +15,22 @@ import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
 
+const perspectiveContainers: React.CSSProperties = {
+    display: "flex",
+    marginBottom: "5vh",
+    paddingBottom: "1vh",
+}
+
+
+const widthStyle: Map<PerspectiveState, React.CSSProperties> = new Map([
+    [PerspectiveState.unactive, { width: "0%" }],
+    [PerspectiveState.activeBoth, { width: "50%" }],
+    [PerspectiveState.activeSingle, { width: "100%" }],
+    [PerspectiveState.activeBig, { width: "80%" }],
+    [PerspectiveState.collapsed, { width: "20%" }],
+])
+
+
 interface PerspectivesGroupProps {
     leftPerspective?: PerspectiveInfo,
     rightPerspective?: PerspectiveInfo,
@@ -90,20 +106,21 @@ export const PerspectivesGroups = ({
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
             perspectiveState={rightState}
+            mirror={true}
         />
 
     return (
-        <div className="perspectives-containers">
+        <div style={perspectiveContainers}>
             < Tooltip
                 selectedObject={selectedObject}
                 hideLabels={viewOptions.hideLabels}
             />
-            <div className={PerspectiveState[leftState]}
+            <div style={widthStyle.get(leftState)}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.details.id}`}>
                 {leftComponent}
             </div>
 
-            <div className={PerspectiveState[rightState]}
+            <div style={widthStyle.get(rightState)}
                 key={rightPerspective === undefined ? -2 : `second${rightPerspective.details.id}`}>
                 {rightComponent}
             </div>

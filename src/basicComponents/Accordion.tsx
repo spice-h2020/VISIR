@@ -12,8 +12,6 @@ import React, { useReducer} from "react";
 //Local files
 import { AccordionItem } from "./AccordionItem";
 
-import '../style/base.css';
-
 interface AccordionProps {
     items: React.ReactNode[];
     tittles: string[];
@@ -45,8 +43,8 @@ export const Accordion = ({
     }
 
     return (
-        <div className="accordion-group">
+        <React.Fragment>
             {components}
-        </div>
+        </React.Fragment>
     );
 };

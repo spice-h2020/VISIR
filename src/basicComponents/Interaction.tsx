@@ -7,9 +7,26 @@
 import { anyProperty, ArtworkData, Interaction } from "../constants/perspectivesTypes";
 //Packages
 import { useEffect, useState } from "react";
-//Local files
-import '../style/base.css';
 
+const interactionBox: React.CSSProperties = {
+    borderLeft: "1px solid var(--grayLineColor)",
+    borderRight: "1px solid var(--grayLineColor)",
+    padding: "5px",
+}
+
+const userFeelings: React.CSSProperties = {
+    width: "80%",
+    margin: "15px auto",
+    border: "2px dashed var(--primaryButtonColor)",
+    boxSizing: "border-box",
+    textAlign: "center",
+}
+
+const artworkImage: React.CSSProperties = {
+    maxHeight: "100%",
+    maxWidth: "100%",
+    border: "2px solid var(--grayLineColor)",
+}
 
 interface InteractionPanelProps {
     artworksData: ArtworkData[];
@@ -34,11 +51,12 @@ export const InteractionPanel = ({
 
     if (artworkData !== undefined) {
         return (
-            <div className="interaction">
-                <div className="row artwork-data">
+            <div style={interactionBox}>
+                <div style={{ maxHeight: "20vh" }} className="row">
                     <div className="col">
-                        <div className="author"> {artworkData.author} </div>
-
+                        <div style={{ fontSize: "80%" }}>
+                            {artworkData.author}
+                        </div>
                         <br />
                         <div className="row">
                             {artworkData.tittle}&nbsp;
@@ -46,18 +64,18 @@ export const InteractionPanel = ({
                         </div>
                     </div>
                     <div className="col">
-                        <img src={artworkData.image}
+                        <img style={artworkImage} src={artworkData.image}
                             alt={artworkData.tittle}
                         />
                     </div>
                 </div>
                 <div className="row">
-                    <div className="feelings">
+                    <div style={userFeelings}>
                         "{interaction.feelings}"
                     </div>
                 </div>
                 <div className="row">
-                    <div className="emotions">
+                    <div style={{ overflowWrap: "anywhere" }}>
                         <strong> Emotions:</strong>&nbsp;
                         {shopiaToString(interaction.sophia_extracted_emotions)}
                     </div>

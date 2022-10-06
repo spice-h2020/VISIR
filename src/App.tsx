@@ -20,6 +20,7 @@ import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdow
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import { LegendTooltip } from './components/LegendTooltip';
 import RequestManager from './managers/requestManager';
+
 import './style/base.css';
 
 const requestManager = new RequestManager();

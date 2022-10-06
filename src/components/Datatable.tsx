@@ -10,9 +10,8 @@ import { ArtworkData, CommunityData, UserData } from "../constants/perspectivesT
 //Packages
 import React from "react";
 //Local files
-import { InteractionPanel } from "./Interaction";
-import { Accordion } from "./Accordion";
-import '../style/base.css';
+import { InteractionPanel } from "../basicComponents/Interaction";
+import { Accordion } from "../basicComponents/Accordion";
 
 const tittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -21,6 +20,18 @@ const tittleStyle: React.CSSProperties = {
     lineHeight: "135%",
     width: "100%",
     margin: "5px 0px"
+}
+
+const tableContainer: React.CSSProperties = {
+    margin: "auto",
+    padding: "16px 16px 24px 16px",
+    backgroundColor: "white",
+    border: "1px solid #dadce0",
+    boxSizing: "border-box",
+    borderRadius: "8px",
+    width: "100%",
+    maxWidth: "500px",
+    wordWrap: "break-word",
 }
 
 interface DataTableProps {
@@ -50,7 +61,7 @@ export const DataTable = ({
     const communities = getCommunityPanel(community)
 
     return (
-        <div className= {`dataColumn ${state}`}>
+        <div className= {state} style={getContainerStyle(state)}>
             <h2 className="tittle"> {tittle} </h2>
             {nodePanel}
             {interactions}
@@ -142,4 +153,14 @@ function getCommunityPanel(community: CommunityData | undefined) {
             {content}
         </div>
     )
+}
+
+function getContainerStyle(currentState: string): React.CSSProperties {
+    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(tableContainer)));
+
+    if (currentState === "active") {
+        newStyle.borderLeft = "7px solid var(--primaryButtonColor)";
+    }
+
+    return newStyle;
 }

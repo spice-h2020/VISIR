@@ -35,43 +35,43 @@ example.args = {
   leftAlignedItems: [
     <Button
       content="Button"
-      extraClassName="navBar-mainBtn"
+      extraClassName="transparent"
     />,
     ,
     <Dropdown
       items={testButtons}
       content="Dropdown <- A"
-      extraClassName="dropdown-light"
+      extraClassButton='transparent'
     />
     ,
     <Dropdown
       items={testButtons}
       content="Dropdown <- B"
-      extraClassName="dropdown-light"
+      extraClassButton='transparent'
     />
   ],
   midAlignedItems: [
     <Dropdown
       items={testButtons}
       content="Dropdown <-> A"
-      extraClassName="dropdown-dark"
+      extraClassButton='primary'
     />,
     <Dropdown
       items={testButtons}
       content="Dropdown <-> B"
-      extraClassName="dropdown-light"
+      extraClassButton='dark'
     />
   ],
   rightAlignedItems: [
     <Dropdown
       items={testButtons}
       content="Dropdown -> A"
-      extraClassName="dropdown-dark"
+      extraClassButton='dark'
     />,
     <Dropdown
       items={testButtons}
       content="Dropdown -> B"
-      extraClassName="dropdown-dark"
+      extraClassButton='primary'
     />
   ]
 };

@@ -13,6 +13,12 @@ import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import { Slider } from "../basicComponents/Slider";
 
+const hrStyle: React.CSSProperties = {
+    margin: "0.1rem 0",
+    borderBottom: "1px",
+    borderColor: "black",
+}
+
 interface OptionsDropdownProps {
     setViewOptions: Dispatch<ViewOptionAction>;
 }
@@ -48,20 +54,22 @@ export const OptionsDropdown = ({
             content="Hide node labels"
             onClick={() => { onClick(0, "hideLabels"); }}
             state={states[0]}
-            key={0} />,
+            key={0}
+            extraClassName={"btn-dropdown"} />,
         <Button
             content="Hide unselected Edges"
             onClick={() => { onClick(1, "hideEdges"); }}
             state={states[1]}
-            key={1} />,
-        <hr key={2} />,
+            key={1}
+            extraClassName={"btn-dropdown"} />,
+        <hr key={2} style={hrStyle} />,
         <Slider
             content="Minimum similarity:"
             onInput={(value: number) => { setViewOptions({ updateType: "edgeThreshold", newValue: value }); }}
             initialValue={initialOptions.edgeThreshold}
             key={3}
         />,
-        <hr key={4} />,
+        <hr key={4} style={hrStyle} />,
         <Slider
             content="Remove % of edges:"
             contentUnit="%"
@@ -72,25 +80,27 @@ export const OptionsDropdown = ({
             onInput={(value: number) => { setViewOptions({ updateType: "deleteEdges", newValue: value }); }}
             key={5}
         />,
-        <hr key={6} />,
+        <hr key={6} style={hrStyle} />,
         <Button
             content="Make edge width variable"
             onClick={() => { onClick(2, "edgeWidth"); }}
             state={states[2]}
-            key={7} />,
-        <hr key={8} />,
+            key={7}
+            extraClassName={"btn-dropdown"} />,
+        <hr key={8} style={hrStyle} />,
         <Button
             content="Activate nodes borders"
             onClick={() => { onClick(3, "border"); }}
             state={states[3]}
-            key={9} />
+            key={9}
+            extraClassName={"btn-dropdown"} />
     ];
 
     return (
         <Dropdown
             items={[optionsButtons]}
             content="Options"
-            extraClassName="dropdown-light"
+            extraClassButton="transparent down-arrow"
         />
     );
 };

@@ -31,14 +31,21 @@ export const lightDropdown = Template.bind({});
 lightDropdown.args = {
     items: testButtons,
     content: "Light dropdown",
-    extraClassName: "dropdown-light"
+    extraClassButton: "transparent"
+};
+
+export const primaryDropdown = Template.bind({});
+primaryDropdown.args = {
+    items: testButtons,
+    content: "Primary dropdown",
+    extraClassButton: "primary"
 };
 
 export const darkDropdown = Template.bind({});
 darkDropdown.args = {
     items: testButtons,
     content: "Dark dropdown",
-    extraClassName: "dropdown-dark"
+    extraClassButton: "dark"
 };
 
 

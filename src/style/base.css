@@ -1,3 +1,6 @@
+/*------------------------------------------
+//         GENERIC
+//------------------------------------------*/
 :root {
     --bodyBackground: #E5E5E5;
     --headerBackground: #fff;
@@ -63,17 +66,14 @@ body {
     letter-spacing: var(--titleLetterSpacing) !important;
 }
 
-.row {
-    display: flex;
-}
-
-/**
- <--- BUTTON CSS --->
- */
+/*------------------------------------------
+//         BUTTONS
+//------------------------------------------*/
 
 .btn {
     cursor: pointer;
     border: none;
+    direction: ltr;
 
     font-family: var(--textAreaFont);
     font-size: var(--textAreaFontSize);
@@ -93,11 +93,13 @@ body {
     opacity: 40%;
     cursor: auto;
 }
+
 .btn.disabled:hover {
     box-shadow: none !important;
     cursor: auto;
 }
 
+/* A few basic button colors */
 .primary {
     background-color: var(--primaryButtonColor);
 }
@@ -108,10 +110,6 @@ body {
 
 .dark {
     background-color: #555;
-}
-
-.circle {
-    border-radius: 100%;
 }
 
 .transparent {
@@ -128,78 +126,15 @@ body {
 
 /*Buttons of the collapse perspective options*/
 .first.btn {
-    border-radius: 100% 0px 0px 100%     !important;
+    border-radius: 100% 0px 0px 100% !important;
 }
 
 .second.btn {
     border-radius: 0px 100% 100% 0px !important;
 }
 
-/*Little triangle after a dropdown */
-.btn.down-arrow::after {
-    display: inline-block;
-    margin-left: 0.255em;
-    vertical-align: 0.255em;
-    content: "";
-    border-top: 0.3em solid;
-    border-right: 0.3em solid transparent;
-    border-bottom: 0;
-    border-left: 0.3em solid transparent;
-}
-
-.btn.plus::after {
-    margin-left: 5px;
-    scale: 1.5;
-    display: inline-block;
-    content: "+";
-}
-.btn.plus.active::after {
-    margin-left: 5px;
-    scale: 1.5;
-    display: inline-block;
-    content: "-";
-}
-
-
-:root {
-    --btn-no-hover-opacity: 0.85;
-}
-
-
-/**
- <--- DROPDOWN CSS --->
- */
-
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-    float: left;
-    overflow: hidden;
-
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.dropdown.active .dropdown-content {
-    display: block;
-}
-
-.dropdown-content {
-    display: none;
-    position: fixed;
-    z-index: 10;
-    padding: 0.5rem 0;
-
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    background-color: white;
-
-    background-clip: padding-box;
-    border: 2px solid rgba(0, 0, 0, 0.15);
-    border-radius: 0.25rem;
-}
-
-/*Dropdown item*/
-.dropdown-content .btn {
+/*Button that is an item of a dropdown*/
+.btn-dropdown {
     display: block;
     width: 100%;
     height: 40px;
@@ -214,50 +149,137 @@ body {
     text-align: start;
 }
 
-.dropdown-content>.btn:first-child {
+.btn-dropdownbtn:first-child {
     margin-top: 0.1rem;
 }
 
-.dropdown-content>.btn:last-child {
+.btn-dropdown:last-child {
     margin-bottom: 0.1rem;
 }
 
-.dropdown-content .btn:hover {
+.btn-dropdown:hover {
     box-shadow: none;
     background-color: var(--secondaryButtonColor);
 }
 
-.dropdown-content .btn.active {
+.btn-dropdown.active {
     background-color: var(--primaryButtonColor);
     color: var(--buttonTextColor);
 }
 
-.dropdown-content .btn.loading {
+.btn-dropdown.loading {
     background-color: black;
     color: var(--buttonTextColor);
 }
 
-.dropdown-content>hr {
-    margin: 0.1rem 0;
-    border-bottom: 1px;
-    border-color: black;
+/*Button that is just an X*/
+.btn-close::after {
+    display: inline-block;
+    content: "X";
+    font-size: large;
+
+    text-align: center;
+
+    color: black;
+    height: 20px;
+    width: 20px;
+
+    margin: 0cm;
+    padding: 0cm;
 }
 
-
-.dropdown-content>.slider-container {
-    padding: 12px 16px;
-    margin: 0px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    font-size: 1rem;
+.btn-close {
+    text-align: right;
 }
 
-/**
- <--- SLIDER CSS --->
- */
+.btn-close:hover {
+    box-shadow: none;
+}
+
+/* Button that toggles an accordion */
+.btn-accordion {
+    padding: 18px;
+    width: 100%;
+
+    padding: 8px 8px 12px 8px;
+    background-color: var(--bodyBackground);
+    color: black;
+    border: 1px solid var(--grayLineColor);
+
+    width: 100%;
+    max-width: 500px;
+    word-wrap: break-word;
+
+    border-radius: 0px;
+}
+
+.btn-accordion:hover {
+    box-shadow: none;
+    background-color: var(--primaryButtonColor);
+    opacity: 90%;
+}
+
+.btn-accordion.active {
+    background-color: var(--secondaryButtonColor);
+}
+
+.btn-accordion.active:hover {
+    box-shadow: none;
+    opacity: 75%;
+}
+
+.accordion-menu:first-child .btn-accordion {
+    border-radius: 10px 10px 0px 0px;
+}
+
+.accordion-menu:last-child .btn-accordion {
+    border-radius: 0px 0px 10px 10px;
+}
+
+/* Button that toggles an option from the legend */
+.btn-legend.active {
+    color: black;
+    background-color: white;
+}
+
+.btn-legend.active:hover {
+    background-color: rgba(0, 0, 0, 0.10);
+}
+
+.btn-legend.active>* {
+    opacity: 25%;
+}
+
+/*Little triangle after a button */
+.btn.down-arrow::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+
+/*Little + after a button*/
+.btn.plus::after {
+    margin-left: 5px;
+    scale: 1.5;
+    display: inline-block;
+    content: "+";
+}
+
+.btn.plus.active::after {
+    margin-left: 5px;
+    scale: 1.5;
+    display: inline-block;
+    content: "-";
+}
+
+/*------------------------------------------
+//         SLIDER
+//------------------------------------------*/
 
 input[type="range"] {
     -webkit-appearance: none;
@@ -330,299 +352,130 @@ input[type="range"]::-ms-track {
 }
 
 
-/**
- <--- DATATABLE CSS --->
- */
+/*------------------------------------------
+//         LEGEND
+//------------------------------------------*/
 
-.dataColumn {
-    margin: auto;
-    padding: 16px 16px 24px 16px;
 
-    background-color: white;
-    border: 1px solid #dadce0;
-    box-sizing: border-box;
+/* Legend dropdown */
 
-    border-radius: 8px;
-
-    width: 100%;
-    max-width: 500px;
-    word-wrap: break-word;
+.legend-container>* {
+    direction: rtl;
 }
 
-.dataColumn.active {
-    border-left: 7px solid var(--primaryButtonColor);
+/* Legend column */
+.legend-dropdown>*>*>.col:not(:last-child) {
+    border-right: 1px solid black;
 }
 
-/**
- <--- ACCORDION CSS --->
- */
-.accordion-header>.btn {
-    padding: 18px;
-    width: 100%;
-
-    padding: 8px 8px 12px 8px;
-    background-color: var(--bodyBackground);
-    color: black;
-    border: 1px solid var(--grayLineColor);
-
-    width: 100%;
-    max-width: 500px;
-    word-wrap: break-word;
-
-    border-radius: 0px;
-}
-
-.accordion-menu:first-child>.accordion-header>.btn {
-    border-radius: 10px 10px 0px 0px;
-}
-
-.accordion-menu:last-child>.accordion-header>.btn {
-    border-radius: 0px 0px 10px 10px;
-}
-
-
-.accordion-header>.btn:hover {
-    box-shadow: none;
-    background-color: var(--primaryButtonColor);
-    opacity: 90%;
-}
-
-.accordion-header>.btn.active {
-    background-color: var(--secondaryButtonColor);
-}
-
-.accordion-header>.btn.active:hover {
-    box-shadow: none;
-    opacity: 75%;
-}
-
-/*Button text*/
-.accordion-header>.btn>*>.btn-text {
-    width: 100%;
-
-    text-align: left;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.accordion-header>.btn>*>.btn-icon {
-    width: 10px;
-    margin-left: 5px;
-    text-align: center;
-}
-
-/*Panel with the content*/
-.panel {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-}
-
-/**
- <--- INTERACTION PANEL CSS --->
- */
-.interaction {
-    border-left: 1px solid var(--grayLineColor);
-    border-right: 1px solid var(--grayLineColor);
-    padding: 5px;
-}
-
-.artwork-data {
-    max-height: 20vh;
-}
-
-.author {
-    font-size: 80%;
-}
-
-.feelings {
-    width: 80%;
-    margin: 15px auto;
-
-    border: 2px dashed var(--primaryButtonColor);
-
-    box-sizing: border-box;
-    text-align: center;
-}
-
-.emotions {
-    overflow-wrap: anywhere;
-}
-
-img {
-    max-height: 100%;
-    max-width: 100%;
-
-    border: 2px solid var(--grayLineColor);
-}
-
-
-/**
- <--- TOOLTIP CSS --->
- */
-
-/* Tooltip container */
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-}
-
-/* Tooltip content */
-.tooltip .tooltip-content {
-    visibility: hidden;
-    position: absolute;
-    z-index: 1;
-
-    min-width: 12rem;
-    max-width: 14rem;
-
-    opacity: 90%;
-
-}
-
-.tooltip.active .tooltip-content {
-    visibility: visible;
-}
-
-.tooltip-content.right {
-    top: -5px;
-    left: 105%;
-}
-
-/* Tooltip header */
-.tooltip-header {
-    padding-left: 10px;
-    margin-bottom: 0;
-
-    border-radius: 6px 6px 0px 0px;
-
-    background-color: var(--headerBackground);
-    border: 2px solid var(--grayLineColor);
-}
-
-.tooltip-header>h3 {
-    padding: 0px;
-    margin: 0px;
-    font-size: 1rem;
-}
-
-.tooltip-header>.btn-close::after {
-    display: inline-block;
-    content: "X";
-    font-size: large;
-
-    text-align: center;
-
-    color: black;
+/*--- LEGEND DIMENSIONS HTML ---*/
+/* box shape with border color*/
+.box {
+    float: left;
     height: 20px;
     width: 20px;
-
-    margin: 0cm;
-    padding: 0cm;
+    margin: auto;
+    padding: 0px !important;
+    border: 1px solid black;
+    clear: both;
 }
 
-.tooltip-header>.btn-close {
-    text-align: right;
+/*Parent shape*/
+.legend-shape {
+    width: 20px;
+    height: 20px;
+    background: rgb(0, 0, 0);
 }
 
-.tooltip-header>.btn-close:hover {
-    box-shadow: none;
+/*All available shapes*/
+.triangle {
+    --path: 50% 0, 100% 100%, 0 100%;
+    /*Second number is the height, starting with 0 at the top of the div*/
+    clip-path: polygon(var(--path));
 }
 
-/* Tooltip body */
-.tooltip-body {
-    background-color: var(--textAreaBackground);
-
-    border: 2px solid var(--grayLineColor);
-    border-top: none;
-    padding: 1rem 1rem;
-
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
+.diamond {
+    --path: 50% 0, 0% 50%, 50% 100%, 100% 50%;
+    clip-path: polygon(var(--path));
 }
 
-/* Tooltip arrow */
-.tooltip-arrow {
-    content: " ";
-    position: absolute;
-    border-width: 5px;
-    border-style: solid;
+.dot {
+    border-radius: 50%;
 }
 
-.tooltip-content .tooltip-arrow {
-    top: 50%;
-    right: 100%;
-    margin-top: -5px;
-    border-color: transparent var(--textAreaBackground) transparent transparent;
+.star {
+    --path: 50% 5%, 61% 40%, 98% 40%, 68% 62%, 79% 96%, 50% 75%, 21% 96%, 32% 62%, 2% 40%, 39% 40%;
+    clip-path: polygon(var(--path));
 }
 
-/**
- <--- NETWORK LAYOUT CSS --->
- */
+.triangleDown {
+    --path: 0% 0%, 50% 100%, 100% 0%;
+    clip-path: polygon(var(--path));
+}
 
-/* Container of both perspectives */
-.perspectives-containers {
+.hexagon {
+    --path: 25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%;
+    clip-path: polygon(var(--path));
+}
+
+/*------------------------------------------
+//         COLUMNS
+//------------------------------------------*/
+
+.row {
     display: flex;
-
-    margin-bottom: 5vh;
-    padding-bottom: 1vh;
 }
 
-/* Fixed height for all perspectives */
-.perspectives-containers>* {
-    height: 80vh;
+.col {
+    flex: 1 0 0%;
 }
 
-/* The second perspective has its dataTable fliped horizontaly*/
-.perspectives-containers>*:last-child>.row {
-    flex-direction: row-reverse;
+.col-1 {
+    width: 8.33%;
+    flex: 1 0 0%;
 }
 
-/* PERSPECTIVE STATES */
-/*This perspective is not active and viewable*/
-.perspectives-containers>.unactive {
-    width: 0%;
+.col-2 {
+    width: 16.66%;
 }
 
-/*Only one perspective is active and viewable*/
-.perspectives-containers>.activeSingle {
-    width: 100%;
+.col-3 {
+    width: 25%;
 }
 
-/*Both perspectives are active and viewable*/
-.perspectives-containers>.activeBoth {
+.col-4 {
+    width: 33.33%;
+    flex: 1 0 0%;
+}
+
+.col-5 {
+    width: 41.66%;
+}
+
+.col-6 {
     width: 50%;
 }
 
-/*This perspective is bigger because the other one is collapsed*/
-.perspectives-containers>.activeBig {
-    width: 80%;
+.col-7 {
+    width: 58.33%;
 }
 
-/*This perspective is the collapsed one*/
-.perspectives-containers>.collapsed {
-    width: 20%;
-
+.col-8 {
+    width: 66.66%;
 }
 
-.perspectives-containers>.collapsed>*>*>.network-container {
-    width: auto;
-    border-top: 1px solid var(--grayLineColor);
+.col-9 {
+    width: 75%;
 }
 
-/* This changes the container of the vis.js network */
-.network-container {
-    margin: 0px 1.5% 15px 1.5%;
-    height: 80vh;
+.col-10 {
+    width: 83.33%;
 }
 
-.network-container {
-    border-radius: 10px;
-    border: 1px solid var(--grayLineColor);
-    border-top: 5px solid var(--primaryButtonColor);
-    box-sizing: border-box;
-    background-color: var(--headerBackground);    
+.col-11 {
+    width: 91.66%;
+}
+
+.col-12 {
+    width: 100%;
 }

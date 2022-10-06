@@ -11,9 +11,27 @@ import React from "react";
 //Local files
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
-import '../style/legend.css';
 import { ColorStain } from '../basicComponents/ColorStain';
 
+
+const columnTittle: React.CSSProperties = {
+    whiteSpace: "nowrap",
+    margin: "5px 10px",
+    paddingBottom: "5px",
+    borderBottom: "black 1px inset",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
+}
+
+const buttonContentRow: React.CSSProperties = {
+    alignItems: "self-end",
+}
+
+const columnStyle: React.CSSProperties = {
+    borderRight: "1px solid black",
+    width: "15vw",
+    textAlign: "center",
+}
 
 interface LegendTooltipProps {
     //Content of the legend
@@ -38,21 +56,21 @@ export const LegendTooltip = ({
         const legendRows: React.ReactNode[] = getLegendButtons(legendData, legendConf, onLegendClick);
 
         return (
-            <Dropdown
-                items={[<div className='row' key={-2}>{legendRows}</div>]}
-                content="Legend"
-                extraClassName="dropdown-dark legend-dropdown"
-                extraClassButton="plus"
-                closeWhenOutsideClick={false}
-            />
+            <div className="legend-container">
+                <Dropdown
+                    items={[<div className='row' style={{ direction: "ltr" }} key={-2}>{legendRows}</div>]}
+                    content="Legend"
+                    extraClassButton="plus primary"
+                    closeWhenOutsideClick={false}
+                />
+            </div>
         );
 
     } else {
         return (<Dropdown
             items={[]}
             content="Unactive Legend"
-            extraClassName="dropdown-dark legend-dropdown"
-            extraClassButton="plus"
+            extraClassButton="plus primary"
             closeWhenOutsideClick={false}
         />)
 
@@ -83,7 +101,7 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
                         key={i * 10 + j}
                         content={getButtonContent(value, legendData[i].dimension, j)}
                         state={legendConf.get(value) ? ButtonState.active : ButtonState.unactive}
-
+                        extraClassName={"btn-legend btn-dropdown"}
                         onClick={() => {
                             legendConf.set(value, !legendConf.get(value));
 
@@ -97,11 +115,10 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
             }
 
             const colum =
-                <div className='col' key={i}>
-                    <h3>{legendData[i].key} </h3>
-                    <div className="legend-content">
-                        {buttonsColumn}
-                    </div>
+                <div className='col' style={getLegendColumnStyle(i === legendData.length)}
+                    key={i}>
+                    <h3 style={columnTittle} title={legendData[i].key}>{legendData[i].key} </h3>
+                    {buttonsColumn}
                 </div>;
 
             rows.push(colum);
@@ -122,27 +139,25 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
     switch (dim) {
         case Dimensions.Color:
             return (
-                <div className="legend-row row" key={index}>
-                    <div className="col-9" style={{alignSelf: "center"}}> {value} </div>
-                    <div className="col-3">
-                        <ColorStain
-                            color={nodeConst.nodeDimensions.getColor(index)}
-                            scale={1.3}
-                        />
-                    </div>
+                <div className="row" style={buttonContentRow} key={index}>
+                    <div className="col-9" style={{ alignSelf: "center" }}> {value} </div>
+                    <ColorStain
+                        color={nodeConst.nodeDimensions.getColor(index)}
+                        scale={1.3}
+                    />
                 </div>
             );
 
         case Dimensions.Shape:
             return (
-                <div className="legend-row row" key={index}>
+                <div className="row" style={buttonContentRow} key={index}>
                     <div className="col-9"> {value} </div>
-                    <div className={`col-3 legend-shape ${nodeConst.nodeDimensions.getShape(index).name}`}></div>
+                    <div className={`legend-shape ${nodeConst.nodeDimensions.getShape(index).name}`}></div>
                 </div>
             );
         case Dimensions.Border:
             return (
-                <div className="legend-row row" key={index}>
+                <div className="row" style={buttonContentRow} key={index}>
                     <div className="col-9"> {value} </div>
                     <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
                 </div>
@@ -153,3 +168,13 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
 }
 
 
+
+function getLegendColumnStyle(isLast: boolean): React.CSSProperties {
+    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(columnStyle)));
+
+    if (isLast) {
+        newStyle.borderRight = "none";
+    }
+
+    return newStyle;
+}
