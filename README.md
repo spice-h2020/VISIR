@@ -1,5 +1,5 @@
 # SPICE-visualization-ReactPort
-Port of [SPICE-visualization repository](https://github.com/gjimenezUCM/SPICE-visualization) to react and typescript.
+Port of [SPICE-visualization repository](https://github.com/gjimenezUCM/SPICE-visualization) to react and typescript
 
 Access to the [github pages deployment](https://marcoexpper.github.io/SPICE-visualization-ReactPort/). 
 
