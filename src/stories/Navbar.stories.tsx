@@ -14,7 +14,7 @@ export default {
 
 const Template: ComponentStory<typeof Navbar> = (args) => <Navbar {...args} />;
 
-const selectedItems = [ButtonState.inactive, ButtonState.inactive, ButtonState.active];
+const selectedItems = [ButtonState.unactive, ButtonState.unactive, ButtonState.active];
 const testButtons = [
   <Button
     content="Option A"

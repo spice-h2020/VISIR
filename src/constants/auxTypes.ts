@@ -1,71 +1,11 @@
 /**
  * @fileoverview This File contains diferent unrelated auxiliary classes/interfaces that doesnt need a unique file for them.
- * @package Requires react package
  * @author Marco Expósito Pérez
  */
-//Package
-import React from "react";
-
-/**
- * Class to streamline the data of a row that will be shown to the user. Key will be at the left of the row, value at the right
- */
-export class DataRow {
-    //Key of the row
-    key: string;
-    //Value of the row
-    value: string;
-    //If true, getKey will return nothing and getValue will return key and value in the same react component
-    combineBoth: boolean;
-
-    /**
-     * Constructor of the class. There is no real distinction between the key param and the value param. 
-     * Current datatable implementation shows key at the left of the row, and value at the right
-     * @param key component of the row
-     * @param value another component of the row
-     * @param combineBoth If true, getKey will return nothing and getValue will return key and value in the same react component.
-     */
-    constructor(key: string, value: string, combineBoth: boolean = false) { this.key = key; this.value = value; this.combineBoth = combineBoth; }
-
-    /**
-     * Returns the key of the row if combine both is false
-     * @returns the key or "" 
-     */
-    getKey(strongKey: boolean = true): string {
-        if (!this.combineBoth) {
-            if (strongKey)
-                return `<strong> ${this.key}: </strong>`;
-            else
-                return `${this.key}: `;
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     * Returns the value in diferent formats. If combineBoth is false, will return the value. If true, will return a div with the key and the value, aditionaly, 
-     * if strong key is true, the key value in the div will have <strong> tag
-     * @param strongKey if true, the key value in the div will have <strong> tag
-     * @returns the value or the key + value div
-     */
-    getValue(strongKey: boolean = false): string {
-        if (!this.combineBoth) {
-            return ` ${this.value} `;
-        } else if (strongKey) {
-            return `<strong>${this.key}: </strong> &nbsp; ${this.value}`;
-        } else {
-            return `${this.key}: ${this.value}`;
-        }
-    }
-}
-
-/**
- * Interface that contains all the info to show in a tooltip
- */
-export interface TooltipInfo {
-    tittle: string;
-    mainDataRow: DataRow[];
-    subDataRow: DataRow[];
-}
+//Constants
+import { Dispatch } from "react";
+import { CommunityData, UserData } from "./perspectivesTypes";
+import { ButtonState } from "./viewOptions";
 
 /**
  * Interface with the data of a bounding box
@@ -95,12 +35,131 @@ export interface Point {
  * Interface with all functions that change the state of one/all perspectives in the application
  */
 export interface StateFunctions {
-    setSelectedNodeId: Function;
-    setTooltipInfo: Function;
-    setTooltipPosition: Function;
-    setTooltipState: Function;
     setLegendData: Function;
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
     setSelectedCommunity?: Function;
+    setSelectedObject: Dispatch<SelectedObjectAction>;
+}
+
+/**
+ * Interface of an object selected by the user. It can be a community, a user node or nothing
+ */
+export interface SelectedObject {
+    obj: CommunityData | UserData | undefined;
+    position?: Point;
+    sourceID?: number;
+}
+
+//#region Reducer types/function
+
+/**
+ * Available actions for SelectedObjectAction. 
+ */
+export enum SelectedObjectActionEnum {
+    /**
+     * changes the position of the selected object. (Usefull for the tooltip.)
+     */
+    position,
+    /**
+     * Changes the selected object
+     */
+    object,
+    /**
+     * clears the object and its position
+     */
+    clear,
+}
+
+/**
+ * Available actions for the selectedObjectReducer function
+ */
+export interface SelectedObjectAction {
+    action: SelectedObjectActionEnum;
+    newValue: Point | CommunityData | UserData | undefined;
+    sourceID: number;
+}
+
+/**
+ * Function that simplify states updates of a SelectedObject state
+ * @param state current state
+ * @param stateAction action to execute
+ * @returns the new state
+ */
+export function selectedObjectReducer(state: SelectedObject | undefined, stateAction: SelectedObjectAction) {
+    const { action, newValue, sourceID } = stateAction;
+
+    switch (action) {
+        case SelectedObjectActionEnum.position:
+            return {
+                ...state,
+                position: newValue,
+            } as SelectedObject;
+        case SelectedObjectActionEnum.object:
+            return {
+                position: state?.position,
+                obj: newValue,
+                sourceID: sourceID,
+            } as SelectedObject;
+        case SelectedObjectActionEnum.clear:
+            state = undefined;
+            return state;
+    }
+}
+
+/**
+ * Available actions for a buttonState array action
+ */
+export enum bStateArrayActionEnum {
+    /**
+     * Change the index of the array with the newState value
+     */
+    changeOne,
+    /**
+     * Change the index of the array with the newState value and turn inactive all other values of the array
+     */
+    activeOne,
+    /**
+     * Reset the array to a new array of size index and value newState
+     */
+    reset,
+}
+
+/**
+ * Interface of a button state Array action to tell the reducer function what to do
+ */
+export interface bStateArrayAction {
+    action: bStateArrayActionEnum;
+    index: number;
+    newState: ButtonState;
+}
+
+/**
+ * Function that simplify states updates of a ButtonState array state
+ * @param state state to edit
+ * @param stateAction action to execute
+ * @returns the state edited by the action
+ */
+export function bStateArrayReducer(state: ButtonState[], stateAction: bStateArrayAction) {
+    const { action, index, newState } = stateAction;
+
+    switch (action) {
+        case bStateArrayActionEnum.changeOne:
+            state[index] = newState;
+            state = JSON.parse(JSON.stringify(state));
+            break;
+
+        case bStateArrayActionEnum.activeOne:
+            state.fill(ButtonState.unactive);
+            state[index] = newState;
+            state = JSON.parse(JSON.stringify(state));
+            break;
+
+        case bStateArrayActionEnum.reset:
+            state = new Array<ButtonState>(index);
+            state.fill(newState);
+            break;
+    }
+
+    return state;
 }

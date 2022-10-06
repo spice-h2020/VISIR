@@ -4,21 +4,18 @@
  */
 
  export const edgeConst = {
-
-    //Number that decides the minimum limit of edges to not be deleted 
-    narrowLimit: 0.5,
-
-    //% of edges that will be deleted. Lowest similarity edges will be deleted first
-    deleteLimit: 0.00, //0.85,
+    //Allow edge labels
+    allowLabels: true,
 
     //Edge Width limits
     minWidth: 1,
     maxWidth: 10,
 
     //Default color of the edge when is not selected
-    defaultColor: "#A4A4A4",
+    defaultColor: "rgba(164,164,164, 0.2)",
     //Color when the edge is being selected
     selectedColor: "#000000",
+    selectedExtraWidth: 2, 
 
     //--- Labels ---
     //Default values

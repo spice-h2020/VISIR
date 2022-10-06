@@ -10,7 +10,6 @@ import { EdgeData } from "../constants/perspectivesTypes";
 //Package
 import { DataSetEdges, Edge, IdType, Network, Options } from "vis-network";
 
-
 export default class EdgeVisuals {
     //Data of all edges of the perspective, even if they are not shown or loaded in the dataset
     allEdges: EdgeData[];
@@ -97,7 +96,7 @@ export default class EdgeVisuals {
      */
     hideUnselectedEdges(hideEdges: boolean) {
         this.hideEdges = hideEdges;
-        const newEdges = new Array();
+        const newEdges: Edge[] = [];
 
         if (this.hideEdges === true) {
             //If currently there are selected edges, we wont hide them
@@ -132,7 +131,7 @@ export default class EdgeVisuals {
     updateEdgesThreshold(valueThreshold: number) {
         this.threshold = valueThreshold;
 
-        const newEdges = new Array();
+        const newEdges: Edge[] = [];
         this.edges.forEach((edge: Edge) => {
 
             if (edge.value !== undefined && edge.value < this.threshold) {
@@ -184,27 +183,45 @@ export default class EdgeVisuals {
      * Update the visuals of all selected edges
      */
     edgeChosenVisuals() {
-        const newEdges = new Array();
+        if (edgeConst.allowLabels) {
+            const newEdges: Edge[] = [];
 
-        this.edges.forEach((edge: Edge) => {
-            if (this.filteredSelectedEdges?.includes(edge.id as string)) {
-                edge.font = {
-                    color: edgeConst.LabelColorSelected,
-                    strokeColor: edgeConst.LabelStrokeColorSelected,
-                    strokeWidth: edgeConst.LabelStrokeWidthSelected
+            this.edges.forEach((edge: Edge) => {
+                if (this.filteredSelectedEdges?.includes(edge.id as string)) {
+                    edge.font = {
+                        color: edgeConst.LabelColorSelected,
+                        strokeColor: edgeConst.LabelStrokeColorSelected,
+                        strokeWidth: edgeConst.LabelStrokeWidthSelected
+                    }
+                    edge.color = edgeConst.selectedColor;
+                } else {
+                    edge.font = {
+                        color: edgeConst.LabelColor,
+                        strokeColor: edgeConst.LabelStrokeColor,
+                        strokeWidth: edgeConst.LabelStrokeWidth,
+                    }
+                    edge.color = edgeConst.defaultColor;
                 }
-            } else {
-                edge.font = {
-                    color: edgeConst.LabelColor,
-                    strokeColor: edgeConst.LabelStrokeColor,
-                    strokeWidth: edgeConst.LabelStrokeWidth,
+
+                newEdges.push(edge);
+            })
+
+            this.edges.update(newEdges);
+        } else {
+            const newEdges: Edge[] = [];
+
+            this.edges.forEach((edge: Edge) => {
+                if (this.filteredSelectedEdges?.includes(edge.id as string)) {
+                    edge.color = edgeConst.selectedColor;
+                } else {
+                    edge.color = edgeConst.defaultColor;
                 }
-            }
 
-            newEdges.push(edge);
-        })
+                newEdges.push(edge);
+            })
 
-        this.edges.update(newEdges);
+            this.edges.update(newEdges);
+        }
     }
 
     getSelectedNodesAndEdges(sourceNode: string): { selectedNodes: string[], selected_edges_id: IdType[] } {
@@ -216,19 +233,18 @@ export default class EdgeVisuals {
         this.allSelectedEdges = selected_edges_id as string[];
 
         this.edges.get(selected_edges_id).forEach((edge: Edge) => {
-            if (edge.value !== undefined && edge.value >= this.threshold) { //TODO link this with the threshold option once the slider works
+            if (edge.value !== undefined && edge.value >= this.threshold) {
 
-                if (edge.from != selectedNodes[0] && edge.to == selectedNodes[0])
+                if (edge.from !== selectedNodes[0] && edge.to === selectedNodes[0])
                     selectedNodes.push(edge.from as string);
 
-                else if (edge.to != selectedNodes[0] && edge.from == selectedNodes[0])
+                else if (edge.to !== selectedNodes[0] && edge.from === selectedNodes[0])
                     selectedNodes.push(edge.to as string);
 
             } else {
                 const index = selected_edges_id.indexOf(edge.id as string);
                 selected_edges_id.splice(index, 1);
             }
-
         });
 
         return { selectedNodes, selected_edges_id };

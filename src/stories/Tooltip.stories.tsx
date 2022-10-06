@@ -1,8 +1,9 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Tooltip } from '../basicComponents/Tooltip';
-import { DataRow, Point, TooltipInfo } from '../constants/auxTypes';
+import { SelectedObject } from '../constants/auxTypes';
+import { CommunityData, UserData } from '../constants/perspectivesTypes';
 
-import '../style/Base.css';
+import '../style/base.css';
 
 export default {
   title: 'Example/Tooltip',
@@ -12,59 +13,37 @@ export default {
 
 const Template: ComponentStory<typeof Tooltip> = (args) => <Tooltip {...args} />;
 
-
 export const userExample = Template.bind({});
-const mainNodeData = new Array();
 
-mainNodeData.push(new DataRow("Id", "40"))
-mainNodeData.push(new DataRow("Label", "nº 40"))
-mainNodeData.push(new DataRow("Implicit_community", "14"))
-
-const subNodeData = new Array();
-
-subNodeData.push(new DataRow("Selected language", "FIN"))
-subNodeData.push(new DataRow("Selected age", "GenX"))
-subNodeData.push(new DataRow("Selected avatar", "p\u00e4ssi"))
-
-const userContent: TooltipInfo = {
-  tittle: "Citizen data",
-  mainDataRow: mainNodeData,
-  subDataRow: subNodeData,
-}
-const userPosition: Point = {
-  x: 200,
-  y: 150
+const user: UserData = {
+  id: '01',
+  label: 'user1',
+  implicit_community: 0,
+  explicit_community: { ageGroup: "adult", Language: "ESP" },
+  interactions: []
 }
 
+const userObject: SelectedObject = {
+  obj: user,
+  position: { x: 100, y: 150 }
+}
 userExample.args = {
-  content: userContent,
-  state: true,
-  position: userPosition
+  selectedObject: userObject
 };
 
 export const commExample = Template.bind({});
-const mainCommData = new Array();
 
-mainCommData.push(new DataRow("Id", "1"))
-mainCommData.push(new DataRow("Name", "Community 1"))
-mainCommData.push(new DataRow("Explanation", "Representative Properties: {'Artefacts collected': 'Stool60, Pastille chair, Pehtoori'}"))
-
-const subCommData = new Array();
-
-const commContent: TooltipInfo = {
-  tittle: "Community data",
-  mainDataRow: mainCommData,
-  subDataRow: subCommData
+const comm: CommunityData = {
+  id: 0,
+  name: 'Community 1',
+  explanation: "Representative Properties: {'Artefacts collected': 'Fiskars scissors, Pehtoori, Cast Iron Pot, Stool60, Pastille chair'}",
+  users: []
 }
-
-const commPosition: Point = {
-  x: 450,
-  y: 100
+const commObject: SelectedObject = {
+  obj: comm,
+  position: { x: 100, y: 150 }
 }
-
 commExample.args = {
-  content: commContent,
-  state: true,
-  position: commPosition
+  selectedObject: commObject
 };
 

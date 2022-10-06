@@ -1,42 +1,51 @@
 /**
  * @fileoverview This file creates a dropdown that changes activates/disactives diferent perspectives from the allPerspectives prop.
+ * This component's item states are externalized because the state is async based on functions that are not in this file
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { ButtonState } from "../constants/viewOptions"
 import { PerspectiveDetails } from '../constants/perspectivesTypes';
+import { bStateArrayReducer, bStateArrayActionEnum, bStateArrayAction } from "../constants/auxTypes";
 //Packages
-import React, { useState, useEffect } from "react";
+import React, { Dispatch, useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
+import RequestManager from "../managers/requestManager";
 
 interface SelectPerspectiveProps {
+    //tittle of the dropdown
+    tittle: string;
     //On click handler
     onClick: Function;
     //Object that contains the name of all perspectives availables
     allPerspectives?: PerspectiveDetails[];
-    //Map that contains the relation between the name of a perspective and their visual state.
-    itemsState: Map<number, ButtonState>;
+    //Request Manager
+    requestManager: RequestManager;
 }
 
 /**
  * Dropdown component that holds the options to add/hide perspectives to the application
  */
 export const SelectPerspectiveDropdown = ({
+    tittle,
     onClick,
     allPerspectives,
-    itemsState: states,
+    requestManager,
 }: SelectPerspectiveProps) => {
 
-    const [itemsState, setItemsState] = useState(states);
+    //State of all items
+    const [states, setStates] = useReducer(bStateArrayReducer, []);
 
     useEffect(() => {
-        setItemsState(states);
-    }, [states]);
+        if (allPerspectives !== undefined)
+            setStates({ action: bStateArrayActionEnum.reset, index: allPerspectives.length, newState: ButtonState.unactive });
 
-    if (allPerspectives === undefined) {
+    }, [allPerspectives]);
+
+    if (allPerspectives === undefined || states.length === 0) {
         return (
             <Dropdown
                 items={[]}
@@ -46,40 +55,47 @@ export const SelectPerspectiveDropdown = ({
         );
     }
 
-    //Creates all perspective buttons components
-    const perspectivesButtons: React.ReactNode[] = getButtons(allPerspectives, states, onClick);
-
+    const perspectivesButtons: React.ReactNode[] = getButtons(allPerspectives, states, setStates, onClick, requestManager);
 
     return (
         <Dropdown
             items={perspectivesButtons}
-            content="Select Perspective"
+            content={tittle}
             extraClassName="dropdown-dark"
         />
     );
 };
 
 /**
- * Returns the buttons-reactComponents of the Select perspective dropdown
- * @param allPerspectives Array that contains all perspectiveDetails available to the user
- * @param itemsState Active/disabled state of all items
- * @param onClick Function executed when any button is clicked
- * @returns returns an array of React components
+ * Return all buttons/react components of the select perspective dropdown
+ * @param allPerspectives all available perspective details
+ * @param states current state of all buttons
+ * @param setStates function to set the state of all buttons
+ * @param onClick function executed when a button is clicked
+ * @param requestManager object to request the diferent files once a button is clicked
+ * @returns returns an array of react components
  */
-function getButtons(allPerspectives: PerspectiveDetails[], itemsState: Map<number, ButtonState>, onClick: Function): React.ReactNode[] {
+function getButtons(allPerspectives: PerspectiveDetails[], states: ButtonState[],
+    setStates: Dispatch<bStateArrayAction>, onClick: Function,
+    requestManager: RequestManager): React.ReactNode[] {
+
     const buttons = new Array<React.ReactNode>();
 
     for (let i = 0; i < allPerspectives.length; i++) {
+        const state: ButtonState = states[allPerspectives[i].localId];
+
         buttons.push(
             <Button
+                key={allPerspectives[i].id}
                 content={allPerspectives[i].name}
-                state={itemsState.get(allPerspectives[i].id)}
+                state={state}
                 onClick={() => {
-                    onClick(allPerspectives[i].id);
+                    requestManager.requestPerspectiveFIle(state, allPerspectives[i], setStates, onClick);
                 }} />
         );
     }
-
     return buttons;
 }
+
+
 

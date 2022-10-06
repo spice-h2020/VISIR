@@ -4,115 +4,93 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { DataRow, TooltipInfo, Point } from "../constants/auxTypes";
+import { SelectedObject } from "../constants/auxTypes";
 //Packages
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 //Local files
 import { Button } from "./Button";
-import '../style/tooltip.css';
+import '../style/base.css';
+import { CommunityData, UserData } from "../constants/perspectivesTypes";
+
 
 interface TooltipProps {
-    //Active state of the tooltip
-    state?: boolean;
-    //Content of the tooltip
-    content: TooltipInfo | undefined;
-    //Coordinates of the tooltip
-    position?: Point;
+    //All important information about the tooltip
+    selectedObject: SelectedObject | undefined;
+    //If the tooltip should hide users' labels and ids when shown 
+    hideLabels: boolean;
 }
 
 /**
  * Tooltip component
  */
 export const Tooltip = ({
-    state = false,
-    content,
-    position,
+    selectedObject,
+    hideLabels,
 }: TooltipProps) => {
 
-    //States to activate/disactivate the tooltip, hold tooltip info and change the tooltip position
-    const [tState, setTState] = useState<boolean>(state);
-    const [info, setInfo] = useState<TooltipInfo | undefined>(content);
-    const [pos, setPos] = useState<Point | undefined>(position);
+    const [isActive, setActive] = useState<Boolean>(false);
+    const [yOffset, setYoffset] = useState<number>(0);
 
-    //In order to center the arrow on the position, the tooltip needs vertical offset based on its own height
-    const [yOffset, setYOffset] = useState<number>(0);
+    const [selectObject, setSelecObject] = useState<CommunityData | UserData | undefined>();
 
-    //Reference of the tooltip body and this component. Used to calculate the vertical offset of the tooltip
     const bodyRef = useRef(null);
-    const compRef = useRef(null);
+    const componentRef = useRef(null);
 
+    //Calculates the vertical offset based on the height of the tooltip to center it around the focused object
     useEffect(() => {
-        setTState(state);
-    }, [state]);
-
-    useEffect(() => {
-        setPos(position);
-
-    }, [position]);
-
-    useEffect(() => {
-        setInfo(content);
-    }, [content]);
-
-    useEffect(() => {
-
         //Calculates the vertical offset
         const ref = bodyRef as any;
-        const pRef = compRef.current as any;
+        const pRef = componentRef.current as any;
 
         if (ref.current !== null) {
             const parentPosition = getHTMLPosition(pRef.parentElement);
-            setYOffset(ref.current.clientHeight / 2 + parentPosition.top);
+            setYoffset(ref.current.clientHeight / 2 + parentPosition.top);
         }
 
-    }, [info]);
+    }, [selectedObject?.position]);
 
-    const style = pos !== undefined ? { top: pos.y - yOffset, left: pos.x } : {};
-    
-    if (info === undefined) {
-        return <div className={`tooltip`}></div>
-    } else {
+    //Update the data of the tooltip
+    useEffect(() => {
+        setActive(true);
+
+        setSelecObject(selectedObject?.obj);
+
+    }, [selectedObject?.obj, hideLabels])
+
+    const tooltipTittle: React.ReactNode = getTooltipTittle(selectObject);
+    const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, hideLabels);
+
+    if (selectedObject !== undefined && selectedObject.obj !== undefined && selectedObject.position !== undefined && isActive) {
+
+        const style = { top: selectedObject.position.y - yOffset, left: selectedObject.position.x };
         return (
             <div
-                ref={compRef}
-                className={`tooltip ${tState ? "active" : ""}`}
+                ref={componentRef}
+                className="tooltip active"
                 style={style}
             >
-                <div ref={bodyRef} className={`tooltip-content right`}>
+                <div ref={bodyRef} className={`tooltip-content`}>
                     <div className={"tooltip-header row"}>
-                        <h3 className="col-10"> {info.tittle} </h3>
+                        <h3 style={{alignSelf: "center", whiteSpace: "nowrap"}}> {tooltipTittle} </h3>
                         <Button
                             content=""
-                            extraClassName="col-2 btn-close"
-                            onClick={() => {
-                                setTState(false);
-                            }}
+                            extraClassName="btn-close transparent"
+                            onClick={() => { setActive(false); }}
                         />
                     </div>
                     <div className={"tooltip-body"}>
-                        {info.mainDataRow.map((item: DataRow, index: number): JSX.Element => {
-                            return (
-                                <div key={index} className="main-row row"
-                                    dangerouslySetInnerHTML={{ __html: `${item.getKey()} &nbsp; ${item.getValue(true)}` }}
-                                >
-                                </div>
-                            );
-                        })}
-                        {info.subDataRow.map((item: DataRow, index: number): JSX.Element => {
-                            return (
-                                <div key={index} className="sub-row row"
-                                    dangerouslySetInnerHTML={{ __html: `${item.getKey(false)} &nbsp; ${item.getValue()}` }}
-                                >
-                                </div>
-                            );
-                        })}
+                        {tooltipBody}
                     </div>
                     <div className="tooltip-arrow"> </div>
                 </div >
             </div >
         );
-    }
-};
+
+    } else
+        return <div className={`tooltip`}></div>
+
+}
+
 
 /**
  * Gets the position of a HTML element in the DOM
@@ -128,4 +106,50 @@ export const getHTMLPosition = (element: HTMLDivElement) => {
     const left = element.offsetLeft - parseFloat(marginLeft);
 
     return { top: top, left: left, right: left + element.offsetWidth, bottom: top + element.offsetHeight };
+}
+
+
+function getTooltipBody(selectedObject: CommunityData | UserData | undefined, hideLabel: boolean) {
+    const body: React.ReactNode[] = []
+
+    if(selectedObject !== undefined){
+        if (selectedObject?.users) {
+            
+            body.push(<div className="row" key={-1}> <strong> Name: </strong> &nbsp; {selectedObject.name} </div>);
+            body.push(<div className="row" key={-2}> <strong> Explanation: </strong> &nbsp; {selectedObject.explanation} </div>);
+    
+            // if (selectedObject.bb !== undefined) {
+            //     body.push(<div className="row" key={-3}> {`Color: ${selectedObject.bb.color.name}`}</div>);
+            // }
+            // const users = selectedObject.users.toString();
+            // body.push(<div className="row" key={-4}> {` Users: ${users.replace(/,/g, ', ')}`} </div>);
+
+        }else{
+
+            if (!hideLabel) {
+                body.push(<div className="row" key={-1}> <strong> Label: </strong> &nbsp; {selectedObject.label} </div>);
+            }
+    
+            const keys = Object.keys(selectedObject.explicit_community);
+    
+            for (let i = 0; i < keys.length; i++) {
+                body.push(<div className="row" key={i}> {`${keys[i]}: ${selectedObject.explicit_community[keys[i]]}`} </div>);
+            }
+        }
+    }
+
+    return body;
+}
+
+function getTooltipTittle(selectedObject: CommunityData | UserData | undefined) {
+    let tittle: React.ReactNode = "";
+
+    if (selectedObject !== undefined)
+        if (selectedObject?.users) {
+            tittle = "Community Attributes"
+        } else {
+            tittle = "Citizen Attributes"
+        }
+
+    return tittle;
 }

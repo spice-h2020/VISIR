@@ -2,8 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Button } from '../basicComponents/Button';
 import { ButtonState } from '../constants/viewOptions';
 
-import '../style/Navbar.css';
-import '../style/Dropdown.css';
+import '../style/navbar.css';
 
 export default {
   title: 'Example/Button',
@@ -13,35 +12,41 @@ export default {
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const Default = Template.bind({});
-Default.args = {
+export const Primary = Template.bind({});
+Primary.args = {
   content: "Default Button",
-  state: ButtonState.inactive,
+  state: ButtonState.unactive,
   autoToggle: true,
+  extraClassName: "primary"
 };
 
+export const Secondary = Template.bind({});
+Secondary.args = {
+  content: "Default Button",
+  state: ButtonState.unactive,
+  autoToggle: true,
+  extraClassName: "secondary"
+};
 
 export const NavBarBtn = Template.bind({});
 NavBarBtn.args = {
   content: "NavBar Button",
-  state: ButtonState.inactive,
+  state: ButtonState.unactive,
   autoToggle: false,
-  extraClassName:"navBar-mainBtn",
+  extraClassName:"transparent",
 };
-
-
 
 export const DropdownLightBtn = Template.bind({});
 DropdownLightBtn.args = {
   content: "Light Button",
-  state: ButtonState.inactive,
+  state: ButtonState.unactive,
   autoToggle: true,
   extraClassName:"dropdown-light",
 };
 export const DropdownDarkBtn = Template.bind({});
 DropdownDarkBtn.args = {
   content: "Dark Button",
-  state: ButtonState.inactive,
+  state: ButtonState.unactive,
   autoToggle: true,
   extraClassName:"dropdown-dark",
 };

@@ -11,7 +11,6 @@ Documentation explained in the [wiki](https://github.com/MarcoExpPer/SPICE-visua
     2. [Using Node.js and NPM](#Using-Node.js-and-NPM)
 2. [How to use the app](#How-to-use-the-app)
 3. [How to add more testing files](#How-to-add-more-testing-files)
-4. [Known Errors](#Known-Errors)
 
 ## How to run the application localy
 There are 2 ways of running the application. Docker allows for an easy one command instalation, Node.js allows to introduce new testing files. Both options start with these steps.
@@ -72,7 +71,9 @@ Options dropdown has several diferent options to change how the visualization is
 
 ______________________
 ## How to add more testing files
-To add testing files, Node.js instalation is required.
+There is a format guide for new testing files [here](https://github.com/MarcoExpPer/SPICE-visualization-ReactPort/blob/main/public/data/dataFormatGuide.txt).
+
+To add testing files using Localfile options, Node.js instalation is required.
 
 - Localfiles: Move any new file to ./public/data/ directory and update the dataList.json file with its perspective details. The new file and the perspective details must follow the format that all others perspectives are following. Make sure the name of the new file is the same as its perspective ID. Now the app should be able to see that file after refreshing the browser and selecting local app files as the file source.
 

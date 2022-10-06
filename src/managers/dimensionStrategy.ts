@@ -3,7 +3,6 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { stat } from "fs";
 import { DimAttribute, Dimensions } from "../constants/nodes"
 import { UserData } from "../constants/perspectivesTypes";
 //Local files
@@ -56,17 +55,19 @@ export default class NodeDimensionStrategy {
     }
 
     /**
-     * Toggle the state of the border strategy 
-     * @param newValue 
+     * Toggle the state of the border strategy based on the newValue
+     * @param newValue new toggle border value
      */
     toggleBorderStat(newValue: boolean){
         const attributes = new Array<DimAttribute>();
-
+        
         this.strategies.forEach((strat) => {
-            if(strat.attr.dimension === Dimensions.Border){
-                strat.attr.active = newValue;
+            if(strat.attr !== undefined){
+                if(strat.attr.dimension === Dimensions.Border)
+                    strat.attr.active = newValue;
+
+                attributes.push(strat.attr)
             }
-            attributes.push(strat.attr)
         });
 
         this.setLegendData(attributes);

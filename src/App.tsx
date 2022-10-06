@@ -5,65 +5,60 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FileSource, initialOptions, ButtonState, ViewOptions, AppLayout } from './constants/viewOptions';
-import { PerspectiveDetails } from './constants/perspectivesTypes';
+import { FileSource, ButtonState, ViewOptions, viewOptionsReducer, CollapsedState } from './constants/viewOptions';
+import { PerspectiveDetails, PerspectiveInfo } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
-import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from './constants/perspectiveValidation';
+import { bStateArrayAction } from './constants/auxTypes';
 //Packages
-import React, { useEffect, useState } from 'react';
+import { Dispatch, useEffect, useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
 import { FileSourceDropdown } from './components/FileSourceDropdown';
-import { LayoutDropdown } from './components/LayoutDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
-import RequestManager from './managers/requestManager';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
-import ViewDataManager from './managers/viewDataManager';
 import { LegendTooltip } from './components/LegendTooltip';
+import RequestManager from './managers/requestManager';
 import './style/base.css';
 
 const requestManager = new RequestManager();
-const viewDataManager = new ViewDataManager();
+
+function collapseReducer(state: CollapsedState, stateAction: CollapsedState) {
+  if (state === CollapsedState.unCollapsed) {
+    state = stateAction
+  } else if ((state === CollapsedState.toTheLeft && stateAction === CollapsedState.toTheRight)
+    || (state === CollapsedState.toTheRight && stateAction === CollapsedState.toTheLeft)) {
+
+    state = CollapsedState.unCollapsed;
+  }
+
+  return state;
+}
 
 export function App() {
-
-  //State that mantains what perspectives are active, loading or inactive
-  const [perspectivesState, setPerspectivesState] = useState(new Map<number, ButtonState>());
-  //Holds the details of all available perspectives 
-  const [availablePerspectives, setAvailablePerspectives] = useState<PerspectiveDetails[]>();
-  //Current file source option of all GET requests
-  const [fileSource, setFileSource] = useState<FileSource>(initialOptions.fileSource);
   //Current options that change how the user view each perspective
-  const [viewOptions, setViewOptions] = useState<ViewOptions>(new ViewOptions());
-  //Current layout of the active perspectives
-  const [layout, setLayout] = useState<AppLayout>(initialOptions.layout);
+  const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
+
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useState<DimAttribute[]>([]);
-  //Tracks what button from the legend has been clicked or not
-  const [legendConfig, setLegendConfig] = useState(new Map<string, boolean>());
-  //Tracks if there is any perspective active in the view area
-  const [viewActive, setViewActive] = useState<boolean>(false);
 
-  //All options dropdown on click functions
-  const { onHideLabels, onHideEdges, onEdgeWidth, onBorder, onThreshold, onDeleteEdges } = optionsOnClick(viewOptions, setViewOptions);
+  //All available perspectives that the user can select to view
+  const [allPerspectives, setAllPerspectives] = useState<PerspectiveDetails[]>();
 
-  const perspectiveSelected: Function = singlePerspectiveSelected(perspectivesState, setPerspectivesState, availablePerspectives);
+  //Current Active perspectives in the view group
+  const [leftPerspective, setLeftPerspective] = useState<PerspectiveInfo>();
+  const [rightPerspective, setRightPerspective] = useState<PerspectiveInfo>();
 
-  useEffect(() => {
-    if (viewOptions !== undefined) {
-      const newViewOptions = (JSON.parse(JSON.stringify(viewOptions))) as ViewOptions;
-
-      newViewOptions.legendConfig = legendConfig
-      setViewOptions(newViewOptions);
-    }
-
-  }, [legendConfig]);
+  //Current state of the perspectives collapse buttons
+  const [collapseState, setCollapseState] = useReducer(collapseReducer, CollapsedState.unCollapsed);
 
   useEffect(() => {
-    updateAllAvailablePerspectives(fileSource, setPerspectivesState, setAvailablePerspectives);
-  }, [fileSource])
+
+    setLeftPerspective(undefined);
+    setRightPerspective(undefined);
+
+  }, [allPerspectives])
 
   return (
     <div>
@@ -71,183 +66,73 @@ export function App() {
         leftAlignedItems={[
           <Button
             content="Visualization module"
-            extraClassName="navBar-mainBtn"
+            extraClassName="transparent tittle"
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown
-            setFileSource={setFileSource}
-          />,
-          <LayoutDropdown
-            setLayout={setLayout}
+            setFileSource={(fileSource: FileSource, setFileSource: Dispatch<bStateArrayAction>) => {
+              requestManager.requestAllPerspectivesDetails(fileSource, setFileSource, setAllPerspectives);
+            }}
           />,
           <OptionsDropdown
-            onHideLabels={onHideLabels}
-            onHideEdges={onHideEdges}
-            onEdgeWidth={onEdgeWidth}
-            onBorder={onBorder}
-            onThreshold={onThreshold}
-            onDeleteEdges={onDeleteEdges}
+            setViewOptions={setViewOptions}
           />,
         ]}
         midAlignedItems={[
           <SelectPerspectiveDropdown
-            onClick={perspectiveSelected}
-            allPerspectives={availablePerspectives}
-            itemsState={perspectivesState}
+            tittle='Select A'
+            onClick={setLeftPerspective}
+            allPerspectives={allPerspectives}
+            requestManager={requestManager}
+          />,
+          <Button
+            content="<<"
+            onClick={(state: ButtonState) => {
+              if (state !== ButtonState.disabled) {
+                setCollapseState(CollapsedState.toTheLeft);
+              }
+            }}
+            extraClassName={`first dark`}
+            state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
+          />,
+          <Button
+            content=">>"
+            extraClassName={`second dark`}
+            onClick={(state: ButtonState) => {
+              if (state !== ButtonState.disabled) {
+                setCollapseState(CollapsedState.toTheRight);
+              }
+            }}
+            state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
+          />,
+          <SelectPerspectiveDropdown
+            tittle='Select B'
+            onClick={setRightPerspective}
+            allPerspectives={allPerspectives}
+            requestManager={requestManager}
           />,
 
         ]}
         rightAlignedItems={[
           <LegendTooltip
             legendData={legendData}
-            state={viewActive}
-            updateLegendConfig={setLegendConfig}
+            legendConf={viewOptions.legendConfig}
+            onLegendClick={(newMap: Map<string, boolean>) => {
+              setViewOptions({ updateType: "legendConfig", newValue: newMap, });
+            }}
           />,
         ]}
       />
-      <h1> Communities Visualization</h1>
+      <span style={{ height: "75px", display: "flex" }}></span>
       <PerspectivesGroups
-        perspectivePairs={viewDataManager.activePerspectivePairs}
-        nPerspectives={viewDataManager.getNumberOfPerspectives()}
-        layout={layout}
+        leftPerspective={leftPerspective}
+        rightPerspective={rightPerspective}
+        collapsedState={collapseState}
         viewOptions={viewOptions}
         setLegendData={setLegendData}
-        setViewActive={setViewActive}
       />
     </div>
   );
 }
 
-/**
- * Request a new all available perspectives based on the fileSource state and update the state with all available perspectives if the requested file validation was succesfull
- * @param fileSource FileSource of allPerspectives file
- * @param setPerspectivesState Function to set the state of all new perspectives
- * @param setAvailablePerspectives Function to set the state of all available perspectives details
- */
-function updateAllAvailablePerspectives(fileSource: FileSource, setPerspectivesState: React.Dispatch<React.SetStateAction<Map<number, ButtonState>>>, setAvailablePerspectives: React.Dispatch<React.SetStateAction<PerspectiveDetails[] | undefined>>) {
-  requestManager.changeBaseURL(fileSource);
-  viewDataManager.clearPerspectives();
-
-  requestManager.getAllPerspectives()
-    .then((response) => {
-      if (response.status === 200) {
-        const allPerspectivesFile = validateAllPerspectivesDetailsJSON(JSON.parse(response.data));
-
-        const newPerspectivesState = new Map<number, ButtonState>();
-        for (let i = 0; i < allPerspectivesFile.length; i++) {
-          newPerspectivesState.set(allPerspectivesFile[i].id, ButtonState.inactive);
-        }
-
-        setPerspectivesState(newPerspectivesState);
-        setAvailablePerspectives(allPerspectivesFile);
-
-      } else {
-        throw new Error(`All perspectives info was ${response.statusText}`);
-      }
-    })
-    .catch((error) => {
-      setAvailablePerspectives(undefined);
-      console.log(error);
-      alert(error.message);
-    });
-}
-
-/**
- * Returns a function executed when a perspective from the select perspective dropdown is clicked
- * @param perspectivesState The state of all active/disabled perspectives
- * @param setPerspectivesState Function to set the state of the previous parameter
- * @param availablePerspectives State with the details of all available perspectives
- * @returns a function that request the perspective, validate the perspective data and make its state active
- */
-function singlePerspectiveSelected(perspectivesState: Map<number, ButtonState>, setPerspectivesState: React.Dispatch<React.SetStateAction<Map<number, ButtonState>>>,
-  availablePerspectives: PerspectiveDetails[] | undefined) {
-
-  return (perspectiveId: number) => {
-    const state = perspectivesState.get(perspectiveId);
-
-    if (state === ButtonState.inactive) {
-
-      setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.loading)));
-
-      requestManager.getPerspective(perspectiveId)
-        .then((response) => {
-          if (response.status === 200) {
-
-            const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
-            const perspectiveInfo = availablePerspectives?.find((element: PerspectiveDetails) => { return element.id === perspectiveId; });
-
-            if (perspectiveInfo) {
-              viewDataManager.addPerspective(perspectiveInfo, perspectiveJson);
-              setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.active)));
-            }
-
-            else
-              throw new Error(`Perspective info of perspective: ${perspectiveId} was not found`);
-
-          } else {
-            throw new Error(`Perspective ${perspectiveId} was ${response.statusText}`);
-          }
-        })
-        .catch((error) => {
-          setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.inactive)));
-
-          console.log(error);
-          alert(error.message);
-        });
-
-    } else if (state === ButtonState.active) {
-      viewDataManager.removePerspective(perspectiveId);
-      setPerspectivesState(new Map(perspectivesState.set(perspectiveId, ButtonState.inactive)));
-    }
-  };
-}
-
-/**
- * Returns the functions for each of the onClick options of the options dropdown
- * @param viewOptions Object with the viewoptions
- * @param setViewOptions Function to set viewOptions react state
- * @returns all functions in this order { onHideLabels, onHideEdges, onEdgeWidth, onBorder, onThreshold, onDeleteEdges }
- */
-function optionsOnClick(viewOptions: ViewOptions, setViewOptions: React.Dispatch<React.SetStateAction<ViewOptions>>) {
-  const onHideLabels = (newValue: boolean) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.hideLabels = newValue;
-    setViewOptions(newViewOptions);
-    return true;
-  };
-
-  const onHideEdges = (newValue: boolean) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.hideEdges = newValue;
-    setViewOptions(newViewOptions);
-    return true;
-  };
-
-  const onEdgeWidth = (newValue: boolean) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.edgeWidth = newValue;
-    setViewOptions(newViewOptions);
-    return true;
-  };
-
-  const onBorder = (newValue: boolean) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.border = newValue;
-    setViewOptions(newViewOptions);
-    return true;
-  };
-
-  const onThreshold = (newValue: number) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.edgeThreshold = newValue;
-    setViewOptions(newViewOptions);
-  };
-
-  const onDeleteEdges = (newValue: number) => {
-    const newViewOptions = Object.assign({}, viewOptions);
-    newViewOptions.deleteEdges = newValue;
-    setViewOptions(newViewOptions);
-  };
-  return { onHideLabels, onHideEdges, onEdgeWidth, onBorder, onThreshold, onDeleteEdges };
-}
 

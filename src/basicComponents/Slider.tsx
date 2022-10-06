@@ -4,13 +4,9 @@
  * @author Marco Expósito Pérez
  */
 //Packages
-import { useEffect, useState } from "react";
+import { useState } from "react";
 //Local files
-import "../style/slider.css"
-
-
-
-
+import "../style/base.css"
 
 interface SliderProps {
     //Text above the slider
@@ -47,25 +43,27 @@ export const Slider = ({
     const [value, setValue] = useState<string>(initialValue.toString());
 
     //In order to reduce the number of calls while user move the slider, there is a timer that is reseted evry time the user moves the slider
-    useEffect(() => {
+    const updateValue = (newValue: string) => {
         if (timer !== undefined && timer !== null)
             clearTimeout(timer);
 
-        setTimer(setTimeout(() => onInput(value), 200));
-    }, [value]);
-
+        setValue(newValue);
+        setTimer(setTimeout(() => onInput(newValue), 200));
+    }
 
     const label = getContent(content, contentUnit, value);
+    const size = (parseFloat(value) - minimum) * 100 / (maximum - minimum) + '% 100%';
 
     return (
         <div className="slider-container">
             {label}
             <input type="range"
+            style={{backgroundSize: size}}
                 min={minimum} max={maximum} step={step}
                 value={value}
                 onChange={(e) => {
                     if (e.target.value !== undefined) {
-                        setValue(e.target.value);
+                        updateValue(e.target.value);
                     }
                 }}
             />

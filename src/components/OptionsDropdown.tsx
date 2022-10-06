@@ -4,67 +4,41 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ButtonState, initialOptions } from "../constants/viewOptions";
+import { ButtonState, initialOptions, ViewOptionAction, ViewOptions } from "../constants/viewOptions";
+import { bStateArrayReducer, bStateArrayActionEnum } from "../constants/auxTypes";
 //Packages
-import React, { useState } from "react";
+import React, { Dispatch, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import { Slider } from "../basicComponents/Slider";
 
 interface OptionsDropdownProps {
-    //On click handler for hide labels option
-    onHideLabels: Function;
-    //On click handler for hide edges option
-    onHideEdges: Function;
-    //On click handler for variable edge width option
-    onEdgeWidth: Function;
-    //On click handler for border option
-    onBorder: Function;
-    //On change handler for threshold option
-    onThreshold: Function;
-    //On change handler for delete edges option
-    onDeleteEdges: Function;
+    setViewOptions: Dispatch<ViewOptionAction>;
 }
 
 /**
  * Dropdown component
  */
 export const OptionsDropdown = ({
-    onHideLabels,
-    onHideEdges,
-    onEdgeWidth,
-    onBorder,
-    onThreshold,
-    onDeleteEdges: onDeleteEdges,
+    setViewOptions
 }: OptionsDropdownProps) => {
 
-    const [itemsState, setItemsState] = useState<Array<ButtonState>>(initialState);
+    //State of all items
+    const [states, setStates] = useReducer(bStateArrayReducer, init());
 
-    const onClick = (index: number, realOnclick: Function) => {
-        if (itemsState[index] !== ButtonState.loading) {
+    const onClick = (index: number, updateType: keyof ViewOptions) => {
+        if (states[index] !== ButtonState.loading) {
 
-            const savedState = itemsState[index];
+            const savedState = states[index];
+            setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: ButtonState.loading });
 
-            //Update the state to loading
-            const newSelected = Object.assign(new Array(), itemsState);
-            newSelected[index] = ButtonState.loading;
-            setItemsState(newSelected);
+            try {
+                setViewOptions({ updateType: updateType })
+                setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState === ButtonState.active ? ButtonState.unactive : ButtonState.active });
 
-            //Once the real onClick function finish, it will return true if the button option was succesfuly executed
-            if (realOnclick(savedState !== ButtonState.active)) {
-
-                //Update the state to the oposite of what the saved state is, because the click worked
-                const newSelected = Object.assign(new Array(), itemsState);
-                newSelected[index] = savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active;
-                setItemsState(newSelected);
-
-            } else {
-
-                //Update the state to the the saved state, because the click didnt worked
-                const newSelected = Object.assign(new Array(), itemsState);
-                newSelected[index] = savedState === ButtonState.active ? ButtonState.inactive : ButtonState.active;
-                setItemsState(newSelected);
+            } catch (e: any) {
+                setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState });
             }
         }
     }
@@ -72,18 +46,18 @@ export const OptionsDropdown = ({
     const optionsButtons: React.ReactNode[] = [
         <Button
             content="Hide node labels"
-            onClick={() => { onClick(0, onHideLabels); }}
-            state={itemsState[0]}
+            onClick={() => { onClick(0, "hideLabels"); }}
+            state={states[0]}
             key={0} />,
         <Button
             content="Hide unselected Edges"
-            onClick={() => { onClick(1, onHideEdges); }}
-            state={itemsState[1]}
+            onClick={() => { onClick(1, "hideEdges"); }}
+            state={states[1]}
             key={1} />,
         <hr key={2} />,
         <Slider
             content="Minimum similarity:"
-            onInput={onThreshold}
+            onInput={(value: number) => { setViewOptions({ updateType: "edgeThreshold", newValue: value }); }}
             initialValue={initialOptions.edgeThreshold}
             key={3}
         />,
@@ -95,20 +69,20 @@ export const OptionsDropdown = ({
             maximum={100}
             step={10}
             initialValue={initialOptions.deleteEdges}
-            onInput={onDeleteEdges}
+            onInput={(value: number) => { setViewOptions({ updateType: "deleteEdges", newValue: value }); }}
             key={5}
         />,
         <hr key={6} />,
         <Button
             content="Make edge width variable"
-            onClick={() => { onClick(2, onEdgeWidth); }}
-            state={itemsState[2]}
+            onClick={() => { onClick(2, "edgeWidth"); }}
+            state={states[2]}
             key={7} />,
         <hr key={8} />,
         <Button
             content="Activate nodes borders"
-            onClick={() => { onClick(3, onBorder); }}
-            state={itemsState[3]}
+            onClick={() => { onClick(3, "border"); }}
+            state={states[3]}
             key={9} />
     ];
 
@@ -124,11 +98,13 @@ export const OptionsDropdown = ({
 /**
  * Calculates the initial state of the dropdown
  */
-const initialState = new Array();
-const init = () => {
+const init = (): ButtonState[] => {
+    const initialState: ButtonState[] = [];
+
     initialState.push(initialOptions.hideLabels);
     initialState.push(initialOptions.hideEdges);
     initialState.push(initialOptions.edgeWidth);
     initialState.push(initialOptions.border);
+
+    return initialState;
 }
-init();

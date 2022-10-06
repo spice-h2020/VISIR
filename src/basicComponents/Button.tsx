@@ -8,7 +8,7 @@ import { ButtonState } from "../constants/viewOptions";
 //Packages
 import React, { useEffect, useState } from "react";
 //Local files
-import '../style/button.css';
+import '../style/base.css';
 
 interface ButtonProps {
   //Button contents.
@@ -21,8 +21,8 @@ interface ButtonProps {
   onClick?: (params: any) => void;
   //Extra class name to add and change the CSS
   extraClassName?: string;
-  //Button id that will be send as a parameter of the onclick handler
-  buttonId?: number;
+  //Text that will be shown to the user when hovering the button
+  hoverText?: string;
 }
 
 /**
@@ -30,11 +30,11 @@ interface ButtonProps {
  */
 export const Button = ({
   content = "Button",
-  state = ButtonState.inactive,
+  state = ButtonState.unactive,
   autoToggle = false,
   onClick = (): void => { },
-  buttonId,
   extraClassName = "",
+  hoverText = "",
 }: ButtonProps) => {
 
   const [buttonState, setButtonState] = useState<ButtonState>(state);
@@ -43,18 +43,19 @@ export const Button = ({
     setButtonState(state);
   }, [state]);
 
+  const buttonClassState = buttonState !== ButtonState.unactive ? ButtonState[buttonState] : "";
+
   return (
-    <button type="button" className={buttonState === ButtonState.active ? `btn ${extraClassName} active` : buttonState === ButtonState.inactive ? `btn ${extraClassName}` : `btn ${extraClassName} loading`}
+    <button title={hoverText} type="button" className={`btn ${extraClassName} ${buttonClassState}`}
       onClick={(): void => {
-        onClick(buttonId);
+        onClick(buttonState);
 
         if (autoToggle) {
-          if (buttonState === ButtonState.inactive)
+          if (buttonState === ButtonState.unactive)
             setButtonState(ButtonState.active);
           else
-            setButtonState(ButtonState.inactive);
+            setButtonState(ButtonState.unactive);
         }
-
       }}
     >
       {content}

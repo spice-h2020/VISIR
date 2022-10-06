@@ -9,7 +9,7 @@ import { ButtonState } from '../constants/viewOptions';
 import React, { useState, useEffect } from "react";
 //Local files
 import { Button } from "./Button";
-import '../style/dropdown.css';
+import '../style/base.css';
 
 interface DropdownProps {
     //Items inside the dropdown
@@ -20,6 +20,8 @@ interface DropdownProps {
     extraClassName?: string;
     //Active close dropdown when outside click functionality
     closeWhenOutsideClick?: boolean;
+    //Extra class name to add to the dropdown button
+    extraClassButton?: string;
 }
 
 /**
@@ -29,7 +31,9 @@ export const Dropdown = ({
     items = [],
     content = "Dropdown",
     extraClassName = "",
+    extraClassButton = "down-arrow",
     closeWhenOutsideClick = true,
+
 }: DropdownProps) => {
 
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -40,23 +44,24 @@ export const Dropdown = ({
         setShowDropDown(false);
     }, closeWhenOutsideClick);
 
-    if (items.length != 0)
+    const buttonClass = extraClassName === "dropdown-light" ? "transparent" : "primary";
+
+    if (items.length !== 0)
         return (
             <div className={showDropDown ? `dropdown ${extraClassName} active` : `dropdown ${extraClassName}`}
                 ref={ref}
             >
                 <Button
+                    key={-1}
                     content={content}
-                    state={showDropDown ? ButtonState.active : ButtonState.inactive}
+                    state={showDropDown ? ButtonState.active : ButtonState.unactive}
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
-                    extraClassName={extraClassName}
+                    extraClassName={`${extraClassButton} ${buttonClass}`}
                 />
                 <div className="dropdown-content">
-                    {items.map((item: React.ReactNode, index: number): JSX.Element => {
-                        return (<React.Fragment key={index}>{item}</React.Fragment>);
-                    })}
+                    {items}
                 </div>
             </div >
         );
@@ -67,8 +72,8 @@ export const Dropdown = ({
             >
                 <Button
                     content={content}
-                    state={ButtonState.inactive}
-                    extraClassName={`${extraClassName} disabled`}
+                    state={ButtonState.disabled}
+                    extraClassName={`${extraClassButton} ${buttonClass}`}
                 />
             </div >
         );
@@ -83,13 +88,13 @@ export const Dropdown = ({
  */
 const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function, closeWhenOutsideClick: boolean) => {
 
-    const handleClick = (ev: Event) => {
-        if (ref.current && !ref.current.contains(ev.target as Node)) {
-            callback();
-        }
-    };
-
     useEffect(() => {
+        const handleClick = (ev: Event) => {
+            if (ref.current && !ref.current.contains(ev.target as Node)) {
+                callback();
+            }
+        };
+
         if (closeWhenOutsideClick) {
             if (state) {
                 document.addEventListener("click", handleClick);
@@ -103,5 +108,6 @@ const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, c
                 document.removeEventListener("click", handleClick);
             };
         }
-    }, [state]);
+
+    }, [state, closeWhenOutsideClick, ref, callback]);
 };

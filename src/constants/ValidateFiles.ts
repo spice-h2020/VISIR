@@ -4,9 +4,10 @@
  * @author Marco Expósito Pérez
  */
 //Constants
+import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 
-const checkSimilarityFunctions = true; //FOR DEBUG WITH TESTING DATAFILES if active, will validate the similarity options 
+const checkSimilarityFunctions = true; //FOR DEBUG WITH TESTING DATAFILES if active, will validate the similarity options of the perspective details
 
 //#region All perspectives JSON
 
@@ -39,6 +40,7 @@ export function validateAllPerspectivesDetailsJSON(arg: any): types.PerspectiveD
             }
 
             arg[i] = isPerspectiveInfoValid(arg[i]);
+            arg[i].localId = i;
         }
 
         console.log(`All perspectives file validation has been completed -> `);
@@ -49,7 +51,7 @@ export function validateAllPerspectivesDetailsJSON(arg: any): types.PerspectiveD
         throw Error(`All perspectives file is not valid: ${e.message}`);
     }
 
-    
+
 }
 
 function isPerspectiveInfoValid(arg: any): types.PerspectiveDetails {
@@ -61,7 +63,7 @@ function isPerspectiveInfoValid(arg: any): types.PerspectiveDetails {
         if (typeof (arg.id) !== "number") {
             arg.id = Number(arg.id);
 
-            if (arg.id === NaN)
+            if (isNaN(arg.id))
                 throw Error(`ID of the perspective (${arg.id}) is not a number`);
         }
 
@@ -182,7 +184,7 @@ function isSimilarityFunctionValid(arg: any): types.SimFunction {
         if (typeof (arg.weight) !== "number") {
             arg.weight = Number(arg.weight);
 
-            if (arg.weight === NaN)
+            if (isNaN(arg.weight))
                 throw Error(`Weight of the Similarity function (${arg.name}) is not a number`);
 
         }
@@ -267,6 +269,14 @@ export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
             throw Error(`Similarity is not an object`);
         }
 
+        if (arg.artworks === undefined) {
+            throw Error(`Artworks is undefined`);
+        }
+
+        if (typeof (arg.artworks) !== "object") {
+            throw Error(`Artworks is not an object`);
+        }
+
         for (let i = 0; i < arg.communities.length; i++) {
             arg.communities[i] = isCommunityDataValid(arg.communities[i]);
         }
@@ -276,6 +286,9 @@ export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
         for (let i = 0; i < arg.similarity.length; i++) {
             arg.similarity[i] = isSimilarityDataValid(arg.similarity[i]);
             arg.similarity[i].id = i;
+        }
+        for (let i = 0; i < arg.artworks.length; i++) {
+            arg.artworks[i] = isArtworkDataValid(arg.artworks[i]);
         }
 
         console.log(`Perspective file validation has been completed -> `);
@@ -298,20 +311,8 @@ function isCommunityDataValid(arg: any): types.CommunityData {
         if (typeof (arg.id) !== "number") {
             arg.id = Number(arg.id);
 
-            if (arg.id === NaN)
+            if (isNaN(arg.id))
                 throw Error(`ID of the community (${arg.id}) is not a number`);
-        }
-
-        if (arg["community-type"] === undefined) {
-            throw Error(`Community-type of the community (${arg.id}) is undefined`);
-        }
-
-        if (typeof (arg["community-type"]) !== "string") {
-            try {
-                arg["community-type"] = String(arg["community-type"]);
-            } catch (e: any) {
-                throw Error(`Community-type of the community (${arg.id}) is not a string`);
-            }
         }
 
         if (arg.name === undefined) {
@@ -360,12 +361,12 @@ function isUserDataValid(arg: any): types.UserData {
             throw Error(`Id is undefined`);
         }
 
-        
+
         if (typeof (arg.id) !== "string") {
             try {
                 arg.id = String(arg.id);
             } catch (e: any) {
-                throw Error(`Label of the user (${arg.id}) is not a string`);
+                throw Error(`Id of the user (${arg.id}) is not a string`);
             }
         }
 
@@ -388,7 +389,7 @@ function isUserDataValid(arg: any): types.UserData {
         if (typeof (arg.group) !== "number") {
             arg.group = Number(arg.group);
 
-            if (arg.group === NaN)
+            if (isNaN(arg.group))
                 throw Error(`Group of the user (${arg.id}) is not a number`);
         }
 
@@ -403,6 +404,25 @@ function isUserDataValid(arg: any): types.UserData {
             throw Error(`Explicit community of the user (${arg.id}) is not an object. There may not be any explicit community values`);
         }
 
+        if (arg.interactions === undefined) {
+            arg.interactions = "";
+        }
+
+        const nInteractions = Object.keys(arg.interactions).length;
+        if (nInteractions > 0) {
+
+            try {
+                for (let i = 0; i < nInteractions; i++) {
+                    arg.interactions[i] = isInteractionValid(arg.interactions[i]);
+                }
+            } catch (e: any) {
+                throw Error(`Interaction of the user (${arg.id}) has problems: ${e.message}`);
+            }
+
+        } else {
+            arg.interactions = "";
+        }
+
         return arg;
 
     } catch (e: any) {
@@ -410,6 +430,40 @@ function isUserDataValid(arg: any): types.UserData {
     }
 }
 
+function isInteractionValid(arg: any): types.Interaction {
+    try {
+
+        if (arg.artwork_id === undefined) {
+            throw Error(`Artwork_id of an interaction is undefined`);
+        }
+
+        if (typeof (arg.artwork_id) !== "string") {
+            try {
+                arg.artwork_id = String(arg.artwork_id);
+            } catch (e: any) {
+                throw Error(`Artwork_id of (${arg.artwork_id}) is not a string`);
+            }
+        }
+
+        if (arg.feelings === undefined) {
+            arg.feelings = "";
+        } else if (typeof (arg.feelings) !== "string") {
+            try {
+                arg.feelings = String(arg.feelings);
+            } catch (e: any) {
+                throw Error(`Feelings of the artwork whose id is (${arg.artwork_id}) is not a string`);
+            }
+        }
+
+        if (arg.sophia_extracted_emotions === undefined) {
+            arg.sophia_extracted_emotions = "";
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Interaction data is not valid: ${e.message}`);
+    }
+}
 function isSimilarityDataValid(arg: any): types.EdgeData {
     try {
 
@@ -418,9 +472,9 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
         }
 
         if (typeof (arg.value) !== "number") {
-            arg.value = Number(arg.ivalued);
+            arg.value = Number(arg.value);
 
-            if (arg.value === NaN)
+            if (isNaN(arg.value))
                 throw Error(`Value is not a number`);
         }
 
@@ -449,17 +503,89 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
             } catch (e: any) {
                 throw Error(`U2 of the edge with value (${arg.value}) is not a string`);
             }
-        }  
+        }
 
         arg.to = arg.u2;
         delete arg.u2;
 
-        arg.label = arg.value.toString();
+        if (edgeConst.allowLabels)
+            arg.label = arg.value.toString();
 
         return arg;
 
     } catch (e: any) {
         throw Error(`Edge data is not valid: ${e.message}`);
+    }
+}
+
+function isArtworkDataValid(arg: any): types.ArtworkData {
+    try {
+
+        if (arg.id === undefined) {
+            throw Error(`Id is undefined`);
+        }
+
+        if (typeof (arg.id) !== "string") {
+            try {
+                arg.id = String(arg.id);
+            } catch (e: any) {
+                throw Error(`Id of the artwork (${arg.id}) is not a string`);
+            }
+        }
+
+        if (arg.tittle === undefined) {
+            throw Error(`Id is undefined`);
+        }
+
+        if (typeof (arg.tittle) !== "string") {
+            try {
+                arg.tittle = String(arg.tittle);
+            } catch (e: any) {
+                throw Error(`Tittle of the artwork (${arg.id}) is not a string`);
+            }
+        }
+
+        if (arg.author === undefined) {
+            throw Error(`Id is undefined`);
+        }
+
+        if (typeof (arg.author) !== "string") {
+            try {
+                arg.author = String(arg.author);
+            } catch (e: any) {
+                throw Error(`Author of the artwork (${arg.id}) is not a string`);
+            }
+        }
+
+        if (arg.year === undefined) {
+            throw Error(`Value is undefined`);
+        }
+
+        if (typeof (arg.year) !== "number") {
+            arg.year = Number(arg.year);
+
+            if (isNaN(arg.year))
+                throw Error(`Year of the artwork (${arg.id}) is not a number`);
+        }
+
+        if (arg.image === undefined) {
+            throw Error(`Id is undefined`);
+        }
+
+        if (typeof (arg.image) !== "string") {
+            try {
+                arg.image = String(arg.image);
+            } catch (e: any) {
+                throw Error(`Image of the artwork (${arg.id}) is not a string`);
+            }
+        }
+
+        arg.image =decodeURIComponent(decodeURIComponent(arg.image))
+
+        return arg;
+
+    } catch (e: any) {
+        throw Error(`Artwork data is not valid: ${e.message}`);
     }
 }
 

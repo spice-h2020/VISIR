@@ -28,6 +28,7 @@ export interface PerspectiveDetails {
     name: string;
     algorithm: PerspectiveAlgorithm;
     similarity_functions: SimFunction[];
+    localId: number;
 }
 
 /**
@@ -66,6 +67,7 @@ export interface PerspectiveData {
     communities: CommunityData[];
     users: UserData[];
     similarity: EdgeData[];
+    artworks: ArtworkData[],
 }
 
 /**
@@ -73,7 +75,6 @@ export interface PerspectiveData {
  */
 export interface CommunityData extends anyProperty {
     id: number;
-    community_type: string;
     name: string;
     explanation: string;
     users: number[];
@@ -87,6 +88,16 @@ export interface UserData extends anyProperty {
     label: string;
     implicit_community: number;
     explicit_community: anyProperty;
+    interactions: Interaction[];
+}
+
+/**
+ * Interface of the data of a user interaction.
+ */
+ export interface Interaction extends anyProperty {
+    artwork_id: string;
+    feelings: string;
+    sophia_extracted_emotions: anyProperty;
 }
 
 /**
@@ -98,87 +109,42 @@ export interface EdgeData extends anyProperty {
     value: number;
     id?: number;
 }
+
+/**
+ * Interface of the data of an artwork.
+ */
+ export interface ArtworkData {
+    id: string;
+    tittle: string;
+    author: string;
+    year: number;
+    image: string
+}
+
 //#endregion
 
-//Class that contains All the info about 2 diferent perspectives in order to draw the view layout in pairs of networks for easy comparison
 /**
- * Class with the Perspective info of 2 (or just 1) perspectives, and several utility functions to ease its use. Its used to know what perspectives are in a pair
- * in order to show them on the app view layout as such.
+ * Possible states of a single perspective
  */
-export class PerspectivePair {
-    //Info of both perspectives in the pair or undefined if there is an empty space
-    perspectives: (PerspectiveInfo | undefined)[];
-    //Controls where there is an empty space in the perspectives Array
-    spacesAvailables: boolean[];
-
+export enum PerspectiveState {
     /**
-     * Constructor of the class
-     * @param newPerspective Perspective Info of the first perpsective in this pair
+     * The perspective is unactive, not being shown to anyone.
      */
-    constructor(newPerspective: PerspectiveInfo, pairId: number) {
-        //Data of the perspectives
-        this.perspectives = [newPerspective, undefined];
-        //Works as a dirty attribute for this.perspectives, to know if the value inside its an active perspective or useless data
-        this.spacesAvailables = [false, true];
-    }
-
+    unactive,
     /**
-     * Add a new perspective if there is space available in this pair
-     * @param newPerspective perspective to add
+     * Only this perspective is active, so its size is the available maximum.
      */
-    addNewPerspective(newPerspective: PerspectiveInfo) {
-        for (let i = 0; i < this.spacesAvailables.length; i++) {
-            if (this.spacesAvailables[i]) {
-                this.perspectives[i] = newPerspective;
-                this.spacesAvailables[i] = false;
-                break;
-            }
-        }
-    }
-
+    activeSingle,
     /**
-     * Removes a perspective based on its id if its in this pair
-     * @param perspectiveId id of the perspective to delete
-     * @returns returns true if the pair ends up empty and needs to be deleted
+     * Both perspectives are active, so the size of the perspective is average
      */
-    removePerspective(perspectiveId: number): boolean {
-        for (let i = 0; i < this.perspectives.length; i++) {
-            if (this.perspectives[i]?.details.id === perspectiveId) {
-                this.perspectives[i] = undefined;
-                this.spacesAvailables[i] = true;
-
-                if (this.spacesAvailables[0] && this.spacesAvailables[1]) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
-
+    activeBoth,
     /**
-     * Check if the pair has any empty space
-     * @returns true if there is an available space
+     * Both perspectives are active, but the other one is collapsed, so this one's size is big
      */
-    hasEmptySpace() {
-        for (let i = 0; i < this.spacesAvailables.length; i++) {
-            if (this.spacesAvailables[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    activeBig,
     /**
-     * Returns the first available perspective of the pair. Used when u just want the perspective of a pair that only has one perspective
-     * @returns the first perspective in the pair
+     * Both perspectives are active, but this one is collapsed, so this one's size is small
      */
-    getSingle() {
-        for (let i = 0; i < this.spacesAvailables.length; i++) {
-            if (!this.spacesAvailables[i]) {
-                return this.perspectives[i];
-            }
-        }
-    }
+    collapsed,
 }

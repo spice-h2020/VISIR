@@ -4,15 +4,15 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ViewOptions, AppLayout } from '../constants/viewOptions';
-import { PerspectiveInfo, UserData, CommunityData } from '../constants/perspectivesTypes';
-import { StateFunctions } from '../constants/auxTypes';
+import { ViewOptions } from '../constants/viewOptions';
+import { PerspectiveInfo, UserData, CommunityData, PerspectiveState } from '../constants/perspectivesTypes';
+import { SelectedObject, StateFunctions } from '../constants/auxTypes';
 //Packages
 import { useEffect, useState, useRef } from "react";
 //Local files
-import { DataColumn } from "./DataColumn";
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/dimensionStrategy';
+import { DataTable } from '../basicComponents/Datatable';
 
 
 interface PerspectiveViewProps {
@@ -20,18 +20,16 @@ interface PerspectiveViewProps {
     perspectiveInfo: PerspectiveInfo;
     //Options that change the view of a perspective
     viewOptions: ViewOptions;
-    //Function to select a node
-    layout: AppLayout;
-    //Optional parameter to know if the its the first perspective of the pair, to mirror the table position in the horizontal layout
-    isFirstPerspective?: boolean;
     //Object with all the functions that will change the state of the network
     sf: StateFunctions;
-    //Current selected node
-    selectedNodeId: undefined | number;
+    //Current selected Object. Can be nothing, a node or a community
+    selectedObject: SelectedObject | undefined;
     //Current node dimension strategy
     dimStrat: NodeDimensionStrategy | undefined;
     //Id of the current network on the focus
-    networkFocusID: undefined | number
+    networkFocusID: undefined | number;
+
+    perspectiveState: PerspectiveState
 }
 
 /**
@@ -40,86 +38,104 @@ interface PerspectiveViewProps {
 export const PerspectiveView = ({
     perspectiveInfo,
     viewOptions,
-    layout: ly,
-    isFirstPerspective = true,
     sf,
-    selectedNodeId,
+    selectedObject,
     dimStrat,
     networkFocusID,
+    perspectiveState,
 }: PerspectiveViewProps) => {
-
-    const [layout, setLayout] = useState<AppLayout>(ly);
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
 
     const [selectedCommunity, setSelectedCommunity] = useState<CommunityData>();
     const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
 
-    const [info, setInfo] = useState<PerspectiveInfo>(perspectiveInfo);
     const visJsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setInfo(perspectiveInfo);
-    }, [perspectiveInfo]);
-
-
-    useEffect(() => {
-        setLayout(ly);
-    }, [ly]);
-
-    useEffect(() => {
-        if (netManager !== undefined && networkFocusID !== undefined) {
-            netManager.eventsController.networkFocusID = networkFocusID;
+        if (netManager !== undefined) {
+            if (networkFocusID === undefined) {
+                netManager.eventsController.networkFocusID = -1;
+            } else
+                netManager.eventsController.networkFocusID = networkFocusID;
         }
 
-    }, [networkFocusID])
+    }, [networkFocusID, netManager])
 
-    ViewOptionsUseEffect(viewOptions, netManager, sf);
+    ViewOptionsUseEffect(viewOptions, netManager);
 
     useEffect(() => {
-        if (selectedNodeId === undefined) {
-            //If no node id is selected, we clear the node dataTable info
+        //If something is selected
+        if (selectedObject?.obj !== undefined && netManager !== undefined) {
+            //If a node has been selected
+            if (selectedObject.obj.explanation === undefined) {
+
+                const nodeData = netManager.eventsController.nodeClicked(selectedObject.obj.id as number);
+
+                setSelectedNode(nodeData as UserData);
+                setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
+
+            } else {//If a community has been selected
+                //If the community is from this network
+                if (selectedObject.sourceID === perspectiveInfo.details.id) {
+
+                    setSelectedNode(undefined);
+                    setSelectedCommunity(selectedObject.obj as CommunityData);
+
+                } else { //If the community is not from this network
+
+                    setSelectedNode(undefined);
+                    setSelectedCommunity(undefined);
+
+                    if (netManager !== undefined) {
+                        netManager.eventsController.removeSelectedItems();
+                        netManager.eventsController.selectNodesByID(selectedObject.obj.users);
+                    }
+                }
+            }
+        } else { //Nothing is selected
+
             setSelectedNode(undefined);
+            setSelectedCommunity(undefined);
+
             if (netManager !== undefined) {
                 netManager.eventsController.removeSelectedItems();
-
-                if (networkFocusID !== info.details.id)
-                    netManager.eventsController.zoomOut();
-            }
-        } else {
-            //If its a number, it means the user clicked a node in some perspective. So we update the node table and the community table
-            if (netManager !== undefined) {
-                const nodeData = netManager.eventsController.nodeClicked(selectedNodeId);
-                setSelectedNode(nodeData);
-                setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
+                netManager.eventsController.zoomOut();
             }
         }
-    }, [selectedNodeId]);
+    }, [selectedObject?.obj, selectedObject?.sourceID, perspectiveInfo.details.id, netManager]);
 
+    //Create the vis network controller
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
             sf.setSelectedCommunity = setSelectedCommunity;
 
             if (networkFocusID === undefined) {
-                sf.setNetworkFocusId(info.details.id);
+                sf.setNetworkFocusId(perspectiveInfo.details.id);
             }
-            setNetManager(new NetworkController(info, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
+            setNetManager(new NetworkController(perspectiveInfo, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
         }
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
 
-    const dataCol = <DataColumn
-        tittle={info?.details.name}
-        node={selectedNode}
-        community={selectedCommunity}
-        viewOptions={viewOptions}
-    />
+    let networkState = "";
+    if (netManager !== undefined && networkFocusID === netManager?.eventsController.networkID)
+        networkState = "active";
 
-    const networkContainer = <div className="network-container" key={1} ref={visJsRef} />
+    const networkContainer = <div className={`network-container ${networkState}`} key={1} ref={visJsRef} />
 
-    if (isFirstPerspective === undefined || isFirstPerspective === true || layout === AppLayout.Vertical) {
+    if (perspectiveState !== PerspectiveState.collapsed) {
+        const dataCol = <DataTable
+            tittle={perspectiveInfo.details.name}
+            node={selectedNode}
+            community={selectedCommunity}
+            artworks={perspectiveInfo.data.artworks}
+            hideLabel={viewOptions.hideLabels}
+            state={networkState}
+        />
+
         return (
-            <div className="perspective row" key={10}>
+            <div className="row" key={10}>
                 <div className="col-4" key={1}>
                     {dataCol}
                 </div>
@@ -127,20 +143,18 @@ export const PerspectiveView = ({
                     {networkContainer}
                 </div>
             </div >
-
         );
     } else {
         return (
-            <div className="perspective row" key={10}>
-                <div className="col-8" key={0}>
+            <div className="row" key={10}>
+                <div className="col-12" key={0}>
                     {networkContainer}
-                </div>
-                <div className="col-4" key={1}>
-                    {dataCol}
                 </div>
             </div >
         );
     }
+
+
 };
 
 /**
@@ -148,18 +162,18 @@ export const PerspectiveView = ({
  * @param viewOptions object that will trigger the useEffects.
  * @param netManager will execute the changes once useEffects are triggered
  */
-function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined, sf: StateFunctions) {
+function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined) {
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.nodeVisuals.updateNodeDimensions(viewOptions.legendConfig);
         }
-    }, [viewOptions.legendConfig]);
+    }, [viewOptions.legendConfig, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.nodeVisuals.hideLabels(viewOptions.hideLabels);
         }
-    }, [viewOptions.hideLabels]);
+    }, [viewOptions.hideLabels, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
@@ -167,23 +181,24 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
             netManager.net.setOptions(netManager.options);
             netManager.edges.update(netManager.edges);
         }
-    }, [viewOptions.edgeWidth]);
+    }, [viewOptions.edgeWidth, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.edgeVisuals.hideUnselectedEdges(viewOptions.hideEdges);
         }
-    }, [viewOptions.hideEdges]);
+    }, [viewOptions.hideEdges, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.edgeVisuals.updateEdgesThreshold(viewOptions.edgeThreshold);
         }
-    }, [viewOptions.edgeThreshold]);
+    }, [viewOptions.edgeThreshold, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
             netManager.edgeVisuals.deleteEdges(viewOptions);
         }
-    }, [viewOptions.deleteEdges]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [viewOptions.deleteEdges, netManager]);
 }
