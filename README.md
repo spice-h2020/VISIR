@@ -42,13 +42,13 @@ ______________________
 
 1. Select the desired File Source from the FileSource dropdown. (local app files is the default option)
 
-2. Once a correct source has been loaded, the Select Perspective dropdown should be clickable. Click any row to activate/disactivate the view of the perspective.
-
-    1. When 2 or more perspectives are opened, the layout will of the perspectives will change, shrinking to fit both perspectives' visualizations at the same time. You can change this Layout with the Layout dropdown.
+2. Once a correct source has been loaded, both Select Perspective dropdowns should be clickable. Click any row to activate/disactivate the view of the perspective.
+    
+    1. WHen two perspectives are active, the grey buttons between the Select Perspective Dropdown will be usable to collapse one of the perspectives to see better the other one.
     
 3. If u click a node of any network, all networks will select that node, will show the node's info in the nearby dataTables and will zoom in to that node and its connected nodes. A tooltip will be shown nearby the node to represent the same info as the dataTables.
 
-4. If u click a bounding box and not a node, only this network will zoom in to all the nodes inside the bounding box, the dataTables will be updated with the community represented by the bounding box and a tooltip will appear similar to the node tooltip.
+4. If u click a bounding box and not a node, only this network will zoom in to all the nodes inside the bounding box while all nodes inside this bounding box will be highlighted in the other network, the dataTables will be updated with the community represented by the bounding box and a tooltip will appear similar to the node tooltip.
 
 5. If u neither click a node or a bounding box, all datatables and tooltips will be cleared and a zoom out will bring the network to the original zoom.
 
