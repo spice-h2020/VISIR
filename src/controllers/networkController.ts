@@ -7,7 +7,7 @@
  */
 //Constants
 import { edgeConst } from "../constants/edges";
-import { EdgeData, PerspectiveInfo } from "../constants/perspectivesTypes";
+import { EdgeData, PerspectiveData, PerspectiveInfo } from "../constants/perspectivesTypes";
 import { ViewOptions } from "../constants/viewOptions";
 import { nodeConst } from "../constants/nodes";
 import { StateFunctions } from "../constants/auxTypes";
@@ -49,23 +49,24 @@ export default class NetworkController {
      * @param dimStrat Current dimension strategy
      * @param networkFocusID ID of the current network with the tooltip focus
      */
-    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, dimStrat: NodeDimensionStrategy | undefined, networkFocusID: number) {
+    constructor(perspectiveData: PerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, 
+        dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string) {
 
-        this.nodes = new DataSet(perspectiveInfo.data.users);
+        this.nodes = new DataSet(perspectiveData.users);
 
-        perspectiveInfo.data.similarity.sort(sortEdges);
-        this.edges = new DataSet(perspectiveInfo.data.similarity);
+        perspectiveData.similarity.sort(sortEdges);
+        this.edges = new DataSet(perspectiveData.similarity);
 
-        this.nodeVisuals = new NodeVisuals(perspectiveInfo.data, this.nodes, sf, viewOptions, dimStrat);
+        this.nodeVisuals = new NodeVisuals(perspectiveData, this.nodes, sf, viewOptions, dimStrat);
         this.createOptions(viewOptions);
-        this.edgeVisuals = new EdgeVisuals(this.edges, perspectiveInfo.data.similarity, viewOptions, this.options)
+        this.edgeVisuals = new EdgeVisuals(this.edges, perspectiveData.similarity, viewOptions, this.options)
 
         this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
         this.edgeVisuals.net = this.net;
         
-        this.bbController = new BoxesController(perspectiveInfo.data.communities, perspectiveInfo.data.users, this.net);
+        this.bbController = new BoxesController(perspectiveData.communities, perspectiveData.users, this.net);
 
-        this.eventsController = new EventsController(this, htmlRef, sf, networkFocusID, perspectiveInfo.details.id);
+        this.eventsController = new EventsController(this, htmlRef, sf, networkFocusID, perspectiveData.id);
     }
 
     /**

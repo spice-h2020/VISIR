@@ -40,9 +40,9 @@ export default class EventsController {
     //Current tooltip data before being parsed
     tooltipData?: UserData | CommunityData;
     //ID of the current focused network
-    networkFocusID: number;
+    networkFocusID: string;
     //Id of this network
-    networkID: number;
+    networkID: string;
 
     /**
      * Constructor of the class
@@ -52,7 +52,7 @@ export default class EventsController {
      * @param networkFocusID ID of the current network with the focus of the tooltip
      * @param networkID ID of this network
      */
-    constructor(networkController: NetworkController, htmlRef: HTMLDivElement, sf: StateFunctions, networkFocusID: number, networkID: number) {
+    constructor(networkController: NetworkController, htmlRef: HTMLDivElement, sf: StateFunctions, networkFocusID: string, networkID: string) {
 
         this.bbController = networkController.bbController;
         this.nodeVisuals = networkController.nodeVisuals;

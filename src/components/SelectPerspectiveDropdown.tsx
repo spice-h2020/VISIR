@@ -79,23 +79,24 @@ function getButtons(allPerspectives: PerspectiveDetails[], states: ButtonState[]
     setStates: Dispatch<bStateArrayAction>, onClick: Function,
     requestManager: RequestManager): React.ReactNode[] {
 
-    const buttons = new Array<React.ReactNode>();
+    // const buttons = new Array<React.ReactNode>();
 
-    for (let i = 0; i < allPerspectives.length; i++) {
-        const state: ButtonState = states[allPerspectives[i].localId];
+    // for (let i = 0; i < allPerspectives.length; i++) {
+    //     const state: ButtonState = states[allPerspectives[i].localId];
 
-        buttons.push(
-            <Button
-                key={allPerspectives[i].id}
-                content={allPerspectives[i].name}
-                state={state}
-                onClick={() => {
-                    requestManager.requestPerspectiveFIle(state, allPerspectives[i], setStates, onClick);
-                }}
-                extraClassName="btn-dropdown" />
-        );
-    }
-    return buttons;
+    //     buttons.push(
+    //         <Button
+    //             key={allPerspectives[i].id}
+    //             content={allPerspectives[i].name}
+    //             state={state}
+    //             onClick={() => {
+    //                 requestManager.requestPerspectiveFIle(state, allPerspectives[i], setStates, onClick);
+    //             }}
+    //             extraClassName="btn-dropdown" />
+    //     );
+    // }
+    // return buttons;
+    return [<div></div>,<div></div>];
 }
 
 

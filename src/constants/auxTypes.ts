@@ -48,7 +48,7 @@ export interface StateFunctions {
 export interface SelectedObject {
     obj: CommunityData | UserData | undefined;
     position?: Point;
-    sourceID?: number;
+    sourceID?: string;
 }
 
 //#region Reducer types/function
@@ -77,7 +77,7 @@ export enum SelectedObjectActionEnum {
 export interface SelectedObjectAction {
     action: SelectedObjectActionEnum;
     newValue: Point | CommunityData | UserData | undefined;
-    sourceID: number;
+    sourceID: string;
 }
 
 /**

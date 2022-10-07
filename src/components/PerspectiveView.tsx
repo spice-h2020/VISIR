@@ -5,7 +5,7 @@
  */
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
-import { PerspectiveInfo, UserData, CommunityData, PerspectiveState } from '../constants/perspectivesTypes';
+import { PerspectiveInfo, UserData, CommunityData, PerspectiveState, PerspectiveData } from '../constants/perspectivesTypes';
 import { SelectedObject, StateFunctions } from '../constants/auxTypes';
 //Packages
 import React, { useEffect, useState, useRef } from "react";
@@ -26,7 +26,7 @@ const networkContainer: React.CSSProperties = {
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
-    perspectiveInfo: PerspectiveInfo;
+    perspectiveData: PerspectiveData;
     //Options that change the view of a perspective
     viewOptions: ViewOptions;
     //Object with all the functions that will change the state of the network
@@ -36,7 +36,7 @@ interface PerspectiveViewProps {
     //Current node dimension strategy
     dimStrat: NodeDimensionStrategy | undefined;
     //Id of the current network on the focus
-    networkFocusID: undefined | number;
+    networkFocusID: undefined | string;
 
     perspectiveState: PerspectiveState;
 
@@ -47,7 +47,7 @@ interface PerspectiveViewProps {
  * Basic UI component that execute a function when clicked
  */
 export const PerspectiveView = ({
-    perspectiveInfo,
+    perspectiveData,
     viewOptions,
     sf,
     selectedObject,
@@ -67,7 +67,7 @@ export const PerspectiveView = ({
     useEffect(() => {
         if (netManager !== undefined) {
             if (networkFocusID === undefined) {
-                netManager.eventsController.networkFocusID = -1;
+                netManager.eventsController.networkFocusID = "-1";
             } else
                 netManager.eventsController.networkFocusID = networkFocusID;
         }
@@ -103,7 +103,7 @@ export const PerspectiveView = ({
 
             } else {//If a community has been selected
                 //If the community is from this network
-                if (selectedObject.sourceID === perspectiveInfo.details.id) {
+                if (selectedObject.sourceID === perspectiveData.id) {
 
                     setSelectedNode(undefined);
                     setSelectedCommunity(selectedObject.obj as CommunityData);
@@ -129,7 +129,7 @@ export const PerspectiveView = ({
                 netManager.eventsController.zoomOut();
             }
         }
-    }, [selectedObject?.obj, selectedObject?.sourceID, perspectiveInfo.details.id, netManager]);
+    }, [selectedObject?.obj, selectedObject?.sourceID, perspectiveData.id, netManager]);
 
     //Create the vis network controller
     useEffect(() => {
@@ -137,9 +137,9 @@ export const PerspectiveView = ({
             sf.setSelectedCommunity = setSelectedCommunity;
 
             if (networkFocusID === undefined) {
-                sf.setNetworkFocusId(perspectiveInfo.details.id);
+                sf.setNetworkFocusId(perspectiveData.id);
             }
-            setNetManager(new NetworkController(perspectiveInfo, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
+            setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
@@ -152,10 +152,10 @@ export const PerspectiveView = ({
 
     if (perspectiveState !== PerspectiveState.collapsed) {
         const dataCol = <DataTable
-            tittle={perspectiveInfo.details.name}
+            tittle={""}
             node={selectedNode}
             community={selectedCommunity}
-            artworks={perspectiveInfo.data.artworks}
+            artworks={perspectiveData.artworks}
             hideLabel={viewOptions.hideLabels}
             state={networkState}
         />

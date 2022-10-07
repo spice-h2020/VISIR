@@ -5,7 +5,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { PerspectiveInfo, PerspectiveState } from "../constants/perspectivesTypes";
+import { PerspectiveData, PerspectiveInfo, PerspectiveState } from "../constants/perspectivesTypes";
 import { ViewOptions, CollapsedState } from "../constants/viewOptions"
 import { SelectedObjectActionEnum, selectedObjectReducer, StateFunctions } from "../constants/auxTypes";
 //Packages
@@ -32,8 +32,8 @@ const widthStyle: Map<PerspectiveState, React.CSSProperties> = new Map([
 
 
 interface PerspectivesGroupProps {
-    leftPerspective?: PerspectiveInfo,
-    rightPerspective?: PerspectiveInfo,
+    leftPerspective?: PerspectiveData,
+    rightPerspective?: PerspectiveData,
 
     collapsedState: CollapsedState,
     //View options for all networks
@@ -54,7 +54,7 @@ export const PerspectivesGroups = ({
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
-    const [networkFocusID, setNetworkFocusID] = useState<number | undefined>();
+    const [networkFocusID, setNetworkFocusID] = useState<string | undefined>();
     const [selectedObject, setSelectedObject] = useReducer(selectedObjectReducer, undefined);
 
     const sf: StateFunctions = {
@@ -65,14 +65,14 @@ export const PerspectivesGroups = ({
     }
 
     useEffect(() => {
-        setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: 0 });
+        setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: "0" });
         setNetworkFocusID(undefined);
     }, [collapsedState]);
 
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
 
-            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: 0 });
+            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
         }
@@ -88,7 +88,7 @@ export const PerspectivesGroups = ({
 
     const leftComponent = leftPerspective === undefined ? "" :
         <PerspectiveView
-            perspectiveInfo={leftPerspective}
+            perspectiveData={leftPerspective}
             viewOptions={viewOptions}
             sf={sf}
             selectedObject={selectedObject}
@@ -99,7 +99,7 @@ export const PerspectivesGroups = ({
 
     const rightComponent = rightPerspective === undefined ? "" :
         <PerspectiveView
-            perspectiveInfo={rightPerspective}
+            perspectiveData={rightPerspective}
             viewOptions={viewOptions}
             sf={sf}
             selectedObject={selectedObject}
@@ -116,12 +116,12 @@ export const PerspectivesGroups = ({
                 hideLabels={viewOptions.hideLabels}
             />
             <div style={widthStyle.get(leftState)}
-                key={leftPerspective === undefined ? -1 : `first${leftPerspective.details.id}`}>
+                key={leftPerspective === undefined ? -1 : `first${leftPerspective.id}`}>
                 {leftComponent}
             </div>
 
             <div style={widthStyle.get(rightState)}
-                key={rightPerspective === undefined ? -2 : `second${rightPerspective.details.id}`}>
+                key={rightPerspective === undefined ? -2 : `second${rightPerspective.id}`}>
                 {rightComponent}
             </div>
         </div>
@@ -135,7 +135,7 @@ export const PerspectivesGroups = ({
  * @param collapsedState 
  * @returns returns two perspective states, {left, right}
  */
-function calculatePerspectiveState(leftPerspective: PerspectiveInfo | undefined, rightPerspective: PerspectiveInfo | undefined,
+function calculatePerspectiveState(leftPerspective: PerspectiveData | undefined, rightPerspective: PerspectiveData | undefined,
     collapsedState: CollapsedState) {
 
     let leftState: PerspectiveState = PerspectiveState.unactive;

@@ -6,8 +6,17 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+const myURL = new URL(window.location.href);
+
+if (!myURL.searchParams.get("perspective1") && !myURL.searchParams.get("perspective2")) {
+  window.location.href = `${window.location.href}?perspective1=5&perspective2=6`
+}
+
 root.render(
   <React.StrictMode>
-    <App />
+    <App
+      perspectiveId1={myURL.searchParams.get("perspective1")}
+      perspectiveId2={myURL.searchParams.get("perspective2")}
+    />
   </React.StrictMode>
 );

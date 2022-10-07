@@ -68,6 +68,8 @@ export interface PerspectiveData {
     users: UserData[];
     similarity: EdgeData[];
     artworks: ArtworkData[],
+
+    id: string,
 }
 
 /**

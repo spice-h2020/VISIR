@@ -159,6 +159,8 @@ function getContainerStyle(currentState: string): React.CSSProperties {
 
     if (currentState === "active") {
         newStyle.borderLeft = "7px solid var(--primaryButtonColor)";
+    }else{
+        newStyle.borderLeft = "1px solid #dadce0";
     }
 
     return newStyle;
