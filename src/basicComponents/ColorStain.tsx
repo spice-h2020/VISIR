@@ -4,9 +4,6 @@
  * @author Marco Expósito Pérez
  */
 
-//Local files
-import '../style/base.css';
-
 interface ColorStainProps {
     color: string;
     scale?: number;

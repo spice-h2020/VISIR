@@ -50,7 +50,7 @@ export const SelectPerspectiveDropdown = ({
             <Dropdown
                 items={[]}
                 content="No available perspectives"
-                extraClassName="dropdown-dark"
+                extraClassButton="primary down-arrow"
             />
         );
     }
@@ -61,7 +61,7 @@ export const SelectPerspectiveDropdown = ({
         <Dropdown
             items={perspectivesButtons}
             content={tittle}
-            extraClassName="dropdown-dark"
+            extraClassButton="primary down-arrow"
         />
     );
 };
@@ -91,7 +91,8 @@ function getButtons(allPerspectives: PerspectiveDetails[], states: ButtonState[]
                 state={state}
                 onClick={() => {
                     requestManager.requestPerspectiveFIle(state, allPerspectives[i], setStates, onClick);
-                }} />
+                }}
+                extraClassName="btn-dropdown" />
         );
     }
     return buttons;

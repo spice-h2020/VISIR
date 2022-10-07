@@ -36,7 +36,7 @@ export const FileSourceDropdown = ({
     //Init the app with the initial option executed.
     useEffect(() => {
         setFileSource(initialOptions.fileSource, setStates);
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, []);
 
     const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states)
@@ -45,7 +45,7 @@ export const FileSourceDropdown = ({
         <Dropdown
             items={fileSourceButtons}
             content="File Source"
-            extraClassName="dropdown-light"
+            extraClassButton="transparent down-arrow"
         />
     );
 };
@@ -74,17 +74,22 @@ function getButtons(changeFileSource: Function, selectedItems: ButtonState[]): R
             content="Local app files"
             onClick={() => { changeFileSource(FileSource.Local); }}
             state={selectedItems[FileSource.Local]}
-            key={1} 
-            />,
+            key={1}
+            extraClassName={"btn-dropdown"}
+        />,
         <Button
             content="Github Develop"
             onClick={() => { changeFileSource(FileSource.Develop); }}
             state={selectedItems[FileSource.Develop]}
-            key={2} />,
+            key={2}
+            extraClassName={"btn-dropdown"}
+        />,
         <Button
             content="Use the API (WIP)"
             onClick={() => { changeFileSource(FileSource.Api); }}
             state={selectedItems[FileSource.Api]}
-            key={3} />
+            key={3}
+            extraClassName={"btn-dropdown"}
+        />
     ];
 }

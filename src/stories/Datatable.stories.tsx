@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { DataTable } from '../basicComponents/Datatable';
+import { DataTable } from '../components/Datatable';
 import { ArtworkData, CommunityData, UserData } from '../constants/perspectivesTypes';
 import '../style/base.css';
 

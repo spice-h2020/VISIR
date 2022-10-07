@@ -269,7 +269,7 @@ export default class EventsController {
                     });
 
                     //Position the tooltip at the right of the bounding box
-                    x = bbRight.x + refPosition.left + 16;
+                    x = bbRight.x + refPosition.left + 22;
                     y = bbLeft.y + (bbRight.y - bbLeft.y) / 2 + refPosition.top;
 
                 }

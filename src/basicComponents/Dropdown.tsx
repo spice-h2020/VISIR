@@ -9,15 +9,33 @@ import { ButtonState } from '../constants/viewOptions';
 import React, { useState, useEffect } from "react";
 //Local files
 import { Button } from "./Button";
-import '../style/base.css';
+
+const dropdownStyle: React.CSSProperties = {
+    float: "left",
+    overflow: "hidden",
+    marginLeft: "10px",
+    marginRight: "10px",
+}
+
+const contentStyle: React.CSSProperties = {
+    position: "fixed",
+    zIndex: "10",
+    padding: "0.5rem 0",
+
+    minWidth: "160px",
+    boxShadow: "0px 8px 16px 0px rgba(0, 0, 0, 0.2)",
+    backgroundColor: "white",
+
+    backgroundClip: "padding-box",
+    border: "2px solid rgba(0, 0, 0, 0.15)",
+    borderRadius: "0.25rem",
+}
 
 interface DropdownProps {
     //Items inside the dropdown
     items?: React.ReactNode[];
     //Context of the main dropdown button
     content?: React.ReactNode;
-    //Extra class name to add and change the CSS
-    extraClassName?: string;
     //Active close dropdown when outside click functionality
     closeWhenOutsideClick?: boolean;
     //Extra class name to add to the dropdown button
@@ -30,7 +48,6 @@ interface DropdownProps {
 export const Dropdown = ({
     items = [],
     content = "Dropdown",
-    extraClassName = "",
     extraClassButton = "down-arrow",
     closeWhenOutsideClick = true,
 
@@ -44,11 +61,9 @@ export const Dropdown = ({
         setShowDropDown(false);
     }, closeWhenOutsideClick);
 
-    const buttonClass = extraClassName === "dropdown-light" ? "transparent" : "primary";
-
     if (items.length !== 0)
         return (
-            <div className={showDropDown ? `dropdown ${extraClassName} active` : `dropdown ${extraClassName}`}
+            <div style={dropdownStyle}
                 ref={ref}
             >
                 <Button
@@ -58,22 +73,22 @@ export const Dropdown = ({
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
-                    extraClassName={`${extraClassButton} ${buttonClass}`}
+                    extraClassName={extraClassButton}
                 />
-                <div className="dropdown-content">
+                <div style={ getContentStyle(showDropDown) }>
                     {items}
                 </div>
             </div >
         );
     else
         return (
-            <div className={showDropDown ? `dropdown ${extraClassName} active` : `dropdown ${extraClassName}`}
+            <div style={dropdownStyle}
                 ref={ref}
             >
                 <Button
                     content={content}
                     state={ButtonState.disabled}
-                    extraClassName={`${extraClassButton} ${buttonClass}`}
+                    extraClassName={extraClassButton}
                 />
             </div >
         );
@@ -111,3 +126,16 @@ const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, c
 
     }, [state, closeWhenOutsideClick, ref, callback]);
 };
+
+
+function getContentStyle(currentState: Boolean): React.CSSProperties {
+    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(contentStyle)));
+
+    if (currentState) {
+        newStyle.display = "block";
+    } else {
+        newStyle.display = "none";
+    }
+
+    return newStyle;
+}

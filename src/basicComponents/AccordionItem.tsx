@@ -11,7 +11,27 @@ import { ButtonState } from "../constants/viewOptions";
 import React, { Dispatch, useRef } from "react";
 //Local files
 import { Button } from "./Button";
-import '../style/base.css';
+
+const panelStyle: React.CSSProperties = {
+    maxHeight: "0px",
+    overflow: "hidden",
+    transition: "max-height 0.2s ease-out"
+}
+
+const buttonIcon: React.CSSProperties = {
+    width: "10px",
+    marginLeft: "5px",
+    textAlign: "center"
+}
+
+const buttonText: React.CSSProperties = {
+    width: "90%",
+    float: "left",
+    textAlign: "left",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
+}
 
 interface AccordionItemProps {
     item: React.ReactNode;
@@ -34,34 +54,28 @@ export const AccordionItem = ({
 
     const contentRef = useRef(null);
     const maxHeight = calculateElementMaxHeight(contentRef);
-    
+
     return (
         <div className="accordion-menu">
-            <div className="accordion-header">
-                <Button
-                    content={
-                    <div className="row"> 
-                        <div className="btn-text">
-                            {tittle}
-                        </div>
-                        <div className="btn-icon plus">
-                            {state === ButtonState.active ? "-" : "+"}
-                        </div>
+            <Button
+                content={
+                    <div style={buttonText}>
+                        {tittle}
                     </div>}
-                    state={state}
-                    onClick={() => {
-                        onClick({
-                            action: bStateArrayActionEnum.activeOne,
-                            index: index,
-                            newState: state === ButtonState.active ? ButtonState.unactive : ButtonState.active
-                        });
-                    }}
-                    hoverText={tittle}
-                />
-            </div>
-            <div className={`panel ${state === ButtonState.active ? "panel-open" : "panel-close"}`}
+                state={state}
+                onClick={() => {
+                    onClick({
+                        action: bStateArrayActionEnum.activeOne,
+                        index: index,
+                        newState: state === ButtonState.active ? ButtonState.unactive : ButtonState.active
+                    });
+                }}
+                extraClassName="btn-accordion plus"
+                hoverText={tittle}
+            />
+            <div
                 ref={contentRef}
-                style={{ maxHeight: state === ButtonState.active ? `${maxHeight}px` : "0px" }}
+                style={getPanelStyle(state, maxHeight)}
             >
                 {item}
             </div>
@@ -79,4 +93,17 @@ function calculateElementMaxHeight(ref: React.MutableRefObject<null>) {
     } else {
         return 0;
     }
+}
+
+
+function getPanelStyle(currentState: ButtonState, maxHeight: number): React.CSSProperties {
+    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(panelStyle)));
+
+    if (currentState === ButtonState.active) {
+        newStyle.maxHeight = maxHeight;
+    } else {
+        newStyle.maxHeight = "0px";
+    }
+
+    return newStyle;
 }

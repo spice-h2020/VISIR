@@ -5,7 +5,7 @@
 
  export const edgeConst = {
     //Allow edge labels
-    allowLabels: true,
+    allowLabels: false,
 
     //Edge Width limits
     minWidth: 1,

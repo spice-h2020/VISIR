@@ -5,9 +5,24 @@
  */
 //Packages
 import React from "react";
-//Local files
-import '../style/navbar.css';
 
+const navBarContainer: React.CSSProperties = {
+    listStyleType: "none",
+    overflow: "hidden",
+    backgroundColor: "rgb(248, 249, 250)",
+    boxSizing: "border-box",
+    display: "flex",
+    flexWrap: "wrap",
+    paddingTop: "0.7rem",
+    paddingBottom: "0.7rem",
+
+    position: "fixed",
+    top: "0",
+
+    zIndex: "100",
+    height: "70px",
+    width: "100%",
+}
 interface NavbarProps {
     //Components aligned to the left of the navBar
     leftAlignedItems?: React.ReactNode[];
@@ -27,18 +42,15 @@ export const Navbar = ({
 }: NavbarProps) => {
 
     return (
-        <div className="navbar">
+        <div style={navBarContainer}>
             <div className="col-4"
-                style={{
-                    flexDirection: "row",
-                    display: "flex"
-                }}
+                style={{ flexDirection: "row", display: "flex" }}
             >
                 {leftAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div className="col-4 align-center"
+            <div className="col-4"
                 style={{ display: "contents" }}
             >
                 {midAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
@@ -46,10 +58,7 @@ export const Navbar = ({
                 })}
             </div>
             <div className="col-4"
-                style={{
-                    flexDirection: "row-reverse",
-                    display: "flex"
-                }}
+                style={{ flexDirection: "row-reverse", display: "flex"}}
             >
                 {rightAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
