@@ -143,8 +143,7 @@ function getCommunityPanel(community: CommunityData | undefined) {
         content.push(<div className="row" key={-1}> <strong> Name: </strong> &nbsp; {community.name} </div>);
         content.push(<div className="row" key={-2}> <strong> Explanation: </strong> &nbsp; {community.explanation} </div>);
 
-        const users = community.users.toString();
-        content.push(<div className="row" key={-4}> {` Users: ${users.replace(/,/g, ', ')}`} </div>);
+        content.push(<div className="row" key={-4}> {` Citizens: ${community.users.length}`} </div>);
     }
 
     return (
