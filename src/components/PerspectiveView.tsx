@@ -5,7 +5,7 @@
  */
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
-import { PerspectiveInfo, UserData, CommunityData, PerspectiveState, PerspectiveData } from '../constants/perspectivesTypes';
+import { UserData, CommunityData, PerspectiveState, PerspectiveData } from '../constants/perspectivesTypes';
 import { SelectedObject, StateFunctions } from '../constants/auxTypes';
 //Packages
 import React, { useEffect, useState, useRef } from "react";
@@ -76,20 +76,6 @@ export const PerspectiveView = ({
 
     ViewOptionsUseEffect(viewOptions, netManager);
 
-    /**
-     * Cuando se seleccione algo que no es de esta perspectiva, es necesario buscar si el nodo/community esta en esta perspectiva,
-     * para ello, no hay mas que,
-     * 
-     * 
-     * Dropdown (morelesss) para configurar perspectivas etc.
-     * 
-     * similar emotions in same artworks
-     * ______   ________     ____     ___________
-     * same      values     similar     attribute1
-     * distinct  thematics  distinct    attribute2
-     *                                  attribute3
-     * ___________________________________________
-     */
     useEffect(() => {
         //If something is selected
         if (selectedObject?.obj !== undefined && netManager !== undefined) {

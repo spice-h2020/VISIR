@@ -5,10 +5,9 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ButtonState, FileSource } from '../constants/viewOptions';
-import { validateAllPerspectivesDetailsJSON, validatePerspectiveDataJSON } from '../constants/ValidateFiles';
-import { bStateArrayActionEnum, bStateArrayAction } from '../constants/auxTypes';
-import { PerspectiveData, PerspectiveDetails, PerspectiveInfo } from '../constants/perspectivesTypes';
+import { FileSource } from '../constants/viewOptions';
+import { validatePerspectiveDataJSON } from '../constants/ValidateFiles';
+import { PerspectiveData } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
 import { Dispatch } from 'react';
@@ -74,11 +73,11 @@ export default class RequestManager {
                 }
             })
             .catch((error) => {
-
+                
                 setPerspective(undefined);
 
-                console.log(error);
-                alert(error.message);
+                console.log(`Perspective file was not found: ${error}`);
+                alert(`Perspective file was not found: ${error.message}`);
             });
     }
 

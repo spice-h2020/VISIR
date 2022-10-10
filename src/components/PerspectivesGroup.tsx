@@ -5,7 +5,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { PerspectiveData, PerspectiveInfo, PerspectiveState } from "../constants/perspectivesTypes";
+import { PerspectiveData, PerspectiveState } from "../constants/perspectivesTypes";
 import { ViewOptions, CollapsedState } from "../constants/viewOptions"
 import { SelectedObjectActionEnum, selectedObjectReducer, StateFunctions } from "../constants/auxTypes";
 //Packages

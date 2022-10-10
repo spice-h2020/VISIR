@@ -6,6 +6,9 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+/**
+ * DEBUG: This is intended as testing to check the url parameters
+ */
 const myURL = new URL(window.location.href);
 
 if (!myURL.searchParams.get("perspective1") && !myURL.searchParams.get("perspective2")) {

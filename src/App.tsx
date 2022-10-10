@@ -6,11 +6,10 @@
  */
 //Constants
 import { FileSource, ButtonState, ViewOptions, viewOptionsReducer, CollapsedState } from './constants/viewOptions';
-import { PerspectiveData, PerspectiveDetails, PerspectiveInfo } from './constants/perspectivesTypes';
+import { PerspectiveData } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
-import { bStateArrayAction } from './constants/auxTypes';
 //Packages
-import { Dispatch, useEffect, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -65,7 +64,6 @@ export const App = ({
 
     if (perspectiveId2 !== null && perspectiveId2 !== perspectiveId1)
       requestManager.requestPerspectiveFIle(perspectiveId2, setRightPerspective);
-
   }
 
   return (
