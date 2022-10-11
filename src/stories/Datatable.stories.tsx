@@ -56,10 +56,11 @@ const node: UserData = {
 };
 
 const comm: CommunityData = {
-    id: 0,
+    id: "0",
     name: 'Community 1',
     explanation: "Representative Properties: {'Artefacts collected': 'Stool60, Pastille chair, Pehtoori'}'",
-    users: [1, 2, 3, 4, 5, 6]
+    users: ["1", "2", "3", "4", "5", "6"],
+    explicitCommunity: {}
 };
 
 const artworkData: ArtworkData[] = [

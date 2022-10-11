@@ -38,7 +38,6 @@ export interface StateFunctions {
     setLegendData: Function;
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
-    setSelectedCommunity?: Function;
     setSelectedObject: Dispatch<SelectedObjectAction>;
 }
 

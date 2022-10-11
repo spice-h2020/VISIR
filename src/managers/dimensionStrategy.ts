@@ -38,9 +38,9 @@ export default class NodeDimensionStrategy {
      * Change user to its default state based on the active strategies
      * @param user node to edit
      */
-    nodeToDefault(user: UserData) {
+    nodeToDefault(user: UserData, isFocus: boolean = false) {
         this.strategies.forEach((strat) => {
-            strat.change(user);
+            strat.change(user, isFocus);
         });
     }
 

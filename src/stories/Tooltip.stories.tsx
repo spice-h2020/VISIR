@@ -34,10 +34,12 @@ userExample.args = {
 export const commExample = Template.bind({});
 
 const comm: CommunityData = {
-  id: 0,
+  id: "0",
   name: 'Community 1',
   explanation: "Representative Properties: {'Artefacts collected': 'Fiskars scissors, Pehtoori, Cast Iron Pot, Stool60, Pastille chair'}",
-  users: []
+  users: [],
+  explicitCommunity: {}
+
 }
 const commObject: SelectedObject = {
   obj: comm,

@@ -18,21 +18,28 @@ export default class BorderStrategy extends GenericStrategy {
      * Changes the border's color and width
      * @param user user to edit
      */
-    change(user: UserData) {
+    change(user: UserData, isFocus: boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
             const value = user.explicit_community[this.attr.key];
 
             user["color"].border = this.dimensionMap.get(value);
-            user["borderWidth"] = nodeConst.defaultBorderColorWidth;
-            user["borderWidthSelected"] = nodeConst.selectedBorderColorWidth;
+
+            if (isFocus) {
+                user["borderWidth"] = nodeConst.selectedBorderColorWidth;
+            } else {
+                user["borderWidth"] = nodeConst.defaultBorderColorWidth;
+            }
 
         } else {
 
-            user["color"].border = "transparent";
+            user["color"].border = "black";
 
-            user["borderWidth"] = nodeConst.defaultBorderWidth;
-            user["borderWidthSelected"] = nodeConst.selectedBorderWidth;
+            if (isFocus) {
+                user["borderWidth"] = nodeConst.selectedBorderWidth;
+            } else {
+                user["borderWidth"] = nodeConst.defaultBorderWidth;
+            }
 
         }
     }
@@ -43,5 +50,10 @@ export default class BorderStrategy extends GenericStrategy {
      */
     toColorless(user: UserData) {
         user["color"]["border"] = nodeConst.noFocusColor.border;
+
+        if (this.attr !== undefined && this.attr.active)
+            user["borderWidth"] = nodeConst.defaultBorderColorWidth;
+        else
+            user["borderWidth"] = nodeConst.defaultBorderWidth;
     }
 }

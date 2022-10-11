@@ -44,7 +44,7 @@ export default abstract class GenericStrategy {
     }
 
     //Change the user properties to fit the dimension strategy
-    abstract change(user: UserData): void;
+    abstract change(user: UserData, isFocus: boolean): void;
     //Change the user properties to make it colorless acordingly with the dimension strategy
     abstract toColorless(user: UserData): void;
 }

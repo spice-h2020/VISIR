@@ -74,7 +74,6 @@ export const Tooltip = ({
     selectedObject,
     hideLabels,
 }: TooltipProps) => {
-
     const [isActive, setActive] = useState<Boolean>(false);
     const [yOffset, setYoffset] = useState<number>(0);
 
@@ -103,6 +102,11 @@ export const Tooltip = ({
         setSelecObject(selectedObject?.obj);
 
     }, [selectedObject?.obj, hideLabels])
+
+    // console.log(selectedObject !== undefined);
+    // console.log(selectedObject?.obj !== undefined);
+    // console.log(selectedObject?.position !== undefined);
+    // console.log(isActive);
 
     const tooltipTittle: React.ReactNode = getTooltipTittle(selectObject);
     const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, hideLabels);

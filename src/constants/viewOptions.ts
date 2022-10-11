@@ -93,7 +93,7 @@ export const initialOptions = {
     /**
      * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
      */
-    deleteEdges: 0
+    deleteEdges: 10
 }
 /**
  * Class that contains the value of all visualization options that will change how the user see the networks

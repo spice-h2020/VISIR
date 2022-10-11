@@ -6,7 +6,7 @@
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
 import { UserData, CommunityData, PerspectiveState, PerspectiveData } from '../constants/perspectivesTypes';
-import { SelectedObject, StateFunctions } from '../constants/auxTypes';
+import { SelectedObject, SelectedObjectActionEnum, StateFunctions } from '../constants/auxTypes';
 //Packages
 import React, { useEffect, useState, useRef } from "react";
 //Local files
@@ -67,52 +67,53 @@ export const PerspectiveView = ({
     useEffect(() => {
         if (netManager !== undefined) {
             if (networkFocusID === undefined) {
-                netManager.eventsController.networkFocusID = "-1";
+                netManager.eventsCtrl.focusedNetId = "-1";
             } else
-                netManager.eventsController.networkFocusID = networkFocusID;
+                netManager.eventsCtrl.focusedNetId = networkFocusID;
         }
-
     }, [networkFocusID, netManager])
 
-    ViewOptionsUseEffect(viewOptions, netManager);
+    ViewOptionsUseEffect(viewOptions, netManager, sf.setSelectedObject, networkFocusID);
 
     useEffect(() => {
         //If something is selected
-        if (selectedObject?.obj !== undefined && netManager !== undefined) {
-            //If a node has been selected
-            if (selectedObject.obj.explanation === undefined) {
+        if (netManager !== undefined) {
+            if (selectedObject?.obj !== undefined) {
+                //If a node has been selected
+                if (selectedObject.obj.explanation === undefined && selectedObject.obj.id !== undefined) {
 
-                const nodeData = netManager.eventsController.nodeClicked(selectedObject.obj.id as number);
+                    const nodeData = netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
 
-                setSelectedNode(nodeData as UserData);
-                setSelectedCommunity(netManager.bbController.comData[nodeData.implicit_community]);
+                    if (nodeData === undefined) {
+                        setSelectedNode(undefined);
+                        setSelectedCommunity(undefined);
+                    } else {
+                        setSelectedNode(nodeData as UserData);
+                        setSelectedCommunity(netManager.bbCtrl.comData[nodeData.implicit_community]);
+                    }
+                } else {//If a community has been selected
+                    //If the community is from this network
+                    if (selectedObject.sourceID === perspectiveData.id) {
 
-            } else {//If a community has been selected
-                //If the community is from this network
-                if (selectedObject.sourceID === perspectiveData.id) {
+                        netManager.eventsCtrl.boundingBoxClicked(selectedObject.obj as CommunityData);
 
-                    setSelectedNode(undefined);
-                    setSelectedCommunity(selectedObject.obj as CommunityData);
+                        setSelectedNode(undefined);
+                        setSelectedCommunity(selectedObject.obj as CommunityData);
 
-                } else { //If the community is not from this network
+                    } else { //If the community is not from this network
 
-                    setSelectedNode(undefined);
-                    setSelectedCommunity(undefined);
+                        netManager.eventsCtrl.externalCommunityClicked(selectedObject.obj as CommunityData);
 
-                    if (netManager !== undefined) {
-                        netManager.eventsController.removeSelectedItems();
-                        netManager.eventsController.selectNodesByID(selectedObject.obj.users);
+                        setSelectedNode(undefined);
+                        setSelectedCommunity(undefined);
                     }
                 }
-            }
-        } else { //Nothing is selected
+            } else { //Nothing is selected
 
-            setSelectedNode(undefined);
-            setSelectedCommunity(undefined);
+                netManager.eventsCtrl.nothingClicked();
 
-            if (netManager !== undefined) {
-                netManager.eventsController.removeSelectedItems();
-                netManager.eventsController.zoomOut();
+                setSelectedNode(undefined);
+                setSelectedCommunity(undefined);
             }
         }
     }, [selectedObject?.obj, selectedObject?.sourceID, perspectiveData.id, netManager]);
@@ -120,7 +121,6 @@ export const PerspectiveView = ({
     //Create the vis network controller
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
-            sf.setSelectedCommunity = setSelectedCommunity;
 
             if (networkFocusID === undefined) {
                 sf.setNetworkFocusId(perspectiveData.id);
@@ -131,7 +131,7 @@ export const PerspectiveView = ({
     }, [visJsRef]);
 
     let networkState = "";
-    if (netManager !== undefined && networkFocusID === netManager?.eventsController.networkID)
+    if (netManager !== undefined && networkFocusID === netManager.id)
         networkState = "active";
 
     const networkContainer = <div style={getNetworkContainerStyle(perspectiveState)} key={1} ref={visJsRef} />
@@ -174,42 +174,45 @@ export const PerspectiveView = ({
  * @param viewOptions object that will trigger the useEffects.
  * @param netManager will execute the changes once useEffects are triggered
  */
-function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined) {
-    useEffect(() => {
-        if (netManager !== undefined) {
-            netManager.nodeVisuals.updateNodeDimensions(viewOptions.legendConfig);
-        }
-    }, [viewOptions.legendConfig, netManager]);
+function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined, setSelectedObject: Function, focusedId: string | undefined) {
+    // useEffect(() => {
+    //     if (netManager !== undefined) {
+    //         netManager.nodeVisuals.updateNodeDimensions(viewOptions.legendConfig);
+    //     }
+    // }, [viewOptions.legendConfig, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.nodeVisuals.hideLabels(viewOptions.hideLabels);
+            netManager.nodeVisuals.toggleNodeLabels(netManager.nodes, viewOptions.hideLabels);
         }
     }, [viewOptions.hideLabels, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.edgeVisuals.changeEdgeWidth(viewOptions.edgeWidth, netManager.options);
-            netManager.net.setOptions(netManager.options);
-            netManager.edges.update(netManager.edges);
+            netManager.edgeCtrl.toggleEdgeWidth(viewOptions.edgeWidth, netManager.net, netManager.options);
         }
     }, [viewOptions.edgeWidth, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.edgeVisuals.hideUnselectedEdges(viewOptions.hideEdges);
+            netManager.edgeCtrl.toggleHideEdges(viewOptions.hideEdges);
         }
     }, [viewOptions.hideEdges, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.edgeVisuals.updateEdgesThreshold(viewOptions.edgeThreshold);
+            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: focusedId });
+
+            netManager.edgeCtrl.updateEdgesThreshold(viewOptions.edgeThreshold);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [viewOptions.edgeThreshold, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.edgeVisuals.deleteEdges(viewOptions);
+            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: focusedId });
+            
+            netManager.edgeCtrl.updateDeletedEdges(viewOptions);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [viewOptions.deleteEdges, netManager]);

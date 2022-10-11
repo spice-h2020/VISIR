@@ -3,6 +3,8 @@
  * @author Marco Expósito Pérez
  */
 
+import { AnyARecord } from "dns";
+
 /**
  * Interface that allows to add any (key:string -> value:any) property to an object of this type 
  */
@@ -76,10 +78,11 @@ export interface PerspectiveData {
  * Interface of the data of a community.
  */
 export interface CommunityData extends anyProperty {
-    id: number;
+    id: string;
     name: string;
     explanation: string;
-    users: number[];
+    users: string[];
+    explicitCommunity: anyProperty;
 }
 
 /**
@@ -109,7 +112,7 @@ export interface EdgeData extends anyProperty {
     from: string;
     to: string;
     value: number;
-    id?: number;
+    id: string;
 }
 
 /**
