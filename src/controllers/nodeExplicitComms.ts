@@ -28,6 +28,7 @@ export class ExplicitData {
 
 export default class NodeExplicitComms {
 
+
     //All explicit Data of the users
     explicitData: ExplicitData[];
 
@@ -35,6 +36,7 @@ export default class NodeExplicitComms {
 
     constructor(communitiesData: CommunityData[]) {
         this.explicitData = new Array<ExplicitData>();
+
         this.communitiesData = communitiesData;
     }
 
@@ -82,10 +84,6 @@ export default class NodeExplicitComms {
             this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
         } else {
             const currentNumber = this.communitiesData[group].explicitCommunity[key].get(node.explicit_community[key]);
-            if (key === "ageGroup" && node.explicit_community[key] === "" && group === 1) {
-
-            }
-
 
             if (currentNumber === undefined) {
                 this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
@@ -95,4 +93,17 @@ export default class NodeExplicitComms {
         }
     }
 
+    calcExplicitPercentile() {
+        for (let community of this.communitiesData) {
+            const explicitCommunityKeys = Object.keys(community.explicitCommunity)
+
+            for (let i = 0; i < explicitCommunityKeys.length; i++) {
+                const key = explicitCommunityKeys[i];
+
+                for (const pair of community.explicitCommunity[key]) {
+                    community.explicitCommunity[key].set(pair[0], ((pair[1] / community.users.length)*100).toFixed(0));
+                }
+            }
+        }
+    }
 }

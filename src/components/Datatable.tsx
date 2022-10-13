@@ -146,6 +146,7 @@ function getCommunityPanel(community: CommunityData | undefined) {
         content.push(<div className="row" key={-4}> {` Citizens: ${community.users.length}`} </div>);
         content.push(<br key={-5} />);
 
+        console.log(community);
         const explicitCommunityKeys = Object.keys(community.explicitCommunity)
         for (let i = 0; i < explicitCommunityKeys.length; i++) {
             const key = explicitCommunityKeys[i];

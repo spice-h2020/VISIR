@@ -103,11 +103,6 @@ export const Tooltip = ({
 
     }, [selectedObject?.obj, hideLabels])
 
-    // console.log(selectedObject !== undefined);
-    // console.log(selectedObject?.obj !== undefined);
-    // console.log(selectedObject?.position !== undefined);
-    // console.log(isActive);
-
     const tooltipTittle: React.ReactNode = getTooltipTittle(selectObject);
     const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, hideLabels);
 

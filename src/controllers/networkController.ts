@@ -84,6 +84,8 @@ export default class NetworkController {
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
         });
 
+        explicitCtrl.calcExplicitPercentile();
+
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions, this.nodes.getIds() as string[]);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
