@@ -107,13 +107,7 @@ export default class NetworkController {
         this.options = {
             autoResize: true,
             edges: {
-                scaling: {
-                    min: edgeConst.minWidth,
-                    max: edgeConst.minWidth,
-                    label: {
-                        enabled: false
-                    }
-                },
+                width: edgeConst.minWidth,
                 color: {
                     color: edgeConst.defaultColor,
                     highlight: edgeConst.selectedColor

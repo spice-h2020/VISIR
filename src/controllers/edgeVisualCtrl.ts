@@ -36,7 +36,7 @@ export default class EdgeVisualsCtrl {
         this.baseEdges.forEach((edge) => {
             if (Math.random() < viewOptions.deleteEdges / 100) {
                 edgesToDelete.push(edge.id);
-            } else if (edge.value < viewOptions.edgeThreshold) {
+            } else if (edge.similarity < viewOptions.edgeThreshold) {
                 edgesToDelete.push(edge.id);
             } else {
                 const edgeToEdit = this.edges.get(edge.id);
@@ -182,7 +182,8 @@ export default class EdgeVisualsCtrl {
             const edgesToDelete: string[] = new Array<string>();
 
             this.edges.forEach((edge: Edge) => {
-                if (edge.value !== undefined && edge.value < newEdgeThreshold) {
+
+                if ((edge as EdgeData).similarity !== undefined && (edge as EdgeData).similarity < newEdgeThreshold) {
                     edgesToDelete.push(edge.id as string);
                 }
             });
@@ -195,7 +196,7 @@ export default class EdgeVisualsCtrl {
 
             for (const edge of this.baseEdges) {
 
-                if (edge.value < newEdgeThreshold) {
+                if (edge.similarity < newEdgeThreshold) {
                     continue;
                 } else {
                     if (containedEdges.includes(edge.id)) {
@@ -219,7 +220,7 @@ export default class EdgeVisualsCtrl {
 
         this.baseEdges.forEach((edge) => {
             if (Math.random() >= viewOptions.deleteEdges / 100 &&
-                edge.value >= viewOptions.edgeThreshold) {
+                (edge as EdgeData).similarity >= viewOptions.edgeThreshold) {
 
                 if (viewOptions.edgeWidth) {
                     edge!.scaling = {

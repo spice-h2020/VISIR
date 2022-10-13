@@ -175,11 +175,11 @@ export const PerspectiveView = ({
  * @param netManager will execute the changes once useEffects are triggered
  */
 function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined, setSelectedObject: Function, focusedId: string | undefined) {
-    // useEffect(() => {
-    //     if (netManager !== undefined) {
-    //         netManager.nodeVisuals.updateNodeDimensions(viewOptions.legendConfig);
-    //     }
-    // }, [viewOptions.legendConfig, netManager]);
+    useEffect(() => {
+        if (netManager !== undefined) {
+            netManager.nodeVisuals.selectNodes(netManager.nodes, netManager.nodeVisuals.selectedNodes, netManager.nodeVisuals.focusedNodes, viewOptions.legendConfig);
+        }
+    }, [viewOptions.legendConfig, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {

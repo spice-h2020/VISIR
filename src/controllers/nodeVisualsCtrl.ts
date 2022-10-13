@@ -6,12 +6,12 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { PerspectiveData, UserData } from "../constants/perspectivesTypes";
-import { Dimensions, DimAttribute, nodeConst } from "../constants/nodes"
+import { UserData } from "../constants/perspectivesTypes";
+import { Dimensions, DimAttribute } from "../constants/nodes"
 import { ViewOptions } from "../constants/viewOptions";
-import { Point, StateFunctions } from "../constants/auxTypes";
+import { StateFunctions } from "../constants/auxTypes";
 //Packages
-import { ChosenLabelValues, ChosenNodeValues, DataSetNodes, Node } from "vis-network";
+import { DataSetNodes, Node } from "vis-network";
 //Local files
 import NodeDimensionStrategy from "../managers/dimensionStrategy";
 import { ExplicitData } from "./nodeExplicitComms";
@@ -19,6 +19,8 @@ import { ExplicitData } from "./nodeExplicitComms";
 export default class NodeVisualsCtrl {
     dimStrat: NodeDimensionStrategy;
     legendConfig: Map<string, boolean>;
+
+    selectedNodes: Array<string>;
     focusedNodes: Array<string>;
 
     constructor(dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions) {
@@ -29,9 +31,10 @@ export default class NodeVisualsCtrl {
         } else {
             this.dimStrat = dimStrat;
         }
-
-        this.focusedNodes = new Array<string>();
         this.legendConfig = viewOptions.legendConfig;
+
+        this.selectedNodes = new Array<string>();
+        this.focusedNodes = new Array<string>();
     }
 
 
@@ -69,52 +72,29 @@ export default class NodeVisualsCtrl {
     }
 
     setNodeInitialVisuals(node: UserData, hideLabel: boolean) {
-        this.updateNodeVisual(node);
+
+        if (this.isHidedByLegend(node as UserData)) {
+            this.hideNodeVisuals(node as UserData);
+        }else{
+            this.coloredNodeVisuals(node as UserData);
+        }
+
         this.updateNodeLabel(node, hideLabel);
     }
 
-    updateNodeVisual(node: UserData) {
-        const keys = Object.keys(node.explicit_community);
-
-        //Find if the node must be colorless
-        let toColorless = false;
-        for (let i = 0; i < keys.length && !toColorless; i++) {
-            const value = node.explicit_community[keys[i]]
-
-            if (this.legendConfig!.get(value))
-                toColorless = true;
-        }
-
-        if (toColorless) {
-            this.dimStrat.nodeToColorless(node);
-
-            //If it must not be colorless, check if there are selected Nodes
-        } else if (this.focusedNodes.length > 0) {
-
-            //If there are selected nodes, we only move to default color the ones that are selected
-            if (this.focusedNodes.includes(node.id.toString())) {
-                this.dimStrat.nodeToDefault(node);
-            } else {
-                this.dimStrat.nodeToColorless(node);
-            }
-        } else {
-            this.dimStrat.nodeToDefault(node);
-        }
-    }
-
-    toggleNodeLabels(allNodes: DataSetNodes, hideLabel:boolean){
+    toggleNodeLabels(allNodes: DataSetNodes, hideLabel: boolean) {
         const newNodes: Node[] = new Array<Node>();
 
         allNodes.forEach((node) => {
 
             this.updateNodeLabel(node as UserData, hideLabel);
             newNodes.push(node);
-            
+
         })
 
         allNodes.update(newNodes);
     }
-    
+
     updateNodeLabel(node: UserData, hideLabel: boolean) {
         if (hideLabel) {
             if (node.font !== undefined) {
@@ -136,12 +116,17 @@ export default class NodeVisualsCtrl {
         }
     }
 
-    selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[]) {
+    selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[], legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
         const newNodes: Node[] = new Array<Node>();
+        this.selectedNodes = selectedNodes;
+        this.focusedNodes = focusedId;
 
         allNodes.forEach((node) => {
             const id = node.id;
-            if (selectedNodes.includes(id as string)) {
+            if (this.isHidedByLegend(node as UserData, legendConfig)) {
+                this.hideNodeVisuals(node as UserData);
+
+            } else if (selectedNodes.includes(id as string)) {
                 this.coloredNodeVisuals(node as UserData);
 
             } else if (focusedId.includes(id as string)) {
@@ -180,6 +165,25 @@ export default class NodeVisualsCtrl {
         this.dimStrat.nodeToColorless(node);
     }
 
+    isHidedByLegend(node: UserData, legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
+        if (legendConfig.size !== 0) {
+            this.legendConfig = legendConfig;
+        }
+
+        let hideNode = false;
+        const keys = Object.keys(node.explicit_community);
+
+        for (let i = 0; i < keys.length; i++) {
+            const value = node.explicit_community[keys[i]]
+
+            if (this.legendConfig!.get(value)) {
+                hideNode = true;
+                break;
+            }
+        }
+
+        return hideNode;
+    }
 
 }
 

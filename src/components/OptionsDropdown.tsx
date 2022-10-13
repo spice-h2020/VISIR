@@ -81,12 +81,12 @@ export const OptionsDropdown = ({
             key={5}
         />,
         <hr key={6} style={hrStyle} />,
-        <Button
-            content="Make edge width variable"
-            onClick={() => { onClick(2, "edgeWidth"); }}
-            state={states[2]}
-            key={7}
-            extraClassName={"btn-dropdown"} />,
+        // <Button
+        //     content="Make edge width variable"
+        //     onClick={() => { onClick(2, "edgeWidth"); }}
+        //     state={states[2]}
+        //     key={7}
+        //     extraClassName={"btn-dropdown"} />,
         <hr key={8} style={hrStyle} />,
         <Button
             content="Activate nodes borders"

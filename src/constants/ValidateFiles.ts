@@ -483,6 +483,9 @@ function isSimilarityDataValid(arg: any): types.EdgeData | undefined {
                 throw Error(`Value is not a number`);
         }
 
+        arg.similarity = arg.value;
+        delete arg.value;
+
         if (arg.u1 === undefined) {
             throw Error(`U1 of the edge with value (${arg.value}) is undefined`);
         }

@@ -3,8 +3,6 @@
  * @author Marco Expósito Pérez
  */
 
-import { AnyARecord } from "dns";
-
 /**
  * Interface that allows to add any (key:string -> value:any) property to an object of this type 
  */
@@ -111,7 +109,7 @@ export interface UserData extends anyProperty {
 export interface EdgeData extends anyProperty {
     from: string;
     to: string;
-    value: number;
+    similarity: number;
     id: string;
 }
 
