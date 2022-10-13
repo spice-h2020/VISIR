@@ -101,7 +101,7 @@ export default class NodeExplicitComms {
                 const key = explicitCommunityKeys[i];
 
                 for (const pair of community.explicitCommunity[key]) {
-                    community.explicitCommunity[key].set(pair[0], ((pair[1] / community.users.length)*100).toFixed(0));
+                    community.explicitCommunity[key].set(pair[0], ((pair[1] / community.users.length)*100).toFixed(1));
                 }
             }
         }

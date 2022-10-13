@@ -3,6 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
 import { ButtonState } from '../constants/viewOptions';
+import '../style/base.css';
 
 export default {
     title: 'Example/Dropdown',

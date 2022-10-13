@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { InteractionPanel } from '../basicComponents/Interaction';
 import { ArtworkData, Interaction } from '../constants/perspectivesTypes';
+import '../style/base.css';
 
 export default {
   title: 'Example/Interaction',

@@ -3,6 +3,8 @@ import { Accordion } from '../basicComponents/Accordion';
 import { InteractionPanel } from '../basicComponents/Interaction';
 import { ArtworkData, Interaction } from '../constants/perspectivesTypes';
 
+import '../style/base.css';
+
 export default {
     title: 'Example/Accordion',
     component: Accordion,

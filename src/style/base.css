@@ -479,3 +479,15 @@ input[type="range"]::-ms-track {
 .col-12 {
     width: 100%;
 }
+
+
+/*------------------------------------------
+//         STACKED BARS
+//------------------------------------------*/
+
+
+.bar-stacked{
+    max-width: 400px;
+    max-height: 30px;
+    border: 1px solid black;
+}

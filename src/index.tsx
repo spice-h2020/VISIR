@@ -16,10 +16,10 @@ if (!myURL.searchParams.get("perspective1") && !myURL.searchParams.get("perspect
 }
 
 root.render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <App
       perspectiveId1={myURL.searchParams.get("perspective1")}
       perspectiveId2={myURL.searchParams.get("perspective2")}
     />
-  </React.StrictMode>
+  //</React.StrictMode>
 );

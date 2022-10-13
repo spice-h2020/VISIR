@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Button } from '../basicComponents/Button';
 import { ButtonState } from '../constants/viewOptions';
 
-import '../style/navbar.css';
+import '../style/base.css';
 
 export default {
   title: 'Example/Button',
