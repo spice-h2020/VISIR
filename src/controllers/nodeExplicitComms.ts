@@ -48,8 +48,6 @@ export default class NodeExplicitComms {
             }
 
             this.updateCommunitiesData(key, node);
-
-
         });
     }
 
@@ -74,20 +72,24 @@ export default class NodeExplicitComms {
         const group = node.implicit_community;
 
         if (this.communitiesData[group].explicitCommunity === undefined) {
-
             this.communitiesData[group].explicitCommunity = {};
             this.communitiesData[group].explicitCommunity[key] = new Map<string, number>();
             this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
 
+
         } else if (this.communitiesData[group].explicitCommunity[key] === undefined) {
             this.communitiesData[group].explicitCommunity[key] = new Map<string, number>();
             this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
-        }else{
+        } else {
             const currentNumber = this.communitiesData[group].explicitCommunity[key].get(node.explicit_community[key]);
+            if (key === "ageGroup" && node.explicit_community[key] === "" && group === 1) {
 
-            if(currentNumber === undefined){
+            }
+
+
+            if (currentNumber === undefined) {
                 this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
-            }else{
+            } else {
                 this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], currentNumber + 1);
             }
         }

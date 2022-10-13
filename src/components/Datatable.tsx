@@ -61,7 +61,7 @@ export const DataTable = ({
     const communities = getCommunityPanel(community)
 
     return (
-        <div className= {state} style={getContainerStyle(state)}>
+        <div className={state} style={getContainerStyle(state)}>
             <h2 className="tittle"> {tittle} </h2>
             {nodePanel}
             {interactions}
@@ -120,7 +120,7 @@ function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkD
         }
 
         content.push(
-            <div key={2} style={{margin: "5px 0px"}}>
+            <div key={2} style={{ margin: "5px 0px" }}>
                 <Accordion
                     items={interactions}
                     tittles={tittles}
@@ -144,6 +144,28 @@ function getCommunityPanel(community: CommunityData | undefined) {
         content.push(<div className="row" key={-2}> <strong> Explanation: </strong> &nbsp; {community.explanation} </div>);
 
         content.push(<div className="row" key={-4}> {` Citizens: ${community.users.length}`} </div>);
+        content.push(<br key={-5} />);
+
+        const explicitCommunityKeys = Object.keys(community.explicitCommunity)
+        for (let i = 0; i < explicitCommunityKeys.length; i++) {
+            const key = explicitCommunityKeys[i];
+            content.push(<div className="row" key={-6 - i*2}> {key} </div>);
+
+            let explicitText = "";
+            for (const pair of community.explicitCommunity[key]) {
+                
+                let name = pair[0];
+                if(name === ""){
+                    name = "(empty)";
+                }
+
+                let value = pair[1];
+                explicitText = `${explicitText} ${value}% ${name} -`;
+            }
+
+            explicitText = explicitText.slice(0, -1);
+            content.push(<div className="row" key={-6 - i*2-1}> {explicitText} </div>);
+        }
     }
 
     return (
@@ -159,7 +181,7 @@ function getContainerStyle(currentState: string): React.CSSProperties {
 
     if (currentState === "active") {
         newStyle.borderLeft = "7px solid var(--primaryButtonColor)";
-    }else{
+    } else {
         newStyle.borderLeft = "1px solid #dadce0";
     }
 

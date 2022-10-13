@@ -177,7 +177,11 @@ export const PerspectiveView = ({
 function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined, setSelectedObject: Function, focusedId: string | undefined) {
     useEffect(() => {
         if (netManager !== undefined) {
-            netManager.nodeVisuals.selectNodes(netManager.nodes, netManager.nodeVisuals.selectedNodes, netManager.nodeVisuals.focusedNodes, viewOptions.legendConfig);
+            if (netManager.nodeVisuals.selectedNodes.length === 0) {
+                netManager.nodeVisuals.colorAllNodes(netManager.nodes, viewOptions.legendConfig);
+            } else {
+                netManager.nodeVisuals.selectNodes(netManager.nodes, netManager.nodeVisuals.selectedNodes, netManager.nodeVisuals.focusedNodes, viewOptions.legendConfig);
+            }
         }
     }, [viewOptions.legendConfig, netManager]);
 
@@ -211,7 +215,7 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
     useEffect(() => {
         if (netManager !== undefined) {
             setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: focusedId });
-            
+
             netManager.edgeCtrl.updateDeletedEdges(viewOptions);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -84,7 +84,7 @@ export default class NetworkController {
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
         });
 
-        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);
+        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions, this.nodes.getIds() as string[]);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
         perspectiveData.users.forEach((user: UserData) => {

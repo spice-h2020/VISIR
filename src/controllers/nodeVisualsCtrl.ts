@@ -23,7 +23,7 @@ export default class NodeVisualsCtrl {
     selectedNodes: Array<string>;
     focusedNodes: Array<string>;
 
-    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions) {
+    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions, allNodes: string[]) {
 
         if (dimStrat === undefined) {
             this.dimStrat = this.createDimensionStrategy(explicitData, viewOptions.border, sf.setLegendData);
@@ -75,7 +75,7 @@ export default class NodeVisualsCtrl {
 
         if (this.isHidedByLegend(node as UserData)) {
             this.hideNodeVisuals(node as UserData);
-        }else{
+        } else {
             this.coloredNodeVisuals(node as UserData);
         }
 
@@ -121,9 +121,11 @@ export default class NodeVisualsCtrl {
         this.selectedNodes = selectedNodes;
         this.focusedNodes = focusedId;
 
+        this.legendConfig = legendConfig === undefined ? this.legendConfig : legendConfig;
+
         allNodes.forEach((node) => {
             const id = node.id;
-            if (this.isHidedByLegend(node as UserData, legendConfig)) {
+            if (this.isHidedByLegend(node as UserData)) {
                 this.hideNodeVisuals(node as UserData);
 
             } else if (selectedNodes.includes(id as string)) {
@@ -142,11 +144,20 @@ export default class NodeVisualsCtrl {
         allNodes.update(newNodes);
     }
 
-    colorAllNodes(allNodes: DataSetNodes) {
+    colorAllNodes(allNodes: DataSetNodes, legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
         const newNodes: Node[] = new Array<Node>();
+        this.selectedNodes = [];
+        this.focusedNodes = [];
+
+        this.legendConfig = legendConfig.size === 0 ? this.legendConfig : legendConfig;
 
         allNodes.forEach((node) => {
-            this.coloredNodeVisuals(node as UserData);
+            if (this.isHidedByLegend(node as UserData)) {
+                this.hideNodeVisuals(node as UserData);
+            } else {
+                this.coloredNodeVisuals(node as UserData);
+            }
+
             newNodes.push(node);
         })
 
@@ -165,11 +176,7 @@ export default class NodeVisualsCtrl {
         this.dimStrat.nodeToColorless(node);
     }
 
-    isHidedByLegend(node: UserData, legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
-        if (legendConfig.size !== 0) {
-            this.legendConfig = legendConfig;
-        }
-
+    isHidedByLegend(node: UserData) {
         let hideNode = false;
         const keys = Object.keys(node.explicit_community);
 
