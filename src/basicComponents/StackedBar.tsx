@@ -25,11 +25,35 @@ const box: React.CSSProperties = {
 }
 
 const rowStyle: React.CSSProperties = {
-    alignContent: "center",
-    justifyContent: "center",
     alignItems: "center",
     height: "100%",
     cursor: "default",
+}
+
+const stackedGraph: React.CSSProperties = {
+    width: "100%",
+    height: "30px",
+    color: "black",
+}
+
+const barStyle: React.CSSProperties = {
+    display: "flex",
+    height: "100%",
+
+    float: "left",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+
+    borderTop: "1px solid black",
+    borderBottom: "1px solid black",
+    boxSizing: "border-box",
+
+    cursor: "default",
+
 }
 
 interface StackedBarProps {
@@ -54,35 +78,44 @@ export const StackedBar = ({
 
     if (pairs !== undefined) {
         for (let i = 0; i < pairs.length; i++) {
-            let style: React.CSSProperties = JSON.parse(JSON.stringify(box));
+            let style: React.CSSProperties = JSON.parse(JSON.stringify(barStyle));
             let content = getContent(pairs[i][1], i, dimension);
 
             style.width = `${pairs[i][1]}%`;
 
+            if (pairs[i][1] < 25)
+                style.justifyContent = "left";
+
             switch (i % 3) {
                 case 0:
-                    style.background = "white";
+                    style.background = "cyan";
                     break;
                 case 1:
-                    style.background = "lightgray";
+                    style.background = "orange";
                     break;
                 case 2:
-                    style.background = "gray";
+                    style.background = "pink";
                     break;
             }
+            const hoverText = `${pairs[i][0] === "" ? "(empty)" : pairs[i][0]} ${pairs[i][1]}%`;
 
-            bars.push(<div key={i} title={`${pairs[i][0]} ${pairs[i][1]}`} style={style}>{content}</div>)
+            bars.push(<span key={i} title={hoverText} style={style}>
+
+                {content}
+
+            </span>)
         }
     }
 
     return (
-        <div className="row bar-stacked">
+        <div>
             <div style={tittleStyle}>{tittle}</div>
-            <div style={{ width: "100%" }} className="row">
+
+            <div style={stackedGraph} className="row">
                 {bars}
             </div>
-        </div >
-    );
+
+        </div>);
 };
 
 
@@ -90,9 +123,7 @@ export const StackedBar = ({
 
 function getContent(value: string, index: number, dimension?: Dimensions): React.ReactNode {
     let style: React.CSSProperties = JSON.parse(JSON.stringify(rowStyle));
-    if (parseFloat(value) < 10.0) {
-        style.float = "left";
-    }
+
     value = `${value}%`;
 
     if (dimension !== undefined) {
@@ -101,22 +132,25 @@ function getContent(value: string, index: number, dimension?: Dimensions): React
                 return (
                     <div className="row" style={style}>
                         {value}
-                        <ColorStain
-                            color={nodeConst.nodeDimensions.getColor(index)}
-                            scale={1.3}
-                        />
+                        <div style={{ marginLeft: "5px" }}>
+                            <ColorStain
+                                color={nodeConst.nodeDimensions.getColor(index)}
+                                scale={1.3}
+                            />
+                        </div>
                     </div>);
             case Dimensions.Shape:
                 return (
                     <div className="row" style={style}>
                         {value}
-                        <div className={`legend-shape ${nodeConst.nodeDimensions.getShape(index).name}`}></div>
+                        <div className={`legend-shape ${nodeConst.nodeDimensions.getShape(index).name}`}
+                            style={{ marginLeft: "5px" }} />
                     </div>);
             case Dimensions.Border:
                 return (
                     <div className="row" style={style}>
                         {value}
-                        <div className="box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
+                        <div className="box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px", marginLeft: "5px" }} />
                     </div>);
 
         }

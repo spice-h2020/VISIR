@@ -182,6 +182,7 @@ function getStackedBars(community: CommunityData) {
 
         content.push(
             <StackedBar
+                key={i}
                 tittle={key}
                 pairs={pairs}
                 dimension={dimension}
