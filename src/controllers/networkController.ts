@@ -16,7 +16,7 @@ import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network"
 import { DataSet } from "vis-data";
 //Local Files
 import BoxesController from "./boundingBoxes";
-import NodeDimensionStrategy from "../managers/dimensionStrategy";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 import NodeLocation from "./nodeLocation";
 import NodeExplicitComms from "./nodeExplicitComms";
 import NodeVisualsCtrl from "./nodeVisualsCtrl";
@@ -84,8 +84,6 @@ export default class NetworkController {
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
         });
 
-        explicitCtrl.calcExplicitPercentile();
-
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions, this.nodes.getIds() as string[]);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
@@ -94,6 +92,9 @@ export default class NetworkController {
             this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.hideLabels);
             this.bbCtrl.calculateBoundingBoxes(user);
         });
+
+        explicitCtrl.calcExplicitPercentile(this.nodeVisuals.dimStrat);
+
 
         this.nodes.update(perspectiveData.users);
     }

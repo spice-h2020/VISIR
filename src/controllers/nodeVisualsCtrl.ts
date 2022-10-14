@@ -13,7 +13,7 @@ import { StateFunctions } from "../constants/auxTypes";
 //Packages
 import { DataSetNodes, Node } from "vis-network";
 //Local files
-import NodeDimensionStrategy from "../managers/dimensionStrategy";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 import { ExplicitData } from "./nodeExplicitComms";
 
 export default class NodeVisualsCtrl {

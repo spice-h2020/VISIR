@@ -12,6 +12,7 @@ import React from "react";
 //Local files
 import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
+import { StackedBar } from "../basicComponents/StackedBar";
 
 const tittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -146,27 +147,7 @@ function getCommunityPanel(community: CommunityData | undefined) {
         content.push(<div className="row" key={-4}> {` Citizens: ${community.users.length}`} </div>);
         content.push(<br key={-5} />);
 
-        console.log(community);
-        const explicitCommunityKeys = Object.keys(community.explicitCommunity)
-        for (let i = 0; i < explicitCommunityKeys.length; i++) {
-            const key = explicitCommunityKeys[i];
-            content.push(<div className="row" key={-6 - i*2}> {key} </div>);
-
-            let explicitText = "";
-            for (const pair of community.explicitCommunity[key]) {
-                
-                let name = pair[0];
-                if(name === ""){
-                    name = "(empty)";
-                }
-
-                let value = pair[1];
-                explicitText = `${explicitText} ${value}% ${name} -`;
-            }
-
-            explicitText = explicitText.slice(0, -1);
-            content.push(<div className="row" key={-6 - i*2-1}> {explicitText} </div>);
-        }
+        content.push(getStackedBars(community))
     }
 
     return (
@@ -187,4 +168,26 @@ function getContainerStyle(currentState: string): React.CSSProperties {
     }
 
     return newStyle;
+}
+
+function getStackedBars(community: CommunityData) {
+    const content = new Array();
+    const explicitCommunityKeys = Object.keys(community.explicitCommunity)
+
+    for (let i = 0; i < explicitCommunityKeys.length; i++) {
+        const key = explicitCommunityKeys[i];
+
+        const pairs = community.explicitCommunity[key][0];
+        const dimension = community.explicitCommunity[key][1];
+
+        content.push(
+            <StackedBar
+                tittle={key}
+                pairs={pairs}
+                dimension={dimension}
+            />
+        );
+    }
+
+    return content;
 }

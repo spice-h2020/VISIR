@@ -7,7 +7,7 @@
 import { Point } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
 import { anyProperty, CommunityData, UserData } from "../constants/perspectivesTypes";
-import NodeDimensionStrategy from "../managers/dimensionStrategy";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
 //Local aux class to help mantain and collect all the values of an Explicit Community
 export class ExplicitData {
@@ -93,17 +93,35 @@ export default class NodeExplicitComms {
         }
     }
 
-    calcExplicitPercentile() {
+    calcExplicitPercentile(dimStrat: NodeDimensionStrategy) {
         for (let community of this.communitiesData) {
             const explicitCommunityKeys = Object.keys(community.explicitCommunity)
 
             for (let i = 0; i < explicitCommunityKeys.length; i++) {
                 const key = explicitCommunityKeys[i];
 
+                const array = new Array();
                 for (const pair of community.explicitCommunity[key]) {
-                    community.explicitCommunity[key].set(pair[0], ((pair[1] / community.users.length)*100).toFixed(1));
+                    array.push([pair[0], parseFloat(((pair[1] / community.users.length) * 100).toFixed(1))]);
                 }
+
+                array.sort((a: any[], b: any[]) => {
+                    if (a[1] < b[1]) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+
+                const dimension = dimStrat.strategies.filter((strat) => {
+                    if (strat !== undefined && strat.attr !== undefined && strat.attr.key !== undefined)
+                        return strat.attr.key === key
+                    else return false;
+                });
+
+                community.explicitCommunity[key] = [array, dimension === undefined ? undefined : dimension[0].attr.dimension];
             }
+
         }
     }
 }

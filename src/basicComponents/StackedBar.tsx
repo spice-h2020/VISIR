@@ -11,17 +11,25 @@ import { Dimensions, nodeConst } from "../constants/nodes";
 import { ColorStain } from "./ColorStain";
 
 const tittleStyle: React.CSSProperties = {
-    paddingRight: "1em",
+    padding: "0em 0.5em",
     float: "left",
-    alignSelf: "center",
+    margin: "auto 0px",
 }
 
 const box: React.CSSProperties = {
-    padding: "0.5em 0px",
     textAlign: "center",
     overflow: "hidden",
     whiteSpace: "nowrap",
     alignSelf: "center",
+    height: "100%",
+}
+
+const rowStyle: React.CSSProperties = {
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    cursor: "default",
 }
 
 interface StackedBarProps {
@@ -49,8 +57,9 @@ export const StackedBar = ({
             let style: React.CSSProperties = JSON.parse(JSON.stringify(box));
             let content = getContent(pairs[i][1], i, dimension);
 
-            style.width = pairs[i][1];
-            switch (i) {
+            style.width = `${pairs[i][1]}%`;
+
+            switch (i % 3) {
                 case 0:
                     style.background = "white";
                     break;
@@ -62,15 +71,17 @@ export const StackedBar = ({
                     break;
             }
 
-            bars.push(<div key={i} title={pairs[i][0]} style={style}>{content}</div>)
+            bars.push(<div key={i} title={`${pairs[i][0]} ${pairs[i][1]}`} style={style}>{content}</div>)
         }
     }
 
     return (
         <div className="row bar-stacked">
             <div style={tittleStyle}>{tittle}</div>
-            {bars}
-        </div>
+            <div style={{ width: "100%" }} className="row">
+                {bars}
+            </div>
+        </div >
     );
 };
 
@@ -78,11 +89,17 @@ export const StackedBar = ({
 
 
 function getContent(value: string, index: number, dimension?: Dimensions): React.ReactNode {
+    let style: React.CSSProperties = JSON.parse(JSON.stringify(rowStyle));
+    if (parseFloat(value) < 10.0) {
+        style.float = "left";
+    }
+    value = `${value}%`;
+
     if (dimension !== undefined) {
         switch (dimension) {
             case Dimensions.Color:
                 return (
-                    <div>
+                    <div className="row" style={style}>
                         {value}
                         <ColorStain
                             color={nodeConst.nodeDimensions.getColor(index)}
@@ -91,20 +108,20 @@ function getContent(value: string, index: number, dimension?: Dimensions): React
                     </div>);
             case Dimensions.Shape:
                 return (
-                    <div>
+                    <div className="row" style={style}>
                         {value}
                         <div className={`legend-shape ${nodeConst.nodeDimensions.getShape(index).name}`}></div>
                     </div>);
             case Dimensions.Border:
                 return (
-                    <div>
+                    <div className="row" style={style}>
                         {value}
                         <div className="box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
                     </div>);
 
         }
     } else {
-        return <div>{value}</div>;
+        return <div className="row" style={style}>{value}</div>;
     }
 
 

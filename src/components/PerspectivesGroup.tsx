@@ -13,7 +13,7 @@ import { useEffect, useReducer, useState } from "react";
 //Local files
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
-import NodeDimensionStrategy from "../managers/dimensionStrategy";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
 const perspectiveContainers: React.CSSProperties = {
     display: "flex",

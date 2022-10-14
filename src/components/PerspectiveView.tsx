@@ -11,7 +11,7 @@ import { SelectedObject, SelectedObjectActionEnum, StateFunctions } from '../con
 import React, { useEffect, useState, useRef } from "react";
 //Local files
 import NetworkController from '../controllers/networkController';
-import NodeDimensionStrategy from '../managers/dimensionStrategy';
+import NodeDimensionStrategy from '../managers/nodeDimensionStat';
 import { DataTable } from './Datatable';
 
 const networkContainer: React.CSSProperties = {
