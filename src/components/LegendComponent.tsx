@@ -1,5 +1,7 @@
 /**
- * @fileoverview This file creates a button that show/hides a dropdown with the legend of the active networks.
+ * @fileoverview This file creates a button that show/hides the legend of the app.
+ * The legend allows the user to understand the relations between the node's dimensions and the value of its explicit communities.
+ * The user can also toggle any Legend value to hide all node's with that value.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -12,7 +14,6 @@ import React from "react";
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
 import { ColorStain } from '../basicComponents/ColorStain';
-
 
 const columnTittle: React.CSSProperties = {
     whiteSpace: "nowrap",
@@ -34,18 +35,24 @@ const columnStyle: React.CSSProperties = {
 }
 
 interface LegendTooltipProps {
-    //Content of the legend
-    legendData: DimAttribute[]
-    //Current legend configuration
-    legendConf: Map<string, boolean>
-    //Function to change the legend configuration that will change how nodes will be seen
-    onLegendClick: Function
+    /**
+     * Data source to create the legend content
+     */
+    legendData: DimAttribute[];
+    /**
+     * Configuration of the legend with the explicit communities that should be hidden/shown
+     */
+    legendConf: Map<string, boolean>;
+    /**
+     * Function to change the legend configuration that changes how nodes will be seen
+     */
+    onLegendClick: Function;
 }
 
 /**
  * Legend component
  */
-export const LegendTooltip = ({
+export const LegendComponent = ({
     legendData,
     legendConf,
     onLegendClick,
@@ -166,8 +173,6 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
 }
-
-
 
 function getLegendColumnStyle(isLast: boolean): React.CSSProperties {
     let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(columnStyle)));

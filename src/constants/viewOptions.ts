@@ -79,10 +79,6 @@ export const initialOptions = {
      */
     hideEdges: ButtonState.unactive,
     /**
-     * Change the width of all edges based on their similarity/value parameter
-     */
-    edgeWidth: ButtonState.unactive,
-    /**
      * Activate the border option of nodes that adds a third dimension that changes based on an explicit community
      */
     border: ButtonState.unactive,
@@ -109,10 +105,6 @@ export class ViewOptions {
      */
     hideEdges: boolean;
     /**
-     * Change the width of all edges based on their similarity/value parameter
-     */
-    edgeWidth: boolean;
-    /**
      * Activate the border option of nodes that adds a third dimension that changes based on an explicit community
      */
     border: boolean;
@@ -135,7 +127,6 @@ export class ViewOptions {
     constructor() {
         this.hideLabels = initialOptions.hideLabels === ButtonState.active;
         this.hideEdges = initialOptions.hideEdges === ButtonState.active;
-        this.edgeWidth = initialOptions.edgeWidth === ButtonState.active;
         this.border = initialOptions.border === ButtonState.active;
         this.legendConfig = new Map<string, boolean>();
         this.edgeThreshold = initialOptions.edgeThreshold;

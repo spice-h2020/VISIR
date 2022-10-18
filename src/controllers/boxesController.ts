@@ -1,13 +1,10 @@
 /**
- * @fileoverview Calculate and draw the bounding boxes of users with the same implicit community.
- * @package Requires vis network package.
+ * @fileoverview This class controls where bounding boxes should be drawn and when a click hits a bounding box
  * @author Marco Expósito Pérez
  */
 //Constants
 import { CommunityData, UserData } from "../constants/perspectivesTypes";
 import { BoundingBox } from "../constants/auxTypes";
-//Packages
-import { Network } from "vis-network";
 
 /**
  * Configuration of the bounding boxes
@@ -40,14 +37,14 @@ const configuration = {
 }
 
 export default class BoxesController {
-    //Data of all communities of the network
+    /**
+     * Data of all communities of the network
+     */
     comData: CommunityData[]
 
     /**
      * Constructor of the class
      * @param communityData Data of all communities of the network
-     * @param uData Data of all users of the network
-     * @param network Vis.js network object 
      */
     constructor(communityData: CommunityData[]) {
         this.comData = communityData;

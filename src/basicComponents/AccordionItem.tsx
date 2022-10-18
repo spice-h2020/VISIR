@@ -18,12 +18,6 @@ const panelStyle: React.CSSProperties = {
     transition: "max-height 0.2s ease-out"
 }
 
-const buttonIcon: React.CSSProperties = {
-    width: "10px",
-    marginLeft: "5px",
-    textAlign: "center"
-}
-
 const buttonText: React.CSSProperties = {
     width: "90%",
     float: "left",

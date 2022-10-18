@@ -1,6 +1,6 @@
 /**
- * @fileoverview This file creates all the perspective views and broadcast the necesary options, like the node that is selected, all perspective views need that to update their
- * dataTables
+ * @fileoverview This file creates all the perspective views and broadcast the necesary options, like the node that is selected, 
+ * all perspective views need that to update their dataTables
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -21,7 +21,6 @@ const perspectiveContainers: React.CSSProperties = {
     paddingBottom: "1vh",
 }
 
-
 const widthStyle: Map<PerspectiveState, React.CSSProperties> = new Map([
     [PerspectiveState.unactive, { width: "0%" }],
     [PerspectiveState.activeBoth, { width: "50%" }],
@@ -30,20 +29,23 @@ const widthStyle: Map<PerspectiveState, React.CSSProperties> = new Map([
     [PerspectiveState.collapsed, { width: "20%" }],
 ])
 
-
 interface PerspectivesGroupProps {
     leftPerspective?: PerspectiveData,
     rightPerspective?: PerspectiveData,
 
     collapsedState: CollapsedState,
-    //View options for all networks
+    /**
+     * View options for all networks
+     */
     viewOptions: ViewOptions,
-    //Function to setup the legend's data
+    /**
+     * Function to setup the legend's data
+     */
     setLegendData: Function,
 }
 
 /**
- * Component that draws each active perspective
+ * Component that draws each perspective
  */
 export const PerspectivesGroups = ({
     leftPerspective,
@@ -64,11 +66,13 @@ export const PerspectivesGroups = ({
         setSelectedObject: setSelectedObject,
     }
 
+    //When the collapsed state changes, we clear both datatables
     useEffect(() => {
         setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: "0" });
         setNetworkFocusID(undefined);
     }, [collapsedState]);
 
+    //When a new perspective is loaded, we clear all configuration
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
 

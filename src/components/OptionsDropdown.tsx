@@ -24,7 +24,7 @@ interface OptionsDropdownProps {
 }
 
 /**
- * Dropdown component
+ * Dropdown component that holds diferent options that changes some of the view options of the network
  */
 export const OptionsDropdown = ({
     setViewOptions
@@ -80,13 +80,6 @@ export const OptionsDropdown = ({
             onInput={(value: number) => { setViewOptions({ updateType: "deleteEdges", newValue: value }); }}
             key={5}
         />,
-        <hr key={6} style={hrStyle} />,
-        // <Button
-        //     content="Make edge width variable"
-        //     onClick={() => { onClick(2, "edgeWidth"); }}
-        //     state={states[2]}
-        //     key={7}
-        //     extraClassName={"btn-dropdown"} />,
         <hr key={8} style={hrStyle} />,
         <Button
             content="Activate nodes borders"
@@ -113,7 +106,6 @@ const init = (): ButtonState[] => {
 
     initialState.push(initialOptions.hideLabels);
     initialState.push(initialOptions.hideEdges);
-    initialState.push(initialOptions.edgeWidth);
     initialState.push(initialOptions.border);
 
     return initialState;

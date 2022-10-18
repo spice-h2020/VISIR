@@ -1,6 +1,5 @@
 /**
- * @fileoverview Calculate and draw the bounding boxes of users with the same implicit community.
- * @package Requires vis network package.
+ * @fileoverview Calculate locate the nodes in circular groups, each group separated in the vertex of a polygon.
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -8,8 +7,9 @@ import { Point } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
 import { UserData } from "../constants/perspectivesTypes";
 
-
-//Local aux interface to help group nodes in their partition of the canvas's layout
+/**
+ * Aux interface to help group nodes in their partition of the canvas's layout
+ */
 interface NodeGroup {
     nodes: string[],
     partition: {
@@ -20,13 +20,19 @@ interface NodeGroup {
 
 export default class NodeLocation {
 
-    nodeGroups: Array<NodeGroup>
-    /**
+    nodeGroups!: Array<NodeGroup>
 
+    /**
+     * Constructor of the class
+     * @param nCommunities number of communities
+     * @param nNodes number of nodes
      */
     constructor(nCommunities: number, nNodes: number) {
-        const nAreas = nCommunities;
+        this.initializeNodeGroups(nCommunities, nNodes);
+    }
 
+    initializeNodeGroups(nCommunities: number, nNodes: number) {
+        const nAreas = nCommunities;
         const areaPartitions: Point[] = this.createNetworkPartitions(nNodes, nAreas);
         this.nodeGroups = new Array<NodeGroup>();
 
@@ -41,24 +47,8 @@ export default class NodeLocation {
         }
     }
 
-
-    updateNodeGroup(node: UserData) {
-        const group = node.implicit_community;
-
-        this.nodeGroups[group].nodes.push(node.id);
-        this.nodeGroups[group].partition.nNodes++;
-    }
-
-    setNodeLocation(node: UserData) {
-        const group = node.implicit_community;
-        const nodePos: Point = this.getNodePos(this.nodeGroups[group], node.id);
-
-        node.x = nodePos.x;
-        node.y = nodePos.y;
-    }
-
     /**
-     * Create partitions in a circle to slot every implicit community
+     * Create partitions in a circle to slot every node group
      * @param nUsers number of users
      * @param nAreas number of areas to make
      * @returns returns an array with the center poin of each partition
@@ -85,6 +75,31 @@ export default class NodeLocation {
 
         return areaPartitions as Point[];
     }
+
+    /**
+     * Add the node to the its group
+     * @param node source node
+     */
+    updateNodeGroup(node: UserData) {
+        const group = node.implicit_community;
+
+        this.nodeGroups[group].nodes.push(node.id);
+        this.nodeGroups[group].partition.nNodes++;
+    }
+
+    /**
+     * Set the node location to its position in the group
+     * @param node node to edit
+     */
+    setNodeLocation(node: UserData) {
+        const group = node.implicit_community;
+        const nodePos: Point = this.getNodePos(this.nodeGroups[group], node.id);
+
+        node.x = nodePos.x;
+        node.y = nodePos.y;
+    }
+
+
 
     /**
      * Gets the exact node coordinates in the canvas

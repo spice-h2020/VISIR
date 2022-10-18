@@ -2,7 +2,10 @@
 
 This folder contains the JSON schema of the two type of files this app uses.
 
-#### All perspective Details
+#### All perspective Details (DEPRECATED)
+
+Currently this data structure is unused because the app recevies via URL the id of the perspective it needs to look up for.
+
 All perspective Details contains a few identifiers of all accesible perspectives in the app.
 It's requested during the start up of the app.
 

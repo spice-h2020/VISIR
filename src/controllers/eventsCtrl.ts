@@ -1,6 +1,20 @@
 /**
- * @fileoverview Calculate and draw the bounding boxes of users with the same implicit community.
+ * @fileoverview This class reacts to all vis.js networks and to some other external events.
+ * Vis.js events: 
+ *      animationFinished, zoom, dragging -> Updates the tooltip position if this network has the focus of the tooltip.
+ *      beforeDrawing -> Draws the bounding boxes of the communities.
+ *      resize -> Zooms out to fit all nodes in the new resized view.
+ *      click -> If a node or a bounding box is clicked, select that node or community for all networks and in the tooltip. 
+ *          Otherwise, unselect all objects in all networks.
+ * 
+ * External events based on what is the selected object:
+ *      A node of this network -> Updates the clicked node visual and all connected node and edges visuals. Zoom to fit all these nodes in the view.
+ *      A bounding box of this network -> Update nodes' visuals inside the bounding box and zoom to them.
+ *      A community of other network -> Highlight all nodes that are also inside this network and zoom to them.
+ *      Nothing is selected -> Deselect all edges, nodes and zoom out to fit all the network.
+ * 
  * @package Requires vis network package.
+ * @package Requires react package.
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -8,8 +22,9 @@ import { CommunityData, UserData } from "../constants/perspectivesTypes";
 import { BoundingBox, SelectedObjectAction, SelectedObjectActionEnum, StateFunctions } from "../constants/auxTypes";
 //Packages
 import { FitOptions, TimelineAnimationType } from "vis-network";
-import NetworkController from "./networkController";
 import { Dispatch } from "react";
+//Local files
+import NetworkController from "./networkController";
 import { getHTMLPosition } from "../basicComponents/Tooltip";
 import { nodeConst } from "../constants/nodes";
 
@@ -17,7 +32,7 @@ export default class EventsCtrl {
     netCtrl: NetworkController;
     focusedNetId: string;
 
-    //Current tooltip data before being parsed
+    //Current data of the selected object
     selectedObject?: UserData | CommunityData;
 
     constructor(netController: NetworkController, sf: StateFunctions, focusedNetId: string) {
@@ -35,10 +50,19 @@ export default class EventsCtrl {
         this.netCtrl.net.on("click", (event) => this.click(event, sf));
     }
 
+
+    /**
+     * Callback to the before Drawing vis.js network event
+     * @param ctx CanvasRenderingContext2D
+     */
     beforeDrawing(ctx: CanvasRenderingContext2D) {
         this.netCtrl.bbCtrl.drawBoundingBoxes(ctx);
     }
 
+    /**
+     * Updates the tooltip position if this network is the focused network and if the selected object is a node or a community
+     * @param setSelectedObject Function to set the selected object
+     */
     updateTooltipPosition(setSelectedObject: Dispatch<SelectedObjectAction>) {
 
         if (this.netCtrl.id === this.focusedNetId) {
@@ -96,9 +120,9 @@ export default class EventsCtrl {
     }
 
     /**
-     * Zoom out to fit all nodes in the image
+     * Zoom to fit all nodes in the networs. 
+     * @param nodes ID of all nodes to zoom to. If empty, zoom to all nodes
      */
-
     zoomToNodes(nodes: string[]) {
         const fitOptions: FitOptions = {
             animation: {
@@ -110,6 +134,11 @@ export default class EventsCtrl {
         this.netCtrl.net.fit(fitOptions);
     }
 
+    /**
+     * Callback to the click vis.js network event
+     * @param event Click event
+     * @param sf Functions that change the state of the visualization
+     */
     click(event: any, sf: StateFunctions) {
 
         sf.setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: this.netCtrl.id });
@@ -131,7 +160,11 @@ export default class EventsCtrl {
         }
     }
 
-
+    /**
+     * Function executed when a node of this network has been clicked/selected
+     * @param nodeId id of the node selected
+     * @returns returns the data of the node
+     */
     nodeClicked(nodeId: string) {
         const node = this.netCtrl.nodes.get(nodeId) as UserData;
 
@@ -150,6 +183,10 @@ export default class EventsCtrl {
         return node;
     }
 
+    /**
+     * Function executed when a community/boundingbox of this network has been clicked/selected.
+     * @param community Community selected
+     */
     boundingBoxClicked(community: CommunityData) {
         this.selectedObject = community;
 
@@ -160,6 +197,10 @@ export default class EventsCtrl {
         this.netCtrl.edgeCtrl.unselectEdges();
     }
 
+    /**
+     * Function executed when a community/boundingbox of an external network has been clicked/selected.
+     * @param community Community selected
+     */
     externalCommunityClicked(community: CommunityData) {
         this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, [], community.users);
         this.netCtrl.edgeCtrl.unselectEdges();
@@ -167,11 +208,13 @@ export default class EventsCtrl {
         this.zoomToNodes(community.users);
     }
 
-    nothingClicked(zoom: boolean = true) {
+    /**
+     * Function executed when a community/boundingbox of an external network has been clicked/selected.
+     */
+    nothingClicked() {
         this.netCtrl.nodeVisuals.colorAllNodes(this.netCtrl.nodes);
         this.netCtrl.edgeCtrl.unselectEdges();
 
-        if (zoom)
-            this.zoomToNodes([]);
+        this.zoomToNodes([]);
     }
 }

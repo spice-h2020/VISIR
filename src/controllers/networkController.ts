@@ -1,6 +1,5 @@
 /**
- * @fileoverview This file creates all objects related to a Vis.js network. 
- * Aditionaly creates the initial vis.js network's configuration
+ * @fileoverview This class creates the controller of this network. Creating all controllers, setting up the options and parsing the initial data
  * @package Requires vis network package.
  * @package Requires vis data package.
  * @author Marco Expósito Pérez
@@ -15,12 +14,12 @@ import { StateFunctions } from "../constants/auxTypes";
 import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network";
 import { DataSet } from "vis-data";
 //Local Files
-import BoxesController from "./boundingBoxes";
+import BoxesController from "./boxesController";
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 import NodeLocation from "./nodeLocation";
 import NodeExplicitComms from "./nodeExplicitComms";
 import NodeVisualsCtrl from "./nodeVisualsCtrl";
-import EdgeVisualsCtrl from "./edgeVisualCtrl";
+import EdgeVisualsCtrl from "./edgeVisualsCtrl";
 import EventsCtrl from "./eventsCtrl";
 
 export default class NetworkController {
@@ -75,6 +74,13 @@ export default class NetworkController {
         this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
     }
 
+    /**
+     * Parse all nodes to initialize their related options and data structures.
+     * @param perspectiveData data of the network
+     * @param dimStrat dimension strat of all networks
+     * @param sf Functions that change the state
+     * @param viewOptions Options that change the visualization
+     */
     parseNodes(perspectiveData: PerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, viewOptions: ViewOptions) {
         const explicitCtrl = new NodeExplicitComms(perspectiveData.communities);
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
@@ -84,7 +90,7 @@ export default class NetworkController {
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
         });
 
-        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions, this.nodes.getIds() as string[]);
+        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
         perspectiveData.users.forEach((user: UserData) => {
@@ -99,6 +105,12 @@ export default class NetworkController {
         this.nodes.update(perspectiveData.users);
     }
 
+    /**
+     * Parse all nodes to initialize the edge visuals controller.
+     * @param edgeDataset Data of the active edges
+     * @param baseData Data of all edges of the network
+     * @param viewOptions Options that change the visualization
+     */
     parseEdges(edgeDataset: DataSetEdges, baseData: EdgeData[], viewOptions: ViewOptions) {
         this.edgeCtrl = new EdgeVisualsCtrl(edgeDataset, baseData, viewOptions);
     }
@@ -163,7 +175,7 @@ export default class NetworkController {
 }
 
 /**
- * Function that compares EdgeData.
+ * Function that compares and sort EdgeData.
  * @param a EdgeData A
  * @param b EdgeData B
  * @returns Returns 1 if A has higher value. Returns 0 if both have the same value. Returns -1 if B has higher value

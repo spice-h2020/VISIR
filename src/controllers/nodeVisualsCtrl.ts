@@ -20,10 +20,23 @@ export default class NodeVisualsCtrl {
     dimStrat: NodeDimensionStrategy;
     legendConfig: Map<string, boolean>;
 
+    /**
+     * Nodes that are currently selected
+     */
     selectedNodes: Array<string>;
+    /**
+     * Nodes that the user specificaly selected and its focused on.
+     */
     focusedNodes: Array<string>;
 
-    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions, allNodes: string[]) {
+    /**
+     * Constructor of the class
+     * @param dimStrat Dimension strategy that changes how nodes' are seieng
+     * @param sf Functions that change the state
+     * @param explicitData All the explicit data of this network
+     * @param viewOptions Options that change how the network is seeing
+     */
+    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions) {
 
         if (dimStrat === undefined) {
             this.dimStrat = this.createDimensionStrategy(explicitData, viewOptions.border, sf.setLegendData);
@@ -37,7 +50,13 @@ export default class NodeVisualsCtrl {
         this.focusedNodes = new Array<string>();
     }
 
-
+    /**
+     * Creates a new dimension strategy based on the explicit data of the network
+     * @param explicitData All the explicit data of this network
+     * @param showBorder Option that toggles the border of a network in the legend
+     * @param setLegendData Set the legend data to update the legend contents
+     * @returns Returns the new created dimension strategy
+     */
     createDimensionStrategy(explicitData: ExplicitData[], showBorder: boolean, setLegendData: Function) {
         const attributes = new Array<DimAttribute>();
 
@@ -116,6 +135,13 @@ export default class NodeVisualsCtrl {
         }
     }
 
+    /**
+     * Change the visuals of all node based on the parameters and update the selected and focused nodes arrays
+     * @param allNodes all nodes of the network
+     * @param selectedNodes node array that will have its visuals to the base colored state
+     * @param focusedId node array that will change node visuals to a colored and focused state
+     * @param legendConfig Optional parameters that if included, will update the legend configuration of this network
+     */
     selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[], legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = selectedNodes;
@@ -144,6 +170,11 @@ export default class NodeVisualsCtrl {
         allNodes.update(newNodes);
     }
 
+    /**
+     * Shortcut to reset all nodes to their colored state based on the legend configuration
+     * @param allNodes all nodes of the network
+     * @param legendConfig Optional parameters that if included, will update the legend configuration of this network
+     */
     colorAllNodes(allNodes: DataSetNodes, legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = [];

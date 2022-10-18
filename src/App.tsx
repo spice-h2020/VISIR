@@ -16,7 +16,7 @@ import { Button } from './basicComponents/Button';
 import { FileSourceDropdown } from './components/FileSourceDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
-import { LegendTooltip } from './components/LegendTooltip';
+import { LegendComponent } from './components/LegendComponent';
 import RequestManager from './managers/requestManager';
 
 import './style/base.css';
@@ -108,7 +108,7 @@ export const App = ({
           />
         ]}
         rightAlignedItems={[
-          <LegendTooltip
+          <LegendComponent
             legendData={legendData}
             legendConf={viewOptions.legendConfig}
             onLegendClick={(newMap: Map<string, boolean>) => {

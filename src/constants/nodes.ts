@@ -105,7 +105,6 @@ export const nodeConst = {
         { name: "triangleDown", vAdjust: -40, selectedVAdjust: -45 } as shapeData,
         { name: "hexagon", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
     ],
-
 }
 
 /**

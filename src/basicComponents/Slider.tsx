@@ -16,19 +16,33 @@ const sliderContainer: React.CSSProperties = {
 }
 
 interface SliderProps {
-    //Text above the slider
+    /**
+     * Text above the slider
+     */
     content?: string;
-    //Text after the content text and the current value number
+    /**
+     * Text after the content text and the current value number
+     */
     contentUnit?: string;
-    //Minimum value
+    /**
+     * Minimum value of the slider
+     */
     minimum?: number;
-    //Maximum value
+    /**
+     * Maximum value of the slider
+     */
     maximum?: number;
-    //Slider steps
+    /**
+     * Steps of the slider thumb
+     */
     step?: number;
-    //Initial value of the slider
+    /**
+     * Initial value of the slider
+     */
     initialValue: number;
-    //Function executed when the slider is moved
+    /**
+     * Function executed when the slider is moved and after a timer has expired
+     */
     onInput: Function;
 }
 

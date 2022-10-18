@@ -9,17 +9,26 @@ import { ButtonState } from "../constants/viewOptions";
 import React, { useEffect, useState } from "react";
 
 interface ButtonProps {
-  //Button contents.
+  /**
+   * Button contents.
+   */
   content?: React.ReactNode;
-  //Current visual state of the button.
+  /**
+   * Current visual state of the button.
+   */
   state?: ButtonState;
-  //Auto toggle button state on click.
+  /**
+   * Auto toggle button state on click.
+   */
   autoToggle?: boolean;
-  //On click handler
   onClick?: (params: any) => void;
-  //Extra class name to add and change the CSS
+  /**
+   * Extra class name to add and change the CSS
+   */
   extraClassName?: string;
-  //Text that will be shown to the user when hovering the button
+  /**
+   * Text that will be shown to the user when hovering the button
+   */
   hoverText?: string;
 }
 

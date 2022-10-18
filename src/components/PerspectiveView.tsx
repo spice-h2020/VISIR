@@ -75,6 +75,7 @@ export const PerspectiveView = ({
 
     ViewOptionsUseEffect(viewOptions, netManager, sf.setSelectedObject, networkFocusID);
 
+    //Do something when the user clicks in a network
     useEffect(() => {
         //If something is selected
         if (netManager !== undefined) {
@@ -138,7 +139,7 @@ export const PerspectiveView = ({
 
     if (perspectiveState !== PerspectiveState.collapsed) {
         const dataCol = <DataTable
-            tittle={""}
+            tittle={perspectiveData.id}
             node={selectedNode}
             community={selectedCommunity}
             artworks={perspectiveData.artworks}
@@ -190,12 +191,6 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkContr
             netManager.nodeVisuals.toggleNodeLabels(netManager.nodes, viewOptions.hideLabels);
         }
     }, [viewOptions.hideLabels, netManager]);
-
-    useEffect(() => {
-        if (netManager !== undefined) {
-            netManager.edgeCtrl.toggleEdgeWidth(viewOptions.edgeWidth, netManager.net, netManager.options);
-        }
-    }, [viewOptions.edgeWidth, netManager]);
 
     useEffect(() => {
         if (netManager !== undefined) {

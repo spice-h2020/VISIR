@@ -1,14 +1,16 @@
 /**
  * @fileoverview This File contains diferent unrelated auxiliary classes/interfaces that doesnt need a unique file for them.
+ * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
-//Constants
+//Package
 import { Dispatch } from "react";
+//Local files
 import { CommunityData, UserData } from "./perspectivesTypes";
 import { ButtonState } from "./viewOptions";
 
 /**
- * Interface with the data of a bounding box
+ * Interface with the data of a bounding box.
  */
 export interface BoundingBox {
     top: number
@@ -24,7 +26,7 @@ export interface BoundingBox {
 }
 
 /**
- * Interface with a point(x,y) coordinate
+ * Interface with a point(x,y) coordinate.
  */
 export interface Point {
     x: number;
@@ -32,7 +34,7 @@ export interface Point {
 }
 
 /**
- * Interface with all functions that change the state of one/all perspectives in the application
+ * Interface with all functions that change the state of one/all perspectives in the application.
  */
 export interface StateFunctions {
     setLegendData: Function;
@@ -42,7 +44,7 @@ export interface StateFunctions {
 }
 
 /**
- * Interface of an object selected by the user. It can be a community, a user node or nothing
+ * Interface of an object selected by the user. It can be a community, a user node or nothing.
  */
 export interface SelectedObject {
     obj: CommunityData | UserData | undefined;

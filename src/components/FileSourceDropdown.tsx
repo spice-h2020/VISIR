@@ -5,9 +5,9 @@
  */
 //Constants
 import { FileSource, initialOptions, ButtonState } from "../constants/viewOptions";
-import { bStateArrayAction, bStateArrayActionEnum, bStateArrayReducer } from "../constants/auxTypes";
+import { bStateArrayActionEnum, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
-import { Dispatch, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";

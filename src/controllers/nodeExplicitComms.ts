@@ -1,15 +1,13 @@
 /**
- * @fileoverview Calculate and draw the bounding boxes of users with the same implicit community.
- * @package Requires vis network package.
+ * @fileoverview This class parse the node's explicit communities and calculates the % of each one in each community.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { Point } from "../constants/auxTypes";
-import { nodeConst } from "../constants/nodes";
-import { anyProperty, CommunityData, UserData } from "../constants/perspectivesTypes";
+import { CommunityData, UserData } from "../constants/perspectivesTypes";
+//Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
-//Local aux class to help mantain and collect all the values of an Explicit Community
+//Aux class to help structure and collect all the values of an Explicit Community
 export class ExplicitData {
     key: string;
     values: string[];
@@ -27,19 +25,30 @@ export class ExplicitData {
 }
 
 export default class NodeExplicitComms {
-
-
-    //All explicit Data of the users
+    /**
+     * Parsed explicit data
+    */
     explicitData: ExplicitData[];
-
+    /**
+     * Data of all communities
+     */
     communitiesData: CommunityData[];
 
+    /**
+     * Constructor of the class
+     * @param communitiesData 
+     */
     constructor(communitiesData: CommunityData[]) {
         this.explicitData = new Array<ExplicitData>();
 
         this.communitiesData = communitiesData;
     }
 
+    /**
+     * Parse the explicit community data of the node 
+     * @param node source node
+     * @param dimStrat dimension strategy controller
+     */
     parseExplicitCommunity(node: UserData, dimStrat: NodeDimensionStrategy | undefined) {
 
         const explicitKeys = Object.keys(node.explicit_community);
@@ -53,6 +62,11 @@ export default class NodeExplicitComms {
         });
     }
 
+    /**
+     * Update the explicit data of the network
+     * @param key key of the explicit community
+     * @param node source node
+     */
     updateExplicitData(key: string, node: UserData) {
         if (this.explicitData.length === 0) {
             this.explicitData.push(new ExplicitData(key, node.explicit_community[key]));
@@ -70,6 +84,11 @@ export default class NodeExplicitComms {
         }
     }
 
+    /**
+     * Updates the community data with all explicit communities and the number of user that has each value.
+     * @param key key of the explicit community
+     * @param node source node
+     */
     updateCommunitiesData(key: string, node: UserData) {
         const group = node.implicit_community;
 
@@ -77,7 +96,6 @@ export default class NodeExplicitComms {
             this.communitiesData[group].explicitCommunity = {};
             this.communitiesData[group].explicitCommunity[key] = new Map<string, number>();
             this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
-
 
         } else if (this.communitiesData[group].explicitCommunity[key] === undefined) {
             this.communitiesData[group].explicitCommunity[key] = new Map<string, number>();
@@ -93,6 +111,10 @@ export default class NodeExplicitComms {
         }
     }
 
+    /**
+     * transform the number of users with each value of each explicit community, into the percentage
+     * @param dimStrat 
+     */
     calcExplicitPercentile(dimStrat: NodeDimensionStrategy) {
         for (let community of this.communitiesData) {
             const explicitCommunityKeys = Object.keys(community.explicitCommunity)
@@ -121,7 +143,6 @@ export default class NodeExplicitComms {
 
                 community.explicitCommunity[key] = [array, dimension === undefined ? undefined : dimension[0].attr.dimension];
             }
-
         }
     }
 }

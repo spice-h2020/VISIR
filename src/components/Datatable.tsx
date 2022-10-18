@@ -14,7 +14,7 @@ import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
 import { StackedBar } from "../basicComponents/StackedBar";
 
-const tittleStyle: React.CSSProperties = {
+const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
     fontWeight: "400",
     fontFamily: "Raleway",
@@ -71,9 +71,15 @@ export const DataTable = ({
     )
 };
 
+/**
+ * Returns a panel with all the node's information.
+ * @param node source node.
+ * @param hideLabel boolean that will hide the node label in the panel.
+ * @returns a react component with the node's panel.
+ */
 function getNodePanel(node: UserData | undefined, hideLabel: boolean) {
-    const tittle = <div style={tittleStyle}> Citizen Attributes </div>;
-    let content: React.ReactNode[] = [];
+    const tittle = <div style={sectionTittleStyle}> Citizen Attributes </div>;
+    let content: React.ReactNode[] = new Array<React.ReactNode>();
 
     if (node !== undefined) {
 
@@ -96,13 +102,19 @@ function getNodePanel(node: UserData | undefined, hideLabel: boolean) {
     )
 }
 
+/**
+ * Returns an accordion that includes all the node's interactions.
+ * @param node source node
+ * @param artworks all artworks' data
+ * @returns a react component with the node's interactions accordion.
+ */
 function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkData[]) {
-    let content: React.ReactNode[] = [];
+    let content: React.ReactNode[] = new Array<React.ReactNode>();
 
     if (node !== undefined && node.interactions !== undefined) {
 
-        const tittles: string[] = [];
-        const interactions: React.ReactNode[] = [];
+        const tittles: string[] = new Array<string>();
+        const interactions: React.ReactNode[] = new Array<React.ReactNode>();
 
         for (let i = 0; i < node.interactions.length; i++) {
 
@@ -135,8 +147,13 @@ function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkD
     </React.Fragment>);
 }
 
+/**
+ * Returns a panel with all the community's information.
+ * @param community source community.
+ * @returns a react component with the community's panel.
+ */
 function getCommunityPanel(community: CommunityData | undefined) {
-    const tittle = <div style={tittleStyle}> Community Attributes </div>;
+    const tittle = <div style={sectionTittleStyle}> Community Attributes </div>;
     let content: React.ReactNode[] = [];
 
     if (community !== undefined) {
@@ -158,18 +175,11 @@ function getCommunityPanel(community: CommunityData | undefined) {
     )
 }
 
-function getContainerStyle(currentState: string): React.CSSProperties {
-    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(tableContainer)));
-
-    if (currentState === "active") {
-        newStyle.borderLeft = "7px solid var(--primaryButtonColor)";
-    } else {
-        newStyle.borderLeft = "1px solid #dadce0";
-    }
-
-    return newStyle;
-}
-
+/**
+ * Returns all stacked bar graphs of a community.
+ * @param community source community.
+ * @returns a react component array with the community's stacked bar.
+ */
 function getStackedBars(community: CommunityData) {
     const content = new Array();
     const explicitCommunityKeys = Object.keys(community.explicitCommunity)
@@ -191,4 +201,16 @@ function getStackedBars(community: CommunityData) {
     }
 
     return content;
+}
+
+function getContainerStyle(currentState: string): React.CSSProperties {
+    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(tableContainer)));
+
+    if (currentState === "active") {
+        newStyle.borderLeft = "7px solid var(--primaryButtonColor)";
+    } else {
+        newStyle.borderLeft = "1px solid #dadce0";
+    }
+
+    return newStyle;
 }
