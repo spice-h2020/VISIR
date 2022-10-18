@@ -12,7 +12,7 @@ import React from "react";
 //Local files
 import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
-import { StackedBar } from "../basicComponents/StackedBar";
+import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -188,14 +188,12 @@ function getStackedBars(community: CommunityData) {
         const key = explicitCommunityKeys[i];
 
         const pairs = community.explicitCommunity[key][0];
-        const dimension = community.explicitCommunity[key][1];
 
         content.push(
-            <StackedBar
+            <StackedBarGraph
                 key={i}
                 tittle={key}
                 pairs={pairs}
-                dimension={dimension}
             />
         );
     }

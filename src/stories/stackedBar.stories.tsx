@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Button } from '../basicComponents/Button';
-import { StackedBar } from '../basicComponents/StackedBar';
+import { StackedBarGraph } from '../basicComponents/StackedBarGraph';
 import { Dimensions } from '../constants/nodes';
 import { ButtonState } from '../constants/viewOptions';
 
@@ -8,11 +8,11 @@ import '../style/base.css';
 
 export default {
   title: 'Example/Bars',
-  component: StackedBar,
+  component: StackedBarGraph,
 
-} as ComponentMeta<typeof StackedBar>;
+} as ComponentMeta<typeof StackedBarGraph>;
 
-const Template: ComponentStory<typeof StackedBar> = (args) => <StackedBar {...args} />;
+const Template: ComponentStory<typeof StackedBarGraph> = (args) => <StackedBarGraph {...args} />;
 
 let pairs = [
     ["Adult", 73.9],
@@ -25,7 +25,6 @@ export const Color = Template.bind({});
 Color.args = {
     tittle: "AgeGroup",
     pairs: pairs,
-    dimension: Dimensions.Color
 };
 
 pairs = [
@@ -40,14 +39,12 @@ export const Shape = Template.bind({});
 Shape.args = {
     tittle: "AgeGroup",
     pairs: pairs,
-    dimension: Dimensions.Shape
 };
 
 export const Border = Template.bind({});
 Border.args = {
     tittle: "AgeGroup",
     pairs: pairs,
-    dimension: Dimensions.Border
 };
 
 
