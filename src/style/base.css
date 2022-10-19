@@ -47,6 +47,7 @@
 
 * {
     transition: all 0.5s;
+    font-family: "Raleway";
 }
 
 body {
@@ -478,4 +479,30 @@ input[type="range"]::-ms-track {
 
 .col-12 {
     width: 100%;
+}
+
+
+/*------------------------------------------
+//         STACKED BARS
+//------------------------------------------*/
+
+
+.bar-stacked{
+    width: 100%;
+    height: 100%;
+}
+
+.bar-portion:first-child{
+    border-left: 1px solid black;
+    
+}
+.bar-portion{
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+
+    box-sizing: "border-box";
+    font-family: "Anonymous Pro";
+}
+.bar-portion:last-child{
+    border-right: 1px solid black;
 }

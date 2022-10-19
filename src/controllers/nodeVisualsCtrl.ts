@@ -1,0 +1,228 @@
+/**
+ * @fileoverview This class find all explicit communities and its values in the user data of the perspective. 
+ * Then create a dimension strategy that changes how the network ndoes look based on the explicitData.
+ * Then it changes the node position in the canvas to create a circular distribution without node overlap.
+ * @package Requires vis network package.
+ * @author Marco Expósito Pérez
+ */
+//Constants
+import { UserData } from "../constants/perspectivesTypes";
+import { Dimensions, DimAttribute } from "../constants/nodes"
+import { ViewOptions } from "../constants/viewOptions";
+import { StateFunctions } from "../constants/auxTypes";
+//Packages
+import { DataSetNodes, Node } from "vis-network";
+//Local files
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import { ExplicitData } from "./nodeExplicitComms";
+
+export default class NodeVisualsCtrl {
+    dimStrat: NodeDimensionStrategy;
+    legendConfig: Map<string, boolean>;
+
+    /**
+     * Nodes that are currently selected
+     */
+    selectedNodes: Array<string>;
+    /**
+     * Nodes that the user specificaly selected and its focused on.
+     */
+    focusedNodes: Array<string>;
+
+    /**
+     * Constructor of the class
+     * @param dimStrat Dimension strategy that changes how nodes' are seieng
+     * @param sf Functions that change the state
+     * @param explicitData All the explicit data of this network
+     * @param viewOptions Options that change how the network is seeing
+     */
+    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions) {
+
+        if (dimStrat === undefined) {
+            this.dimStrat = this.createDimensionStrategy(explicitData, viewOptions.border, sf.setLegendData);
+            sf.setDimensionStrategy(this.dimStrat);
+        } else {
+            this.dimStrat = dimStrat;
+        }
+        this.legendConfig = viewOptions.legendConfig;
+
+        this.selectedNodes = new Array<string>();
+        this.focusedNodes = new Array<string>();
+    }
+
+    /**
+     * Creates a new dimension strategy based on the explicit data of the network
+     * @param explicitData All the explicit data of this network
+     * @param showBorder Option that toggles the border of a network in the legend
+     * @param setLegendData Set the legend data to update the legend contents
+     * @returns Returns the new created dimension strategy
+     */
+    createDimensionStrategy(explicitData: ExplicitData[], showBorder: boolean, setLegendData: Function) {
+        const attributes = new Array<DimAttribute>();
+
+        if (explicitData[0] !== undefined) {
+            attributes.push({
+                key: explicitData[0].key,
+                values: explicitData[0].values,
+                dimension: Dimensions.Color,
+                active: true
+            })
+        }
+
+        if (explicitData[1] !== undefined) {
+            attributes.push({
+                key: explicitData[1].key,
+                values: explicitData[1].values,
+                dimension: Dimensions.Shape,
+                active: true
+            })
+        }
+
+        if (explicitData[2] !== undefined) {
+            attributes.push({
+                key: explicitData[2].key,
+                values: explicitData[2].values,
+                dimension: Dimensions.Border,
+                active: showBorder
+            })
+        }
+
+        return new NodeDimensionStrategy(attributes, setLegendData);
+    }
+
+    setNodeInitialVisuals(node: UserData, hideLabel: boolean) {
+
+        if (this.isHidedByLegend(node as UserData)) {
+            this.hideNodeVisuals(node as UserData);
+        } else {
+            this.coloredNodeVisuals(node as UserData);
+        }
+
+        this.updateNodeLabel(node, hideLabel);
+    }
+
+    toggleNodeLabels(allNodes: DataSetNodes, hideLabel: boolean) {
+        const newNodes: Node[] = new Array<Node>();
+
+        allNodes.forEach((node) => {
+
+            this.updateNodeLabel(node as UserData, hideLabel);
+            newNodes.push(node);
+
+        })
+
+        allNodes.update(newNodes);
+    }
+
+    updateNodeLabel(node: UserData, hideLabel: boolean) {
+        if (hideLabel) {
+            if (node.font !== undefined) {
+                node.font.color = "#00000000"
+            } else {
+                node.font = {
+                    color: "#00000000"
+                }
+            }
+        }
+        else {
+            if (node.font !== undefined) {
+                node.font.color = "#000000FF"
+            } else {
+                node.font = {
+                    color: "#000000FF"
+                }
+            }
+        }
+    }
+
+    /**
+     * Change the visuals of all node based on the parameters and update the selected and focused nodes arrays
+     * @param allNodes all nodes of the network
+     * @param selectedNodes node array that will have its visuals to the base colored state
+     * @param focusedId node array that will change node visuals to a colored and focused state
+     * @param legendConfig Optional parameters that if included, will update the legend configuration of this network
+     */
+    selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[], legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
+        const newNodes: Node[] = new Array<Node>();
+        this.selectedNodes = selectedNodes;
+        this.focusedNodes = focusedId;
+
+        this.legendConfig = legendConfig === undefined ? this.legendConfig : legendConfig;
+
+        allNodes.forEach((node) => {
+            const id = node.id;
+            if (this.isHidedByLegend(node as UserData)) {
+                this.hideNodeVisuals(node as UserData);
+
+            } else if (selectedNodes.includes(id as string)) {
+                this.coloredNodeVisuals(node as UserData);
+
+            } else if (focusedId.includes(id as string)) {
+                this.focusedNodeVisuals(node as UserData);
+
+            } else {
+                this.hideNodeVisuals(node as UserData);
+            }
+
+            newNodes.push(node);
+        })
+
+        allNodes.update(newNodes);
+    }
+
+    /**
+     * Shortcut to reset all nodes to their colored state based on the legend configuration
+     * @param allNodes all nodes of the network
+     * @param legendConfig Optional parameters that if included, will update the legend configuration of this network
+     */
+    colorAllNodes(allNodes: DataSetNodes, legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
+        const newNodes: Node[] = new Array<Node>();
+        this.selectedNodes = [];
+        this.focusedNodes = [];
+
+        this.legendConfig = legendConfig.size === 0 ? this.legendConfig : legendConfig;
+
+        allNodes.forEach((node) => {
+            if (this.isHidedByLegend(node as UserData)) {
+                this.hideNodeVisuals(node as UserData);
+            } else {
+                this.coloredNodeVisuals(node as UserData);
+            }
+
+            newNodes.push(node);
+        })
+
+        allNodes.update(newNodes);
+    }
+
+    coloredNodeVisuals(node: UserData) {
+        this.dimStrat.nodeToDefault(node);
+    }
+
+    focusedNodeVisuals(node: UserData) {
+        this.dimStrat.nodeToDefault(node, true);
+    }
+
+    hideNodeVisuals(node: UserData) {
+        this.dimStrat.nodeToColorless(node);
+    }
+
+    isHidedByLegend(node: UserData) {
+        let hideNode = false;
+        const keys = Object.keys(node.explicit_community);
+
+        for (let i = 0; i < keys.length; i++) {
+            const value = node.explicit_community[keys[i]]
+
+            if (this.legendConfig!.get(value)) {
+                hideNode = true;
+                break;
+            }
+        }
+
+        return hideNode;
+    }
+
+}
+
+

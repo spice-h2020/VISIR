@@ -3,6 +3,8 @@ import { Accordion } from '../basicComponents/Accordion';
 import { InteractionPanel } from '../basicComponents/Interaction';
 import { ArtworkData, Interaction } from '../constants/perspectivesTypes';
 
+import '../style/base.css';
+
 export default {
     title: 'Example/Accordion',
     component: Accordion,
@@ -38,7 +40,7 @@ const artworkData: ArtworkData[] = [
 const interactions: Interaction[] = [{
     artwork_id: '1',
     feelings: 'scettico',
-    sophia_extracted_emotions: {
+    extracted_emotions: {
         "Serenity": 0.7,
         "Trust": 0.3,
         "Fear": 0.5
@@ -47,7 +49,7 @@ const interactions: Interaction[] = [{
 {
     artwork_id: '2',
     feelings: 'Vociare, odori, curiosità, calore',
-    sophia_extracted_emotions: {
+    extracted_emotions: {
         "Surprise": 0.622342,
         "Anger": 1,
         "Disgust": 1,
@@ -57,7 +59,7 @@ const interactions: Interaction[] = [{
 {
     artwork_id: '3',
     feelings: loreIpsum,
-    sophia_extracted_emotions: {
+    extracted_emotions: {
         "Surprise": 0.622342,
         "Anger": 1,
         "Disgust": 1,

@@ -283,9 +283,14 @@ export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
         for (let i = 0; i < arg.users.length; i++) {
             arg.users[i] = isUserDataValid(arg.users[i]);
         }
-        for (let i = 0; i < arg.similarity.length; i++) {
-            arg.similarity[i] = isSimilarityDataValid(arg.similarity[i]);
-            arg.similarity[i].id = i;
+        for (let i = arg.similarity.length - 1; i > 0; --i) {
+            const edge = isSimilarityDataValid(arg.similarity[i]);
+
+            if (edge === undefined) {
+                delete arg.similarity[i];
+            } else {
+                arg.similarity[i].id = i;
+            }
         }
         for (let i = 0; i < arg.artworks.length; i++) {
             arg.artworks[i] = isArtworkDataValid(arg.artworks[i]);
@@ -455,8 +460,8 @@ function isInteractionValid(arg: any): types.Interaction {
             }
         }
 
-        if (arg.sophia_extracted_emotions === undefined) {
-            arg.sophia_extracted_emotions = "";
+        if (arg.extracted_emotions === undefined) {
+            arg.extracted_emotions = "";
         }
 
         return arg;
@@ -464,7 +469,7 @@ function isInteractionValid(arg: any): types.Interaction {
         throw Error(`Interaction data is not valid: ${e.message}`);
     }
 }
-function isSimilarityDataValid(arg: any): types.EdgeData {
+function isSimilarityDataValid(arg: any): types.EdgeData | undefined {
     try {
 
         if (arg.value === undefined) {
@@ -477,6 +482,9 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
             if (isNaN(arg.value))
                 throw Error(`Value is not a number`);
         }
+
+        arg.similarity = arg.value;
+        delete arg.value;
 
         if (arg.u1 === undefined) {
             throw Error(`U1 of the edge with value (${arg.value}) is undefined`);
@@ -511,7 +519,11 @@ function isSimilarityDataValid(arg: any): types.EdgeData {
         if (edgeConst.allowLabels)
             arg.label = arg.value.toString();
 
-        return arg;
+        if (arg.to === arg.from) {
+            return undefined;
+        } else {
+            return arg;
+        }
 
     } catch (e: any) {
         throw Error(`Edge data is not valid: ${e.message}`);
@@ -580,7 +592,7 @@ function isArtworkDataValid(arg: any): types.ArtworkData {
             }
         }
 
-        arg.image =decodeURIComponent(decodeURIComponent(arg.image))
+        arg.image = decodeURIComponent(decodeURIComponent(arg.image))
 
         return arg;
 

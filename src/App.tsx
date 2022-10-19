@@ -6,19 +6,17 @@
  */
 //Constants
 import { FileSource, ButtonState, ViewOptions, viewOptionsReducer, CollapsedState } from './constants/viewOptions';
-import { PerspectiveDetails, PerspectiveInfo } from './constants/perspectivesTypes';
+import { PerspectiveData } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
-import { bStateArrayAction } from './constants/auxTypes';
 //Packages
-import { Dispatch, useEffect, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
 import { FileSourceDropdown } from './components/FileSourceDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
-import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
-import { LegendTooltip } from './components/LegendTooltip';
+import { LegendComponent } from './components/LegendComponent';
 import RequestManager from './managers/requestManager';
 
 import './style/base.css';
@@ -37,29 +35,36 @@ function collapseReducer(state: CollapsedState, stateAction: CollapsedState) {
   return state;
 }
 
-export function App() {
+interface AppProps {
+  perspectiveId1: string | null,
+  perspectiveId2: string | null
+}
+
+export const App = ({
+  perspectiveId1,
+  perspectiveId2
+}: AppProps) => {
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
 
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useState<DimAttribute[]>([]);
 
-  //All available perspectives that the user can select to view
-  const [allPerspectives, setAllPerspectives] = useState<PerspectiveDetails[]>();
-
   //Current Active perspectives in the view group
-  const [leftPerspective, setLeftPerspective] = useState<PerspectiveInfo>();
-  const [rightPerspective, setRightPerspective] = useState<PerspectiveInfo>();
+  const [leftPerspective, setLeftPerspective] = useState<PerspectiveData>();
+  const [rightPerspective, setRightPerspective] = useState<PerspectiveData>();
 
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, CollapsedState.unCollapsed);
 
-  useEffect(() => {
+  const updatePerspectives = (perspectiveId1: string | null, perspectiveId2: string | null) => {
 
-    setLeftPerspective(undefined);
-    setRightPerspective(undefined);
+    if (perspectiveId1 !== null)
+      requestManager.requestPerspectiveFIle(perspectiveId1, setLeftPerspective);
 
-  }, [allPerspectives])
+    if (perspectiveId2 !== null && perspectiveId2 !== perspectiveId1)
+      requestManager.requestPerspectiveFIle(perspectiveId2, setRightPerspective);
+  }
 
   return (
     <div>
@@ -71,8 +76,9 @@ export function App() {
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown
-            setFileSource={(fileSource: FileSource, setFileSource: Dispatch<bStateArrayAction>) => {
-              requestManager.requestAllPerspectivesDetails(fileSource, setFileSource, setAllPerspectives);
+            setFileSource={(fileSource: FileSource) => {
+              requestManager.changeBaseURL(fileSource);
+              updatePerspectives(perspectiveId1, perspectiveId2);
             }}
           />,
           <OptionsDropdown
@@ -80,12 +86,6 @@ export function App() {
           />,
         ]}
         midAlignedItems={[
-          <SelectPerspectiveDropdown
-            tittle='Select A'
-            onClick={setLeftPerspective}
-            allPerspectives={allPerspectives}
-            requestManager={requestManager}
-          />,
           <Button
             content="<<"
             onClick={(state: ButtonState) => {
@@ -105,17 +105,10 @@ export function App() {
               }
             }}
             state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
-          />,
-          <SelectPerspectiveDropdown
-            tittle='Select B'
-            onClick={setRightPerspective}
-            allPerspectives={allPerspectives}
-            requestManager={requestManager}
-          />,
-
+          />
         ]}
         rightAlignedItems={[
-          <LegendTooltip
+          <LegendComponent
             legendData={legendData}
             legendConf={viewOptions.legendConfig}
             onLegendClick={(newMap: Map<string, boolean>) => {

@@ -61,9 +61,13 @@ const tooltipArrow: React.CSSProperties = {
 }
 
 interface TooltipProps {
-    //All important information about the tooltip
+    /**
+     *  All important information about the tooltip
+     */
     selectedObject: SelectedObject | undefined;
-    //If the tooltip should hide users' labels and ids when shown 
+    /**
+     * If the tooltip should hide users' labels and ids when shown 
+     */
     hideLabels: boolean;
 }
 
@@ -74,7 +78,6 @@ export const Tooltip = ({
     selectedObject,
     hideLabels,
 }: TooltipProps) => {
-
     const [isActive, setActive] = useState<Boolean>(false);
     const [yOffset, setYoffset] = useState<number>(0);
 

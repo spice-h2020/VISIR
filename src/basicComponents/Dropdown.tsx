@@ -1,5 +1,6 @@
 /**
- * @fileoverview This file creates a dropdown menu. A button that can be clicked and will show aditional buttons/items to interact with.
+ * @fileoverview This file creates a dropdown menu. A button that can be clicked and will show additional items to interact with. All additional items
+ * will be hidden if the user clicks outside the menu.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -32,18 +33,27 @@ const contentStyle: React.CSSProperties = {
 }
 
 interface DropdownProps {
-    //Items inside the dropdown
+    /**
+     * Items inside the dropdown
+     */
     items?: React.ReactNode[];
-    //Context of the main dropdown button
+    /**
+     * Content of the main dropdown button
+     */
     content?: React.ReactNode;
-    //Active close dropdown when outside click functionality
+    /**
+     * Active close dropdown when outside click functionality
+     */
     closeWhenOutsideClick?: boolean;
-    //Extra class name to add to the dropdown button
+    /**
+     * Extra class name to add to the dropdown button
+     */
     extraClassButton?: string;
 }
 
 /**
- * Dropdown Menu that toggle items visibility when the main button is clicked. The items are closed if u click outside the dropdown 
+ * Group of elements creating a Dropdown Menu that toggle items visibility when the main button is clicked. 
+ * The items are closed if u click outside the dropdown 
  */
 export const Dropdown = ({
     items = [],

@@ -5,16 +5,16 @@
  */
 //Constants
 import { FileSource, initialOptions, ButtonState } from "../constants/viewOptions";
-import { bStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
+import { bStateArrayActionEnum, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
-import { Dispatch, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 
 interface FileSourceDropdownProps {
     //On click handler
-    setFileSource: (fileSource: FileSource, setFileSource: Dispatch<bStateArrayAction>) => void;
+    setFileSource: (fileSource: FileSource) => void;
 }
 
 /**
@@ -29,13 +29,19 @@ export const FileSourceDropdown = ({
 
     const changeFileSource = (newFileSource: FileSource) => {
         if (states[newFileSource] === ButtonState.unactive) {
-            setFileSource(newFileSource, setStates);
+            setFileSource(newFileSource);
+
+            setStates({
+                action: bStateArrayActionEnum.activeOne,
+                index: newFileSource,
+                newState: ButtonState.active
+            });
         }
     }
 
     //Init the app with the initial option executed.
     useEffect(() => {
-        setFileSource(initialOptions.fileSource, setStates);
+        setFileSource(initialOptions.fileSource);
         // eslint-disable-next-line
     }, []);
 

@@ -1,13 +1,10 @@
 /**
- * @fileoverview Calculate and draw the bounding boxes of users with the same implicit community.
- * @package Requires vis network package.
+ * @fileoverview This class controls where bounding boxes should be drawn and when a click hits a bounding box
  * @author Marco Expósito Pérez
  */
 //Constants
 import { CommunityData, UserData } from "../constants/perspectivesTypes";
 import { BoundingBox } from "../constants/auxTypes";
-//Packages
-import { Network } from "vis-network";
 
 /**
  * Configuration of the bounding boxes
@@ -40,58 +37,51 @@ const configuration = {
 }
 
 export default class BoxesController {
-    //Data of all communities of the network
+    /**
+     * Data of all communities of the network
+     */
     comData: CommunityData[]
 
     /**
      * Constructor of the class
      * @param communityData Data of all communities of the network
-     * @param uData Data of all users of the network
-     * @param network Vis.js network object 
      */
-    constructor(communityData: CommunityData[], uData: UserData[], network: Network) {
+    constructor(communityData: CommunityData[]) {
         this.comData = communityData;
-
-        this.calculateBoundingBoxes(uData, network);
     }
 
     /**
      * Calculates the boundaries of each bounding box and add them to their own community
-     * @param uData Data of all users of the network
-     * @param network Vis.js network object 
+     * @param node Data of all users of the network
      */
-    calculateBoundingBoxes(uData: UserData[], network: Network) {
+    calculateBoundingBoxes(node: UserData) {
+        const group: number = node.implicit_community;
 
-        uData.forEach((user: UserData) => {
-            const group: number = user.implicit_community;
-            const positionInCanvas = network.getPosition(user.id);
+        const nodeBB: BoundingBox = {
+            top: node.y - node.size / 2 - configuration.padding,
+            bottom: node.y + node.size / 2 + configuration.padding,
+            left: node.x - node.size / 2 - configuration.padding,
+            right: node.x + node.size / 2 + configuration.padding
+        }
 
-            const nodeBB: BoundingBox = {
-                top: positionInCanvas.y - user.size / 2 - configuration.padding,
-                bottom: positionInCanvas.y + user.size / 2 + configuration.padding,
-                left: positionInCanvas.x - user.size / 2 - configuration.padding,
-                right: positionInCanvas.x + user.size / 2 + configuration.padding
-            }
+        if (this.comData[group].bb === undefined) {
 
-            if (this.comData[group].bb === undefined) {
+            this.comData[group].bb = nodeBB;
+            this.comData[group].bb.color = configuration.color[group % configuration.color.length];
 
-                this.comData[group].bb = nodeBB;
-                this.comData[group].bb.color = configuration.color[group % configuration.color.length];
+        } else {
+            if (nodeBB.left < this.comData[group].bb.left)
+                this.comData[group].bb.left = nodeBB.left;
 
-            } else {
-                if (nodeBB.left < this.comData[group].bb.left)
-                    this.comData[group].bb.left = nodeBB.left;
+            if (nodeBB.top < this.comData[group].bb.top)
+                this.comData[group].bb.top = nodeBB.top;
 
-                if (nodeBB.top < this.comData[group].bb.top)
-                    this.comData[group].bb.top = nodeBB.top;
+            if (nodeBB.right > this.comData[group].bb.right)
+                this.comData[group].bb.right = nodeBB.right;
 
-                if (nodeBB.right > this.comData[group].bb.right)
-                    this.comData[group].bb.right = nodeBB.right;
-
-                if (nodeBB.bottom > this.comData[group].bb.bottom)
-                    this.comData[group].bb.bottom = nodeBB.bottom;
-            }
-        });
+            if (nodeBB.bottom > this.comData[group].bb.bottom)
+                this.comData[group].bb.bottom = nodeBB.bottom;
+        }
     }
 
     /**

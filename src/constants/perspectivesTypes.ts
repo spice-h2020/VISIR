@@ -68,16 +68,19 @@ export interface PerspectiveData {
     users: UserData[];
     similarity: EdgeData[];
     artworks: ArtworkData[],
+
+    id: string,
 }
 
 /**
  * Interface of the data of a community.
  */
 export interface CommunityData extends anyProperty {
-    id: number;
+    id: string;
     name: string;
     explanation: string;
-    users: number[];
+    users: string[];
+    explicitCommunity: anyProperty;
 }
 
 /**
@@ -97,7 +100,7 @@ export interface UserData extends anyProperty {
  export interface Interaction extends anyProperty {
     artwork_id: string;
     feelings: string;
-    sophia_extracted_emotions: anyProperty;
+    extracted_emotions: anyProperty;
 }
 
 /**
@@ -106,8 +109,8 @@ export interface UserData extends anyProperty {
 export interface EdgeData extends anyProperty {
     from: string;
     to: string;
-    value: number;
-    id?: number;
+    similarity: number;
+    id: string;
 }
 
 /**

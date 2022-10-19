@@ -1,11 +1,11 @@
 /**
- * @fileoverview This file creates all the perspective views and broadcast the necesary options, like the node that is selected, all perspective views need that to update their
- * dataTables
+ * @fileoverview This file creates all the perspective views and broadcast the necesary options, like the node that is selected, 
+ * all perspective views need that to update their dataTables
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { PerspectiveInfo, PerspectiveState } from "../constants/perspectivesTypes";
+import { PerspectiveData, PerspectiveState } from "../constants/perspectivesTypes";
 import { ViewOptions, CollapsedState } from "../constants/viewOptions"
 import { SelectedObjectActionEnum, selectedObjectReducer, StateFunctions } from "../constants/auxTypes";
 //Packages
@@ -13,14 +13,13 @@ import { useEffect, useReducer, useState } from "react";
 //Local files
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
-import NodeDimensionStrategy from "../managers/dimensionStrategy";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
 const perspectiveContainers: React.CSSProperties = {
     display: "flex",
     marginBottom: "5vh",
     paddingBottom: "1vh",
 }
-
 
 const widthStyle: Map<PerspectiveState, React.CSSProperties> = new Map([
     [PerspectiveState.unactive, { width: "0%" }],
@@ -30,20 +29,23 @@ const widthStyle: Map<PerspectiveState, React.CSSProperties> = new Map([
     [PerspectiveState.collapsed, { width: "20%" }],
 ])
 
-
 interface PerspectivesGroupProps {
-    leftPerspective?: PerspectiveInfo,
-    rightPerspective?: PerspectiveInfo,
+    leftPerspective?: PerspectiveData,
+    rightPerspective?: PerspectiveData,
 
     collapsedState: CollapsedState,
-    //View options for all networks
+    /**
+     * View options for all networks
+     */
     viewOptions: ViewOptions,
-    //Function to setup the legend's data
+    /**
+     * Function to setup the legend's data
+     */
     setLegendData: Function,
 }
 
 /**
- * Component that draws each active perspective
+ * Component that draws each perspective
  */
 export const PerspectivesGroups = ({
     leftPerspective,
@@ -54,7 +56,7 @@ export const PerspectivesGroups = ({
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
-    const [networkFocusID, setNetworkFocusID] = useState<number | undefined>();
+    const [networkFocusID, setNetworkFocusID] = useState<string | undefined>();
     const [selectedObject, setSelectedObject] = useReducer(selectedObjectReducer, undefined);
 
     const sf: StateFunctions = {
@@ -64,15 +66,17 @@ export const PerspectivesGroups = ({
         setSelectedObject: setSelectedObject,
     }
 
+    //When the collapsed state changes, we clear both datatables
     useEffect(() => {
-        setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: 0 });
+        setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: "0" });
         setNetworkFocusID(undefined);
     }, [collapsedState]);
 
+    //When a new perspective is loaded, we clear all configuration
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
 
-            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: 0 });
+            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
         }
@@ -88,7 +92,7 @@ export const PerspectivesGroups = ({
 
     const leftComponent = leftPerspective === undefined ? "" :
         <PerspectiveView
-            perspectiveInfo={leftPerspective}
+            perspectiveData={leftPerspective}
             viewOptions={viewOptions}
             sf={sf}
             selectedObject={selectedObject}
@@ -99,7 +103,7 @@ export const PerspectivesGroups = ({
 
     const rightComponent = rightPerspective === undefined ? "" :
         <PerspectiveView
-            perspectiveInfo={rightPerspective}
+            perspectiveData={rightPerspective}
             viewOptions={viewOptions}
             sf={sf}
             selectedObject={selectedObject}
@@ -116,12 +120,12 @@ export const PerspectivesGroups = ({
                 hideLabels={viewOptions.hideLabels}
             />
             <div style={widthStyle.get(leftState)}
-                key={leftPerspective === undefined ? -1 : `first${leftPerspective.details.id}`}>
+                key={leftPerspective === undefined ? -1 : `first${leftPerspective.id}`}>
                 {leftComponent}
             </div>
 
             <div style={widthStyle.get(rightState)}
-                key={rightPerspective === undefined ? -2 : `second${rightPerspective.details.id}`}>
+                key={rightPerspective === undefined ? -2 : `second${rightPerspective.id}`}>
                 {rightComponent}
             </div>
         </div>
@@ -135,7 +139,7 @@ export const PerspectivesGroups = ({
  * @param collapsedState 
  * @returns returns two perspective states, {left, right}
  */
-function calculatePerspectiveState(leftPerspective: PerspectiveInfo | undefined, rightPerspective: PerspectiveInfo | undefined,
+function calculatePerspectiveState(leftPerspective: PerspectiveData | undefined, rightPerspective: PerspectiveData | undefined,
     collapsedState: CollapsedState) {
 
     let leftState: PerspectiveState = PerspectiveState.unactive;

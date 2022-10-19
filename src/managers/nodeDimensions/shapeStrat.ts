@@ -18,7 +18,7 @@ export default class ShapeStrategy extends GenericStrategy {
      * Changes the shape and font's vertical align
      * @param user user to edit
      */
-    change(user: UserData) {
+    change(user: UserData, isFocus: boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
             const value = user.explicit_community[this.attr.key];
@@ -44,12 +44,19 @@ export default class ShapeStrategy extends GenericStrategy {
             }
         }
 
-        user.size = nodeConst.defaultSize;
+        if(isFocus){
+            user.size = nodeConst.selectedSize;
+        }else{
+            user.size = nodeConst.defaultSize;
+        }
+        
     }
 
     /**
      * This strategy doesnt do anything when a node turn colorless
      * @param user 
      */
-    toColorless(): void {}
+    toColorless(user: UserData): void {
+        user.size = nodeConst.defaultSize;
+    }
 }

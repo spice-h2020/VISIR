@@ -18,7 +18,7 @@ export default class ColorStrategy extends GenericStrategy {
      * Changes the background's color
      * @param user user to edit
      */
-    change(user: UserData) {
+    change(user: UserData, isFocus: Boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
             const value = user.explicit_community[this.attr.key];

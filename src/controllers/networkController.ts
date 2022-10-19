@@ -1,37 +1,39 @@
 /**
- * @fileoverview This file creates all objects related to a Vis.js network. 
- * Aditionaly creates the initial vis.js network's configuration
+ * @fileoverview This class creates the controller of this network. Creating all controllers, setting up the options and parsing the initial data
  * @package Requires vis network package.
  * @package Requires vis data package.
  * @author Marco Expósito Pérez
  */
 //Constants
 import { edgeConst } from "../constants/edges";
-import { EdgeData, PerspectiveInfo } from "../constants/perspectivesTypes";
+import { EdgeData, PerspectiveData, UserData } from "../constants/perspectivesTypes";
 import { ViewOptions } from "../constants/viewOptions";
 import { nodeConst } from "../constants/nodes";
 import { StateFunctions } from "../constants/auxTypes";
 //Package
-import { Data, DataSetEdges, DataSetNodes, Network, NodeChosenLabelFunction, NodeChosenNodeFunction, Options } from "vis-network";
+import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network";
 import { DataSet } from "vis-data";
 //Local Files
-import EdgeVisuals from "./edgeVisuals";
-import NodeVisuals from "./nodeVisuals";
-import BoxesController from "./boundingBoxes";
-import EventsController from "./eventsController";
-import NodeDimensionStrategy from "../managers/dimensionStrategy";
+import BoxesController from "./boxesController";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import NodeLocation from "./nodeLocation";
+import NodeExplicitComms from "./nodeExplicitComms";
+import NodeVisualsCtrl from "./nodeVisualsCtrl";
+import EdgeVisualsCtrl from "./edgeVisualsCtrl";
+import EventsCtrl from "./eventsCtrl";
 
 export default class NetworkController {
     //Options of the vis.js network
     options!: Options;
-    //Node visuals controller
-    nodeVisuals!: NodeVisuals;
-    //Edge visuals controller
-    edgeVisuals!: EdgeVisuals;
     //Bounding boxes controller
-    bbController: BoxesController
+    bbCtrl!: BoxesController;
+    //Edge visuals controller
+    edgeCtrl!: EdgeVisualsCtrl;
+    //Node visuals controller
+    nodeVisuals!: NodeVisualsCtrl;
+
     //Network event controller
-    eventsController: EventsController
+    eventsCtrl: EventsCtrl;
 
     //Vis.js network object
     net!: Network;
@@ -39,6 +41,10 @@ export default class NetworkController {
     nodes: DataSetNodes;
     //Edges of the network
     edges: DataSetEdges;
+
+    //Id of this network
+    id: string;
+    htmlRef: HTMLDivElement
 
     /**
      * Constructor of the class 
@@ -49,40 +55,74 @@ export default class NetworkController {
      * @param dimStrat Current dimension strategy
      * @param networkFocusID ID of the current network with the tooltip focus
      */
-    constructor(perspectiveInfo: PerspectiveInfo, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions, dimStrat: NodeDimensionStrategy | undefined, networkFocusID: number) {
+    constructor(perspectiveData: PerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions,
+        dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string) {
 
-        this.nodes = new DataSet(perspectiveInfo.data.users);
+        this.id = perspectiveData.id;
+        this.htmlRef = htmlRef;
 
-        perspectiveInfo.data.similarity.sort(sortEdges);
-        this.edges = new DataSet(perspectiveInfo.data.similarity);
+        this.nodes = new DataSet(perspectiveData.users);
+        perspectiveData.similarity.sort(sortEdges);
+        this.edges = new DataSet(perspectiveData.similarity);
 
-        this.nodeVisuals = new NodeVisuals(perspectiveInfo.data, this.nodes, sf, viewOptions, dimStrat);
-        this.createOptions(viewOptions);
-        this.edgeVisuals = new EdgeVisuals(this.edges, perspectiveInfo.data.similarity, viewOptions, this.options)
-
+        this.createOptions();
         this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
-        this.edgeVisuals.net = this.net;
-        
-        this.bbController = new BoxesController(perspectiveInfo.data.communities, perspectiveInfo.data.users, this.net);
 
-        this.eventsController = new EventsController(this, htmlRef, sf, networkFocusID, perspectiveInfo.details.id);
+        this.parseNodes(perspectiveData, dimStrat, sf, viewOptions);
+        this.parseEdges(this.edges, perspectiveData.similarity, viewOptions);
+
+        this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
+    }
+
+    /**
+     * Parse all nodes to initialize their related options and data structures.
+     * @param perspectiveData data of the network
+     * @param dimStrat dimension strat of all networks
+     * @param sf Functions that change the state
+     * @param viewOptions Options that change the visualization
+     */
+    parseNodes(perspectiveData: PerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, viewOptions: ViewOptions) {
+        const explicitCtrl = new NodeExplicitComms(perspectiveData.communities);
+        const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
+
+        perspectiveData.users.forEach((user: UserData) => {
+            nodeLocation.updateNodeGroup(user);
+            explicitCtrl.parseExplicitCommunity(user, dimStrat);
+        });
+
+        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);
+        this.bbCtrl = new BoxesController(perspectiveData.communities);
+
+        perspectiveData.users.forEach((user: UserData) => {
+            nodeLocation.setNodeLocation(user);
+            this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.hideLabels);
+            this.bbCtrl.calculateBoundingBoxes(user);
+        });
+
+        explicitCtrl.calcExplicitPercentile(this.nodeVisuals.dimStrat);
+
+
+        this.nodes.update(perspectiveData.users);
+    }
+
+    /**
+     * Parse all nodes to initialize the edge visuals controller.
+     * @param edgeDataset Data of the active edges
+     * @param baseData Data of all edges of the network
+     * @param viewOptions Options that change the visualization
+     */
+    parseEdges(edgeDataset: DataSetEdges, baseData: EdgeData[], viewOptions: ViewOptions) {
+        this.edgeCtrl = new EdgeVisualsCtrl(edgeDataset, baseData, viewOptions);
     }
 
     /**
      * Create the initial option object of vis.js
-     * @param viewOptions viewOptions that will change some options
      */
-    createOptions(viewOptions: ViewOptions) {
+    createOptions() {
         this.options = {
             autoResize: true,
             edges: {
-                scaling: {
-                    min: edgeConst.minWidth,
-                    max: viewOptions.edgeWidth ? edgeConst.maxWidth : edgeConst.minWidth,
-                    label: {
-                        enabled: false
-                    }
-                },
+                width: edgeConst.minWidth,
                 color: {
                     color: edgeConst.defaultColor,
                     highlight: edgeConst.selectedColor
@@ -104,12 +144,8 @@ export default class NetworkController {
                     interpolation: false,
                 },
                 borderWidth: nodeConst.defaultBorderWidth,
-                borderWidthSelected: nodeConst.selectedBorderWidth,
                 size: nodeConst.defaultSize,
-                chosen: {
-                    node: this.nodeVisuals.nodeChosen.bind(this.nodeVisuals) as NodeChosenNodeFunction,
-                    label: this.nodeVisuals.labelChosen.bind(this.nodeVisuals) as NodeChosenLabelFunction,
-                },
+                chosen: false,
                 color: {
                     background: nodeConst.defaultColor,
                     border: nodeConst.defaultColor,
@@ -139,7 +175,7 @@ export default class NetworkController {
 }
 
 /**
- * Function that compares EdgeData.
+ * Function that compares and sort EdgeData.
  * @param a EdgeData A
  * @param b EdgeData B
  * @returns Returns 1 if A has higher value. Returns 0 if both have the same value. Returns -1 if B has higher value

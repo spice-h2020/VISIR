@@ -27,7 +27,7 @@ const node: UserData = {
     interactions: [{
         artwork_id: '1',
         feelings: 'scettico',
-        sophia_extracted_emotions: {
+        extracted_emotions: {
             "Serenity": 0.7,
             "Trust": 0.3,
             "Fear": 0.5
@@ -36,7 +36,7 @@ const node: UserData = {
     {
         artwork_id: '2',
         feelings: 'Vociare, odori, curiosità, calore',
-        sophia_extracted_emotions: {
+        extracted_emotions: {
             "Surprise": 0.622342,
             "Anger": 1,
             "Disgust": 1,
@@ -46,7 +46,7 @@ const node: UserData = {
     {
         artwork_id: '3',
         feelings: loreIpsum,
-        sophia_extracted_emotions: {
+        extracted_emotions: {
             "Surprise": 0.622342,
             "Anger": 1,
             "Disgust": 1,
@@ -56,10 +56,11 @@ const node: UserData = {
 };
 
 const comm: CommunityData = {
-    id: 0,
+    id: "0",
     name: 'Community 1',
     explanation: "Representative Properties: {'Artefacts collected': 'Stool60, Pastille chair, Pehtoori'}'",
-    users: [1, 2, 3, 4, 5, 6]
+    users: ["1", "2", "3", "4", "5", "6"],
+    explicitCommunity: {}
 };
 
 const artworkData: ArtworkData[] = [

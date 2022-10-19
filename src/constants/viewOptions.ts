@@ -79,10 +79,6 @@ export const initialOptions = {
      */
     hideEdges: ButtonState.unactive,
     /**
-     * Change the width of all edges based on their similarity/value parameter
-     */
-    edgeWidth: ButtonState.unactive,
-    /**
      * Activate the border option of nodes that adds a third dimension that changes based on an explicit community
      */
     border: ButtonState.unactive,
@@ -93,7 +89,7 @@ export const initialOptions = {
     /**
      * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
      */
-    deleteEdges: 0
+    deleteEdges: 10
 }
 /**
  * Class that contains the value of all visualization options that will change how the user see the networks
@@ -108,10 +104,6 @@ export class ViewOptions {
      * Hide all edges except when a node is selected, in such case, only conected edges will be shown
      */
     hideEdges: boolean;
-    /**
-     * Change the width of all edges based on their similarity/value parameter
-     */
-    edgeWidth: boolean;
     /**
      * Activate the border option of nodes that adds a third dimension that changes based on an explicit community
      */
@@ -135,7 +127,6 @@ export class ViewOptions {
     constructor() {
         this.hideLabels = initialOptions.hideLabels === ButtonState.active;
         this.hideEdges = initialOptions.hideEdges === ButtonState.active;
-        this.edgeWidth = initialOptions.edgeWidth === ButtonState.active;
         this.border = initialOptions.border === ButtonState.active;
         this.legendConfig = new Map<string, boolean>();
         this.edgeThreshold = initialOptions.edgeThreshold;

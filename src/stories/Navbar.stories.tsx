@@ -5,6 +5,8 @@ import { Button } from '../basicComponents/Button';
 import { Dropdown } from '../basicComponents/Dropdown';
 import { ButtonState } from '../constants/viewOptions';
 
+import '../style/base.css';
+
 export default {
   title: 'Example/Navbar',
   component: Navbar,
