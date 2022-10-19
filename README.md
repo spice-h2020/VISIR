@@ -40,15 +40,18 @@ Prerequisite: [Node](https://nodejs.org/en/).
 ______________________
 ## How to use the app.
 
-1. Select the desired File Source from the FileSource dropdown. (local app files is the default option)
+0. By default, when you open the APP, it will load 2 predetermined files from the local file system.
 
-2. Once a correct source has been loaded, both Select Perspective dropdowns should be clickable. Click any row to activate/disactivate the view of the perspective.
-    
-    1. WHen two perspectives are active, the grey buttons between the Select Perspective Dropdown will be usable to collapse one of the perspectives to see better the other one.
-    
-3. If u click a node of any network, all networks will select that node, will show the node's info in the nearby dataTables and will zoom in to that node and its connected nodes. A tooltip will be shown nearby the node to represent the same info as the dataTables.
+1. You need to tell the APP the ID of the files u want to see. You can do that by editing directly editing "perspective1" and "perspective2" URL's values to the desired IDs. Idealy, there would be another UI that streamlines the perspectiveID selection.
+   1.1. Keep in mind, that the moment u enter the new parameters, the APP will try to load them and will output a little error if they dont exist in the selected File Source. U can accept the alert box and then pick the desired File Source where the perspective is saved.
 
-4. If u click a bounding box and not a node, only this network will zoom in to all the nodes inside the bounding box while all nodes inside this bounding box will be highlighted in the other network, the dataTables will be updated with the community represented by the bounding box and a tooltip will appear similar to the node tooltip.
+2. Now u need to pick the desired FIle Source, where the selected perspectives are saved. Local files is the default option for local testing. The connection to the API is still work in progress.
+
+3. If u click a node of any network, all networks will select that node, will show the node's info in the nearby dataTables and will zoom in to that node and its connected nodes. A tooltip will be shown nearby the node to represent similar info.
+
+4. If u click a bounding box and not a node, two diferent things will happen depending on which network was clicked:
+    4.1 The network that was clicked will zoom in to all nodes inside the bounding box, and will show information about the community related to the bounding box.
+    4.2 The network that was *not* clicked, will search for all nodes inside the clicked bounding box, and if they exist in this network, they will be highlighted and the view will zoom to them
 
 5. If u neither click a node or a bounding box, all datatables and tooltips will be cleared and a zoom out will bring the network to the original zoom.
 
@@ -61,11 +64,9 @@ Options dropdown has several diferent options to change how the visualization is
 
 - Hide unselected Edges. Hide all edges excepts the ones that are conected to the current selected node.
 
-- Minimum Similarity. Hide all edges that doesnt have a minimum similarity value even if they are selected.
+- Minimum Similarity. Delete all edges that doesnt have a minimum similarity value. *Can improve performance if increased*
 
-- Remove % of edges. Directly removes a % of all edges of the network, chosen randomly. *Increasing this number heavily improves the visualization's performance*
-
-- Make edge width variable. Change all edges' width to change based on each edge similarity.
+- Remove % of edges. Directly removes a % of all edges of the network, chosen randomly. *Can improve performance if increased*
 
 - Activate node borders. Add a third visualization dimension to all nodes when possible. Depending on one characteristic, all nodes' border colour will change. The legend dropdown will be updated with this new characteristic and the new border colours.
 
@@ -73,9 +74,9 @@ ______________________
 ## How to add more testing files
 There is a format guide for new testing files [here](https://github.com/MarcoExpPer/SPICE-visualization-ReactPort/blob/main/public/data/dataFormatGuide.txt).
 
-To add testing files using Localfile options, Node.js instalation is required.
+To add testing files using LocalFile file source options, Node.js instalation is required.
 
-- Localfiles: Move any new file to ./public/data/ directory and update the dataList.json file with its perspective details. The new file and the perspective details must follow the format that all others perspectives are following. Make sure the name of the new file is the same as its perspective ID. Now the app should be able to see that file after refreshing the browser and selecting local app files as the file source.
+- Localfiles: Move any new file to ./public/data/ directory. The new file must follow the required format. The id of the perspective will be equal to the name of its file. Now u can write the ID of the file in the URL in one of the url parameters, "perspective1" or "perspective2" to load that one. 
 
 - API (WIP): Currently theres no way to upload new files or perspectives to the API.
 _______________________
