@@ -76,8 +76,8 @@ export default class RequestManager {
                 
                 setPerspective(undefined);
 
-                console.log(`Perspective file was not found: ${error}`);
-                alert(`Perspective file was not found: ${error.message}`);
+                console.log(`Perspective file with id: (${perspectiveId}) was not found: ${error}`);
+                alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
             });
     }
 

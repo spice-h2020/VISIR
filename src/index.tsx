@@ -15,11 +15,14 @@ if (!myURL.searchParams.get("perspective1") && !myURL.searchParams.get("perspect
   window.location.href = `${window.location.href}?perspective1=5&perspective2=6`
 }
 
+const perspectiveA = myURL.searchParams.get("perspective1");
+const perspectiveB = myURL.searchParams.get("perspective2");
+
 root.render(
   //<React.StrictMode>
     <App
-      perspectiveId1={myURL.searchParams.get("perspective1")}
-      perspectiveId2={myURL.searchParams.get("perspective2")}
+      perspectiveId1={perspectiveA}
+      perspectiveId2={perspectiveB}
     />
   //</React.StrictMode>
 );

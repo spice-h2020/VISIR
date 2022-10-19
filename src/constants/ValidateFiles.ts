@@ -460,8 +460,8 @@ function isInteractionValid(arg: any): types.Interaction {
             }
         }
 
-        if (arg.sophia_extracted_emotions === undefined) {
-            arg.sophia_extracted_emotions = "";
+        if (arg.extracted_emotions === undefined) {
+            arg.extracted_emotions = "";
         }
 
         return arg;

@@ -77,7 +77,7 @@ export const InteractionPanel = ({
                 <div className="row">
                     <div style={{ overflowWrap: "anywhere" }}>
                         <strong> Emotions:</strong>&nbsp;
-                        {shopiaToString(interaction.sophia_extracted_emotions)}
+                        {shopiaToString(interaction.extracted_emotions)}
                     </div>
                 </div>
             </div>

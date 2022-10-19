@@ -100,7 +100,7 @@ export interface UserData extends anyProperty {
  export interface Interaction extends anyProperty {
     artwork_id: string;
     feelings: string;
-    sophia_extracted_emotions: anyProperty;
+    extracted_emotions: anyProperty;
 }
 
 /**
