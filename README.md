@@ -43,19 +43,19 @@ ______________________
 0. By default, when you open the APP, it will load 2 predetermined files from the local file system.
 
 1. You need to tell the APP the ID of the files u want to see. You can do that by editing directly editing "perspective1" and "perspective2" URL's values to the desired IDs. Idealy, there would be another UI that streamlines the perspectiveID selection.
-   1.1. Keep in mind, that the moment u enter the new parameters, the APP will try to load them and will output a little error if they dont exist in the selected File Source. U can accept the alert box and then pick the desired File Source where the perspective is saved.
+   1. Keep in mind, that the moment u enter the new parameters, the APP will try to load them and will output a little error if they dont exist in the selected File Source. U can accept the alert box and then pick the desired File Source where the perspective is saved.
 
 2. Now u need to pick the desired FIle Source, where the selected perspectives are saved. Local files is the default option for local testing. The connection to the API is still work in progress.
 
 3. If u click a node of any network, all networks will select that node, will show the node's info in the nearby dataTables and will zoom in to that node and its connected nodes. A tooltip will be shown nearby the node to represent similar info.
 
 4. If u click a bounding box and not a node, two diferent things will happen depending on which network was clicked:
-    4.1 The network that was clicked will zoom in to all nodes inside the bounding box, and will show information about the community related to the bounding box.
-    4.2 The network that was *not* clicked, will search for all nodes inside the clicked bounding box, and if they exist in this network, they will be highlighted and the view will zoom to them
+    1. The network that was clicked will zoom in to all nodes inside the bounding box, and will show information about the community related to the bounding box.
+    2. The network that was *not* clicked, will search for all nodes inside the clicked bounding box, and if they exist in this network, they will be highlighted and the view will zoom to them
 
 5. If u neither click a node or a bounding box, all datatables and tooltips will be cleared and a zoom out will bring the network to the original zoom.
 
-6. All nodes will have diferent colours and shapes. Legend dropdown allows u to understand what does every colour/shape means. If u click any of the legend rows, all nodes that contain that characteristic will be made less obstrusive to the visualization.
+6. All nodes will have diferent colours and shapes. Legend dropdown allows you to understand what does every colour/shape means. If u click any of the legend rows, all nodes that contain that characteristic will be made less obstrusive to the visualization.
 
 #### Other options
 Options dropdown has several diferent options to change how the visualization is shown.
