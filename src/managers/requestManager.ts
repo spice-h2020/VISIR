@@ -61,7 +61,7 @@ export default class RequestManager {
      */
     requestPerspectiveFIle(perspectiveId: string, setPerspective: Dispatch<React.SetStateAction<PerspectiveData | undefined>>) {
         
-        this.getPerspective(parseInt(perspectiveId))
+        this.getPerspective(perspectiveId)
             .then((response) => {
                 if (response.status === 200) {
                     const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
@@ -83,10 +83,10 @@ export default class RequestManager {
 
     /**
      * Send a GET petition to obtain a singleFile in a directory
-     * @param {number} id Id of the file we want to get. It needs to include the extension
+     * @param id Id of the file we want to get.
      * @returns {Object} Returns the file
      */
-    getPerspective(id: number) {
+    getPerspective(id: string) {
         const realID = this.usingAPI ? `file/${id}` : `${id}.json`;
 
         return this.axios.get(realID, {
