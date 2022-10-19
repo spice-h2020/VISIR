@@ -9,13 +9,13 @@ Currently this data structure is unused because the app recevies via URL the id 
 All perspective Details contains a few identifiers of all accesible perspectives in the app.
 It's requested during the start up of the app.
 
-To easily check the format you can use [this online app]() that is already configured with this file.
+To easily check the format you can use [this online app](https://json-schema.app/view/%23?url=https%3A%2F%2Fraw.githubusercontent.com%2FMarcoExpPer%2FSPICE-visualization-ReactPort%2Fdevelop%2Fpublic%2FdataSchemas%2FallPerspectiveDetails.json) that is already configured with this file.
 
 #### Perspective Data
 Perspective Data is all the data about a single perspective containing all its communities, users, edges and artworks used in the process.
 It's requested when the user selects a perspective to view.
 
-To easily check the format you can use [this online app]() that is already configured with this file.
+To easily check the format you can use [this online app](https://json-schema.app/view/%23?url=https%3A%2F%2Fraw.githubusercontent.com%2FMarcoExpPer%2FSPICE-visualization-ReactPort%2Fdevelop%2Fpublic%2FdataSchemas%2FperspectiveData.json) that is already configured with this file.
 
 ## Validate files
 
