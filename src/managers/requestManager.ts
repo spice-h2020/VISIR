@@ -33,7 +33,7 @@ export default class RequestManager {
 
         this.keyToUrl.set(FileSource.Local, "./data/");
         this.keyToUrl.set(FileSource.Develop, "https://raw.githubusercontent.com/MarcoExpPer/SPICE-visualization-ReactPort/develop/public/data/");
-        this.keyToUrl.set(FileSource.Api, "http://localhost:8090/");
+        this.keyToUrl.set(FileSource.Api, "http://localhost:8080/visualizationAPI/");
     }
 
     /**
