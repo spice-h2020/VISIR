@@ -283,7 +283,7 @@ export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
         for (let i = 0; i < arg.users.length; i++) {
             arg.users[i] = isUserDataValid(arg.users[i]);
         }
-        for (let i = arg.similarity.length - 1; i > 0; --i) {
+        for (let i = arg.similarity.length - 1; i >= 0; --i) {
             const edge = isSimilarityDataValid(arg.similarity[i]);
 
             if (edge === undefined) {

@@ -62,7 +62,13 @@ export default class NetworkController {
         this.htmlRef = htmlRef;
 
         this.nodes = new DataSet(perspectiveData.users);
+
+        console.log(perspectiveData.similarity[0].similarity)
+
         perspectiveData.similarity.sort(sortEdges);
+
+        console.log(perspectiveData.similarity[0].similarity)   
+
         this.edges = new DataSet(perspectiveData.similarity);
 
         this.createOptions();
@@ -181,10 +187,10 @@ export default class NetworkController {
  * @returns Returns 1 if A has higher value. Returns 0 if both have the same value. Returns -1 if B has higher value
  */
 const sortEdges = (a: EdgeData, b: EdgeData) => {
-    if (a.value > b.value) {
+    if (a.similarity > b.similarity) {
         return 1;
     }
-    if (a.value < b.value) {
+    if (a.similarity < b.similarity) {
         return -1;
     }
     return 0;
