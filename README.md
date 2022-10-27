@@ -42,10 +42,10 @@ ______________________
 
 0. By default, when you open the APP, it will load 2 predetermined files from the local file system.
 
-1. You need to tell the APP the ID of the files you want to see. You can do that by editing directly editing "perspective1" and "perspective2" URL's values to the desired IDs. Idealy, there would be another UI that streamlines the perspectiveID selection.
-   1. Keep in mind, that the moment you enter the new parameters, the APP will try to load them and will output a little error if they dont exist in the selected File Source. You can accept the alert box and then pick the desired File Source where the perspective is saved.
+1. You need to tell the APP the ID of the files you want to see. You can do that by directly editing "perspective1" and "perspective2" URL's values to the desired IDs. Idealy, there would be another UI that streamlines the perspectiveID selection.
+   1. Keep in mind, that the moment you enter the new parameters, the APP will try to load them and will show an alert if they dont exist in the selected File Source. You can accept the alert box and then pick the desired File Source where the perspective is saved.
 
-2. Now you need to pick the desired FIle Source, where the selected perspectives are saved. Local files is the default option for local testing. The connection to the API is still work in progress.
+2. Now you need to pick the desired FIle Source, where the selected perspectives are saved. Local files is the default option for local testing. The connection to the API work but only if u launch the local api localy, the deployment of the APi is still work in progress.
 
 3. If you click a node of any network, all networks will select that node, will show the node's info in the nearby dataTables and will zoom in to that node and its connected nodes. A tooltip will be shown nearby the node to represent similar info.
 
