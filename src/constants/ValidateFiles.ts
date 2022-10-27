@@ -313,11 +313,12 @@ function isCommunityDataValid(arg: any): types.CommunityData {
             throw Error(`Id is undefined`);
         }
 
-        if (typeof (arg.id) !== "number") {
-            arg.id = Number(arg.id);
-
-            if (isNaN(arg.id))
-                throw Error(`ID of the community (${arg.id}) is not a number`);
+        if (typeof (arg.id) !== "string") {
+            try {
+                arg.id = String(arg.id);
+            } catch (e: any) {
+                throw Error(`Id of the community (${arg.id}) is not a string`);
+            }
         }
 
         if (arg.name === undefined) {
@@ -570,16 +571,17 @@ function isArtworkDataValid(arg: any): types.ArtworkData {
         }
 
         if (arg.year === undefined) {
-            throw Error(`Value is undefined`);
+            throw Error(`Year is undefined`);
         }
 
-        if (typeof (arg.year) !== "number") {
-            arg.year = Number(arg.year);
-
-            if (isNaN(arg.year))
-                throw Error(`Year of the artwork (${arg.id}) is not a number`);
+        if (typeof (arg.year) !== "string") {
+            try {
+                arg.year = String(arg.year);
+            } catch (e: any) {
+                throw Error(`Year of the artwork (${arg.year}) is not a string`);
+            }
         }
-
+    
         if (arg.image === undefined) {
             throw Error(`Id is undefined`);
         }
