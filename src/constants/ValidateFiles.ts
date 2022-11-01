@@ -401,7 +401,6 @@ function isUserDataValid(arg: any): types.UserData {
             throw Error(`Id is undefined`);
         }
 
-
         if (typeof (arg.id) !== "string") {
             try {
                 arg.id = String(arg.id);

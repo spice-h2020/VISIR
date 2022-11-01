@@ -167,7 +167,6 @@ function getTooltipBody(selectedObject: CommunityData | UserData | undefined, hi
         if (selectedObject?.users) {
 
             body.push(<div className="row" key={-1}> <strong> Name: </strong> &nbsp; {selectedObject.name} </div>);
-            body.push(<div className="row" key={-2}> <strong> Explanation: </strong> &nbsp; {selectedObject.explanation} </div>);
 
         } else {
 

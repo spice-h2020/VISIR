@@ -74,7 +74,7 @@ export default class EventsCtrl {
                 let y: number;
 
                 //If the tooltip data is a node
-                if (this.selectedObject?.explanation === undefined) {
+                if (this.selectedObject?.explanations === undefined) {
                     const node = this.selectedObject as UserData;
 
                     const nodePositionInDOM = this.netCtrl.net.canvasToDOM(this.netCtrl.net.getPosition(node.id));

@@ -6,7 +6,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ArtworkData, CommunityData, UserData } from "../constants/perspectivesTypes";
+import { ArtworkData, CommExplanation as ExplanationData, CommunityData, ExplanationTypes, UserData } from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
 //Local files
@@ -39,7 +39,9 @@ interface DataTableProps {
     tittle?: String;
     node?: UserData;
     community?: CommunityData;
+
     artworks: ArtworkData[];
+    allUsers: UserData[];
 
     hideLabel: boolean;
     state: string;
@@ -53,13 +55,14 @@ export const DataTable = ({
     node,
     community,
     artworks,
+    allUsers,
     hideLabel,
     state,
 }: DataTableProps) => {
 
-    const nodePanel = getNodePanel(node, hideLabel);
+    const nodePanel = getNodePanel("Citizen Attributes", node, hideLabel);
     const interactions = getInteractionsAccordion(node, artworks);
-    const communities = getCommunityPanel(community)
+    const communities = getCommunityPanel(community, allUsers, hideLabel)
 
     return (
         <div className={state} style={getContainerStyle(state)}>
@@ -77,8 +80,8 @@ export const DataTable = ({
  * @param hideLabel boolean that will hide the node label in the panel.
  * @returns a react component with the node's panel.
  */
-function getNodePanel(node: UserData | undefined, hideLabel: boolean) {
-    const tittle = <div style={sectionTittleStyle}> Citizen Attributes </div>;
+function getNodePanel(header: string, node: UserData | undefined, hideLabel: boolean) {
+    const tittle = <div style={sectionTittleStyle}> {header} </div>;
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
     if (node !== undefined) {
@@ -94,12 +97,16 @@ function getNodePanel(node: UserData | undefined, hideLabel: boolean) {
         }
     }
 
-    return (
-        <div style={{ borderBottom: "1px #dadce0 inset", paddingBottom: "3px" }} key={1}>
-            {tittle}
-            {content}
-        </div>
-    )
+    if (content.length === 0) {
+        return "";
+    } else {
+        return (
+            <div style={{ borderBottom: "1px #dadce0 inset", paddingBottom: "3px" }} key={1}>
+                {tittle}
+                {content}
+            </div>
+        )
+    }
 }
 
 /**
@@ -152,19 +159,21 @@ function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkD
  * @param community source community.
  * @returns a react component with the community's panel.
  */
-function getCommunityPanel(community: CommunityData | undefined) {
+function getCommunityPanel(community: CommunityData | undefined, allUsers: UserData[], hideLabel: boolean) {
+
     const tittle = <div style={sectionTittleStyle}> Community Attributes </div>;
     let content: React.ReactNode[] = [];
 
     if (community !== undefined) {
 
         content.push(<div className="row" key={-1}> <strong> Name: </strong> &nbsp; {community.name} </div>);
-        content.push(<div className="row" key={-2}> <strong> Explanation: </strong> &nbsp; {community.explanation} </div>);
-
         content.push(<div className="row" key={-4}> {` Citizens: ${community.users.length}`} </div>);
         content.push(<br key={-5} />);
 
-        content.push(getStackedBars(community))
+        for (let i = 0; i < community.explanations.length; i++) {
+            content.push(getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel));
+            content.push(<br key={-6 - i} />);
+        }
     }
 
     return (
@@ -175,6 +184,29 @@ function getCommunityPanel(community: CommunityData | undefined) {
     )
 }
 
+
+function getCommunityExplanation(communityData: CommunityData, explanation: ExplanationData, allUsers: UserData[], hideLabel: boolean) {
+    if (explanation.visible === false) {
+        return "";
+
+    } else {
+        switch (explanation.explanation_type) {
+            case ExplanationTypes.explicit_attributes: {
+                return getStackedBars(communityData);
+            }
+            case ExplanationTypes.medioid: {
+                
+                const medioid = allUsers.find( (value) => {return value.id == explanation.explanation_data.id});
+
+                return (getNodePanel("Medioid Attributes", medioid, hideLabel));
+            }
+            default: {
+                console.log("Unrecognized explanation type");
+                return "";
+            }
+        }
+    }
+}
 /**
  * Returns all stacked bar graphs of a community.
  * @param community source community.

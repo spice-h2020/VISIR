@@ -93,7 +93,7 @@ export enum ExplanationTypes {
  */
 export interface CommExplanation extends anyProperty {
     explanation_type: ExplanationTypes;
-    explanation_data: object;
+    explanation_data: anyProperty;
     visible: boolean;
 }
 

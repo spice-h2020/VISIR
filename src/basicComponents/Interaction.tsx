@@ -90,18 +90,6 @@ export const InteractionPanel = ({
         );
 };
 
-/**
- * Function to parse shopia emotions to a readable string. Currently does nothing but parsing its text to string
- * @param emotions shopia emotion results
- * @returns a string with the translation
- */
-function shopiaToString(emotions: anyProperty) {
-    if (emotions !== undefined) {
-        return JSON.stringify(emotions);
-    } else {
-        return "";
-    }
-}
 
 function getEmotionsCloud(emotions: anyProperty) {
     const array = [];
@@ -110,7 +98,6 @@ function getEmotionsCloud(emotions: anyProperty) {
     for (let i = 0; i < keys.length; i++) {
         array[i] = { value: keys[i], count: emotions[keys[i]] };
     }
-
 
     return (
         <div>

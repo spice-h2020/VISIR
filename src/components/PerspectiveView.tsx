@@ -81,7 +81,7 @@ export const PerspectiveView = ({
         if (netManager !== undefined) {
             if (selectedObject?.obj !== undefined) {
                 //If a node has been selected
-                if (selectedObject.obj.explanation === undefined && selectedObject.obj.id !== undefined) {
+                if (selectedObject.obj.explanations === undefined && selectedObject.obj.id !== undefined) {
 
                     const nodeData = netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
 
@@ -142,7 +142,10 @@ export const PerspectiveView = ({
             tittle={perspectiveData.id}
             node={selectedNode}
             community={selectedCommunity}
+
             artworks={perspectiveData.artworks}
+            allUsers={perspectiveData.users}
+
             hideLabel={viewOptions.hideLabels}
             state={networkState}
         />
