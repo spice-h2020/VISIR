@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { DataTable } from '../components/Datatable';
-import { ArtworkData, CommunityData, UserData } from '../constants/perspectivesTypes';
+import { ArtworkData, CommunityData, ExplanationTypes, UserData } from '../constants/perspectivesTypes';
 import '../style/base.css';
 
 export default {
@@ -58,7 +58,12 @@ const node: UserData = {
 const comm: CommunityData = {
     id: "0",
     name: 'Community 1',
-    explanation: "Representative Properties: {'Artefacts collected': 'Stool60, Pastille chair, Pehtoori'}'",
+    explanations: [{
+        explanation_type: ExplanationTypes.explicit_attributes,
+        explanation_data: {},
+        visible: true,
+    },
+    ],
     users: ["1", "2", "3", "4", "5", "6"],
     explicitCommunity: {}
 };

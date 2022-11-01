@@ -3,7 +3,20 @@
         {
             "id": "0",
             "name": "Community 0",
-            "explanation": "Similar dominant emotions while interacting with the following artworks: {'Asfissia! (parte sinistra)': 'sadness'; 'Marina': 'joy'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 7
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "7",
                 "8",
@@ -45,7 +58,20 @@
         {
             "id": "1",
             "name": "Community 1",
-            "explanation": "Similar dominant emotions while interacting with the following artworks: {'Asfissia! (parte sinistra)': 'anticipation'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 5
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "5",
                 "6",
@@ -98,7 +124,20 @@
         {
             "id": "2",
             "name": "Community 2",
-            "explanation": "Users without community",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 91
+                    },
+                    "visible": false
+                }
+            ],
             "users": [
                 "91"
             ]
@@ -106,7 +145,20 @@
         {
             "id": "3",
             "name": "Community 3",
-            "explanation": "Similar dominant emotions while interacting with the following artworks: {'Aprile': 'sadness'; 'Aracne': 'sadness'; 'La Sirena (Sirena) (Abisso verde)': 'sadness'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 27
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "27",
                 "88",
@@ -116,7 +168,20 @@
         {
             "id": "4",
             "name": "Community 4",
-            "explanation": "Similar dominant emotions while interacting with the following artworks: {'Aracne': 'sadness'; 'La Sirena (Sirena) (Abisso verde)': 'joy'; 'Marina': 'disgust'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 90
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "11",
                 "16",
@@ -234,7 +299,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "mi fa sentire libera",
-                    "extracted_emotionsextracted_emotions": {
+                    "extracted_emotions": {
                         "Joy": 1
                     }
                 }
@@ -357,7 +422,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -469,7 +534,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -629,7 +694,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -645,7 +710,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1045,7 +1110,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1157,7 +1222,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1509,7 +1574,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1733,7 +1798,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         }

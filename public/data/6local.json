@@ -4,7 +4,20 @@
             "id": "0",
             "community-type": "implicit",
             "name": "Community 0",
-            "explanation": "Representative Properties: {'La Sirena (Sirena) (Abisso verde)': 'joy'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 11
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "6",
                 "11",
@@ -46,7 +59,20 @@
             "id": "1",
             "community-type": "implicit",
             "name": "Community 1",
-            "explanation": "Users without community",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 76
+                    },
+                    "visible": false
+                }
+            ],
             "users": [
                 "76"
             ]
@@ -55,7 +81,20 @@
             "id": "2",
             "community-type": "implicit",
             "name": "Community 2",
-            "explanation": "Representative Properties: {'Marina': 'joy'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 72
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "9",
                 "72",
@@ -70,7 +109,20 @@
             "id": "3",
             "community-type": "implicit",
             "name": "Community 3",
-            "explanation": "Representative Properties: {'Aracne': 'anticipation'; 'Marina': 'joy'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 7
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "7",
                 "8",
@@ -122,7 +174,20 @@
             "id": "4",
             "community-type": "implicit",
             "name": "Community 4",
-            "explanation": "Representative Properties: {'Aracne': 'sadness'; 'Marina': 'disgust'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 95
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "67",
                 "95",
@@ -134,7 +199,20 @@
             "id": "5",
             "community-type": "implicit",
             "name": "Community 5",
-            "explanation": "Representative Properties: {'Aprile': 'sadness'; 'Aracne': 'sadness'; 'Marina': 'joy'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 27
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "26",
                 "27",
@@ -145,7 +223,20 @@
             "id": "6",
             "community-type": "implicit",
             "name": "Community 6",
-            "explanation": "Representative Properties: {'Aprile': 'sadness'; 'Aracne': 'joy'; 'Asfissia! (parte sinistra)': 'anticipation'}",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": 103
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "5",
                 "103",
@@ -309,7 +400,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "sereno",
-                    "extracted_emotionsextracted_emotions": {
+                    "extracted_emotions": {
                         "Joy": 0.981668,
                         "Serenity": 0.9667546
                     }
@@ -714,7 +805,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1130,7 +1221,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1290,7 +1381,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1418,7 +1509,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1482,7 +1573,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },
@@ -1674,7 +1765,7 @@
                 {
                     "artwork_id": "1",
                     "feelings": "",
-                    "extracted_emotionsextracted_emotions": {}
+                    "extracted_emotions": {}
                 }
             ]
         },

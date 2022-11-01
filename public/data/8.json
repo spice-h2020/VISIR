@@ -4,7 +4,20 @@
             "id": "gam-agglomerative-0",
             "community-type": "implicit",
             "name": "Community 0",
-            "explanation": "",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": "Sz5Wx2XD"
+                    },
+                    "visible": true
+                }
+            ],
             "users": [
                 "Sz5Wx2XD",
                 "Y0WXF1LR",
@@ -25,6 +38,20 @@
             "id": "gam-agglomerative-1",
             "community-type": "implicit",
             "name": "Community 1",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medioid",
+                    "explanation_data": {
+                        "id": "LW3Klzvx"
+                    },
+                    "visible": false
+                }
+            ],
             "explanation": "",
             "users": [
                 "LW3Klzvx"

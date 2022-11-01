@@ -333,16 +333,11 @@ function isCommunityDataValid(arg: any): types.CommunityData {
             }
         }
 
-        if (arg.explanation === undefined) {
-            throw Error(`Explanation of the community (${arg.id}) is undefined`);
+        if (arg.explanations === undefined) {
+            throw Error(`Explanations of the community (${arg.id}) are undefined`);
         }
-
-        if (typeof (arg.explanation) !== "string") {
-            try {
-                arg.explanation = String(arg.explanation);
-            } catch (e: any) {
-                throw Error(`Explanation of the community (${arg.id}) is not a string`);
-            }
+        if (typeof (arg.explanations) !== "object") {
+            throw Error(`Explanations of the community (${arg.id}) are not an object or an array`);
         }
 
         if (arg.users === undefined) {
@@ -353,12 +348,51 @@ function isCommunityDataValid(arg: any): types.CommunityData {
             throw Error(`Users of the community (${arg.id}) is not an object`);
         }
 
+        for (let i = 0; i < arg.explanations.length; i++) {
+            arg.explanations[i] = isCommunityExplanationValid(arg.explanations[i]);
+        }
+
         return arg;
 
     } catch (e: any) {
         throw Error(`Community data is not valid: ${e.message}`);
     }
 }
+ function isCommunityExplanationValid(arg: any) : types.CommExplanation{
+    try {
+        if (arg.explanation_type === undefined) {
+            throw Error(`Explanation_type is undefined`);
+        }
+        if (typeof (arg.explanation_type) !== "string") {
+            try {
+                arg.explanation_type = String(arg.explanation_type);
+            } catch (e: any) {
+                throw Error(`Explanation_type is not a string`);
+            }
+        }
+        arg.explanation_type = types.ExplanationTypes[arg.explanation_type];
+
+        if (arg.explanation_data === undefined) {
+            throw Error(`Explanation_data is undefined`);
+        }
+        if (typeof (arg.explanation_data) !== "object") {
+            throw Error(`Explanation_data is not an object or an array`);
+        }
+
+        if (arg.visible === undefined) {
+            arg.visible = false;
+        }else{
+            if (typeof (arg.visible) !== "boolean") {
+                throw Error(`Visible is not a boolean`);
+            }
+        }
+       
+        return arg;
+
+    } catch (e: any) {
+        throw Error(`Community explanation is not valid: ${e.message}`);
+    }
+ }
 
 function isUserDataValid(arg: any): types.UserData {
     try {
