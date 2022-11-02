@@ -18,8 +18,6 @@ if (!myURL.searchParams.get("perspective1") && !myURL.searchParams.get("perspect
 const perspectiveA = myURL.searchParams.get("perspective1");
 const perspectiveB = myURL.searchParams.get("perspective2");
 
-console.log(perspectiveA);
-console.log(perspectiveB);
 root.render(
   //<React.StrictMode>
     <App
