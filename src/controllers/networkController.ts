@@ -63,12 +63,7 @@ export default class NetworkController {
 
         this.nodes = new DataSet(perspectiveData.users);
 
-        console.log(perspectiveData.similarity[0].similarity)
-
         perspectiveData.similarity.sort(sortEdges);
-
-        console.log(perspectiveData.similarity[0].similarity)   
-
         this.edges = new DataSet(perspectiveData.similarity);
 
         this.createOptions();
@@ -92,7 +87,7 @@ export default class NetworkController {
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
 
         perspectiveData.users.forEach((user: UserData) => {
-            nodeLocation.updateNodeGroup(user);
+            nodeLocation.updateNodeGroup(user, perspectiveData.communities);
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
         });
 

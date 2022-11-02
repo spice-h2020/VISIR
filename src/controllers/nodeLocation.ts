@@ -5,7 +5,7 @@
 //Constants
 import { Point } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
-import { UserData } from "../constants/perspectivesTypes";
+import { CommunityData, ExplanationTypes, UserData } from "../constants/perspectivesTypes";
 
 /**
  * Aux interface to help group nodes in their partition of the canvas's layout
@@ -54,7 +54,7 @@ export default class NodeLocation {
      * @returns returns an array with the center poin of each partition
      */
     createNetworkPartitions(nUsers: number, nAreas: number): Point[] {
-        const partitionsDistance = nUsers + nodeConst.groupsBaseDistance + (nAreas*4);
+        const partitionsDistance = nUsers + nodeConst.groupsBaseDistance + (nAreas * 4);
         const pi2 = (2 * Math.PI);
 
         //Separate the network area in as many angle slices as necesary
@@ -80,11 +80,18 @@ export default class NodeLocation {
      * Add the node to the its group
      * @param node source node
      */
-    updateNodeGroup(node: UserData) {
+    updateNodeGroup(node: UserData, communities: CommunityData[]) {
         const group = node.implicit_community;
 
-        this.nodeGroups[group].nodes.push(node.id);
-        this.nodeGroups[group].partition.nNodes++;
+        const medioid_expl = communities[group].explanations.find((value) => { return value.explanation_type === ExplanationTypes.medioid });
+        if (medioid_expl !== undefined && medioid_expl.visible && medioid_expl.explanation_data.id == node.id) {
+
+            node.medioid = true;
+
+        } else {
+            this.nodeGroups[group].nodes.push(node.id);
+            this.nodeGroups[group].partition.nNodes++;
+        }
     }
 
     /**
@@ -93,10 +100,18 @@ export default class NodeLocation {
      */
     setNodeLocation(node: UserData) {
         const group = node.implicit_community;
-        const nodePos: Point = this.getNodePos(this.nodeGroups[group], node.id);
 
-        node.x = nodePos.x;
-        node.y = nodePos.y;
+        if (node?.medioid) {
+
+            node.x = this.nodeGroups[group].partition.center.x;
+            node.y = this.nodeGroups[group].partition.center.y;
+
+        } else {
+            const nodePos: Point = this.getNodePos(this.nodeGroups[group], node.id);
+
+            node.x = nodePos.x;
+            node.y = nodePos.y;
+        }
     }
 
 

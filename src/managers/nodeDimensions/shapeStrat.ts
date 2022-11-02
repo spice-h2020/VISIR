@@ -50,6 +50,12 @@ export default class ShapeStrategy extends GenericStrategy {
             user.size = nodeConst.defaultSize;
         }
         
+        // if(isFocus || user?.medioid){
+        //     user.size = nodeConst.selectedSize;
+        // }else{
+        //     user.size = nodeConst.defaultSize;
+        // }
+        
     }
 
     /**
