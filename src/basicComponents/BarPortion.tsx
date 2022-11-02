@@ -63,6 +63,8 @@ export const BarPortion = ({
                 setText("");
             } else if (width <= 29) {
                 setText((value.toFixed(0)).toString());
+            }else{
+                setText(`${value}%`);
             }
         }
 

@@ -77,11 +77,8 @@ export const InteractionPanel = ({
                         "{interaction.feelings}"
                     </div>
                 </div>
-                <div>
-                    <strong> Makes me feel:</strong>
-                    {getEmotionsCloud(interaction.extracted_emotions)}
-                    {/* {shopiaToString(interaction.extracted_emotions)} */}
-                </div>
+                {getEmotions(interaction.extracted_emotions)}
+
             </div>
         );
     } else
@@ -90,6 +87,19 @@ export const InteractionPanel = ({
         );
 };
 
+function getEmotions(extracted_emotions: any): React.ReactNode {
+    if (extracted_emotions !== undefined && Object.keys(extracted_emotions).length > 0) {
+
+        return (
+            <div>
+                <strong> Makes me feel:</strong>
+                {getEmotionsCloud(extracted_emotions)}
+            </div>);
+
+    } else {
+        return "";
+    }
+}
 
 function getEmotionsCloud(emotions: anyProperty) {
     const array = [];
@@ -102,9 +112,9 @@ function getEmotionsCloud(emotions: anyProperty) {
     return (
         <div>
             <span style={{
-                  height: "10px",
-                  display: "block",
-            }}/>
+                height: "10px",
+                display: "block",
+            }} />
             <WordCloudGraph
                 data={array}
             />
