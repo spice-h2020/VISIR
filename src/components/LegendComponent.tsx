@@ -21,11 +21,14 @@ const columnTittle: React.CSSProperties = {
     paddingBottom: "5px",
     borderBottom: "black 1px inset",
     overflow: "hidden",
-    textOverflow: "ellipsis"
+    textOverflow: "ellipsis",
+    cursor: "default"
 }
 
 const buttonContentRow: React.CSSProperties = {
-    alignItems: "self-end",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap"
 }
 
 const columnStyle: React.CSSProperties = {
@@ -146,26 +149,29 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
     switch (dim) {
         case Dimensions.Color:
             return (
-                <div className="row" style={buttonContentRow} key={index}>
-                    <div className="col-9" style={{ alignSelf: "center" }}> {value} </div>
-                    <ColorStain
-                        color={nodeConst.nodeDimensions.getColor(index)}
-                        scale={1.3}
-                    />
+                <div title={value} className="row" style={{ alignItems: "self-end" }} key={index}>
+                    <div className="col-9" style={buttonContentRow}> {value} </div>
+                    <div style={{ width: "20px", height: "20px" }}>
+                        <ColorStain
+                            color={nodeConst.nodeDimensions.getColor(index)}
+                            scale={1.3}
+                        />
+                    </div>
                 </div>
+
             );
 
         case Dimensions.Shape:
             return (
-                <div className="row" style={buttonContentRow} key={index}>
-                    <div className="col-9"> {value} </div>
+                <div title={value} className="row" style={{ alignItems: "self-end" }} key={index}>
+                    <div className="col-9" style={buttonContentRow}> {value} </div>
                     <div className={`legend-shape ${nodeConst.nodeDimensions.getShape(index).name}`}></div>
                 </div>
             );
         case Dimensions.Border:
             return (
-                <div className="row" style={buttonContentRow} key={index}>
-                    <div className="col-9"> {value} </div>
+                <div title={value} className="row" style={{ alignItems: "self-end" }} key={index}>
+                    <div className="col-9" style={buttonContentRow}> {value} </div>
                     <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
                 </div>
             );

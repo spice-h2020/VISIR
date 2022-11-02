@@ -33,7 +33,7 @@ export default class RequestManager {
 
         this.keyToUrl.set(FileSource.Local, "./data/");
         this.keyToUrl.set(FileSource.Develop, "https://raw.githubusercontent.com/MarcoExpPer/SPICE-visualization-ReactPort/develop/public/data/");
-        this.keyToUrl.set(FileSource.Api, "http://localhost:8090/");
+        this.keyToUrl.set(FileSource.Api, "http://localhost:8080/visualizationAPI/");
     }
 
     /**
@@ -44,6 +44,7 @@ export default class RequestManager {
         if (baseURL !== undefined) {
             this.axios = new Axios({
                 baseURL: baseURL,
+                timeout: 2000,
             });
             this.isActive = true;
         } else
@@ -77,6 +78,7 @@ export default class RequestManager {
                 setPerspective(undefined);
 
                 console.log(`Perspective file with id: (${perspectiveId}) was not found: ${error}`);
+                console.log(error);
                 alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
             });
     }
@@ -96,7 +98,7 @@ export default class RequestManager {
                 return response;
             })
             .catch((error) => {
-                return error;
+                throw error;
             });
     }
 

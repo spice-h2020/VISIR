@@ -8,6 +8,9 @@ import { anyProperty, ArtworkData, Interaction } from "../constants/perspectives
 //Packages
 import { useEffect, useState } from "react";
 
+import { WordCloudGraph } from "./WordCloudGraph";
+import { SingleTreeMap } from "./SingleTreeMap";
+
 const interactionBox: React.CSSProperties = {
     borderLeft: "1px solid var(--grayLineColor)",
     borderRight: "1px solid var(--grayLineColor)",
@@ -74,11 +77,10 @@ export const InteractionPanel = ({
                         "{interaction.feelings}"
                     </div>
                 </div>
-                <div className="row">
-                    <div style={{ overflowWrap: "anywhere" }}>
-                        <strong> Emotions:</strong>&nbsp;
-                        {shopiaToString(interaction.extracted_emotions)}
-                    </div>
+                <div>
+                    <strong> Makes me feel:</strong>
+                    {getEmotionsCloud(interaction.extracted_emotions)}
+                    {/* {shopiaToString(interaction.extracted_emotions)} */}
                 </div>
             </div>
         );
@@ -88,15 +90,26 @@ export const InteractionPanel = ({
         );
 };
 
-/**
- * Function to parse shopia emotions to a readable string. Currently does nothing but parsing its text to string
- * @param emotions shopia emotion results
- * @returns a string with the translation
- */
-function shopiaToString(emotions: anyProperty) {
-    if (emotions !== undefined) {
-        return JSON.stringify(emotions);
-    } else {
-        return "";
+
+function getEmotionsCloud(emotions: anyProperty) {
+    const array = [];
+    const keys = Object.keys(emotions);
+
+    for (let i = 0; i < keys.length; i++) {
+        array[i] = { value: keys[i], count: emotions[keys[i]] };
     }
+
+    return (
+        <div>
+            <span style={{
+                  height: "10px",
+                  display: "block",
+            }}/>
+            <WordCloudGraph
+                data={array}
+            />
+            <SingleTreeMap
+                data={array}
+            />
+        </div>);
 }

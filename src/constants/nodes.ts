@@ -37,8 +37,8 @@ export interface DimAttribute {
 export const nodeConst = {
 
     //--- Node circular location Values ---
-    groupsBaseDistance: 75,
-    betweenNodesDistance: 9,
+    groupsBaseDistance: 40,
+    betweenNodesDistance: 8,
 
     //--- Default Configuration Values ---
     zoomDuration: 400,

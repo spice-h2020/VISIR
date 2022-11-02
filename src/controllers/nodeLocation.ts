@@ -54,7 +54,7 @@ export default class NodeLocation {
      * @returns returns an array with the center poin of each partition
      */
     createNetworkPartitions(nUsers: number, nAreas: number): Point[] {
-        const partitionsDistance = nodeConst.groupsBaseDistance * nUsers / 45;
+        const partitionsDistance = nUsers + nodeConst.groupsBaseDistance + (nAreas*4);
         const pi2 = (2 * Math.PI);
 
         //Separate the network area in as many angle slices as necesary

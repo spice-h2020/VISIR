@@ -6,7 +6,7 @@
 /**
  * Interface that allows to add any (key:string -> value:any) property to an object of this type 
  */
- export interface anyProperty extends Record<string, any> { }
+export interface anyProperty extends Record<string, any> { }
 
 /**
  * Class that contains all the information of a perspective, including its details from the All perspectives file and its data from the own perspective file.
@@ -78,9 +78,23 @@ export interface PerspectiveData {
 export interface CommunityData extends anyProperty {
     id: string;
     name: string;
-    explanation: string;
+    explanations: CommExplanation[];
     users: string[];
     explicitCommunity: anyProperty;
+}
+
+export enum ExplanationTypes {
+    explicit_attributes,
+    medioid
+}
+
+/**
+ * Community explanation for visualization purpouses
+ */
+export interface CommExplanation extends anyProperty {
+    explanation_type: ExplanationTypes;
+    explanation_data: anyProperty;
+    visible: boolean;
 }
 
 /**
@@ -97,7 +111,7 @@ export interface UserData extends anyProperty {
 /**
  * Interface of the data of a user interaction.
  */
- export interface Interaction extends anyProperty {
+export interface Interaction extends anyProperty {
     artwork_id: string;
     feelings: string;
     extracted_emotions: anyProperty;
@@ -116,7 +130,7 @@ export interface EdgeData extends anyProperty {
 /**
  * Interface of the data of an artwork.
  */
- export interface ArtworkData {
+export interface ArtworkData {
     id: string;
     tittle: string;
     author: string;

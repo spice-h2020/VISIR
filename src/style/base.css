@@ -237,6 +237,10 @@ body {
     border-radius: 0px 0px 10px 10px;
 }
 
+.accordion-menu:last-child:first-child .btn-accordion {
+    border-radius: 10px;
+}
+
 /* Button that toggles an option from the legend */
 .btn-legend.active {
     color: black;

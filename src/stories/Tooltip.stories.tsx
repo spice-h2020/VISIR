@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Tooltip } from '../basicComponents/Tooltip';
 import { SelectedObject } from '../constants/auxTypes';
-import { CommunityData, UserData } from '../constants/perspectivesTypes';
+import { CommunityData, ExplanationTypes, UserData } from '../constants/perspectivesTypes';
 
 import '../style/base.css';
 
@@ -36,7 +36,12 @@ export const commExample = Template.bind({});
 const comm: CommunityData = {
   id: "0",
   name: 'Community 1',
-  explanation: "Representative Properties: {'Artefacts collected': 'Fiskars scissors, Pehtoori, Cast Iron Pot, Stool60, Pastille chair'}",
+  explanations: [{
+    explanation_type: ExplanationTypes.explicit_attributes,
+    explanation_data: {},
+    visible: true,
+  },
+  ],
   users: [],
   explicitCommunity: {}
 
