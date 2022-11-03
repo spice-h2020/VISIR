@@ -3,6 +3,8 @@
  * @author Marco Expósito Pérez
  */
 
+import { Dimensions } from "./nodes";
+
 /**
  * Interface that allows to add any (key:string -> value:any) property to an object of this type 
  */
@@ -80,12 +82,20 @@ export interface CommunityData extends anyProperty {
     name: string;
     explanations: CommExplanation[];
     users: string[];
-    explicitCommunity: anyProperty;
+
+    explicitCommunityMap: Map<string, ExplicitCommData>;
+    explicitCommunityArray?: [string, ExplicitCommData][];
+}
+
+export interface ExplicitCommData {
+    map: Map<string, number>;
+    array?: [string, number][];
+    dimension?: Dimensions;
 }
 
 export enum ExplanationTypes {
     explicit_attributes,
-    medioid
+    medoid
 }
 
 /**

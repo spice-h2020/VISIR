@@ -83,8 +83,8 @@ export default class NodeLocation {
     updateNodeGroup(node: UserData, communities: CommunityData[]) {
         const group = node.implicit_community;
 
-        const medioid_expl = communities[group].explanations.find((value) => { return value.explanation_type === ExplanationTypes.medioid });
-        if (medioid_expl !== undefined && medioid_expl.visible && medioid_expl.explanation_data.id == node.id) {
+        const medioid_expl = communities[group].explanations.find((value) => { return value.explanation_type === ExplanationTypes.medoid });
+        if (medioid_expl !== undefined && medioid_expl.visible && medioid_expl.explanation_data.id === Number(node.id)) {
 
             node.medioid = true;
 

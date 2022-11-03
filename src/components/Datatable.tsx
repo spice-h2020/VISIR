@@ -194,11 +194,11 @@ function getCommunityExplanation(communityData: CommunityData, explanation: Expl
             case ExplanationTypes.explicit_attributes: {
                 return getStackedBars(communityData);
             }
-            case ExplanationTypes.medioid: {
-                
-                const medioid = allUsers.find( (value) => {return value.id == explanation.explanation_data.id});
+            case ExplanationTypes.medoid: {
 
-                return (getNodePanel("Medioid Attributes", medioid, hideLabel));
+                const medioid = allUsers.find((value) => { return Number(value.id) === explanation.explanation_data.id });
+
+                return (getNodePanel("Medoid Attributes", medioid, hideLabel));
             }
             default: {
                 console.log("Unrecognized explanation type");
@@ -213,21 +213,20 @@ function getCommunityExplanation(communityData: CommunityData, explanation: Expl
  * @returns a react component array with the community's stacked bar.
  */
 function getStackedBars(community: CommunityData) {
-    const content = new Array();
-    const explicitCommunityKeys = Object.keys(community.explicitCommunity)
+    let content: React.ReactNode[] = new Array<React.ReactNode>();
 
-    for (let i = 0; i < explicitCommunityKeys.length; i++) {
-        const key = explicitCommunityKeys[i];
+    if (community.explicitCommunityArray !== undefined) {
 
-        const pairs = community.explicitCommunity[key][0];
+        for (let i = 0; i < community.explicitCommunityArray.length; i++) {
+            content.push(
+                <StackedBarGraph
+                    key={i}
+                    tittle={community.explicitCommunityArray[i][0]}
+                    commData={community.explicitCommunityArray[i][1]}
+                />
+            );
 
-        content.push(
-            <StackedBarGraph
-                key={i}
-                tittle={key}
-                pairs={pairs}
-            />
-        );
+        }
     }
 
     return content;
