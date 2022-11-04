@@ -87,18 +87,6 @@ export const App = ({
     setAllPerspectivesIds(newIds);
   }
 
-  useEffect(() => {
-    console.log(allPerspectivesIds);
-  }, [allPerspectivesIds]);
-
-  useEffect(() => {
-    console.log(leftPerspective);
-  }, [leftPerspective]);
-
-  useEffect(() => {
-    console.log(rightPerspective);
-  }, [rightPerspective]);
-
   return (
     <div>
       <Navbar
