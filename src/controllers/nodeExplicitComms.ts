@@ -3,7 +3,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { CommunityData, UserData } from "../constants/perspectivesTypes";
+import { CommExplanation, CommunityData, ExplanationTypes, ExplicitCommData, UserData } from "../constants/perspectivesTypes";
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
@@ -33,6 +33,10 @@ export default class NodeExplicitComms {
      * Data of all communities
      */
     communitiesData: CommunityData[];
+    /**
+     * ID of all medoid nodes
+     */
+    medoidNodes: string[];
 
     /**
      * Constructor of the class
@@ -42,6 +46,16 @@ export default class NodeExplicitComms {
         this.explicitData = new Array<ExplicitData>();
 
         this.communitiesData = communitiesData;
+        this.medoidNodes = [];
+
+        this.communitiesData.forEach((comm: CommunityData) => {
+            comm.explanations.forEach((expl: CommExplanation) => {
+                if (expl.explanation_type === ExplanationTypes.medoid && expl.explanation_data.id !== undefined) {
+                    this.medoidNodes.push( (expl.explanation_data.id).toString());
+                }
+            })
+        });
+
     }
 
     /**
@@ -58,8 +72,23 @@ export default class NodeExplicitComms {
                 this.updateExplicitData(key, node);
             }
 
+            node.isMedoid = this.medoidNodes.includes(node.id);
+
             this.updateCommunitiesData(key, node);
         });
+    }
+
+    isMedoid(id: string) {
+
+        this.communitiesData.forEach((comm: CommunityData) => {
+            comm.explanations.forEach((expl: CommExplanation) => {
+                if (expl.explanation_type === ExplanationTypes.medoid && expl.explanation_data.id === id) {
+                    return true;
+                }
+            })
+        });
+
+        return false;
     }
 
     /**
@@ -90,23 +119,48 @@ export default class NodeExplicitComms {
      * @param node source node
      */
     updateCommunitiesData(key: string, node: UserData) {
+
         const group = node.implicit_community;
 
-        if (this.communitiesData[group].explicitCommunity === undefined) {
-            this.communitiesData[group].explicitCommunity = {};
-            this.communitiesData[group].explicitCommunity[key] = new Map<string, number>();
-            this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
+        //Check if the parent map is defined
+        if (this.communitiesData[group].explicitCommunityMap === undefined) {
+            //Create the parent map
+            this.communitiesData[group].explicitCommunityMap = new Map<string, ExplicitCommData>();
 
-        } else if (this.communitiesData[group].explicitCommunity[key] === undefined) {
-            this.communitiesData[group].explicitCommunity[key] = new Map<string, number>();
-            this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
+            //Define the child map of this key
+            const newValue = new Map<string, number>();
+            newValue.set(node.explicit_community[key], 1);
+
+            //Include the new child map in the parent map
+            this.communitiesData[group].explicitCommunityMap.set(key, { map: newValue });
+
         } else {
-            const currentNumber = this.communitiesData[group].explicitCommunity[key].get(node.explicit_community[key]);
 
-            if (currentNumber === undefined) {
-                this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], 1);
+            //Check if the current key has a value in the parent map
+            const currentComm = this.communitiesData[group].explicitCommunityMap.get(key);
+
+            if (currentComm !== undefined) {
+                //Check if the child map of the current key includes this value
+                let currentValue = currentComm.map.get(node.explicit_community[key]);
+
+                if (currentValue !== undefined) {
+                    //Update the count in the child map
+                    let currentCount = currentComm.map.get(node.explicit_community[key]);
+                    if (currentCount !== undefined)
+                        currentComm.map.set(node.explicit_community[key], ++currentCount);
+
+                } else {
+                    //Include the new value in the child map
+                    currentComm.map.set(node.explicit_community[key], 1);
+                }
             } else {
-                this.communitiesData[group].explicitCommunity[key].set(node.explicit_community[key], currentNumber + 1);
+
+                //Define the child map of this key
+                const newValue = new Map<string, number>();
+                newValue.set(node.explicit_community[key], 1);
+
+                //Include the new child map in the parent map
+                this.communitiesData[group].explicitCommunityMap.set(key, { map: newValue });
             }
         }
     }
@@ -117,23 +171,23 @@ export default class NodeExplicitComms {
      */
     calcExplicitPercentile(dimStrat: NodeDimensionStrategy) {
         for (let community of this.communitiesData) {
-            const explicitCommunityKeys = Object.keys(community.explicitCommunity)
+            community.explicitCommunityMap.forEach(function (parentValue, key) {
 
-            for (let i = 0; i < explicitCommunityKeys.length; i++) {
-                const key = explicitCommunityKeys[i];
-
-                const array = new Array();
-                for (const pair of community.explicitCommunity[key]) {
-                    array.push([pair[0], parseFloat(((pair[1] / community.users.length) * 100).toFixed(1))]);
-                }
-
-                array.sort((a: any[], b: any[]) => {
-                    if (a[1] < b[1]) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
+                //Change the count to percentile
+                parentValue.map.forEach(function (value, key) {
+                    let newValue = Math.round((value / community.users.length) * 100);
+                    parentValue.map.set(key, newValue);
                 });
+
+                //Sort the map
+                parentValue.array = Array.from(parentValue.map).sort(
+                    (a: [string, number], b: [string, number]) => {
+                        if (a[1] > b[1])
+                            return -1;
+                        else
+                            return 1;
+                    }
+                );
 
                 const dimension = dimStrat.strategies.filter((strat) => {
                     if (strat !== undefined && strat.attr !== undefined && strat.attr.key !== undefined)
@@ -141,8 +195,10 @@ export default class NodeExplicitComms {
                     else return false;
                 });
 
-                community.explicitCommunity[key] = [array, dimension === undefined ? undefined : dimension[0].attr.dimension];
-            }
+                parentValue.dimension = dimension === undefined ? undefined : dimension[0].attr.dimension;
+            })
+            community.explicitCommunityArray = Array.from(community.explicitCommunityMap);
         }
     }
+
 }

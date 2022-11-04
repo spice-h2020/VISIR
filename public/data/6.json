@@ -2,6 +2,7 @@
     "communities": [
         {
             "id": "0",
+            "community-type": "implicit",
             "name": "Community 0",
             "explanations":[
                 {
@@ -10,7 +11,112 @@
                     "visible": true
                 },
                 {
-                    "explanation_type": "medioid",
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": 11
+                    },
+                    "visible": true
+                }
+            ],
+            "users": [
+                "6",
+                "11",
+                "17",
+                "18",
+                "24",
+                "25",
+                "30",
+                "37",
+                "39",
+                "41",
+                "44",
+                "45",
+                "54",
+                "58",
+                "61",
+                "63",
+                "64",
+                "66",
+                "68",
+                "74",
+                "75",
+                "82",
+                "84",
+                "87",
+                "90",
+                "96",
+                "97",
+                "105",
+                "113",
+                "114",
+                "115",
+                "117",
+                "118",
+                "126"
+            ]
+        },
+        {
+            "id": "1",
+            "community-type": "implicit",
+            "name": "Community 1",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": 76
+                    },
+                    "visible": true
+                }
+            ],
+            "users": [
+                "76"
+            ]
+        },
+        {
+            "id": "2",
+            "community-type": "implicit",
+            "name": "Community 2",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": 72
+                    },
+                    "visible": true
+                }
+            ],
+            "users": [
+                "9",
+                "72",
+                "81",
+                "85",
+                "89",
+                "92",
+                "124"
+            ]
+        },
+        {
+            "id": "3",
+            "community-type": "implicit",
+            "name": "Community 3",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medoid",
                     "explanation_data": {
                         "id": 7
                     },
@@ -20,35 +126,44 @@
             "users": [
                 "7",
                 "8",
+                "12",
                 "13",
-                "17",
+                "14",
+                "15",
+                "16",
+                "19",
+                "20",
+                "21",
+                "23",
                 "28",
                 "29",
+                "31",
                 "32",
                 "34",
                 "35",
-                "37",
-                "39",
-                "45",
-                "58",
+                "36",
                 "65",
+                "69",
                 "70",
                 "71",
-                "72",
-                "74",
-                "75",
+                "73",
                 "77",
                 "78",
-                "84",
-                "87",
+                "79",
+                "80",
+                "91",
+                "93",
                 "94",
-                "96",
-                "97",
                 "98",
                 "99",
+                "101",
                 "102",
+                "104",
+                "106",
                 "107",
-                "114",
+                "108",
+                "109",
+                "110",
                 "116",
                 "120",
                 "121",
@@ -56,117 +171,8 @@
             ]
         },
         {
-            "id": "1",
-            "name": "Community 1",
-            "explanations":[
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                },
-                {
-                    "explanation_type": "medioid",
-                    "explanation_data": {
-                        "id": 5
-                    },
-                    "visible": true
-                }
-            ],
-            "users": [
-                "5",
-                "6",
-                "9",
-                "12",
-                "14",
-                "15",
-                "18",
-                "19",
-                "20",
-                "21",
-                "23",
-                "24",
-                "25",
-                "26",
-                "30",
-                "31",
-                "36",
-                "41",
-                "54",
-                "61",
-                "63",
-                "68",
-                "69",
-                "73",
-                "79",
-                "80",
-                "81",
-                "82",
-                "85",
-                "89",
-                "92",
-                "93",
-                "101",
-                "103",
-                "104",
-                "105",
-                "106",
-                "109",
-                "110",
-                "112",
-                "115",
-                "117",
-                "118",
-                "122",
-                "124",
-                "126"
-            ]
-        },
-        {
-            "id": "2",
-            "name": "Community 2",
-            "explanations":[
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                },
-                {
-                    "explanation_type": "medioid",
-                    "explanation_data": {
-                        "id": 91
-                    },
-                    "visible": false
-                }
-            ],
-            "users": [
-                "91"
-            ]
-        },
-        {
-            "id": "3",
-            "name": "Community 3",
-            "explanations":[
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                },
-                {
-                    "explanation_type": "medioid",
-                    "explanation_data": {
-                        "id": 27
-                    },
-                    "visible": true
-                }
-            ],
-            "users": [
-                "27",
-                "88",
-                "95"
-            ]
-        },
-        {
             "id": "4",
+            "community-type": "implicit",
             "name": "Community 4",
             "explanations":[
                 {
@@ -175,26 +181,67 @@
                     "visible": true
                 },
                 {
-                    "explanation_type": "medioid",
+                    "explanation_type": "medoid",
                     "explanation_data": {
-                        "id": 90
+                        "id": 95
                     },
                     "visible": true
                 }
             ],
             "users": [
-                "11",
-                "16",
-                "44",
-                "64",
-                "66",
                 "67",
-                "76",
-                "90",
-                "108",
+                "95",
                 "111",
-                "113",
                 "119"
+            ]
+        },
+        {
+            "id": "5",
+            "community-type": "implicit",
+            "name": "Community 5",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": 27
+                    },
+                    "visible": true
+                }
+            ],
+            "users": [
+                "26",
+                "27",
+                "88"
+            ]
+        },
+        {
+            "id": "6",
+            "community-type": "implicit",
+            "name": "Community 6",
+            "explanations":[
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                },
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": 103
+                    },
+                    "visible": true
+                }
+            ],
+            "users": [
+                "5",
+                "103",
+                "112",
+                "122"
             ]
         }
     ],
@@ -202,7 +249,7 @@
         {
             "id": "5",
             "label": "5",
-            "group": 1,
+            "group": 6,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -232,7 +279,7 @@
         {
             "id": "6",
             "label": "6",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -266,7 +313,7 @@
         {
             "id": "7",
             "label": "7",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -290,7 +337,7 @@
         {
             "id": "8",
             "label": "8",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "",
                 "language": "EN"
@@ -308,7 +355,7 @@
         {
             "id": "9",
             "label": "9",
-            "group": 1,
+            "group": 2,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -326,7 +373,7 @@
         {
             "id": "11",
             "label": "11",
-            "group": 4,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -344,7 +391,7 @@
         {
             "id": "12",
             "label": "12",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -363,7 +410,7 @@
         {
             "id": "13",
             "label": "13",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -381,7 +428,7 @@
         {
             "id": "14",
             "label": "14",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "EN"
@@ -397,7 +444,7 @@
         {
             "id": "15",
             "label": "15",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "EN"
@@ -413,7 +460,7 @@
         {
             "id": "16",
             "label": "16",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "elderly",
                 "language": "EN"
@@ -445,7 +492,7 @@
         {
             "id": "18",
             "label": "18",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -461,7 +508,7 @@
         {
             "id": "19",
             "label": "19",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -477,7 +524,7 @@
         {
             "id": "20",
             "label": "20",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -493,7 +540,7 @@
         {
             "id": "21",
             "label": "21",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -509,7 +556,7 @@
         {
             "id": "23",
             "label": "23",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "EN"
@@ -525,7 +572,7 @@
         {
             "id": "24",
             "label": "24",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -541,7 +588,7 @@
         {
             "id": "25",
             "label": "25",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -557,7 +604,7 @@
         {
             "id": "26",
             "label": "26",
-            "group": 1,
+            "group": 5,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -573,7 +620,7 @@
         {
             "id": "27",
             "label": "27",
-            "group": 3,
+            "group": 5,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -589,7 +636,7 @@
         {
             "id": "28",
             "label": "28",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -605,7 +652,7 @@
         {
             "id": "29",
             "label": "29",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -621,7 +668,7 @@
         {
             "id": "30",
             "label": "30",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -637,7 +684,7 @@
         {
             "id": "31",
             "label": "31",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "",
                 "language": "EN"
@@ -653,7 +700,7 @@
         {
             "id": "32",
             "label": "32",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -669,7 +716,7 @@
         {
             "id": "34",
             "label": "34",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -685,7 +732,7 @@
         {
             "id": "35",
             "label": "35",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -701,7 +748,7 @@
         {
             "id": "36",
             "label": "36",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "EN"
@@ -749,7 +796,7 @@
         {
             "id": "41",
             "label": "41",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "ES"
@@ -765,7 +812,7 @@
         {
             "id": "44",
             "label": "44",
-            "group": 4,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "ES"
@@ -797,7 +844,7 @@
         {
             "id": "54",
             "label": "54",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "FI"
@@ -829,7 +876,7 @@
         {
             "id": "61",
             "label": "61",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "",
                 "language": "FI"
@@ -845,7 +892,7 @@
         {
             "id": "63",
             "label": "63",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -861,7 +908,7 @@
         {
             "id": "64",
             "label": "64",
-            "group": 4,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -877,7 +924,7 @@
         {
             "id": "65",
             "label": "65",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -893,7 +940,7 @@
         {
             "id": "66",
             "label": "66",
-            "group": 4,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -925,7 +972,7 @@
         {
             "id": "68",
             "label": "68",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "elderly",
                 "language": "HE"
@@ -941,7 +988,7 @@
         {
             "id": "69",
             "label": "69",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -957,7 +1004,7 @@
         {
             "id": "70",
             "label": "70",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -973,7 +1020,7 @@
         {
             "id": "71",
             "label": "71",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -989,7 +1036,7 @@
         {
             "id": "72",
             "label": "72",
-            "group": 0,
+            "group": 2,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -1005,7 +1052,7 @@
         {
             "id": "73",
             "label": "73",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -1053,7 +1100,7 @@
         {
             "id": "76",
             "label": "76",
-            "group": 4,
+            "group": 1,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -1069,7 +1116,7 @@
         {
             "id": "77",
             "label": "77",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -1085,7 +1132,7 @@
         {
             "id": "78",
             "label": "78",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -1101,7 +1148,7 @@
         {
             "id": "79",
             "label": "79",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -1117,7 +1164,7 @@
         {
             "id": "80",
             "label": "80",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -1133,7 +1180,7 @@
         {
             "id": "81",
             "label": "81",
-            "group": 1,
+            "group": 2,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -1149,7 +1196,7 @@
         {
             "id": "82",
             "label": "82",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -1181,7 +1228,7 @@
         {
             "id": "85",
             "label": "85",
-            "group": 1,
+            "group": 2,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -1213,7 +1260,7 @@
         {
             "id": "88",
             "label": "88",
-            "group": 3,
+            "group": 5,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -1229,7 +1276,7 @@
         {
             "id": "89",
             "label": "89",
-            "group": 1,
+            "group": 2,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -1245,7 +1292,7 @@
         {
             "id": "90",
             "label": "90",
-            "group": 4,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -1261,7 +1308,7 @@
         {
             "id": "91",
             "label": "91",
-            "group": 2,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "HE"
@@ -1277,7 +1324,7 @@
         {
             "id": "92",
             "label": "92",
-            "group": 1,
+            "group": 2,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "HE"
@@ -1293,7 +1340,7 @@
         {
             "id": "93",
             "label": "93",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1309,7 +1356,7 @@
         {
             "id": "94",
             "label": "94",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "IT"
@@ -1325,7 +1372,7 @@
         {
             "id": "95",
             "label": "95",
-            "group": 3,
+            "group": 4,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1373,7 +1420,7 @@
         {
             "id": "98",
             "label": "98",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1389,7 +1436,7 @@
         {
             "id": "99",
             "label": "99",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1405,7 +1452,7 @@
         {
             "id": "101",
             "label": "101",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "IT"
@@ -1421,7 +1468,7 @@
         {
             "id": "102",
             "label": "102",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "elderly",
                 "language": "IT"
@@ -1437,7 +1484,7 @@
         {
             "id": "103",
             "label": "103",
-            "group": 1,
+            "group": 6,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1453,7 +1500,7 @@
         {
             "id": "104",
             "label": "104",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1469,7 +1516,7 @@
         {
             "id": "105",
             "label": "105",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1485,7 +1532,7 @@
         {
             "id": "106",
             "label": "106",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1501,7 +1548,7 @@
         {
             "id": "107",
             "label": "107",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "IT"
@@ -1517,7 +1564,7 @@
         {
             "id": "108",
             "label": "108",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1533,7 +1580,7 @@
         {
             "id": "109",
             "label": "109",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "IT"
@@ -1549,7 +1596,7 @@
         {
             "id": "110",
             "label": "110",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1581,7 +1628,7 @@
         {
             "id": "112",
             "label": "112",
-            "group": 1,
+            "group": 6,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1597,7 +1644,7 @@
         {
             "id": "113",
             "label": "113",
-            "group": 4,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "IT"
@@ -1629,7 +1676,7 @@
         {
             "id": "115",
             "label": "115",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1645,7 +1692,7 @@
         {
             "id": "116",
             "label": "116",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1661,7 +1708,7 @@
         {
             "id": "117",
             "label": "117",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1677,7 +1724,7 @@
         {
             "id": "118",
             "label": "118",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "elderly",
                 "language": "IT"
@@ -1709,7 +1756,7 @@
         {
             "id": "120",
             "label": "120",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "IT"
@@ -1725,7 +1772,7 @@
         {
             "id": "121",
             "label": "121",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1741,7 +1788,7 @@
         {
             "id": "122",
             "label": "122",
-            "group": 1,
+            "group": 6,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1757,7 +1804,7 @@
         {
             "id": "123",
             "label": "123",
-            "group": 0,
+            "group": 3,
             "explicit_community": {
                 "ageGroup": "young",
                 "language": "IT"
@@ -1773,7 +1820,7 @@
         {
             "id": "124",
             "label": "124",
-            "group": 1,
+            "group": 2,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1789,7 +1836,7 @@
         {
             "id": "126",
             "label": "126",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "ageGroup": "adult",
                 "language": "IT"
@@ -1822,7 +1869,7 @@
         {
             "u1": "5",
             "u2": "9",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "5",
@@ -1832,7 +1879,7 @@
         {
             "u1": "5",
             "u2": "12",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "5",
@@ -1847,7 +1894,7 @@
         {
             "u1": "5",
             "u2": "15",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "5",
@@ -1867,7 +1914,7 @@
         {
             "u1": "5",
             "u2": "19",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
@@ -1892,7 +1939,7 @@
         {
             "u1": "5",
             "u2": "25",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "5",
@@ -1907,7 +1954,7 @@
         {
             "u1": "5",
             "u2": "28",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "5",
@@ -1922,12 +1969,12 @@
         {
             "u1": "5",
             "u2": "31",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
             "u2": "32",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "5",
@@ -1942,7 +1989,7 @@
         {
             "u1": "5",
             "u2": "36",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
@@ -1957,7 +2004,7 @@
         {
             "u1": "5",
             "u2": "41",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "5",
@@ -2037,7 +2084,7 @@
         {
             "u1": "5",
             "u2": "73",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "5",
@@ -2047,7 +2094,7 @@
         {
             "u1": "5",
             "u2": "75",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "5",
@@ -2082,7 +2129,7 @@
         {
             "u1": "5",
             "u2": "82",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
@@ -2097,12 +2144,12 @@
         {
             "u1": "5",
             "u2": "87",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
             "u2": "88",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "5",
@@ -2127,7 +2174,7 @@
         {
             "u1": "5",
             "u2": "93",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
@@ -2137,7 +2184,7 @@
         {
             "u1": "5",
             "u2": "95",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "5",
@@ -2152,12 +2199,12 @@
         {
             "u1": "5",
             "u2": "98",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "5",
             "u2": "99",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "5",
@@ -2177,7 +2224,7 @@
         {
             "u1": "5",
             "u2": "104",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "5",
@@ -2192,7 +2239,7 @@
         {
             "u1": "5",
             "u2": "107",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "5",
@@ -2202,7 +2249,7 @@
         {
             "u1": "5",
             "u2": "109",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
@@ -2212,12 +2259,12 @@
         {
             "u1": "5",
             "u2": "111",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "5",
             "u2": "112",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "5",
@@ -2232,7 +2279,7 @@
         {
             "u1": "5",
             "u2": "115",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
@@ -2262,12 +2309,12 @@
         {
             "u1": "5",
             "u2": "121",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "5",
             "u2": "122",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "5",
@@ -2292,7 +2339,7 @@
         {
             "u1": "6",
             "u2": "8",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "6",
@@ -2312,7 +2359,7 @@
         {
             "u1": "6",
             "u2": "13",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "6",
@@ -2332,12 +2379,12 @@
         {
             "u1": "6",
             "u2": "17",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "6",
             "u2": "18",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "6",
@@ -2382,7 +2429,7 @@
         {
             "u1": "6",
             "u2": "28",
-            "value": 0.42
+            "value": 0.43
         },
         {
             "u1": "6",
@@ -2417,7 +2464,7 @@
         {
             "u1": "6",
             "u2": "36",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "6",
@@ -2432,7 +2479,7 @@
         {
             "u1": "6",
             "u2": "41",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "6",
@@ -2482,7 +2529,7 @@
         {
             "u1": "6",
             "u2": "67",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "6",
@@ -2497,7 +2544,7 @@
         {
             "u1": "6",
             "u2": "70",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "6",
@@ -2512,7 +2559,7 @@
         {
             "u1": "6",
             "u2": "73",
-            "value": 0.6
+            "value": 0.61
         },
         {
             "u1": "6",
@@ -2542,7 +2589,7 @@
         {
             "u1": "6",
             "u2": "79",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "6",
@@ -2652,7 +2699,7 @@
         {
             "u1": "6",
             "u2": "104",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "6",
@@ -2682,7 +2729,7 @@
         {
             "u1": "6",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "6",
@@ -2702,17 +2749,17 @@
         {
             "u1": "6",
             "u2": "114",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "6",
             "u2": "115",
-            "value": 0.78
+            "value": 0.79
         },
         {
             "u1": "6",
             "u2": "116",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "6",
@@ -2727,7 +2774,7 @@
         {
             "u1": "6",
             "u2": "119",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "6",
@@ -2747,12 +2794,12 @@
         {
             "u1": "6",
             "u2": "123",
-            "value": 0.7
+            "value": 0.71
         },
         {
             "u1": "6",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "6",
@@ -2762,7 +2809,7 @@
         {
             "u1": "7",
             "u2": "8",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "7",
@@ -2782,7 +2829,7 @@
         {
             "u1": "7",
             "u2": "13",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "7",
@@ -2827,7 +2874,7 @@
         {
             "u1": "7",
             "u2": "23",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "7",
@@ -3032,7 +3079,7 @@
         {
             "u1": "7",
             "u2": "84",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "7",
@@ -3162,7 +3209,7 @@
         {
             "u1": "7",
             "u2": "112",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "7",
@@ -3217,7 +3264,7 @@
         {
             "u1": "7",
             "u2": "123",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "7",
@@ -3232,7 +3279,7 @@
         {
             "u1": "8",
             "u2": "9",
-            "value": 0.45
+            "value": 0.46
         },
         {
             "u1": "8",
@@ -3282,7 +3329,7 @@
         {
             "u1": "8",
             "u2": "20",
-            "value": 0.6
+            "value": 0.61
         },
         {
             "u1": "8",
@@ -3292,7 +3339,7 @@
         {
             "u1": "8",
             "u2": "23",
-            "value": 0.7
+            "value": 0.71
         },
         {
             "u1": "8",
@@ -3322,7 +3369,7 @@
         {
             "u1": "8",
             "u2": "29",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "8",
@@ -3332,12 +3379,12 @@
         {
             "u1": "8",
             "u2": "31",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "8",
             "u2": "32",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "8",
@@ -3367,7 +3414,7 @@
         {
             "u1": "8",
             "u2": "41",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "8",
@@ -3382,7 +3429,7 @@
         {
             "u1": "8",
             "u2": "54",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "8",
@@ -3512,7 +3559,7 @@
         {
             "u1": "8",
             "u2": "88",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "8",
@@ -3607,7 +3654,7 @@
         {
             "u1": "8",
             "u2": "108",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "8",
@@ -3632,7 +3679,7 @@
         {
             "u1": "8",
             "u2": "113",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "8",
@@ -3642,7 +3689,7 @@
         {
             "u1": "8",
             "u2": "115",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "8",
@@ -3662,7 +3709,7 @@
         {
             "u1": "8",
             "u2": "119",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "8",
@@ -3672,12 +3719,12 @@
         {
             "u1": "8",
             "u2": "121",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "8",
             "u2": "122",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "8",
@@ -3687,7 +3734,7 @@
         {
             "u1": "8",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "8",
@@ -3707,7 +3754,7 @@
         {
             "u1": "9",
             "u2": "13",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "9",
@@ -3752,7 +3799,7 @@
         {
             "u1": "9",
             "u2": "23",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "9",
@@ -3767,7 +3814,7 @@
         {
             "u1": "9",
             "u2": "26",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "9",
@@ -3777,12 +3824,12 @@
         {
             "u1": "9",
             "u2": "28",
-            "value": 0.35
+            "value": 0.36
         },
         {
             "u1": "9",
             "u2": "29",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "9",
@@ -3797,7 +3844,7 @@
         {
             "u1": "9",
             "u2": "32",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "9",
@@ -3807,7 +3854,7 @@
         {
             "u1": "9",
             "u2": "35",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "9",
@@ -3827,7 +3874,7 @@
         {
             "u1": "9",
             "u2": "41",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "9",
@@ -3862,7 +3909,7 @@
         {
             "u1": "9",
             "u2": "64",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "9",
@@ -3872,7 +3919,7 @@
         {
             "u1": "9",
             "u2": "66",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "9",
@@ -3882,22 +3929,22 @@
         {
             "u1": "9",
             "u2": "68",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "9",
             "u2": "69",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "9",
             "u2": "70",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "9",
             "u2": "71",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "9",
@@ -3957,7 +4004,7 @@
         {
             "u1": "9",
             "u2": "84",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "9",
@@ -3972,7 +4019,7 @@
         {
             "u1": "9",
             "u2": "88",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "9",
@@ -3987,7 +4034,7 @@
         {
             "u1": "9",
             "u2": "91",
-            "value": 0.38
+            "value": 0.39
         },
         {
             "u1": "9",
@@ -4007,7 +4054,7 @@
         {
             "u1": "9",
             "u2": "95",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "9",
@@ -4097,7 +4144,7 @@
         {
             "u1": "9",
             "u2": "114",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "9",
@@ -4127,12 +4174,12 @@
         {
             "u1": "9",
             "u2": "120",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "9",
             "u2": "121",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "9",
@@ -4227,7 +4274,7 @@
         {
             "u1": "11",
             "u2": "27",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "11",
@@ -4332,7 +4379,7 @@
         {
             "u1": "11",
             "u2": "67",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "11",
@@ -4637,7 +4684,7 @@
         {
             "u1": "12",
             "u2": "18",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "12",
@@ -4682,7 +4729,7 @@
         {
             "u1": "12",
             "u2": "28",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "12",
@@ -4697,7 +4744,7 @@
         {
             "u1": "12",
             "u2": "31",
-            "value": 0.7
+            "value": 0.71
         },
         {
             "u1": "12",
@@ -4742,7 +4789,7 @@
         {
             "u1": "12",
             "u2": "45",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "12",
@@ -4782,7 +4829,7 @@
         {
             "u1": "12",
             "u2": "67",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "12",
@@ -4792,7 +4839,7 @@
         {
             "u1": "12",
             "u2": "69",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "12",
@@ -4802,7 +4849,7 @@
         {
             "u1": "12",
             "u2": "71",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "12",
@@ -4862,7 +4909,7 @@
         {
             "u1": "12",
             "u2": "84",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "12",
@@ -4932,12 +4979,12 @@
         {
             "u1": "12",
             "u2": "99",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "12",
             "u2": "101",
-            "value": 0.93
+            "value": 0.94
         },
         {
             "u1": "12",
@@ -4947,7 +4994,7 @@
         {
             "u1": "12",
             "u2": "103",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "12",
@@ -4962,7 +5009,7 @@
         {
             "u1": "12",
             "u2": "106",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "12",
@@ -4982,12 +5029,12 @@
         {
             "u1": "12",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "12",
             "u2": "111",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "12",
@@ -5017,7 +5064,7 @@
         {
             "u1": "12",
             "u2": "117",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "12",
@@ -5042,7 +5089,7 @@
         {
             "u1": "12",
             "u2": "122",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "12",
@@ -5072,7 +5119,7 @@
         {
             "u1": "13",
             "u2": "16",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "13",
@@ -5082,7 +5129,7 @@
         {
             "u1": "13",
             "u2": "18",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "13",
@@ -5092,7 +5139,7 @@
         {
             "u1": "13",
             "u2": "20",
-            "value": 0.7
+            "value": 0.71
         },
         {
             "u1": "13",
@@ -5117,7 +5164,7 @@
         {
             "u1": "13",
             "u2": "26",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "13",
@@ -5127,7 +5174,7 @@
         {
             "u1": "13",
             "u2": "28",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "13",
@@ -5137,7 +5184,7 @@
         {
             "u1": "13",
             "u2": "30",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "13",
@@ -5157,12 +5204,12 @@
         {
             "u1": "13",
             "u2": "35",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "13",
             "u2": "36",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "13",
@@ -5177,7 +5224,7 @@
         {
             "u1": "13",
             "u2": "41",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "13",
@@ -5227,7 +5274,7 @@
         {
             "u1": "13",
             "u2": "67",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "13",
@@ -5272,7 +5319,7 @@
         {
             "u1": "13",
             "u2": "76",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "13",
@@ -5287,7 +5334,7 @@
         {
             "u1": "13",
             "u2": "79",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "13",
@@ -5307,7 +5354,7 @@
         {
             "u1": "13",
             "u2": "84",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "13",
@@ -5337,7 +5384,7 @@
         {
             "u1": "13",
             "u2": "91",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "13",
@@ -5352,12 +5399,12 @@
         {
             "u1": "13",
             "u2": "94",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "13",
             "u2": "95",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "13",
@@ -5422,7 +5469,7 @@
         {
             "u1": "13",
             "u2": "109",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "13",
@@ -5442,17 +5489,17 @@
         {
             "u1": "13",
             "u2": "113",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "13",
             "u2": "114",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "13",
             "u2": "115",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "13",
@@ -5482,7 +5529,7 @@
         {
             "u1": "13",
             "u2": "121",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "13",
@@ -5492,12 +5539,12 @@
         {
             "u1": "13",
             "u2": "123",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "13",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "13",
@@ -5507,12 +5554,12 @@
         {
             "u1": "14",
             "u2": "15",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "14",
             "u2": "16",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "14",
@@ -5527,12 +5574,12 @@
         {
             "u1": "14",
             "u2": "19",
-            "value": 0.93
+            "value": 0.94
         },
         {
             "u1": "14",
             "u2": "20",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "14",
@@ -5547,12 +5594,12 @@
         {
             "u1": "14",
             "u2": "24",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
             "u2": "25",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "14",
@@ -5562,7 +5609,7 @@
         {
             "u1": "14",
             "u2": "27",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "14",
@@ -5582,12 +5629,12 @@
         {
             "u1": "14",
             "u2": "31",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
             "u2": "32",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "14",
@@ -5617,7 +5664,7 @@
         {
             "u1": "14",
             "u2": "41",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "14",
@@ -5652,7 +5699,7 @@
         {
             "u1": "14",
             "u2": "64",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
@@ -5662,12 +5709,12 @@
         {
             "u1": "14",
             "u2": "66",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
             "u2": "67",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
@@ -5677,7 +5724,7 @@
         {
             "u1": "14",
             "u2": "69",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
@@ -5697,7 +5744,7 @@
         {
             "u1": "14",
             "u2": "73",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "14",
@@ -5717,12 +5764,12 @@
         {
             "u1": "14",
             "u2": "77",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "14",
             "u2": "78",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "14",
@@ -5772,7 +5819,7 @@
         {
             "u1": "14",
             "u2": "90",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
@@ -5812,17 +5859,17 @@
         {
             "u1": "14",
             "u2": "98",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "14",
             "u2": "99",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "14",
             "u2": "101",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "14",
@@ -5842,7 +5889,7 @@
         {
             "u1": "14",
             "u2": "105",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "14",
@@ -5862,7 +5909,7 @@
         {
             "u1": "14",
             "u2": "109",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
@@ -5922,7 +5969,7 @@
         {
             "u1": "14",
             "u2": "121",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "14",
@@ -5942,7 +5989,7 @@
         {
             "u1": "14",
             "u2": "126",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "15",
@@ -5957,7 +6004,7 @@
         {
             "u1": "15",
             "u2": "18",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "15",
@@ -6012,12 +6059,12 @@
         {
             "u1": "15",
             "u2": "30",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "15",
             "u2": "31",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "15",
@@ -6027,7 +6074,7 @@
         {
             "u1": "15",
             "u2": "34",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "15",
@@ -6037,7 +6084,7 @@
         {
             "u1": "15",
             "u2": "36",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "15",
@@ -6052,7 +6099,7 @@
         {
             "u1": "15",
             "u2": "41",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "15",
@@ -6067,7 +6114,7 @@
         {
             "u1": "15",
             "u2": "54",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "15",
@@ -6122,7 +6169,7 @@
         {
             "u1": "15",
             "u2": "71",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "15",
@@ -6187,7 +6234,7 @@
         {
             "u1": "15",
             "u2": "85",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "15",
@@ -6207,7 +6254,7 @@
         {
             "u1": "15",
             "u2": "90",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "15",
@@ -6227,12 +6274,12 @@
         {
             "u1": "15",
             "u2": "94",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "15",
             "u2": "95",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "15",
@@ -6267,7 +6314,7 @@
         {
             "u1": "15",
             "u2": "103",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "15",
@@ -6302,12 +6349,12 @@
         {
             "u1": "15",
             "u2": "110",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "15",
             "u2": "111",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "15",
@@ -6317,12 +6364,12 @@
         {
             "u1": "15",
             "u2": "113",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "15",
             "u2": "114",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "15",
@@ -6332,12 +6379,12 @@
         {
             "u1": "15",
             "u2": "116",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "15",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "15",
@@ -6357,7 +6404,7 @@
         {
             "u1": "15",
             "u2": "121",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "15",
@@ -6422,12 +6469,12 @@
         {
             "u1": "16",
             "u2": "26",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "16",
             "u2": "27",
-            "value": 0.18
+            "value": 0.19
         },
         {
             "u1": "16",
@@ -6467,7 +6514,7 @@
         {
             "u1": "16",
             "u2": "36",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "16",
@@ -6552,7 +6599,7 @@
         {
             "u1": "16",
             "u2": "71",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "16",
@@ -6577,7 +6624,7 @@
         {
             "u1": "16",
             "u2": "76",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "16",
@@ -6592,7 +6639,7 @@
         {
             "u1": "16",
             "u2": "79",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "16",
@@ -6622,7 +6669,7 @@
         {
             "u1": "16",
             "u2": "87",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "16",
@@ -6642,7 +6689,7 @@
         {
             "u1": "16",
             "u2": "91",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "16",
@@ -6682,7 +6729,7 @@
         {
             "u1": "16",
             "u2": "99",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "16",
@@ -6697,7 +6744,7 @@
         {
             "u1": "16",
             "u2": "103",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "16",
@@ -6707,7 +6754,7 @@
         {
             "u1": "16",
             "u2": "105",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "16",
@@ -6722,7 +6769,7 @@
         {
             "u1": "16",
             "u2": "108",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "16",
@@ -6792,7 +6839,7 @@
         {
             "u1": "16",
             "u2": "122",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "16",
@@ -6842,7 +6889,7 @@
         {
             "u1": "17",
             "u2": "25",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "17",
@@ -6852,7 +6899,7 @@
         {
             "u1": "17",
             "u2": "27",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "17",
@@ -6872,12 +6919,12 @@
         {
             "u1": "17",
             "u2": "31",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "17",
             "u2": "32",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "17",
@@ -6892,7 +6939,7 @@
         {
             "u1": "17",
             "u2": "36",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "17",
@@ -7052,7 +7099,7 @@
         {
             "u1": "17",
             "u2": "88",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "17",
@@ -7062,7 +7109,7 @@
         {
             "u1": "17",
             "u2": "90",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "17",
@@ -7182,7 +7229,7 @@
         {
             "u1": "17",
             "u2": "115",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "17",
@@ -7207,7 +7254,7 @@
         {
             "u1": "17",
             "u2": "120",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "17",
@@ -7227,7 +7274,7 @@
         {
             "u1": "17",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "17",
@@ -7237,7 +7284,7 @@
         {
             "u1": "18",
             "u2": "19",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "18",
@@ -7262,7 +7309,7 @@
         {
             "u1": "18",
             "u2": "25",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "18",
@@ -7272,7 +7319,7 @@
         {
             "u1": "18",
             "u2": "27",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "18",
@@ -7292,7 +7339,7 @@
         {
             "u1": "18",
             "u2": "31",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "18",
@@ -7362,7 +7409,7 @@
         {
             "u1": "18",
             "u2": "64",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "18",
@@ -7372,12 +7419,12 @@
         {
             "u1": "18",
             "u2": "66",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "18",
             "u2": "67",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "18",
@@ -7387,7 +7434,7 @@
         {
             "u1": "18",
             "u2": "69",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "18",
@@ -7407,7 +7454,7 @@
         {
             "u1": "18",
             "u2": "73",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "18",
@@ -7427,7 +7474,7 @@
         {
             "u1": "18",
             "u2": "77",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "18",
@@ -7452,7 +7499,7 @@
         {
             "u1": "18",
             "u2": "82",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "18",
@@ -7497,7 +7544,7 @@
         {
             "u1": "18",
             "u2": "93",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "18",
@@ -7572,7 +7619,7 @@
         {
             "u1": "18",
             "u2": "109",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "18",
@@ -7597,12 +7644,12 @@
         {
             "u1": "18",
             "u2": "114",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "18",
             "u2": "115",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "18",
@@ -7632,7 +7679,7 @@
         {
             "u1": "18",
             "u2": "121",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "18",
@@ -7652,7 +7699,7 @@
         {
             "u1": "18",
             "u2": "126",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "19",
@@ -7672,7 +7719,7 @@
         {
             "u1": "19",
             "u2": "24",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "19",
@@ -7702,7 +7749,7 @@
         {
             "u1": "19",
             "u2": "30",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "19",
@@ -7712,12 +7759,12 @@
         {
             "u1": "19",
             "u2": "32",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "19",
             "u2": "34",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "19",
@@ -7837,7 +7884,7 @@
         {
             "u1": "19",
             "u2": "76",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "19",
@@ -7857,7 +7904,7 @@
         {
             "u1": "19",
             "u2": "80",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "19",
@@ -7867,7 +7914,7 @@
         {
             "u1": "19",
             "u2": "82",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "19",
@@ -7877,7 +7924,7 @@
         {
             "u1": "19",
             "u2": "85",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "19",
@@ -7917,7 +7964,7 @@
         {
             "u1": "19",
             "u2": "94",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "19",
@@ -7942,7 +7989,7 @@
         {
             "u1": "19",
             "u2": "99",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "19",
@@ -7957,17 +8004,17 @@
         {
             "u1": "19",
             "u2": "103",
-            "value": 0.67
+            "value": 0.68
         },
         {
             "u1": "19",
             "u2": "104",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "19",
             "u2": "105",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "19",
@@ -7992,12 +8039,12 @@
         {
             "u1": "19",
             "u2": "110",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "19",
             "u2": "111",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "19",
@@ -8017,12 +8064,12 @@
         {
             "u1": "19",
             "u2": "115",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "19",
             "u2": "116",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "19",
@@ -8037,7 +8084,7 @@
         {
             "u1": "19",
             "u2": "119",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "19",
@@ -8052,12 +8099,12 @@
         {
             "u1": "19",
             "u2": "122",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "19",
             "u2": "123",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "19",
@@ -8092,7 +8139,7 @@
         {
             "u1": "20",
             "u2": "26",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "20",
@@ -8112,12 +8159,12 @@
         {
             "u1": "20",
             "u2": "30",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "20",
             "u2": "31",
-            "value": 0.6
+            "value": 0.61
         },
         {
             "u1": "20",
@@ -8162,7 +8209,7 @@
         {
             "u1": "20",
             "u2": "45",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "20",
@@ -8187,17 +8234,17 @@
         {
             "u1": "20",
             "u2": "64",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "20",
             "u2": "65",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "20",
             "u2": "66",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "20",
@@ -8207,12 +8254,12 @@
         {
             "u1": "20",
             "u2": "68",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "20",
             "u2": "69",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "20",
@@ -8222,7 +8269,7 @@
         {
             "u1": "20",
             "u2": "71",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "20",
@@ -8262,12 +8309,12 @@
         {
             "u1": "20",
             "u2": "79",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "20",
             "u2": "80",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "20",
@@ -8287,7 +8334,7 @@
         {
             "u1": "20",
             "u2": "85",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "20",
@@ -8307,7 +8354,7 @@
         {
             "u1": "20",
             "u2": "90",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "20",
@@ -8347,7 +8394,7 @@
         {
             "u1": "20",
             "u2": "98",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "20",
@@ -8387,7 +8434,7 @@
         {
             "u1": "20",
             "u2": "107",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "20",
@@ -8422,7 +8469,7 @@
         {
             "u1": "20",
             "u2": "114",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "20",
@@ -8432,7 +8479,7 @@
         {
             "u1": "20",
             "u2": "116",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "20",
@@ -8452,7 +8499,7 @@
         {
             "u1": "20",
             "u2": "120",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "20",
@@ -8477,7 +8524,7 @@
         {
             "u1": "20",
             "u2": "126",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "21",
@@ -8897,12 +8944,12 @@
         {
             "u1": "23",
             "u2": "26",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "23",
             "u2": "27",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "23",
@@ -8937,7 +8984,7 @@
         {
             "u1": "23",
             "u2": "35",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "23",
@@ -8992,7 +9039,7 @@
         {
             "u1": "23",
             "u2": "64",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "23",
@@ -9002,7 +9049,7 @@
         {
             "u1": "23",
             "u2": "66",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "23",
@@ -9017,17 +9064,17 @@
         {
             "u1": "23",
             "u2": "69",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "23",
             "u2": "70",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "23",
             "u2": "71",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "23",
@@ -9037,7 +9084,7 @@
         {
             "u1": "23",
             "u2": "73",
-            "value": 0.7
+            "value": 0.71
         },
         {
             "u1": "23",
@@ -9052,7 +9099,7 @@
         {
             "u1": "23",
             "u2": "76",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "23",
@@ -9132,7 +9179,7 @@
         {
             "u1": "23",
             "u2": "94",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "23",
@@ -9167,7 +9214,7 @@
         {
             "u1": "23",
             "u2": "102",
-            "value": 0.85
+            "value": 0.86
         },
         {
             "u1": "23",
@@ -9177,7 +9224,7 @@
         {
             "u1": "23",
             "u2": "104",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "23",
@@ -9207,7 +9254,7 @@
         {
             "u1": "23",
             "u2": "110",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "23",
@@ -9232,7 +9279,7 @@
         {
             "u1": "23",
             "u2": "115",
-            "value": 0.93
+            "value": 0.94
         },
         {
             "u1": "23",
@@ -9267,7 +9314,7 @@
         {
             "u1": "23",
             "u2": "122",
-            "value": 0.93
+            "value": 0.94
         },
         {
             "u1": "23",
@@ -9277,12 +9324,12 @@
         {
             "u1": "23",
             "u2": "124",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "23",
             "u2": "126",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "24",
@@ -9302,7 +9349,7 @@
         {
             "u1": "24",
             "u2": "28",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "24",
@@ -9322,7 +9369,7 @@
         {
             "u1": "24",
             "u2": "32",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "24",
@@ -9432,7 +9479,7 @@
         {
             "u1": "24",
             "u2": "73",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "24",
@@ -9552,7 +9599,7 @@
         {
             "u1": "24",
             "u2": "99",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "24",
@@ -9582,7 +9629,7 @@
         {
             "u1": "24",
             "u2": "106",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "24",
@@ -9652,7 +9699,7 @@
         {
             "u1": "24",
             "u2": "120",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "24",
@@ -9662,7 +9709,7 @@
         {
             "u1": "24",
             "u2": "122",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "24",
@@ -9692,7 +9739,7 @@
         {
             "u1": "25",
             "u2": "28",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "25",
@@ -9717,7 +9764,7 @@
         {
             "u1": "25",
             "u2": "34",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "25",
@@ -9742,7 +9789,7 @@
         {
             "u1": "25",
             "u2": "41",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "25",
@@ -9807,7 +9854,7 @@
         {
             "u1": "25",
             "u2": "70",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "25",
@@ -9847,7 +9894,7 @@
         {
             "u1": "25",
             "u2": "78",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "25",
@@ -9897,7 +9944,7 @@
         {
             "u1": "25",
             "u2": "90",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "25",
@@ -9957,7 +10004,7 @@
         {
             "u1": "25",
             "u2": "103",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "25",
@@ -9977,7 +10024,7 @@
         {
             "u1": "25",
             "u2": "107",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "25",
@@ -9992,7 +10039,7 @@
         {
             "u1": "25",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "25",
@@ -10042,7 +10089,7 @@
         {
             "u1": "25",
             "u2": "120",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "25",
@@ -10052,12 +10099,12 @@
         {
             "u1": "25",
             "u2": "122",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "25",
             "u2": "123",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "25",
@@ -10072,7 +10119,7 @@
         {
             "u1": "26",
             "u2": "27",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "26",
@@ -10087,7 +10134,7 @@
         {
             "u1": "26",
             "u2": "30",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "26",
@@ -10097,7 +10144,7 @@
         {
             "u1": "26",
             "u2": "32",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "26",
@@ -10112,7 +10159,7 @@
         {
             "u1": "26",
             "u2": "36",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "26",
@@ -10137,7 +10184,7 @@
         {
             "u1": "26",
             "u2": "45",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "26",
@@ -10182,7 +10229,7 @@
         {
             "u1": "26",
             "u2": "68",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "26",
@@ -10197,7 +10244,7 @@
         {
             "u1": "26",
             "u2": "71",
-            "value": 0.18
+            "value": 0.19
         },
         {
             "u1": "26",
@@ -10237,7 +10284,7 @@
         {
             "u1": "26",
             "u2": "79",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "26",
@@ -10262,7 +10309,7 @@
         {
             "u1": "26",
             "u2": "85",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "26",
@@ -10287,7 +10334,7 @@
         {
             "u1": "26",
             "u2": "91",
-            "value": 0.7
+            "value": 0.71
         },
         {
             "u1": "26",
@@ -10302,7 +10349,7 @@
         {
             "u1": "26",
             "u2": "94",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "26",
@@ -10337,12 +10384,12 @@
         {
             "u1": "26",
             "u2": "102",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "26",
             "u2": "103",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "26",
@@ -10377,7 +10424,7 @@
         {
             "u1": "26",
             "u2": "110",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "26",
@@ -10422,12 +10469,12 @@
         {
             "u1": "26",
             "u2": "119",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "26",
             "u2": "120",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "26",
@@ -10437,7 +10484,7 @@
         {
             "u1": "26",
             "u2": "122",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "26",
@@ -10447,17 +10494,17 @@
         {
             "u1": "26",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "26",
             "u2": "126",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "27",
             "u2": "28",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "27",
@@ -10467,12 +10514,12 @@
         {
             "u1": "27",
             "u2": "30",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "27",
             "u2": "31",
-            "value": 0.67
+            "value": 0.68
         },
         {
             "u1": "27",
@@ -10572,7 +10619,7 @@
         {
             "u1": "27",
             "u2": "70",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "27",
@@ -10587,7 +10634,7 @@
         {
             "u1": "27",
             "u2": "73",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "27",
@@ -10622,7 +10669,7 @@
         {
             "u1": "27",
             "u2": "80",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "27",
@@ -10642,7 +10689,7 @@
         {
             "u1": "27",
             "u2": "85",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "27",
@@ -10712,22 +10759,22 @@
         {
             "u1": "27",
             "u2": "101",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "27",
             "u2": "102",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "27",
             "u2": "103",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "27",
             "u2": "104",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "27",
@@ -10737,17 +10784,17 @@
         {
             "u1": "27",
             "u2": "106",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "27",
             "u2": "107",
-            "value": 0.45
+            "value": 0.46
         },
         {
             "u1": "27",
             "u2": "108",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "27",
@@ -10757,7 +10804,7 @@
         {
             "u1": "27",
             "u2": "110",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "27",
@@ -10767,7 +10814,7 @@
         {
             "u1": "27",
             "u2": "112",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "27",
@@ -10787,7 +10834,7 @@
         {
             "u1": "27",
             "u2": "116",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "27",
@@ -10807,12 +10854,12 @@
         {
             "u1": "27",
             "u2": "120",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "27",
             "u2": "121",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "27",
@@ -10847,7 +10894,7 @@
         {
             "u1": "28",
             "u2": "31",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "28",
@@ -10917,7 +10964,7 @@
         {
             "u1": "28",
             "u2": "64",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "28",
@@ -10927,7 +10974,7 @@
         {
             "u1": "28",
             "u2": "66",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "28",
@@ -10942,7 +10989,7 @@
         {
             "u1": "28",
             "u2": "69",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "28",
@@ -10952,7 +10999,7 @@
         {
             "u1": "28",
             "u2": "71",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "28",
@@ -10977,12 +11024,12 @@
         {
             "u1": "28",
             "u2": "76",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "28",
             "u2": "77",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "28",
@@ -10992,12 +11039,12 @@
         {
             "u1": "28",
             "u2": "79",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "28",
             "u2": "80",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "28",
@@ -11022,7 +11069,7 @@
         {
             "u1": "28",
             "u2": "87",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "28",
@@ -11037,12 +11084,12 @@
         {
             "u1": "28",
             "u2": "90",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "28",
             "u2": "91",
-            "value": 0.65
+            "value": 0.66
         },
         {
             "u1": "28",
@@ -11052,7 +11099,7 @@
         {
             "u1": "28",
             "u2": "93",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "28",
@@ -11077,7 +11124,7 @@
         {
             "u1": "28",
             "u2": "98",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "28",
@@ -11122,7 +11169,7 @@
         {
             "u1": "28",
             "u2": "108",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "28",
@@ -11152,7 +11199,7 @@
         {
             "u1": "28",
             "u2": "114",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "28",
@@ -11177,12 +11224,12 @@
         {
             "u1": "28",
             "u2": "119",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "28",
             "u2": "120",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "28",
@@ -11207,7 +11254,7 @@
         {
             "u1": "28",
             "u2": "126",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "29",
@@ -11227,7 +11274,7 @@
         {
             "u1": "29",
             "u2": "34",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "29",
@@ -11332,7 +11379,7 @@
         {
             "u1": "29",
             "u2": "73",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "29",
@@ -11347,7 +11394,7 @@
         {
             "u1": "29",
             "u2": "76",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "29",
@@ -11357,7 +11404,7 @@
         {
             "u1": "29",
             "u2": "78",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "29",
@@ -11382,7 +11429,7 @@
         {
             "u1": "29",
             "u2": "84",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "29",
@@ -11457,7 +11504,7 @@
         {
             "u1": "29",
             "u2": "101",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "29",
@@ -11467,7 +11514,7 @@
         {
             "u1": "29",
             "u2": "103",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "29",
@@ -11547,7 +11594,7 @@
         {
             "u1": "29",
             "u2": "119",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "29",
@@ -11567,7 +11614,7 @@
         {
             "u1": "29",
             "u2": "123",
-            "value": 0.7
+            "value": 0.71
         },
         {
             "u1": "29",
@@ -11592,7 +11639,7 @@
         {
             "u1": "30",
             "u2": "34",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "30",
@@ -11717,7 +11764,7 @@
         {
             "u1": "30",
             "u2": "77",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "30",
@@ -11852,7 +11899,7 @@
         {
             "u1": "30",
             "u2": "107",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "30",
@@ -11867,7 +11914,7 @@
         {
             "u1": "30",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "30",
@@ -11897,7 +11944,7 @@
         {
             "u1": "30",
             "u2": "116",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "30",
@@ -11932,7 +11979,7 @@
         {
             "u1": "30",
             "u2": "123",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "30",
@@ -11962,7 +12009,7 @@
         {
             "u1": "31",
             "u2": "36",
-            "value": 0.93
+            "value": 0.94
         },
         {
             "u1": "31",
@@ -11977,7 +12024,7 @@
         {
             "u1": "31",
             "u2": "41",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "31",
@@ -12057,7 +12104,7 @@
         {
             "u1": "31",
             "u2": "73",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "31",
@@ -12072,7 +12119,7 @@
         {
             "u1": "31",
             "u2": "76",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "31",
@@ -12082,12 +12129,12 @@
         {
             "u1": "31",
             "u2": "78",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "31",
             "u2": "79",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "31",
@@ -12107,7 +12154,7 @@
         {
             "u1": "31",
             "u2": "84",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "31",
@@ -12122,7 +12169,7 @@
         {
             "u1": "31",
             "u2": "88",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "31",
@@ -12147,7 +12194,7 @@
         {
             "u1": "31",
             "u2": "93",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "31",
@@ -12157,7 +12204,7 @@
         {
             "u1": "31",
             "u2": "95",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "31",
@@ -12187,17 +12234,17 @@
         {
             "u1": "31",
             "u2": "102",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "31",
             "u2": "103",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "31",
             "u2": "104",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "31",
@@ -12217,7 +12264,7 @@
         {
             "u1": "31",
             "u2": "108",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "31",
@@ -12227,12 +12274,12 @@
         {
             "u1": "31",
             "u2": "110",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "31",
             "u2": "111",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "31",
@@ -12262,7 +12309,7 @@
         {
             "u1": "31",
             "u2": "117",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "31",
@@ -12287,7 +12334,7 @@
         {
             "u1": "31",
             "u2": "122",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "31",
@@ -12307,7 +12354,7 @@
         {
             "u1": "32",
             "u2": "34",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "32",
@@ -12382,17 +12429,17 @@
         {
             "u1": "32",
             "u2": "67",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "32",
             "u2": "68",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "32",
             "u2": "69",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "32",
@@ -12412,242 +12459,242 @@
         {
             "u1": "32",
             "u2": "73",
-            "value": 0.43
-        },
-        {
-            "u1": "32",
-            "u2": "74",
-            "value": 1.0
-        },
-        {
-            "u1": "32",
-            "u2": "75",
-            "value": 0.37
-        },
-        {
-            "u1": "32",
-            "u2": "76",
-            "value": 0.37
-        },
-        {
-            "u1": "32",
-            "u2": "77",
-            "value": 0.75
-        },
-        {
-            "u1": "32",
-            "u2": "78",
-            "value": 0.75
-        },
-        {
-            "u1": "32",
-            "u2": "79",
-            "value": 0.5
-        },
-        {
-            "u1": "32",
-            "u2": "80",
-            "value": 0.12
-        },
-        {
-            "u1": "32",
-            "u2": "81",
-            "value": 1.0
-        },
-        {
-            "u1": "32",
-            "u2": "82",
-            "value": 0.62
-        },
-        {
-            "u1": "32",
-            "u2": "84",
-            "value": 0.25
-        },
-        {
-            "u1": "32",
-            "u2": "85",
-            "value": 0.25
-        },
-        {
-            "u1": "32",
-            "u2": "87",
-            "value": 0.62
-        },
-        {
-            "u1": "32",
-            "u2": "88",
-            "value": 0.37
-        },
-        {
-            "u1": "32",
-            "u2": "89",
-            "value": 1.0
-        },
-        {
-            "u1": "32",
-            "u2": "90",
-            "value": 0.41
-        },
-        {
-            "u1": "32",
-            "u2": "91",
-            "value": 0.75
-        },
-        {
-            "u1": "32",
-            "u2": "92",
-            "value": 1.0
-        },
-        {
-            "u1": "32",
-            "u2": "93",
-            "value": 0.62
-        },
-        {
-            "u1": "32",
-            "u2": "94",
-            "value": 0.5
-        },
-        {
-            "u1": "32",
-            "u2": "95",
-            "value": 0.41
-        },
-        {
-            "u1": "32",
-            "u2": "96",
-            "value": 0.75
-        },
-        {
-            "u1": "32",
-            "u2": "97",
-            "value": 1.0
-        },
-        {
-            "u1": "32",
-            "u2": "98",
-            "value": 0.62
-        },
-        {
-            "u1": "32",
-            "u2": "99",
-            "value": 0.87
-        },
-        {
-            "u1": "32",
-            "u2": "101",
-            "value": 0.5
-        },
-        {
-            "u1": "32",
-            "u2": "102",
-            "value": 0.41
-        },
-        {
-            "u1": "32",
-            "u2": "103",
-            "value": 0.62
-        },
-        {
-            "u1": "32",
-            "u2": "104",
-            "value": 0.58
-        },
-        {
-            "u1": "32",
-            "u2": "105",
-            "value": 0.5
-        },
-        {
-            "u1": "32",
-            "u2": "106",
-            "value": 0.66
-        },
-        {
-            "u1": "32",
-            "u2": "107",
-            "value": 0.68
-        },
-        {
-            "u1": "32",
-            "u2": "108",
-            "value": 0.58
-        },
-        {
-            "u1": "32",
-            "u2": "109",
-            "value": 0.37
-        },
-        {
-            "u1": "32",
-            "u2": "110",
-            "value": 0.25
-        },
-        {
-            "u1": "32",
-            "u2": "111",
-            "value": 0.58
-        },
-        {
-            "u1": "32",
-            "u2": "112",
-            "value": 0.43
-        },
-        {
-            "u1": "32",
-            "u2": "113",
-            "value": 0.5
-        },
-        {
-            "u1": "32",
-            "u2": "114",
-            "value": 0.87
-        },
-        {
-            "u1": "32",
-            "u2": "115",
-            "value": 0.43
-        },
-        {
-            "u1": "32",
-            "u2": "116",
-            "value": 0.87
-        },
-        {
-            "u1": "32",
-            "u2": "117",
-            "value": 0.5
-        },
-        {
-            "u1": "32",
-            "u2": "118",
-            "value": 1.0
-        },
-        {
-            "u1": "32",
-            "u2": "119",
-            "value": 0.25
-        },
-        {
-            "u1": "32",
-            "u2": "120",
-            "value": 0.66
-        },
-        {
-            "u1": "32",
-            "u2": "121",
-            "value": 0.62
-        },
-        {
-            "u1": "32",
-            "u2": "122",
             "value": 0.44
         },
         {
             "u1": "32",
+            "u2": "74",
+            "value": 1.0
+        },
+        {
+            "u1": "32",
+            "u2": "75",
+            "value": 0.38
+        },
+        {
+            "u1": "32",
+            "u2": "76",
+            "value": 0.38
+        },
+        {
+            "u1": "32",
+            "u2": "77",
+            "value": 0.75
+        },
+        {
+            "u1": "32",
+            "u2": "78",
+            "value": 0.75
+        },
+        {
+            "u1": "32",
+            "u2": "79",
+            "value": 0.5
+        },
+        {
+            "u1": "32",
+            "u2": "80",
+            "value": 0.12
+        },
+        {
+            "u1": "32",
+            "u2": "81",
+            "value": 1.0
+        },
+        {
+            "u1": "32",
+            "u2": "82",
+            "value": 0.62
+        },
+        {
+            "u1": "32",
+            "u2": "84",
+            "value": 0.25
+        },
+        {
+            "u1": "32",
+            "u2": "85",
+            "value": 0.25
+        },
+        {
+            "u1": "32",
+            "u2": "87",
+            "value": 0.62
+        },
+        {
+            "u1": "32",
+            "u2": "88",
+            "value": 0.38
+        },
+        {
+            "u1": "32",
+            "u2": "89",
+            "value": 1.0
+        },
+        {
+            "u1": "32",
+            "u2": "90",
+            "value": 0.42
+        },
+        {
+            "u1": "32",
+            "u2": "91",
+            "value": 0.75
+        },
+        {
+            "u1": "32",
+            "u2": "92",
+            "value": 1.0
+        },
+        {
+            "u1": "32",
+            "u2": "93",
+            "value": 0.62
+        },
+        {
+            "u1": "32",
+            "u2": "94",
+            "value": 0.5
+        },
+        {
+            "u1": "32",
+            "u2": "95",
+            "value": 0.42
+        },
+        {
+            "u1": "32",
+            "u2": "96",
+            "value": 0.75
+        },
+        {
+            "u1": "32",
+            "u2": "97",
+            "value": 1.0
+        },
+        {
+            "u1": "32",
+            "u2": "98",
+            "value": 0.62
+        },
+        {
+            "u1": "32",
+            "u2": "99",
+            "value": 0.88
+        },
+        {
+            "u1": "32",
+            "u2": "101",
+            "value": 0.5
+        },
+        {
+            "u1": "32",
+            "u2": "102",
+            "value": 0.42
+        },
+        {
+            "u1": "32",
+            "u2": "103",
+            "value": 0.62
+        },
+        {
+            "u1": "32",
+            "u2": "104",
+            "value": 0.58
+        },
+        {
+            "u1": "32",
+            "u2": "105",
+            "value": 0.5
+        },
+        {
+            "u1": "32",
+            "u2": "106",
+            "value": 0.67
+        },
+        {
+            "u1": "32",
+            "u2": "107",
+            "value": 0.69
+        },
+        {
+            "u1": "32",
+            "u2": "108",
+            "value": 0.58
+        },
+        {
+            "u1": "32",
+            "u2": "109",
+            "value": 0.38
+        },
+        {
+            "u1": "32",
+            "u2": "110",
+            "value": 0.25
+        },
+        {
+            "u1": "32",
+            "u2": "111",
+            "value": 0.58
+        },
+        {
+            "u1": "32",
+            "u2": "112",
+            "value": 0.44
+        },
+        {
+            "u1": "32",
+            "u2": "113",
+            "value": 0.5
+        },
+        {
+            "u1": "32",
+            "u2": "114",
+            "value": 0.88
+        },
+        {
+            "u1": "32",
+            "u2": "115",
+            "value": 0.44
+        },
+        {
+            "u1": "32",
+            "u2": "116",
+            "value": 0.88
+        },
+        {
+            "u1": "32",
+            "u2": "117",
+            "value": 0.5
+        },
+        {
+            "u1": "32",
+            "u2": "118",
+            "value": 1.0
+        },
+        {
+            "u1": "32",
+            "u2": "119",
+            "value": 0.25
+        },
+        {
+            "u1": "32",
+            "u2": "120",
+            "value": 0.67
+        },
+        {
+            "u1": "32",
+            "u2": "121",
+            "value": 0.62
+        },
+        {
+            "u1": "32",
+            "u2": "122",
+            "value": 0.45
+        },
+        {
+            "u1": "32",
             "u2": "123",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "32",
@@ -12692,7 +12739,7 @@
         {
             "u1": "34",
             "u2": "45",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "34",
@@ -12747,7 +12794,7 @@
         {
             "u1": "34",
             "u2": "70",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "34",
@@ -12787,12 +12834,12 @@
         {
             "u1": "34",
             "u2": "78",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "34",
             "u2": "79",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "34",
@@ -12812,7 +12859,7 @@
         {
             "u1": "34",
             "u2": "84",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "34",
@@ -12892,7 +12939,7 @@
         {
             "u1": "34",
             "u2": "102",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "34",
@@ -12942,7 +12989,7 @@
         {
             "u1": "34",
             "u2": "112",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "34",
@@ -12952,7 +12999,7 @@
         {
             "u1": "34",
             "u2": "114",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "34",
@@ -13107,7 +13154,7 @@
         {
             "u1": "35",
             "u2": "73",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "35",
@@ -13237,7 +13284,7 @@
         {
             "u1": "35",
             "u2": "102",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "35",
@@ -13422,7 +13469,7 @@
         {
             "u1": "36",
             "u2": "68",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "36",
@@ -13482,7 +13529,7 @@
         {
             "u1": "36",
             "u2": "80",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "36",
@@ -13497,7 +13544,7 @@
         {
             "u1": "36",
             "u2": "84",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "36",
@@ -13572,7 +13619,7 @@
         {
             "u1": "36",
             "u2": "101",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "36",
@@ -13582,7 +13629,7 @@
         {
             "u1": "36",
             "u2": "103",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "36",
@@ -13607,7 +13654,7 @@
         {
             "u1": "36",
             "u2": "108",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "36",
@@ -13622,7 +13669,7 @@
         {
             "u1": "36",
             "u2": "111",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "36",
@@ -13642,17 +13689,17 @@
         {
             "u1": "36",
             "u2": "115",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "36",
             "u2": "116",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "36",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "36",
@@ -13662,7 +13709,7 @@
         {
             "u1": "36",
             "u2": "119",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "36",
@@ -14472,7 +14519,7 @@
         {
             "u1": "41",
             "u2": "80",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "41",
@@ -14572,7 +14619,7 @@
         {
             "u1": "41",
             "u2": "103",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "41",
@@ -14632,7 +14679,7 @@
         {
             "u1": "41",
             "u2": "115",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "41",
@@ -15007,7 +15054,7 @@
         {
             "u1": "45",
             "u2": "54",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "45",
@@ -15072,7 +15119,7 @@
         {
             "u1": "45",
             "u2": "73",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "45",
@@ -15097,7 +15144,7 @@
         {
             "u1": "45",
             "u2": "78",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "45",
@@ -15152,7 +15199,7 @@
         {
             "u1": "45",
             "u2": "91",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "45",
@@ -15227,7 +15274,7 @@
         {
             "u1": "45",
             "u2": "107",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "45",
@@ -15272,7 +15319,7 @@
         {
             "u1": "45",
             "u2": "116",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "45",
@@ -15307,7 +15354,7 @@
         {
             "u1": "45",
             "u2": "123",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "45",
@@ -15512,7 +15559,7 @@
         {
             "u1": "54",
             "u2": "102",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "54",
@@ -16557,7 +16604,7 @@
         {
             "u1": "64",
             "u2": "70",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "64",
@@ -16602,7 +16649,7 @@
         {
             "u1": "64",
             "u2": "79",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "64",
@@ -16672,7 +16719,7 @@
         {
             "u1": "64",
             "u2": "95",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "64",
@@ -16712,7 +16759,7 @@
         {
             "u1": "64",
             "u2": "104",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "64",
@@ -16742,7 +16789,7 @@
         {
             "u1": "64",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "64",
@@ -16752,7 +16799,7 @@
         {
             "u1": "64",
             "u2": "112",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "64",
@@ -16792,7 +16839,7 @@
         {
             "u1": "64",
             "u2": "120",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "64",
@@ -16802,7 +16849,7 @@
         {
             "u1": "64",
             "u2": "122",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "64",
@@ -16872,7 +16919,7 @@
         {
             "u1": "65",
             "u2": "76",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "65",
@@ -16937,7 +16984,7 @@
         {
             "u1": "65",
             "u2": "91",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "65",
@@ -17062,7 +17109,7 @@
         {
             "u1": "65",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "65",
@@ -17122,7 +17169,7 @@
         {
             "u1": "66",
             "u2": "70",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "66",
@@ -17167,7 +17214,7 @@
         {
             "u1": "66",
             "u2": "79",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "66",
@@ -17237,7 +17284,7 @@
         {
             "u1": "66",
             "u2": "95",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "66",
@@ -17277,7 +17324,7 @@
         {
             "u1": "66",
             "u2": "104",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "66",
@@ -17307,7 +17354,7 @@
         {
             "u1": "66",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "66",
@@ -17317,7 +17364,7 @@
         {
             "u1": "66",
             "u2": "112",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "66",
@@ -17357,7 +17404,7 @@
         {
             "u1": "66",
             "u2": "120",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "66",
@@ -17367,7 +17414,7 @@
         {
             "u1": "66",
             "u2": "122",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "66",
@@ -17407,7 +17454,7 @@
         {
             "u1": "67",
             "u2": "72",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "67",
@@ -17422,12 +17469,12 @@
         {
             "u1": "67",
             "u2": "75",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "67",
             "u2": "76",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "67",
@@ -17487,7 +17534,7 @@
         {
             "u1": "67",
             "u2": "90",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "67",
@@ -17532,7 +17579,7 @@
         {
             "u1": "67",
             "u2": "99",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "67",
@@ -17542,7 +17589,7 @@
         {
             "u1": "67",
             "u2": "102",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "67",
@@ -17552,7 +17599,7 @@
         {
             "u1": "67",
             "u2": "104",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "67",
@@ -17567,7 +17614,7 @@
         {
             "u1": "67",
             "u2": "107",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "67",
@@ -17582,12 +17629,12 @@
         {
             "u1": "67",
             "u2": "110",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "67",
             "u2": "111",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "67",
@@ -17602,7 +17649,7 @@
         {
             "u1": "67",
             "u2": "114",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "67",
@@ -17742,7 +17789,7 @@
         {
             "u1": "68",
             "u2": "87",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "68",
@@ -17757,7 +17804,7 @@
         {
             "u1": "68",
             "u2": "90",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "68",
@@ -17802,7 +17849,7 @@
         {
             "u1": "68",
             "u2": "99",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "68",
@@ -17832,12 +17879,12 @@
         {
             "u1": "68",
             "u2": "106",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "68",
             "u2": "107",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "68",
@@ -17897,7 +17944,7 @@
         {
             "u1": "68",
             "u2": "119",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "68",
@@ -17932,7 +17979,7 @@
         {
             "u1": "69",
             "u2": "70",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "69",
@@ -17992,7 +18039,7 @@
         {
             "u1": "69",
             "u2": "82",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "69",
@@ -18067,7 +18114,7 @@
         {
             "u1": "69",
             "u2": "99",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "69",
@@ -18087,7 +18134,7 @@
         {
             "u1": "69",
             "u2": "104",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "69",
@@ -18117,7 +18164,7 @@
         {
             "u1": "69",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "69",
@@ -18137,7 +18184,7 @@
         {
             "u1": "69",
             "u2": "114",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "69",
@@ -18207,7 +18254,7 @@
         {
             "u1": "70",
             "u2": "73",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "70",
@@ -18222,12 +18269,12 @@
         {
             "u1": "70",
             "u2": "76",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "70",
             "u2": "77",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "70",
@@ -18287,7 +18334,7 @@
         {
             "u1": "70",
             "u2": "91",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "70",
@@ -18297,7 +18344,7 @@
         {
             "u1": "70",
             "u2": "93",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "70",
@@ -18322,7 +18369,7 @@
         {
             "u1": "70",
             "u2": "98",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "70",
@@ -18337,7 +18384,7 @@
         {
             "u1": "70",
             "u2": "102",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "70",
@@ -18362,7 +18409,7 @@
         {
             "u1": "70",
             "u2": "107",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "70",
@@ -18387,7 +18434,7 @@
         {
             "u1": "70",
             "u2": "112",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "70",
@@ -18402,12 +18449,12 @@
         {
             "u1": "70",
             "u2": "115",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "70",
             "u2": "116",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "70",
@@ -18437,12 +18484,12 @@
         {
             "u1": "70",
             "u2": "122",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "70",
             "u2": "123",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "70",
@@ -18452,12 +18499,12 @@
         {
             "u1": "70",
             "u2": "126",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "71",
             "u2": "72",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "71",
@@ -18482,7 +18529,7 @@
         {
             "u1": "71",
             "u2": "77",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "71",
@@ -18542,7 +18589,7 @@
         {
             "u1": "71",
             "u2": "91",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "71",
@@ -18552,7 +18599,7 @@
         {
             "u1": "71",
             "u2": "93",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "71",
@@ -18577,7 +18624,7 @@
         {
             "u1": "71",
             "u2": "98",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "71",
@@ -18592,7 +18639,7 @@
         {
             "u1": "71",
             "u2": "102",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "71",
@@ -18602,7 +18649,7 @@
         {
             "u1": "71",
             "u2": "104",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "71",
@@ -18612,12 +18659,12 @@
         {
             "u1": "71",
             "u2": "106",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "71",
             "u2": "107",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "71",
@@ -18627,7 +18674,7 @@
         {
             "u1": "71",
             "u2": "109",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "71",
@@ -18642,7 +18689,7 @@
         {
             "u1": "71",
             "u2": "112",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "71",
@@ -18692,7 +18739,7 @@
         {
             "u1": "71",
             "u2": "122",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "71",
@@ -18787,7 +18834,7 @@
         {
             "u1": "72",
             "u2": "90",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "72",
@@ -18887,7 +18934,7 @@
         {
             "u1": "72",
             "u2": "111",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "72",
@@ -18927,7 +18974,7 @@
         {
             "u1": "72",
             "u2": "119",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "72",
@@ -18972,7 +19019,7 @@
         {
             "u1": "73",
             "u2": "76",
-            "value": 0.45
+            "value": 0.46
         },
         {
             "u1": "73",
@@ -18987,7 +19034,7 @@
         {
             "u1": "73",
             "u2": "79",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "73",
@@ -19007,7 +19054,7 @@
         {
             "u1": "73",
             "u2": "84",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "73",
@@ -19022,7 +19069,7 @@
         {
             "u1": "73",
             "u2": "88",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "73",
@@ -19047,7 +19094,7 @@
         {
             "u1": "73",
             "u2": "93",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "73",
@@ -19057,7 +19104,7 @@
         {
             "u1": "73",
             "u2": "95",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "73",
@@ -19082,7 +19129,7 @@
         {
             "u1": "73",
             "u2": "101",
-            "value": 0.93
+            "value": 0.94
         },
         {
             "u1": "73",
@@ -19092,12 +19139,12 @@
         {
             "u1": "73",
             "u2": "103",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "73",
             "u2": "104",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "73",
@@ -19112,7 +19159,7 @@
         {
             "u1": "73",
             "u2": "107",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "73",
@@ -19127,12 +19174,12 @@
         {
             "u1": "73",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "73",
             "u2": "111",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "73",
@@ -19152,7 +19199,7 @@
         {
             "u1": "73",
             "u2": "115",
-            "value": 0.67
+            "value": 0.68
         },
         {
             "u1": "73",
@@ -19162,7 +19209,7 @@
         {
             "u1": "73",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "73",
@@ -19172,7 +19219,7 @@
         {
             "u1": "73",
             "u2": "119",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "73",
@@ -19552,7 +19599,7 @@
         {
             "u1": "75",
             "u2": "99",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "75",
@@ -19582,7 +19629,7 @@
         {
             "u1": "75",
             "u2": "106",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "75",
@@ -19682,12 +19729,12 @@
         {
             "u1": "76",
             "u2": "77",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "76",
             "u2": "78",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "76",
@@ -19697,7 +19744,7 @@
         {
             "u1": "76",
             "u2": "80",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "76",
@@ -19727,7 +19774,7 @@
         {
             "u1": "76",
             "u2": "88",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "76",
@@ -19802,7 +19849,7 @@
         {
             "u1": "76",
             "u2": "104",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "76",
@@ -19852,7 +19899,7 @@
         {
             "u1": "76",
             "u2": "114",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "76",
@@ -19877,7 +19924,7 @@
         {
             "u1": "76",
             "u2": "119",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "76",
@@ -19887,7 +19934,7 @@
         {
             "u1": "76",
             "u2": "121",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "76",
@@ -19902,7 +19949,7 @@
         {
             "u1": "76",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "76",
@@ -19917,7 +19964,7 @@
         {
             "u1": "77",
             "u2": "79",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "77",
@@ -20027,7 +20074,7 @@
         {
             "u1": "77",
             "u2": "104",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "77",
@@ -20037,7 +20084,7 @@
         {
             "u1": "77",
             "u2": "106",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "77",
@@ -20057,7 +20104,7 @@
         {
             "u1": "77",
             "u2": "110",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "77",
@@ -20067,7 +20114,7 @@
         {
             "u1": "77",
             "u2": "112",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "77",
@@ -20092,7 +20139,7 @@
         {
             "u1": "77",
             "u2": "117",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "77",
@@ -20117,7 +20164,7 @@
         {
             "u1": "77",
             "u2": "122",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "77",
@@ -20142,7 +20189,7 @@
         {
             "u1": "78",
             "u2": "80",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "78",
@@ -20172,7 +20219,7 @@
         {
             "u1": "78",
             "u2": "88",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "78",
@@ -20187,7 +20234,7 @@
         {
             "u1": "78",
             "u2": "91",
-            "value": 0.93
+            "value": 0.94
         },
         {
             "u1": "78",
@@ -20232,12 +20279,12 @@
         {
             "u1": "78",
             "u2": "101",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "78",
             "u2": "102",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "78",
@@ -20297,7 +20344,7 @@
         {
             "u1": "78",
             "u2": "114",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "78",
@@ -20307,12 +20354,12 @@
         {
             "u1": "78",
             "u2": "116",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "78",
             "u2": "117",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "78",
@@ -20342,7 +20389,7 @@
         {
             "u1": "78",
             "u2": "123",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "78",
@@ -20457,12 +20504,12 @@
         {
             "u1": "79",
             "u2": "103",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "79",
             "u2": "104",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "79",
@@ -20477,7 +20524,7 @@
         {
             "u1": "79",
             "u2": "107",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "79",
@@ -20487,7 +20534,7 @@
         {
             "u1": "79",
             "u2": "109",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "79",
@@ -20517,7 +20564,7 @@
         {
             "u1": "79",
             "u2": "115",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "79",
@@ -20557,17 +20604,17 @@
         {
             "u1": "79",
             "u2": "123",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "79",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "79",
             "u2": "126",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "80",
@@ -20662,7 +20709,7 @@
         {
             "u1": "80",
             "u2": "102",
-            "value": 0.44
+            "value": 0.45
         },
         {
             "u1": "80",
@@ -20682,7 +20729,7 @@
         {
             "u1": "80",
             "u2": "106",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "80",
@@ -21072,7 +21119,7 @@
         {
             "u1": "82",
             "u2": "103",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "82",
@@ -21087,7 +21134,7 @@
         {
             "u1": "82",
             "u2": "106",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "82",
@@ -21117,7 +21164,7 @@
         {
             "u1": "82",
             "u2": "112",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "82",
@@ -21142,7 +21189,7 @@
         {
             "u1": "82",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "82",
@@ -21167,7 +21214,7 @@
         {
             "u1": "82",
             "u2": "122",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "82",
@@ -21227,7 +21274,7 @@
         {
             "u1": "84",
             "u2": "94",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "84",
@@ -21262,7 +21309,7 @@
         {
             "u1": "84",
             "u2": "102",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "84",
@@ -21287,27 +21334,27 @@
         {
             "u1": "84",
             "u2": "107",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "84",
             "u2": "108",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "84",
             "u2": "109",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "84",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "84",
             "u2": "111",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "84",
@@ -21362,12 +21409,12 @@
         {
             "u1": "84",
             "u2": "122",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "84",
             "u2": "123",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "84",
@@ -21452,7 +21499,7 @@
         {
             "u1": "85",
             "u2": "102",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "85",
@@ -21492,7 +21539,7 @@
         {
             "u1": "85",
             "u2": "110",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "85",
@@ -21582,7 +21629,7 @@
         {
             "u1": "87",
             "u2": "90",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "87",
@@ -21627,7 +21674,7 @@
         {
             "u1": "87",
             "u2": "99",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "87",
@@ -21637,7 +21684,7 @@
         {
             "u1": "87",
             "u2": "102",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "87",
@@ -21742,7 +21789,7 @@
         {
             "u1": "87",
             "u2": "123",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "87",
@@ -21762,7 +21809,7 @@
         {
             "u1": "88",
             "u2": "90",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "88",
@@ -21807,12 +21854,12 @@
         {
             "u1": "88",
             "u2": "99",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "88",
             "u2": "101",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "88",
@@ -21822,7 +21869,7 @@
         {
             "u1": "88",
             "u2": "103",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "88",
@@ -21837,7 +21884,7 @@
         {
             "u1": "88",
             "u2": "106",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "88",
@@ -21882,7 +21929,7 @@
         {
             "u1": "88",
             "u2": "115",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "88",
@@ -22122,7 +22169,7 @@
         {
             "u1": "90",
             "u2": "93",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "90",
@@ -22182,12 +22229,12 @@
         {
             "u1": "90",
             "u2": "106",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "90",
             "u2": "107",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "90",
@@ -22207,12 +22254,12 @@
         {
             "u1": "90",
             "u2": "111",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "90",
             "u2": "112",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "90",
@@ -22237,7 +22284,7 @@
         {
             "u1": "90",
             "u2": "117",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "90",
@@ -22252,7 +22299,7 @@
         {
             "u1": "90",
             "u2": "120",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "90",
@@ -22262,7 +22309,7 @@
         {
             "u1": "90",
             "u2": "122",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "90",
@@ -22272,7 +22319,7 @@
         {
             "u1": "90",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "90",
@@ -22292,12 +22339,12 @@
         {
             "u1": "91",
             "u2": "94",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "91",
             "u2": "95",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "91",
@@ -22322,12 +22369,12 @@
         {
             "u1": "91",
             "u2": "101",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "91",
             "u2": "102",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "91",
@@ -22337,7 +22384,7 @@
         {
             "u1": "91",
             "u2": "104",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "91",
@@ -22347,7 +22394,7 @@
         {
             "u1": "91",
             "u2": "106",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "91",
@@ -22362,7 +22409,7 @@
         {
             "u1": "91",
             "u2": "109",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "91",
@@ -22392,7 +22439,7 @@
         {
             "u1": "91",
             "u2": "115",
-            "value": 0.7
+            "value": 0.71
         },
         {
             "u1": "91",
@@ -22412,7 +22459,7 @@
         {
             "u1": "91",
             "u2": "119",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "91",
@@ -22422,7 +22469,7 @@
         {
             "u1": "91",
             "u2": "121",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "91",
@@ -22432,12 +22479,12 @@
         {
             "u1": "91",
             "u2": "123",
-            "value": 0.78
+            "value": 0.79
         },
         {
             "u1": "91",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "91",
@@ -22687,7 +22734,7 @@
         {
             "u1": "93",
             "u2": "111",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "93",
@@ -22707,7 +22754,7 @@
         {
             "u1": "93",
             "u2": "115",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "93",
@@ -22757,7 +22804,7 @@
         {
             "u1": "93",
             "u2": "126",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "94",
@@ -22927,7 +22974,7 @@
         {
             "u1": "95",
             "u2": "99",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "95",
@@ -22942,7 +22989,7 @@
         {
             "u1": "95",
             "u2": "103",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "95",
@@ -22957,12 +23004,12 @@
         {
             "u1": "95",
             "u2": "106",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "95",
             "u2": "107",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "95",
@@ -23002,7 +23049,7 @@
         {
             "u1": "95",
             "u2": "115",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "95",
@@ -23012,7 +23059,7 @@
         {
             "u1": "95",
             "u2": "117",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "95",
@@ -23052,7 +23099,7 @@
         {
             "u1": "95",
             "u2": "126",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "96",
@@ -23362,7 +23409,7 @@
         {
             "u1": "98",
             "u2": "106",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "98",
@@ -23467,7 +23514,7 @@
         {
             "u1": "99",
             "u2": "102",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "99",
@@ -23502,7 +23549,7 @@
         {
             "u1": "99",
             "u2": "109",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "99",
@@ -23517,7 +23564,7 @@
         {
             "u1": "99",
             "u2": "112",
-            "value": 0.45
+            "value": 0.46
         },
         {
             "u1": "99",
@@ -23527,7 +23574,7 @@
         {
             "u1": "99",
             "u2": "114",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "99",
@@ -23557,7 +23604,7 @@
         {
             "u1": "99",
             "u2": "120",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "99",
@@ -23567,12 +23614,12 @@
         {
             "u1": "99",
             "u2": "122",
-            "value": 0.43
+            "value": 0.44
         },
         {
             "u1": "99",
             "u2": "123",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "99",
@@ -23587,7 +23634,7 @@
         {
             "u1": "101",
             "u2": "102",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "101",
@@ -23632,7 +23679,7 @@
         {
             "u1": "101",
             "u2": "111",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "101",
@@ -23662,7 +23709,7 @@
         {
             "u1": "101",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "101",
@@ -23672,7 +23719,7 @@
         {
             "u1": "101",
             "u2": "119",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "101",
@@ -23687,12 +23734,12 @@
         {
             "u1": "101",
             "u2": "122",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "101",
             "u2": "123",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "101",
@@ -23717,7 +23764,7 @@
         {
             "u1": "102",
             "u2": "105",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "102",
@@ -23732,12 +23779,12 @@
         {
             "u1": "102",
             "u2": "108",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "102",
             "u2": "109",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "102",
@@ -23747,12 +23794,12 @@
         {
             "u1": "102",
             "u2": "111",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "102",
             "u2": "112",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "102",
@@ -23777,7 +23824,7 @@
         {
             "u1": "102",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "102",
@@ -23792,12 +23839,12 @@
         {
             "u1": "102",
             "u2": "120",
-            "value": 0.16
+            "value": 0.17
         },
         {
             "u1": "102",
             "u2": "121",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "102",
@@ -23822,7 +23869,7 @@
         {
             "u1": "103",
             "u2": "104",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "103",
@@ -23832,7 +23879,7 @@
         {
             "u1": "103",
             "u2": "106",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "103",
@@ -23852,7 +23899,7 @@
         {
             "u1": "103",
             "u2": "110",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "103",
@@ -23862,7 +23909,7 @@
         {
             "u1": "103",
             "u2": "112",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "103",
@@ -23957,7 +24004,7 @@
         {
             "u1": "104",
             "u2": "110",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "104",
@@ -23982,7 +24029,7 @@
         {
             "u1": "104",
             "u2": "115",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "104",
@@ -23992,7 +24039,7 @@
         {
             "u1": "104",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "104",
@@ -24032,7 +24079,7 @@
         {
             "u1": "104",
             "u2": "126",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "105",
@@ -24157,7 +24204,7 @@
         {
             "u1": "106",
             "u2": "111",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "106",
@@ -24172,7 +24219,7 @@
         {
             "u1": "106",
             "u2": "114",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "106",
@@ -24202,7 +24249,7 @@
         {
             "u1": "106",
             "u2": "120",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "106",
@@ -24212,7 +24259,7 @@
         {
             "u1": "106",
             "u2": "122",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "106",
@@ -24232,7 +24279,7 @@
         {
             "u1": "107",
             "u2": "108",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "107",
@@ -24277,7 +24324,7 @@
         {
             "u1": "107",
             "u2": "117",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "107",
@@ -24292,12 +24339,12 @@
         {
             "u1": "107",
             "u2": "120",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "107",
             "u2": "121",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "107",
@@ -24307,7 +24354,7 @@
         {
             "u1": "107",
             "u2": "123",
-            "value": 0.85
+            "value": 0.86
         },
         {
             "u1": "107",
@@ -24337,7 +24384,7 @@
         {
             "u1": "108",
             "u2": "112",
-            "value": 0.66
+            "value": 0.67
         },
         {
             "u1": "108",
@@ -24397,7 +24444,7 @@
         {
             "u1": "108",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "108",
@@ -24407,7 +24454,7 @@
         {
             "u1": "109",
             "u2": "110",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "109",
@@ -24492,7 +24539,7 @@
         {
             "u1": "110",
             "u2": "112",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "110",
@@ -24502,12 +24549,12 @@
         {
             "u1": "110",
             "u2": "114",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "110",
             "u2": "115",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "110",
@@ -24517,7 +24564,7 @@
         {
             "u1": "110",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "110",
@@ -24542,7 +24589,7 @@
         {
             "u1": "110",
             "u2": "122",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "110",
@@ -24557,7 +24604,7 @@
         {
             "u1": "110",
             "u2": "126",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "111",
@@ -24587,7 +24634,7 @@
         {
             "u1": "111",
             "u2": "117",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "111",
@@ -24622,7 +24669,7 @@
         {
             "u1": "111",
             "u2": "124",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "111",
@@ -24642,7 +24689,7 @@
         {
             "u1": "112",
             "u2": "115",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "112",
@@ -24672,12 +24719,12 @@
         {
             "u1": "112",
             "u2": "121",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "112",
             "u2": "122",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "112",
@@ -24692,7 +24739,7 @@
         {
             "u1": "112",
             "u2": "126",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "113",
@@ -24762,7 +24809,7 @@
         {
             "u1": "114",
             "u2": "116",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "114",
@@ -24797,7 +24844,7 @@
         {
             "u1": "114",
             "u2": "123",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "114",
@@ -24817,7 +24864,7 @@
         {
             "u1": "115",
             "u2": "117",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "115",
@@ -24827,7 +24874,7 @@
         {
             "u1": "115",
             "u2": "119",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "115",
@@ -24837,7 +24884,7 @@
         {
             "u1": "115",
             "u2": "121",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "115",
@@ -24872,7 +24919,7 @@
         {
             "u1": "116",
             "u2": "119",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "116",
@@ -24912,7 +24959,7 @@
         {
             "u1": "117",
             "u2": "119",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "117",
@@ -24942,7 +24989,7 @@
         {
             "u1": "117",
             "u2": "126",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "118",
@@ -24997,7 +25044,7 @@
         {
             "u1": "119",
             "u2": "123",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "119",
@@ -25017,7 +25064,7 @@
         {
             "u1": "120",
             "u2": "122",
-            "value": 0.37
+            "value": 0.38
         },
         {
             "u1": "120",
@@ -25032,7 +25079,7 @@
         {
             "u1": "120",
             "u2": "126",
-            "value": 0.41
+            "value": 0.42
         },
         {
             "u1": "121",
@@ -25052,12 +25099,12 @@
         {
             "u1": "121",
             "u2": "126",
-            "value": 0.87
+            "value": 0.88
         },
         {
             "u1": "122",
             "u2": "123",
-            "value": 0.68
+            "value": 0.69
         },
         {
             "u1": "122",
@@ -25067,7 +25114,7 @@
         {
             "u1": "122",
             "u2": "126",
-            "value": 0.91
+            "value": 0.92
         },
         {
             "u1": "123",
@@ -25090,14 +25137,14 @@
             "id": "1",
             "tittle": "Le tre finestre, La pianura della torre",
             "author": "Jessie Boswell Leeds",
-            "year": "1924", 
+            "year": "1924",
             "image": "https%3A%2F%2Fwww.gamtorino.it%2Fsites%2Fdefault%2Ffiles%2Fopere%2FMALINCONIA-%2520BOSWELL%2520Le%2520tre%2520finestre.jpg"
         },
         {
             "id": "2",
             "tittle": "Mercato Vecchio",
             "author": "Antonio Fontanesi Reggio Emilia",
-            "year": "1867", 
+            "year": "1867",
             "image": "https://www.gamtorino.it/sites/default/files/opere/FONTANESI_P_790.jpg"
         }
     ]

@@ -48,7 +48,7 @@ export default class NetworkController {
 
     /**
      * Constructor of the class 
-     * @param perspectiveInfo All the information of this perspective
+     * @param perspectiveData Data of this perspective
      * @param htmlRef HTMLDiv element where the canvas of the network will be holded
      * @param viewOptions Object with the view options
      * @param sf Obkect with the functions that change the state
@@ -63,12 +63,7 @@ export default class NetworkController {
 
         this.nodes = new DataSet(perspectiveData.users);
 
-        console.log(perspectiveData.similarity[0].similarity)
-
         perspectiveData.similarity.sort(sortEdges);
-
-        console.log(perspectiveData.similarity[0].similarity)   
-
         this.edges = new DataSet(perspectiveData.similarity);
 
         this.createOptions();
@@ -92,8 +87,8 @@ export default class NetworkController {
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
 
         perspectiveData.users.forEach((user: UserData) => {
-            nodeLocation.updateNodeGroup(user);
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
+            nodeLocation.updateNodeGroup(user, perspectiveData.communities);
         });
 
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);

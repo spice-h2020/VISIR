@@ -51,7 +51,7 @@ interface DataTableProps {
  * Basic UI component that shows some data in a table
  */
 export const DataTable = ({
-    tittle = "Perspective A",
+    tittle = "Perspective",
     node,
     community,
     artworks,
@@ -62,7 +62,7 @@ export const DataTable = ({
 
     const nodePanel = getNodePanel("Citizen Attributes", node, hideLabel);
     const interactions = getInteractionsAccordion(node, artworks);
-    const communities = getCommunityPanel(community, allUsers, hideLabel)
+    const communities = getCommunityPanel(community, allUsers, hideLabel, artworks)
 
     return (
         <div className={state} style={getContainerStyle(state)}>
@@ -159,7 +159,7 @@ function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkD
  * @param community source community.
  * @returns a react component with the community's panel.
  */
-function getCommunityPanel(community: CommunityData | undefined, allUsers: UserData[], hideLabel: boolean) {
+function getCommunityPanel(community: CommunityData | undefined, allUsers: UserData[], hideLabel: boolean, artworks: ArtworkData[]) {
 
     const tittle = <div style={sectionTittleStyle}> Community Attributes </div>;
     let content: React.ReactNode[] = [];
@@ -171,7 +171,7 @@ function getCommunityPanel(community: CommunityData | undefined, allUsers: UserD
         content.push(<br key={-5} />);
 
         for (let i = 0; i < community.explanations.length; i++) {
-            content.push(getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel));
+            content.push(getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks));
             content.push(<br key={-6 - i} />);
         }
     }
@@ -185,7 +185,7 @@ function getCommunityPanel(community: CommunityData | undefined, allUsers: UserD
 }
 
 
-function getCommunityExplanation(communityData: CommunityData, explanation: ExplanationData, allUsers: UserData[], hideLabel: boolean) {
+function getCommunityExplanation(communityData: CommunityData, explanation: ExplanationData, allUsers: UserData[], hideLabel: boolean, artworks: ArtworkData[]) {
     if (explanation.visible === false) {
         return "";
 
@@ -194,14 +194,19 @@ function getCommunityExplanation(communityData: CommunityData, explanation: Expl
             case ExplanationTypes.explicit_attributes: {
                 return getStackedBars(communityData);
             }
-            case ExplanationTypes.medioid: {
-                
-                const medioid = allUsers.find( (value) => {return value.id == explanation.explanation_data.id});
+            case ExplanationTypes.medoid: {
 
-                return (getNodePanel("Medioid Attributes", medioid, hideLabel));
+                const medioid = allUsers.find((value) => { return Number(value.id) === explanation.explanation_data.id });
+
+                return (
+                    <React.Fragment>
+                        {getNodePanel("Medoid Attributes", medioid, hideLabel)}
+                        {getInteractionsAccordion(medioid, artworks)}
+                    </React.Fragment>);
             }
             default: {
                 console.log("Unrecognized explanation type");
+                console.log(explanation.explanation_type);
                 return "";
             }
         }
@@ -213,21 +218,20 @@ function getCommunityExplanation(communityData: CommunityData, explanation: Expl
  * @returns a react component array with the community's stacked bar.
  */
 function getStackedBars(community: CommunityData) {
-    const content = new Array();
-    const explicitCommunityKeys = Object.keys(community.explicitCommunity)
+    let content: React.ReactNode[] = new Array<React.ReactNode>();
 
-    for (let i = 0; i < explicitCommunityKeys.length; i++) {
-        const key = explicitCommunityKeys[i];
+    if (community.explicitCommunityArray !== undefined) {
 
-        const pairs = community.explicitCommunity[key][0];
+        for (let i = 0; i < community.explicitCommunityArray.length; i++) {
+            content.push(
+                <StackedBarGraph
+                    key={i}
+                    tittle={community.explicitCommunityArray[i][0]}
+                    commData={community.explicitCommunityArray[i][1]}
+                />
+            );
 
-        content.push(
-            <StackedBarGraph
-                key={i}
-                tittle={key}
-                pairs={pairs}
-            />
-        );
+        }
     }
 
     return content;

@@ -16,220 +16,59 @@ const checkSimilarityFunctions = true; //FOR DEBUG WITH TESTING DATAFILES if act
  * @param arg JSON with the data
  * @returns {types.PerspectiveDetails} returns the JSON parsed as a proper TS class
  */
-export function validateAllPerspectivesDetailsJSON(arg: any): types.PerspectiveDetails[] {
+export function validatePerspectiveIDfile(arg: any): types.PerspectiveId[] {
     try {
         if (arg === undefined) {
-            throw Error(`All perspectives file is undefined`);
+            throw Error(`Perspectives Ids and names file is undefined`);
         }
 
         if (typeof (arg) !== "object") {
-            throw Error(`All perspectives file is not an object`);
+            throw Error(`Perspectives Ids and names file is not an object nor array`);
         }
 
         if (arg.length === undefined || arg.length <= 0) {
-            throw Error(`All perspectives file does not have any perspective`);
+            throw Error(`Perspectives Ids and names file does not have any perspective`);
         }
 
         for (let i = 0; i < arg.length; i++) {
             if (arg[i] === undefined) {
-                throw Error(`A perspective of Allperspectives file is undefined`);
+                throw Error(`A perspective of the perspective IDs file is undefined`);
             }
 
             if (typeof (arg[i]) !== "object") {
-                throw Error(`A perspective of Allperspectives file is not an object`);
+                throw Error(`A perspective of the perspective IDs file is not an object`);
             }
 
-            arg[i] = isPerspectiveInfoValid(arg[i]);
-            arg[i].localId = i;
-        }
-
-        console.log(`All perspectives file validation has been completed -> `);
-        console.log(arg as types.PerspectiveDetails[]);
-
-        return arg;
-    } catch (e: any) {
-        throw Error(`All perspectives file is not valid: ${e.message}`);
-    }
-
-
-}
-
-function isPerspectiveInfoValid(arg: any): types.PerspectiveDetails {
-    try {
-        if (arg.id === undefined) {
-            throw Error(`ID of the perspective is undefined`);
-        }
-
-        if (typeof (arg.id) !== "number") {
-            arg.id = Number(arg.id);
-
-            if (isNaN(arg.id))
-                throw Error(`ID of the perspective (${arg.id}) is not a number`);
-        }
-
-        if (arg.name === undefined) {
-            throw Error(`Name of the perspective (${arg.id}) is undefined`);
-        }
-
-        if (typeof (arg.name) !== "string") {
-            try {
-                arg.name = String(arg.name);
-            } catch (e: any) {
-                throw Error(`Name of the perspective (${arg.id}) is not a string`);
+            if (arg[i].id === undefined) {
+                throw Error(`A perspective Id of the perspective IDs file is undefined`);
             }
-        }
-
-        if (arg.algorithm === undefined) {
-            throw Error(`Algorithms of the perspective (${arg.id}) is undefined`);
-        }
-
-        if (typeof (arg.algorithm) !== "object") {
-            throw Error(`Algorithms of the perspective (${arg.id}) is not an object`);
-        }
-
-        arg.algorithm = isAlgorithmValid(arg.algorithm);
-
-        if (checkSimilarityFunctions) {
-            if (arg.similarity_functions === undefined) {
-                throw Error(`Similarity functions of the perspective (${arg.id}) is undefined`);
-            }
-
-            if (typeof (arg.similarity_functions) !== "object") {
-                throw Error(`Similarity functions of the perspective (${arg.id}) is not an object`);
-            }
-
-            for (let i = 0; i < arg.similarity_functions.length; i++) {
-                if (arg.similarity_functions[i].sim_function === undefined) {
-                    throw Error(`A Sim function of the perspective (${arg.id}) is undefined`);
+    
+            if (typeof (arg[i].id) !== "string") {
+                try {
+                    arg[i].id = String(arg[i].id);
+                } catch (e: any) {
+                    throw Error(`A perspective Id of the perspective IDs file is not a string`);
                 }
-
-                if (typeof (arg.similarity_functions[i].sim_function) !== "object") {
-                    throw Error(`A Sim function of the perspective (${arg.id}) is not an object`);
-                }
-
-                arg.similarity_functions[i].sim_function = isSimilarityFunctionValid(arg.similarity_functions[i].sim_function);
             }
+
+            if (arg[i].name === undefined || typeof (arg[i].name) !== "string") {
+                arg[i].name = arg[i].id;
+            }
+
+            arg[i].isActive = types.PerspectiveActiveState.unactive;
         }
+
+        console.log(`Perspective IDs file validation has been completed -> `);
+        console.log(arg);
 
         return arg;
     } catch (e: any) {
-        throw Error(`PerspectiveInfo is not valid: ${e.message}`);
+        throw Error(`Perspective IDs file is not valid: ${e.message}`);
     }
+
+
 }
 
-function isAlgorithmValid(arg: any): types.PerspectiveAlgorithm {
-    try {
-        if (arg.name === undefined) {
-            throw Error(`Name of the algorithm is undefined`);
-        }
-
-        if (typeof (arg.name) !== "string") {
-            try {
-                arg.name = String(arg.name);
-            } catch (e: any) {
-                throw Error(`Name of the algorithm (${arg.name}) is not a string`);
-            }
-        }
-
-        if (arg.params === undefined) {
-            throw Error(`Params of the algorithm (${arg.name}) is undefined`);
-        }
-
-        if (typeof (arg.params) !== "object") {
-            throw Error(`Params of the algorithm (${arg.name}) is not an object`);
-        }
-
-        return arg;
-
-    } catch (e: any) {
-        throw Error(`Algorithm is not valid: ${e.message}`);
-    }
-}
-
-
-function isSimilarityFunctionValid(arg: any): types.SimFunction {
-    try {
-        if (arg.name === undefined) {
-            throw Error(`Name of the Similarity function is undefined`);
-        }
-
-        if (typeof (arg.name) !== "string") {
-            try {
-                arg.name = String(arg.name);
-            } catch (e: any) {
-                throw Error(`Name of the Similarity function (${arg.name}) is not a string`);
-            }
-        }
-
-        if (arg.params === undefined) {
-            throw Error(`Params of the Similarity function (${arg.name}) is undefined`);
-        }
-
-        if (typeof (arg.params) !== "object") {
-            throw Error(`Params of the Similarity function (${arg.name}) is not an object`);
-        }
-
-        if (arg.on_attribute === undefined) {
-            throw Error(`onAttribute of the Similarity function (${arg.name}) is undefined`);
-        }
-
-        if (typeof (arg.on_attribute) !== "object") {
-            throw Error(`onAttribute of the Similarity function (${arg.name}) is not an object`);
-        }
-
-        if (arg.weight === undefined) {
-            throw Error(`Weight of the Similarity function (${arg.name}) is undefined`);
-        }
-
-        if (typeof (arg.weight) !== "number") {
-            arg.weight = Number(arg.weight);
-
-            if (isNaN(arg.weight))
-                throw Error(`Weight of the Similarity function (${arg.name}) is not a number`);
-
-        }
-
-        arg.on_attribute = isOnAttributeValid(arg.on_attribute);
-
-        return arg;
-
-    } catch (e: any) {
-        throw Error(`Similarity function is not valid: ${e.message}`);
-    }
-}
-
-function isOnAttributeValid(arg: any): types.OnAttribute {
-    try {
-        if (arg.att_name === undefined) {
-            throw Error(`Att_name of the OnAttribute is undefined`);
-        }
-
-        if (typeof (arg.att_name) !== "string") {
-            try {
-                arg.att_name = String(arg.att_name);
-            } catch (e: any) {
-                throw Error(`Att_name of the OnAttribute (${arg.att_name}) is not a string`);
-            }
-        }
-
-        if (arg.att_type === undefined) {
-            throw Error(`Att_type of the OnAttribute is undefined`);
-        }
-
-        if (typeof (arg.att_type) !== "string") {
-            try {
-                arg.att_type = String(arg.att_type);
-            } catch (e: any) {
-                throw Error(`Att_type of the OnAttribute (${arg.att_type}) is not a string`);
-            }
-        }
-
-        return arg;
-
-    } catch (e: any) {
-        throw Error(`OnAttribute is not valid: ${e.message}`);
-    }
-}
 //#endregion
 
 //#region Perspective Data JSON

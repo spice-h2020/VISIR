@@ -3,59 +3,31 @@
  * @author Marco Expósito Pérez
  */
 
+import { Dimensions } from "./nodes";
+
 /**
  * Interface that allows to add any (key:string -> value:any) property to an object of this type 
  */
 export interface anyProperty extends Record<string, any> { }
 
-/**
- * Class that contains all the information of a perspective, including its details from the All perspectives file and its data from the own perspective file.
- */
-export class PerspectiveInfo {
-    details: PerspectiveDetails;
-    data: PerspectiveData;
-
-    constructor(details: PerspectiveDetails, data: PerspectiveData) { this.details = details; this.data = data }
-}
 
 //#region All perspectives file
 
 /**
  * Interface with all the details of a single perspective.
  */
-export interface PerspectiveDetails {
-    id: number;
+export interface PerspectiveId {
+    id: string;
     name: string;
-    algorithm: PerspectiveAlgorithm;
-    similarity_functions: SimFunction[];
-    localId: number;
+    isActive: PerspectiveActiveState;
 }
 
-/**
- * Interface of an algorithm used in a perspective. Params doesnt have any specified format.
- */
-export interface PerspectiveAlgorithm {
-    name: string;
-    params: anyProperty;
+export enum PerspectiveActiveState {
+    unactive,
+    left,
+    right,
 }
 
-/**
- * Interface of an SimilarityFunction used in a perspective. Params doesnt have any specified format.
- */
-export interface SimFunction {
-    name: string;
-    params: anyProperty;
-    onAttribute: OnAttribute[];
-    weight: number;
-}
-
-/**
- * Interface of an attribute used in a perspective.
- */
-export interface OnAttribute {
-    name: string;
-    type: string;
-}
 //#endregion
 
 //#region Perspective Data file
@@ -70,6 +42,7 @@ export interface PerspectiveData {
     artworks: ArtworkData[],
 
     id: string,
+    name: string,
 }
 
 /**
@@ -80,12 +53,20 @@ export interface CommunityData extends anyProperty {
     name: string;
     explanations: CommExplanation[];
     users: string[];
-    explicitCommunity: anyProperty;
+
+    explicitCommunityMap: Map<string, ExplicitCommData>;
+    explicitCommunityArray?: [string, ExplicitCommData][];
+}
+
+export interface ExplicitCommData {
+    map: Map<string, number>;
+    array?: [string, number][];
+    dimension?: Dimensions;
 }
 
 export enum ExplanationTypes {
     explicit_attributes,
-    medioid
+    medoid
 }
 
 /**
@@ -106,6 +87,8 @@ export interface UserData extends anyProperty {
     implicit_community: number;
     explicit_community: anyProperty;
     interactions: Interaction[];
+
+    isMedoid: boolean;
 }
 
 /**

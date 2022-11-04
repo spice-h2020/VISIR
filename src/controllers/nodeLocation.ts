@@ -5,7 +5,7 @@
 //Constants
 import { Point } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
-import { UserData } from "../constants/perspectivesTypes";
+import { CommunityData, ExplanationTypes, UserData } from "../constants/perspectivesTypes";
 
 /**
  * Aux interface to help group nodes in their partition of the canvas's layout
@@ -54,7 +54,7 @@ export default class NodeLocation {
      * @returns returns an array with the center poin of each partition
      */
     createNetworkPartitions(nUsers: number, nAreas: number): Point[] {
-        const partitionsDistance = nUsers + nodeConst.groupsBaseDistance + (nAreas*4);
+        const partitionsDistance = nUsers + nodeConst.groupsBaseDistance + (nAreas * 4);
         const pi2 = (2 * Math.PI);
 
         //Separate the network area in as many angle slices as necesary
@@ -80,11 +80,13 @@ export default class NodeLocation {
      * Add the node to the its group
      * @param node source node
      */
-    updateNodeGroup(node: UserData) {
+    updateNodeGroup(node: UserData, communities: CommunityData[]) {
         const group = node.implicit_community;
 
-        this.nodeGroups[group].nodes.push(node.id);
-        this.nodeGroups[group].partition.nNodes++;
+        if (!node.isMedoid) {
+            this.nodeGroups[group].nodes.push(node.id);
+            this.nodeGroups[group].partition.nNodes++;
+        }
     }
 
     /**
@@ -93,10 +95,18 @@ export default class NodeLocation {
      */
     setNodeLocation(node: UserData) {
         const group = node.implicit_community;
-        const nodePos: Point = this.getNodePos(this.nodeGroups[group], node.id);
 
-        node.x = nodePos.x;
-        node.y = nodePos.y;
+        if (node.isMedoid) {
+
+            node.x = this.nodeGroups[group].partition.center.x;
+            node.y = this.nodeGroups[group].partition.center.y;
+
+        } else {
+            const nodePos: Point = this.getNodePos(this.nodeGroups[group], node.id);
+
+            node.x = nodePos.x;
+            node.y = nodePos.y;
+        }
     }
 
 
@@ -108,7 +118,7 @@ export default class NodeLocation {
      * @returns point coordinates
      */
     getNodePos(group: NodeGroup, nodeId: string): Point {
-        const size = group.partition.nNodes;
+        let size = group.partition.nNodes;
         const center = group.partition.center;
         const nodeIndex = group.nodes.indexOf(nodeId);;
 
@@ -116,6 +126,10 @@ export default class NodeLocation {
 
         const angleSlice = (2 * Math.PI) / size;
         let targetAngle = angleSlice * nodeIndex;
+        
+        if(size < 7){
+            size = 8;
+        }
 
         output.x = center.x + Math.cos(targetAngle) * size * nodeConst.betweenNodesDistance;
         output.y = center.y + Math.sin(targetAngle) * size * nodeConst.betweenNodesDistance;

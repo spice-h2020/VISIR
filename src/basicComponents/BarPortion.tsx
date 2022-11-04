@@ -5,9 +5,10 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { nodeConst } from "../constants/nodes";
+import { Dimensions, nodeConst } from "../constants/nodes";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
+import { ShapeForm } from "./ShapeForm";
 
 const barPortion: React.CSSProperties = {
     display: "flex",
@@ -28,29 +29,35 @@ const barPortion: React.CSSProperties = {
 
 interface StackedBarProps {
     /**
-     * Tittle of the graph
+     * Tittle/value of the graph
      */
-    value: number,
+    percentile: number,
     /**
-     * Pairs (string, number) that will be represented in the stacked bar.
+     * Text to show when hovering a bar portion
      */
     hoverText: string,
     /**
      * Index of this bar portion in a stacked bar
      */
     index: number,
+    /**
+     * Dimensions represented in the portion
+     */
+    dim: Dimensions | undefined
 }
 
 /**
  * UI component that shows data in a stackedbar format
  */
 export const BarPortion = ({
-    value,
+    percentile: value,
     hoverText,
     index,
+    dim,
 }: StackedBarProps) => {
 
     const [text, setText] = useState<string>(`${value}%`);
+    const [symbolActive, setSymbolActive] = useState<boolean>(true);
 
     const htmlRef = useRef(null);
 
@@ -61,8 +68,13 @@ export const BarPortion = ({
 
             if (width <= 14.0) {
                 setText("");
+                setSymbolActive(false);
             } else if (width <= 29) {
                 setText((value.toFixed(0)).toString());
+                setSymbolActive(false);
+            } else {
+                setText(`${value}%`);
+                setSymbolActive(true);
             }
         }
 
@@ -71,12 +83,85 @@ export const BarPortion = ({
     let style: React.CSSProperties = JSON.parse(JSON.stringify(barPortion));
 
     style.width = `${value}%`;
-    style.background = nodeConst.nodeDimensions.getColor(index);
+    style.background = getBackgroundColor(index, dim);
+    style.color = getTextColor(index, dim);
 
     hoverText = `${hoverText === "" ? "(empty)" : hoverText} ${value}%`;
 
     return (
         <span ref={htmlRef} title={hoverText} className="bar-portion" style={style}>
-            {text}
+            <div className="row" style={{ alignItems: "center" }}>
+                {text}
+                <span style={{ width: "3px" }} />
+                {symbolActive === true ? getSymbol(index, dim) : ""}
+            </div>
         </span>);
 };
+
+function getBackgroundColor(index: number, dim: Dimensions | undefined) {
+    switch (dim) {
+        case Dimensions.Color: {
+            return nodeConst.nodeDimensions.getColor(index);
+        }
+        case Dimensions.Shape: {
+            return index % 2 ? "white" : "black";
+        }
+        default: {
+            switch (index % 3) {
+                case 1: {
+                    return "red";
+                }
+                case 2: {
+                    return "blue";
+                }
+                case 0: {
+                    return "yellow";
+                }
+            }
+        }
+    }
+}
+
+
+function getTextColor(index: number, dim: Dimensions | undefined) {
+    switch (dim) {
+        case Dimensions.Color: {
+            if (index === 0) {
+                return "white";
+            } else {
+                return "black";
+            }
+        }
+        case Dimensions.Shape: {
+            return index % 2 ? "black" : "white";
+        }
+        default: {
+            switch (index % 3) {
+                case 1: {
+                    return "white";
+                }
+                default:{
+                    return "black";
+                }
+            }
+        }
+    }
+}
+
+function getSymbol(index: number, dim: Dimensions | undefined) {
+    switch (dim) {
+        case Dimensions.Color: {
+            return "";
+        }
+        case Dimensions.Shape: {
+            return <ShapeForm
+                shape={nodeConst.nodeDimensions.getShape(index).name}
+                color={getTextColor(index, dim)}
+                scale={0.95}
+            />;
+        }
+        default: {
+            return "";
+        }
+    }
+}
