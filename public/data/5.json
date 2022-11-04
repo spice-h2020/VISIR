@@ -135,7 +135,7 @@
                     "explanation_data": {
                         "id": 91
                     },
-                    "visible": false
+                    "visible": true
                 }
             ],
             "users": [
@@ -156,7 +156,7 @@
                     "explanation_data": {
                         "id": 27
                     },
-                    "visible": false
+                    "visible": true
                 }
             ],
             "users": [

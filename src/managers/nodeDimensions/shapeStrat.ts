@@ -28,7 +28,7 @@ export default class ShapeStrategy extends GenericStrategy {
             if (shape !== undefined) {
 
                 user["shape"] = shape.name;
-                
+
                 user.font = {
                     vadjust: shape.vAdjust,
                 }
@@ -44,18 +44,13 @@ export default class ShapeStrategy extends GenericStrategy {
             }
         }
 
-        if(isFocus){
+        if (isFocus) {
             user.size = nodeConst.selectedSize;
-        }else{
+        } else if (user.isMedoid) {
+            user.size = nodeConst.medoidSize;
+        } else {
             user.size = nodeConst.defaultSize;
         }
-        
-        // if(isFocus || user?.medioid){
-        //     user.size = nodeConst.selectedSize;
-        // }else{
-        //     user.size = nodeConst.defaultSize;
-        // }
-        
     }
 
     /**

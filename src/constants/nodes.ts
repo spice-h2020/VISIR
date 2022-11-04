@@ -44,14 +44,14 @@ export const nodeConst = {
     zoomDuration: 400,
 
     //Sizes
-    defaultSize: 20,
+    defaultSize: 15,
+    medoidSize: 25,
     selectedSize: 35,
 
     //Default value for a background color when the explicit community doesnt change it
     defaultColor: "rgb(30, 236, 164, 1)",
     //Color when another node is being focused
     noFocusColor: { background: "rgba(155, 155, 155, 0.3)", border: "rgba(100, 100, 100, 0.3)" },
-
 
     //Default shape in case explicit community doesnt change it
     defaultShape: { name: "dot", vAdjust: -35, selectedVAdjust: -40 } as shapeData,

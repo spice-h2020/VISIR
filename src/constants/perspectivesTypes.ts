@@ -87,6 +87,8 @@ export interface UserData extends anyProperty {
     implicit_community: number;
     explicit_community: anyProperty;
     interactions: Interaction[];
+
+    isMedoid: boolean;
 }
 
 /**

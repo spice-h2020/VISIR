@@ -87,8 +87,8 @@ export default class NetworkController {
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
 
         perspectiveData.users.forEach((user: UserData) => {
-            nodeLocation.updateNodeGroup(user, perspectiveData.communities);
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
+            nodeLocation.updateNodeGroup(user, perspectiveData.communities);
         });
 
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);

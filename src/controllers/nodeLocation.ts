@@ -83,12 +83,7 @@ export default class NodeLocation {
     updateNodeGroup(node: UserData, communities: CommunityData[]) {
         const group = node.implicit_community;
 
-        const medioid_expl = communities[group].explanations.find((value) => { return value.explanation_type === ExplanationTypes.medoid });
-        if (medioid_expl !== undefined && medioid_expl.visible && medioid_expl.explanation_data.id === Number(node.id)) {
-
-            node.medioid = true;
-
-        } else {
+        if (!node.isMedoid) {
             this.nodeGroups[group].nodes.push(node.id);
             this.nodeGroups[group].partition.nNodes++;
         }
@@ -101,7 +96,7 @@ export default class NodeLocation {
     setNodeLocation(node: UserData) {
         const group = node.implicit_community;
 
-        if (node?.medioid) {
+        if (node.isMedoid) {
 
             node.x = this.nodeGroups[group].partition.center.x;
             node.y = this.nodeGroups[group].partition.center.y;
@@ -123,7 +118,7 @@ export default class NodeLocation {
      * @returns point coordinates
      */
     getNodePos(group: NodeGroup, nodeId: string): Point {
-        const size = group.partition.nNodes;
+        let size = group.partition.nNodes;
         const center = group.partition.center;
         const nodeIndex = group.nodes.indexOf(nodeId);;
 
@@ -131,6 +126,10 @@ export default class NodeLocation {
 
         const angleSlice = (2 * Math.PI) / size;
         let targetAngle = angleSlice * nodeIndex;
+        
+        if(size < 7){
+            size = 8;
+        }
 
         output.x = center.x + Math.cos(targetAngle) * size * nodeConst.betweenNodesDistance;
         output.y = center.y + Math.sin(targetAngle) * size * nodeConst.betweenNodesDistance;

@@ -3,7 +3,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { CommunityData, ExplicitCommData, UserData } from "../constants/perspectivesTypes";
+import { CommExplanation, CommunityData, ExplanationTypes, ExplicitCommData, UserData } from "../constants/perspectivesTypes";
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
@@ -33,6 +33,10 @@ export default class NodeExplicitComms {
      * Data of all communities
      */
     communitiesData: CommunityData[];
+    /**
+     * ID of all medoid nodes
+     */
+    medoidNodes: string[];
 
     /**
      * Constructor of the class
@@ -42,6 +46,16 @@ export default class NodeExplicitComms {
         this.explicitData = new Array<ExplicitData>();
 
         this.communitiesData = communitiesData;
+        this.medoidNodes = [];
+
+        this.communitiesData.forEach((comm: CommunityData) => {
+            comm.explanations.forEach((expl: CommExplanation) => {
+                if (expl.explanation_type === ExplanationTypes.medoid && expl.explanation_data.id !== undefined) {
+                    this.medoidNodes.push( (expl.explanation_data.id).toString());
+                }
+            })
+        });
+
     }
 
     /**
@@ -58,8 +72,23 @@ export default class NodeExplicitComms {
                 this.updateExplicitData(key, node);
             }
 
+            node.isMedoid = this.medoidNodes.includes(node.id);
+
             this.updateCommunitiesData(key, node);
         });
+    }
+
+    isMedoid(id: string) {
+
+        this.communitiesData.forEach((comm: CommunityData) => {
+            comm.explanations.forEach((expl: CommExplanation) => {
+                if (expl.explanation_type === ExplanationTypes.medoid && expl.explanation_data.id === id) {
+                    return true;
+                }
+            })
+        });
+
+        return false;
     }
 
     /**
@@ -142,8 +171,6 @@ export default class NodeExplicitComms {
      */
     calcExplicitPercentile(dimStrat: NodeDimensionStrategy) {
         for (let community of this.communitiesData) {
-
-
             community.explicitCommunityMap.forEach(function (parentValue, key) {
 
                 //Change the count to percentile
