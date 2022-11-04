@@ -104,8 +104,11 @@ export const App = ({
       <Navbar
         leftAlignedItems={[
           <Button
-            content="Visualization module"
-            extraClassName="transparent tittle"
+            content={<div className='row' style={{ alignItems: "center" }}>
+              <img className="mainIcon" src="./images/VISIR-red.png" alt="VISIR icon" /> 
+              <div className="tittle" style={{marginLeft: "10px"}}>VISIR</div>
+            </div>}
+            extraClassName="transparent tittle mainBtn"
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown

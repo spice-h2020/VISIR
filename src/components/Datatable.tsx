@@ -62,7 +62,7 @@ export const DataTable = ({
 
     const nodePanel = getNodePanel("Citizen Attributes", node, hideLabel);
     const interactions = getInteractionsAccordion(node, artworks);
-    const communities = getCommunityPanel(community, allUsers, hideLabel)
+    const communities = getCommunityPanel(community, allUsers, hideLabel, artworks)
 
     return (
         <div className={state} style={getContainerStyle(state)}>
@@ -159,7 +159,7 @@ function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkD
  * @param community source community.
  * @returns a react component with the community's panel.
  */
-function getCommunityPanel(community: CommunityData | undefined, allUsers: UserData[], hideLabel: boolean) {
+function getCommunityPanel(community: CommunityData | undefined, allUsers: UserData[], hideLabel: boolean, artworks: ArtworkData[]) {
 
     const tittle = <div style={sectionTittleStyle}> Community Attributes </div>;
     let content: React.ReactNode[] = [];
@@ -171,7 +171,7 @@ function getCommunityPanel(community: CommunityData | undefined, allUsers: UserD
         content.push(<br key={-5} />);
 
         for (let i = 0; i < community.explanations.length; i++) {
-            content.push(getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel));
+            content.push(getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks));
             content.push(<br key={-6 - i} />);
         }
     }
@@ -185,7 +185,7 @@ function getCommunityPanel(community: CommunityData | undefined, allUsers: UserD
 }
 
 
-function getCommunityExplanation(communityData: CommunityData, explanation: ExplanationData, allUsers: UserData[], hideLabel: boolean) {
+function getCommunityExplanation(communityData: CommunityData, explanation: ExplanationData, allUsers: UserData[], hideLabel: boolean, artworks: ArtworkData[]) {
     if (explanation.visible === false) {
         return "";
 
@@ -198,7 +198,11 @@ function getCommunityExplanation(communityData: CommunityData, explanation: Expl
 
                 const medioid = allUsers.find((value) => { return Number(value.id) === explanation.explanation_data.id });
 
-                return (getNodePanel("Medoid Attributes", medioid, hideLabel));
+                return (
+                    <React.Fragment>
+                        {getNodePanel("Medoid Attributes", medioid, hideLabel)}
+                        {getInteractionsAccordion(medioid, artworks)}
+                    </React.Fragment>);
             }
             default: {
                 console.log("Unrecognized explanation type");

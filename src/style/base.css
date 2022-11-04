@@ -67,6 +67,13 @@ body {
     letter-spacing: var(--titleLetterSpacing) !important;
 }
 
+img{
+
+    /* filter: brightness(76.9%) hue-rotate(1deg) saturate(62.8%);   */
+
+    height: 40px;
+}
+
 /*------------------------------------------
 //         BUTTONS
 //------------------------------------------*/
@@ -98,6 +105,12 @@ body {
 .btn.disabled:hover {
     box-shadow: none !important;
     cursor: auto;
+}
+
+/* Button at the top left of the toolbar */
+.mainBtn {
+    display: flex;
+    align-items: center;
 }
 
 /* A few basic button colors */
