@@ -51,7 +51,7 @@ interface DataTableProps {
  * Basic UI component that shows some data in a table
  */
 export const DataTable = ({
-    tittle = "Perspective A",
+    tittle = "Perspective",
     node,
     community,
     artworks,
@@ -202,6 +202,7 @@ function getCommunityExplanation(communityData: CommunityData, explanation: Expl
             }
             default: {
                 console.log("Unrecognized explanation type");
+                console.log(explanation.explanation_type);
                 return "";
             }
         }

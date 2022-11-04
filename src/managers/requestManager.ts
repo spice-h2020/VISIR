@@ -6,8 +6,8 @@
  */
 //Constants
 import { FileSource } from '../constants/viewOptions';
-import { validatePerspectiveDataJSON } from '../constants/ValidateFiles';
-import { PerspectiveData } from '../constants/perspectivesTypes';
+import { validatePerspectiveDataJSON, validatePerspectiveIDfile } from '../constants/ValidateFiles';
+import { PerspectiveData, PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
 import { Dispatch } from 'react';
@@ -60,22 +60,23 @@ export default class RequestManager {
      * @param setStates function to update the selectPerspective dropdown state
      * @param onFinish function executed when the request ends, updating the activePerspectives if necesary
      */
-    requestPerspectiveFIle(perspectiveId: string, setPerspective: Dispatch<React.SetStateAction<PerspectiveData | undefined>>) {
-        
+    requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
+
         this.getPerspective(perspectiveId)
             .then((response) => {
                 if (response.status === 200) {
                     const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
                     perspectiveJson.id = perspectiveId;
-
-                    setPerspective(perspectiveJson);
+                    perspectiveJson.name = name;
+                    
+                    callback(perspectiveJson);
                 } else {
                     throw new Error(`Perspective ${perspectiveId} was ${response.statusText}`);
                 }
             })
             .catch((error) => {
-                
-                setPerspective(undefined);
+
+                callback(undefined);
 
                 console.log(`Perspective file with id: (${perspectiveId}) was not found: ${error}`);
                 console.log(error);
@@ -99,6 +100,28 @@ export default class RequestManager {
             })
             .catch((error) => {
                 throw error;
+            });
+    }
+
+    requestAllPerspectivesIds(initPerspectives: Function) {
+
+        this.getAllPerspectives()
+            .then((response) => {
+                if (response.status === 200) {
+                    const allIds: PerspectiveId[] = validatePerspectiveIDfile(JSON.parse(response.data));
+
+                    initPerspectives(allIds);
+                } else {
+                    throw new Error(`All IDs file was ${response.statusText}`);
+                }
+            })
+            .catch((error) => {
+
+                initPerspectives(undefined);
+
+                console.log(`All IDs file was not found:`);
+                console.log(error);
+                alert(`All IDs file was not found: ${error.message}`);
             });
     }
 

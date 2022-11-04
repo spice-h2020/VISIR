@@ -6,10 +6,10 @@
  */
 //Constants
 import { FileSource, ButtonState, ViewOptions, viewOptionsReducer, CollapsedState } from './constants/viewOptions';
-import { PerspectiveData } from './constants/perspectivesTypes';
+import { PerspectiveActiveState, PerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
 //Packages
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -20,8 +20,7 @@ import { LegendComponent } from './components/LegendComponent';
 import RequestManager from './managers/requestManager';
 
 import './style/base.css';
-
-const requestManager = new RequestManager();
+import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 
 function collapseReducer(state: CollapsedState, stateAction: CollapsedState) {
   if (state === CollapsedState.unCollapsed) {
@@ -41,14 +40,21 @@ interface AppProps {
 }
 
 export const App = ({
+
   perspectiveId1,
   perspectiveId2
+
 }: AppProps) => {
+  const [requestManager] = useState<RequestManager>(new RequestManager());
+
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
 
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useState<DimAttribute[]>([]);
+
+  //Current available perspectives for the dropdowns
+  const [allPerspectivesIds, setAllPerspectivesIds] = useState<PerspectiveId[]>([]);
 
   //Current Active perspectives in the view group
   const [leftPerspective, setLeftPerspective] = useState<PerspectiveData>();
@@ -57,14 +63,41 @@ export const App = ({
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, CollapsedState.unCollapsed);
 
-  const updatePerspectives = (perspectiveId1: string | null, perspectiveId2: string | null) => {
+  function initPerspectives(newIds: PerspectiveId[]) {
+    setLeftPerspective(undefined);
+    setRightPerspective(undefined);
 
-    if (perspectiveId1 !== null)
-      requestManager.requestPerspectiveFIle(perspectiveId1, setLeftPerspective);
+    for (let i = 0; i < newIds.length; i++) {
 
-    if (perspectiveId2 !== null && perspectiveId2 !== perspectiveId1)
-      requestManager.requestPerspectiveFIle(perspectiveId2, setRightPerspective);
+      if (newIds[i].id === perspectiveId1) {
+        newIds[i].isActive = PerspectiveActiveState.left;
+        requestManager.requestPerspectiveFIle(perspectiveId1, newIds[i].name, setLeftPerspective);
+
+      } else if (newIds[i].id === perspectiveId2 && perspectiveId2 !== perspectiveId1) {
+
+        newIds[i].isActive = PerspectiveActiveState.right;
+        requestManager.requestPerspectiveFIle(perspectiveId2, newIds[i].name, setRightPerspective);
+
+      } else {
+
+        newIds[i].isActive = PerspectiveActiveState.unactive;
+      }
+    }
+
+    setAllPerspectivesIds(newIds);
   }
+
+  useEffect(() => {
+    console.log(allPerspectivesIds);
+  }, [allPerspectivesIds]);
+
+  useEffect(() => {
+    console.log(leftPerspective);
+  }, [leftPerspective]);
+
+  useEffect(() => {
+    console.log(rightPerspective);
+  }, [rightPerspective]);
 
   return (
     <div>
@@ -78,7 +111,7 @@ export const App = ({
           <FileSourceDropdown
             setFileSource={(fileSource: FileSource) => {
               requestManager.changeBaseURL(fileSource);
-              updatePerspectives(perspectiveId1, perspectiveId2);
+              requestManager.requestAllPerspectivesIds(initPerspectives);
             }}
           />,
           <OptionsDropdown
@@ -86,6 +119,14 @@ export const App = ({
           />,
         ]}
         midAlignedItems={[
+          <SelectPerspectiveDropdown
+            tittle={'Select perspective A'}
+            setAllIds={setAllPerspectivesIds}
+            setActivePerspective={setLeftPerspective}
+            allIds={allPerspectivesIds}
+            isLeftDropdown={true}
+            requestMan={requestManager}
+          />,
           <Button
             content="<<"
             onClick={(state: ButtonState) => {
@@ -105,7 +146,15 @@ export const App = ({
               }
             }}
             state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
-          />
+          />,
+          <SelectPerspectiveDropdown
+            tittle={'Select perspective B'}
+            setAllIds={setAllPerspectivesIds}
+            setActivePerspective={setRightPerspective}
+            allIds={allPerspectivesIds}
+            isLeftDropdown={false}
+            requestMan={requestManager}
+          />,
         ]}
         rightAlignedItems={[
           <LegendComponent

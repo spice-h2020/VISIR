@@ -48,7 +48,7 @@ export default class NetworkController {
 
     /**
      * Constructor of the class 
-     * @param perspectiveInfo All the information of this perspective
+     * @param perspectiveData Data of this perspective
      * @param htmlRef HTMLDiv element where the canvas of the network will be holded
      * @param viewOptions Object with the view options
      * @param sf Obkect with the functions that change the state

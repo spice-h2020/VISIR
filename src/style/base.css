@@ -150,6 +150,11 @@ body {
     text-align: start;
 }
 
+.btn-dropdown.disabled:hover {
+    background-color: transparent;
+}
+
+
 .btn-dropdownbtn:first-child {
     margin-top: 0.1rem;
 }
@@ -491,22 +496,24 @@ input[type="range"]::-ms-track {
 //------------------------------------------*/
 
 
-.bar-stacked{
+.bar-stacked {
     width: 100%;
     height: 100%;
 }
 
-.bar-portion:first-child{
+.bar-portion:first-child {
     border-left: 1px solid black;
-    
+
 }
-.bar-portion{
+
+.bar-portion {
     border-bottom: 1px solid black;
     border-top: 1px solid black;
 
     box-sizing: "border-box";
     font-family: "Anonymous Pro";
 }
-.bar-portion:last-child{
+
+.bar-portion:last-child {
     border-right: 1px solid black;
 }

@@ -139,7 +139,7 @@ export const PerspectiveView = ({
 
     if (perspectiveState !== PerspectiveState.collapsed) {
         const dataCol = <DataTable
-            tittle={perspectiveData.id}
+            tittle={perspectiveData.name}
             node={selectedNode}
             community={selectedCommunity}
 
