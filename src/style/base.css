@@ -67,10 +67,9 @@ body {
     letter-spacing: var(--titleLetterSpacing);
 }
 
-img{
+img.mainIcon {
 
     /* filter: brightness(76.9%) hue-rotate(1deg) saturate(62.8%);  Only brightness filter works */
-    height: 40px;
 }
 
 /*------------------------------------------
