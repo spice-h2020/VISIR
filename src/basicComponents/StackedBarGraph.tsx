@@ -6,8 +6,7 @@
  */
 //Packages
 import React from "react";
-import { Dimensions } from "../constants/nodes";
-import { ExplicitCommData } from "../constants/perspectivesTypes";
+import { IExplicitCommData } from "../constants/perspectivesTypes";
 //Local files
 import { BarPortion } from "./BarPortion";
 
@@ -25,17 +24,17 @@ const barContainer: React.CSSProperties = {
 
 interface StackedBarGraphProps {
     /**
-     * Tittle of the graph
+     * Tittle of the graph.
      */
     tittle: string,
     /**
      * pairs (string, number) that will be represented in the stacked bar.
      */
-    commData: ExplicitCommData,
+    commData: IExplicitCommData,
 }
 
 /**
- * UI component that shows data in a stackedbar format
+ * UI component that shows data in a horizontal stackedbar.
  */
 export const StackedBarGraph = ({
     tittle,

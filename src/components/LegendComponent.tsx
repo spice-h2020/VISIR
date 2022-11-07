@@ -1,13 +1,14 @@
 /**
- * @fileoverview This file creates a button that show/hides the legend of the app.
- * The legend allows the user to understand the relations between the node's dimensions and the value of its explicit communities.
+ * @fileoverview This file creates a dropdown that show/hides the legend of the app. This also creates the content.
+ * The legend allows the user to understand the relations between the node's dimensions and the value of 
+ * its explicit communities.
  * The user can also toggle any Legend value to hide all node's with that value.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { DimAttribute, Dimensions, nodeConst } from '../constants/nodes';
-import { ButtonState } from '../constants/viewOptions';
+import { EButtonState } from '../constants/viewOptions';
 //Packages
 import React from "react";
 //Local files
@@ -39,21 +40,22 @@ const columnStyle: React.CSSProperties = {
 
 interface LegendTooltipProps {
     /**
-     * Data source to create the legend content
+     * Data source to create the legend content.
      */
     legendData: DimAttribute[];
     /**
-     * Configuration of the legend with the explicit communities that should be hidden/shown
+     * Configuration of the legend with the explicit communities that should be hidden/shown.
      */
     legendConf: Map<string, boolean>;
     /**
-     * Function to change the legend configuration that changes how nodes will be seen
+     * Function to change the legend configuration that changes how nodes will be seen.
      */
     onLegendClick: Function;
 }
 
 /**
- * Legend component
+ * Dropdown component that toggles the legend of the active perspectives. The legend can be clicked to toggle some
+ * nodes visibility based on their explicit community values.
  */
 export const LegendComponent = ({
     legendData,
@@ -88,11 +90,11 @@ export const LegendComponent = ({
 };
 
 /**
- * Get all the buttons that creates the legend tooltip
- * @param legendData Data that creates the legend
- * @param legendConf Configuration of what is active/inactive in the legend
- * @param onClick Function executed when a legend row is clicked
- * @returns all the column buttons
+ * Get all the buttons that creates the legend tooltip.
+ * @param legendData Data that creates the legend.
+ * @param legendConf Configuration of what is active/inactive in the legend.
+ * @param onClick Function executed when a legend row is clicked.
+ * @returns all the column buttons.
  */
 function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, boolean>,
     onClick: Function): React.ReactNode[] {
@@ -110,7 +112,7 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
                     <Button
                         key={i * 10 + j}
                         content={getButtonContent(value, legendData[i].dimension, j)}
-                        state={legendConf.get(value) ? ButtonState.active : ButtonState.unactive}
+                        state={legendConf.get(value) ? EButtonState.active : EButtonState.unactive}
                         extraClassName={"btn-legend btn-dropdown"}
                         onClick={() => {
                             legendConf.set(value, !legendConf.get(value));
@@ -139,11 +141,11 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
 }
 
 /**
- * Returns the content of a legend button based on data from a community and its related values and dimensions
- * @param value value of the attribute of this row
- * @param dim dimension of the attribute of this row
- * @param index index of the community
- * @returns a react component
+ * Returns the content of a legend button based on data from a community and its related values and dimensions.
+ * @param value value of the attribute of this row.
+ * @param dim dimension of the attribute of this row.
+ * @param index index of the community.
+ * @returns a react component.
  */
 const getButtonContent = (value: string, dim: Dimensions, index: number): React.ReactNode => {
     switch (dim) {

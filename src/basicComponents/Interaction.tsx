@@ -1,10 +1,13 @@
 /**
- * @fileoverview This file creates a panel with the information of a user interaction with an artwork.
+ * @fileoverview This file creates a panel with the information of a user interaction with an artwork. This is used
+ * inside accordion items to show all interactions in a compact way.
+ * It shows the name,year,author and image of an artwork. And what the user said about the artwork with the emotions
+ * they felt.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { anyProperty, ArtworkData, Interaction } from "../constants/perspectivesTypes";
+import { anyProperty, IArtworkData, IInteraction } from "../constants/perspectivesTypes";
 //Packages
 import { useEffect, useState } from "react";
 
@@ -32,22 +35,22 @@ const artworkImage: React.CSSProperties = {
 }
 
 interface InteractionPanelProps {
-    artworksData: ArtworkData[];
-    interaction: Interaction;
+    artworksData: IArtworkData[];
+    interaction: IInteraction;
 }
 
 /**
- * Basic UI component that shows the information about a single interaction of a user with an artwork
+ * UI component that only shows information about a single interaction of a user with an artwork.
  */
 export const InteractionPanel = ({
     artworksData,
     interaction,
 }: InteractionPanelProps) => {
 
-    const [artworkData, setArtworkData] = useState<ArtworkData>();
+    const [artworkData, setArtworkData] = useState<IArtworkData>();
 
     useEffect(() => {
-        const newArtwork = artworksData.find((element: ArtworkData) => { return element.id === interaction.artwork_id })
+        const newArtwork = artworksData.find((element: IArtworkData) => { return element.id === interaction.artwork_id })
         setArtworkData(newArtwork);
 
     }, [interaction, artworksData]);
@@ -78,7 +81,6 @@ export const InteractionPanel = ({
                     </div>
                 </div>
                 {getEmotions(interaction.extracted_emotions)}
-
             </div>
         );
     } else
@@ -101,7 +103,14 @@ function getEmotions(extracted_emotions: any): React.ReactNode {
     }
 }
 
-function getEmotionsCloud(emotions: anyProperty) {
+/**
+ * Creates a words cloud based on the emotions parameters of the interaction. Currently it creates two diferent
+ * "word clouds" while iterating over what one is better.
+ * @param emotions Format {(string): (number)}[]. The string is the name of the emotion, the number is the percentile of
+ * feeling of the emotion.
+ * @returns returns a react component with 2 diferent "word clouds".
+ */
+function getEmotionsCloud(emotions: anyProperty): React.ReactNode {
     const array = [];
     const keys = Object.keys(emotions);
 

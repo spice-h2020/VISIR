@@ -4,7 +4,7 @@
  */
 //Constants
 import { DimAttribute, Dimensions } from "../constants/nodes"
-import { UserData } from "../constants/perspectivesTypes";
+import { IUserData } from "../constants/perspectivesTypes";
 //Local files
 import BorderStrategy from "./nodeDimensions/borderStrat";
 import ColorStrategy from "./nodeDimensions/colorStrat";
@@ -13,14 +13,14 @@ import ShapeStrategy from "./nodeDimensions/shapeStrat";
 
 export default class NodeDimensionStrategy {
 
-    //Array with all available strategies
+    //Array with all available strategies.
     strategies: GenericStrategy[];
-    //Function to set the legend configuration
+    //Function to set the legend configuration.
     setLegendData: Function;
 
     /**
-     * Constructor of the class
-     * @param attributesArray Array with all Dimension attributes 
+     * Constructor of the class.
+     * @param attributesArray Array with all Dimension attributes.
      */
     constructor(attributesArray: DimAttribute[], setLegendData: Function) {
         this.setLegendData = setLegendData;
@@ -35,35 +35,35 @@ export default class NodeDimensionStrategy {
     }
 
     /**
-     * Change user to its default state based on the active strategies
-     * @param user node to edit
+     * Change user to its default state based on the active strategies.
+     * @param user node to edit.
      */
-    nodeToDefault(user: UserData, isFocus: boolean = false) {
+    nodeToDefault(user: IUserData, isFocus: boolean = false) {
         this.strategies.forEach((strat) => {
             strat.change(user, isFocus);
         });
     }
 
     /**
-     * Change user to colorless state based on the active strategies
-     * @param user node to edit
+     * Change user to colorless state based on the active strategies.
+     * @param user node to edit.
      */
-    nodeToColorless(user: UserData) {
+    nodeToColorless(user: IUserData) {
         this.strategies.forEach((strat) => {
             strat.toColorless(user);
         });
     }
 
     /**
-     * Toggle the state of the border strategy based on the newValue
-     * @param newValue new toggle border value
+     * Toggle the state of the border strategy based on the newValue.
+     * @param newValue new toggle border value.
      */
-    toggleBorderStat(newValue: boolean){
+    toggleBorderStat(newValue: boolean) {
         const attributes = new Array<DimAttribute>();
-        
+
         this.strategies.forEach((strat) => {
-            if(strat.attr !== undefined){
-                if(strat.attr.dimension === Dimensions.Border)
+            if (strat.attr !== undefined) {
+                if (strat.attr.dimension === Dimensions.Border)
                     strat.attr.active = newValue;
 
                 attributes.push(strat.attr)

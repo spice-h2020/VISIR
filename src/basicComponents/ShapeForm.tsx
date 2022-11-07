@@ -1,5 +1,7 @@
 /**
- * @fileoverview This file creates a simple SVG image that looks like a stain.
+ * @fileoverview This file creates a simple SVG image that looks like a geometry figure of some shape based on the 
+ * available shapes for the user's nodes in vis.js networks. If the shape introduced is unavailable, a circle will be
+ * drawn.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -20,7 +22,7 @@ shapeToPath.set("hexagon", "25 5, 75 5, 100 50, 75 95, 25 95, 0 50");
 
 
 /**
- * SVG component that draws a color stain
+ * UI component that draws a SVG shape.
  */
 export const ShapeForm = ({
     shape,

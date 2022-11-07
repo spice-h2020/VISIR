@@ -1,11 +1,11 @@
 /**
- * @fileoverview This file creates a dropdown that changes the source of the files with All the info from all perspectives.
+ * @fileoverview This file creates a dropdown that changes the source of the files of the request manager.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FileSource, initialOptions, ButtonState } from "../constants/viewOptions";
-import { bStateArrayActionEnum, bStateArrayReducer } from "../constants/auxTypes";
+import { EFileSource, initialOptions, EButtonState } from "../constants/viewOptions";
+import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer } from "react";
 //Local files
@@ -14,27 +14,26 @@ import { Dropdown } from "../basicComponents/Dropdown";
 
 interface FileSourceDropdownProps {
     //On click handler
-    setFileSource: (fileSource: FileSource) => void;
+    setFileSource: (fileSource: EFileSource) => void;
 }
 
 /**
- * Dropdown component that holds the options to change the source of perspective files in the visualization tool
+ * Dropdown component that holds the options to change the source of perspective files in the visualization tool.
  */
 export const FileSourceDropdown = ({
     setFileSource,
 }: FileSourceDropdownProps) => {
 
-    //State of all items
     const [states, setStates] = useReducer(bStateArrayReducer, init());
 
-    const changeFileSource = (newFileSource: FileSource) => {
-        if (states[newFileSource] === ButtonState.unactive) {
+    const changeFileSource = (newFileSource: EFileSource) => {
+        if (states[newFileSource] === EButtonState.unactive) {
             setFileSource(newFileSource);
 
             setStates({
-                action: bStateArrayActionEnum.activeOne,
+                action: EbuttonStateArrayAction.activeOne,
                 index: newFileSource,
-                newState: ButtonState.active
+                newState: EButtonState.active
             });
         }
     }
@@ -57,43 +56,43 @@ export const FileSourceDropdown = ({
 };
 
 /**
- * Calculates the initial state of the dropdown
+ * Calculates the initial state of the dropdown.
  */
-const init = (): ButtonState[] => {
-    const initialState = new Array(Object.keys(FileSource).length / 2);
+const init = (): EButtonState[] => {
+    const initialState = new Array(Object.keys(EFileSource).length / 2);
 
-    initialState.fill(ButtonState.unactive);
-    initialState[initialOptions.fileSource] = ButtonState.active;
+    initialState.fill(EButtonState.unactive);
+    initialState[initialOptions.fileSource] = EButtonState.active;
 
     return initialState;
 }
 
 /**
- * Returns the buttons-reactComponents of the file source dropdown
- * @param changeFileSource On click function for the buttons. Will receive a FIleSource parameter as an argument
- * @param selectedItems State of the buttons
- * @returns returns an array of React components
+ * Returns the buttons-reactComponents of the file source dropdown.
+ * @param changeFileSource On click function for the buttons. Will receive a FIleSource parameter as an argument.
+ * @param selectedItems State of the buttons.
+ * @returns returns an array of React components.
  */
-function getButtons(changeFileSource: Function, selectedItems: ButtonState[]): React.ReactNode[] {
+function getButtons(changeFileSource: Function, selectedItems: EButtonState[]): React.ReactNode[] {
     return [
         <Button
             content="Local app files"
-            onClick={() => { changeFileSource(FileSource.Local); }}
-            state={selectedItems[FileSource.Local]}
+            onClick={() => { changeFileSource(EFileSource.Local); }}
+            state={selectedItems[EFileSource.Local]}
             key={1}
             extraClassName={"btn-dropdown"}
         />,
         <Button
             content="Github Develop"
-            onClick={() => { changeFileSource(FileSource.Develop); }}
-            state={selectedItems[FileSource.Develop]}
+            onClick={() => { changeFileSource(EFileSource.Develop); }}
+            state={selectedItems[EFileSource.Develop]}
             key={2}
             extraClassName={"btn-dropdown"}
         />,
         <Button
             content="Use the API (WIP)"
-            onClick={() => { changeFileSource(FileSource.Api); }}
-            state={selectedItems[FileSource.Api]}
+            onClick={() => { changeFileSource(EFileSource.Api); }}
+            state={selectedItems[EFileSource.Api]}
             key={3}
             extraClassName={"btn-dropdown"}
         />

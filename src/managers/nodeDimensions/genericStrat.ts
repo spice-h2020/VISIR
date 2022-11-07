@@ -1,18 +1,23 @@
 /**
- * @fileoverview This abstract class is the parent of all diferent dimensions strats executing the generic functions.
+ * @fileoverview This abstract class is the parent of all diferent dimensions strats. Executes the functions that
+ * are the same for all dim strats, like finding its dimension in the attributes array and filling the map with the
+ * (Explicit Community value -> specific dimensions data) relationship.
+ * 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { DimAttribute, Dimensions } from "../../constants/nodes";
-import { UserData } from "../../constants/perspectivesTypes";
+import { IUserData } from "../../constants/perspectivesTypes";
 
 export default abstract class GenericStrategy {
     //Attribute of this strategy.
     attr: DimAttribute;
-    //Map with the relation "Value of the attribute whose key is this.key" -> "The corresponding dimension value for each dimensions strat"
+    /*Map with the relation: 
+    "Value of the attribute whose key is this.key" -> "The corresponding dimension value for each dimensions strat"
+    */
     dimensionMap: Map<string, any>
 
-   
+
     /**
      * Constructor of the class
      * @param attributesArray Array with all Dimension attributes 
@@ -33,20 +38,20 @@ export default abstract class GenericStrategy {
 
     /**
      * Fill the dimensionMap with the values and the dimension obtained from the function
-     * @param values values that will be a key in the map
      * @param getDimension function that returns the value for each key in the map
      */
     fillMap(getDimension: Function) {
         for (let i = 0; i < this.attr.values.length; i++) {
-            const color = getDimension(i);
-            this.dimensionMap.set(this.attr.values[i], color);
+            const dimension = getDimension(i);
+            this.dimensionMap.set(this.attr.values[i], dimension);
         }
     }
 
-    //Change the user properties to fit the dimension strategy
-    abstract change(user: UserData, isFocus: boolean): void;
+    // <-- MUST BE OVERRIDEN -->
+    //Change the user properties to fit the dimension strategy. 
+    abstract change(user: IUserData, isFocus: boolean): void;
     //Change the user properties to make it colorless acordingly with the dimension strategy
-    abstract toColorless(user: UserData): void;
+    abstract toColorless(user: IUserData): void;
 }
 
 

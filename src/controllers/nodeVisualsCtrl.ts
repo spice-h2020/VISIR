@@ -1,15 +1,18 @@
 /**
- * @fileoverview This class find all explicit communities and its values in the user data of the perspective. 
- * Then create a dimension strategy that changes how the network ndoes look based on the explicitData.
- * Then it changes the node position in the canvas to create a circular distribution without node overlap.
+ * @fileoverview This class creates the dimensions strategy object if its undefined, using the explicit data obtained by
+ * the nodeExplicitComms class and changes the visuals of nodes to meet the dimension strategy values.
+ * 
+ * This class also changes the nodes' visuals dependin on their focused, selected or unselected state, increasing or
+ * reducing their visibility respectively.
+ * 
  * @package Requires vis network package.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { UserData } from "../constants/perspectivesTypes";
+import { IUserData } from "../constants/perspectivesTypes";
 import { Dimensions, DimAttribute } from "../constants/nodes"
 import { ViewOptions } from "../constants/viewOptions";
-import { StateFunctions } from "../constants/auxTypes";
+import { IStateFunctions } from "../constants/auxTypes";
 //Packages
 import { DataSetNodes, Node } from "vis-network";
 //Local files
@@ -36,7 +39,7 @@ export default class NodeVisualsCtrl {
      * @param explicitData All the explicit data of this network
      * @param viewOptions Options that change how the network is seeing
      */
-    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions) {
+    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions) {
 
         if (dimStrat === undefined) {
             this.dimStrat = this.createDimensionStrategy(explicitData, viewOptions.border, sf.setLegendData);
@@ -90,12 +93,12 @@ export default class NodeVisualsCtrl {
         return new NodeDimensionStrategy(attributes, setLegendData);
     }
 
-    setNodeInitialVisuals(node: UserData, hideLabel: boolean) {
+    setNodeInitialVisuals(node: IUserData, hideLabel: boolean) {
 
-        if (this.isHidedByLegend(node as UserData)) {
-            this.hideNodeVisuals(node as UserData);
+        if (this.isHidedByLegend(node as IUserData)) {
+            this.hideNodeVisuals(node as IUserData);
         } else {
-            this.coloredNodeVisuals(node as UserData);
+            this.coloredNodeVisuals(node as IUserData);
         }
 
         this.updateNodeLabel(node, hideLabel);
@@ -106,7 +109,7 @@ export default class NodeVisualsCtrl {
 
         allNodes.forEach((node) => {
 
-            this.updateNodeLabel(node as UserData, hideLabel);
+            this.updateNodeLabel(node as IUserData, hideLabel);
             newNodes.push(node);
 
         })
@@ -114,7 +117,7 @@ export default class NodeVisualsCtrl {
         allNodes.update(newNodes);
     }
 
-    updateNodeLabel(node: UserData, hideLabel: boolean) {
+    updateNodeLabel(node: IUserData, hideLabel: boolean) {
         if (hideLabel) {
             if (node.font !== undefined) {
                 node.font.color = "#00000000"
@@ -151,17 +154,17 @@ export default class NodeVisualsCtrl {
 
         allNodes.forEach((node) => {
             const id = node.id;
-            if (this.isHidedByLegend(node as UserData)) {
-                this.hideNodeVisuals(node as UserData);
+            if (this.isHidedByLegend(node as IUserData)) {
+                this.hideNodeVisuals(node as IUserData);
 
             } else if (selectedNodes.includes(id as string)) {
-                this.coloredNodeVisuals(node as UserData);
+                this.coloredNodeVisuals(node as IUserData);
 
             } else if (focusedId.includes(id as string)) {
-                this.focusedNodeVisuals(node as UserData);
+                this.focusedNodeVisuals(node as IUserData);
 
             } else {
-                this.hideNodeVisuals(node as UserData);
+                this.hideNodeVisuals(node as IUserData);
             }
 
             newNodes.push(node);
@@ -183,10 +186,10 @@ export default class NodeVisualsCtrl {
         this.legendConfig = legendConfig.size === 0 ? this.legendConfig : legendConfig;
 
         allNodes.forEach((node) => {
-            if (this.isHidedByLegend(node as UserData)) {
-                this.hideNodeVisuals(node as UserData);
+            if (this.isHidedByLegend(node as IUserData)) {
+                this.hideNodeVisuals(node as IUserData);
             } else {
-                this.coloredNodeVisuals(node as UserData);
+                this.coloredNodeVisuals(node as IUserData);
             }
 
             newNodes.push(node);
@@ -195,19 +198,19 @@ export default class NodeVisualsCtrl {
         allNodes.update(newNodes);
     }
 
-    coloredNodeVisuals(node: UserData) {
+    coloredNodeVisuals(node: IUserData) {
         this.dimStrat.nodeToDefault(node);
     }
 
-    focusedNodeVisuals(node: UserData) {
+    focusedNodeVisuals(node: IUserData) {
         this.dimStrat.nodeToDefault(node, true);
     }
 
-    hideNodeVisuals(node: UserData) {
+    hideNodeVisuals(node: IUserData) {
         this.dimStrat.nodeToColorless(node);
     }
 
-    isHidedByLegend(node: UserData) {
+    isHidedByLegend(node: IUserData) {
         let hideNode = false;
         const keys = Object.keys(node.explicit_community);
 

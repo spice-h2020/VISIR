@@ -1,5 +1,6 @@
 /**
- * @fileoverview This file creates a simple SVG image that looks like a stain.
+ * @fileoverview This file creates a simple SVG image that looks like a stain. Used to show color attributes on the 
+ * legend.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -10,7 +11,7 @@ interface ColorStainProps {
 }
 
 /**
- * SVG component that draws a color stain
+ * UI component that draws a SVG color stain.
  */
 export const ColorStain = ({
     color,

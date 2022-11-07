@@ -1,6 +1,8 @@
 /**
  * @fileoverview This file creates a portion of an horizontal stacked bar graphic. 
- * If the bar is too thin, the shown text will be hidden.
+ * If the bar is too thin, the inside text will be hidden.
+ * The color of the bar depends on the dimension of the bar. Shape dimension additionaly add the shape figure to the 
+ * shown text.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -29,25 +31,25 @@ const barPortion: React.CSSProperties = {
 
 interface StackedBarProps {
     /**
-     * Tittle/value of the graph
+     * Tittle/value of the graph.
      */
     percentile: number,
     /**
-     * Text to show when hovering a bar portion
+     * Text to show when hovering a bar portion.
      */
     hoverText: string,
     /**
-     * Index of this bar portion in a stacked bar
+     * Index of this bar portion in a stacked bar.
      */
     index: number,
     /**
-     * Dimensions represented in the portion
+     * Dimensions represented in the portion.
      */
     dim: Dimensions | undefined
 }
 
 /**
- * UI component that shows data in a stackedbar format
+ * UI component that creates a portion of a stacked bar graph.
  */
 export const BarPortion = ({
     percentile: value,
@@ -140,13 +142,14 @@ function getTextColor(index: number, dim: Dimensions | undefined) {
                 case 1: {
                     return "white";
                 }
-                default:{
+                default: {
                     return "black";
                 }
             }
         }
     }
 }
+
 
 function getSymbol(index: number, dim: Dimensions | undefined) {
     switch (dim) {

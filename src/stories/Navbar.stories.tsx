@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Navbar } from '../basicComponents/Navbar';
 import { Button } from '../basicComponents/Button';
 import { Dropdown } from '../basicComponents/Dropdown';
-import { ButtonState } from '../constants/viewOptions';
+import { EButtonState } from '../constants/viewOptions';
 
 import '../style/base.css';
 
@@ -16,7 +16,7 @@ export default {
 
 const Template: ComponentStory<typeof Navbar> = (args) => <Navbar {...args} />;
 
-const selectedItems = [ButtonState.unactive, ButtonState.unactive, ButtonState.active];
+const selectedItems = [EButtonState.unactive, EButtonState.unactive, EButtonState.active];
 const testButtons = [
   <Button
     content="Option A"

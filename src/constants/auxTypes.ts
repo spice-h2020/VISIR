@@ -1,18 +1,18 @@
 /**
- * @fileoverview This File contains diferent unrelated auxiliary classes/interfaces that doesnt need a unique file for them.
+ * @fileoverview This File contains diferent unrelated auxiliary classes/interfaces that doesnt belong to a specific file
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Package
 import { Dispatch } from "react";
 //Local files
-import { CommunityData, UserData } from "./perspectivesTypes";
-import { ButtonState } from "./viewOptions";
+import { ICommunityData, IUserData } from "./perspectivesTypes";
+import { EButtonState } from "./viewOptions";
 
 /**
  * Interface with the data of a bounding box.
  */
-export interface BoundingBox {
+export interface IBoundingBox {
     top: number
     bottom: number
     left: number
@@ -28,7 +28,7 @@ export interface BoundingBox {
 /**
  * Interface with a point(x,y) coordinate.
  */
-export interface Point {
+export interface IPoint {
     x: number;
     y: number;
 }
@@ -36,28 +36,29 @@ export interface Point {
 /**
  * Interface with all functions that change the state of one/all perspectives in the application.
  */
-export interface StateFunctions {
+export interface IStateFunctions {
     setLegendData: Function;
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
-    setSelectedObject: Dispatch<SelectedObjectAction>;
+    setSelectedObject: Dispatch<ISelectedObjectAction>;
 }
 
 /**
  * Interface of an object selected by the user. It can be a community, a user node or nothing.
  */
-export interface SelectedObject {
-    obj: CommunityData | UserData | undefined;
-    position?: Point;
+export interface ISelectedObject {
+    obj: ICommunityData | IUserData | undefined;
+    position?: IPoint;
     sourceID?: string;
 }
 
 //#region Reducer types/function
 
+//#region Selected Object
 /**
  * Available actions for SelectedObjectAction. 
  */
-export enum SelectedObjectActionEnum {
+export enum ESelectedObjectAction {
     /**
      * changes the position of the selected object. (Usefull for the tooltip.)
      */
@@ -75,9 +76,9 @@ export enum SelectedObjectActionEnum {
 /**
  * Available actions for the selectedObjectReducer function
  */
-export interface SelectedObjectAction {
-    action: SelectedObjectActionEnum;
-    newValue: Point | CommunityData | UserData | undefined;
+export interface ISelectedObjectAction {
+    action: ESelectedObjectAction;
+    newValue: IPoint | ICommunityData | IUserData | undefined;
     sourceID: string;
 }
 
@@ -87,31 +88,32 @@ export interface SelectedObjectAction {
  * @param stateAction action to execute
  * @returns the new state
  */
-export function selectedObjectReducer(state: SelectedObject | undefined, stateAction: SelectedObjectAction) {
+export function selectedObjectReducer(state: ISelectedObject | undefined, stateAction: ISelectedObjectAction) {
     const { action, newValue, sourceID } = stateAction;
 
     switch (action) {
-        case SelectedObjectActionEnum.position:
+        case ESelectedObjectAction.position:
             return {
                 ...state,
                 position: newValue,
-            } as SelectedObject;
-        case SelectedObjectActionEnum.object:
+            } as ISelectedObject;
+        case ESelectedObjectAction.object:
             return {
                 position: state?.position,
                 obj: newValue,
                 sourceID: sourceID,
-            } as SelectedObject;
-        case SelectedObjectActionEnum.clear:
+            } as ISelectedObject;
+        case ESelectedObjectAction.clear:
             state = undefined;
             return state;
     }
 }
-
+//#endregion
+//#region button state array
 /**
  * Available actions for a buttonState array action
  */
-export enum bStateArrayActionEnum {
+export enum EbuttonStateArrayAction {
     /**
      * Change the index of the array with the newState value
      */
@@ -129,10 +131,10 @@ export enum bStateArrayActionEnum {
 /**
  * Interface of a button state Array action to tell the reducer function what to do
  */
-export interface bStateArrayAction {
-    action: bStateArrayActionEnum;
+export interface IbStateArrayAction {
+    action: EbuttonStateArrayAction;
     index: number;
-    newState: ButtonState;
+    newState: EButtonState;
 }
 
 /**
@@ -141,26 +143,29 @@ export interface bStateArrayAction {
  * @param stateAction action to execute
  * @returns the state edited by the action
  */
-export function bStateArrayReducer(state: ButtonState[], stateAction: bStateArrayAction) {
+export function bStateArrayReducer(state: EButtonState[], stateAction: IbStateArrayAction) {
     const { action, index, newState } = stateAction;
 
     switch (action) {
-        case bStateArrayActionEnum.changeOne:
+        case EbuttonStateArrayAction.changeOne:
             state[index] = newState;
             state = JSON.parse(JSON.stringify(state));
             break;
 
-        case bStateArrayActionEnum.activeOne:
-            state.fill(ButtonState.unactive);
+        case EbuttonStateArrayAction.activeOne:
+            state.fill(EButtonState.unactive);
             state[index] = newState;
             state = JSON.parse(JSON.stringify(state));
             break;
 
-        case bStateArrayActionEnum.reset:
-            state = new Array<ButtonState>(index);
+        case EbuttonStateArrayAction.reset:
+            state = new Array<EButtonState>(index);
             state.fill(newState);
             break;
     }
 
     return state;
 }
+//#endregion
+
+//#endregion

@@ -1,11 +1,11 @@
 /**
- * @fileoverview This file creates a dropdown that changes some of the view options of the network
- * @package Requires React package. 
+ * @fileoverview This file creates a dropdown that changes some of the view options of the network.
+ * @package Requires React package.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ButtonState, initialOptions, ViewOptionAction, ViewOptions } from "../constants/viewOptions";
-import { bStateArrayReducer, bStateArrayActionEnum } from "../constants/auxTypes";
+import { EButtonState, initialOptions, IViewOptionAction, ViewOptions } from "../constants/viewOptions";
+import { bStateArrayReducer, EbuttonStateArrayAction } from "../constants/auxTypes";
 //Packages
 import React, { Dispatch, useReducer } from "react";
 //Local files
@@ -20,31 +20,30 @@ const hrStyle: React.CSSProperties = {
 }
 
 interface OptionsDropdownProps {
-    setViewOptions: Dispatch<ViewOptionAction>;
+    setViewOptions: Dispatch<IViewOptionAction>;
 }
 
 /**
- * Dropdown component that holds diferent options that changes some of the view options of the network
+ * Dropdown component that holds diferent options that change some of the view options of the network.
  */
 export const OptionsDropdown = ({
     setViewOptions
 }: OptionsDropdownProps) => {
 
-    //State of all items
     const [states, setStates] = useReducer(bStateArrayReducer, init());
 
     const onClick = (index: number, updateType: keyof ViewOptions) => {
-        if (states[index] !== ButtonState.loading) {
+        if (states[index] !== EButtonState.loading) {
 
             const savedState = states[index];
-            setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: ButtonState.loading });
+            setStates({ action: EbuttonStateArrayAction.changeOne, index: index, newState: EButtonState.loading });
 
             try {
                 setViewOptions({ updateType: updateType })
-                setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState === ButtonState.active ? ButtonState.unactive : ButtonState.active });
+                setStates({ action: EbuttonStateArrayAction.changeOne, index: index, newState: savedState === EButtonState.active ? EButtonState.unactive : EButtonState.active });
 
             } catch (e: any) {
-                setStates({ action: bStateArrayActionEnum.changeOne, index: index, newState: savedState });
+                setStates({ action: EbuttonStateArrayAction.changeOne, index: index, newState: savedState });
             }
         }
     }
@@ -99,10 +98,10 @@ export const OptionsDropdown = ({
 };
 
 /**
- * Calculates the initial state of the dropdown
+ * Calculates the initial state of the dropdown.
  */
-const init = (): ButtonState[] => {
-    const initialState: ButtonState[] = [];
+const init = (): EButtonState[] => {
+    const initialState: EButtonState[] = [];
 
     initialState.push(initialOptions.hideLabels);
     initialState.push(initialOptions.hideEdges);

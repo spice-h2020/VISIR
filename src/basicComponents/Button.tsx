@@ -1,10 +1,14 @@
 /**
  * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
+ * The button can also be disabled to negate any interaction with it, or change its colors with the state : ButtonState
+ * properties.
+ * If auto toggle parameter is true, the button will automaticaly change its state between active and 
+ * unactive when clicked.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ButtonState } from "../constants/viewOptions";
+import { EButtonState } from "../constants/viewOptions";
 //Packages
 import React, { useEffect, useState } from "react";
 
@@ -16,41 +20,41 @@ interface ButtonProps {
   /**
    * Current visual state of the button.
    */
-  state?: ButtonState;
+  state?: EButtonState;
   /**
    * Auto toggle button state on click.
    */
   autoToggle?: boolean;
   onClick?: (params: any) => void;
   /**
-   * Extra class name to add and change the CSS
+   * Extra class name to add and change the CSS.
    */
   extraClassName?: string;
   /**
-   * Text that will be shown to the user when hovering the button
+   * Text that will be shown to the user when hovering the button.
    */
   hoverText?: string;
 }
 
 /**
- * Basic UI component that execute a function when clicked
+ * UI component that executes a function when clicked.
  */
 export const Button = ({
   content = "Button",
-  state = ButtonState.unactive,
+  state = EButtonState.unactive,
   autoToggle = false,
   onClick = (): void => { },
   extraClassName = "",
   hoverText = "",
 }: ButtonProps) => {
 
-  const [buttonState, setButtonState] = useState<ButtonState>(state);
+  const [buttonState, setButtonState] = useState<EButtonState>(state);
 
   useEffect(() => {
     setButtonState(state);
   }, [state]);
 
-  const buttonClassState = buttonState !== ButtonState.unactive ? ButtonState[buttonState] : "";
+  const buttonClassState = buttonState !== EButtonState.unactive ? EButtonState[buttonState] : "";
 
   return (
     <button title={hoverText} type="button" className={`btn ${extraClassName} ${buttonClassState}`}
@@ -58,10 +62,10 @@ export const Button = ({
         onClick(buttonState);
 
         if (autoToggle) {
-          if (buttonState === ButtonState.unactive)
-            setButtonState(ButtonState.active);
+          if (buttonState === EButtonState.unactive)
+            setButtonState(EButtonState.active);
           else
-            setButtonState(ButtonState.unactive);
+            setButtonState(EButtonState.unactive);
         }
       }}
     >

@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
-import { ButtonState } from '../constants/viewOptions';
+import { EButtonState } from '../constants/viewOptions';
 import '../style/base.css';
 
 export default {
@@ -10,7 +10,7 @@ export default {
     component: Dropdown,
 } as ComponentMeta<typeof Dropdown>;
 
-const selectedItems = [ButtonState.unactive, ButtonState.unactive, ButtonState.active];
+const selectedItems = [EButtonState.unactive, EButtonState.unactive, EButtonState.active];
 const testButtons = [
     <Button
         content="Option A"

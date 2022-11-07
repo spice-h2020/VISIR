@@ -4,7 +4,7 @@
  */
 //Constants
 import { Dimensions, DimAttribute, nodeConst } from "../../constants/nodes";
-import { UserData } from "../../constants/perspectivesTypes";
+import { IUserData } from "../../constants/perspectivesTypes";
 //Local files
 import GenericStrategy from "./genericStrat";
 
@@ -18,7 +18,7 @@ export default class ColorStrategy extends GenericStrategy {
      * Changes the background's color
      * @param user user to edit
      */
-    change(user: UserData, isFocus: Boolean) {
+    change(user: IUserData, isFocus: Boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
             const value = user.explicit_community[this.attr.key];
@@ -40,7 +40,7 @@ export default class ColorStrategy extends GenericStrategy {
      * Change the background's color
      * @param user user to edit
      */
-    toColorless(user: UserData) {
+    toColorless(user: IUserData) {
         user.defaultColor = false;
 
         if (user["color"] === undefined) {

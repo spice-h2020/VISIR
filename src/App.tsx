@@ -1,15 +1,19 @@
 /**
- * @fileoverview This file is the entry point of the application. Holds the states with all the info necesary for the application, creates the toolbar/navbar component,
- * creates the perspectives Groups component for the visualization and has the necesary managers to request files and load them.
+ * @fileoverview This file is the entry point of the application. 
+ * 
+ * - Holds the states with all the info necesary for the application.
+ * - Creates the toolbar/navbar component,
+ * - Creates the perspectives Groups component for the visualization.
+ * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FileSource, ButtonState, ViewOptions, viewOptionsReducer, CollapsedState } from './constants/viewOptions';
-import { PerspectiveActiveState, PerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
+import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer } from './constants/viewOptions';
+import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
 //Packages
-import { useEffect, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -21,18 +25,6 @@ import RequestManager from './managers/requestManager';
 
 import './style/base.css';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
-
-function collapseReducer(state: CollapsedState, stateAction: CollapsedState) {
-  if (state === CollapsedState.unCollapsed) {
-    state = stateAction
-  } else if ((state === CollapsedState.toTheLeft && stateAction === CollapsedState.toTheRight)
-    || (state === CollapsedState.toTheRight && stateAction === CollapsedState.toTheLeft)) {
-
-    state = CollapsedState.unCollapsed;
-  }
-
-  return state;
-}
 
 interface AppProps {
   perspectiveId1: string | null,
@@ -57,11 +49,11 @@ export const App = ({
   const [allPerspectivesIds, setAllPerspectivesIds] = useState<PerspectiveId[]>([]);
 
   //Current Active perspectives in the view group
-  const [leftPerspective, setLeftPerspective] = useState<PerspectiveData>();
-  const [rightPerspective, setRightPerspective] = useState<PerspectiveData>();
+  const [leftPerspective, setLeftPerspective] = useState<IPerspectiveData>();
+  const [rightPerspective, setRightPerspective] = useState<IPerspectiveData>();
 
   //Current state of the perspectives collapse buttons
-  const [collapseState, setCollapseState] = useReducer(collapseReducer, CollapsedState.unCollapsed);
+  const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
 
   function initPerspectives(newIds: PerspectiveId[]) {
     setLeftPerspective(undefined);
@@ -93,14 +85,14 @@ export const App = ({
         leftAlignedItems={[
           <Button
             content={<div className='row' style={{ alignItems: "center" }}>
-              <img className="mainIcon" src="./images/VISIR-red.png" alt="VISIR icon" /> 
-              <div className="tittle" style={{marginLeft: "10px"}}>VISIR</div>
+              <img className="mainIcon" src="./images/VISIR-red.png" alt="VISIR icon" />
+              <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
             </div>}
             extraClassName="transparent tittle mainBtn"
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown
-            setFileSource={(fileSource: FileSource) => {
+            setFileSource={(fileSource: EFileSource) => {
               requestManager.changeBaseURL(fileSource);
               requestManager.requestAllPerspectivesIds(initPerspectives);
             }}
@@ -120,23 +112,23 @@ export const App = ({
           />,
           <Button
             content="<<"
-            onClick={(state: ButtonState) => {
-              if (state !== ButtonState.disabled) {
-                setCollapseState(CollapsedState.toTheLeft);
+            onClick={(state: EButtonState) => {
+              if (state !== EButtonState.disabled) {
+                setCollapseState(EAppCollapsedState.toTheLeft);
               }
             }}
             extraClassName={`first dark`}
-            state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
+            state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
           />,
           <Button
             content=">>"
             extraClassName={`second dark`}
-            onClick={(state: ButtonState) => {
-              if (state !== ButtonState.disabled) {
-                setCollapseState(CollapsedState.toTheRight);
+            onClick={(state: EButtonState) => {
+              if (state !== EButtonState.disabled) {
+                setCollapseState(EAppCollapsedState.toTheRight);
               }
             }}
-            state={leftPerspective !== undefined && rightPerspective !== undefined ? ButtonState.unactive : ButtonState.disabled}
+            state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
           />,
           <SelectPerspectiveDropdown
             tittle={'Select perspective B'}

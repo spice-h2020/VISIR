@@ -6,8 +6,8 @@
     --headerBackground: #fff;
 
     --title: #ff6347;
-    --titleFont: "Anonymous Pro";
-    --titleFontSize: "1.2em";
+    --titleFont: "Roboto";
+    --titleFontSize: 2rem;
     --titleLetterSpacing: "+2px";
 
     --textColor: #000;
@@ -61,16 +61,15 @@ body {
 .tittle {
     text-align: center;
 
-    color: var(--title) !important;
-    font-family: var(--titleFont) !important;
-    font-size: var(--titleFontSize) !important;
-    letter-spacing: var(--titleLetterSpacing) !important;
+    color: var(--title);
+    font-family: var(--titleFont);
+    font-size: var(--titleFontSize);
+    letter-spacing: var(--titleLetterSpacing);
 }
 
 img{
 
-    /* filter: brightness(76.9%) hue-rotate(1deg) saturate(62.8%);   */
-
+    /* filter: brightness(76.9%) hue-rotate(1deg) saturate(62.8%);  Only brightness filter works */
     height: 40px;
 }
 
@@ -86,7 +85,7 @@ img{
     font-family: var(--textAreaFont);
     font-size: var(--textAreaFontSize);
     border-radius: 5px;
-    height: 3em;
+    height: 3rem;
     padding: 0.7rem 0.7rem;
     color: var(--buttonTextColor);
 

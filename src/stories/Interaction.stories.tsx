@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { InteractionPanel } from '../basicComponents/Interaction';
-import { ArtworkData, Interaction } from '../constants/perspectivesTypes';
+import { IArtworkData, IInteraction } from '../constants/perspectivesTypes';
 import '../style/base.css';
 
 export default {
@@ -11,7 +11,7 @@ export default {
 
 const Template: ComponentStory<typeof InteractionPanel> = (args) => <InteractionPanel {...args} />;
 
-const artworkData: ArtworkData[] = [
+const artworkData: IArtworkData[] = [
   {
     id: "1",
     tittle: "Le tre finestre, La pianura della torre",
@@ -30,7 +30,7 @@ const artworkData: ArtworkData[] = [
 
 export const ExampleA = Template.bind({});
 
-const interaction: Interaction = {
+const interaction: IInteraction = {
   artwork_id: '1',
   feelings: 'scettico',
   extracted_emotions: {
@@ -48,7 +48,7 @@ ExampleA.args = {
 export const ExampleB = Template.bind({});
 
 
-const interactionB: Interaction = {
+const interactionB: IInteraction = {
   artwork_id: '2',
   feelings: 'Vociare, odori, curiosità, calore',
   extracted_emotions: {

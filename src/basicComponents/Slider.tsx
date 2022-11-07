@@ -1,5 +1,5 @@
 /**
- * @fileoverview This file creates a slider with an optional text above it that tracks current slider value.
+ * @fileoverview This file creates a slider with an optional text above that tracks the current slider value.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -17,38 +17,38 @@ const sliderContainer: React.CSSProperties = {
 
 interface SliderProps {
     /**
-     * Text above the slider
+     * Text above the slider.
      */
     content?: string;
     /**
-     * Text after the content text and the current value number
+     * Text after the content text and the current value number.
      */
     contentUnit?: string;
     /**
-     * Minimum value of the slider
+     * Minimum value of the slider.
      */
     minimum?: number;
     /**
-     * Maximum value of the slider
+     * Maximum value of the slider.
      */
     maximum?: number;
     /**
-     * Steps of the slider thumb
+     * Steps of the slider thumb every time the user moves it.
      */
     step?: number;
     /**
-     * Initial value of the slider
+     * Initial value of the slider.
      */
     initialValue: number;
     /**
-     * Function executed when the slider is moved and after a timer has expired
+     * Function executed when the slider is moved and after a timer has expired.
      */
     onInput: Function;
 }
 
 
 /**
- * Slider component 
+ * UI component that creates a slider .
  */
 export const Slider = ({
     content,
@@ -63,7 +63,10 @@ export const Slider = ({
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>(setTimeout(() => '', 10));
     const [value, setValue] = useState<string>(initialValue.toString());
 
-    //In order to reduce the number of calls while user move the slider, there is a timer that is reseted evry time the user moves the slider
+    /*
+    There is a timer reseted every time the user moves the slider to reduce the number of onInput calls while the user 
+    is still moving the slider.
+    */
     const updateValue = (newValue: string) => {
         if (timer !== undefined && timer !== null)
             clearTimeout(timer);
@@ -95,11 +98,12 @@ export const Slider = ({
 
 /**
  * Aux function that returns the text above the slider combining content, value and contentUnit. 
- * If there is no content unit, it will change "0" and "0.0" to "1" and "1.0" to mantain the same size across all values.
- * @param content content of the slider
- * @param contentUnit text after text and value
- * @param value current value of the slider
- * @returns a react node with the text that will go above the slider
+ * If there is no content unit, it will change "0" and "0.0" to "1" and "1.0" to mantain the same size across all 
+ * values.
+ * @param content content of the slider.
+ * @param contentUnit text after text and value.
+ * @param value current value of the slider.
+ * @returns a react node with the text that will go above the slider.
  */
 function getContent(content: string | undefined, contentUnit: string, value: string): React.ReactNode {
 

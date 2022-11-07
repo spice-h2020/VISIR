@@ -1,37 +1,44 @@
 /**
- * @fileoverview This file creates a dropdown that changes activates/disactives diferent perspectives from the allPerspectives prop.
- * This component's item states are externalized because the state is async based on functions that are not in this file
+ * @fileoverview This file creates a dropdown that activates/disactivate diferent perspectives from the visualization.
+ * If a dropdown item is disabled, it means that perspective ownership is not in this dropdown and cant be edited.
+ * 
+ * - If an active item/button is clicked, its state will change to unactive and its visualization will be removed.
+ * - If an unactive item/button is clicked, its state will change to loading while waiting for its data request. When
+ * the request ends, if the data was correctly loaded, the old active perspective will be replaced with this new one.
+ * otherwhise, the loading item will swap its state to inactive again.
+ * - If a disabled item/button is clicked, as previously explained, will do nothing.
+ * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ButtonState } from "../constants/viewOptions"
-import { bStateArrayReducer, bStateArrayActionEnum, bStateArrayAction } from "../constants/auxTypes";
+import { EButtonState } from "../constants/viewOptions"
+import { bStateArrayReducer, EbuttonStateArrayAction, IbStateArrayAction } from "../constants/auxTypes";
 //Packages
-import React, { Dispatch, useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import RequestManager from "../managers/requestManager";
-import { PerspectiveActiveState, PerspectiveData, PerspectiveId } from "../constants/perspectivesTypes";
+import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from "../constants/perspectivesTypes";
 
 interface SelectPerspectiveProps {
-    //tittle of the dropdown
+    //tittle of the dropdown.
     tittle: string;
-    //Set all active perspectives for dropdown items visualization
+    //Set all active perspectives for dropdown items visualization.
     setAllIds: Function;
-    //Set the current active perspective of this side of the app
+    //Set the current active perspective of this side of the app.
     setActivePerspective: Function;
-    //Object that contains the name of all perspectives availables
+    //Object that contains the name of all perspectives availables.
     allIds: PerspectiveId[];
-    //Id of the perspective active in this dropdown
+    //Id of the perspective active in this dropdown.
     isLeftDropdown: boolean,
 
     requestMan: RequestManager,
 }
 
 /**
- * Dropdown component that holds the options to add/hide perspectives to the application
+ * Dropdown component that holds the options to add/hide perspectives to the application.
  */
 export const SelectPerspectiveDropdown = ({
     tittle,
@@ -42,27 +49,28 @@ export const SelectPerspectiveDropdown = ({
     requestMan,
 }: SelectPerspectiveProps) => {
 
-    //State of all items
     const [states, setStates] = useReducer(bStateArrayReducer, []);
 
+    /*Init all dropdown items to unactive except the active perspectives that will be active or disabled depending on
+    their position and what position does this dropdown owns. */
     useEffect(() => {
         if (allIds !== undefined) {
-            setStates({ action: bStateArrayActionEnum.reset, index: allIds.length, newState: ButtonState.unactive });
+            setStates({ action: EbuttonStateArrayAction.reset, index: allIds.length, newState: EButtonState.unactive });
 
             for (let i = 0; i < allIds.length; i++) {
                 if (allIds[i].isActive !== PerspectiveActiveState.unactive) {
 
                     if (allIds[i].isActive === PerspectiveActiveState.left) {
                         if (isLeftDropdown)
-                            setStates({ action: bStateArrayActionEnum.changeOne, index: i, newState: ButtonState.active });
+                            setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.active });
                         else
-                            setStates({ action: bStateArrayActionEnum.changeOne, index: i, newState: ButtonState.disabled });
+                            setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.disabled });
 
                     } else if (allIds[i].isActive === PerspectiveActiveState.right) {
                         if (!isLeftDropdown)
-                            setStates({ action: bStateArrayActionEnum.changeOne, index: i, newState: ButtonState.active });
+                            setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.active });
                         else
-                            setStates({ action: bStateArrayActionEnum.changeOne, index: i, newState: ButtonState.disabled });
+                            setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.disabled });
                     }
                 }
             }
@@ -91,15 +99,17 @@ export const SelectPerspectiveDropdown = ({
 };
 
 /**
- * Return all buttons/react components of the select perspective dropdown
- * @param allPerspectives all available perspective details
- * @param states current state of all buttons
- * @param setStates function to set the state of all buttons
- * @param setAllIds function executed when a button is clicked
- * @param requestManager object to request the diferent files once a button is clicked
+ * Return all buttons/react components of the select perspective dropdown.
+ * @param allIds array with all the ids and names of all available perspectives.
+ * @param states current state of all buttons.
+ * @param setStates function to set the state of all buttons.
+ * @param setAllIds function to set the allIds state in the app.js component.
+ * @param setActivePerspective function to set the active perspective owned by this dropdown.
+ * @param isLeft boolean that helps to know what position does this dropdown owns.
+ * @param requestMan
  * @returns returns an array of react components
  */
-function getButtons(allIds: PerspectiveId[], states: ButtonState[], setStates: React.Dispatch<bStateArrayAction>,
+function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: React.Dispatch<IbStateArrayAction>,
     setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager): React.ReactNode[] {
 
     const buttons = new Array<React.ReactNode>();
@@ -114,7 +124,7 @@ function getButtons(allIds: PerspectiveId[], states: ButtonState[], setStates: R
     })
 
     for (let i = 0; i < allIdsToEdit.length; i++) {
-        const state: ButtonState = states[i];
+        const state: EButtonState = states[i];
 
         buttons.push(
             <Button
@@ -122,20 +132,25 @@ function getButtons(allIds: PerspectiveId[], states: ButtonState[], setStates: R
                 content={allIdsToEdit[i].name}
                 state={state}
                 onClick={() => {
-                    console.log(state);
-                    if (state === ButtonState.active) {
+                    if (state === EButtonState.active) {
 
+                        //Turn this perspective unactive and remove it from visualization.
                         allIdsToEdit[i].isActive = PerspectiveActiveState.unactive;
-                        //Update all perspectiveIds
                         setAllIds(allIdsToEdit);
                         setActivePerspective(undefined);
 
-                    } else if (state === ButtonState.unactive) {
+                    } else if (state === EButtonState.unactive) {
+
                         //Request the unactive perspective
-                        setStates({ action: bStateArrayActionEnum.changeOne, index: i, newState: ButtonState.loading });
+                        setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.loading });
 
                         requestMan.requestPerspectiveFIle(allIdsToEdit[i].id, allIdsToEdit[i].name,
-                            (newPerspective: PerspectiveData) => {
+                            /**
+                             * Callback executed when the request and validation of the network data is finished.
+                             * Update perspective states and data based on the data received.
+                             * @param newPerspective requested perspective's data
+                             */
+                            (newPerspective: IPerspectiveData) => {
                                 if (newPerspective) {
                                     allIdsToEdit[i].isActive = isLeft ? PerspectiveActiveState.left : PerspectiveActiveState.right;
 
@@ -146,7 +161,7 @@ function getButtons(allIds: PerspectiveId[], states: ButtonState[], setStates: R
                                     setActivePerspective(newPerspective);
 
                                 } else {
-                                    setStates({ action: bStateArrayActionEnum.changeOne, index: i, newState: ButtonState.unactive });
+                                    setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.unactive });
                                 }
                             });
                     }
