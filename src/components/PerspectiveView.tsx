@@ -16,7 +16,7 @@ import React, { useEffect, useState, useRef } from "react";
 //Local files
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/nodeDimensionStat';
-import { DataTable } from './Datatable';
+import { DataTable } from './DataColumn';
 
 const networkContainer: React.CSSProperties = {
     margin: "0px 1.5% 15px 1.5%",
