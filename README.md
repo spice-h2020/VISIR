@@ -44,8 +44,8 @@ ______________________
     1. An example of a URL with IDs is the following "http://localhost:3000/?perspective1=5&perspective2=6" Where 5 and 6 are the id of the files.
 
 1. First you need to tell the app where the perspectives you want to see are located. With the FileSource dropdown you can pick between some options (local app files is the default option).
-    1. Keep in mind, the moment u change the file source, the app will disable all active perspectives and will try to reload the URL perspectives if they exist.
-    2. Currently the API server is not active, so unless u launch it localy, this option wont work.
+    1. Keep in mind, the moment file source is changed, the app will disable all active perspectives and will try to reload the URL perspectives if they exist.
+    2. Currently the API server is not active, so unless you launch it localy, this option wont work.
 
 2. Now you need to pick what perspectives you want to see. One way is the URL parameters as mentioned, the other way is to use the select perspective dropdowns. Clicking the name of the desired perspective will disable the prevously active perspective, if there is one, and load the new one.
     1. If a perspective is highlighted in red, it means its the current active perspective in this side of the app.
