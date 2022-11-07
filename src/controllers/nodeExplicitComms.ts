@@ -1,9 +1,10 @@
 /**
- * @fileoverview This class parse the node's explicit communities and calculates the % of each one in each community.
+ * @fileoverview This class parse the node's explicit communities, calculates the % of users that have a determined
+ * explicit community value and find the medoid user if the community explanation is configured to.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { CommExplanation, CommunityData, ExplanationTypes, ExplicitCommData, UserData } from "../constants/perspectivesTypes";
+import { ICommunityExplanation, ICommunityData, EExplanationTypes, IExplicitCommData, IUserData } from "../constants/perspectivesTypes";
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
@@ -32,7 +33,7 @@ export default class NodeExplicitComms {
     /**
      * Data of all communities
      */
-    communitiesData: CommunityData[];
+    communitiesData: ICommunityData[];
     /**
      * ID of all medoid nodes
      */
@@ -42,16 +43,16 @@ export default class NodeExplicitComms {
      * Constructor of the class
      * @param communitiesData 
      */
-    constructor(communitiesData: CommunityData[]) {
+    constructor(communitiesData: ICommunityData[]) {
         this.explicitData = new Array<ExplicitData>();
 
         this.communitiesData = communitiesData;
         this.medoidNodes = [];
 
-        this.communitiesData.forEach((comm: CommunityData) => {
-            comm.explanations.forEach((expl: CommExplanation) => {
-                if (expl.explanation_type === ExplanationTypes.medoid && expl.explanation_data.id !== undefined) {
-                    this.medoidNodes.push( (expl.explanation_data.id).toString());
+        this.communitiesData.forEach((comm: ICommunityData) => {
+            comm.explanations.forEach((expl: ICommunityExplanation) => {
+                if (expl.explanation_type === EExplanationTypes.medoid && expl.explanation_data.id !== undefined) {
+                    this.medoidNodes.push((expl.explanation_data.id).toString());
                 }
             })
         });
@@ -63,7 +64,7 @@ export default class NodeExplicitComms {
      * @param node source node
      * @param dimStrat dimension strategy controller
      */
-    parseExplicitCommunity(node: UserData, dimStrat: NodeDimensionStrategy | undefined) {
+    parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined) {
 
         const explicitKeys = Object.keys(node.explicit_community);
         explicitKeys.forEach((key) => {
@@ -78,25 +79,12 @@ export default class NodeExplicitComms {
         });
     }
 
-    isMedoid(id: string) {
-
-        this.communitiesData.forEach((comm: CommunityData) => {
-            comm.explanations.forEach((expl: CommExplanation) => {
-                if (expl.explanation_type === ExplanationTypes.medoid && expl.explanation_data.id === id) {
-                    return true;
-                }
-            })
-        });
-
-        return false;
-    }
-
     /**
      * Update the explicit data of the network
      * @param key key of the explicit community
      * @param node source node
      */
-    updateExplicitData(key: string, node: UserData) {
+    updateExplicitData(key: string, node: IUserData) {
         if (this.explicitData.length === 0) {
             this.explicitData.push(new ExplicitData(key, node.explicit_community[key]));
         } else {
@@ -118,14 +106,14 @@ export default class NodeExplicitComms {
      * @param key key of the explicit community
      * @param node source node
      */
-    updateCommunitiesData(key: string, node: UserData) {
+    updateCommunitiesData(key: string, node: IUserData) {
 
         const group = node.implicit_community;
 
         //Check if the parent map is defined
         if (this.communitiesData[group].explicitCommunityMap === undefined) {
             //Create the parent map
-            this.communitiesData[group].explicitCommunityMap = new Map<string, ExplicitCommData>();
+            this.communitiesData[group].explicitCommunityMap = new Map<string, IExplicitCommData>();
 
             //Define the child map of this key
             const newValue = new Map<string, number>();
@@ -179,7 +167,7 @@ export default class NodeExplicitComms {
                     parentValue.map.set(key, newValue);
                 });
 
-                //Sort the map
+                //Sort the map from highest percentile to lowest
                 parentValue.array = Array.from(parentValue.map).sort(
                     (a: [string, number], b: [string, number]) => {
                         if (a[1] > b[1])

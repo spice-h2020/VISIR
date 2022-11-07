@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Accordion } from '../basicComponents/Accordion';
 import { InteractionPanel } from '../basicComponents/Interaction';
-import { ArtworkData, Interaction } from '../constants/perspectivesTypes';
+import { IArtworkData, IInteraction } from '../constants/perspectivesTypes';
 
 import '../style/base.css';
 
@@ -14,7 +14,7 @@ export default {
 const Template: ComponentStory<typeof Accordion> = (args) => <Accordion {...args} />;
 
 const loreIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-const artworkData: ArtworkData[] = [
+const artworkData: IArtworkData[] = [
     {
         id: "1",
         tittle: "Le tre finestre, La pianura della torre",
@@ -37,7 +37,7 @@ const artworkData: ArtworkData[] = [
         image: "https://www.gamtorino.it/sites/default/files/opere/MALINCONIA-%20BOSWELL%20Le%20tre%20finestre.jpg"
     },
 ]
-const interactions: Interaction[] = [{
+const interactions: IInteraction[] = [{
     artwork_id: '1',
     feelings: 'scettico',
     extracted_emotions: {

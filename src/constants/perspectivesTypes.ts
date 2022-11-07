@@ -1,5 +1,5 @@
 /**
- * @fileoverview This file contains diferent perspectives interfaces and classes related with the perspectives.
+ * @fileoverview This file contains diferent interfaces and classes related with the perspectives.
  * @author Marco Expósito Pérez
  */
 
@@ -11,10 +11,10 @@ import { Dimensions } from "./nodes";
 export interface anyProperty extends Record<string, any> { }
 
 
-//#region All perspectives file
+//#region All perspective ids file
 
 /**
- * Interface with all the details of a single perspective.
+ * Interface with the id of a single perspective.
  */
 export interface PerspectiveId {
     id: string;
@@ -35,11 +35,11 @@ export enum PerspectiveActiveState {
 /**
  * Interface with all the data of a single perspective.
  */
-export interface PerspectiveData {
-    communities: CommunityData[];
-    users: UserData[];
-    similarity: EdgeData[];
-    artworks: ArtworkData[],
+export interface IPerspectiveData {
+    communities: ICommunityData[];
+    users: IUserData[];
+    similarity: IEdgeData[];
+    artworks: IArtworkData[],
 
     id: string,
     name: string,
@@ -48,23 +48,32 @@ export interface PerspectiveData {
 /**
  * Interface of the data of a community.
  */
-export interface CommunityData extends anyProperty {
+export interface ICommunityData extends anyProperty {
     id: string;
     name: string;
-    explanations: CommExplanation[];
+    explanations: ICommunityExplanation[];
     users: string[];
 
-    explicitCommunityMap: Map<string, ExplicitCommData>;
-    explicitCommunityArray?: [string, ExplicitCommData][];
+    //The string of the map represents the name of the explicit community.
+    explicitCommunityMap: Map<string, IExplicitCommData>;
+    explicitCommunityArray?: [string, IExplicitCommData][];
 }
 
-export interface ExplicitCommData {
+/**
+ * Interface with the relation "value -> amount of users" data of an explicit community.
+ * The map and the array shows the same information. The string is the value of the explicit community, 
+ * number is the amount of users that has that value.
+ */
+export interface IExplicitCommData {
     map: Map<string, number>;
     array?: [string, number][];
     dimension?: Dimensions;
 }
 
-export enum ExplanationTypes {
+/**
+ * Supported community explanation types
+ */
+export enum EExplanationTypes {
     explicit_attributes,
     medoid
 }
@@ -72,8 +81,8 @@ export enum ExplanationTypes {
 /**
  * Community explanation for visualization purpouses
  */
-export interface CommExplanation extends anyProperty {
-    explanation_type: ExplanationTypes;
+export interface ICommunityExplanation extends anyProperty {
+    explanation_type: EExplanationTypes;
     explanation_data: anyProperty;
     visible: boolean;
 }
@@ -81,12 +90,12 @@ export interface CommExplanation extends anyProperty {
 /**
  * Interface of the data of a user/node.
  */
-export interface UserData extends anyProperty {
+export interface IUserData extends anyProperty {
     id: string;
     label: string;
     implicit_community: number;
     explicit_community: anyProperty;
-    interactions: Interaction[];
+    interactions: IInteraction[];
 
     isMedoid: boolean;
 }
@@ -94,7 +103,7 @@ export interface UserData extends anyProperty {
 /**
  * Interface of the data of a user interaction.
  */
-export interface Interaction extends anyProperty {
+export interface IInteraction extends anyProperty {
     artwork_id: string;
     feelings: string;
     extracted_emotions: anyProperty;
@@ -103,7 +112,7 @@ export interface Interaction extends anyProperty {
 /**
  * Interface of the data of an edge/similarity.
  */
-export interface EdgeData extends anyProperty {
+export interface IEdgeData extends anyProperty {
     from: string;
     to: string;
     similarity: number;
@@ -113,7 +122,7 @@ export interface EdgeData extends anyProperty {
 /**
  * Interface of the data of an artwork.
  */
-export interface ArtworkData {
+export interface IArtworkData {
     id: string;
     tittle: string;
     author: string;
@@ -126,7 +135,7 @@ export interface ArtworkData {
 /**
  * Possible states of a single perspective
  */
-export enum PerspectiveState {
+export enum EPerspectiveVisState {
     /**
      * The perspective is unactive, not being shown to anyone.
      */

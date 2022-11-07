@@ -1,12 +1,16 @@
 /**
- * @fileoverview This file creates a network controller based on the perspectiveData. Also mantains the dataColumn of this network
+ * @fileoverview This file creates a network controller based on the perspectiveData that has the responsability of 
+ * creating the vis.js network object, creates a dataTable component updating it with the necesary information and 
+ * reacts to diferent changes.
+ * When some of the viewOptions attribute changes, the network will be updated accordingly.
+ * When the selected object changes, the dataTable and the network will be updated.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
-import { UserData, CommunityData, PerspectiveState, PerspectiveData } from '../constants/perspectivesTypes';
-import { SelectedObject, SelectedObjectActionEnum, StateFunctions } from '../constants/auxTypes';
+import { IUserData, ICommunityData, EPerspectiveVisState, IPerspectiveData } from '../constants/perspectivesTypes';
+import { ISelectedObject, ESelectedObjectAction, IStateFunctions } from '../constants/auxTypes';
 //Packages
 import React, { useEffect, useState, useRef } from "react";
 //Local files
@@ -26,25 +30,25 @@ const networkContainer: React.CSSProperties = {
 
 interface PerspectiveViewProps {
     //Data of this perspective view.
-    perspectiveData: PerspectiveData;
-    //Options that change the view of a perspective
+    perspectiveData: IPerspectiveData;
+    //Options that change the view of a perspective.
     viewOptions: ViewOptions;
-    //Object with all the functions that will change the state of the network
-    sf: StateFunctions;
-    //Current selected Object. Can be nothing, a node or a community
-    selectedObject: SelectedObject | undefined;
-    //Current node dimension strategy
+    //Object with all the functions that will change the state of the network.
+    sf: IStateFunctions;
+    //Current selected Object. Can be nothing, a node or a community.
+    selectedObject: ISelectedObject | undefined;
+    //Current node dimension strategy.
     dimStrat: NodeDimensionStrategy | undefined;
-    //Id of the current network on the focus
+    //Id of the current network on the focus.
     networkFocusID: undefined | string;
-
-    perspectiveState: PerspectiveState;
-
+    //Collapsed state of this perspective.
+    perspectiveState: EPerspectiveVisState;
+    //If true, mirror the dataTable and vis.js network position
     mirror?: boolean;
 }
 
 /**
- * Basic UI component that execute a function when clicked
+ * UI component that creates a vis.js network and a dataTable with diferent data based on the selected object.
  */
 export const PerspectiveView = ({
     perspectiveData,
@@ -59,8 +63,8 @@ export const PerspectiveView = ({
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
 
-    const [selectedCommunity, setSelectedCommunity] = useState<CommunityData>();
-    const [selectedNode, setSelectedNode] = useState<UserData | undefined>();
+    const [selectedCommunity, setSelectedCommunity] = useState<ICommunityData>();
+    const [selectedNode, setSelectedNode] = useState<IUserData | undefined>();
 
     const visJsRef = useRef<HTMLDivElement>(null);
 
@@ -77,39 +81,46 @@ export const PerspectiveView = ({
 
     //Do something when the user clicks in a network
     useEffect(() => {
-        //If something is selected
+        //Check if something has been clicked
         if (netManager !== undefined) {
             if (selectedObject?.obj !== undefined) {
-                //If a node has been selected
+                //If a node has been clicked.
                 if (selectedObject.obj.explanations === undefined && selectedObject.obj.id !== undefined) {
 
                     const nodeData = netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
 
+                    //If the node doesnt exist in this network
                     if (nodeData === undefined) {
                         setSelectedNode(undefined);
                         setSelectedCommunity(undefined);
-                    } else {
-                        setSelectedNode(nodeData as UserData);
+
+                    }//If the node exists in this network 
+                    else {
+                        setSelectedNode(nodeData as IUserData);
                         setSelectedCommunity(netManager.bbCtrl.comData[nodeData.implicit_community]);
                     }
-                } else {//If a community has been selected
+
+                } //If a community has been clicked
+                else {
                     //If the community is from this network
                     if (selectedObject.sourceID === perspectiveData.id) {
 
-                        netManager.eventsCtrl.boundingBoxClicked(selectedObject.obj as CommunityData);
+                        netManager.eventsCtrl.boundingBoxClicked(selectedObject.obj as ICommunityData);
 
                         setSelectedNode(undefined);
-                        setSelectedCommunity(selectedObject.obj as CommunityData);
+                        setSelectedCommunity(selectedObject.obj as ICommunityData);
 
-                    } else { //If the community is not from this network
+                    }//If the community is not from this network 
+                    else {
 
-                        netManager.eventsCtrl.externalCommunityClicked(selectedObject.obj as CommunityData);
+                        netManager.eventsCtrl.externalCommunityClicked(selectedObject.obj as ICommunityData);
 
                         setSelectedNode(undefined);
                         setSelectedCommunity(undefined);
                     }
                 }
-            } else { //Nothing is selected
+            }//If nothing is selected 
+            else {
 
                 netManager.eventsCtrl.nothingClicked();
 
@@ -126,7 +137,8 @@ export const PerspectiveView = ({
             if (networkFocusID === undefined) {
                 sf.setNetworkFocusId(perspectiveData.id);
             }
-            setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions, sf, dimStrat, networkFocusID!));
+            setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
+                sf, dimStrat, networkFocusID!));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
@@ -137,7 +149,7 @@ export const PerspectiveView = ({
 
     const networkContainer = <div style={getNetworkContainerStyle(perspectiveState)} key={1} ref={visJsRef} />
 
-    if (perspectiveState !== PerspectiveState.collapsed) {
+    if (perspectiveState !== EPerspectiveVisState.collapsed) {
         const dataCol = <DataTable
             tittle={perspectiveData.name}
             node={selectedNode}
@@ -174,57 +186,61 @@ export const PerspectiveView = ({
 };
 
 /**
- * Creates a series of UseEffect functions that will be executed when viewOptions object changes. They will update the network in diferent ways depending on the option
+ * Creates a series of UseEffect functions that will be executed when viewOptions object changes. 
+ * They will update the network in diferent ways depending on the option
  * @param viewOptions object that will trigger the useEffects.
- * @param netManager will execute the changes once useEffects are triggered
+ * @param netMgr will execute the changes once useEffects are triggered
  */
-function ViewOptionsUseEffect(viewOptions: ViewOptions, netManager: NetworkController | undefined, setSelectedObject: Function, focusedId: string | undefined) {
+function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkController | undefined,
+    setSelectedObject: Function, focusedId: string | undefined) {
+
     useEffect(() => {
-        if (netManager !== undefined) {
-            if (netManager.nodeVisuals.selectedNodes.length === 0) {
-                netManager.nodeVisuals.colorAllNodes(netManager.nodes, viewOptions.legendConfig);
+        if (netMgr !== undefined) {
+            if (netMgr.nodeVisuals.selectedNodes.length === 0) {
+                netMgr.nodeVisuals.colorAllNodes(netMgr.nodes, viewOptions.legendConfig);
             } else {
-                netManager.nodeVisuals.selectNodes(netManager.nodes, netManager.nodeVisuals.selectedNodes, netManager.nodeVisuals.focusedNodes, viewOptions.legendConfig);
+                netMgr.nodeVisuals.selectNodes(netMgr.nodes, netMgr.nodeVisuals.selectedNodes,
+                    netMgr.nodeVisuals.focusedNodes, viewOptions.legendConfig);
             }
         }
-    }, [viewOptions.legendConfig, netManager]);
+    }, [viewOptions.legendConfig, netMgr]);
 
     useEffect(() => {
-        if (netManager !== undefined) {
-            netManager.nodeVisuals.toggleNodeLabels(netManager.nodes, viewOptions.hideLabels);
+        if (netMgr !== undefined) {
+            netMgr.nodeVisuals.toggleNodeLabels(netMgr.nodes, viewOptions.hideLabels);
         }
-    }, [viewOptions.hideLabels, netManager]);
+    }, [viewOptions.hideLabels, netMgr]);
 
     useEffect(() => {
-        if (netManager !== undefined) {
-            netManager.edgeCtrl.toggleHideEdges(viewOptions.hideEdges);
+        if (netMgr !== undefined) {
+            netMgr.edgeCtrl.toggleHideEdges(viewOptions.hideEdges);
         }
-    }, [viewOptions.hideEdges, netManager]);
+    }, [viewOptions.hideEdges, netMgr]);
 
     useEffect(() => {
-        if (netManager !== undefined) {
-            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: focusedId });
+        if (netMgr !== undefined) {
+            setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: focusedId });
 
-            netManager.edgeCtrl.updateEdgesThreshold(viewOptions.edgeThreshold);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [viewOptions.edgeThreshold, netManager]);
-
-    useEffect(() => {
-        if (netManager !== undefined) {
-            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: focusedId });
-
-            netManager.edgeCtrl.updateDeletedEdges(viewOptions);
+            netMgr.edgeCtrl.updateEdgesThreshold(viewOptions.edgeThreshold);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [viewOptions.deleteEdges, netManager]);
+    }, [viewOptions.edgeThreshold, netMgr]);
+
+    useEffect(() => {
+        if (netMgr !== undefined) {
+            setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: focusedId });
+
+            netMgr.edgeCtrl.updateDeletedEdges(viewOptions);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [viewOptions.deleteEdges, netMgr]);
 }
 
 
-function getNetworkContainerStyle(perspectiveState: PerspectiveState): React.CSSProperties {
+function getNetworkContainerStyle(perspectiveState: EPerspectiveVisState): React.CSSProperties {
     let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(networkContainer)));
 
-    if (perspectiveState === PerspectiveState.collapsed) {
+    if (perspectiveState === EPerspectiveVisState.collapsed) {
         newStyle.borderTop = "none";
     }
 

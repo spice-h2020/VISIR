@@ -1,12 +1,13 @@
 /**
- * @fileoverview This file creates a button and a hidden component. They are intended to work inside an accordion component
- * were a click will hide all visible components and will make this component unhidden.
+ * @fileoverview This file creates a button and a hidden component linked to the button. 
+ * They are intended to work inside an accordion component were a click will hide all visible components and will make 
+ * this component unhidden.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { bStateArrayAction, bStateArrayActionEnum } from "../constants/auxTypes";
-import { ButtonState } from "../constants/viewOptions";
+import { IbStateArrayAction, EbuttonStateArrayAction } from "../constants/auxTypes";
+import { EButtonState } from "../constants/viewOptions";
 //Packages
 import React, { Dispatch, useRef } from "react";
 //Local files
@@ -31,12 +32,12 @@ interface AccordionItemProps {
     item: React.ReactNode;
     tittle: string;
     index: number;
-    state: ButtonState;
-    onClick: Dispatch<bStateArrayAction>;
+    state: EButtonState;
+    onClick: Dispatch<IbStateArrayAction>;
 }
 
 /**
- * Basic UI element formed by a button that toggles the item state and hide all other active items in the accordion
+ * UI component formed by a button that toggles the item state and hide all other active items in the accordion.
  */
 export const AccordionItem = ({
     item,
@@ -59,9 +60,9 @@ export const AccordionItem = ({
                 state={state}
                 onClick={() => {
                     onClick({
-                        action: bStateArrayActionEnum.activeOne,
+                        action: EbuttonStateArrayAction.activeOne,
                         index: index,
-                        newState: state === ButtonState.active ? ButtonState.unactive : ButtonState.active
+                        newState: state === EButtonState.active ? EButtonState.unactive : EButtonState.active
                     });
                 }}
                 extraClassName="btn-accordion plus"
@@ -76,11 +77,6 @@ export const AccordionItem = ({
         </div >);
 };
 
-/**
- * Calculates the max Height of an HTML element
- * @param ref ref of the HTML element
- * @returns the height
- */
 function calculateElementMaxHeight(ref: React.MutableRefObject<null>) {
     if (ref !== undefined && ref.current !== null) {
         return (ref.current as unknown as HTMLElement).scrollHeight;
@@ -90,10 +86,10 @@ function calculateElementMaxHeight(ref: React.MutableRefObject<null>) {
 }
 
 
-function getPanelStyle(currentState: ButtonState, maxHeight: number): React.CSSProperties {
+function getPanelStyle(currentState: EButtonState, maxHeight: number): React.CSSProperties {
     let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(panelStyle)));
 
-    if (currentState === ButtonState.active) {
+    if (currentState === EButtonState.active) {
         newStyle.maxHeight = maxHeight;
     } else {
         newStyle.maxHeight = "0px";

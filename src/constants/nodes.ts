@@ -1,10 +1,11 @@
 /**
- * @fileoverview This file contains diferent aux classes and constant parameters related with the nodes/users of each perspective.
+ * @fileoverview This file contains diferent aux classes and constant parameters related with the nodes/users of each 
+ * perspective.
  * @author Marco Expósito Pérez
  */
 
 /**
- * Contains the necesary info to change the shape of a node
+ * Contains the necesary info to change the shape of a node.
  */
 export interface shapeData {
     name: string,
@@ -13,12 +14,12 @@ export interface shapeData {
 }
 
 /**
- * Current available dimensions to change from nodes based on their explicit communities values
+ * Current available dimensions to change from nodes based on their explicit communities values.
  */
 export enum Dimensions {
     Color,
     Shape,
-    Border, //Color of the border
+    Border, //Color of the border.
 }
 
 /**
@@ -32,7 +33,7 @@ export interface DimAttribute {
 }
 
 /**
- * Constant values of configuration for the nodes
+ * Constant values of configuration for the nodes.
  */
 export const nodeConst = {
 
@@ -43,17 +44,17 @@ export const nodeConst = {
     //--- Default Configuration Values ---
     zoomDuration: 400,
 
-    //Sizes
+    //Sizes.
     defaultSize: 15,
     medoidSize: 25,
     selectedSize: 35,
 
-    //Default value for a background color when the explicit community doesnt change it
+    //Default value for a background color when the explicit community doesnt change it.
     defaultColor: "rgb(30, 236, 164, 1)",
-    //Color when another node is being focused
+    //Color when another node is being focused.
     noFocusColor: { background: "rgba(155, 155, 155, 0.3)", border: "rgba(100, 100, 100, 0.3)" },
 
-    //Default shape in case explicit community doesnt change it
+    //Default shape in case explicit community doesnt change it.
     defaultShape: { name: "dot", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
 
     defaultBorderWidth: 0,
@@ -65,14 +66,14 @@ export const nodeConst = {
     labelSize: 13,
     labelvOffset: -31,
 
-    //Node dimensions that change based on its explicit Community
+    //Node dimensions that change based on its explicit Community.
     nodeDimensions: {
         getColor: (n: number) => getColorOfN(n),
         getShape: (n: number) => getShapeOfN(n),
         getBorder: (n: number) => getBorderOfN(n),
     },
 
-    //Characteristics that change based on the explicit communities
+    //Characteristics that change based on the explicit communities.
 
     BackgroundColors: [
         "rgb(255, 0, 0, 1)", //Red
@@ -96,21 +97,21 @@ export const nodeConst = {
         "rgb(15, 118, 82, 1)", //green-blue
     ],
 
-    AvailableShapes: [  //SelectedVAdjust is not being used
-        { name: "dot", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
-        { name: "diamond", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
-        { name: "star", vAdjust: -34, selectedVAdjust: -40 } as shapeData,
-        { name: "triangle", vAdjust: -29, selectedVAdjust: -35 } as shapeData,
-        { name: "square", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
-        { name: "triangleDown", vAdjust: -40, selectedVAdjust: -45 } as shapeData,
-        { name: "hexagon", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
+    AvailableShapes: [
+        { name: "dot", vAdjust: -35 } as shapeData,
+        { name: "diamond", vAdjust: -35 } as shapeData,
+        { name: "star", vAdjust: -34 } as shapeData,
+        { name: "triangle", vAdjust: -29 } as shapeData,
+        { name: "square", vAdjust: -35 } as shapeData,
+        { name: "triangleDown", vAdjust: -40 } as shapeData,
+        { name: "hexagon", vAdjust: -35 } as shapeData,
     ],
 }
 
 /**
- * Returns a color for a node background
- * @param {number} n index of the returned color
- * @returns {string} Returns aa string similar to "rgb(255, 0, 0, 1)"
+ * Returns a color for a node background.
+ * @param {number} n index of the returned color.
+ * @returns {string} Returns aa string similar to "rgb(255, 0, 0, 1)".
  */
 const getColorOfN = function (n: number): string {
     n = n % nodeConst.BackgroundColors.length;
@@ -119,9 +120,9 @@ const getColorOfN = function (n: number): string {
 };
 
 /**
- * Returns a shape and label offset for a node shape
- * @param {number} n index of the returned shape
- * @returns {Object} Returns an object in the format of { Shape: "dot", vOffset: -31, selOffset: -40 }
+ * Returns a shape and label offset for a node shape.
+ * @param {number} n index of the returned shape.
+ * @returns {Object} Returns an object in the format of { Shape: "dot", vOffset: -31, selOffset: -40 }.
  */
 const getShapeOfN = function (n: number): shapeData {
     n = n % nodeConst.AvailableShapes.length;
@@ -130,9 +131,9 @@ const getShapeOfN = function (n: number): shapeData {
 }
 
 /**
- * Returns a color for a node border
- * @param {number} n index of the returned color
- * @returns {String} Returns aa string similar to "rgb(255, 0, 0, 1)"
+ * Returns a color for a node border.
+ * @param {number} n index of the returned color.
+ * @returns {String} Returns aa string similar to "rgb(255, 0, 0, 1)".
  */
 const getBorderOfN = function (n: number): string {
     n = n % nodeConst.BoderColors.length;

@@ -1,15 +1,16 @@
 /**
- * @fileoverview This class creates the controller of this network. Creating all controllers, setting up the options and parsing the initial data
+ * @fileoverview This class creates the controller of this network. 
+ * Creating all other controllers, setting up vis.js's options and parsing the initial data.
  * @package Requires vis network package.
  * @package Requires vis data package.
  * @author Marco Expósito Pérez
  */
 //Constants
 import { edgeConst } from "../constants/edges";
-import { EdgeData, PerspectiveData, UserData } from "../constants/perspectivesTypes";
+import { IEdgeData, IPerspectiveData, IUserData } from "../constants/perspectivesTypes";
 import { ViewOptions } from "../constants/viewOptions";
 import { nodeConst } from "../constants/nodes";
-import { StateFunctions } from "../constants/auxTypes";
+import { IStateFunctions } from "../constants/auxTypes";
 //Package
 import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network";
 import { DataSet } from "vis-data";
@@ -55,7 +56,7 @@ export default class NetworkController {
      * @param dimStrat Current dimension strategy
      * @param networkFocusID ID of the current network with the tooltip focus
      */
-    constructor(perspectiveData: PerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: StateFunctions,
+    constructor(perspectiveData: IPerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: IStateFunctions,
         dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string) {
 
         this.id = perspectiveData.id;
@@ -82,11 +83,11 @@ export default class NetworkController {
      * @param sf Functions that change the state
      * @param viewOptions Options that change the visualization
      */
-    parseNodes(perspectiveData: PerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: StateFunctions, viewOptions: ViewOptions) {
+    parseNodes(perspectiveData: IPerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions, viewOptions: ViewOptions) {
         const explicitCtrl = new NodeExplicitComms(perspectiveData.communities);
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
 
-        perspectiveData.users.forEach((user: UserData) => {
+        perspectiveData.users.forEach((user: IUserData) => {
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
             nodeLocation.updateNodeGroup(user, perspectiveData.communities);
         });
@@ -94,7 +95,7 @@ export default class NetworkController {
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
-        perspectiveData.users.forEach((user: UserData) => {
+        perspectiveData.users.forEach((user: IUserData) => {
             nodeLocation.setNodeLocation(user);
             this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.hideLabels);
             this.bbCtrl.calculateBoundingBoxes(user);
@@ -112,7 +113,7 @@ export default class NetworkController {
      * @param baseData Data of all edges of the network
      * @param viewOptions Options that change the visualization
      */
-    parseEdges(edgeDataset: DataSetEdges, baseData: EdgeData[], viewOptions: ViewOptions) {
+    parseEdges(edgeDataset: DataSetEdges, baseData: IEdgeData[], viewOptions: ViewOptions) {
         this.edgeCtrl = new EdgeVisualsCtrl(edgeDataset, baseData, viewOptions);
     }
 
@@ -181,7 +182,7 @@ export default class NetworkController {
  * @param b EdgeData B
  * @returns Returns 1 if A has higher value. Returns 0 if both have the same value. Returns -1 if B has higher value
  */
-const sortEdges = (a: EdgeData, b: EdgeData) => {
+const sortEdges = (a: IEdgeData, b: IEdgeData) => {
     if (a.similarity > b.similarity) {
         return 1;
     }

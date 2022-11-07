@@ -4,7 +4,7 @@
  */
 //Constants
 import { Dimensions, DimAttribute, nodeConst } from "../../constants/nodes";
-import { UserData } from "../../constants/perspectivesTypes";
+import { IUserData } from "../../constants/perspectivesTypes";
 //Local files
 import GenericStrategy from "./genericStrat";
 
@@ -18,7 +18,7 @@ export default class BorderStrategy extends GenericStrategy {
      * Changes the border's color and width
      * @param user user to edit
      */
-    change(user: UserData, isFocus: boolean) {
+    change(user: IUserData, isFocus: boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
             const value = user.explicit_community[this.attr.key];
@@ -48,7 +48,7 @@ export default class BorderStrategy extends GenericStrategy {
      * Change the border's color
      * @param user user to edit
      */
-    toColorless(user: UserData) {
+    toColorless(user: IUserData) {
         user["color"]["border"] = nodeConst.noFocusColor.border;
 
         if (this.attr !== undefined && this.attr.active)

@@ -2,8 +2,8 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Button } from '../basicComponents/Button';
 import { StackedBarGraph } from '../basicComponents/StackedBarGraph';
 import { Dimensions } from '../constants/nodes';
-import { ExplicitCommData } from '../constants/perspectivesTypes';
-import { ButtonState } from '../constants/viewOptions';
+import { IExplicitCommData } from '../constants/perspectivesTypes';
+import { EButtonState } from '../constants/viewOptions';
 
 import '../style/base.css';
 
@@ -25,7 +25,7 @@ let explicitData = {
         ["(empty)", 4.3],
         ["Elderly", 4.3],
     ]
-} as ExplicitCommData;
+} as IExplicitCommData;
 
 export const Color = Template.bind({});
 Color.args = {
@@ -43,7 +43,7 @@ explicitData = {
         ["FI", 4.3],
         ["ES", 2.2],
     ]
-} as ExplicitCommData;
+} as IExplicitCommData;
 
 export const Shape = Template.bind({});
 Shape.args = {
@@ -65,7 +65,7 @@ explicitData = {
         ["PO", 2.0],
         ["FR", 1.0],
     ]
-} as ExplicitCommData;
+} as IExplicitCommData;
 
 export const None = Template.bind({});
 None.args = {

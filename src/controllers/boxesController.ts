@@ -1,20 +1,20 @@
 /**
- * @fileoverview This class controls where bounding boxes should be drawn and when a click hits a bounding box
+ * @fileoverview This class controls where bounding boxes should be drawn and when a click hits a bounding box.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { CommunityData, UserData } from "../constants/perspectivesTypes";
-import { BoundingBox } from "../constants/auxTypes";
+import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
+import { IBoundingBox } from "../constants/auxTypes";
 
 /**
  * Configuration of the bounding boxes
  */
 const configuration = {
-    //Padding to make bounding boxes a bit bigger than the nodes they bound
+    //Padding to make bounding boxes a bit bigger than the nodes they bound.
     padding: 15,
-    //width of the border of the bounding boxes
+    //width of the border of the bounding boxes.
     boderWidth: 4,
-    //backgroundColor and border color of the bounding boxes
+    //backgroundColor and border color of the bounding boxes.
     color: [
         {
             color: "rgba(248, 212, 251, 0.6)", border: "rgba(242, 169, 249, 1)", name: "Purple" //purple
@@ -40,13 +40,13 @@ export default class BoxesController {
     /**
      * Data of all communities of the network
      */
-    comData: CommunityData[]
+    comData: ICommunityData[]
 
     /**
      * Constructor of the class
      * @param communityData Data of all communities of the network
      */
-    constructor(communityData: CommunityData[]) {
+    constructor(communityData: ICommunityData[]) {
         this.comData = communityData;
     }
 
@@ -54,10 +54,10 @@ export default class BoxesController {
      * Calculates the boundaries of each bounding box and add them to their own community
      * @param node Data of all users of the network
      */
-    calculateBoundingBoxes(node: UserData) {
+    calculateBoundingBoxes(node: IUserData) {
         const group: number = node.implicit_community;
 
-        const nodeBB: BoundingBox = {
+        const nodeBB: IBoundingBox = {
             top: node.y - node.size / 2 - configuration.padding,
             bottom: node.y + node.size / 2 + configuration.padding,
             left: node.x - node.size / 2 - configuration.padding,
@@ -92,7 +92,7 @@ export default class BoxesController {
         for (let i = 0; i < this.comData.length; i++) {
             if (this.comData[i].bb !== undefined) {
 
-                const bb: BoundingBox = this.comData[i].bb;
+                const bb: IBoundingBox = this.comData[i].bb;
 
                 //Draw Border
                 ctx.lineWidth = configuration.boderWidth;
@@ -131,7 +131,7 @@ export default class BoxesController {
      * @param y Y of the click
      * @returns True if the click is inside the bounding box
      */
-    clickInsideBox(bb: BoundingBox, x: number, y: number) {
+    clickInsideBox(bb: IBoundingBox, x: number, y: number) {
         return x > bb.left && x < bb.right && y > bb.top && y < bb.bottom;
     }
 }

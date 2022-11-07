@@ -1,11 +1,12 @@
 /**
- * @fileoverview This file creates a Tooltip fixated in a position. A floating container with some transparency and a button to close it.
+ * @fileoverview This file creates a Tooltip positioned close to an object. 
+ * A floating container with some transparency and a button to close it. 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { SelectedObject } from "../constants/auxTypes";
-import { CommunityData, UserData } from "../constants/perspectivesTypes";
+import { ISelectedObject } from "../constants/auxTypes";
+import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
 //Local files
@@ -62,17 +63,17 @@ const tooltipArrow: React.CSSProperties = {
 
 interface TooltipProps {
     /**
-     *  All important information about the tooltip
+     *  All important information about the tooltip.
      */
-    selectedObject: SelectedObject | undefined;
+    selectedObject: ISelectedObject | undefined;
     /**
-     * If the tooltip should hide users' labels and ids when shown 
+     * If the tooltip should hide users' labels and ids when shown.
      */
     hideLabels: boolean;
 }
 
 /**
- * Tooltip component
+ * UI component that creates a tooltip based on the selectedObject position.
  */
 export const Tooltip = ({
     selectedObject,
@@ -81,14 +82,13 @@ export const Tooltip = ({
     const [isActive, setActive] = useState<Boolean>(false);
     const [yOffset, setYoffset] = useState<number>(0);
 
-    const [selectObject, setSelecObject] = useState<CommunityData | UserData | undefined>();
+    const [selectObject, setSelecObject] = useState<ICommunityData | IUserData | undefined>();
 
     const bodyRef = useRef(null);
     const componentRef = useRef(null);
 
-    //Calculates the vertical offset based on the height of the tooltip to center it around the focused object
+    //Calculates the vertical offset based on the height of the tooltip, to center it around the focused object.
     useEffect(() => {
-        //Calculates the vertical offset
         const ref = bodyRef as any;
         const pRef = componentRef.current as any;
 
@@ -99,10 +99,9 @@ export const Tooltip = ({
 
     }, [selectedObject?.position]);
 
-    //Update the data of the tooltip
+
     useEffect(() => {
         setActive(true);
-
         setSelecObject(selectedObject?.obj);
 
     }, [selectedObject?.obj, hideLabels])
@@ -132,21 +131,21 @@ export const Tooltip = ({
                     <div style={tooltipBodyStyle}>
                         {tooltipBody}
                     </div>
-                    <div style={tooltipArrow}/>
+                    <div style={tooltipArrow} />
                 </div >
             </div >
         );
 
     } else
-        return <React.Fragment/>;
+        return <React.Fragment />;
 
 }
 
 
 /**
- * Gets the position of a HTML element in the DOM
- * @param element element to get the position from
- * @returns returns an object with the format { top: number, left: number, right: number, bottom: number}
+ * Gets the position of a HTML element in the DOM.
+ * @param element element to get the position from.
+ * @returns returns an object with the format { top: number, left: number, right: number, bottom: number}.
  */
 export const getHTMLPosition = (element: HTMLDivElement) => {
     const cs = window.getComputedStyle(element);
@@ -160,7 +159,7 @@ export const getHTMLPosition = (element: HTMLDivElement) => {
 }
 
 
-function getTooltipBody(selectedObject: CommunityData | UserData | undefined, hideLabel: boolean) {
+function getTooltipBody(selectedObject: ICommunityData | IUserData | undefined, hideLabel: boolean) {
     const body: React.ReactNode[] = []
 
     if (selectedObject !== undefined) {
@@ -185,7 +184,7 @@ function getTooltipBody(selectedObject: CommunityData | UserData | undefined, hi
     return body;
 }
 
-function getTooltipTittle(selectedObject: CommunityData | UserData | undefined) {
+function getTooltipTittle(selectedObject: ICommunityData | IUserData | undefined) {
     let tittle: React.ReactNode = "";
 
     if (selectedObject !== undefined)

@@ -1,10 +1,14 @@
 /**
- * @fileoverview This class calculates and draw the bounding boxes of users with the same implicit community.
+ * @fileoverview This class controls the edges's visualization options.
+ * It removes edges from the network based on the deleteEdges and edgeThreshold view option values.
+ * It also changes the visualization of the edges that are selected vs the unselected ones.
+ * If the hideEdges option is active, unselected edges will be hidded.
+ * 
  * @package Requires vis network package.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { EdgeData } from "../constants/perspectivesTypes";
+import { IEdgeData } from "../constants/perspectivesTypes";
 //Packages
 import { DataSetEdges, Edge } from "vis-network";
 //Local files
@@ -19,7 +23,7 @@ export default class EdgeVisualsCtrl {
     /**
      * All edges of the network regardless of their active status.
      */
-    baseEdges: EdgeData[];
+    baseEdges: IEdgeData[];
     /**
      * Edges that are currently selected/highlighted in the network.
      */
@@ -34,7 +38,7 @@ export default class EdgeVisualsCtrl {
      * @param baseEdges All edges of the network regardless of their active status.
      * @param viewOptions options that changes how the user see the network
      */
-    constructor(edges: DataSetEdges, baseEdges: EdgeData[], viewOptions: ViewOptions) {
+    constructor(edges: DataSetEdges, baseEdges: IEdgeData[], viewOptions: ViewOptions) {
         this.edges = edges;
         this.baseEdges = baseEdges;
         this.selected = new Array<string>();
@@ -46,7 +50,7 @@ export default class EdgeVisualsCtrl {
     }
 
     /**
-     * Initialize edge options
+     * Initialize edges removing the ones that must be deleted, and updateing their hidden parameter.
      * @param viewOptions options that changes how the user see the network
      */
     initEdges(viewOptions: ViewOptions) {
@@ -70,10 +74,10 @@ export default class EdgeVisualsCtrl {
     }
 
     /**
-     * Receives the ID of an edge and select all edges that start/ends up in that node.
-     * Additionaly, it changes the visual of all edges based on their selected status
+     * Receives the ID of a node and select all edges that start/ends up in that node.
+     * Additionaly, it changes the visual of all edges based on their selected status.
      * @param id node's id.
-     * @returns returns a list with all other nodes that start/ends at the other end of selected edges
+     * @returns returns a list with all other nodes that start/ends at the other end of the selected edges
      */
     selectEdges(id: string): string[] {
         this.selected = new Array<string>();
@@ -149,7 +153,7 @@ export default class EdgeVisualsCtrl {
     }
 
     /**
-     * Unselect all edges
+     * Unselect all edges clearing the selected edge array and updating all visuals accordingly.
      */
     unselectEdges() {
         this.selected = new Array<string>();
@@ -209,7 +213,7 @@ export default class EdgeVisualsCtrl {
 
             this.edges.forEach((edge: Edge) => {
 
-                if ((edge as EdgeData).similarity !== undefined && (edge as EdgeData).similarity < newEdgeThreshold) {
+                if ((edge as IEdgeData).similarity !== undefined && (edge as IEdgeData).similarity < newEdgeThreshold) {
                     edgesToDelete.push(edge.id as string);
                 }
             });
@@ -218,7 +222,7 @@ export default class EdgeVisualsCtrl {
 
         } else {
             const containedEdges: string[] = this.edges.getIds() as string[];
-            const edgeToAdd: EdgeData[] = new Array<EdgeData>();
+            const edgeToAdd: IEdgeData[] = new Array<IEdgeData>();
 
             for (const edge of this.baseEdges) {
 
@@ -240,7 +244,7 @@ export default class EdgeVisualsCtrl {
     }
 
     /**
-     * Remove random edges to increase performance of the app.
+     * Remove random edges to reduce the amount of edges of the network.
      * @param viewOptions options that changes how the user see the network
      */
     updateDeletedEdges(viewOptions: ViewOptions) {
@@ -250,7 +254,7 @@ export default class EdgeVisualsCtrl {
 
         this.baseEdges.forEach((edge) => {
             if (Math.random() >= viewOptions.deleteEdges / 100 &&
-                (edge as EdgeData).similarity >= viewOptions.edgeThreshold) {
+                (edge as IEdgeData).similarity >= viewOptions.edgeThreshold) {
 
                 if (viewOptions.hideEdges) {
                     edge!.hidden = true;

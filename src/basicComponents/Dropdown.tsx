@@ -1,11 +1,11 @@
 /**
- * @fileoverview This file creates a dropdown menu. A button that can be clicked and will show additional items to interact with. All additional items
- * will be hidden if the user clicks outside the menu.
+ * @fileoverview This file creates a dropdown menu. A main button button that can be clicked and will show additional 
+ * items to interact with. All additional items will be hidden if the user clicks outside the menu or the main button.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ButtonState } from '../constants/viewOptions';
+import { EButtonState } from '../constants/viewOptions';
 //Packages
 import React, { useState, useEffect } from "react";
 //Local files
@@ -34,26 +34,26 @@ const contentStyle: React.CSSProperties = {
 
 interface DropdownProps {
     /**
-     * Items inside the dropdown
+     * Items inside the dropdown.
      */
     items?: React.ReactNode[];
     /**
-     * Content of the main dropdown button
+     * Content of the main dropdown button.
      */
     content?: React.ReactNode;
     /**
-     * Active close dropdown when outside click functionality
+     * Active close dropdown when outside click functionality.
      */
     closeWhenOutsideClick?: boolean;
     /**
-     * Extra class name to add to the dropdown button
+     * Extra class name to add to the dropdown button.
      */
     extraClassButton?: string;
 }
 
 /**
  * Group of elements creating a Dropdown Menu that toggle items visibility when the main button is clicked. 
- * The items are closed if u click outside the dropdown 
+ * The items are closed if u click outside the dropdown or if u click the button again. 
  */
 export const Dropdown = ({
     items = [],
@@ -65,7 +65,7 @@ export const Dropdown = ({
 
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
 
-    //Close the dropdown when u click outside of it
+    //Close the dropdown when u click outside of it.
     const ref = React.useRef<HTMLDivElement>(null);
     useOutsideClick(showDropDown, ref, () => {
         setShowDropDown(false);
@@ -79,13 +79,13 @@ export const Dropdown = ({
                 <Button
                     key={-1}
                     content={content}
-                    state={showDropDown ? ButtonState.active : ButtonState.unactive}
+                    state={showDropDown ? EButtonState.active : EButtonState.unactive}
                     onClick={() => {
                         setShowDropDown(!showDropDown);
                     }}
                     extraClassName={extraClassButton}
                 />
-                <div style={ getContentStyle(showDropDown) }>
+                <div style={getContentStyle(showDropDown)}>
                     {items}
                 </div>
             </div >
@@ -97,7 +97,7 @@ export const Dropdown = ({
             >
                 <Button
                     content={content}
-                    state={ButtonState.disabled}
+                    state={EButtonState.disabled}
                     extraClassName={extraClassButton}
                 />
             </div >
@@ -106,10 +106,10 @@ export const Dropdown = ({
 
 
 /**
- * Aux function that execute a callback function when u click outside of the ref component. 
- * @param state State that will add/delete the events based on its value
- * @param ref Reference of the html object of the component to detect a click outside it
- * @param callback Function executed when the user clicks outside the ref component
+ * Aux function that execute a callback function when u click outside of the ref component.
+ * @param state State that will add/delete the events based on its value.
+ * @param ref Reference of the html object of the component to detect a click outside it.
+ * @param callback Function executed when the user clicks outside the ref component.
  */
 const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function, closeWhenOutsideClick: boolean) => {
 

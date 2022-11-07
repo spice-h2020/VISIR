@@ -1,13 +1,11 @@
 /**
  * @fileoverview This file contains 2 functions to validate Files already parsed to JSON. One function for a file with All perspectives details, 
- * and one for a file with the data of a single perspective
+ * and one for a file with the data of a single perspective.
  * @author Marco Expósito Pérez
  */
 //Constants
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
-
-const checkSimilarityFunctions = true; //FOR DEBUG WITH TESTING DATAFILES if active, will validate the similarity options of the perspective details
 
 //#region All perspectives JSON
 
@@ -42,7 +40,7 @@ export function validatePerspectiveIDfile(arg: any): types.PerspectiveId[] {
             if (arg[i].id === undefined) {
                 throw Error(`A perspective Id of the perspective IDs file is undefined`);
             }
-    
+
             if (typeof (arg[i].id) !== "string") {
                 try {
                     arg[i].id = String(arg[i].id);
@@ -76,9 +74,9 @@ export function validatePerspectiveIDfile(arg: any): types.PerspectiveId[] {
 /**
  * Validate a JSON with all the data to create the perspective network
  * @param arg JSON with the data
- * @returns {types.PerspectiveData} returns the file parsed as a proper TS class
+ * @returns {types.IPerspectiveData} returns the file parsed as a proper TS class
  */
-export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
+export function validatePerspectiveDataJSON(arg: any): types.IPerspectiveData {
     try {
         if (arg === undefined) {
             throw Error(`Perspective network data is undefined`);
@@ -136,7 +134,7 @@ export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
         }
 
         console.log(`Perspective file validation has been completed -> `);
-        console.log(arg as types.PerspectiveData);
+        console.log(arg as types.IPerspectiveData);
 
         return arg;
 
@@ -145,7 +143,7 @@ export function validatePerspectiveDataJSON(arg: any): types.PerspectiveData {
     }
 }
 
-function isCommunityDataValid(arg: any): types.CommunityData {
+function isCommunityDataValid(arg: any): types.ICommunityData {
     try {
 
         if (arg.id === undefined) {
@@ -197,7 +195,7 @@ function isCommunityDataValid(arg: any): types.CommunityData {
         throw Error(`Community data is not valid: ${e.message}`);
     }
 }
- function isCommunityExplanationValid(arg: any) : types.CommExplanation{
+function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
     try {
         if (arg.explanation_type === undefined) {
             throw Error(`Explanation_type is undefined`);
@@ -209,7 +207,7 @@ function isCommunityDataValid(arg: any): types.CommunityData {
                 throw Error(`Explanation_type is not a string`);
             }
         }
-        arg.explanation_type = types.ExplanationTypes[arg.explanation_type];
+        arg.explanation_type = types.EExplanationTypes[arg.explanation_type];
 
         if (arg.explanation_data === undefined) {
             throw Error(`Explanation_data is undefined`);
@@ -220,20 +218,20 @@ function isCommunityDataValid(arg: any): types.CommunityData {
 
         if (arg.visible === undefined) {
             arg.visible = false;
-        }else{
+        } else {
             if (typeof (arg.visible) !== "boolean") {
                 throw Error(`Visible is not a boolean`);
             }
         }
-       
+
         return arg;
 
     } catch (e: any) {
         throw Error(`Community explanation is not valid: ${e.message}`);
     }
- }
+}
 
-function isUserDataValid(arg: any): types.UserData {
+function isUserDataValid(arg: any): types.IUserData {
     try {
 
         if (arg.id === undefined) {
@@ -308,7 +306,7 @@ function isUserDataValid(arg: any): types.UserData {
     }
 }
 
-function isInteractionValid(arg: any): types.Interaction {
+function isInteractionValid(arg: any): types.IInteraction {
     try {
 
         if (arg.artwork_id === undefined) {
@@ -342,7 +340,7 @@ function isInteractionValid(arg: any): types.Interaction {
         throw Error(`Interaction data is not valid: ${e.message}`);
     }
 }
-function isSimilarityDataValid(arg: any): types.EdgeData | undefined {
+function isSimilarityDataValid(arg: any): types.IEdgeData | undefined {
     try {
 
         if (arg.value === undefined) {
@@ -403,7 +401,7 @@ function isSimilarityDataValid(arg: any): types.EdgeData | undefined {
     }
 }
 
-function isArtworkDataValid(arg: any): types.ArtworkData {
+function isArtworkDataValid(arg: any): types.IArtworkData {
     try {
 
         if (arg.id === undefined) {
@@ -453,7 +451,7 @@ function isArtworkDataValid(arg: any): types.ArtworkData {
                 throw Error(`Year of the artwork (${arg.year}) is not a string`);
             }
         }
-    
+
         if (arg.image === undefined) {
             throw Error(`Id is undefined`);
         }

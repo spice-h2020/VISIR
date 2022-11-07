@@ -1,12 +1,13 @@
 /**
  * @fileoverview This file creates a table with the data of a community, a user and its interactions.
- * If a user is provided, the communnity will be the users community.
- * Otherwise, no user data will be shown.
+ * If a user is provided, the communnity will be the users community. Otherwise, no user data will be shown.
+ * Community data will include stacked bars and the medoid user information if the explanation configuration allows it.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ArtworkData, CommExplanation as ExplanationData, CommunityData, ExplanationTypes, UserData } from "../constants/perspectivesTypes";
+import { IArtworkData, ICommunityExplanation as ExplanationData, ICommunityData, EExplanationTypes, IUserData }
+    from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
 //Local files
@@ -37,18 +38,18 @@ const tableContainer: React.CSSProperties = {
 
 interface DataTableProps {
     tittle?: String;
-    node?: UserData;
-    community?: CommunityData;
+    node?: IUserData;
+    community?: ICommunityData;
 
-    artworks: ArtworkData[];
-    allUsers: UserData[];
+    artworks: IArtworkData[];
+    allUsers: IUserData[];
 
     hideLabel: boolean;
     state: string;
 }
 
 /**
- * Basic UI component that shows some data in a table
+ * UI component that shows diferent types of data in a column
  */
 export const DataTable = ({
     tittle = "Perspective",
@@ -66,7 +67,7 @@ export const DataTable = ({
 
     return (
         <div className={state} style={getContainerStyle(state)}>
-            <h2 className="tittle" style={{fontSize: "1.5rem"}}>  {tittle} </h2>
+            <h2 className="tittle" style={{ fontSize: "1.5rem" }}>  {tittle} </h2>
             {nodePanel}
             {interactions}
             {communities}
@@ -80,7 +81,7 @@ export const DataTable = ({
  * @param hideLabel boolean that will hide the node label in the panel.
  * @returns a react component with the node's panel.
  */
-function getNodePanel(header: string, node: UserData | undefined, hideLabel: boolean) {
+function getNodePanel(header: string, node: IUserData | undefined, hideLabel: boolean) {
     const tittle = <div style={sectionTittleStyle}> {header} </div>;
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
@@ -115,7 +116,7 @@ function getNodePanel(header: string, node: UserData | undefined, hideLabel: boo
  * @param artworks all artworks' data
  * @returns a react component with the node's interactions accordion.
  */
-function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkData[]) {
+function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[]) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
     if (node !== undefined && node.interactions !== undefined) {
@@ -126,7 +127,7 @@ function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkD
         for (let i = 0; i < node.interactions.length; i++) {
 
             const interaction = node.interactions[i];
-            const artwork = artworks.find((element: ArtworkData) => { return element.id === interaction.artwork_id });
+            const artwork = artworks.find((element: IArtworkData) => { return element.id === interaction.artwork_id });
 
             if (artwork !== undefined) {
                 tittles.push(artwork.tittle);
@@ -159,7 +160,7 @@ function getInteractionsAccordion(node: UserData | undefined, artworks: ArtworkD
  * @param community source community.
  * @returns a react component with the community's panel.
  */
-function getCommunityPanel(community: CommunityData | undefined, allUsers: UserData[], hideLabel: boolean, artworks: ArtworkData[]) {
+function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
 
     const tittle = <div style={sectionTittleStyle}> Community Attributes </div>;
     let content: React.ReactNode[] = [];
@@ -184,17 +185,22 @@ function getCommunityPanel(community: CommunityData | undefined, allUsers: UserD
     )
 }
 
-
-function getCommunityExplanation(communityData: CommunityData, explanation: ExplanationData, allUsers: UserData[], hideLabel: boolean, artworks: ArtworkData[]) {
+/**
+ * Returns a panel with the explanations of the community based on the explanation parameter configuration.
+ * @param communityData source community.
+ * @param explanation data of the explanations to know its type and if it should be visible.
+ * @returns a react component with the explanations.
+ */
+function getCommunityExplanation(communityData: ICommunityData, explanation: ExplanationData, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
     if (explanation.visible === false) {
         return "";
 
     } else {
         switch (explanation.explanation_type) {
-            case ExplanationTypes.explicit_attributes: {
+            case EExplanationTypes.explicit_attributes: {
                 return getStackedBars(communityData);
             }
-            case ExplanationTypes.medoid: {
+            case EExplanationTypes.medoid: {
 
                 const medioid = allUsers.find((value) => { return Number(value.id) === explanation.explanation_data.id });
 
@@ -212,12 +218,13 @@ function getCommunityExplanation(communityData: CommunityData, explanation: Expl
         }
     }
 }
+
 /**
  * Returns all stacked bar graphs of a community.
  * @param community source community.
  * @returns a react component array with the community's stacked bar.
  */
-function getStackedBars(community: CommunityData) {
+function getStackedBars(community: ICommunityData) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
     if (community.explicitCommunityArray !== undefined) {

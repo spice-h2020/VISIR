@@ -4,7 +4,7 @@
  */
 //Constants
 import { Dimensions, DimAttribute, nodeConst, shapeData } from "../../constants/nodes";
-import { UserData } from "../../constants/perspectivesTypes";
+import { IUserData } from "../../constants/perspectivesTypes";
 //Local files
 import GenericStrategy from "./genericStrat";
 
@@ -18,7 +18,7 @@ export default class ShapeStrategy extends GenericStrategy {
      * Changes the shape and font's vertical align
      * @param user user to edit
      */
-    change(user: UserData, isFocus: boolean) {
+    change(user: IUserData, isFocus: boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
             const value = user.explicit_community[this.attr.key];
@@ -57,7 +57,7 @@ export default class ShapeStrategy extends GenericStrategy {
      * This strategy doesnt do anything when a node turn colorless
      * @param user 
      */
-    toColorless(user: UserData): void {
+    toColorless(user: IUserData): void {
         user.size = nodeConst.defaultSize;
     }
 }

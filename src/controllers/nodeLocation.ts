@@ -1,26 +1,29 @@
 /**
- * @fileoverview Calculate locate the nodes in circular groups, each group separated in the vertex of a polygon.
+ * @fileoverview This class separates nodes in groups based on their implicit communities and order each group 
+ * in a circular pattern.
+ * It also separates each node in a group to create another circular pattern inside the group.
+ * If a group has a medoid node, it will be placed in the middle of the group.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { Point } from "../constants/auxTypes";
+import { IPoint } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
-import { CommunityData, ExplanationTypes, UserData } from "../constants/perspectivesTypes";
+import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
 
 /**
  * Aux interface to help group nodes in their partition of the canvas's layout
  */
-interface NodeGroup {
+interface INodeGroup {
     nodes: string[],
     partition: {
-        center: Point,
+        center: IPoint,
         nNodes: number
     }
 }
 
 export default class NodeLocation {
 
-    nodeGroups!: Array<NodeGroup>
+    nodeGroups!: Array<INodeGroup>
 
     /**
      * Constructor of the class
@@ -33,8 +36,8 @@ export default class NodeLocation {
 
     initializeNodeGroups(nCommunities: number, nNodes: number) {
         const nAreas = nCommunities;
-        const areaPartitions: Point[] = this.createNetworkPartitions(nNodes, nAreas);
-        this.nodeGroups = new Array<NodeGroup>();
+        const areaPartitions: IPoint[] = this.createNetworkPartitions(nNodes, nAreas);
+        this.nodeGroups = new Array<INodeGroup>();
 
         for (let i = 0; i < nAreas; i++) {
             this.nodeGroups.push({
@@ -53,7 +56,7 @@ export default class NodeLocation {
      * @param nAreas number of areas to make
      * @returns returns an array with the center poin of each partition
      */
-    createNetworkPartitions(nUsers: number, nAreas: number): Point[] {
+    createNetworkPartitions(nUsers: number, nAreas: number): IPoint[] {
         const partitionsDistance = nUsers + nodeConst.groupsBaseDistance + (nAreas * 4);
         const pi2 = (2 * Math.PI);
 
@@ -73,14 +76,14 @@ export default class NodeLocation {
         }
 
 
-        return areaPartitions as Point[];
+        return areaPartitions as IPoint[];
     }
 
     /**
      * Add the node to the its group
      * @param node source node
      */
-    updateNodeGroup(node: UserData, communities: CommunityData[]) {
+    updateNodeGroup(node: IUserData, communities: ICommunityData[]) {
         const group = node.implicit_community;
 
         if (!node.isMedoid) {
@@ -93,7 +96,7 @@ export default class NodeLocation {
      * Set the node location to its position in the group
      * @param node node to edit
      */
-    setNodeLocation(node: UserData) {
+    setNodeLocation(node: IUserData) {
         const group = node.implicit_community;
 
         if (node.isMedoid) {
@@ -102,22 +105,20 @@ export default class NodeLocation {
             node.y = this.nodeGroups[group].partition.center.y;
 
         } else {
-            const nodePos: Point = this.getNodePos(this.nodeGroups[group], node.id);
+            const nodePos: IPoint = this.getNodePos(this.nodeGroups[group], node.id);
 
             node.x = nodePos.x;
             node.y = nodePos.y;
         }
     }
 
-
-
     /**
-     * Gets the exact node coordinates in the canvas
+     * Gets the exact node's coordinates in the canvas
      * @param group Node group of the node
      * @param nodeId id of the node
      * @returns point coordinates
      */
-    getNodePos(group: NodeGroup, nodeId: string): Point {
+    getNodePos(group: INodeGroup, nodeId: string): IPoint {
         let size = group.partition.nNodes;
         const center = group.partition.center;
         const nodeIndex = group.nodes.indexOf(nodeId);;
@@ -126,8 +127,8 @@ export default class NodeLocation {
 
         const angleSlice = (2 * Math.PI) / size;
         let targetAngle = angleSlice * nodeIndex;
-        
-        if(size < 7){
+
+        if (size < 7) {
             size = 8;
         }
 

@@ -7,7 +7,7 @@
 /**
  * Available "all perspective file/details" sources
  */
-export enum FileSource {
+export enum EFileSource {
     /**
      * Using local app data folder
      */
@@ -25,7 +25,7 @@ export enum FileSource {
 /**
  * Possible states of a button.
  */
-export enum ButtonState {
+export enum EButtonState {
     /**
      * The button is disabled. user cant interact with it.
      */
@@ -47,7 +47,7 @@ export enum ButtonState {
 /**
  * Possible states of the collapse buttons / visualization of two perspectives
  */
-export enum CollapsedState {
+export enum EAppCollapsedState {
     /**
      * Nothing is collapsed, both perspectives are equaly looking
      */
@@ -62,6 +62,18 @@ export enum CollapsedState {
     toTheRight,
 }
 
+export function collapseReducer(state: EAppCollapsedState, stateAction: EAppCollapsedState) {
+    if (state === EAppCollapsedState.unCollapsed) {
+        state = stateAction
+    } else if ((state === EAppCollapsedState.toTheLeft && stateAction === EAppCollapsedState.toTheRight)
+        || (state === EAppCollapsedState.toTheRight && stateAction === EAppCollapsedState.toTheLeft)) {
+
+        state = EAppCollapsedState.unCollapsed;
+    }
+
+    return state;
+}
+
 /**
  * Initial options of the toolbar.
 */
@@ -69,19 +81,19 @@ export const initialOptions = {
     /**
      * What type of URL will be picked to GET requests. Request Manager has the map that relates each fileSource option with its url
      */
-    fileSource: FileSource.Local,
+    fileSource: EFileSource.Local,
     /**
      * Hide the labels of all nodes in the canvas and in the tooltip and datatable
      */
-    hideLabels: ButtonState.active,
+    hideLabels: EButtonState.active,
     /**
      * Hide all edges except when a node is selected, in such case, only conected edges will be shown
      */
-    hideEdges: ButtonState.unactive,
+    hideEdges: EButtonState.unactive,
     /**
      * Activate the border option of nodes that adds a third dimension that changes based on an explicit community
      */
-    border: ButtonState.unactive,
+    border: EButtonState.unactive,
     /**
      * Threshold that controls the minimum value edges must have to be shown. Selected edges have priority above this
      */
@@ -125,9 +137,9 @@ export class ViewOptions {
      * Constructor of the class
      */
     constructor() {
-        this.hideLabels = initialOptions.hideLabels === ButtonState.active;
-        this.hideEdges = initialOptions.hideEdges === ButtonState.active;
-        this.border = initialOptions.border === ButtonState.active;
+        this.hideLabels = initialOptions.hideLabels === EButtonState.active;
+        this.hideEdges = initialOptions.hideEdges === EButtonState.active;
+        this.border = initialOptions.border === EButtonState.active;
         this.legendConfig = new Map<string, boolean>();
         this.edgeThreshold = initialOptions.edgeThreshold;
         this.deleteEdges = initialOptions.deleteEdges;
@@ -137,7 +149,7 @@ export class ViewOptions {
 /**
  * Interface with the available actions of the viewOptionReducer.
  */
-export interface ViewOptionAction {
+export interface IViewOptionAction {
     updateType: keyof ViewOptions;
     newValue?: number | Map<string, boolean> | undefined;
 }
@@ -150,7 +162,7 @@ export interface ViewOptionAction {
  * @param action new Action
  * @returns the new state
  */
-export function viewOptionsReducer(state: ViewOptions, action: ViewOptionAction) {
+export function viewOptionsReducer(state: ViewOptions, action: IViewOptionAction) {
     const { updateType, newValue } = action;
 
     if (newValue === undefined)

@@ -1,6 +1,7 @@
 /**
- * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
+ * @fileoverview This file Tree map graph but only with one map. Its a diferent way of representing word clouds.
  * @package Requires React package. 
+ * @package Requires ApexChart and its ReactApexChart package. 
  * @author Marco Expósito Pérez
  */
 //Packages
@@ -13,7 +14,7 @@ interface SingleTreeMapProps {
 }
 
 /**
- * Basic UI component that execute a function when clicked
+ * UI component that creates a tree map graph with only one map.
  */
 export const SingleTreeMap = ({
     data,
@@ -50,7 +51,7 @@ export const SingleTreeMap = ({
             width: "80%",
             margin: "auto",
             maxHeight: "200px"
-        }}> 
+        }}>
             <ReactApexChart
                 options={options}
                 series={series}

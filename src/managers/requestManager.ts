@@ -5,19 +5,17 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FileSource } from '../constants/viewOptions';
+import { EFileSource } from '../constants/viewOptions';
 import { validatePerspectiveDataJSON, validatePerspectiveIDfile } from '../constants/ValidateFiles';
-import { PerspectiveData, PerspectiveId } from '../constants/perspectivesTypes';
+import { PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
-import { Dispatch } from 'react';
-
 
 export default class RequestManager {
 
     isActive: boolean;
     axios: Axios;
-    keyToUrl: Map<FileSource, string>;
+    keyToUrl: Map<EFileSource, string>;
     usingAPI: boolean;
 
     /**
@@ -29,11 +27,11 @@ export default class RequestManager {
 
         this.axios = new Axios();
 
-        this.keyToUrl = new Map<FileSource, string>();
+        this.keyToUrl = new Map<EFileSource, string>();
 
-        this.keyToUrl.set(FileSource.Local, "./data/");
-        this.keyToUrl.set(FileSource.Develop, "https://raw.githubusercontent.com/MarcoExpPer/SPICE-visualization-ReactPort/develop/public/data/");
-        this.keyToUrl.set(FileSource.Api, "http://localhost:8080/visualizationAPI/");
+        this.keyToUrl.set(EFileSource.Local, "./data/");
+        this.keyToUrl.set(EFileSource.Develop, "https://raw.githubusercontent.com/MarcoExpPer/SPICE-visualization-ReactPort/develop/public/data/");
+        this.keyToUrl.set(EFileSource.Api, "http://localhost:8080/visualizationAPI/");
     }
 
     /**
@@ -53,12 +51,9 @@ export default class RequestManager {
     }
 
     /**
-     * Send a request for the data file of a perspective and update the selectPerspective dropdown state.
-     * If the requested perspective is already active, its removed.
-     * @param currentState current state of the perspective to request
-     * @param perspectiveDetails details of the perspective to request
-     * @param setStates function to update the selectPerspective dropdown state
-     * @param onFinish function executed when the request ends, updating the activePerspectives if necesary
+     * Send a request for the data file of a perspective whose id is perspective ID and whose name is name.
+     * When the request is finished, executes a callback function whose parameter will be the perspective Data, undefined
+     * if something went wrong.
      */
     requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
 
@@ -68,7 +63,7 @@ export default class RequestManager {
                     const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
                     perspectiveJson.id = perspectiveId;
                     perspectiveJson.name = name;
-                    
+
                     callback(perspectiveJson);
                 } else {
                     throw new Error(`Perspective ${perspectiveId} was ${response.statusText}`);
@@ -103,21 +98,26 @@ export default class RequestManager {
             });
     }
 
-    requestAllPerspectivesIds(initPerspectives: Function) {
+    /**
+     * Send a request for the id and names of all available perspectives.
+     * When the request is finished, executes a callback function with all the new ids as parameter, undefined if
+     * something went wrong.
+     */
+    requestAllPerspectivesIds(callback: Function) {
 
         this.getAllPerspectives()
             .then((response) => {
                 if (response.status === 200) {
                     const allIds: PerspectiveId[] = validatePerspectiveIDfile(JSON.parse(response.data));
 
-                    initPerspectives(allIds);
+                    callback(allIds);
                 } else {
                     throw new Error(`All IDs file was ${response.statusText}`);
                 }
             })
             .catch((error) => {
 
-                initPerspectives(undefined);
+                callback(undefined);
 
                 console.log(`All IDs file was not found:`);
                 console.log(error);
@@ -145,12 +145,12 @@ export default class RequestManager {
 
     /**
      * Update the baseURL of the requestManager
-     * @param {FileSource} newKey the key of the new fileSource
+     * @param {EFileSource} newKey the key of the new fileSource
      */
-    changeBaseURL(newKey: FileSource) {
+    changeBaseURL(newKey: EFileSource) {
         const newUrl = this.keyToUrl.get(newKey);
 
-        this.usingAPI = newKey === FileSource.Api;
+        this.usingAPI = newKey === EFileSource.Api;
 
         if (this.isActive && this.axios) {
             this.axios.defaults.baseURL = newUrl;

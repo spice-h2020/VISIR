@@ -1,13 +1,17 @@
 /**
- * @fileoverview This file creates all the perspective views and broadcast the necesary options, like the node that is selected, 
- * all perspective views need that to update their dataTables
+ * @fileoverview This file creates the perspective view component and broadcast the necesary options, 
+ * like what node is currently selected.
+ * This component also holds and resets the controllers shared by the perspectives, like the dimensions strategy.
+ * 
+ * The first perspective view created has the responsability of creating the dimensions strategy.
+ * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { PerspectiveData, PerspectiveState } from "../constants/perspectivesTypes";
-import { ViewOptions, CollapsedState } from "../constants/viewOptions"
-import { SelectedObjectActionEnum, selectedObjectReducer, StateFunctions } from "../constants/auxTypes";
+import { IPerspectiveData, EPerspectiveVisState } from "../constants/perspectivesTypes";
+import { ViewOptions, EAppCollapsedState } from "../constants/viewOptions"
+import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer, useState } from "react";
 //Local files
@@ -21,31 +25,31 @@ const perspectiveContainers: React.CSSProperties = {
     paddingBottom: "1vh",
 }
 
-const widthStyle: Map<PerspectiveState, React.CSSProperties> = new Map([
-    [PerspectiveState.unactive, { width: "0%" }],
-    [PerspectiveState.activeBoth, { width: "50%" }],
-    [PerspectiveState.activeSingle, { width: "100%" }],
-    [PerspectiveState.activeBig, { width: "80%" }],
-    [PerspectiveState.collapsed, { width: "20%" }],
+const widthStyle: Map<EPerspectiveVisState, React.CSSProperties> = new Map([
+    [EPerspectiveVisState.unactive, { width: "0%" }],
+    [EPerspectiveVisState.activeBoth, { width: "50%" }],
+    [EPerspectiveVisState.activeSingle, { width: "100%" }],
+    [EPerspectiveVisState.activeBig, { width: "80%" }],
+    [EPerspectiveVisState.collapsed, { width: "20%" }],
 ])
 
 interface PerspectivesGroupProps {
-    leftPerspective?: PerspectiveData,
-    rightPerspective?: PerspectiveData,
+    leftPerspective?: IPerspectiveData,
+    rightPerspective?: IPerspectiveData,
 
-    collapsedState: CollapsedState,
+    collapsedState: EAppCollapsedState,
     /**
-     * View options for all networks
+     * View options for all networks.
      */
     viewOptions: ViewOptions,
     /**
-     * Function to setup the legend's data
+     * Function to setup the legend's data.
      */
     setLegendData: Function,
 }
 
 /**
- * Component that draws each perspective
+ * Component that draws both perspective, holds mutual components and broadcast information between pespectives.
  */
 export const PerspectivesGroups = ({
     leftPerspective,
@@ -59,7 +63,7 @@ export const PerspectivesGroups = ({
     const [networkFocusID, setNetworkFocusID] = useState<string | undefined>();
     const [selectedObject, setSelectedObject] = useReducer(selectedObjectReducer, undefined);
 
-    const sf: StateFunctions = {
+    const sf: IStateFunctions = {
         setLegendData: setLegendData,
         setDimensionStrategy: setDimensionStrategy,
         setNetworkFocusId: setNetworkFocusID,
@@ -68,7 +72,7 @@ export const PerspectivesGroups = ({
 
     //When the collapsed state changes, we clear both datatables
     useEffect(() => {
-        setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: "0" });
+        setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
         setNetworkFocusID(undefined);
     }, [collapsedState]);
 
@@ -76,7 +80,7 @@ export const PerspectivesGroups = ({
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
 
-            setSelectedObject({ action: SelectedObjectActionEnum.clear, newValue: undefined, sourceID: "0" });
+            setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
         }
@@ -133,49 +137,50 @@ export const PerspectivesGroups = ({
 };
 
 /**
- * Returns the state of both perspectives
- * @param leftPerspective 
- * @param rightPerspective 
- * @param collapsedState 
+ * Calculates the Perspective state based on the application collapsed state. If only one perspective is defined,
+ * the other perspective will be singleActive no matter the collapsed state value.
+ * @param leftPerspective data of the left perspective.
+ * @param rightPerspective data of the right perspective.
+ * @param collapsedState collapsed state of the application.
  * @returns returns two perspective states, {left, right}
  */
-function calculatePerspectiveState(leftPerspective: PerspectiveData | undefined, rightPerspective: PerspectiveData | undefined,
-    collapsedState: CollapsedState) {
+function calculatePerspectiveState(leftPerspective: IPerspectiveData | undefined, rightPerspective: IPerspectiveData | undefined,
+    collapsedState: EAppCollapsedState) {
 
-    let leftState: PerspectiveState = PerspectiveState.unactive;
-    let rightState: PerspectiveState = PerspectiveState.unactive;
+    let leftState: EPerspectiveVisState = EPerspectiveVisState.unactive;
+    let rightState: EPerspectiveVisState = EPerspectiveVisState.unactive;
 
     switch (true) {
         case leftPerspective === undefined:
-            leftState = PerspectiveState.unactive;
+            leftState = EPerspectiveVisState.unactive;
 
             if (rightPerspective === undefined)
-                rightState = PerspectiveState.unactive;
+                rightState = EPerspectiveVisState.unactive;
 
             else
-                rightState = PerspectiveState.activeSingle;
+                rightState = EPerspectiveVisState.activeSingle;
             break;
 
         case rightPerspective === undefined:
-            leftState = PerspectiveState.activeSingle;
-            rightState = PerspectiveState.unactive;
+            leftState = EPerspectiveVisState.activeSingle;
+            rightState = EPerspectiveVisState.unactive;
             break;
 
-        case collapsedState === CollapsedState.toTheLeft:
-            leftState = PerspectiveState.collapsed;
-            rightState = PerspectiveState.activeBig;
-
-            break;
-
-        case collapsedState === CollapsedState.toTheRight:
-            leftState = PerspectiveState.activeBig;
-            rightState = PerspectiveState.collapsed;
+        case collapsedState === EAppCollapsedState.toTheLeft:
+            leftState = EPerspectiveVisState.collapsed;
+            rightState = EPerspectiveVisState.activeBig;
 
             break;
 
-        case collapsedState === CollapsedState.unCollapsed:
-            leftState = PerspectiveState.activeBoth;
-            rightState = PerspectiveState.activeBoth;
+        case collapsedState === EAppCollapsedState.toTheRight:
+            leftState = EPerspectiveVisState.activeBig;
+            rightState = EPerspectiveVisState.collapsed;
+
+            break;
+
+        case collapsedState === EAppCollapsedState.unCollapsed:
+            leftState = EPerspectiveVisState.activeBoth;
+            rightState = EPerspectiveVisState.activeBoth;
             break;
     }
     return { leftState, rightState };
