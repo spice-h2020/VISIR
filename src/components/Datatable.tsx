@@ -17,7 +17,7 @@ import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
     fontWeight: "400",
-    fontFamily: "Raleway",
+    fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
     margin: "5px 0px"
@@ -66,7 +66,7 @@ export const DataTable = ({
 
     return (
         <div className={state} style={getContainerStyle(state)}>
-            <h2 className="tittle"> {tittle} </h2>
+            <h2 className="tittle" style={{fontSize: "1.5rem"}}>  {tittle} </h2>
             {nodePanel}
             {interactions}
             {communities}

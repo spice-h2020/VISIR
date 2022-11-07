@@ -9,7 +9,7 @@ import { FileSource, ButtonState, ViewOptions, viewOptionsReducer, CollapsedStat
 import { PerspectiveActiveState, PerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { DimAttribute } from './constants/nodes';
 //Packages
-import { useEffect, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -92,7 +92,7 @@ export const App = ({
       <Navbar
         leftAlignedItems={[
           <Button
-            content={<div className='row' style={{ alignItems: "center" }}>
+            content={<div className='row' style={{ alignItems: "center"}}>
               <img className="mainIcon" src="./images/VISIR-red.png" alt="VISIR icon" /> 
               <div className="tittle" style={{marginLeft: "10px"}}>VISIR</div>
             </div>}
