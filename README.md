@@ -40,14 +40,19 @@ Prerequisite: [Node](https://nodejs.org/en/).
 ______________________
 ## How to use the app.
 
-0. By default, when you open the APP, it will load 2 predetermined files from the local file system.
+0. By default if the URL contains perspective1 and/or perspective2 variables, the app will try to request and activate those perspectives. These URL variables are optional, there are other ways to pick between perspectives.
+    1. An example of a URL with IDs is the following "http://localhost:3000/?perspective1=5&perspective2=6" Where 5 and 6 are the id of the files.
 
-1. You need to tell the APP the ID of the files you want to see. You can do that by directly editing "perspective1" and "perspective2" URL's values to the desired IDs. Idealy, there would be another UI that streamlines the perspectiveID selection.
-   1. Keep in mind, that the moment you enter the new parameters, the APP will try to load them and will show an alert if they dont exist in the selected File Source. You can accept the alert box and then pick the desired File Source where the perspective is saved.
+1. First you need to tell the app where the perspectives you want to see are located. With the FileSource dropdown you can pick between some options (local app files is the default option).
+    1. Keep in mind, the moment u change the file source, the app will disable all active perspectives and will try to reload the URL perspectives if they exist.
+    2. Currently the API server is not active, so unless u launch it localy, this option wont work.
 
-2. Now you need to pick the desired FIle Source, where the selected perspectives are saved. Local files is the default option for local testing. The connection to the API work but only if u launch the local api localy, the deployment of the APi is still work in progress.
+2. Now you need to pick what perspectives you want to see. One way is the URL parameters as mentioned, the other way is to use the select perspective dropdowns. Clicking the name of the desired perspective will disable the prevously active perspective, if there is one, and load the new one.
+    1. If a perspective is highlighted in red, it means its the current active perspective in this side of the app.
+    2. If a perspective inside a dropdown is greyed out, it means its active in the other dropdown and you cant edit it from this dropdown.
 
-3. If you click a node of any network, all networks will select that node, will show the node's info in the nearby dataTables and will zoom in to that node and its connected nodes. A tooltip will be shown nearby the node to represent similar info.
+
+3. Now that the perspective is active, if you click a node of any network, all networks will select that node, will show the node's info in the nearby dataTables and will zoom in to that node and its connected nodes. A tooltip will be shown nearby the node to represent similar info.
 
 4. If you click a bounding box and not a node, two diferent things will happen depending on which network was clicked:
     1. The network that was clicked will zoom in to all nodes inside the bounding box, and will show information about the community related to the bounding box.
@@ -74,9 +79,11 @@ ______________________
 ## How to add more testing files
 There is a format guide for new testing files [here](https://github.com/MarcoExpPer/SPICE-visualization-ReactPort/blob/main/public/data/dataFormatGuide.txt).
 
-To add testing files using LocalFile file source options, Node.js instalation is required.
+To add testing files using LocalFile file source options, you need to do the following changes. 
 
-- Localfiles: Move any new file to ./public/data/ directory. The new file must follow the required format. The id of the perspective will be equal to the name of its file. Now you can write the ID of the file in the URL in one of the url parameters, "perspective1" or "perspective2" to load that one. 
+- Localfiles: Move any new file to ./public/data/ directory. The new file must follow the required format explained in ./public/dataSchemas/perspectiveData.json. The id of the perspective must be queal to the name of the file. It's also necesary to add the id and the name to the ./public/data/dataList.json file. 
 
-- API (WIP): Currently theres no way to upload new files or perspectives to the API.
+Once all of these changes are completed, the node.js instalation should already see the changes on the search engine. Reloading the page may help.
+Docker instalation will need to re-execute the instalation process to create the ocker container with the changes. It's recommended to remove all previously loaded docker containers and images of this application.
+
 _______________________
