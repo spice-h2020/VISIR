@@ -1,38 +1,118 @@
 {
-    "numberOfCommunities": 2,
+    "name": "GAM similar user sentiments in similar artworks (artist_country)",
+    "perspectiveId": "GAM similar user sentiments in similar artworks (artist_country)",
     "communities": [
         {
-            "id": "GAM similar user sentiment in similar artworks (iconclass)-0",
-            "perspectiveId": "GAM similar user sentiment in similar artworks (iconclass)",
+            "id": "GAM similar user sentiments in similar artworks (artist_country)-0",
             "community-type": "implicit",
             "name": "Community 0",
-            "explanations": [],
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "B3N0HGw4"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "implicit_attributes": "Minimum percentage of users with the representative properties: 70.0 %; Representative Properties: {'community_sentiment': 'neutral     75.0\nnegative    25.0'}"
+                    },
+                    "visible": false
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
             "users": [
-                "Sz5Wx2XD",
-                "yjlouq5U",
-                "WYCImqGm",
                 "B3N0HGw4",
-                "q2BDj1os"
+                "RQ4a2nIG",
+                "loEoYm9R",
+                "x2AUnHqw"
             ]
         },
         {
-            "id": "GAM similar user sentiment in similar artworks (iconclass)-1",
-            "perspectiveId": "GAM similar user sentiment in similar artworks (iconclass)",
+            "id": "GAM similar user sentiments in similar artworks (artist_country)-1",
             "community-type": "implicit",
             "name": "Community 1",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "Sz5Wx2XD"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "implicit_attributes": "Minimum percentage of users with the representative properties: 70.0 %; Representative Properties: {'community_sentiment': 'positive    100.0'}"
+                    },
+                    "visible": false
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "Sz5Wx2XD",
+                "WYCImqGm",
+                "q2BDj1os",
+                "yjlouq5U"
+            ]
+        },
+        {
+            "id": "GAM similar user sentiments in similar artworks (artist_country)-2",
+            "community-type": "implicit",
+            "name": "Community 2",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "KQTGApjD"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "implicit_attributes": "Minimum percentage of users with the representative properties: 70.0 %; Representative Properties: {'community_sentiment': 'negative    100.0'}"
+                    },
+                    "visible": false
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "KQTGApjD",
+                "LW3Klzvx",
+                "Y0WXF1LR",
+                "cBjFhvjx"
+            ]
+        },
+        {
+            "id": "GAM similar user sentiments in similar artworks (artist_country)-3 (Users without community)",
+            "community-type": "inexistent",
+            "name": "Community 3 (Users without community)",
             "explanations": [],
             "users": [
-                "Y0WXF1LR",
-                "cBjFhvjx",
-                "LvIeXwcT",
-                "LW3Klzvx"
+                "LvIeXwcT"
             ]
         }
     ],
+    "numberOfCommunities": 3,
     "users": [
         {
-            "id": "Sz5Wx2XD",
-            "label": "Sz5Wx2XD",
+            "id": "B3N0HGw4",
+            "label": "B3N0HGw4",
             "group": 0,
             "explicit_community": {
                 "relationship_with_arts": "Ho un forte interesse per l'arte",
@@ -40,28 +120,71 @@
             },
             "interactions": [
                 {
-                    "artwork_id": "35245",
-                    "feelings": "",
+                    "artwork_id": "35445",
+                    "feelings": "scettico",
                     "extracted_emotions": {
-                        "Positive": 0.96760535
+                        "Neutral": 1
                     }
                 }
             ]
         },
         {
-            "id": "Y0WXF1LR",
-            "label": "Y0WXF1LR",
-            "group": 1,
+            "id": "KQTGApjD",
+            "label": "KQTGApjD",
+            "group": 2,
             "explicit_community": {
-                "relationship_with_arts": "Il mio lavoro riguarda l'arte",
-                "relationship_with_museums": "Visito spesso i musei"
+                "relationship_with_arts": "L'arte mi interessa poco",
+                "relationship_with_museums": "Visito raramente musei e mostre"
+            },
+            "interactions": [
+                {
+                    "artwork_id": "35433",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Negative": 0.9913147
+                    }
+                }
+            ]
+        },
+        {
+            "id": "LW3Klzvx",
+            "label": "LW3Klzvx",
+            "group": 2,
+            "explicit_community": {
+                "relationship_with_arts": "L'arte mi interessa poco",
+                "relationship_with_museums": "Visito raramente musei e mostre"
+            },
+            "interactions": [
+                {
+                    "artwork_id": "35364",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Negative": 0.9388350999999999
+                    }
+                }
+            ]
+        },
+        {
+            "id": "LvIeXwcT",
+            "label": "LvIeXwcT",
+            "group": 3,
+            "explicit_community": {
+                "relationship_with_arts": "Non provo nessun interesse per l'arte",
+                "relationship_with_museums": "Visito raramente musei e mostre"
             },
             "interactions": [
                 {
                     "artwork_id": "35323",
-                    "feelings": "",
+                    "feelings": "scettico",
                     "extracted_emotions": {
-                        "Negative": 1.9748701999999998
+                        "Negative": 0.98281974
+                    }
+                },
+                {
+                    "artwork_id": "39182",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Positive": 0.76706463
                     }
                 }
             ]
@@ -76,67 +199,71 @@
             },
             "interactions": [
                 {
-                    "artwork_id": "39416",
-                    "feelings": "",
-                    "extracted_emotions": {}
-                },
-                {
-                    "artwork_id": "35433",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "Negative": 1.9813416
-                    }
-                },
-                {
-                    "artwork_id": "39648",
-                    "feelings": "",
-                    "extracted_emotions": {}
-                },
-                {
-                    "artwork_id": "39175",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "Positive": 0.9119556
-                    }
-                },
-                {
-                    "artwork_id": "35380",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "Neutral": 1
-                    }
-                },
-                {
-                    "artwork_id": "39347",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "Positive": 1.7120972
-                    }
-                },
-                {
                     "artwork_id": "35227",
-                    "feelings": "",
+                    "feelings": "scettico",
                     "extracted_emotions": {
                         "Positive": 1.88238174
                     }
                 },
                 {
                     "artwork_id": "39182",
-                    "feelings": "",
+                    "feelings": "scettico",
                     "extracted_emotions": {
                         "Neutral": 1
                     }
                 },
                 {
+                    "artwork_id": "39648",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Negative": 0.7526826999999999
+                    }
+                },
+                {
+                    "artwork_id": "39347",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Positive": 1.7120972
+                    }
+                },
+                {
+                    "artwork_id": "39347",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Positive": 1.7120972
+                    }
+                },
+                {
+                    "artwork_id": "35433",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Negative": 1.9813416
+                    }
+                },
+                {
                     "artwork_id": "35222",
-                    "feelings": "",
+                    "feelings": "scettico",
                     "extracted_emotions": {
                         "Negative": 1
                     }
                 },
                 {
+                    "artwork_id": "39138",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Positive": 1.9396
+                    }
+                },
+                {
+                    "artwork_id": "39175",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Positive": 0.9119556
+                    }
+                },
+                {
                     "artwork_id": "35567",
-                    "feelings": "",
+                    "feelings": "scettico",
                     "extracted_emotions": {
                         "Negative": 1
                     }
@@ -144,53 +271,19 @@
             ]
         },
         {
-            "id": "yjlouq5U",
-            "label": "yjlouq5U",
-            "group": 0,
-            "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
-            },
-            "interactions": [
-                {
-                    "artwork_id": "35433",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "Positive": 0.5029781999999999
-                    }
-                }
-            ]
-        },
-        {
-            "id": "WsK2A1ab",
-            "label": "WsK2A1ab",
+            "id": "Sz5Wx2XD",
+            "label": "Sz5Wx2XD",
             "group": 1,
             "explicit_community": {
-                "relationship_with_arts": "L'arte mi interessa poco",
+                "relationship_with_arts": "Ho un forte interesse per l'arte",
                 "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
             },
             "interactions": [
                 {
-                    "artwork_id": "35412",
-                    "feelings": "",
-                    "extracted_emotions": {}
-                }
-            ]
-        },
-        {
-            "id": "cBjFhvjx",
-            "label": "cBjFhvjx",
-            "group": 0,
-            "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito spesso i musei"
-            },
-            "interactions": [
-                {
-                    "artwork_id": "39175",
-                    "feelings": "",
+                    "artwork_id": "35245",
+                    "feelings": "scettico",
                     "extracted_emotions": {
-                        "Negative": 0.6164452
+                        "Positive": 0.96760535
                     }
                 }
             ]
@@ -198,7 +291,7 @@
         {
             "id": "WYCImqGm",
             "label": "WYCImqGm",
-            "group": 0,
+            "group": 1,
             "explicit_community": {
                 "relationship_with_arts": "Ho un forte interesse per l'arte",
                 "relationship_with_museums": "Visito spesso i musei"
@@ -206,7 +299,7 @@
             "interactions": [
                 {
                     "artwork_id": "35229",
-                    "feelings": "",
+                    "feelings": "scettico",
                     "extracted_emotions": {
                         "Positive": 0.5056431
                     }
@@ -214,17 +307,60 @@
             ]
         },
         {
-            "id": "B3N0HGw4",
-            "label": "B3N0HGw4",
-            "group": 0,
+            "id": "Y0WXF1LR",
+            "label": "Y0WXF1LR",
+            "group": 2,
             "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
+                "relationship_with_arts": "Il mio lavoro riguarda l'arte",
+                "relationship_with_museums": "Visito spesso i musei"
             },
             "interactions": [
                 {
-                    "artwork_id": "35445",
-                    "feelings": "",
+                    "artwork_id": "35323",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Negative": 1.9748701999999998
+                    }
+                }
+            ]
+        },
+        {
+            "id": "cBjFhvjx",
+            "label": "cBjFhvjx",
+            "group": 2,
+            "explicit_community": {
+                "relationship_with_arts": "Ho un forte interesse per l'arte",
+                "relationship_with_museums": "Visito spesso i musei"
+            },
+            "interactions": [
+                {
+                    "artwork_id": "39175",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Negative": 0.6164452
+                    }
+                },
+                {
+                    "artwork_id": "39175",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Negative": 0.6164452
+                    }
+                }
+            ]
+        },
+        {
+            "id": "loEoYm9R",
+            "label": "loEoYm9R",
+            "group": 0,
+            "explicit_community": {
+                "relationship_with_arts": "L'arte mi interessa poco",
+                "relationship_with_museums": "Visito raramente musei e mostre"
+            },
+            "interactions": [
+                {
+                    "artwork_id": "35310",
+                    "feelings": "scettico",
                     "extracted_emotions": {
                         "Neutral": 1
                     }
@@ -234,7 +370,7 @@
         {
             "id": "q2BDj1os",
             "label": "q2BDj1os",
-            "group": 0,
+            "group": 1,
             "explicit_community": {
                 "relationship_with_arts": "Ho un forte interesse per l'arte",
                 "relationship_with_museums": "Visito spesso i musei"
@@ -242,7 +378,7 @@
             "interactions": [
                 {
                     "artwork_id": "39138",
-                    "feelings": "",
+                    "feelings": "scettico",
                     "extracted_emotions": {
                         "Positive": 1
                     }
@@ -250,92 +386,37 @@
             ]
         },
         {
-            "id": "JgevtrSb",
-            "label": "JgevtrSb",
-            "group": 1,
-            "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito spesso i musei"
-            },
-            "interactions": [
-                {
-                    "artwork_id": "39384",
-                    "feelings": "",
-                    "extracted_emotions": {}
-                }
-            ]
-        },
-        {
-            "id": "LvIeXwcT",
-            "label": "LvIeXwcT",
-            "group": 1,
-            "explicit_community": {
-                "relationship_with_arts": "Non provo nessun interesse per l'arte",
-                "relationship_with_museums": "Visito raramente musei e mostre"
-            },
-            "interactions": [
-                {
-                    "artwork_id": "39182",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "Positive": 0.76706463
-                    }
-                },
-                {
-                    "artwork_id": "35323",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "Negative": 0.98281974
-                    }
-                }
-            ]
-        },
-        {
-            "id": "ZWrgWx9o",
-            "label": "ZWrgWx9o",
-            "group": 1,
-            "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
-            },
-            "interactions": [
-                {
-                    "artwork_id": "39138",
-                    "feelings": "",
-                    "extracted_emotions": {}
-                }
-            ]
-        },
-        {
-            "id": "N72IRgFy",
-            "label": "N72IRgFy",
+            "id": "x2AUnHqw",
+            "label": "x2AUnHqw",
             "group": 0,
             "explicit_community": {
                 "relationship_with_arts": "L'arte mi interessa poco",
-                "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
-            },
-            "interactions": [
-                {
-                    "artwork_id": "35362",
-                    "feelings": "",
-                    "extracted_emotions": {}
-                }
-            ]
-        },
-        {
-            "id": "LW3Klzvx",
-            "label": "LW3Klzvx",
-            "group": 1,
-            "explicit_community": {
-                "relationship_with_arts": "L'arte mi interessa poco",
                 "relationship_with_museums": "Visito raramente musei e mostre"
             },
             "interactions": [
                 {
-                    "artwork_id": "35364",
-                    "feelings": "",
+                    "artwork_id": "35456",
+                    "feelings": "scettico",
                     "extracted_emotions": {
-                        "Negative": 0.9388350999999999
+                        "Neutral": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "yjlouq5U",
+            "label": "yjlouq5U",
+            "group": 1,
+            "explicit_community": {
+                "relationship_with_arts": "Ho un forte interesse per l'arte",
+                "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
+            },
+            "interactions": [
+                {
+                    "artwork_id": "35433",
+                    "feelings": "scettico",
+                    "extracted_emotions": {
+                        "Positive": 0.5029781999999999
                     }
                 }
             ]
@@ -343,14 +424,284 @@
     ],
     "similarity": [
         {
+            "u1": "B3N0HGw4",
+            "u2": "KQTGApjD",
+            "value": 0.5
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "LW3Klzvx",
+            "value": 0.5
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "LvIeXwcT",
+            "value": 0.5
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "RQ4a2nIG",
+            "value": 0.55
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "Sz5Wx2XD",
+            "value": 0.5
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "WYCImqGm",
+            "value": 0.5
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "Y0WXF1LR",
+            "value": 0.5
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "cBjFhvjx",
+            "value": 0.5
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "loEoYm9R",
+            "value": 1.0
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "q2BDj1os",
+            "value": 0.5
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "x2AUnHqw",
+            "value": 1.0
+        },
+        {
+            "u1": "B3N0HGw4",
+            "u2": "yjlouq5U",
+            "value": 0.5
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "LW3Klzvx",
+            "value": 1.0
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "LvIeXwcT",
+            "value": 0.5
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "RQ4a2nIG",
+            "value": 0.45
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "Sz5Wx2XD",
+            "value": 0.0
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "WYCImqGm",
+            "value": 0.0
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "Y0WXF1LR",
+            "value": 1.0
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "cBjFhvjx",
+            "value": 1.0
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "loEoYm9R",
+            "value": 0.5
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "q2BDj1os",
+            "value": 0.0
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "x2AUnHqw",
+            "value": 0.5
+        },
+        {
+            "u1": "KQTGApjD",
+            "u2": "yjlouq5U",
+            "value": 0.0
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "LvIeXwcT",
+            "value": 0.5
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "RQ4a2nIG",
+            "value": 0.45
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "Sz5Wx2XD",
+            "value": 0.0
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "WYCImqGm",
+            "value": 0.0
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "Y0WXF1LR",
+            "value": 1.0
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "cBjFhvjx",
+            "value": 1.0
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "loEoYm9R",
+            "value": 0.5
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "q2BDj1os",
+            "value": 0.0
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "x2AUnHqw",
+            "value": 0.5
+        },
+        {
+            "u1": "LW3Klzvx",
+            "u2": "yjlouq5U",
+            "value": 0.0
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "RQ4a2nIG",
+            "value": 0.45
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "Sz5Wx2XD",
+            "value": 0.5
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "WYCImqGm",
+            "value": 0.5
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "Y0WXF1LR",
+            "value": 0.5
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "cBjFhvjx",
+            "value": 0.5
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "loEoYm9R",
+            "value": 0.5
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "q2BDj1os",
+            "value": 0.5
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "x2AUnHqw",
+            "value": 0.5
+        },
+        {
+            "u1": "LvIeXwcT",
+            "u2": "yjlouq5U",
+            "value": 0.5
+        },
+        {
+            "u1": "RQ4a2nIG",
+            "u2": "Sz5Wx2XD",
+            "value": 0.55
+        },
+        {
+            "u1": "RQ4a2nIG",
+            "u2": "WYCImqGm",
+            "value": 0.55
+        },
+        {
+            "u1": "RQ4a2nIG",
+            "u2": "Y0WXF1LR",
+            "value": 0.45
+        },
+        {
+            "u1": "RQ4a2nIG",
+            "u2": "cBjFhvjx",
+            "value": 0.45
+        },
+        {
+            "u1": "RQ4a2nIG",
+            "u2": "loEoYm9R",
+            "value": 0.55
+        },
+        {
+            "u1": "RQ4a2nIG",
+            "u2": "q2BDj1os",
+            "value": 0.55
+        },
+        {
+            "u1": "RQ4a2nIG",
+            "u2": "x2AUnHqw",
+            "value": 0.55
+        },
+        {
+            "u1": "RQ4a2nIG",
+            "u2": "yjlouq5U",
+            "value": 0.55
+        },
+        {
+            "u1": "Sz5Wx2XD",
+            "u2": "WYCImqGm",
+            "value": 1.0
+        },
+        {
             "u1": "Sz5Wx2XD",
             "u2": "Y0WXF1LR",
             "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
-            "u2": "RQ4a2nIG",
-            "value": 0.41
+            "u2": "cBjFhvjx",
+            "value": 0.0
+        },
+        {
+            "u1": "Sz5Wx2XD",
+            "u2": "loEoYm9R",
+            "value": 0.5
+        },
+        {
+            "u1": "Sz5Wx2XD",
+            "u2": "q2BDj1os",
+            "value": 1.0
+        },
+        {
+            "u1": "Sz5Wx2XD",
+            "u2": "x2AUnHqw",
+            "value": 0.5
         },
         {
             "u1": "Sz5Wx2XD",
@@ -358,59 +709,54 @@
             "value": 1.0
         },
         {
-            "u1": "Sz5Wx2XD",
-            "u2": "WsK2A1ab",
+            "u1": "WYCImqGm",
+            "u2": "Y0WXF1LR",
             "value": 0.0
         },
         {
-            "u1": "Sz5Wx2XD",
+            "u1": "WYCImqGm",
             "u2": "cBjFhvjx",
             "value": 0.0
         },
         {
-            "u1": "Sz5Wx2XD",
-            "u2": "WYCImqGm",
-            "value": 1.0
-        },
-        {
-            "u1": "Sz5Wx2XD",
-            "u2": "B3N0HGw4",
+            "u1": "WYCImqGm",
+            "u2": "loEoYm9R",
             "value": 0.5
         },
         {
-            "u1": "Sz5Wx2XD",
+            "u1": "WYCImqGm",
             "u2": "q2BDj1os",
             "value": 1.0
         },
         {
-            "u1": "Sz5Wx2XD",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "Sz5Wx2XD",
-            "u2": "LvIeXwcT",
+            "u1": "WYCImqGm",
+            "u2": "x2AUnHqw",
             "value": 0.5
         },
         {
-            "u1": "Sz5Wx2XD",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
+            "u1": "WYCImqGm",
+            "u2": "yjlouq5U",
+            "value": 1.0
         },
         {
-            "u1": "Sz5Wx2XD",
-            "u2": "N72IRgFy",
-            "value": 0.0
+            "u1": "Y0WXF1LR",
+            "u2": "cBjFhvjx",
+            "value": 1.0
         },
         {
-            "u1": "Sz5Wx2XD",
-            "u2": "LW3Klzvx",
+            "u1": "Y0WXF1LR",
+            "u2": "loEoYm9R",
+            "value": 0.5
+        },
+        {
+            "u1": "Y0WXF1LR",
+            "u2": "q2BDj1os",
             "value": 0.0
         },
         {
             "u1": "Y0WXF1LR",
-            "u2": "RQ4a2nIG",
-            "value": 0.32
+            "u2": "x2AUnHqw",
+            "value": 0.5
         },
         {
             "u1": "Y0WXF1LR",
@@ -418,428 +764,98 @@
             "value": 0.0
         },
         {
-            "u1": "Y0WXF1LR",
-            "u2": "WsK2A1ab",
-            "value": 0.0
-        },
-        {
-            "u1": "Y0WXF1LR",
-            "u2": "cBjFhvjx",
-            "value": 1.0
-        },
-        {
-            "u1": "Y0WXF1LR",
-            "u2": "WYCImqGm",
-            "value": 0.0
-        },
-        {
-            "u1": "Y0WXF1LR",
-            "u2": "B3N0HGw4",
+            "u1": "cBjFhvjx",
+            "u2": "loEoYm9R",
             "value": 0.5
         },
         {
-            "u1": "Y0WXF1LR",
+            "u1": "cBjFhvjx",
             "u2": "q2BDj1os",
             "value": 0.0
         },
         {
-            "u1": "Y0WXF1LR",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "Y0WXF1LR",
-            "u2": "LvIeXwcT",
+            "u1": "cBjFhvjx",
+            "u2": "x2AUnHqw",
             "value": 0.5
         },
         {
-            "u1": "Y0WXF1LR",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "Y0WXF1LR",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "Y0WXF1LR",
-            "u2": "LW3Klzvx",
-            "value": 1.0
-        },
-        {
-            "u1": "RQ4a2nIG",
+            "u1": "cBjFhvjx",
             "u2": "yjlouq5U",
-            "value": 0.41
-        },
-        {
-            "u1": "RQ4a2nIG",
-            "u2": "WsK2A1ab",
             "value": 0.0
         },
         {
-            "u1": "RQ4a2nIG",
-            "u2": "cBjFhvjx",
-            "value": 0.32
-        },
-        {
-            "u1": "RQ4a2nIG",
-            "u2": "WYCImqGm",
-            "value": 0.41
-        },
-        {
-            "u1": "RQ4a2nIG",
-            "u2": "B3N0HGw4",
-            "value": 0.41
-        },
-        {
-            "u1": "RQ4a2nIG",
+            "u1": "loEoYm9R",
             "u2": "q2BDj1os",
-            "value": 0.41
+            "value": 0.5
         },
         {
-            "u1": "RQ4a2nIG",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "RQ4a2nIG",
-            "u2": "LvIeXwcT",
-            "value": 0.32
-        },
-        {
-            "u1": "RQ4a2nIG",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "RQ4a2nIG",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "RQ4a2nIG",
-            "u2": "LW3Klzvx",
-            "value": 0.32
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "WsK2A1ab",
-            "value": 0.0
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "cBjFhvjx",
-            "value": 0.0
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "WYCImqGm",
+            "u1": "loEoYm9R",
+            "u2": "x2AUnHqw",
             "value": 1.0
         },
         {
-            "u1": "yjlouq5U",
-            "u2": "B3N0HGw4",
-            "value": 0.5
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "q2BDj1os",
-            "value": 1.0
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "LvIeXwcT",
-            "value": 0.5
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "yjlouq5U",
-            "u2": "LW3Klzvx",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "cBjFhvjx",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "WYCImqGm",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "B3N0HGw4",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "q2BDj1os",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "LvIeXwcT",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "WsK2A1ab",
-            "u2": "LW3Klzvx",
-            "value": 0.0
-        },
-        {
-            "u1": "cBjFhvjx",
-            "u2": "WYCImqGm",
-            "value": 0.0
-        },
-        {
-            "u1": "cBjFhvjx",
-            "u2": "B3N0HGw4",
-            "value": 0.5
-        },
-        {
-            "u1": "cBjFhvjx",
-            "u2": "q2BDj1os",
-            "value": 0.0
-        },
-        {
-            "u1": "cBjFhvjx",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "cBjFhvjx",
-            "u2": "LvIeXwcT",
-            "value": 1.0
-        },
-        {
-            "u1": "cBjFhvjx",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "cBjFhvjx",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "cBjFhvjx",
-            "u2": "LW3Klzvx",
-            "value": 1.0
-        },
-        {
-            "u1": "WYCImqGm",
-            "u2": "B3N0HGw4",
-            "value": 0.5
-        },
-        {
-            "u1": "WYCImqGm",
-            "u2": "q2BDj1os",
-            "value": 1.0
-        },
-        {
-            "u1": "WYCImqGm",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "WYCImqGm",
-            "u2": "LvIeXwcT",
-            "value": 0.5
-        },
-        {
-            "u1": "WYCImqGm",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "WYCImqGm",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "WYCImqGm",
-            "u2": "LW3Klzvx",
-            "value": 0.0
-        },
-        {
-            "u1": "B3N0HGw4",
-            "u2": "q2BDj1os",
-            "value": 0.5
-        },
-        {
-            "u1": "B3N0HGw4",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "B3N0HGw4",
-            "u2": "LvIeXwcT",
-            "value": 0.5
-        },
-        {
-            "u1": "B3N0HGw4",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "B3N0HGw4",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "B3N0HGw4",
-            "u2": "LW3Klzvx",
+            "u1": "loEoYm9R",
+            "u2": "yjlouq5U",
             "value": 0.5
         },
         {
             "u1": "q2BDj1os",
-            "u2": "JgevtrSb",
-            "value": 0.0
-        },
-        {
-            "u1": "q2BDj1os",
-            "u2": "LvIeXwcT",
+            "u2": "x2AUnHqw",
             "value": 0.5
         },
         {
             "u1": "q2BDj1os",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
+            "u2": "yjlouq5U",
+            "value": 1.0
         },
         {
-            "u1": "q2BDj1os",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "q2BDj1os",
-            "u2": "LW3Klzvx",
-            "value": 0.0
-        },
-        {
-            "u1": "JgevtrSb",
-            "u2": "LvIeXwcT",
-            "value": 0.0
-        },
-        {
-            "u1": "JgevtrSb",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "JgevtrSb",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "JgevtrSb",
-            "u2": "LW3Klzvx",
-            "value": 0.0
-        },
-        {
-            "u1": "LvIeXwcT",
-            "u2": "ZWrgWx9o",
-            "value": 0.0
-        },
-        {
-            "u1": "LvIeXwcT",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "LvIeXwcT",
-            "u2": "LW3Klzvx",
+            "u1": "x2AUnHqw",
+            "u2": "yjlouq5U",
             "value": 0.5
-        },
-        {
-            "u1": "ZWrgWx9o",
-            "u2": "N72IRgFy",
-            "value": 0.0
-        },
-        {
-            "u1": "ZWrgWx9o",
-            "u2": "LW3Klzvx",
-            "value": 0.0
-        },
-        {
-            "u1": "N72IRgFy",
-            "u2": "LW3Klzvx",
-            "value": 0.0
         }
     ],
     "artworks": [
         {
-            "id": "35362",
-            "@id": 35362,
-            "DateOfLastModify": "2020-11-30 16:19",
-            "tittle": "Capanni sul mare",
-            "Inventary": "P/997",
-            "Collection": "Opera non esposta",
+            "id": "35456",
+            "@id": 35456,
+            "DateOfLastModify": "2019-01-15 10:59",
+            "tittle": "La pittrice",
+            "Inventary": "P/1955",
+            "Collection": "Ottocento - secondo piano",
             "Sumbject": "",
-            "author": "Carlo Carr\u00e0",
-            "year": "1927",
-            "Materiale_e_Tecnica": "Olio su tela applicata su cartone",
-            "Dimension": "cm 63x44",
+            "author": "Lorenzo Delleani",
+            "year": "1881",
+            "Materiale_e_Tecnica": "Olio su tavola",
+            "Dimension": "37,2x25,5 cm",
             "Definizione": "",
-            "Acquisizione": "Acquisto presso la XVI Esposizione Internazionale d'Arte, Venezia, 1928",
-            "image": "https://www.gamtorino.it/sites/default/files/opere/Carr%C3%A0_Capanni%20sul%20mare.jpg",
-            "dc:description": "Il dipinto si collega alla svolta paesaggistica degli anni Venti di Carr\u00e0, bilanciata tra osservazione ed astrazione. I contrasti sordi dei colori - blu mare all'orizzonte, i bianchi sporchi ed i rossi mattone dei capanni - concorrono nel definire forme essenziali e riconoscibili; linee orizzontali e verticali determinano una scansione spaziale in cui risaltano infatti i semplici solidi delle architetture. L'artista in questi anni parla di \"suprema armonia dei volumi\", quindi della \"profonda poesia di un insieme di forma ben costruite\" (Neoclassicismo e realismo, \"L'ambrosiano\", 1.8.1925).\n\nRiccardo Passoni",
-            "Artwork_start_date": 1927,
+            "Acquisizione": "Legato di Ettore De Fornaris, Torino, 1978.",
+            "image": "https://www.gamtorino.it/sites/default/files/opere/DELLEANI%20La%20pittrice%20P%201955.jpg",
+            "dc:description": "Il dipinto, che ritrae una delle allieve dell'artista, costituisce un significativo omaggio alla pittura en plein air, verso la quale Delleani si sente ormai sospinto con sempre maggiore urgenza. In questa tavoletta una delle prime realizzate nel formato 37x25 a cui l'artista rimarr\u00e0 legato per anni, sono gi\u00e0 presenti le predilette gamme cromatiche che vanno dai gialli alle infinite sfumature di verdi che risalgono verso un cielo cenerino, nonch\u00e8 i rapporti armonici tra la composizione \"geometrizzante\" del paesaggio e le linee pi\u00f9 morbide e indefinite delle figure.\n\nAntonella Casassa",
+            "Artwork_start_date": 1881,
             "Artwork_end_date": "",
-            "Artist_birth_data": 1881,
-            "Artist_death_date": 1966,
+            "Artist_birth_data": 1840,
+            "Artist_death_date": 1908,
             "Gender": "male",
             "Artist_country": "Italy",
             "Artist_secondary_country": "",
-            "Artwork_Artistic_Movement": "Metaphysical painting",
+            "Artwork_Artistic_Movement": "Plein Air",
             "Secondary_Artwork_Artistic_Movement": "",
-            "Technique": "oil on canvas applied on cardboard",
+            "Technique": "oil on wood",
             "Artwork_type": "painting",
             "Size_unity": "cm",
-            "Size_height": 63,
-            "Size_width": 44,
+            "Size_height": "25,5",
+            "Size_width": "37,2",
             "Size_depth": "",
             "Materials": "none",
-            "Iconclass_subjects_curators": "25HH2322 sea - HH - ideal landscapes; 41A163 cottage; 41A16 rural housing, e.g. country-house, villa, cottage; 26A3 lower clouds; 71A11(+0) the earth formless and desolate (+ variant)",
+            "Iconclass_subjects_curators": "25HH113 (high) hill - HH - ideal landscapes; 25H151 deciduous forest; 31D15 adult woman; 48C5112 working situations ~ painter; 48C5 painting, drawing and the graphic arts; 34B11 dog",
             "_datasetid": "0ff7efb1-4ffa-4ed5-abc7-b9ddf895dd57",
-            "_timestamp": 1665127148,
+            "_timestamp": 1665127149,
             "_timestamp_year": 2022,
             "_timestamp_month": 10,
             "_timestamp_day": 7,
             "_timestamp_hour": 8,
             "_timestamp_minute": 19,
-            "_timestamp_second": 8,
+            "_timestamp_second": 9,
             "_updated": true
         },
         {
@@ -1004,49 +1020,6 @@
             "Size_depth": "",
             "Materials": "none",
             "Iconclass_subjects_curators": "25H151 deciduous forest; 25I2 village; 25H114 low hill country",
-            "_datasetid": "0ff7efb1-4ffa-4ed5-abc7-b9ddf895dd57",
-            "_timestamp": 1665127146,
-            "_timestamp_year": 2022,
-            "_timestamp_month": 10,
-            "_timestamp_day": 7,
-            "_timestamp_hour": 8,
-            "_timestamp_minute": 19,
-            "_timestamp_second": 6,
-            "_updated": true
-        },
-        {
-            "id": "39384",
-            "@id": 39384,
-            "DateOfLastModify": "2020-12-11 16:11",
-            "tittle": "Marina",
-            "Inventary": "P/1833",
-            "Collection": "Opera non esposta",
-            "Sumbject": "",
-            "author": "Osvaldo Licini",
-            "year": "1957",
-            "Materiale_e_Tecnica": "Olio su carta",
-            "Dimension": "300 x 200 mm",
-            "Definizione": "",
-            "Acquisizione": "Dono di Paolo Licini, Livorno,1969",
-            "image": "https://www.gamtorino.it/sites/default/files/opere/ETICA%20-%20LICINI%20Marina.jpg",
-            "dc:description": "Negli ultimi anni della sua vita, Licini semplifica il bagaglio di forme che contraddistingue la sua opera e riconduce la tavolozza a tinte prossime a quelle fondamentali, imbastendo le composizizioni su contrasti di complementari. Il presente dipinto si inserisce in questo preciso contesto, denotando un'estrema esemplificazione di linee e colori.\u00a0\n\n\u00a0\n\nPaolo San Martino",
-            "Artwork_start_date": 1957,
-            "Artwork_end_date": "",
-            "Artist_birth_data": 1894,
-            "Artist_death_date": 1954,
-            "Gender": "male",
-            "Artist_country": "Italy",
-            "Artist_secondary_country": "",
-            "Artwork_Artistic_Movement": "Abstract art",
-            "Secondary_Artwork_Artistic_Movement": "",
-            "Technique": "oil on cardboard",
-            "Artwork_type": "painting",
-            "Size_unity": "cm",
-            "Size_height": 20,
-            "Size_width": 30,
-            "Size_depth": "",
-            "Materials": "none",
-            "Iconclass_subjects_curators": "0 Abstract, Non-representational Art; 22C4(BLACK) colours, pigments, and paints: black; 22C4(BLUE) colours, pigments, and paints: blue; 22C4(GREEN) colours, pigments, and paints: green; 22C4(PURPLE) colours, pigments, and paints: purple; 22C4(RED) colours, pigments, and paints: red; 22C4(WHITE) colours, pigments, and paints: white; 22C4(YELLOW) colours, pigments, and paints: yellow; 49D33 triangle (~ planimetry, geometry); 49D32 line (~ planimetry, geometry); 25H2322 sea",
             "_datasetid": "0ff7efb1-4ffa-4ed5-abc7-b9ddf895dd57",
             "_timestamp": 1665127146,
             "_timestamp_year": 2022,
@@ -1230,38 +1203,38 @@
             "_updated": true
         },
         {
-            "id": "35412",
-            "@id": 35412,
-            "DateOfLastModify": "2018-11-14 14:08",
-            "tittle": "Miracolo (Olocausto)",
-            "Inventary": "S/302",
-            "Collection": "Novecento - primo piano",
+            "id": "35310",
+            "@id": 35310,
+            "DateOfLastModify": "2019-01-15 10:44",
+            "tittle": "Il torrente d'inverno",
+            "Inventary": "P/850",
+            "Collection": "Opera non esposta",
             "Sumbject": "",
-            "author": "Marino (Marino Marini)",
-            "year": "1958-1959/1959-1960",
-            "Materiale_e_Tecnica": "Legno di tulipier",
-            "Dimension": "cm 280x163x125",
+            "author": "Giuseppe Bozzalla",
+            "year": "1910",
+            "Materiale_e_Tecnica": "Olio su tela",
+            "Dimension": "cm 80,2x65,3",
             "Definizione": "",
-            "Acquisizione": "Acquisto dall'artista, Milano, 1965",
-            "image": "https://www.gamtorino.it/sites/default/files/opere/Novecento_Marino%20MARINI%20Olocausto_da%20scontornare.jpg",
-            "dc:description": "Dopo gli anni tragici della seconda guerra mondiale il sentimento della vita si fa in Marino sempre pi\u00f9 cupo e la sua opera si carica di una profonda angoscia: i Cavalieri, figure mitiche e metafora della condizione umana, perdono l'olim\u00e8ico equilibrio delle versioni precedenti e annaspano disperatamente fino a cadere dai loro destrieri impennati. Questo nuov drammatico ciclo ha inizio nel 1943, qunado l'artista \u00e8 costretto a ritirarsi in Svizzera, e prende il nome di Miracoli. Per tutti gli anni Cinquanta i tragici crolli si susseguono in un crescendo di tensione lacerante: il cavallo \u00e8 a terra e il cavaliere non si dibatte pi\u00f9, ma si affloscia senza vita, immagine apocalittica della rovina che aveva travolto, senza pi\u00f9 speranza il mondo europeo.\n\nLaura D'Agostino",
-            "Artwork_start_date": 1958,
-            "Artwork_end_date": 1960,
-            "Artist_birth_data": 1901,
-            "Artist_death_date": 1980,
+            "Acquisizione": "Acquisto presso la Societ&#224; Promotrice delle Belle Arti, Torino, 1910",
+            "image": "https://www.gamtorino.it/sites/default/files/opere/Bozzalla%20il%20torrente%20d%27inverno%20P%20850.jpg",
+            "dc:description": "Il profilo sinuoso delle sponde e dei tronchi contribuisce ad accrescere il fascino sottile del paesaggio, che riflette l'adesione dell'artista al gusto secessionista art nouveau. La verit\u00e0 ottica del primo piano, testimoniata dalle iridescenze del manto nevoso e dalle trasparenze livide dell'acqua, crea un singolare contrasto con il paesaggio e il cielo nuvoloso, volutamente indefiniti.\n\nVirginia Bertone",
+            "Artwork_start_date": 1910,
+            "Artwork_end_date": "",
+            "Artist_birth_data": 1874,
+            "Artist_death_date": 1958,
             "Gender": "male",
             "Artist_country": "Italy",
             "Artist_secondary_country": "",
-            "Artwork_Artistic_Movement": "Avant garde",
+            "Artwork_Artistic_Movement": "Art Nouveau",
             "Secondary_Artwork_Artistic_Movement": "",
-            "Technique": "tulipier wood",
-            "Artwork_type": "sculpture",
+            "Technique": "oil painting",
+            "Artwork_type": "painting",
             "Size_unity": "cm",
-            "Size_height": 163,
-            "Size_width": 280,
-            "Size_depth": 125,
+            "Size_height": "65,3",
+            "Size_width": "80,2",
+            "Size_depth": "",
             "Materials": "none",
-            "Iconclass_subjects_curators": "46C13141 horse; 31D14 adult man; 31A461 pain; 54DD42 Fatigue, Lassitude; 'Lassitudine o Languidezza estiva' (Ripa); 31BB181 fainting, swooning - BB - out of doors",
+            "Iconclass_subjects_curators": "25HH211 spring, source of river or stream - HH - ideal landscapes; 26D1 snow; 25H151 deciduous forest; 26A42 cumulonimbus, i.e. thunder clouds",
             "_datasetid": "0ff7efb1-4ffa-4ed5-abc7-b9ddf895dd57",
             "_timestamp": 1665127143,
             "_timestamp_year": 2022,
@@ -1356,49 +1329,6 @@
             "_timestamp_hour": 8,
             "_timestamp_minute": 19,
             "_timestamp_second": 2,
-            "_updated": true
-        },
-        {
-            "id": "39416",
-            "@id": 39416,
-            "DateOfLastModify": "2020-11-30 17:33",
-            "tittle": "03 - F",
-            "Inventary": "MS/295",
-            "Collection": "Novecento - primo piano",
-            "Sumbject": "",
-            "author": "Giorgio Nelva",
-            "year": "1965",
-            "Materiale_e_Tecnica": "Resine acriliche su plexiglas",
-            "Dimension": "50 x 50 x 3,5 cm",
-            "Definizione": "",
-            "Acquisizione": "Dono dell'artista, Torino, 1969",
-            "image": "https://www.gamtorino.it/sites/default/files/opere/E60_NELVA%2003-F.jpg",
-            "dc:description": "Realizzata durante il periodo di attivit\u00e0 del Gruppo Sperimentale d'Arte di Torino (1963 - 1965), l'opera documenta l'interesse dell'autore per i meccanismi della percezione visiva e per il rapporto tra l'arte e la societ\u00e0 tecnologica. Si tratta della sovrapposizione di un doppio reticolo geometrico, giocata sul contrasto del bianco e del nero e sullo sfruttamento della trasparenza del plexiglas. Le diverse possibilit\u00e0 di configurazione della struttura visiva possono realizzarsi solo attraverso l'intervento del riguardante.\u00a0\n\n\u00a0\n\nMaria Teresa Roberto",
-            "Artwork_start_date": 1965,
-            "Artwork_end_date": "",
-            "Artist_birth_data": 1940,
-            "Artist_death_date": "",
-            "Gender": "male",
-            "Artist_country": "Italy",
-            "Artist_secondary_country": "",
-            "Artwork_Artistic_Movement": "Op Art",
-            "Secondary_Artwork_Artistic_Movement": "",
-            "Technique": "acrylic resins on plexiglass",
-            "Artwork_type": "painting",
-            "Size_unity": "cm",
-            "Size_height": 50,
-            "Size_width": 50,
-            "Size_depth": "3,5",
-            "Materials": "resin, plexiglass",
-            "Iconclass_subjects_curators": "49D3 planimetry, geometry; 49D342 regular quadrilateral; 22C4(WHITE) colours, pigments, and paints: white; 22C4(BLACK) colours, pigments, and paints: black",
-            "_datasetid": "0ff7efb1-4ffa-4ed5-abc7-b9ddf895dd57",
-            "_timestamp": 1665127141,
-            "_timestamp_year": 2022,
-            "_timestamp_month": 10,
-            "_timestamp_day": 7,
-            "_timestamp_hour": 8,
-            "_timestamp_minute": 19,
-            "_timestamp_second": 1,
             "_updated": true
         },
         {

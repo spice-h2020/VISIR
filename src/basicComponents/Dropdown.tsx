@@ -30,6 +30,9 @@ const contentStyle: React.CSSProperties = {
     backgroundClip: "padding-box",
     border: "2px solid rgba(0, 0, 0, 0.15)",
     borderRadius: "0.25rem",
+
+    overflowY: "scroll",
+    maxHeight: "80vh",
 }
 
 interface DropdownProps {
