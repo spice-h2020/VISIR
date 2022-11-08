@@ -3,7 +3,7 @@
         {
             "id": "0",
             "name": "Community 0",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -58,7 +58,7 @@
         {
             "id": "1",
             "name": "Community 1",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -124,7 +124,7 @@
         {
             "id": "2",
             "name": "Community 2",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -145,7 +145,7 @@
         {
             "id": "3",
             "name": "Community 3",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -168,7 +168,7 @@
         {
             "id": "4",
             "name": "Community 4",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -1758,10 +1758,7 @@
             "id": "123",
             "label": "123",
             "group": 0,
-            "explicit_community": {
-                "ageGroup": "young",
-                "language": "IT"
-            },
+            "explicit_community": {},
             "interactions": [
                 {
                     "artwork_id": "1",
@@ -1774,10 +1771,7 @@
             "id": "124",
             "label": "124",
             "group": 1,
-            "explicit_community": {
-                "ageGroup": "adult",
-                "language": "IT"
-            },
+            "explicit_community": {},
             "interactions": [
                 {
                     "artwork_id": "1",
@@ -1790,10 +1784,7 @@
             "id": "126",
             "label": "126",
             "group": 1,
-            "explicit_community": {
-                "ageGroup": "adult",
-                "language": "IT"
-            },
+            "explicit_community": {},
             "interactions": [
                 {
                     "artwork_id": "1",
@@ -25090,14 +25081,14 @@
             "id": "1",
             "tittle": "Le tre finestre, La pianura della torre",
             "author": "Jessie Boswell Leeds",
-            "year": "1924", 
+            "year": "1924",
             "image": "https%3A%2F%2Fwww.gamtorino.it%2Fsites%2Fdefault%2Ffiles%2Fopere%2FMALINCONIA-%2520BOSWELL%2520Le%2520tre%2520finestre.jpg"
         },
         {
             "id": "2",
             "tittle": "Mercato Vecchio",
             "author": "Antonio Fontanesi Reggio Emilia",
-            "year": "1867", 
+            "year": "1867",
             "image": "https://www.gamtorino.it/sites/default/files/opere/FONTANESI_P_790.jpg"
         }
     ],

@@ -55,6 +55,8 @@ export default class NodeExplicitComms {
                     this.medoidNodes.push((expl.explanation_data.id).toString());
                 }
             })
+
+            comm.anonUsers = [];
         });
 
     }
@@ -67,16 +69,24 @@ export default class NodeExplicitComms {
     parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined) {
 
         const explicitKeys = Object.keys(node.explicit_community);
-        explicitKeys.forEach((key) => {
 
-            if (dimStrat === undefined) {
-                this.updateExplicitData(key, node);
-            }
+        if (explicitKeys.length === 0) {
+            node.isAnonimous = true;
+            this.communitiesData[node.implicit_community].anonUsers.push(node.id);
+        } else {
+            node.isAnonimous = false;
 
-            node.isMedoid = this.medoidNodes.includes(node.id);
+            explicitKeys.forEach((key) => {
 
-            this.updateCommunitiesData(key, node);
-        });
+                if (dimStrat === undefined) {
+                    this.updateExplicitData(key, node);
+                }
+
+                node.isMedoid = this.medoidNodes.includes(node.id);
+
+                this.updateCommunitiesData(key, node);
+            });
+        }
     }
 
     /**

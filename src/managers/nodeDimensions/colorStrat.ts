@@ -19,7 +19,7 @@ export default class ColorStrategy extends GenericStrategy {
      * @param user user to edit
      */
     change(user: IUserData, isFocus: Boolean) {
-        if (this.attr !== undefined && this.attr.active) {
+        if (this.attr !== undefined && this.attr.active && !user.isAnonimous) {
 
             const value = user.explicit_community[this.attr.key];
 
@@ -32,8 +32,6 @@ export default class ColorStrategy extends GenericStrategy {
                 background: nodeConst.defaultColor,
             }
         }
-
-        user.defaultColor = true;
     }
 
     /**
@@ -41,14 +39,14 @@ export default class ColorStrategy extends GenericStrategy {
      * @param user user to edit
      */
     toColorless(user: IUserData) {
-        user.defaultColor = false;
-
-        if (user["color"] === undefined) {
-            user["color"] = {
-                background: nodeConst.noFocusColor.background,
+        if (!user.isAnonimous) {
+            if (user["color"] === undefined) {
+                user["color"] = {
+                    background: nodeConst.noFocusColor.background,
+                }
+            } else {
+                user.color.background = nodeConst.noFocusColor.background;
             }
-        } else {
-            user.color.background = nodeConst.noFocusColor.background;
         }
 
     }

@@ -21,20 +21,25 @@ export default class ShapeStrategy extends GenericStrategy {
     change(user: IUserData, isFocus: boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
-            const value = user.explicit_community[this.attr.key];
-
-            const shape: shapeData = this.dimensionMap.get(value);
-
-            if (shape !== undefined) {
-
-                user["shape"] = shape.name;
-
-                user.font = {
-                    vadjust: shape.vAdjust,
-                }
-
+            if (user.isAnonimous) {
+                user["shape"] = "image";
+                user["image"] = "../../images/unknown.svg";
             } else {
-                console.log("Shape value is undefined in shape Strategy change function when it should not be");
+                const value = user.explicit_community[this.attr.key];
+
+                const shape: shapeData = this.dimensionMap.get(value);
+
+                if (shape !== undefined) {
+
+                    user["shape"] = shape.name;
+
+                    user.font = {
+                        vadjust: shape.vAdjust,
+                    }
+
+                } else {
+                    console.log("Shape value is undefined in shape Strategy change function when it should not be");
+                }
             }
 
         } else {
@@ -51,6 +56,8 @@ export default class ShapeStrategy extends GenericStrategy {
         } else {
             user.size = nodeConst.defaultSize;
         }
+
+        user.size = user.isAnonimous ? user.size + nodeConst.anonimousSizeIncrease : user.size;
     }
 
     /**
@@ -58,6 +65,10 @@ export default class ShapeStrategy extends GenericStrategy {
      * @param user 
      */
     toColorless(user: IUserData): void {
-        user.size = nodeConst.defaultSize;
+        user.size = user.isAnonimous ? nodeConst.defaultSize + nodeConst.anonimousSizeIncrease : nodeConst.defaultSize;
+
+        if (user.isAnonimous) {
+            user["image"] = "../../images/colorlessUnknown.svg";
+        }
     }
 }

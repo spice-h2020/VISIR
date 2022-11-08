@@ -53,6 +53,7 @@ export interface ICommunityData extends anyProperty {
     name: string;
     explanations: ICommunityExplanation[];
     users: string[];
+    anonUsers: string[];
 
     //The string of the map represents the name of the explicit community.
     explicitCommunityMap: Map<string, IExplicitCommData>;
@@ -98,6 +99,7 @@ export interface IUserData extends anyProperty {
     interactions: IInteraction[];
 
     isMedoid: boolean;
+    isAnonimous: boolean;
 }
 
 /**

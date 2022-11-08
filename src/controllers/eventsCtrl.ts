@@ -82,7 +82,7 @@ export default class EventsCtrl {
 
                     //Depending on the zoom level and node size, we add offset to the coordinates of the tooltip
                     x = nodePositionInDOM.x + refPosition.left + 18 + 1.7 * (node.size * this.netCtrl.net.getScale());
-                    y = nodePositionInDOM.y + refPosition.top + node.size / 2 - 3;
+                    y = nodePositionInDOM.y + refPosition.top + node.size / 2 - 10;
 
                 } else {
                     const community = this.selectedObject as ICommunityData;

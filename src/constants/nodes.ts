@@ -48,6 +48,7 @@ export const nodeConst = {
     defaultSize: 15,
     medoidSize: 25,
     selectedSize: 35,
+    anonimousSizeIncrease: 5,
 
     //Default value for a background color when the explicit community doesnt change it.
     defaultColor: "rgb(30, 236, 164, 1)",

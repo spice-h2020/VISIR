@@ -92,12 +92,13 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
     if (community !== undefined) {
 
         content.push(<div className="row" key={1}> <strong> Name: </strong> &nbsp; {community.name} </div>);
-        content.push(<div className="row" key={2}> {` Citizens: ${community.users.length}`} </div>);
-        content.push(<br key={3} />);
+        content.push(<div className="row" key={2}> {` Total Citizens: ${community.users.length}`} </div>);
+        content.push(<div className="row" key={23}> {` Anonimous: ${community.anonUsers.length}`} </div>);
+        content.push(<br key={4} />);
 
         for (let i = 0; i < community.explanations.length; i++) {
-            content.push(<React.Fragment key={4 + i * 2}> {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks)} </React.Fragment>);
-            content.push(<br key={5 + i * 2} />);
+            content.push(<React.Fragment key={5 + i * 2}> {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks)} </React.Fragment>);
+            content.push(<br key={6 + i * 2} />);
         }
     }
 
