@@ -169,7 +169,7 @@ export default class EventsCtrl {
     nodeClicked(nodeId: string) {
         const node = this.netCtrl.nodes.get(nodeId) as IUserData;
 
-        if (node === undefined) {
+        if (node === null || node === undefined) {
             return undefined;
 
         } else {
@@ -203,10 +203,10 @@ export default class EventsCtrl {
      * @param community Community selected
      */
     externalCommunityClicked(community: ICommunityData) {
-        this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, [], community.users);
+        const localNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, [], community.users);
         this.netCtrl.edgeCtrl.unselectEdges();
 
-        this.zoomToNodes(community.users);
+        this.zoomToNodes(localNodes);
     }
 
     /**

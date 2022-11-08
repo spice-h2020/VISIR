@@ -31,8 +31,8 @@ const contentStyle: React.CSSProperties = {
     border: "2px solid rgba(0, 0, 0, 0.15)",
     borderRadius: "0.25rem",
 
-    overflowY: "scroll",
     maxHeight: "80vh",
+    overflowY: "auto",
 }
 
 interface DropdownProps {

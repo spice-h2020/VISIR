@@ -144,6 +144,8 @@ export default class NodeVisualsCtrl {
      * @param selectedNodes node array that will have its visuals to the base colored state
      * @param focusedId node array that will change node visuals to a colored and focused state
      * @param legendConfig Optional parameters that if included, will update the legend configuration of this network
+     * @return Returns an array with the id of the focusedNodes that exist in this network. Its used to filter what 
+     * nodes are from this network and what are from other networks
      */
     selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[], legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
         const newNodes: Node[] = new Array<Node>();
@@ -151,6 +153,8 @@ export default class NodeVisualsCtrl {
         this.focusedNodes = focusedId;
 
         this.legendConfig = legendConfig === undefined ? this.legendConfig : legendConfig;
+
+        const existingNodes: string[] = [];
 
         allNodes.forEach((node) => {
             const id = node.id;
@@ -161,6 +165,7 @@ export default class NodeVisualsCtrl {
                 this.coloredNodeVisuals(node as IUserData);
 
             } else if (focusedId.includes(id as string)) {
+                existingNodes.push(id as string);
                 this.focusedNodeVisuals(node as IUserData);
 
             } else {
@@ -171,6 +176,8 @@ export default class NodeVisualsCtrl {
         })
 
         allNodes.update(newNodes);
+
+        return existingNodes;
     }
 
     /**
