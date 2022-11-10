@@ -62,7 +62,7 @@ export default class RequestManager {
                 if (response.status === 200) {
                     const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
                     perspectiveJson.id = perspectiveId;
-                    perspectiveJson.name = name;
+                    perspectiveJson.name = perspectiveJson.name === undefined ? name : perspectiveJson.name;
 
                     callback(perspectiveJson);
                 } else {

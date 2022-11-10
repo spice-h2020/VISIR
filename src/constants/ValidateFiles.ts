@@ -186,6 +186,10 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
             throw Error(`Users of the community (${arg.id}) is not an object`);
         }
 
+        if (arg.users.length === 0) {
+            throw Error(`Users.length of the community (${arg.id}) is equal to 0`);
+        }
+
         for (let i = 0; i < arg.explanations.length; i++) {
             arg.explanations[i] = isCommunityExplanationValid(arg.explanations[i]);
         }
@@ -210,7 +214,6 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
 
                 arg.type = ECommunityType.implicit;
             }
-
         }
 
         return arg;

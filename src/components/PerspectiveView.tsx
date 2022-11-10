@@ -195,7 +195,7 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
     setSelectedObject: Function, focusedId: string | undefined) {
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             if (netMgr.nodeVisuals.selectedNodes.length === 0) {
                 netMgr.nodeVisuals.colorAllNodes(netMgr.nodes, viewOptions.legendConfig);
             } else {
@@ -206,19 +206,19 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
     }, [viewOptions.legendConfig, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             netMgr.nodeVisuals.toggleNodeLabels(netMgr.nodes, viewOptions.hideLabels);
         }
     }, [viewOptions.hideLabels, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             netMgr.edgeCtrl.toggleHideEdges(viewOptions.hideEdges);
         }
     }, [viewOptions.hideEdges, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: focusedId });
 
             netMgr.edgeCtrl.updateEdgesThreshold(viewOptions.edgeThreshold);
@@ -227,7 +227,7 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
     }, [viewOptions.edgeThreshold, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: focusedId });
 
             netMgr.edgeCtrl.updateDeletedEdges(viewOptions);

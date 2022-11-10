@@ -36,17 +36,32 @@ export default class EventsCtrl {
     //Current data of the selected object
     selectedObject?: IUserData | ICommunityData;
 
+    zoomQueue: string[][];
+    isZooming: boolean;
+
     constructor(netController: NetworkController, sf: IStateFunctions, focusedNetId: string) {
+        this.zoomQueue = new Array<Array<string>>();
+        this.isZooming = false;
+
         this.netCtrl = netController;
         this.focusedNetId = focusedNetId;
 
         this.netCtrl.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
 
-        this.netCtrl.net.on("animationFinished", () => this.updateTooltipPosition(sf.setSelectedObject));
+        this.netCtrl.net.on("animationFinished", () => {
+
+            this.isZooming = false;
+            this.zoomToNodes();
+            this.updateTooltipPosition(sf.setSelectedObject)
+        });
+
         this.netCtrl.net.on("zoom", () => this.updateTooltipPosition(sf.setSelectedObject));
         this.netCtrl.net.on("dragging", () => this.updateTooltipPosition(sf.setSelectedObject));
 
-        this.netCtrl.net.on("resize", () => this.zoomToNodes([]));
+        this.netCtrl.net.on("resize", () => {
+
+            this.addZoomToQueue([])
+        });
 
         this.netCtrl.net.on("click", (event) => this.click(event, sf));
     }
@@ -124,15 +139,33 @@ export default class EventsCtrl {
      * Zoom to fit all nodes in the networs. 
      * @param nodes ID of all nodes to zoom to. If empty, zoom to all nodes
      */
-    zoomToNodes(nodes: string[]) {
-        const fitOptions: FitOptions = {
-            animation: {
-                duration: nodeConst.zoomDuration
-            } as TimelineAnimationType,
-            nodes: nodes
+    addZoomToQueue(nodes: string[]) {
+
+        if (this.zoomQueue.length <= 2 || nodes.length !== 0) {
+            this.zoomQueue.push(nodes);
         }
 
-        this.netCtrl.net.fit(fitOptions);
+
+        if (this.netCtrl.isReady && !this.isZooming) {
+            this.zoomToNodes();
+        }
+    }
+
+    zoomToNodes() {
+        const nodes = this.zoomQueue.shift();
+
+        if (nodes !== undefined) {
+            this.isZooming = true;
+
+            const fitOptions: FitOptions = {
+                animation: {
+                    duration: nodeConst.zoomDuration
+                } as TimelineAnimationType,
+                nodes: nodes
+            }
+
+            this.netCtrl.net.fit(fitOptions);
+        }
     }
 
     /**
@@ -176,7 +209,8 @@ export default class EventsCtrl {
             this.selectedObject = node;
 
             const selectedNodes = this.netCtrl.edgeCtrl.selectEdges(node.id);
-            this.zoomToNodes(selectedNodes);
+
+            this.addZoomToQueue(selectedNodes);
 
             this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, [node.id]);
         }
@@ -192,7 +226,7 @@ export default class EventsCtrl {
         this.selectedObject = community;
 
         const selectedNodes = community.users;
-        this.zoomToNodes(selectedNodes);
+        this.addZoomToQueue(selectedNodes);
 
         this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, []);
         this.netCtrl.edgeCtrl.unselectEdges();
@@ -204,9 +238,9 @@ export default class EventsCtrl {
      */
     externalCommunityClicked(community: ICommunityData) {
         const localNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, [], community.users);
-        this.netCtrl.edgeCtrl.unselectEdges();
 
-        this.zoomToNodes(localNodes);
+        this.netCtrl.edgeCtrl.unselectEdges();
+        this.addZoomToQueue(localNodes);
     }
 
     /**
@@ -216,6 +250,7 @@ export default class EventsCtrl {
         this.netCtrl.nodeVisuals.colorAllNodes(this.netCtrl.nodes);
         this.netCtrl.edgeCtrl.unselectEdges();
 
-        this.zoomToNodes([]);
+        this.addZoomToQueue([]);
     }
+
 }

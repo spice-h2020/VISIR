@@ -6,7 +6,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, ICommunityExplanation as ExplanationData, ICommunityData, EExplanationTypes, IUserData }
+import { IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
@@ -119,7 +119,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @param explanation data of the explanations to know its type and if it should be visible.
  * @returns a react component with the explanations.
  */
-function getCommunityExplanation(communityData: ICommunityData, explanation: ExplanationData, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
+function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
@@ -130,11 +130,11 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: Exp
             }
             case EExplanationTypes.medoid: {
 
-                const medioid = allUsers.find((value) => { return Number(value.id) === explanation.explanation_data.id });
+                const medoid = allUsers.find((value) => { return value.id === explanation.explanation_data.id });
 
                 return <NodePanel
-                    tittle={"Citizen Attributes"}
-                    node={medioid}
+                    tittle={"Medoid Attributes"}
+                    node={medoid}
                     hideLabel={hideLabel}
                     artworks={artworks}
                 />;

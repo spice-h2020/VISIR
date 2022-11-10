@@ -3,6 +3,7 @@
         {
             "id": "0",
             "name": "Community 0",
+            "community-type": "implicit",
             "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
@@ -58,6 +59,7 @@
         {
             "id": "1",
             "name": "Community 1",
+            "community-type": "implicit",
             "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
@@ -124,6 +126,7 @@
         {
             "id": "2",
             "name": "Community 2",
+            "community-type": "implicit",
             "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
@@ -145,6 +148,7 @@
         {
             "id": "3",
             "name": "Community 3",
+            "community-type": "implicit",
             "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
@@ -168,6 +172,7 @@
         {
             "id": "4",
             "name": "Community 4",
+            "community-type": "implicit",
             "explanations": [
                 {
                     "explanation_type": "explicit_attributes",

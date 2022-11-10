@@ -4,7 +4,7 @@
             "id": "0",
             "community-type": "implicit",
             "name": "Community 0",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -59,7 +59,7 @@
             "id": "1",
             "community-type": "implicit",
             "name": "Community 1",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -81,7 +81,7 @@
             "id": "2",
             "community-type": "implicit",
             "name": "Community 2",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -109,7 +109,7 @@
             "id": "3",
             "community-type": "implicit",
             "name": "Community 3",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -174,7 +174,7 @@
             "id": "4",
             "community-type": "implicit",
             "name": "Community 4",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -199,7 +199,7 @@
             "id": "5",
             "community-type": "implicit",
             "name": "Community 5",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -223,7 +223,7 @@
             "id": "6",
             "community-type": "implicit",
             "name": "Community 6",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
