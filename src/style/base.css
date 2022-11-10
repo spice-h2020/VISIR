@@ -159,6 +159,9 @@ img.mainIcon {
     text-decoration: none;
     font-size: 1rem;
     text-align: start;
+
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .btn-dropdown.disabled:hover {
