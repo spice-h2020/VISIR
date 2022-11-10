@@ -85,7 +85,8 @@ export interface IExplicitCommData {
  */
 export enum EExplanationTypes {
     explicit_attributes,
-    medoid
+    medoid,
+    implicit_attributes
 }
 
 /**

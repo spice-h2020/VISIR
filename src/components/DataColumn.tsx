@@ -6,13 +6,15 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData }
+import { IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData, anyProperty }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
 //Local files
 import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
+import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
+import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -96,8 +98,10 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
         content.push(<br key={4} />);
 
         for (let i = 0; i < community.explanations.length; i++) {
-            content.push(<React.Fragment key={5 + i * 2}> {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks)} </React.Fragment>);
-            content.push(<br key={6 + i * 2} />);
+            if (community.explanations[i].visible) {
+                content.push(<React.Fragment key={5 + i * 2}> {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks)} </React.Fragment>);
+                content.push(<br key={6 + i * 2} />);
+            }
         }
 
         return (
@@ -138,6 +142,15 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                     hideLabel={hideLabel}
                     artworks={artworks}
                 />;
+            }
+            case EExplanationTypes.implicit_attributes: {
+
+                return <div>
+                    <div> {explanation.explanation_data.label}</div>
+                    <div> {getEmotionsCloud(explanation.explanation_data.data)}</div>
+                </div>
+
+
             }
             default: {
                 console.log("Unrecognized explanation type");
@@ -186,4 +199,27 @@ function getContainerStyle(currentState: string): React.CSSProperties {
     }
 
     return newStyle;
+}
+
+function getEmotionsCloud(emotions: anyProperty): React.ReactNode {
+    const array = [];
+    const keys = Object.keys(emotions);
+
+    for (let i = 0; i < keys.length; i++) {
+        array[i] = { value: keys[i], count: emotions[keys[i]] };
+    }
+
+    return (
+        <div>
+            <span style={{
+                height: "10px",
+                display: "block",
+            }} />
+            <WordCloudGraph
+                data={array}
+            />
+            <SingleTreeMap
+                data={array}
+            />
+        </div>);
 }

@@ -17,9 +17,13 @@
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'serenity    50.0\ninterest    50.0'}"
+                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
+                        "data": {
+                            "serenity": 50.0,
+                            "interest": 50.0
+                        }
                     },
-                    "visible": false
+                    "visible": true
                 },
                 {
                     "explanation_type": "explicit_attributes",
@@ -47,9 +51,13 @@
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'fear        50.0\nserenity    50.0'}"
+                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
+                        "data": {
+                            "fear": 50.0,
+                            "serenity": 50.0
+                        }
                     },
-                    "visible": false
+                    "visible": true
                 },
                 {
                     "explanation_type": "explicit_attributes",
@@ -77,9 +85,13 @@
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'joy     50.0\nlove    50.0'}"
+                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
+                        "data": {
+                            "joy": 50.0,
+                            "love": 50.0
+                        }
                     },
-                    "visible": false
+                    "visible": true
                 },
                 {
                     "explanation_type": "explicit_attributes",
@@ -107,9 +119,13 @@
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'sadness    50.0\nfear       50.0'}"
+                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
+                        "data": {
+                            "sadness": 50.0,
+                            "fear": 50.0
+                        }
                     },
-                    "visible": false
+                    "visible": true
                 },
                 {
                     "explanation_type": "explicit_attributes",
@@ -137,9 +153,13 @@
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'fear       50.0\nsadness    50.0'}"
+                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
+                        "data": {
+                            "fear": 50.0,
+                            "sadness": 50.0
+                        }
                     },
-                    "visible": false
+                    "visible": true
                 },
                 {
                     "explanation_type": "explicit_attributes",
