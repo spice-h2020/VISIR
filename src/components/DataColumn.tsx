@@ -86,10 +86,9 @@ export const DataTable = ({
  */
 function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
 
-    const tittle = <div key={0} style={sectionTittleStyle}> Community Attributes </div>;
-    let content: React.ReactNode[] = [];
-
     if (community !== undefined) {
+        const tittle = <div key={0} style={sectionTittleStyle}> Community Attributes </div>;
+        let content: React.ReactNode[] = [];
 
         content.push(<div className="row" key={1}> <strong> Name: </strong> &nbsp; {community.name} </div>);
         content.push(<div className="row" key={2}> {` Total Citizens: ${community.users.length}`} </div>);
@@ -100,14 +99,18 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
             content.push(<React.Fragment key={5 + i * 2}> {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks)} </React.Fragment>);
             content.push(<br key={6 + i * 2} />);
         }
+
+        return (
+            <div style={{ borderTop: "1px #dadce0 inset", paddingTop: "3px" }} key={2}>
+                {tittle}
+                {content}
+            </div>
+        )
+    } else {
+        return <React.Fragment />
     }
 
-    return (
-        <div style={{ borderTop: "1px #dadce0 inset", paddingTop: "3px" }} key={2}>
-            {tittle}
-            {content}
-        </div>
-    )
+
 }
 
 /**
