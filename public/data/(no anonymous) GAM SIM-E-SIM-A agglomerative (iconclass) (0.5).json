@@ -1,23 +1,23 @@
 {
-    "name": "GAM SIM-E-SIM-A kmedoids (artist_country)",
-    "perspectiveId": "GAM SIM-E-SIM-A kmedoids (artist_country)",
+    "name": "GAM SIM-E-SIM-A (iconclass)",
+    "perspectiveId": "GAM SIM-E-SIM-A (iconclass)",
     "communities": [
         {
-            "id": "GAM SIM-E-SIM-A kmedoids (artist_country)-0",
+            "id": "GAM SIM-E-SIM-A (iconclass)-0",
             "community-type": "implicit",
             "name": "Community 0",
             "explanations": [
                 {
                     "explanation_type": "medoid",
                     "explanation_data": {
-                        "id": "q2BDj1os"
+                        "id": "ox8G7avH"
                     },
                     "visible": true
                 },
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "implicit_attributes": "Minimum percentage of users with the representative properties: 10.0 %; Representative Properties: {'community_emotions': 'serenity    50.0\ntrust       25.0\njoy         12.5\nlove        12.5'}"
+                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'serenity    50.0\ninterest    50.0'}"
                     },
                     "visible": false
                 },
@@ -28,18 +28,12 @@
                 }
             ],
             "users": [
-                "0bAAwK14",
-                "6rK3p7za",
-                "B3N0HGw4",
                 "RQ4a2nIG",
-                "Sz5Wx2XD",
-                "e4aM9WL7",
-                "ox8G7avH",
-                "q2BDj1os"
+                "ox8G7avH"
             ]
         },
         {
-            "id": "GAM SIM-E-SIM-A kmedoids (artist_country)-1",
+            "id": "GAM SIM-E-SIM-A (iconclass)-1",
             "community-type": "implicit",
             "name": "Community 1",
             "explanations": [
@@ -53,7 +47,7 @@
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "implicit_attributes": "Minimum percentage of users with the representative properties: 10.0 %; Representative Properties: {'community_emotions': 'fear     85.714286\ntrust    14.285714'}"
+                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'fear        50.0\nserenity    50.0'}"
                     },
                     "visible": false
                 },
@@ -64,23 +58,95 @@
                 }
             ],
             "users": [
-                "BTKF72et",
                 "Y0WXF1LR",
-                "anonymous",
+                "e4aM9WL7"
+            ]
+        },
+        {
+            "id": "GAM SIM-E-SIM-A (iconclass)-2",
+            "community-type": "implicit",
+            "name": "Community 2",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "0bAAwK14"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'joy     50.0\nlove    50.0'}"
+                    },
+                    "visible": false
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "0bAAwK14",
+                "q2BDj1os"
+            ]
+        },
+        {
+            "id": "GAM SIM-E-SIM-A (iconclass)-3",
+            "community-type": "implicit",
+            "name": "Community 3",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "cBjFhvjx"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "implicit_attributes": "Minimum percentage of users with the representative properties: 50.0 %; Representative Properties: {'community_emotions': 'fear       50.0\nsadness    50.0'}"
+                    },
+                    "visible": false
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
                 "cBjFhvjx",
-                "fqybaAk8",
+                "fqybaAk8"
+            ]
+        },
+        {
+            "id": "GAM SIM-E-SIM-A (iconclass)-4 (Users without community)",
+            "community-type": "inexistent",
+            "name": "Community 4 (Users without community)",
+            "explanations": [],
+            "users": [
                 "loEoYm9R",
-                "x2AUnHqw"
+                "B3N0HGw4",
+                "x2AUnHqw",
+                "Sz5Wx2XD",
+                "BTKF72et",
+                "6rK3p7za"
             ]
         }
     ],
-    "numberOfCommunities": 2,
+    "numberOfCommunities": 4,
     "users": [
         {
             "id": "0bAAwK14",
             "label": "0bAAwK14",
-            "group": 0,
-            "explicit_community": {},
+            "group": 2,
+            "explicit_community": {
+                "relationship_with_arts": "unknown",
+                "relationship_with_museums": "unknown"
+            },
             "interactions": [
                 {
                     "artwork_id": "35456",
@@ -112,8 +178,11 @@
         {
             "id": "6rK3p7za",
             "label": "6rK3p7za",
-            "group": 0,
-            "explicit_community": {},
+            "group": 4,
+            "explicit_community": {
+                "relationship_with_arts": "unknown",
+                "relationship_with_museums": "unknown"
+            },
             "interactions": [
                 {
                     "artwork_id": "35288",
@@ -155,7 +224,7 @@
         {
             "id": "B3N0HGw4",
             "label": "B3N0HGw4",
-            "group": 0,
+            "group": 4,
             "explicit_community": {
                 "relationship_with_arts": "Ho un forte interesse per l'arte",
                 "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
@@ -173,8 +242,11 @@
         {
             "id": "BTKF72et",
             "label": "BTKF72et",
-            "group": 1,
-            "explicit_community": {},
+            "group": 4,
+            "explicit_community": {
+                "relationship_with_arts": "unknown",
+                "relationship_with_museums": "unknown"
+            },
             "interactions": [
                 {
                     "artwork_id": "35222",
@@ -297,7 +369,7 @@
         {
             "id": "Sz5Wx2XD",
             "label": "Sz5Wx2XD",
-            "group": 0,
+            "group": 4,
             "explicit_community": {
                 "relationship_with_arts": "Ho un forte interesse per l'arte",
                 "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
@@ -331,24 +403,9 @@
             ]
         },
         {
-            "id": "anonymous",
-            "label": "anonymous",
-            "group": 1,
-            "explicit_community": {},
-            "interactions": [
-                {
-                    "artwork_id": "35217",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "Fear": 0.79869795
-                    }
-                }
-            ]
-        },
-        {
             "id": "cBjFhvjx",
             "label": "cBjFhvjx",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "relationship_with_arts": "Ho un forte interesse per l'arte",
                 "relationship_with_museums": "Visito spesso i musei"
@@ -373,7 +430,7 @@
         {
             "id": "e4aM9WL7",
             "label": "e4aM9WL7",
-            "group": 0,
+            "group": 1,
             "explicit_community": {
                 "relationship_with_arts": "unknown",
                 "relationship_with_museums": "unknown"
@@ -408,7 +465,7 @@
         {
             "id": "fqybaAk8",
             "label": "fqybaAk8",
-            "group": 1,
+            "group": 3,
             "explicit_community": {
                 "relationship_with_arts": "unknown",
                 "relationship_with_museums": "unknown"
@@ -433,7 +490,7 @@
         {
             "id": "loEoYm9R",
             "label": "loEoYm9R",
-            "group": 1,
+            "group": 4,
             "explicit_community": {
                 "relationship_with_arts": "L'arte mi interessa poco",
                 "relationship_with_museums": "Visito raramente musei e mostre"
@@ -522,7 +579,7 @@
         {
             "id": "q2BDj1os",
             "label": "q2BDj1os",
-            "group": 0,
+            "group": 2,
             "explicit_community": {
                 "relationship_with_arts": "Ho un forte interesse per l'arte",
                 "relationship_with_museums": "Visito spesso i musei"
@@ -540,7 +597,7 @@
         {
             "id": "x2AUnHqw",
             "label": "x2AUnHqw",
-            "group": 1,
+            "group": 4,
             "explicit_community": {
                 "relationship_with_arts": "L'arte mi interessa poco",
                 "relationship_with_museums": "Visito raramente musei e mostre"
@@ -561,67 +618,62 @@
         {
             "u1": "0bAAwK14",
             "u2": "6rK3p7za",
-            "value": 0.49
+            "value": 0.25
         },
         {
             "u1": "0bAAwK14",
             "u2": "B3N0HGw4",
-            "value": 0.56
+            "value": 0.0
         },
         {
             "u1": "0bAAwK14",
             "u2": "BTKF72et",
-            "value": 0.22
+            "value": 0.17
         },
         {
             "u1": "0bAAwK14",
             "u2": "RQ4a2nIG",
-            "value": 0.48
+            "value": 0.08
         },
         {
             "u1": "0bAAwK14",
             "u2": "Sz5Wx2XD",
-            "value": 0.56
+            "value": 0.0
         },
         {
             "u1": "0bAAwK14",
             "u2": "Y0WXF1LR",
-            "value": 0.22
-        },
-        {
-            "u1": "0bAAwK14",
-            "u2": "anonymous",
-            "value": 0.22
+            "value": 0.0
         },
         {
             "u1": "0bAAwK14",
             "u2": "cBjFhvjx",
-            "value": 0.22
+            "value": 0.0
         },
         {
             "u1": "0bAAwK14",
             "u2": "e4aM9WL7",
-            "value": 0.56
+            "value": 0.0
         },
         {
             "u1": "0bAAwK14",
             "u2": "fqybaAk8",
-            "value": 0.06
+            "value": 0.0
         },
         {
             "u1": "0bAAwK14",
             "u2": "loEoYm9R",
-            "value": 0.22
+            "value": 0.0
         },
         {
             "u1": "0bAAwK14",
             "u2": "ox8G7avH",
-            "value": 0.78
+            "value": 0.17
         },
         {
             "u1": "0bAAwK14",
             "u2": "q2BDj1os",
-            "value": 0.62
+            "value": 0.33
         },
         {
             "u1": "0bAAwK14",
@@ -631,157 +683,142 @@
         {
             "u1": "6rK3p7za",
             "u2": "B3N0HGw4",
-            "value": 0.47
+            "value": 0.0
         },
         {
             "u1": "6rK3p7za",
             "u2": "BTKF72et",
-            "value": 0.38
+            "value": 0.1
         },
         {
             "u1": "6rK3p7za",
             "u2": "RQ4a2nIG",
-            "value": 0.16
+            "value": 0.08
         },
         {
             "u1": "6rK3p7za",
             "u2": "Sz5Wx2XD",
-            "value": 0.47
+            "value": 0.0
         },
         {
             "u1": "6rK3p7za",
             "u2": "Y0WXF1LR",
-            "value": 0.38
-        },
-        {
-            "u1": "6rK3p7za",
-            "u2": "anonymous",
-            "value": 0.38
+            "value": 0.0
         },
         {
             "u1": "6rK3p7za",
             "u2": "cBjFhvjx",
-            "value": 0.38
+            "value": 0.0
         },
         {
             "u1": "6rK3p7za",
             "u2": "e4aM9WL7",
-            "value": 0.47
+            "value": 0.0
         },
         {
             "u1": "6rK3p7za",
             "u2": "fqybaAk8",
-            "value": 0.5
+            "value": 0.1
         },
         {
             "u1": "6rK3p7za",
             "u2": "loEoYm9R",
-            "value": 0.38
+            "value": 0.0
         },
         {
             "u1": "6rK3p7za",
             "u2": "ox8G7avH",
-            "value": 0.15
+            "value": 0.17
         },
         {
             "u1": "6rK3p7za",
             "u2": "q2BDj1os",
-            "value": 0.52
+            "value": 0.12
         },
         {
             "u1": "6rK3p7za",
             "u2": "x2AUnHqw",
-            "value": 0.38
+            "value": 0.08
         },
         {
             "u1": "B3N0HGw4",
             "u2": "BTKF72et",
-            "value": 0.28
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "RQ4a2nIG",
-            "value": 0.71
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "Sz5Wx2XD",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "Y0WXF1LR",
-            "value": 0.43
-        },
-        {
-            "u1": "B3N0HGw4",
-            "u2": "anonymous",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "cBjFhvjx",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "e4aM9WL7",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "fqybaAk8",
-            "value": 0.34
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "loEoYm9R",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "ox8G7avH",
-            "value": 0.66
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "q2BDj1os",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "x2AUnHqw",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "BTKF72et",
             "u2": "RQ4a2nIG",
-            "value": 0.59
+            "value": 0.13
         },
         {
             "u1": "BTKF72et",
             "u2": "Sz5Wx2XD",
-            "value": 0.28
+            "value": 0.0
         },
         {
             "u1": "BTKF72et",
             "u2": "Y0WXF1LR",
-            "value": 0.67
-        },
-        {
-            "u1": "BTKF72et",
-            "u2": "anonymous",
-            "value": 0.67
+            "value": 0.0
         },
         {
             "u1": "BTKF72et",
             "u2": "cBjFhvjx",
-            "value": 0.67
+            "value": 0.0
         },
         {
             "u1": "BTKF72et",
             "u2": "e4aM9WL7",
-            "value": 0.28
+            "value": 0.0
         },
         {
             "u1": "BTKF72et",
@@ -791,127 +828,112 @@
         {
             "u1": "BTKF72et",
             "u2": "loEoYm9R",
-            "value": 0.67
+            "value": 0.0
         },
         {
             "u1": "BTKF72et",
             "u2": "ox8G7avH",
-            "value": 0.34
+            "value": 0.0
         },
         {
             "u1": "BTKF72et",
             "u2": "q2BDj1os",
-            "value": 0.42
+            "value": 0.0
         },
         {
             "u1": "BTKF72et",
             "u2": "x2AUnHqw",
-            "value": 0.67
+            "value": 0.0
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "Sz5Wx2XD",
-            "value": 0.71
+            "value": 0.0
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "Y0WXF1LR",
-            "value": 0.59
-        },
-        {
-            "u1": "RQ4a2nIG",
-            "u2": "anonymous",
-            "value": 0.59
+            "value": 0.09
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "cBjFhvjx",
-            "value": 0.59
+            "value": 0.07
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "e4aM9WL7",
-            "value": 0.71
+            "value": 0.04
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "fqybaAk8",
-            "value": 0.16
+            "value": 0.09
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "loEoYm9R",
-            "value": 0.59
+            "value": 0.05
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "ox8G7avH",
-            "value": 0.69
+            "value": 0.23
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "q2BDj1os",
-            "value": 0.8
+            "value": 0.09
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "x2AUnHqw",
-            "value": 0.59
+            "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "Y0WXF1LR",
-            "value": 0.43
-        },
-        {
-            "u1": "Sz5Wx2XD",
-            "u2": "anonymous",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "cBjFhvjx",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "e4aM9WL7",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "fqybaAk8",
-            "value": 0.34
+            "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "loEoYm9R",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "ox8G7avH",
-            "value": 0.66
+            "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "q2BDj1os",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "x2AUnHqw",
-            "value": 0.43
-        },
-        {
-            "u1": "Y0WXF1LR",
-            "u2": "anonymous",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "cBjFhvjx",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "Y0WXF1LR",
@@ -921,92 +943,57 @@
         {
             "u1": "Y0WXF1LR",
             "u2": "fqybaAk8",
-            "value": 0.62
+            "value": 0.0
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "loEoYm9R",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "ox8G7avH",
-            "value": 0.34
+            "value": 0.19
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "q2BDj1os",
-            "value": 0.62
+            "value": 0.0
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "x2AUnHqw",
-            "value": 1.0
-        },
-        {
-            "u1": "anonymous",
-            "u2": "cBjFhvjx",
-            "value": 1.0
-        },
-        {
-            "u1": "anonymous",
-            "u2": "e4aM9WL7",
-            "value": 0.43
-        },
-        {
-            "u1": "anonymous",
-            "u2": "fqybaAk8",
-            "value": 0.62
-        },
-        {
-            "u1": "anonymous",
-            "u2": "loEoYm9R",
-            "value": 1.0
-        },
-        {
-            "u1": "anonymous",
-            "u2": "ox8G7avH",
-            "value": 0.34
-        },
-        {
-            "u1": "anonymous",
-            "u2": "q2BDj1os",
-            "value": 0.62
-        },
-        {
-            "u1": "anonymous",
-            "u2": "x2AUnHqw",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "cBjFhvjx",
             "u2": "e4aM9WL7",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "cBjFhvjx",
             "u2": "fqybaAk8",
-            "value": 0.5
+            "value": 0.75
         },
         {
             "u1": "cBjFhvjx",
             "u2": "loEoYm9R",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "cBjFhvjx",
             "u2": "ox8G7avH",
-            "value": 0.34
+            "value": 0.0
         },
         {
             "u1": "cBjFhvjx",
             "u2": "q2BDj1os",
-            "value": 0.62
+            "value": 0.0
         },
         {
             "u1": "cBjFhvjx",
             "u2": "x2AUnHqw",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "e4aM9WL7",
@@ -1016,72 +1003,72 @@
         {
             "u1": "e4aM9WL7",
             "u2": "loEoYm9R",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "e4aM9WL7",
             "u2": "ox8G7avH",
-            "value": 0.66
+            "value": 0.17
         },
         {
             "u1": "e4aM9WL7",
             "u2": "q2BDj1os",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "e4aM9WL7",
             "u2": "x2AUnHqw",
-            "value": 0.43
+            "value": 0.0
         },
         {
             "u1": "fqybaAk8",
             "u2": "loEoYm9R",
-            "value": 0.62
+            "value": 0.0
         },
         {
             "u1": "fqybaAk8",
             "u2": "ox8G7avH",
-            "value": 0.15
+            "value": 0.04
         },
         {
             "u1": "fqybaAk8",
             "u2": "q2BDj1os",
-            "value": 0.44
+            "value": 0.0
         },
         {
             "u1": "fqybaAk8",
             "u2": "x2AUnHqw",
-            "value": 0.62
+            "value": 0.25
         },
         {
             "u1": "loEoYm9R",
             "u2": "ox8G7avH",
-            "value": 0.34
+            "value": 0.0
         },
         {
             "u1": "loEoYm9R",
             "u2": "q2BDj1os",
-            "value": 0.62
+            "value": 0.0
         },
         {
             "u1": "loEoYm9R",
             "u2": "x2AUnHqw",
-            "value": 1.0
+            "value": 0.0
         },
         {
             "u1": "ox8G7avH",
             "u2": "q2BDj1os",
-            "value": 0.78
+            "value": 0.0
         },
         {
             "u1": "ox8G7avH",
             "u2": "x2AUnHqw",
-            "value": 0.34
+            "value": 0.0
         },
         {
             "u1": "q2BDj1os",
             "u2": "x2AUnHqw",
-            "value": 0.62
+            "value": 0.0
         }
     ],
     "artworks": [
@@ -1384,49 +1371,6 @@
             "_timestamp_hour": 8,
             "_timestamp_minute": 19,
             "_timestamp_second": 7,
-            "_updated": true
-        },
-        {
-            "id": "35217",
-            "@id": 35217,
-            "DateOfLastModify": "2018-11-13 10:07",
-            "tittle": "La femme de Claude (L'adultera)",
-            "Inventary": "P/408",
-            "Collection": "Ottocento - secondo piano",
-            "Sumbject": "",
-            "author": "Francesco Mosso",
-            "year": "1877",
-            "Materiale_e_Tecnica": "Olio su tela",
-            "Dimension": "cm 201 x 154",
-            "Definizione": "",
-            "Acquisizione": "Acquisto presso la Societ&#224; Promotrice delle Belle Arti, Torino, 1877",
-            "image": "https://www.gamtorino.it/sites/default/files/opere/MOSSO_P_408.jpg",
-            "dc:description": "Il quadro fu concepito, come scrive Calderini, nel 1874, in una sala della Prefettura di Torino, dove il pittore \"vide vibrare in un canto un bel raggio di sole, sopra un sof\u00e0 antico, coperto di raso chiaro\". Eseguito a Roma, sotto l'influenza dell'amico pittore Cesare Maccari, il grande quadro raffigurante un \"delitto d'onore mimetizzato sotto il titolo La femme ce Claude\" fu inviato a Torino all'esposizione della Promotrice del 1877 dove suscit\u00f2 discussioni e critiche. Mosso adatta la composizione e la teatralit\u00e0 del quadro accademico a un tema di verismo moderno reso con crudi accenti cronachistici. L'innegabile qualit\u00e0 pittorica aggiunge alla scena toni di morbido erotismo.\n\n\n\nCaterina Thellung",
-            "Artwork_start_date": 1874,
-            "Artwork_end_date": 1877,
-            "Artist_birth_data": 1848,
-            "Artist_death_date": 1877,
-            "Gender": "male",
-            "Artist_country": "Italy",
-            "Artist_secondary_country": "",
-            "Artwork_Artistic_Movement": "Verism",
-            "Secondary_Artwork_Artistic_Movement": "",
-            "Technique": "oil painting",
-            "Artwork_type": "painting",
-            "Size_unity": "cm",
-            "Size_height": 201,
-            "Size_width": 154,
-            "Size_depth": "",
-            "Materials": "none",
-            "Iconclass_subjects_curators": "41A2 interior of the house; 33C44 fallen woman; 31D15 adult woman; 31A232 leaning figure; 41A722 couch, sofa, settee",
-            "_datasetid": "0ff7efb1-4ffa-4ed5-abc7-b9ddf895dd57",
-            "_timestamp": 1665127146,
-            "_timestamp_year": 2022,
-            "_timestamp_month": 10,
-            "_timestamp_day": 7,
-            "_timestamp_hour": 8,
-            "_timestamp_minute": 19,
-            "_timestamp_second": 6,
             "_updated": true
         },
         {

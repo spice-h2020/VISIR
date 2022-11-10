@@ -4,7 +4,7 @@
             "id": "gam-agglomerative-0",
             "community-type": "implicit",
             "name": "Community 0",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -38,7 +38,7 @@
             "id": "gam-agglomerative-1",
             "community-type": "implicit",
             "name": "Community 1",
-            "explanations":[
+            "explanations": [
                 {
                     "explanation_type": "explicit_attributes",
                     "explanation_data": {},
@@ -1601,5 +1601,5 @@
             "_updated": true
         }
     ],
-    "name" : "Last GAM"
+    "name": "Last GAM"
 }
