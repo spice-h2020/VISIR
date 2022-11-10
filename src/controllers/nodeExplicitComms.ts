@@ -82,7 +82,7 @@ export default class NodeExplicitComms {
                     this.updateExplicitData(key, node);
                 }
 
-                node.isMedoid = this.medoidNodes.includes(node.id);
+                node.isMedoid = false; //this.medoidNodes.includes(node.id);
 
                 this.updateCommunitiesData(key, node);
             });
@@ -110,7 +110,6 @@ export default class NodeExplicitComms {
             }
         }
     }
-
 
     sortExplicitData() {
         this.explicitData.forEach((data) => {
@@ -184,7 +183,7 @@ export default class NodeExplicitComms {
 
                 //Change the count to percentile
                 parentValue.map.forEach(function (value, key) {
-                    let newValue = Math.round((value / community.users.length) * 100);
+                    let newValue = Math.round((value / (community.users.length - community.anonUsers.length)) * 100);
                     parentValue.map.set(key, newValue);
                 });
 

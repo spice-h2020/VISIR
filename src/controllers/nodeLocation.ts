@@ -107,6 +107,30 @@ export default class NodeLocation {
         } else {
             const nodePos: IPoint = this.getNodePos(this.nodeGroups[group], node.id);
 
+
+            // if (node.id === "ox8G7avH") {
+            //     console.log("Node raro");
+            //     console.log(nodePos.y);
+
+            // }
+            // if (node.id === "RQ4a2nIG") {
+            //     console.log("hmm")
+            //     console.log(nodePos.y);
+            // }
+            // if (node.id === "fqybaAk8") {
+            //     console.log("Node 2 raro");
+            //     console.log(nodePos.y);
+
+            // }
+            // if (node.id === "cBjFhvjx") {
+            //     console.log("hmm 2")
+            //     console.log(nodePos.y);
+            // }
+
+
+
+
+
             node.x = nodePos.x;
             node.y = nodePos.y;
         }
@@ -119,21 +143,21 @@ export default class NodeLocation {
      * @returns point coordinates
      */
     getNodePos(group: INodeGroup, nodeId: string): IPoint {
-        let size = group.partition.nNodes;
+        let size = group.partition.nNodes < 7 ? 8 : group.partition.nNodes;
+
         const center = group.partition.center;
         const nodeIndex = group.nodes.indexOf(nodeId);;
 
         const output = { x: 0, y: 0 };
 
-        const angleSlice = (2 * Math.PI) / size;
+        const angleSlice = (2 * Math.PI) / group.partition.nNodes;
         let targetAngle = angleSlice * nodeIndex;
-
-        if (size < 7) {
-            size = 8;
-        }
 
         output.x = center.x + Math.cos(targetAngle) * size * nodeConst.betweenNodesDistance;
         output.y = center.y + Math.sin(targetAngle) * size * nodeConst.betweenNodesDistance;
+
+        output.x = parseFloat(output.x.toFixed(10));
+        output.y = parseFloat(output.y.toFixed(10));
 
         return output;
     }
