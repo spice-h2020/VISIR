@@ -147,7 +147,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
 
                 return <div>
                     <div> {explanation.explanation_data.label}</div>
-                    <div> {getEmotionsCloud(explanation.explanation_data.data)}</div>
+                    <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
                 </div>
 
 
@@ -201,25 +201,30 @@ function getContainerStyle(currentState: string): React.CSSProperties {
     return newStyle;
 }
 
-function getEmotionsCloud(emotions: anyProperty): React.ReactNode {
-    const array = [];
-    const keys = Object.keys(emotions);
+function getImplicitDataClouds(data: anyProperty): React.ReactNode {
+    try {
+        const array = [];
+        const keys = Object.keys(data);
 
-    for (let i = 0; i < keys.length; i++) {
-        array[i] = { value: keys[i], count: emotions[keys[i]] };
+        for (let i = 0; i < keys.length; i++) {
+            array[i] = { value: keys[i], count: data[keys[i]] };
+        }
+
+        return (
+            <div>
+                <span style={{
+                    height: "10px",
+                    display: "block",
+                }} />
+                <WordCloudGraph
+                    data={array}
+                />
+                <SingleTreeMap
+                    data={array}
+                />
+            </div>);
+    } catch (e: any) {
+        console.log("Error while creating a wordCloud from implicit attributes data");
+        console.log(e);
     }
-
-    return (
-        <div>
-            <span style={{
-                height: "10px",
-                display: "block",
-            }} />
-            <WordCloudGraph
-                data={array}
-            />
-            <SingleTreeMap
-                data={array}
-            />
-        </div>);
 }

@@ -52,8 +52,14 @@ export default class NodeExplicitComms {
 
         this.communitiesData.forEach((comm: ICommunityData) => {
             comm.explanations.forEach((expl: ICommunityExplanation) => {
-                if (expl.explanation_type === EExplanationTypes.medoid && expl.explanation_data.id !== undefined) {
-                    this.medoidNodes.push((expl.explanation_data.id).toString());
+                if (expl.visible) {
+                    switch (expl.explanation_type) {
+                        case EExplanationTypes.medoid: {
+                            this.medoidNodes.push(expl.explanation_data.id);
+
+                            break;
+                        }
+                    }
                 }
             })
 

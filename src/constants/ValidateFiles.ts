@@ -250,12 +250,69 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
             }
         }
 
+        switch (arg.explanation_type) {
+            //Explicit attributes doesnt require a validation
+            case types.EExplanationTypes.medoid: {
+                arg = isMedoidExplanationValid(arg);
+                break;
+            }
+            case types.EExplanationTypes.implicit_attributes: {
+                arg = isImplicitAttributesExplanationValid(arg);
+                break;
+            }
+        }
+
         return arg;
 
     } catch (e: any) {
         throw Error(`Community explanation is not valid: ${e.message}`);
     }
 }
+function isMedoidExplanationValid(arg: any): types.ICommunityExplanation {
+    try {
+        if (arg.explanation_data.id === undefined) {
+            throw Error(`Medoid ID is undefined`);
+        }
+        if (typeof (arg.explanation_data.id) !== "string") {
+            try {
+                arg.explanation_data.id = String(arg.explanation_data.id);
+            } catch (e: any) {
+                throw Error(`Medoid ID is not a string`);
+            }
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Community Medoid explanation is not valid: ${e.message}`);
+    }
+}
+
+function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplanation {
+    try {
+        if (arg.explanation_data.label === undefined) {
+            throw Error(`Label text is undefined`);
+        }
+        if (typeof (arg.explanation_data.label) !== "string") {
+            try {
+                arg.explanation_data.label = String(arg.explanation_data.label);
+            } catch (e: any) {
+                throw Error(`Label text is not a string`);
+            }
+        }
+
+        if (arg.explanation_data.data === undefined) {
+            throw Error(`Data attribute is undefined`);
+        }
+        if (typeof (arg.explanation_data) !== "object") {
+            throw Error(`Data attribute is not an object`);
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Community Implicit Attributes explanation is not valid: ${e.message}`);
+    }
+}
+
 
 function isUserDataValid(arg: any): types.IUserData {
     try {
