@@ -167,6 +167,10 @@ function getStackedBars(community: ICommunityData) {
                 />
             );
         }
+    } else {
+        content.push(
+            <div key={0} > All users' attributes are unknown</div>
+        );
     }
 
     return content;

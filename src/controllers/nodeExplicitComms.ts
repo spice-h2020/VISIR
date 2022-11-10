@@ -4,6 +4,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
+import { nodeConst } from "../constants/nodes";
 import { ICommunityExplanation, ICommunityData, EExplanationTypes, IExplicitCommData, IUserData } from "../constants/perspectivesTypes";
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
@@ -67,12 +68,13 @@ export default class NodeExplicitComms {
      * @param dimStrat dimension strategy controller
      */
     parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined) {
-
         const explicitKeys = Object.keys(node.explicit_community);
 
-        if (explicitKeys.length === 0) {
+        if (explicitKeys.length === 0 || this.areKeysUnknown(node, explicitKeys)) {
+
             node.isAnonimous = true;
             this.communitiesData[node.implicit_community].anonUsers.push(node.id);
+
         } else {
             node.isAnonimous = false;
 
@@ -82,11 +84,25 @@ export default class NodeExplicitComms {
                     this.updateExplicitData(key, node);
                 }
 
-                node.isMedoid = false; //this.medoidNodes.includes(node.id);
+                node.isMedoid = this.medoidNodes.includes(node.id);
 
                 this.updateCommunitiesData(key, node);
             });
         }
+    }
+
+    areKeysUnknown(node: IUserData, keys: string[]) {
+        let isUnknown: boolean = true;
+
+        keys.forEach((key) => {
+            if (node.explicit_community[key] !== nodeConst.unknownCommunityValue) {
+                isUnknown = false;
+                return false;
+            }
+
+        });
+
+        return isUnknown;
     }
 
     /**
@@ -127,7 +143,6 @@ export default class NodeExplicitComms {
      * @param node source node
      */
     updateCommunitiesData(key: string, node: IUserData) {
-
         const group = node.implicit_community;
 
         //Check if the parent map is defined
@@ -179,33 +194,35 @@ export default class NodeExplicitComms {
      */
     calcExplicitPercentile(dimStrat: NodeDimensionStrategy) {
         for (let community of this.communitiesData) {
-            community.explicitCommunityMap.forEach(function (parentValue, key) {
+            if (community.explicitCommunityMap !== undefined) {
+                community.explicitCommunityMap.forEach(function (parentValue, key) {
 
-                //Change the count to percentile
-                parentValue.map.forEach(function (value, key) {
-                    let newValue = Math.round((value / (community.users.length - community.anonUsers.length)) * 100);
-                    parentValue.map.set(key, newValue);
-                });
+                    //Change the count to percentile
+                    parentValue.map.forEach(function (value, key) {
+                        let newValue = Math.round((value / (community.users.length - community.anonUsers.length)) * 100);
+                        parentValue.map.set(key, newValue);
+                    });
 
-                //Sort the map from highest percentile to lowest
-                parentValue.array = Array.from(parentValue.map).sort(
-                    (a: [string, number], b: [string, number]) => {
-                        if (a[1] > b[1])
-                            return -1;
-                        else
-                            return 1;
-                    }
-                );
+                    //Sort the map from highest percentile to lowest
+                    parentValue.array = Array.from(parentValue.map).sort(
+                        (a: [string, number], b: [string, number]) => {
+                            if (a[1] > b[1])
+                                return -1;
+                            else
+                                return 1;
+                        }
+                    );
 
-                const dimension = dimStrat.strategies.filter((strat) => {
-                    if (strat !== undefined && strat.attr !== undefined && strat.attr.key !== undefined)
-                        return strat.attr.key === key
-                    else return false;
-                });
+                    const dimension = dimStrat.strategies.filter((strat) => {
+                        if (strat !== undefined && strat.attr !== undefined && strat.attr.key !== undefined)
+                            return strat.attr.key === key
+                        else return false;
+                    });
 
-                parentValue.dimension = dimension === undefined ? undefined : dimension[0].attr.dimension;
-            })
-            community.explicitCommunityArray = Array.from(community.explicitCommunityMap);
+                    parentValue.dimension = dimension === undefined ? undefined : dimension[0].attr.dimension;
+                })
+                community.explicitCommunityArray = Array.from(community.explicitCommunityMap);
+            }
         }
     }
 

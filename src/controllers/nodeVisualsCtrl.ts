@@ -10,7 +10,7 @@
  */
 //Constants
 import { IUserData } from "../constants/perspectivesTypes";
-import { Dimensions, DimAttribute } from "../constants/nodes"
+import { Dimensions, DimAttribute, nodeConst } from "../constants/nodes"
 import { ViewOptions } from "../constants/viewOptions";
 import { IStateFunctions } from "../constants/auxTypes";
 //Packages
@@ -94,6 +94,7 @@ export default class NodeVisualsCtrl {
     }
 
     setNodeInitialVisuals(node: IUserData, hideLabel: boolean) {
+        node.isAnonGroup = node.id === nodeConst.anonymousGroupKey ? true : false;
 
         if (this.isHidedByLegend(node as IUserData)) {
             this.hideNodeVisuals(node as IUserData);

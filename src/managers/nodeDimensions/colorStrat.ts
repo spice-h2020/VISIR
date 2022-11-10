@@ -19,7 +19,7 @@ export default class ColorStrategy extends GenericStrategy {
      * @param user user to edit
      */
     change(user: IUserData, isFocus: Boolean) {
-        if (this.attr !== undefined && this.attr.active && !user.isAnonimous) {
+        if (this.attr !== undefined && this.attr.active && !user.isAnonimous && !user.isAnonGroup) {
 
             const value = user.explicit_community[this.attr.key];
 
@@ -28,9 +28,16 @@ export default class ColorStrategy extends GenericStrategy {
             }
 
         } else {
-            user["color"] = {
-                background: nodeConst.defaultColor,
+            if (user.isAnonGroup) {
+                user["color"] = {
+                    background: "black",
+                }
+            } else {
+                user["color"] = {
+                    background: nodeConst.defaultColor,
+                }
             }
+
         }
     }
 

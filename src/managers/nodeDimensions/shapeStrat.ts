@@ -21,9 +21,15 @@ export default class ShapeStrategy extends GenericStrategy {
     change(user: IUserData, isFocus: boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
-            if (user.isAnonimous) {
+            if (user.isAnonGroup) {
+                user["shape"] = nodeConst.defaultShape.name;
+                user.font = {
+                    vadjust: nodeConst.defaultShape.vAdjust,
+                }
+            } else if (user.isAnonimous) {
                 user["shape"] = "image";
                 user["image"] = "../../images/unknown.svg";
+
             } else {
                 const value = user.explicit_community[this.attr.key];
 
@@ -43,6 +49,7 @@ export default class ShapeStrategy extends GenericStrategy {
             }
 
         } else {
+
             user["shape"] = nodeConst.defaultShape.name;
             user.font = {
                 vadjust: nodeConst.defaultShape.vAdjust,
@@ -67,7 +74,7 @@ export default class ShapeStrategy extends GenericStrategy {
     toColorless(user: IUserData): void {
         user.size = user.isAnonimous ? nodeConst.defaultSize + nodeConst.anonimousSizeIncrease : nodeConst.defaultSize;
 
-        if (user.isAnonimous) {
+        if (user.isAnonimous && !user.isAnonGroup) {
             user["image"] = "../../images/colorlessUnknown.svg";
         }
     }
