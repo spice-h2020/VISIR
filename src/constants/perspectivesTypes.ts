@@ -54,10 +54,19 @@ export interface ICommunityData extends anyProperty {
     explanations: ICommunityExplanation[];
     users: string[];
     anonUsers: string[];
+    type: ECommunityType;
 
     //The string of the map represents the name of the explicit community.
     explicitCommunityMap: Map<string, IExplicitCommData>;
     explicitCommunityArray?: [string, IExplicitCommData][];
+}
+
+/**
+ * Available types for a community
+ */
+export enum ECommunityType {
+    implicit,
+    inexistent
 }
 
 /**
@@ -100,6 +109,7 @@ export interface IUserData extends anyProperty {
 
     isMedoid: boolean;
     isAnonimous: boolean;
+    isAnonGroup: boolean;
 }
 
 /**

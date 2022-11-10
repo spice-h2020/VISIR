@@ -6,6 +6,7 @@
 //Constants
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
+import { ECommunityType } from "./perspectivesTypes";
 
 //#region All perspectives JSON
 
@@ -189,8 +190,30 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
             arg.explanations[i] = isCommunityExplanationValid(arg.explanations[i]);
         }
 
-        return arg;
+        if (arg["community-type"] === undefined) {
+            arg.type = ECommunityType.inexistent;
 
+        } else {
+            if (typeof (arg["community-type"]) !== "string") {
+                try {
+                    arg["community-type"] = String(arg["community-type"]);
+                } catch (e: any) {
+                    throw Error(`Community type of the community (${arg.id}) is not a string`);
+                }
+            }
+
+            arg.type = ECommunityType[arg["community-type"]];
+            if (arg.type === undefined) {
+                console.log(`Community type of the community (${arg.id}) doesnt have an available type, it was defaulted
+                to implicit. Available types -> ` );
+                console.log(Object.keys(ECommunityType));
+
+                arg.type = ECommunityType.implicit;
+            }
+
+        }
+
+        return arg;
     } catch (e: any) {
         throw Error(`Community data is not valid: ${e.message}`);
     }
