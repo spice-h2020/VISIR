@@ -91,6 +91,7 @@ export default class NetworkController {
             explicitCtrl.parseExplicitCommunity(user, dimStrat);
             nodeLocation.updateNodeGroup(user, perspectiveData.communities);
         });
+        explicitCtrl.sortExplicitData();
 
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);
         this.bbCtrl = new BoxesController(perspectiveData.communities);

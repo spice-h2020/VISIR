@@ -79,7 +79,7 @@ export const PerspectivesGroups = ({
     //When a new perspective is loaded, we clear all configuration
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
-
+            setLegendData(undefined);
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
