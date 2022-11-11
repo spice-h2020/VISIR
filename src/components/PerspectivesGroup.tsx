@@ -11,13 +11,15 @@
 //Constants
 import { IPerspectiveData, EPerspectiveVisState } from "../constants/perspectivesTypes";
 import { ViewOptions, EAppCollapsedState } from "../constants/viewOptions"
-import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions } from "../constants/auxTypes";
+import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendData } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer, useState } from "react";
 //Local files
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import { DimAttribute } from "../constants/nodes";
+import { ILegendDataAction } from "../App";
 
 const perspectiveContainers: React.CSSProperties = {
     display: "flex",
@@ -45,7 +47,7 @@ interface PerspectivesGroupProps {
     /**
      * Function to setup the legend's data.
      */
-    setLegendData: Function,
+    setLegendData: React.Dispatch<ILegendDataAction>,
 }
 
 /**
@@ -70,6 +72,8 @@ export const PerspectivesGroups = ({
         setSelectedObject: setSelectedObject,
     }
 
+
+
     //When the collapsed state changes, we clear both datatables
     useEffect(() => {
         setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
@@ -79,7 +83,7 @@ export const PerspectivesGroups = ({
     //When a new perspective is loaded, we clear all configuration
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
-            setLegendData(undefined);
+            setLegendData({ type: "reset", newData: false });
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);

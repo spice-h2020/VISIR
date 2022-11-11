@@ -4,6 +4,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
+import { ILegendDataAction } from "../App";
 import { nodeConst } from "../constants/nodes";
 import { ICommunityExplanation, ICommunityData, EExplanationTypes, IExplicitCommData, IUserData } from "../constants/perspectivesTypes";
 //Local files
@@ -39,6 +40,8 @@ export default class NodeExplicitComms {
      * ID of all medoid nodes
      */
     medoidNodes: string[];
+    hasAnon: boolean;
+    hasAnonGroup: boolean;
 
     /**
      * Constructor of the class
@@ -46,6 +49,9 @@ export default class NodeExplicitComms {
      */
     constructor(communitiesData: ICommunityData[]) {
         this.explicitData = new Array<ExplicitData>();
+
+        this.hasAnon = false;
+        this.hasAnonGroup = false;
 
         this.communitiesData = communitiesData;
         this.medoidNodes = [];
@@ -73,12 +79,29 @@ export default class NodeExplicitComms {
      * @param node source node
      * @param dimStrat dimension strategy controller
      */
-    parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined) {
+    parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined, setLegendData: React.Dispatch<ILegendDataAction>) {
+        if (node.id === nodeConst.anonymousGroupKey) {
+            node.isAnonGroup = true;
+            this.hasAnonGroup = true;
+
+            setLegendData({
+                type: "anonGroup",
+                newData: true
+            });
+        }
+
         const explicitKeys = Object.keys(node.explicit_community);
 
         if (explicitKeys.length === 0 || this.areKeysUnknown(node, explicitKeys)) {
 
             node.isAnonimous = true;
+            this.hasAnon = true;
+
+            setLegendData({
+                type: "anon",
+                newData: true
+            });
+
             this.communitiesData[node.implicit_community].anonUsers.push(node.id);
 
         } else {

@@ -18,6 +18,7 @@ import { DataSetNodes, Node } from "vis-network";
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 import { ExplicitData } from "./nodeExplicitComms";
+import { ILegendDataAction } from "../App";
 
 export default class NodeVisualsCtrl {
     dimStrat: NodeDimensionStrategy;
@@ -60,7 +61,7 @@ export default class NodeVisualsCtrl {
      * @param setLegendData Set the legend data to update the legend contents
      * @returns Returns the new created dimension strategy
      */
-    createDimensionStrategy(explicitData: ExplicitData[], showBorder: boolean, setLegendData: Function) {
+    createDimensionStrategy(explicitData: ExplicitData[], showBorder: boolean, setLegendData: React.Dispatch<ILegendDataAction>) {
         const attributes = new Array<DimAttribute>();
 
         if (explicitData[0] !== undefined) {
@@ -94,8 +95,6 @@ export default class NodeVisualsCtrl {
     }
 
     setNodeInitialVisuals(node: IUserData, hideLabel: boolean) {
-        node.isAnonGroup = node.id === nodeConst.anonymousGroupKey ? true : false;
-
         if (this.isHidedByLegend(node as IUserData)) {
             this.hideNodeVisuals(node as IUserData);
         } else {
@@ -229,6 +228,10 @@ export default class NodeVisualsCtrl {
                 hideNode = true;
                 break;
             }
+        }
+
+        if (node.isAnonimous && this.legendConfig!.get(`${nodeConst.anonymousGroupKey}User`)) {
+            hideNode = true;
         }
 
         return hideNode;

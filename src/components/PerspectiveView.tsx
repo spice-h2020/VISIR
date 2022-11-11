@@ -17,6 +17,7 @@ import React, { useEffect, useState, useRef } from "react";
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/nodeDimensionStat';
 import { DataTable } from './DataColumn';
+import { nodeConst } from '../constants/nodes';
 
 const networkContainer: React.CSSProperties = {
     margin: "0px 1.5% 15px 1.5%",
@@ -202,7 +203,11 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
                 netMgr.nodeVisuals.selectNodes(netMgr.nodes, netMgr.nodeVisuals.selectedNodes,
                     netMgr.nodeVisuals.focusedNodes, viewOptions.legendConfig);
             }
+
+            console.log(viewOptions.legendConfig.get(`${nodeConst.anonymousGroupKey}User`));
         }
+
+
     }, [viewOptions.legendConfig, netMgr]);
 
     useEffect(() => {

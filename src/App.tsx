@@ -25,10 +25,34 @@ import RequestManager from './managers/requestManager';
 
 import './style/base.css';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
+import { ILegendData } from './constants/auxTypes';
 
 interface AppProps {
   perspectiveId1: string | null,
   perspectiveId2: string | null
+}
+
+export interface ILegendDataAction {
+  type: "dims" | "anon" | "anonGroup" | "reset";
+  newData: boolean | DimAttribute[];
+}
+
+function legendDataReducer(currentState: ILegendData, action: ILegendDataAction) {
+  switch (action.type) {
+    case "dims":
+      currentState.dims = action.newData as DimAttribute[];
+      break;
+    case "anon":
+      currentState.anonimous = action.newData as boolean;
+      break;
+    case "anonGroup":
+      currentState.anonGroup = action.newData as boolean;
+      break;
+    case "reset":
+      return { dims: [], anonimous: false, anonGroup: false } as ILegendData;
+  }
+
+  return JSON.parse(JSON.stringify(currentState));
 }
 
 export const App = ({
@@ -43,7 +67,7 @@ export const App = ({
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
 
   //Current dimension attributes data to create the legend buttons/options
-  const [legendData, setLegendData] = useState<DimAttribute[]>([]);
+  const [legendData, setLegendData] = useReducer(legendDataReducer, { dims: [], anonimous: false, anonGroup: false } as ILegendData);
 
   //Current available perspectives for the dropdowns
   const [allPerspectivesIds, setAllPerspectivesIds] = useState<PerspectiveId[]>([]);
