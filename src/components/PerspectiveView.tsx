@@ -203,8 +203,6 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
                 netMgr.nodeVisuals.selectNodes(netMgr.nodes, netMgr.nodeVisuals.selectedNodes,
                     netMgr.nodeVisuals.focusedNodes, viewOptions.legendConfig);
             }
-
-            console.log(viewOptions.legendConfig.get(`${nodeConst.anonymousGroupKey}User`));
         }
 
 

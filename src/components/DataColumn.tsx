@@ -6,7 +6,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData, anyProperty }
+import { IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData, anyProperty, IExplicitCommData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
@@ -144,10 +144,22 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                 />;
             }
             case EExplanationTypes.implicit_attributes: {
+                //Prepare the data for the stackedBarGraph
+                const array: [string, number][] = [];
+
+                const keys = Object.keys(explanation.explanation_data.data);
+                for (let i = 0; i < keys.length; ++i) {
+                    array.push([keys[i], explanation.explanation_data.data[keys[i]]]);
+                }
+
 
                 return <div>
                     <div> {explanation.explanation_data.label}</div>
                     <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
+                    <div> {<StackedBarGraph
+                        tittle={""}
+                        commData={{ map: new Map(), array: array } as IExplicitCommData}
+                    />}</div>
                 </div>
 
 
