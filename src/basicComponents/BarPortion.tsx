@@ -39,13 +39,17 @@ interface StackedBarProps {
      */
     hoverText: string,
     /**
-     * Index of this bar portion in a stacked bar.
+     * Order of this bar portion in a stacked bar.
      */
-    index: number,
+    portionOrder: number,
     /**
      * Dimensions represented in the portion.
      */
     dim: Dimensions | undefined
+    /**
+     * Index of the value of this stacked bar in its dimension. Used to know what color/shape to use.
+     */
+    dimensionIndex: number,
 }
 
 /**
@@ -54,8 +58,9 @@ interface StackedBarProps {
 export const BarPortion = ({
     percentile: value,
     hoverText,
-    index,
+    portionOrder,
     dim,
+    dimensionIndex
 }: StackedBarProps) => {
 
     const [text, setText] = useState<string>(`${value}%`);
@@ -71,7 +76,7 @@ export const BarPortion = ({
             if (width <= 14.0) {
                 setText("");
                 setSymbolActive(false);
-            } else if (width <= 29) {
+            } else if (width <= 38) {
                 setText((value.toFixed(0)).toString());
                 setSymbolActive(false);
             } else {
@@ -85,8 +90,8 @@ export const BarPortion = ({
     let style: React.CSSProperties = JSON.parse(JSON.stringify(barPortion));
 
     style.width = `${value}%`;
-    style.background = getBackgroundColor(index, dim);
-    style.color = getTextColor(index, dim);
+    style.background = getBackgroundColor(dimensionIndex, dim, portionOrder);
+    style.color = getTextColor(dimensionIndex, dim, portionOrder);
 
     hoverText = `${hoverText === "" ? "(empty)" : hoverText} ${value}%`;
 
@@ -95,21 +100,21 @@ export const BarPortion = ({
             <div className="row" style={{ alignItems: "center" }}>
                 {text}
                 <span style={{ width: "3px" }} />
-                {symbolActive === true ? getSymbol(index, dim) : ""}
+                {symbolActive === true ? getSymbol(dimensionIndex, dim, portionOrder) : ""}
             </div>
         </span>);
 };
 
-function getBackgroundColor(index: number, dim: Dimensions | undefined) {
+function getBackgroundColor(dimensionIndex: number, dim: Dimensions | undefined, portionOrder: number) {
     switch (dim) {
         case Dimensions.Color: {
-            return nodeConst.nodeDimensions.getColor(index);
+            return nodeConst.nodeDimensions.getColor(dimensionIndex);
         }
         case Dimensions.Shape: {
-            return index % 2 ? "white" : "black";
+            return portionOrder % 2 ? "white" : "black";
         }
         default: {
-            switch (index % 3) {
+            switch (portionOrder % 3) {
                 case 1: {
                     return "red";
                 }
@@ -125,20 +130,20 @@ function getBackgroundColor(index: number, dim: Dimensions | undefined) {
 }
 
 
-function getTextColor(index: number, dim: Dimensions | undefined) {
+function getTextColor(dimensionIndex: number, dim: Dimensions | undefined, portionOrder: number) {
     switch (dim) {
         case Dimensions.Color: {
-            if (index === 0) {
+            if (dimensionIndex === 0) {
                 return "white";
             } else {
                 return "black";
             }
         }
         case Dimensions.Shape: {
-            return index % 2 ? "black" : "white";
+            return portionOrder % 2 ? "black" : "white";
         }
         default: {
-            switch (index % 3) {
+            switch (portionOrder % 3) {
                 case 1: {
                     return "white";
                 }
@@ -151,15 +156,15 @@ function getTextColor(index: number, dim: Dimensions | undefined) {
 }
 
 
-function getSymbol(index: number, dim: Dimensions | undefined) {
+function getSymbol(dimensionIndex: number, dim: Dimensions | undefined, portionOrder: number) {
     switch (dim) {
         case Dimensions.Color: {
             return "";
         }
         case Dimensions.Shape: {
             return <ShapeForm
-                shape={nodeConst.nodeDimensions.getShape(index).name}
-                color={getTextColor(index, dim)}
+                shape={nodeConst.nodeDimensions.getShape(dimensionIndex).name}
+                color={getTextColor(dimensionIndex, dim, portionOrder)}
                 scale={0.95}
             />;
         }

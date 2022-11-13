@@ -7,6 +7,7 @@
 //Packages
 import React from "react";
 import { IExplicitCommData } from "../constants/perspectivesTypes";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 //Local files
 import { BarPortion } from "./BarPortion";
 
@@ -31,6 +32,8 @@ interface StackedBarGraphProps {
      * pairs (string, number) that will be represented in the stacked bar.
      */
     commData: IExplicitCommData,
+
+    dimStrat: NodeDimensionStrategy;
 }
 
 /**
@@ -39,6 +42,7 @@ interface StackedBarGraphProps {
 export const StackedBarGraph = ({
     tittle,
     commData,
+    dimStrat
 }: StackedBarGraphProps) => {
 
     const bars = new Array<React.ReactNode>();
@@ -46,12 +50,24 @@ export const StackedBarGraph = ({
 
     if (commData !== undefined && commData.array !== undefined) {
         for (let i = 0; i < commData.array.length; i++) {
+
+            let dimIndex = 0;
+            const attribute = dimStrat.attributesArray.find((value) => {
+                return value.dimension === dim;
+            })
+            if (attribute !== undefined) {
+                dimIndex = attribute.values.findIndex((value) => {
+                    return commData.array !== undefined && commData.array[i][0] === value;
+                })
+            }
+
             bars.push(
                 <BarPortion
                     key={i}
                     hoverText={commData.array[i][0]}
                     percentile={commData.array[i][1]}
-                    index={i}
+                    portionOrder={i}
+                    dimensionIndex={dimIndex}
                     dim={dim}
                 />
             );

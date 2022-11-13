@@ -15,6 +15,7 @@ import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
 import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
 import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -47,6 +48,7 @@ interface DataTableProps {
 
     hideLabel: boolean;
     state: string;
+    dimStrat: NodeDimensionStrategy | undefined;
 }
 
 /**
@@ -60,9 +62,10 @@ export const DataTable = ({
     allUsers,
     hideLabel,
     state,
+    dimStrat,
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks);
+    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks, dimStrat);
 
     return (
         <div className={state} style={getContainerStyle(state)}>
@@ -86,7 +89,8 @@ export const DataTable = ({
  * @param community source community.
  * @returns a react component with the community's panel.
  */
-function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
+function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean,
+    artworks: IArtworkData[], dimStrat: NodeDimensionStrategy | undefined) {
 
     if (community !== undefined) {
         const tittle = <div key={0} style={sectionTittleStyle}> Community Attributes </div>;
@@ -99,7 +103,8 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
         for (let i = 0; i < community.explanations.length; i++) {
             if (community.explanations[i].visible) {
-                content.push(<React.Fragment key={5 + i * 2}> {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks)} </React.Fragment>);
+                content.push(<React.Fragment key={5 + i * 2}> {getCommunityExplanation(community,
+                    community.explanations[i], allUsers, hideLabel, artworks, dimStrat)} </React.Fragment>);
                 content.push(<br key={6 + i * 2} />);
             }
         }
@@ -123,14 +128,15 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @param explanation data of the explanations to know its type and if it should be visible.
  * @returns a react component with the explanations.
  */
-function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
+function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[],
+    hideLabel: boolean, artworks: IArtworkData[], dimStrat: NodeDimensionStrategy | undefined) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
     } else {
         switch (explanation.explanation_type) {
             case EExplanationTypes.explicit_attributes: {
-                return getStackedBars(communityData);
+                return getStackedBars(communityData, dimStrat);
             }
             case EExplanationTypes.medoid: {
 
@@ -152,15 +158,23 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                     array.push([keys[i], explanation.explanation_data.data[keys[i]]]);
                 }
 
+                if (dimStrat !== undefined) {
 
-                return <div>
-                    <div> {explanation.explanation_data.label}</div>
-                    <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
-                    <div> {<StackedBarGraph
-                        tittle={""}
-                        commData={{ map: new Map(), array: array } as IExplicitCommData}
-                    />}</div>
-                </div>
+                    return <div>
+                        <div> {explanation.explanation_data.label}</div>
+                        <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
+                        <div> {<StackedBarGraph
+                            tittle={""}
+                            commData={{ map: new Map(), array: array } as IExplicitCommData}
+                            dimStrat={dimStrat}
+                        />}</div>
+                    </div>
+                } else {
+                    return <div>
+                        <div> {explanation.explanation_data.label}</div>
+                        <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
+                    </div>
+                }
 
 
             }
@@ -178,10 +192,10 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
  * @param community source community.
  * @returns a react component array with the community's stacked bar.
  */
-function getStackedBars(community: ICommunityData) {
+function getStackedBars(community: ICommunityData, dimStrat: NodeDimensionStrategy | undefined) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
-    if (community.explicitCommunityArray !== undefined) {
+    if (community.explicitCommunityArray !== undefined && dimStrat !== undefined) {
 
         for (let i = 0; i < community.explicitCommunityArray.length; i++) {
             content.push(
@@ -189,6 +203,7 @@ function getStackedBars(community: ICommunityData) {
                     key={i}
                     tittle={community.explicitCommunityArray[i][0]}
                     commData={community.explicitCommunityArray[i][1]}
+                    dimStrat={dimStrat}
                 />
             );
         }

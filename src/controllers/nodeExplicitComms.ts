@@ -160,10 +160,6 @@ export default class NodeExplicitComms {
         this.explicitData.forEach((data) => {
             data.values.sort().reverse();
         });
-
-        this.explicitData.sort((a: ExplicitData, b: ExplicitData) => {
-            return a.key < b.key ? -1 : 1;
-        });
     }
 
     /**

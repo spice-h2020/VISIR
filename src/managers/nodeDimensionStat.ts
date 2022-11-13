@@ -18,7 +18,8 @@ export default class NodeDimensionStrategy {
     strategies: GenericStrategy[];
     //Function to set the legend configuration.
     setLegendData: React.Dispatch<ILegendDataAction>;
-
+    //Current attributes
+    attributesArray: DimAttribute[]
     /**
      * Constructor of the class.
      * @param attributesArray Array with all Dimension attributes.
@@ -36,6 +37,8 @@ export default class NodeDimensionStrategy {
             type: "dims",
             newData: attributesArray
         });
+
+        this.attributesArray = attributesArray;
     }
 
     /**
