@@ -1,45 +1,11 @@
 {
-    "name": "GAM SIM-E-SIM-A (iconclass)",
-    "perspectiveId": "GAM SIM-E-SIM-A (iconclass)",
+    "name": "S-emotions-S-artworks (artist_country) agglomerative",
+    "perspectiveId": "S-emotions-S-artworks (artist_country) agglomerative",
     "communities": [
         {
-            "id": "GAM SIM-E-SIM-A (iconclass)-0",
+            "id": "S-emotions-S-artworks (artist_country)-0",
             "community-type": "implicit",
             "name": "Community 0",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "ox8G7avH"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
-                        "data": {
-                            "serenity": 50.0,
-                            "interest": 50.0
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "RQ4a2nIG",
-                "ox8G7avH"
-            ]
-        },
-        {
-            "id": "GAM SIM-E-SIM-A (iconclass)-1",
-            "community-type": "implicit",
-            "name": "Community 1",
             "explanations": [
                 {
                     "explanation_type": "medoid",
@@ -51,10 +17,9 @@
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
+                        "label": "Percentage distribution of the implicit attribute (emotions):",
                         "data": {
-                            "fear": 50.0,
-                            "serenity": 50.0
+                            "fear": 100.0
                         }
                     },
                     "visible": true
@@ -66,12 +31,54 @@
                 }
             ],
             "users": [
+                "BTKF72et",
                 "Y0WXF1LR",
-                "e4aM9WL7"
+                "anonymous",
+                "cBjFhvjx",
+                "loEoYm9R",
+                "x2AUnHqw"
             ]
         },
         {
-            "id": "GAM SIM-E-SIM-A (iconclass)-2",
+            "id": "S-emotions-S-artworks (artist_country)-1",
+            "community-type": "implicit",
+            "name": "Community 1",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "q2BDj1os"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (emotions):",
+                        "data": {
+                            "serenity": 60.0,
+                            "trust": 20.0,
+                            "love": 20.0
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "B3N0HGw4",
+                "RQ4a2nIG",
+                "Sz5Wx2XD",
+                "e4aM9WL7",
+                "q2BDj1os"
+            ]
+        },
+        {
+            "id": "S-emotions-S-artworks (artist_country)-2",
             "community-type": "implicit",
             "name": "Community 2",
             "explanations": [
@@ -85,10 +92,10 @@
                 {
                     "explanation_type": "implicit_attributes",
                     "explanation_data": {
-                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
+                        "label": "Percentage distribution of the implicit attribute (emotions):",
                         "data": {
                             "joy": 50.0,
-                            "love": 50.0
+                            "trust": 50.0
                         }
                     },
                     "visible": true
@@ -101,92 +108,21 @@
             ],
             "users": [
                 "0bAAwK14",
-                "q2BDj1os"
+                "ox8G7avH"
             ]
         },
         {
-            "id": "GAM SIM-E-SIM-A (iconclass)-3",
-            "community-type": "implicit",
-            "name": "Community 3",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "anonymous"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
-                        "data": {
-                            "sadness": 50.0,
-                            "fear": 50.0
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "BTKF72et",
-                "anonymous"
-            ]
-        },
-        {
-            "id": "GAM SIM-E-SIM-A (iconclass)-4",
-            "community-type": "implicit",
-            "name": "Community 4",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "cBjFhvjx"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Minimum percentage of users with the representative properties: 50.0 %",
-                        "data": {
-                            "fear": 50.0,
-                            "sadness": 50.0
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "cBjFhvjx",
-                "fqybaAk8"
-            ]
-        },
-        {
-            "id": "GAM SIM-E-SIM-A (iconclass)-5 (Users without community)",
+            "id": "S-emotions-S-artworks (artist_country)-3 (Users without community)",
             "community-type": "inexistent",
-            "name": "Community 5 (Users without community)",
+            "name": "Community 3 (Users without community)",
             "explanations": [],
             "users": [
-                "loEoYm9R",
-                "B3N0HGw4",
-                "x2AUnHqw",
-                "Sz5Wx2XD",
-                "6rK3p7za"
+                "6rK3p7za",
+                "fqybaAk8"
             ]
         }
     ],
-    "numberOfCommunities": 5,
+    "numberOfCommunities": 3,
     "users": [
         {
             "id": "0bAAwK14",
@@ -227,7 +163,7 @@
         {
             "id": "6rK3p7za",
             "label": "6rK3p7za",
-            "group": 5,
+            "group": 3,
             "explicit_community": {
                 "relationship_with_arts": "unknown",
                 "relationship_with_museums": "unknown"
@@ -273,10 +209,10 @@
         {
             "id": "B3N0HGw4",
             "label": "B3N0HGw4",
-            "group": 5,
+            "group": 1,
             "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
+                "relationship_with_arts": "I have a strong interest in art",
+                "relationship_with_museums": "I visit museums and exhibitions from time to time"
             },
             "interactions": [
                 {
@@ -291,7 +227,7 @@
         {
             "id": "BTKF72et",
             "label": "BTKF72et",
-            "group": 3,
+            "group": 0,
             "explicit_community": {
                 "relationship_with_arts": "unknown",
                 "relationship_with_museums": "unknown"
@@ -323,10 +259,10 @@
         {
             "id": "RQ4a2nIG",
             "label": "RQ4a2nIG",
-            "group": 0,
+            "group": 1,
             "explicit_community": {
-                "relationship_with_arts": "Non provo nessun interesse per l'arte",
-                "relationship_with_museums": "Visito raramente musei e mostre"
+                "relationship_with_arts": "I have no interest in art",
+                "relationship_with_museums": "I rarely visit museums and exhibitions"
             },
             "interactions": [
                 {
@@ -418,10 +354,10 @@
         {
             "id": "Sz5Wx2XD",
             "label": "Sz5Wx2XD",
-            "group": 5,
+            "group": 1,
             "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito di tanto in tanto musei e mostre"
+                "relationship_with_arts": "I have a strong interest in art",
+                "relationship_with_museums": "I visit museums and exhibitions from time to time"
             },
             "interactions": [
                 {
@@ -436,10 +372,10 @@
         {
             "id": "Y0WXF1LR",
             "label": "Y0WXF1LR",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
-                "relationship_with_arts": "Il mio lavoro riguarda l'arte",
-                "relationship_with_museums": "Visito spesso i musei"
+                "relationship_with_arts": "My work is about art",
+                "relationship_with_museums": "I often visit museums"
             },
             "interactions": [
                 {
@@ -454,7 +390,7 @@
         {
             "id": "anonymous",
             "label": "anonymous",
-            "group": 3,
+            "group": 0,
             "explicit_community": {
                 "relationship_with_arts": "unknown",
                 "relationship_with_museums": "unknown"
@@ -472,10 +408,10 @@
         {
             "id": "cBjFhvjx",
             "label": "cBjFhvjx",
-            "group": 4,
+            "group": 0,
             "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito spesso i musei"
+                "relationship_with_arts": "I have a strong interest in art",
+                "relationship_with_museums": "I often visit museums"
             },
             "interactions": [
                 {
@@ -532,7 +468,7 @@
         {
             "id": "fqybaAk8",
             "label": "fqybaAk8",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "relationship_with_arts": "unknown",
                 "relationship_with_museums": "unknown"
@@ -557,10 +493,10 @@
         {
             "id": "loEoYm9R",
             "label": "loEoYm9R",
-            "group": 5,
+            "group": 0,
             "explicit_community": {
-                "relationship_with_arts": "L'arte mi interessa poco",
-                "relationship_with_museums": "Visito raramente musei e mostre"
+                "relationship_with_arts": "Art interests me little",
+                "relationship_with_museums": "I rarely visit museums and exhibitions"
             },
             "interactions": [
                 {
@@ -577,7 +513,7 @@
         {
             "id": "ox8G7avH",
             "label": "ox8G7avH",
-            "group": 0,
+            "group": 2,
             "explicit_community": {
                 "relationship_with_arts": "unknown",
                 "relationship_with_museums": "unknown"
@@ -646,10 +582,10 @@
         {
             "id": "q2BDj1os",
             "label": "q2BDj1os",
-            "group": 2,
+            "group": 1,
             "explicit_community": {
-                "relationship_with_arts": "Ho un forte interesse per l'arte",
-                "relationship_with_museums": "Visito spesso i musei"
+                "relationship_with_arts": "I have a strong interest in art",
+                "relationship_with_museums": "I often visit museums"
             },
             "interactions": [
                 {
@@ -664,10 +600,10 @@
         {
             "id": "x2AUnHqw",
             "label": "x2AUnHqw",
-            "group": 5,
+            "group": 0,
             "explicit_community": {
-                "relationship_with_arts": "L'arte mi interessa poco",
-                "relationship_with_museums": "Visito raramente musei e mostre"
+                "relationship_with_arts": "Art interests me little",
+                "relationship_with_museums": "I rarely visit museums and exhibitions"
             },
             "interactions": [
                 {
@@ -685,67 +621,67 @@
         {
             "u1": "0bAAwK14",
             "u2": "6rK3p7za",
-            "value": 0.25
+            "value": 0.49
         },
         {
             "u1": "0bAAwK14",
             "u2": "B3N0HGw4",
-            "value": 0.0
+            "value": 0.56
         },
         {
             "u1": "0bAAwK14",
             "u2": "BTKF72et",
-            "value": 0.17
+            "value": 0.22
         },
         {
             "u1": "0bAAwK14",
             "u2": "RQ4a2nIG",
-            "value": 0.08
+            "value": 0.48
         },
         {
             "u1": "0bAAwK14",
             "u2": "Sz5Wx2XD",
-            "value": 0.0
+            "value": 0.56
         },
         {
             "u1": "0bAAwK14",
             "u2": "Y0WXF1LR",
-            "value": 0.0
+            "value": 0.22
         },
         {
             "u1": "0bAAwK14",
             "u2": "anonymous",
-            "value": 0.17
+            "value": 0.22
         },
         {
             "u1": "0bAAwK14",
             "u2": "cBjFhvjx",
-            "value": 0.0
+            "value": 0.22
         },
         {
             "u1": "0bAAwK14",
             "u2": "e4aM9WL7",
-            "value": 0.0
+            "value": 0.56
         },
         {
             "u1": "0bAAwK14",
             "u2": "fqybaAk8",
-            "value": 0.0
+            "value": 0.06
         },
         {
             "u1": "0bAAwK14",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 0.22
         },
         {
             "u1": "0bAAwK14",
             "u2": "ox8G7avH",
-            "value": 0.17
+            "value": 0.78
         },
         {
             "u1": "0bAAwK14",
             "u2": "q2BDj1os",
-            "value": 0.33
+            "value": 0.62
         },
         {
             "u1": "0bAAwK14",
@@ -755,142 +691,142 @@
         {
             "u1": "6rK3p7za",
             "u2": "B3N0HGw4",
-            "value": 0.0
+            "value": 0.47
         },
         {
             "u1": "6rK3p7za",
             "u2": "BTKF72et",
-            "value": 0.1
+            "value": 0.38
         },
         {
             "u1": "6rK3p7za",
             "u2": "RQ4a2nIG",
-            "value": 0.08
+            "value": 0.16
         },
         {
             "u1": "6rK3p7za",
             "u2": "Sz5Wx2XD",
-            "value": 0.0
+            "value": 0.47
         },
         {
             "u1": "6rK3p7za",
             "u2": "Y0WXF1LR",
-            "value": 0.0
+            "value": 0.38
         },
         {
             "u1": "6rK3p7za",
             "u2": "anonymous",
-            "value": 0.1
+            "value": 0.38
         },
         {
             "u1": "6rK3p7za",
             "u2": "cBjFhvjx",
-            "value": 0.0
+            "value": 0.38
         },
         {
             "u1": "6rK3p7za",
             "u2": "e4aM9WL7",
-            "value": 0.0
+            "value": 0.47
         },
         {
             "u1": "6rK3p7za",
             "u2": "fqybaAk8",
-            "value": 0.1
+            "value": 0.5
         },
         {
             "u1": "6rK3p7za",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 0.38
         },
         {
             "u1": "6rK3p7za",
             "u2": "ox8G7avH",
-            "value": 0.17
+            "value": 0.15
         },
         {
             "u1": "6rK3p7za",
             "u2": "q2BDj1os",
-            "value": 0.12
+            "value": 0.52
         },
         {
             "u1": "6rK3p7za",
             "u2": "x2AUnHqw",
-            "value": 0.08
+            "value": 0.38
         },
         {
             "u1": "B3N0HGw4",
             "u2": "BTKF72et",
-            "value": 0.0
+            "value": 0.28
         },
         {
             "u1": "B3N0HGw4",
             "u2": "RQ4a2nIG",
-            "value": 0.0
+            "value": 0.71
         },
         {
             "u1": "B3N0HGw4",
             "u2": "Sz5Wx2XD",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "Y0WXF1LR",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "B3N0HGw4",
             "u2": "anonymous",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "B3N0HGw4",
             "u2": "cBjFhvjx",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "B3N0HGw4",
             "u2": "e4aM9WL7",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "fqybaAk8",
-            "value": 0.0
+            "value": 0.34
         },
         {
             "u1": "B3N0HGw4",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "B3N0HGw4",
             "u2": "ox8G7avH",
-            "value": 0.0
+            "value": 0.66
         },
         {
             "u1": "B3N0HGw4",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "B3N0HGw4",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "BTKF72et",
             "u2": "RQ4a2nIG",
-            "value": 0.13
+            "value": 0.59
         },
         {
             "u1": "BTKF72et",
             "u2": "Sz5Wx2XD",
-            "value": 0.0
+            "value": 0.28
         },
         {
             "u1": "BTKF72et",
             "u2": "Y0WXF1LR",
-            "value": 0.0
+            "value": 0.67
         },
         {
             "u1": "BTKF72et",
@@ -900,12 +836,12 @@
         {
             "u1": "BTKF72et",
             "u2": "cBjFhvjx",
-            "value": 0.0
+            "value": 0.67
         },
         {
             "u1": "BTKF72et",
             "u2": "e4aM9WL7",
-            "value": 0.0
+            "value": 0.28
         },
         {
             "u1": "BTKF72et",
@@ -915,127 +851,127 @@
         {
             "u1": "BTKF72et",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 0.67
         },
         {
             "u1": "BTKF72et",
             "u2": "ox8G7avH",
-            "value": 0.0
+            "value": 0.34
         },
         {
             "u1": "BTKF72et",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 0.42
         },
         {
             "u1": "BTKF72et",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 0.67
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "Sz5Wx2XD",
-            "value": 0.0
+            "value": 0.71
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "Y0WXF1LR",
-            "value": 0.09
+            "value": 0.59
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "anonymous",
-            "value": 0.09
+            "value": 0.59
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "cBjFhvjx",
-            "value": 0.07
+            "value": 0.59
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "e4aM9WL7",
-            "value": 0.04
+            "value": 0.71
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "fqybaAk8",
-            "value": 0.09
+            "value": 0.16
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "loEoYm9R",
-            "value": 0.05
+            "value": 0.59
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "ox8G7avH",
-            "value": 0.23
+            "value": 0.69
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "q2BDj1os",
-            "value": 0.09
+            "value": 0.8
         },
         {
             "u1": "RQ4a2nIG",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 0.59
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "Y0WXF1LR",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "anonymous",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "cBjFhvjx",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "e4aM9WL7",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "fqybaAk8",
-            "value": 0.0
+            "value": 0.34
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "ox8G7avH",
-            "value": 0.0
+            "value": 0.66
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "Sz5Wx2XD",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "anonymous",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "cBjFhvjx",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "Y0WXF1LR",
@@ -1045,92 +981,92 @@
         {
             "u1": "Y0WXF1LR",
             "u2": "fqybaAk8",
-            "value": 0.0
+            "value": 0.62
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "ox8G7avH",
-            "value": 0.19
+            "value": 0.34
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 0.62
         },
         {
             "u1": "Y0WXF1LR",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "anonymous",
             "u2": "cBjFhvjx",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "anonymous",
             "u2": "e4aM9WL7",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "anonymous",
             "u2": "fqybaAk8",
-            "value": 0.25
+            "value": 0.62
         },
         {
             "u1": "anonymous",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "anonymous",
             "u2": "ox8G7avH",
-            "value": 0.04
+            "value": 0.34
         },
         {
             "u1": "anonymous",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 0.62
         },
         {
             "u1": "anonymous",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "cBjFhvjx",
             "u2": "e4aM9WL7",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "cBjFhvjx",
             "u2": "fqybaAk8",
-            "value": 0.75
+            "value": 0.5
         },
         {
             "u1": "cBjFhvjx",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "cBjFhvjx",
             "u2": "ox8G7avH",
-            "value": 0.0
+            "value": 0.34
         },
         {
             "u1": "cBjFhvjx",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 0.62
         },
         {
             "u1": "cBjFhvjx",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "e4aM9WL7",
@@ -1140,72 +1076,72 @@
         {
             "u1": "e4aM9WL7",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "e4aM9WL7",
             "u2": "ox8G7avH",
-            "value": 0.17
+            "value": 0.66
         },
         {
             "u1": "e4aM9WL7",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "e4aM9WL7",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 0.43
         },
         {
             "u1": "fqybaAk8",
             "u2": "loEoYm9R",
-            "value": 0.0
+            "value": 0.62
         },
         {
             "u1": "fqybaAk8",
             "u2": "ox8G7avH",
-            "value": 0.04
+            "value": 0.15
         },
         {
             "u1": "fqybaAk8",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 0.44
         },
         {
             "u1": "fqybaAk8",
             "u2": "x2AUnHqw",
-            "value": 0.25
+            "value": 0.62
         },
         {
             "u1": "loEoYm9R",
             "u2": "ox8G7avH",
-            "value": 0.0
+            "value": 0.34
         },
         {
             "u1": "loEoYm9R",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 0.62
         },
         {
             "u1": "loEoYm9R",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 1.0
         },
         {
             "u1": "ox8G7avH",
             "u2": "q2BDj1os",
-            "value": 0.0
+            "value": 0.78
         },
         {
             "u1": "ox8G7avH",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 0.34
         },
         {
             "u1": "q2BDj1os",
             "u2": "x2AUnHqw",
-            "value": 0.0
+            "value": 0.62
         }
     ],
     "artworks": [
