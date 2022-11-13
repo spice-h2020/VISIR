@@ -136,18 +136,24 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
     } else {
         switch (explanation.explanation_type) {
             case EExplanationTypes.explicit_attributes: {
-                return getStackedBars(communityData, dimStrat);
+                return <div>
+                    <hr />
+                    {getStackedBars(communityData, dimStrat)}
+                </div>
             }
             case EExplanationTypes.medoid: {
 
                 const medoid = allUsers.find((value) => { return value.id === explanation.explanation_data.id });
 
-                return <NodePanel
-                    tittle={"Medoid Attributes"}
-                    node={medoid}
-                    hideLabel={hideLabel}
-                    artworks={artworks}
-                />;
+                return <React.Fragment>
+                    <hr />
+                    <NodePanel
+                        tittle={"Medoid Attributes"}
+                        node={medoid}
+                        hideLabel={hideLabel}
+                        artworks={artworks}
+                    />
+                </React.Fragment>;
             }
             case EExplanationTypes.implicit_attributes: {
                 //Prepare the data for the stackedBarGraph
@@ -161,6 +167,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                 if (dimStrat !== undefined) {
 
                     return <div>
+                        <hr />
                         <div> {explanation.explanation_data.label}</div>
                         <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
                         <div> {<StackedBarGraph
@@ -171,6 +178,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                     </div>
                 } else {
                     return <div>
+                        <hr />
                         <div> {explanation.explanation_data.label}</div>
                         <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
                     </div>
