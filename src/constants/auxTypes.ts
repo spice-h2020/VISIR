@@ -5,6 +5,8 @@
  */
 //Package
 import { Dispatch } from "react";
+import { ILegendDataAction } from "../App";
+import { DimAttribute } from "./nodes";
 //Local files
 import { ICommunityData, IUserData } from "./perspectivesTypes";
 import { EButtonState } from "./viewOptions";
@@ -26,6 +28,15 @@ export interface IBoundingBox {
 }
 
 /**
+ * Legend data source
+ */
+export interface ILegendData {
+    dims: DimAttribute[],
+    anonimous: boolean,
+    anonGroup: boolean,
+}
+
+/**
  * Interface with a point(x,y) coordinate.
  */
 export interface IPoint {
@@ -37,7 +48,7 @@ export interface IPoint {
  * Interface with all functions that change the state of one/all perspectives in the application.
  */
 export interface IStateFunctions {
-    setLegendData: Function;
+    setLegendData: React.Dispatch<ILegendDataAction>;
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
     setSelectedObject: Dispatch<ISelectedObjectAction>;

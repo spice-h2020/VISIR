@@ -45,8 +45,10 @@ export default class NetworkController {
 
     //Id of this network
     id: string;
-    htmlRef: HTMLDivElement
+    htmlRef: HTMLDivElement;
 
+    //Ready flag
+    isReady: boolean;
     /**
      * Constructor of the class 
      * @param perspectiveData Data of this perspective
@@ -58,6 +60,8 @@ export default class NetworkController {
      */
     constructor(perspectiveData: IPerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: IStateFunctions,
         dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string) {
+
+        this.isReady = false;
 
         this.id = perspectiveData.id;
         this.htmlRef = htmlRef;
@@ -74,6 +78,9 @@ export default class NetworkController {
         this.parseEdges(this.edges, perspectiveData.similarity, viewOptions);
 
         this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
+
+        this.isReady = true;
+        this.eventsCtrl.zoomToNodes();
     }
 
     /**
@@ -88,9 +95,10 @@ export default class NetworkController {
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
 
         perspectiveData.users.forEach((user: IUserData) => {
-            explicitCtrl.parseExplicitCommunity(user, dimStrat);
+            explicitCtrl.parseExplicitCommunity(user, dimStrat, sf.setLegendData);
             nodeLocation.updateNodeGroup(user, perspectiveData.communities);
         });
+        explicitCtrl.sortExplicitData();
 
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);
         this.bbCtrl = new BoxesController(perspectiveData.communities);

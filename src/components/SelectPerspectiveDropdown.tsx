@@ -37,6 +37,8 @@ interface SelectPerspectiveProps {
     requestMan: RequestManager,
 }
 
+
+
 /**
  * Dropdown component that holds the options to add/hide perspectives to the application.
  */
@@ -112,6 +114,7 @@ export const SelectPerspectiveDropdown = ({
 function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: React.Dispatch<IbStateArrayAction>,
     setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager): React.ReactNode[] {
 
+    const maxButtonNameLength = 85;
     const buttons = new Array<React.ReactNode>();
 
     const allIdsToEdit: PerspectiveId[] = JSON.parse(JSON.stringify(allIds));
@@ -129,7 +132,8 @@ function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: 
         buttons.push(
             <Button
                 key={allIdsToEdit[i].id}
-                content={allIdsToEdit[i].name}
+                hoverText={allIdsToEdit[i].name}
+                content={allIdsToEdit[i].name.substring(0, maxButtonNameLength)}
                 state={state}
                 onClick={() => {
                     if (state === EButtonState.active) {

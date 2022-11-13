@@ -6,13 +6,16 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, ICommunityExplanation as ExplanationData, ICommunityData, EExplanationTypes, IUserData }
+import { IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData, anyProperty, IExplicitCommData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
 //Local files
 import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
+import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
+import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
+import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -45,6 +48,7 @@ interface DataTableProps {
 
     hideLabel: boolean;
     state: string;
+    dimStrat: NodeDimensionStrategy | undefined;
 }
 
 /**
@@ -58,9 +62,10 @@ export const DataTable = ({
     allUsers,
     hideLabel,
     state,
+    dimStrat,
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks);
+    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks, dimStrat);
 
     return (
         <div className={state} style={getContainerStyle(state)}>
@@ -84,29 +89,37 @@ export const DataTable = ({
  * @param community source community.
  * @returns a react component with the community's panel.
  */
-function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
-
-    const tittle = <div key={0} style={sectionTittleStyle}> Community Attributes </div>;
-    let content: React.ReactNode[] = [];
+function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean,
+    artworks: IArtworkData[], dimStrat: NodeDimensionStrategy | undefined) {
 
     if (community !== undefined) {
+        const tittle = <div key={0} style={sectionTittleStyle}> Community Attributes </div>;
+        let content: React.ReactNode[] = [];
 
         content.push(<div className="row" key={1}> <strong> Name: </strong> &nbsp; {community.name} </div>);
-        content.push(<div className="row" key={2}> {` Citizens: ${community.users.length}`} </div>);
-        content.push(<br key={3} />);
+        content.push(<div className="row" key={2}> {` Total Citizens: ${community.users.length}`} </div>);
+        content.push(<div className="row" key={23}> {` Anonimous: ${community.anonUsers.length}`} </div>);
+        content.push(<br key={4} />);
 
         for (let i = 0; i < community.explanations.length; i++) {
-            content.push(<React.Fragment key={4 + i * 2}> {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel, artworks)} </React.Fragment>);
-            content.push(<br key={5 + i * 2} />);
+            if (community.explanations[i].visible) {
+                content.push(<React.Fragment key={5 + i * 2}> {getCommunityExplanation(community,
+                    community.explanations[i], allUsers, hideLabel, artworks, dimStrat)} </React.Fragment>);
+                content.push(<br key={6 + i * 2} />);
+            }
         }
+
+        return (
+            <div style={{ borderTop: "1px #dadce0 inset", paddingTop: "3px" }} key={2}>
+                {tittle}
+                {content}
+            </div>
+        )
+    } else {
+        return <React.Fragment />
     }
 
-    return (
-        <div style={{ borderTop: "1px #dadce0 inset", paddingTop: "3px" }} key={2}>
-            {tittle}
-            {content}
-        </div>
-    )
+
 }
 
 /**
@@ -115,25 +128,63 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @param explanation data of the explanations to know its type and if it should be visible.
  * @returns a react component with the explanations.
  */
-function getCommunityExplanation(communityData: ICommunityData, explanation: ExplanationData, allUsers: IUserData[], hideLabel: boolean, artworks: IArtworkData[]) {
+function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[],
+    hideLabel: boolean, artworks: IArtworkData[], dimStrat: NodeDimensionStrategy | undefined) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
     } else {
         switch (explanation.explanation_type) {
             case EExplanationTypes.explicit_attributes: {
-                return getStackedBars(communityData);
+                return <div>
+                    <hr />
+                    {getStackedBars(communityData, dimStrat)}
+                </div>
             }
             case EExplanationTypes.medoid: {
 
-                const medioid = allUsers.find((value) => { return Number(value.id) === explanation.explanation_data.id });
+                const medoid = allUsers.find((value) => { return value.id === explanation.explanation_data.id });
 
-                return <NodePanel
-                    tittle={"Citizen Attributes"}
-                    node={medioid}
-                    hideLabel={hideLabel}
-                    artworks={artworks}
-                />;
+                return <React.Fragment>
+                    <hr />
+                    <NodePanel
+                        tittle={"Medoid Attributes"}
+                        node={medoid}
+                        hideLabel={hideLabel}
+                        artworks={artworks}
+                    />
+                </React.Fragment>;
+            }
+            case EExplanationTypes.implicit_attributes: {
+                //Prepare the data for the stackedBarGraph
+                const array: [string, number][] = [];
+
+                const keys = Object.keys(explanation.explanation_data.data);
+                for (let i = 0; i < keys.length; ++i) {
+                    array.push([keys[i], explanation.explanation_data.data[keys[i]]]);
+                }
+
+                if (dimStrat !== undefined) {
+
+                    return <div>
+                        <hr />
+                        <div> {explanation.explanation_data.label}</div>
+                        <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
+                        <div> {<StackedBarGraph
+                            tittle={""}
+                            commData={{ map: new Map(), array: array } as IExplicitCommData}
+                            dimStrat={dimStrat}
+                        />}</div>
+                    </div>
+                } else {
+                    return <div>
+                        <hr />
+                        <div> {explanation.explanation_data.label}</div>
+                        <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
+                    </div>
+                }
+
+
             }
             default: {
                 console.log("Unrecognized explanation type");
@@ -149,10 +200,10 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: Exp
  * @param community source community.
  * @returns a react component array with the community's stacked bar.
  */
-function getStackedBars(community: ICommunityData) {
+function getStackedBars(community: ICommunityData, dimStrat: NodeDimensionStrategy | undefined) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
-    if (community.explicitCommunityArray !== undefined) {
+    if (community.explicitCommunityArray !== undefined && dimStrat !== undefined) {
 
         for (let i = 0; i < community.explicitCommunityArray.length; i++) {
             content.push(
@@ -160,9 +211,14 @@ function getStackedBars(community: ICommunityData) {
                     key={i}
                     tittle={community.explicitCommunityArray[i][0]}
                     commData={community.explicitCommunityArray[i][1]}
+                    dimStrat={dimStrat}
                 />
             );
         }
+    } else {
+        content.push(
+            <div key={0} > All users' attributes are unknown</div>
+        );
     }
 
     return content;
@@ -178,4 +234,32 @@ function getContainerStyle(currentState: string): React.CSSProperties {
     }
 
     return newStyle;
+}
+
+function getImplicitDataClouds(data: anyProperty): React.ReactNode {
+    try {
+        const array = [];
+        const keys = Object.keys(data);
+
+        for (let i = 0; i < keys.length; i++) {
+            array[i] = { value: keys[i], count: data[keys[i]] };
+        }
+
+        return (
+            <div>
+                <span style={{
+                    height: "10px",
+                    display: "block",
+                }} />
+                <WordCloudGraph
+                    data={array}
+                />
+                <SingleTreeMap
+                    data={array}
+                />
+            </div>);
+    } catch (e: any) {
+        console.log("Error while creating a wordCloud from implicit attributes data");
+        console.log(e);
+    }
 }

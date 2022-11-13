@@ -3,6 +3,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
+import { ILegendDataAction } from "../App";
 import { DimAttribute, Dimensions } from "../constants/nodes"
 import { IUserData } from "../constants/perspectivesTypes";
 //Local files
@@ -16,13 +17,14 @@ export default class NodeDimensionStrategy {
     //Array with all available strategies.
     strategies: GenericStrategy[];
     //Function to set the legend configuration.
-    setLegendData: Function;
-
+    setLegendData: React.Dispatch<ILegendDataAction>;
+    //Current attributes
+    attributesArray: DimAttribute[]
     /**
      * Constructor of the class.
      * @param attributesArray Array with all Dimension attributes.
      */
-    constructor(attributesArray: DimAttribute[], setLegendData: Function) {
+    constructor(attributesArray: DimAttribute[], setLegendData: React.Dispatch<ILegendDataAction>) {
         this.setLegendData = setLegendData;
 
         this.strategies = new Array<GenericStrategy>();
@@ -31,7 +33,12 @@ export default class NodeDimensionStrategy {
         this.strategies.push(new ShapeStrategy(attributesArray));
         this.strategies.push(new BorderStrategy(attributesArray));
 
-        this.setLegendData(attributesArray);
+        this.setLegendData({
+            type: "dims",
+            newData: attributesArray
+        });
+
+        this.attributesArray = attributesArray;
     }
 
     /**
@@ -70,6 +77,9 @@ export default class NodeDimensionStrategy {
             }
         });
 
-        this.setLegendData(attributes);
+        this.setLegendData({
+            type: "dims",
+            newData: attributes
+        });
     }
 }

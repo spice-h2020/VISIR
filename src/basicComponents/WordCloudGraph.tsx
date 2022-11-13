@@ -15,7 +15,9 @@ const tagCloudStyle: React.CSSProperties = {
     cursor: "default",
     backgroundColor: "white",
     width: "80%",
-    margin: "auto"
+    margin: "auto",
+
+    textAlign: "center",
 }
 
 interface WordCloudProps {

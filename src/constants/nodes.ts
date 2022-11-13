@@ -36,6 +36,10 @@ export interface DimAttribute {
  * Constant values of configuration for the nodes.
  */
 export const nodeConst = {
+    //Id of the node that is a group of completely anonimous users
+    anonymousGroupKey: "anonymous",
+    //Value of an explicit community without value. When all explicit communities are equal to this, the user will be unknown
+    unknownCommunityValue: "unknown",
 
     //--- Node circular location Values ---
     groupsBaseDistance: 40,
@@ -48,6 +52,7 @@ export const nodeConst = {
     defaultSize: 15,
     medoidSize: 25,
     selectedSize: 35,
+    anonimousSizeIncrease: 5,
 
     //Default value for a background color when the explicit community doesnt change it.
     defaultColor: "rgb(30, 236, 164, 1)",
@@ -55,7 +60,7 @@ export const nodeConst = {
     noFocusColor: { background: "rgba(155, 155, 155, 0.3)", border: "rgba(100, 100, 100, 0.3)" },
 
     //Default shape in case explicit community doesnt change it.
-    defaultShape: { name: "dot", vAdjust: -35, selectedVAdjust: -40 } as shapeData,
+    defaultShape: { name: "hexagon", vAdjust: -35 } as shapeData,
 
     defaultBorderWidth: 0,
     selectedBorderWidth: 2,

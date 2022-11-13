@@ -3,7 +3,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
+import { ECommunityType, ICommunityData, IUserData } from "../constants/perspectivesTypes";
 import { IBoundingBox } from "../constants/auxTypes";
 
 /**
@@ -33,7 +33,10 @@ const configuration = {
         }, {
             color: "rgba(10, 10, 10, 0.6)", border: "rgba(0, 0, 0, 1)", name: "Black" //black
         }
-    ]
+    ],
+    inexistentColor: {
+        color: "rgba(0, 0, 0, 0.0)", border: "rgba(0, 0, 0, 0)", name: "Transparent" //black
+    }
 }
 
 export default class BoxesController {
@@ -67,7 +70,12 @@ export default class BoxesController {
         if (this.comData[group].bb === undefined) {
 
             this.comData[group].bb = nodeBB;
-            this.comData[group].bb.color = configuration.color[group % configuration.color.length];
+
+            if (this.comData[group].type !== ECommunityType.inexistent) {
+                this.comData[group].bb.color = configuration.color[group % configuration.color.length];
+            } else {
+                this.comData[group].bb.color = configuration.inexistentColor;
+            }
 
         } else {
             if (nodeBB.left < this.comData[group].bb.left)

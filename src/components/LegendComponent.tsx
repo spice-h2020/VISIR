@@ -10,11 +10,12 @@
 import { DimAttribute, Dimensions, nodeConst } from '../constants/nodes';
 import { EButtonState } from '../constants/viewOptions';
 //Packages
-import React from "react";
+import React, { useEffect } from "react";
 //Local files
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
 import { ColorStain } from '../basicComponents/ColorStain';
+import { ILegendData } from '../constants/auxTypes';
 
 const columnTittle: React.CSSProperties = {
     whiteSpace: "nowrap",
@@ -42,7 +43,7 @@ interface LegendTooltipProps {
     /**
      * Data source to create the legend content.
      */
-    legendData: DimAttribute[];
+    legendData: ILegendData | undefined;
     /**
      * Configuration of the legend with the explicit communities that should be hidden/shown.
      */
@@ -63,14 +64,24 @@ export const LegendComponent = ({
     onLegendClick,
 }: LegendTooltipProps) => {
 
-    if (legendData !== undefined && legendData.length > 0) {
+    if (legendData !== undefined && legendData.dims !== undefined && legendData.dims.length > 0) {
 
-        const legendRows: React.ReactNode[] = getLegendButtons(legendData, legendConf, onLegendClick);
+        const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick);
+        const anonRows: React.ReactNode = getAnonButtons(legendData.anonGroup, legendData.anonimous, legendConf, onLegendClick);
 
+        const legendContent =
+            <React.Fragment key={0}>
+                <div key={1} className='row' style={{ direction: "ltr" }}>
+                    {legendRows}
+                </div>
+                <div key={2} className='row' style={{ direction: "ltr" }}>
+                    {anonRows}
+                </div>
+            </React.Fragment>
         return (
             <div className="legend-container">
                 <Dropdown
-                    items={[<div className='row' style={{ direction: "ltr" }} key={-2}>{legendRows}</div>]}
+                    items={[legendContent]}
                     content="Legend"
                     extraClassButton="plus primary"
                     closeWhenOutsideClick={false}
@@ -180,6 +191,45 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
         default:
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
+}
+
+function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map<string, boolean>,
+    onClick: Function): React.ReactNode {
+
+    let output: React.ReactNode = undefined;
+
+    if (anonymous) {
+        let buttonState: EButtonState = EButtonState.unactive;
+        const currentState = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
+
+        if (currentState !== undefined && currentState) {
+            buttonState = EButtonState.active;
+        };
+
+        output =
+            <div key={2} className='col'>
+                <h3 key={1} style={columnTittle} title="Anonimous Users" >  Anonimous Users </h3>
+                <Button
+                    key={2}
+                    content={<div className='row'>
+                        <div> Users without any explicit data </div>
+                        <span style={{ width: "5px" }} />
+                        <img alt={"Anonimous user icon"} src={"../../images/unknown.svg"} style={{ height: "20px" }}></img>
+                    </div>}
+                    state={buttonState}
+                    extraClassName={"btn-legend btn-dropdown"}
+                    onClick={() => {
+                        legendConf.set(`${nodeConst.anonymousGroupKey}User`, !currentState);
+
+                        const newMap = new Map(JSON.parse(
+                            JSON.stringify(Array.from(legendConf))
+                        ));
+
+                        onClick(newMap);
+                    }} />
+            </div >;
+    }
+    return output;
 }
 
 function getLegendColumnStyle(isLast: boolean): React.CSSProperties {

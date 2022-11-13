@@ -17,6 +17,7 @@ import React, { useEffect, useState, useRef } from "react";
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/nodeDimensionStat';
 import { DataTable } from './DataColumn';
+import { nodeConst } from '../constants/nodes';
 
 const networkContainer: React.CSSProperties = {
     margin: "0px 1.5% 15px 1.5%",
@@ -160,6 +161,7 @@ export const PerspectiveView = ({
 
             hideLabel={viewOptions.hideLabels}
             state={networkState}
+            dimStrat={dimStrat}
         />
 
         return (
@@ -195,7 +197,7 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
     setSelectedObject: Function, focusedId: string | undefined) {
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             if (netMgr.nodeVisuals.selectedNodes.length === 0) {
                 netMgr.nodeVisuals.colorAllNodes(netMgr.nodes, viewOptions.legendConfig);
             } else {
@@ -203,22 +205,24 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
                     netMgr.nodeVisuals.focusedNodes, viewOptions.legendConfig);
             }
         }
+
+
     }, [viewOptions.legendConfig, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             netMgr.nodeVisuals.toggleNodeLabels(netMgr.nodes, viewOptions.hideLabels);
         }
     }, [viewOptions.hideLabels, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             netMgr.edgeCtrl.toggleHideEdges(viewOptions.hideEdges);
         }
     }, [viewOptions.hideEdges, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: focusedId });
 
             netMgr.edgeCtrl.updateEdgesThreshold(viewOptions.edgeThreshold);
@@ -227,7 +231,7 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
     }, [viewOptions.edgeThreshold, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined) {
+        if (netMgr !== undefined && netMgr.isReady) {
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: focusedId });
 
             netMgr.edgeCtrl.updateDeletedEdges(viewOptions);
