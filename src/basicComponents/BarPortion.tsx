@@ -144,7 +144,8 @@ function getTextColor(dimensionIndex: number, dim: Dimensions | undefined, porti
         }
         default: {
             switch (portionOrder % 3) {
-                case 1: {
+                case 1:
+                case 2: {
                     return "white";
                 }
                 default: {
