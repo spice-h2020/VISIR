@@ -48,6 +48,10 @@ export const nodeConst = {
     //--- Default Configuration Values ---
     zoomDuration: 400,
 
+    //--- URL to anonymous icon ---
+    defaultAnon: "./images/unknown.svg",
+    colorlessAnon: "./images/colorlessUnknown.svg",
+
     //Sizes.
     defaultSize: 15,
     medoidSize: 25,

@@ -28,7 +28,7 @@ export default class ShapeStrategy extends GenericStrategy {
                 }
             } else if (user.isAnonimous) {
                 user["shape"] = "image";
-                user["image"] = "./images/unknown.svg";
+                user["image"] = nodeConst.defaultAnon;
 
             } else {
                 const value = user.explicit_community[this.attr.key];
@@ -75,7 +75,7 @@ export default class ShapeStrategy extends GenericStrategy {
         user.size = user.isAnonimous ? nodeConst.defaultSize + nodeConst.anonimousSizeIncrease : nodeConst.defaultSize;
 
         if (user.isAnonimous && !user.isAnonGroup) {
-            user["image"] = "./images/colorlessUnknown.svg";
+            user["image"] = nodeConst.colorlessAnon;
         }
     }
 }

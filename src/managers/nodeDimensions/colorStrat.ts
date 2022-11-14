@@ -55,6 +55,9 @@ export default class ColorStrategy extends GenericStrategy {
                 user.color.background = nodeConst.noFocusColor.background;
             }
         }
+        if (user.isAnonGroup) {
+            user.color.background = nodeConst.noFocusColor.background;
+        }
 
     }
 
