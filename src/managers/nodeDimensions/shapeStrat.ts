@@ -28,7 +28,7 @@ export default class ShapeStrategy extends GenericStrategy {
                 }
             } else if (user.isAnonimous) {
                 user["shape"] = "image";
-                user["image"] = "../../images/unknown.svg";
+                user["image"] = "./images/unknown.svg";
 
             } else {
                 const value = user.explicit_community[this.attr.key];

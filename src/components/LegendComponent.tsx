@@ -208,13 +208,13 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
 
         output =
             <div key={2} className='col'>
-                <h3 key={1} style={columnTittle} title="Anonimous Users" >  Anonimous Users </h3>
+                <h3 key={1} style={columnTittle} title="Anonymous Users" >  Anonimous Users </h3>
                 <Button
                     key={2}
                     content={<div className='row'>
                         <div> Users without any explicit data </div>
                         <span style={{ width: "5px" }} />
-                        <img alt={"Anonimous user icon"} src={"../../images/unknown.svg"} style={{ height: "20px" }}></img>
+                        <img alt={"Anonimous user icon"} src={"./images/unknown.svg"} style={{ height: "20px" }}></img>
                     </div>}
                     state={buttonState}
                     extraClassName={"btn-legend btn-dropdown"}
