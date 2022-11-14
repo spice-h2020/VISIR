@@ -223,9 +223,6 @@ export default class EventsCtrl {
      * @param community Community selected
      */
     boundingBoxClicked(community: ICommunityData) {
-        console.log("Click");
-        console.log(this.netCtrl.nodeVisuals.legendConfig);
-
         this.selectedObject = community;
 
         const selectedNodes = community.users;
@@ -233,9 +230,6 @@ export default class EventsCtrl {
 
         this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, []);
         this.netCtrl.edgeCtrl.unselectEdges();
-
-        console.log("end click");
-        console.log(this.netCtrl.nodeVisuals.legendConfig);
     }
 
     /**
@@ -253,9 +247,6 @@ export default class EventsCtrl {
      * Function executed when a community/boundingbox of an external network has been clicked/selected.
      */
     nothingClicked() {
-        console.log("no click");
-        console.log(this.netCtrl.nodeVisuals.legendConfig);
-
         this.netCtrl.nodeVisuals.colorAllNodes(this.netCtrl.nodes);
         this.netCtrl.edgeCtrl.unselectEdges();
 
