@@ -6,11 +6,10 @@
  */
 //Packages
 import ReactApexChart from "react-apexcharts";
+import { IExplicitCommValue } from "../constants/perspectivesTypes";
 
 interface SingleTreeMapProps {
-    data: {
-        props?: {}; value: string, count: number
-    }[];
+    data: IExplicitCommValue[];
 }
 
 /**
@@ -35,7 +34,11 @@ export const SingleTreeMap = ({
     const series = [];
     const serieData = [];
 
-    for (let obj of data) {
+    for (const obj of data) {
+        if (obj.count <= 10) {
+            obj.count *= 100;
+        }
+
         serieData.push({
             x: obj.value,
             y: obj.count

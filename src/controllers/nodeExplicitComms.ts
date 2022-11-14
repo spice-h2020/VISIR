@@ -6,7 +6,7 @@
 //Constants
 import { ILegendDataAction } from "../App";
 import { nodeConst } from "../constants/nodes";
-import { ICommunityExplanation, ICommunityData, EExplanationTypes, IExplicitCommData, IUserData } from "../constants/perspectivesTypes";
+import { ICommunityExplanation, ICommunityData, EExplanationTypes, IExplicitCommData, IUserData, IExplicitCommValue } from "../constants/perspectivesTypes";
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
@@ -115,7 +115,7 @@ export default class NodeExplicitComms {
 
                 node.isMedoid = this.medoidNodes.includes(node.id);
 
-                this.updateCommunitiesData(key, node);
+                this.updateExplicitCommunityCount(key, node);
             });
         }
     }
@@ -167,39 +167,37 @@ export default class NodeExplicitComms {
      * @param key key of the explicit community
      * @param node source node
      */
-    updateCommunitiesData(key: string, node: IUserData) {
+    updateExplicitCommunityCount(key: string, node: IUserData) {
         const group = node.implicit_community;
 
-        //Check if the parent map is defined
-        if (this.communitiesData[group].explicitCommunityMap === undefined) {
-            //Create the parent map
-            this.communitiesData[group].explicitCommunityMap = new Map<string, IExplicitCommData>();
+        //Check if the main map is defined
+        if (this.communitiesData[group].explicitDataMap === undefined) {
+            //Create the main map
+            this.communitiesData[group].explicitDataMap = new Map<string, Map<string, number>>();
 
             //Define the child map of this key
             const newValue = new Map<string, number>();
             newValue.set(node.explicit_community[key], 1);
 
             //Include the new child map in the parent map
-            this.communitiesData[group].explicitCommunityMap.set(key, { map: newValue });
+            this.communitiesData[group].explicitDataMap.set(key, newValue);
 
         } else {
 
-            //Check if the current key has a value in the parent map
-            const currentComm = this.communitiesData[group].explicitCommunityMap.get(key);
+            //Check if the child map of this key exist
+            const childMap = this.communitiesData[group].explicitDataMap.get(key);
 
-            if (currentComm !== undefined) {
-                //Check if the child map of the current key includes this value
-                let currentValue = currentComm.map.get(node.explicit_community[key]);
+            if (childMap !== undefined) {
+                //Check current count of the current value
+                let currentCount = childMap.get(node.explicit_community[key]);
 
-                if (currentValue !== undefined) {
+                if (currentCount !== undefined) {
                     //Update the count in the child map
-                    let currentCount = currentComm.map.get(node.explicit_community[key]);
-                    if (currentCount !== undefined)
-                        currentComm.map.set(node.explicit_community[key], ++currentCount);
+                    childMap.set(node.explicit_community[key], ++currentCount);
 
                 } else {
-                    //Include the new value in the child map
-                    currentComm.map.set(node.explicit_community[key], 1);
+                    //Set the value to a starting value
+                    childMap.set(node.explicit_community[key], 1);
                 }
             } else {
 
@@ -208,7 +206,7 @@ export default class NodeExplicitComms {
                 newValue.set(node.explicit_community[key], 1);
 
                 //Include the new child map in the parent map
-                this.communitiesData[group].explicitCommunityMap.set(key, { map: newValue });
+                this.communitiesData[group].explicitDataMap.set(key, newValue);
             }
         }
     }
@@ -219,17 +217,19 @@ export default class NodeExplicitComms {
      */
     calcExplicitPercentile(dimStrat: NodeDimensionStrategy) {
         for (let community of this.communitiesData) {
-            if (community.explicitCommunityMap !== undefined) {
-                community.explicitCommunityMap.forEach(function (parentValue, key) {
+            community.explicitDataArray = [];
+
+            if (community.explicitDataMap !== undefined) {
+                community.explicitDataMap.forEach(function (map, key) {
 
                     //Change the count to percentile
-                    parentValue.map.forEach(function (value, key) {
+                    map.forEach(function (value, key) {
                         let newValue = Math.round((value / (community.users.length - community.anonUsers.length)) * 100);
-                        parentValue.map.set(key, newValue);
+                        map.set(key, newValue);
                     });
 
-                    //Sort the map from highest percentile to lowest
-                    parentValue.array = Array.from(parentValue.map).sort(
+                    //Create a sorted array from the map data
+                    const sortedArray = Array.from(map).sort(
                         (a: [string, number], b: [string, number]) => {
                             if (a[1] > b[1])
                                 return -1;
@@ -238,15 +238,29 @@ export default class NodeExplicitComms {
                         }
                     );
 
-                    const dimension = dimStrat.strategies.filter((strat) => {
-                        if (strat !== undefined && strat.attr !== undefined && strat.attr.key !== undefined)
-                            return strat.attr.key === key
-                        else return false;
-                    });
+                    const dimAttribute = dimStrat.attributesArray.find((value) => { return value.key === key });
 
-                    parentValue.dimension = dimension === undefined ? undefined : dimension[0].attr.dimension;
+                    //Create the array with the relations (value -> percentil)
+                    const wordInputArray: IExplicitCommValue[] = [];
+
+                    for (let i = 0; i < sortedArray.length; i++) {
+                        let dimIndex = dimAttribute?.values.findIndex((value) => { return value === sortedArray[i][0] }) ?? 0;
+
+                        wordInputArray.push(
+                            {
+                                value: sortedArray[i][0],
+                                count: sortedArray[i][1],
+                                props: dimIndex,
+                            }
+                        );
+                    }
+
+                    community.explicitDataArray!.push({
+                        key: key,
+                        values: wordInputArray,
+                        dimension: dimAttribute?.dimension
+                    });
                 })
-                community.explicitCommunityArray = Array.from(community.explicitCommunityMap);
             }
         }
     }

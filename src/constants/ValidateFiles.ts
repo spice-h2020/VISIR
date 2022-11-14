@@ -303,9 +303,21 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
         if (arg.explanation_data.data === undefined) {
             throw Error(`Data attribute is undefined`);
         }
-        if (typeof (arg.explanation_data) !== "object") {
+        if (typeof (arg.explanation_data.data) !== "object") {
             throw Error(`Data attribute is not an object`);
         }
+
+        const keys = Object.keys(arg.explanation_data.data);
+        const newData: types.IExplicitCommValue[] = [];
+
+        for (let i = 0; i < keys.length; i++) {
+            newData.push({
+                value: keys[i],
+                count: arg.explanation_data.data[keys[i]]
+            });
+        }
+
+        arg.explanation_data.data = newData;
 
         return arg;
     } catch (e: any) {

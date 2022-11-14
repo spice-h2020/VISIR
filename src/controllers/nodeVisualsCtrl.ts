@@ -147,12 +147,14 @@ export default class NodeVisualsCtrl {
      * @return Returns an array with the id of the focusedNodes that exist in this network. Its used to filter what 
      * nodes are from this network and what are from other networks
      */
-    selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[], legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
+    selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[],
+        legendConfig: Map<string, boolean> | undefined = undefined) {
+
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = selectedNodes;
         this.focusedNodes = focusedId;
 
-        this.legendConfig = legendConfig.size === 0 ? this.legendConfig : legendConfig;
+        this.legendConfig = legendConfig === undefined ? this.legendConfig : legendConfig;
 
         const existingNodes: string[] = [];
 
@@ -185,13 +187,12 @@ export default class NodeVisualsCtrl {
      * @param allNodes all nodes of the network
      * @param legendConfig Optional parameters that if included, will update the legend configuration of this network
      */
-    colorAllNodes(allNodes: DataSetNodes, legendConfig: Map<string, boolean> = new Map<string, boolean>()) {
+    colorAllNodes(allNodes: DataSetNodes, legendConfig: Map<string, boolean> | undefined = undefined) {
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = [];
         this.focusedNodes = [];
 
-        this.legendConfig = legendConfig.size === 0 ? this.legendConfig : legendConfig;
-        console.log(this.legendConfig);
+        this.legendConfig = legendConfig === undefined ? this.legendConfig : legendConfig;
 
         allNodes.forEach((node) => {
             if (this.isHidedByLegend(node as IUserData)) {

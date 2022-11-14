@@ -8,6 +8,7 @@
 //Packages
 import React from 'react';
 import { TagCloud } from 'react-tagcloud'
+import { IExplicitCommValue } from '../constants/perspectivesTypes';
 
 const tagCloudStyle: React.CSSProperties = {
     maxHeight: "200px",
@@ -23,9 +24,7 @@ const tagCloudStyle: React.CSSProperties = {
 interface WordCloudProps {
     minSize?: number;
     maxSize?: number;
-    data: {
-        props?: {}; value: string, count: number
-    }[];
+    data: IExplicitCommValue[];
 }
 
 /**
@@ -38,9 +37,13 @@ export const WordCloudGraph = ({
 }: WordCloudProps) => {
 
     for (let obj of data) {
-        obj.props = {
-            title: `${obj.count * 100}%`
+
+        if (obj.count <= 10) {
+            obj.count *= 100;
         }
+
+        obj.props = { title: `${obj.count}%` }
+
     }
 
     return (
