@@ -75,7 +75,7 @@ export default class ShapeStrategy extends GenericStrategy {
         user.size = user.isAnonimous ? nodeConst.defaultSize + nodeConst.anonimousSizeIncrease : nodeConst.defaultSize;
 
         if (user.isAnonimous && !user.isAnonGroup) {
-            user["image"] = "../../images/colorlessUnknown.svg";
+            user["image"] = "./images/colorlessUnknown.svg";
         }
     }
 }
