@@ -6,7 +6,10 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData, anyProperty, IExplicitCommData, IExplicitCommValue }
+import {
+    IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData
+    , IExplicitCommData, IExplicitCommValue
+}
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
@@ -16,7 +19,6 @@ import { NodePanel } from "./NodePanel";
 import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
 import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
-import { Dimensions } from "../constants/nodes";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",

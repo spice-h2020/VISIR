@@ -6,7 +6,7 @@
 //Constants
 import { ILegendDataAction } from "../App";
 import { nodeConst } from "../constants/nodes";
-import { ICommunityExplanation, ICommunityData, EExplanationTypes, IExplicitCommData, IUserData, IExplicitCommValue } from "../constants/perspectivesTypes";
+import { ICommunityExplanation, ICommunityData, EExplanationTypes, IUserData, IExplicitCommValue } from "../constants/perspectivesTypes";
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
