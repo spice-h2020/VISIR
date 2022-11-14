@@ -152,7 +152,7 @@ export default class NodeVisualsCtrl {
         this.selectedNodes = selectedNodes;
         this.focusedNodes = focusedId;
 
-        this.legendConfig = legendConfig === undefined ? this.legendConfig : legendConfig;
+        this.legendConfig = legendConfig.size === 0 ? this.legendConfig : legendConfig;
 
         const existingNodes: string[] = [];
 
@@ -191,6 +191,7 @@ export default class NodeVisualsCtrl {
         this.focusedNodes = [];
 
         this.legendConfig = legendConfig.size === 0 ? this.legendConfig : legendConfig;
+        console.log(this.legendConfig);
 
         allNodes.forEach((node) => {
             if (this.isHidedByLegend(node as IUserData)) {
