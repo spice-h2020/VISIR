@@ -19,6 +19,7 @@ const tagCloudStyle: React.CSSProperties = {
     margin: "auto",
 
     textAlign: "center",
+    fontWeight: "bold",
 }
 
 interface WordCloudProps {
@@ -52,6 +53,7 @@ export const WordCloudGraph = ({
                 tags={data}
                 minSize={minSize}
                 maxSize={maxSize}
+                colorOptions={{ luminosity: "dark" }}
             />
         </div>
     );

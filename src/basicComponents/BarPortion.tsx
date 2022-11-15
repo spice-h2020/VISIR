@@ -77,7 +77,7 @@ export const BarPortion = ({
 
     return (
         <span ref={htmlRef} title={hoverTitle} className="bar-portion" style={style}>
-            <div className="row" style={{ alignItems: "center" }}>
+            <div className="row" style={{ alignItems: "center", fontWeight: "bold" }}>
                 {text}
                 <span style={{ width: "3px" }} />
                 {isSymbolActive === true ? getSymbol(dimensionIndex, dim, portionOrder) : ""}

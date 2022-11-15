@@ -36,31 +36,28 @@ export default class EventsCtrl {
     //Current data of the selected object
     selectedObject?: IUserData | ICommunityData;
 
-    zoomQueue: string[][];
-    isZooming: boolean;
+    /*When the network resizes, resize event is fired about 50 times in a single resize, this timer helps to only get
+    one call*/
+    resizeEventTimer!: ReturnType<typeof setTimeout>;
 
     constructor(netController: NetworkController, sf: IStateFunctions, focusedNetId: string) {
-        this.zoomQueue = new Array<Array<string>>();
-        this.isZooming = false;
-
         this.netCtrl = netController;
         this.focusedNetId = focusedNetId;
 
         this.netCtrl.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
 
-        this.netCtrl.net.on("animationFinished", () => {
-
-            this.isZooming = false;
-            this.zoomToNodes();
-            this.updateTooltipPosition(sf.setSelectedObject)
-        });
-
+        this.netCtrl.net.on("animationFinished", () => { this.updateTooltipPosition(sf.setSelectedObject) });
         this.netCtrl.net.on("zoom", () => this.updateTooltipPosition(sf.setSelectedObject));
         this.netCtrl.net.on("dragging", () => this.updateTooltipPosition(sf.setSelectedObject));
 
         this.netCtrl.net.on("resize", () => {
 
-            this.addZoomToQueue([])
+            if (this.resizeEventTimer !== undefined) {
+                clearTimeout(this.resizeEventTimer);
+            }
+            this.resizeEventTimer = setTimeout(() => {
+                this.zoomToNodes([])
+            }, 250);
         });
 
         this.netCtrl.net.on("click", (event) => this.click(event, sf));
@@ -137,35 +134,18 @@ export default class EventsCtrl {
 
     /**
      * Zoom to fit all nodes in the networs. 
-     * @param nodes ID of all nodes to zoom to. If empty, zoom to all nodes
+     * @param nodes ID of the nodes to zoom to. If empty, vis.js will zoom to all nodes
      */
-    addZoomToQueue(nodes: string[]) {
+    zoomToNodes(nodes: string[]) {
 
-        if (this.zoomQueue.length <= 2 || nodes.length !== 0) {
-            this.zoomQueue.push(nodes);
+        const fitOptions: FitOptions = {
+            animation: {
+                duration: nodeConst.zoomDuration
+            } as TimelineAnimationType,
+            nodes: nodes
         }
 
-
-        if (this.netCtrl.isReady && !this.isZooming) {
-            this.zoomToNodes();
-        }
-    }
-
-    zoomToNodes() {
-        const nodes = this.zoomQueue.shift();
-
-        if (nodes !== undefined) {
-            this.isZooming = true;
-
-            const fitOptions: FitOptions = {
-                animation: {
-                    duration: nodeConst.zoomDuration
-                } as TimelineAnimationType,
-                nodes: nodes
-            }
-
-            this.netCtrl.net.fit(fitOptions);
-        }
+        this.netCtrl.net.fit(fitOptions);
     }
 
     /**
@@ -210,7 +190,7 @@ export default class EventsCtrl {
 
             const selectedNodes = this.netCtrl.edgeCtrl.selectEdges(node.id);
 
-            this.addZoomToQueue(selectedNodes);
+            this.zoomToNodes(selectedNodes);
 
             this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, [node.id]);
         }
@@ -226,7 +206,7 @@ export default class EventsCtrl {
         this.selectedObject = community;
 
         const selectedNodes = community.users;
-        this.addZoomToQueue(selectedNodes);
+        this.zoomToNodes(selectedNodes);
 
         this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, []);
         this.netCtrl.edgeCtrl.unselectEdges();
@@ -240,7 +220,7 @@ export default class EventsCtrl {
         const localNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, [], community.users);
 
         this.netCtrl.edgeCtrl.unselectEdges();
-        this.addZoomToQueue(localNodes);
+        this.zoomToNodes(localNodes);
     }
 
     /**
@@ -250,7 +230,7 @@ export default class EventsCtrl {
         this.netCtrl.nodeVisuals.colorAllNodes(this.netCtrl.nodes);
         this.netCtrl.edgeCtrl.unselectEdges();
 
-        this.addZoomToQueue([]);
+        this.zoomToNodes([]);
     }
 
 }

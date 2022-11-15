@@ -49,6 +49,7 @@ export default class NetworkController {
 
     //Ready flag
     isReady: boolean;
+
     /**
      * Constructor of the class 
      * @param perspectiveData Data of this perspective
@@ -80,7 +81,7 @@ export default class NetworkController {
         this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
 
         this.isReady = true;
-        this.eventsCtrl.zoomToNodes();
+        this.eventsCtrl.zoomToNodes([]);
     }
 
     /**
