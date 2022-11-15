@@ -8,7 +8,7 @@
 //Packages
 import React from 'react';
 import { TagCloud } from 'react-tagcloud'
-import { IExplicitCommValue } from '../constants/perspectivesTypes';
+import { IStringNumberRelation } from '../constants/perspectivesTypes';
 
 const tagCloudStyle: React.CSSProperties = {
     maxHeight: "200px",
@@ -25,7 +25,7 @@ const tagCloudStyle: React.CSSProperties = {
 interface WordCloudProps {
     minSize?: number;
     maxSize?: number;
-    data: IExplicitCommValue[];
+    data: IStringNumberRelation[];
 }
 
 /**

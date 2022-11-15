@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { WordCloudGraph } from '../basicComponents/WordCloudGraph';
-import { IExplicitCommValue } from '../constants/perspectivesTypes';
+import { IStringNumberRelation } from '../constants/perspectivesTypes';
 
 import '../style/base.css';
 
@@ -12,7 +12,7 @@ export default {
 
 const Template: ComponentStory<typeof WordCloudGraph> = (args) => <WordCloudGraph {...args} />;
 
-const data: IExplicitCommValue[] = [
+const data: IStringNumberRelation[] = [
     { value: "Serenity", count: 0.25 },
     { value: "Anticipation", count: 1 },
     { value: "Trust", count: 1 },

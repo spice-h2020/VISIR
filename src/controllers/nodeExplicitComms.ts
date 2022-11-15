@@ -6,7 +6,7 @@
 //Constants
 import { ILegendDataAction } from "../App";
 import { nodeConst } from "../constants/nodes";
-import { ICommunityExplanation, ICommunityData, EExplanationTypes, IUserData, IExplicitCommValue } from "../constants/perspectivesTypes";
+import { ICommunityExplanation, ICommunityData, EExplanationTypes, IUserData, IStringNumberRelation } from "../constants/perspectivesTypes";
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStat";
 
@@ -241,7 +241,7 @@ export default class NodeExplicitComms {
                     const dimAttribute = dimStrat.attributesArray.find((value) => { return value.key === key });
 
                     //Create the array with the relations (value -> percentil)
-                    const wordInputArray: IExplicitCommValue[] = [];
+                    const wordInputArray: IStringNumberRelation[] = [];
 
                     for (let i = 0; i < sortedArray.length; i++) {
                         let dimIndex = dimAttribute?.values.findIndex((value) => { return value === sortedArray[i][0] }) ?? 0;

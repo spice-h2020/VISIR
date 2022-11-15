@@ -11,7 +11,7 @@ import { Dimensions, nodeConst } from "../constants/nodes";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
 import { ShapeForm } from "./ShapeForm";
-import { IExplicitCommValue } from "../constants/perspectivesTypes";
+import { IStringNumberRelation } from "../constants/perspectivesTypes";
 
 const barPortionStyle: React.CSSProperties = {
     display: "flex",
@@ -31,7 +31,7 @@ const barPortionStyle: React.CSSProperties = {
 }
 
 interface StackedBarProps {
-    data: IExplicitCommValue;
+    data: IStringNumberRelation;
     /**
      * Dimensions represented in the portion.
      */

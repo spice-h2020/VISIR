@@ -8,7 +8,7 @@
 //Constants
 import {
     IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData
-    , IExplicitCommData, IExplicitCommValue
+    , IExplicitCommData, IStringNumberRelation
 }
     from "../constants/perspectivesTypes";
 //Packages
@@ -179,7 +179,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                             <div>
                                 <StackedBarGraph
                                     tittle={""}
-                                    data={explanation.explanation_data.data as IExplicitCommValue[]}
+                                    data={explanation.explanation_data.data as IStringNumberRelation[]}
                                     dim={undefined}
                                 />
                             </div>
@@ -252,7 +252,7 @@ function getContainerStyle(currentState: string): React.CSSProperties {
  * @param data parameters that will be represented in the cloud
  * @returns a react node with two diferent word clouds visualizations.
  */
-export function getWordClouds(data: IExplicitCommValue[]): React.ReactNode {
+export function getWordClouds(data: IStringNumberRelation[]): React.ReactNode {
     try {
         return (
             <React.Fragment>

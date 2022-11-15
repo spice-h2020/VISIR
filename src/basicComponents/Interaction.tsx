@@ -7,12 +7,10 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { anyProperty, IArtworkData, IInteraction } from "../constants/perspectivesTypes";
+import { IArtworkData, IStringNumberRelation, IInteraction } from "../constants/perspectivesTypes";
 //Packages
 import { useEffect, useState } from "react";
-
-import { WordCloudGraph } from "./WordCloudGraph";
-import { SingleTreeMap } from "./SingleTreeMap";
+import { getWordClouds } from "../components/DataColumn";
 
 const interactionBox: React.CSSProperties = {
     borderLeft: "1px solid var(--grayLineColor)",
@@ -89,13 +87,12 @@ export const InteractionPanel = ({
         );
 };
 
-function getEmotions(extracted_emotions: any): React.ReactNode {
-    if (extracted_emotions !== undefined && Object.keys(extracted_emotions).length > 0) {
-
+function getEmotions(extracted_emotions: IStringNumberRelation[] | undefined): React.ReactNode {
+    if (extracted_emotions !== undefined) {
         return (
             <div>
                 <strong> Makes me feel:</strong>
-                {getEmotionsCloud(extracted_emotions)}
+                {getWordClouds(extracted_emotions)}
             </div>);
 
     } else {
@@ -103,32 +100,4 @@ function getEmotions(extracted_emotions: any): React.ReactNode {
     }
 }
 
-/**
- * Creates a words cloud based on the emotions parameters of the interaction. Currently it creates two diferent
- * "word clouds" while iterating over what one is better.
- * @param emotions Format {(string): (number)}[]. The string is the name of the emotion, the number is the percentile of
- * feeling of the emotion.
- * @returns returns a react component with 2 diferent "word clouds".
- */
-function getEmotionsCloud(emotions: anyProperty): React.ReactNode {
-    const array = [];
-    const keys = Object.keys(emotions);
 
-    for (let i = 0; i < keys.length; i++) {
-        array[i] = { value: keys[i], count: emotions[keys[i]] };
-    }
-
-    return (
-        <div>
-            <span style={{
-                height: "10px",
-                display: "block",
-            }} />
-            <WordCloudGraph
-                data={array}
-            />
-            <SingleTreeMap
-                data={array}
-            />
-        </div>);
-}

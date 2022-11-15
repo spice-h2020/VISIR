@@ -80,15 +80,16 @@ export enum ECommunityType {
  */
 export interface IExplicitCommData {
     key: string;
-    values: IExplicitCommValue[];
+    values: IStringNumberRelation[];
     dimension?: Dimensions;
 }
 
 /**
- * Interface with the relation "value -> amount of users" of an explicit community and a props property
- * to add extra configuration to the visualization tool. 
+ * Interface with the relation "value -> number" where in the example of an explicit community, it means the value
+ * of the explicit community and the amount of users with such value. 
+ * The props property is used to add extra configuration to the visualization tool. 
  */
-export interface IExplicitCommValue {
+export interface IStringNumberRelation {
     //The Word to be represented
     value: string,
     //The value of the word in the cloud
@@ -136,7 +137,7 @@ export interface IUserData extends anyProperty {
 export interface IInteraction extends anyProperty {
     artwork_id: string;
     feelings: string;
-    extracted_emotions: anyProperty;
+    extracted_emotions?: IStringNumberRelation[];
 }
 
 /**

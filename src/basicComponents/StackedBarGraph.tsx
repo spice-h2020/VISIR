@@ -7,7 +7,7 @@
 //Packages
 import React from "react";
 import { Dimensions } from "../constants/nodes";
-import { IExplicitCommValue } from "../constants/perspectivesTypes";
+import { IStringNumberRelation } from "../constants/perspectivesTypes";
 //Local files
 import { BarPortion } from "./BarPortion";
 
@@ -36,7 +36,7 @@ interface StackedBarGraphProps {
      * pairs (string, number) that will be represented in the stacked bar. Props must include the index of the dimension
      * for graphs of attributes that have a dimension.
      */
-    data: IExplicitCommValue[],
+    data: IStringNumberRelation[],
 }
 
 /**

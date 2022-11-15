@@ -6,10 +6,10 @@
  */
 //Packages
 import ReactApexChart from "react-apexcharts";
-import { IExplicitCommValue } from "../constants/perspectivesTypes";
+import { IStringNumberRelation } from "../constants/perspectivesTypes";
 
 interface SingleTreeMapProps {
-    data: IExplicitCommValue[];
+    data: IStringNumberRelation[];
 }
 
 /**

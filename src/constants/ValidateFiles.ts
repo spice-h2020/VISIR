@@ -308,7 +308,7 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
         }
 
         const keys = Object.keys(arg.explanation_data.data);
-        const newData: types.IExplicitCommValue[] = [];
+        const newData: types.IStringNumberRelation[] = [];
 
         for (let i = 0; i < keys.length; i++) {
             newData.push({
@@ -368,7 +368,7 @@ function isUserDataValid(arg: any): types.IUserData {
         delete arg.group;
 
         if (arg.explicit_community === undefined) {
-            throw Error(`Explicit community of the user (${arg.id}) is undefined`);
+            arg.explicit_community = {};
         }
 
         if (typeof (arg.explicit_community) !== "object") {
@@ -376,7 +376,7 @@ function isUserDataValid(arg: any): types.IUserData {
         }
 
         if (arg.interactions === undefined) {
-            arg.interactions = "";
+            arg.interactions = [];
         }
 
         const nInteractions = Object.keys(arg.interactions).length;
@@ -426,8 +426,22 @@ function isInteractionValid(arg: any): types.IInteraction {
             }
         }
 
-        if (arg.extracted_emotions === undefined) {
-            arg.extracted_emotions = "";
+        if (arg.extracted_emotions !== undefined) {
+            try {
+                const array: types.IStringNumberRelation[] = [];
+                const keys = Object.keys(arg.extracted_emotions);
+
+                for (let i = 0; i < keys.length; i++) {
+                    array.push({
+                        value: keys[i],
+                        count: arg.extracted_emotions[keys[i]]
+                    });
+                }
+
+                arg.extracted_emotions = array;
+            } catch (e: any) {
+                throw Error(`Error while trying to parse extracted emotions data: ${e.message}`);
+            }
         }
 
         return arg;
@@ -435,6 +449,7 @@ function isInteractionValid(arg: any): types.IInteraction {
         throw Error(`Interaction data is not valid: ${e.message}`);
     }
 }
+
 function isSimilarityDataValid(arg: any): types.IEdgeData | undefined {
     try {
 
