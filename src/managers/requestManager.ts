@@ -130,7 +130,7 @@ export default class RequestManager {
      * @returns {Object} returns the information of all perspectives
      */
     getAllPerspectives() {
-        const perspectiveFilesName = this.usingAPI ? "/perspectives/all" : "dataList.json";
+        const perspectiveFilesName = this.usingAPI ? "/index" : "dataList.json";
 
         return this.axios.get(perspectiveFilesName, {
             params: {}
