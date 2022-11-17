@@ -26,7 +26,7 @@ export function validatePerspectiveIDfile(arg: any): types.PerspectiveId[] {
         }
 
         if (arg.length === undefined || arg.length <= 0) {
-            throw Error(`Perspectives Ids and names file does not have any perspective`);
+            arg.length = 0;
         }
 
         for (let i = 0; i < arg.length; i++) {
@@ -235,30 +235,32 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
         }
         arg.explanation_type = types.EExplanationTypes[arg.explanation_type];
 
-        if (arg.explanation_data === undefined) {
-            throw Error(`Explanation_data is undefined`);
-        }
-        if (typeof (arg.explanation_data) !== "object") {
-            throw Error(`Explanation_data is not an object or an array`);
-        }
-
-        if (arg.visible === undefined) {
-            arg.visible = false;
-        } else {
-            if (typeof (arg.visible) !== "boolean") {
-                throw Error(`Visible is not a boolean`);
+        if (arg.explanation_type !== types.EExplanationTypes.explicit_attributes) {
+            if (arg.explanation_data === undefined) {
+                throw Error(`Explanation_data is undefined`);
             }
-        }
-
-        switch (arg.explanation_type) {
-            //Explicit attributes doesnt require a validation
-            case types.EExplanationTypes.medoid: {
-                arg = isMedoidExplanationValid(arg);
-                break;
+            if (typeof (arg.explanation_data) !== "object") {
+                throw Error(`Explanation_data is not an object or an array`);
             }
-            case types.EExplanationTypes.implicit_attributes: {
-                arg = isImplicitAttributesExplanationValid(arg);
-                break;
+
+            if (arg.visible === undefined) {
+                arg.visible = false;
+            } else {
+                if (typeof (arg.visible) !== "boolean") {
+                    throw Error(`Visible is not a boolean`);
+                }
+            }
+
+            switch (arg.explanation_type) {
+                //Explicit attributes doesnt require a validation
+                case types.EExplanationTypes.medoid: {
+                    arg = isMedoidExplanationValid(arg);
+                    break;
+                }
+                case types.EExplanationTypes.implicit_attributes: {
+                    arg = isImplicitAttributesExplanationValid(arg);
+                    break;
+                }
             }
         }
 
@@ -303,9 +305,21 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
         if (arg.explanation_data.data === undefined) {
             throw Error(`Data attribute is undefined`);
         }
-        if (typeof (arg.explanation_data) !== "object") {
+        if (typeof (arg.explanation_data.data) !== "object") {
             throw Error(`Data attribute is not an object`);
         }
+
+        const keys = Object.keys(arg.explanation_data.data);
+        const newData: types.IStringNumberRelation[] = [];
+
+        for (let i = 0; i < keys.length; i++) {
+            newData.push({
+                value: keys[i],
+                count: arg.explanation_data.data[keys[i]]
+            });
+        }
+
+        arg.explanation_data.data = newData;
 
         return arg;
     } catch (e: any) {
@@ -356,7 +370,7 @@ function isUserDataValid(arg: any): types.IUserData {
         delete arg.group;
 
         if (arg.explicit_community === undefined) {
-            throw Error(`Explicit community of the user (${arg.id}) is undefined`);
+            arg.explicit_community = {};
         }
 
         if (typeof (arg.explicit_community) !== "object") {
@@ -364,7 +378,7 @@ function isUserDataValid(arg: any): types.IUserData {
         }
 
         if (arg.interactions === undefined) {
-            arg.interactions = "";
+            arg.interactions = [];
         }
 
         const nInteractions = Object.keys(arg.interactions).length;
@@ -414,8 +428,22 @@ function isInteractionValid(arg: any): types.IInteraction {
             }
         }
 
-        if (arg.extracted_emotions === undefined) {
-            arg.extracted_emotions = "";
+        if (arg.extracted_emotions !== undefined) {
+            try {
+                const array: types.IStringNumberRelation[] = [];
+                const keys = Object.keys(arg.extracted_emotions);
+
+                for (let i = 0; i < keys.length; i++) {
+                    array.push({
+                        value: keys[i],
+                        count: arg.extracted_emotions[keys[i]]
+                    });
+                }
+
+                arg.extracted_emotions = array;
+            } catch (e: any) {
+                throw Error(`Error while trying to parse extracted emotions data: ${e.message}`);
+            }
         }
 
         return arg;
@@ -423,6 +451,7 @@ function isInteractionValid(arg: any): types.IInteraction {
         throw Error(`Interaction data is not valid: ${e.message}`);
     }
 }
+
 function isSimilarityDataValid(arg: any): types.IEdgeData | undefined {
     try {
 

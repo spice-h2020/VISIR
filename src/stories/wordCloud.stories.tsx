@@ -1,5 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { WordCloudGraph } from '../basicComponents/WordCloudGraph';
+import { IStringNumberRelation } from '../constants/perspectivesTypes';
 
 import '../style/base.css';
 
@@ -11,7 +12,7 @@ export default {
 
 const Template: ComponentStory<typeof WordCloudGraph> = (args) => <WordCloudGraph {...args} />;
 
-const data = [
+const data: IStringNumberRelation[] = [
     { value: "Serenity", count: 0.25 },
     { value: "Anticipation", count: 1 },
     { value: "Trust", count: 1 },
@@ -25,5 +26,3 @@ export const WordCloud = Template.bind({});
 WordCloud.args = {
     data: data
 };
-
-

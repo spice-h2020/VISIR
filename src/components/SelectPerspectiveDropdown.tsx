@@ -15,12 +15,21 @@
 import { EButtonState } from "../constants/viewOptions"
 import { bStateArrayReducer, EbuttonStateArrayAction, IbStateArrayAction } from "../constants/auxTypes";
 //Packages
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
 import RequestManager from "../managers/requestManager";
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from "../constants/perspectivesTypes";
+
+const buttonText: React.CSSProperties = {
+    width: "90%",
+    float: "left",
+    textAlign: "center",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
+}
 
 interface SelectPerspectiveProps {
     //tittle of the dropdown.
@@ -52,6 +61,8 @@ export const SelectPerspectiveDropdown = ({
 }: SelectPerspectiveProps) => {
 
     const [states, setStates] = useReducer(bStateArrayReducer, []);
+    const [text, setText] = useState<string>(tittle);
+
 
     /*Init all dropdown items to unactive except the active perspectives that will be active or disabled depending on
     their position and what position does this dropdown owns. */
@@ -59,32 +70,42 @@ export const SelectPerspectiveDropdown = ({
         if (allIds !== undefined) {
             setStates({ action: EbuttonStateArrayAction.reset, index: allIds.length, newState: EButtonState.unactive });
 
+            let hasPerspective = false;
             for (let i = 0; i < allIds.length; i++) {
                 if (allIds[i].isActive !== PerspectiveActiveState.unactive) {
 
                     if (allIds[i].isActive === PerspectiveActiveState.left) {
-                        if (isLeftDropdown)
+                        if (isLeftDropdown) {
+                            hasPerspective = true;
+                            setText(allIds[i].name);
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.active });
-                        else
+                        } else {
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.disabled });
-
+                        }
                     } else if (allIds[i].isActive === PerspectiveActiveState.right) {
-                        if (!isLeftDropdown)
+                        if (!isLeftDropdown) {
+                            hasPerspective = true;
+                            setText(allIds[i].name);
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.active });
-                        else
+                        } else {
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.disabled });
+                        }
                     }
                 }
             }
+
+            if (!hasPerspective) {
+                setText(tittle);
+            }
         }
-    }, [allIds, isLeftDropdown]);
+    }, [allIds, isLeftDropdown, tittle]);
 
     if (allIds === undefined || states.length === 0) {
         return (
             <Dropdown
                 items={[]}
                 content="No available perspectives"
-                extraClassButton="primary down-arrow"
+                extraClassButton="primary down-arrow fixedWidth-15vw"
             />
         );
     }
@@ -94,8 +115,12 @@ export const SelectPerspectiveDropdown = ({
     return (
         <Dropdown
             items={perspectivesButtons}
-            content={tittle}
-            extraClassButton="primary down-arrow"
+            content={
+                <div style={buttonText}>
+                    {text}
+                </div>}
+            extraClassButton="primary down-arrow fixedWidth-15vw"
+            hoverText={text}
         />
     );
 };

@@ -5,7 +5,6 @@
  */
 //Package
 import { Dispatch } from "react";
-import { ILegendDataAction } from "../App";
 import { DimAttribute } from "./nodes";
 //Local files
 import { ICommunityData, IUserData } from "./perspectivesTypes";
@@ -63,7 +62,30 @@ export interface ISelectedObject {
     sourceID?: string;
 }
 
+export interface ILegendDataAction {
+    type: "dims" | "anon" | "anonGroup" | "reset";
+    newData: boolean | DimAttribute[];
+}
+
 //#region Reducer types/function
+
+export function legendDataReducer(currentState: ILegendData, action: ILegendDataAction) {
+    switch (action.type) {
+        case "dims":
+            currentState.dims = action.newData as DimAttribute[];
+            break;
+        case "anon":
+            currentState.anonimous = action.newData as boolean;
+            break;
+        case "anonGroup":
+            currentState.anonGroup = action.newData as boolean;
+            break;
+        case "reset":
+            return { dims: [], anonimous: false, anonGroup: false } as ILegendData;
+    }
+
+    return JSON.parse(JSON.stringify(currentState));
+}
 
 //#region Selected Object
 /**

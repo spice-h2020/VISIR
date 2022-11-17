@@ -2,7 +2,6 @@
  * @fileoverview This file contains diferent interfaces and classes related with the perspectives.
  * @author Marco Expósito Pérez
  */
-
 import { Dimensions } from "./nodes";
 
 /**
@@ -47,6 +46,9 @@ export interface IPerspectiveData {
 
 /**
  * Interface of the data of a community.
+ * 
+ * The map exist to easily calculate the initial user count fo each community. Then that info is translated
+ * to an array for easier iteration during the execution of the app.
  */
 export interface ICommunityData extends anyProperty {
     id: string;
@@ -56,9 +58,13 @@ export interface ICommunityData extends anyProperty {
     anonUsers: string[];
     type: ECommunityType;
 
-    //The string of the map represents the name of the explicit community.
-    explicitCommunityMap: Map<string, IExplicitCommData>;
-    explicitCommunityArray?: [string, IExplicitCommData][];
+    /**
+     * The string of the main map is the key of the explicit community, the string of the child map is one of the possible
+     * values of an explicit community, the number is the amount of user with such value.
+     */
+    explicitDataMap: Map<string, Map<string, number>>;
+
+    explicitDataArray?: IExplicitCommData[];
 }
 
 /**
@@ -70,14 +76,26 @@ export enum ECommunityType {
 }
 
 /**
- * Interface with the relation "value -> amount of users" data of an explicit community.
- * The map and the array shows the same information. The string is the value of the explicit community, 
- * number is the amount of users that has that value.
+ * Interface with the all the data related to a single key of an explicit community
  */
 export interface IExplicitCommData {
-    map: Map<string, number>;
-    array?: [string, number][];
+    key: string;
+    values: IStringNumberRelation[];
     dimension?: Dimensions;
+}
+
+/**
+ * Interface with the relation "value -> number" where in the example of an explicit community, it means the value
+ * of the explicit community and the amount of users with such value. 
+ * The props property is used to add extra configuration to the visualization tool. 
+ */
+export interface IStringNumberRelation {
+    //The Word to be represented
+    value: string,
+    //The value of the word in the cloud
+    count: number,
+    //Additional configuration
+    props?: any,
 }
 
 /**
@@ -119,7 +137,7 @@ export interface IUserData extends anyProperty {
 export interface IInteraction extends anyProperty {
     artwork_id: string;
     feelings: string;
-    extracted_emotions: anyProperty;
+    extracted_emotions?: IStringNumberRelation[];
 }
 
 /**

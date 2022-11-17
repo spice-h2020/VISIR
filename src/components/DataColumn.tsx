@@ -6,7 +6,10 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData, anyProperty, IExplicitCommData }
+import {
+    IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData
+    , IExplicitCommData, IStringNumberRelation
+}
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
@@ -15,7 +18,7 @@ import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
 import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
 import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
-import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -136,24 +139,26 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
     } else {
         switch (explanation.explanation_type) {
             case EExplanationTypes.explicit_attributes: {
-                return <div>
-                    <hr />
-                    {getStackedBars(communityData, dimStrat)}
-                </div>
+                return (
+                    <div>
+                        <hr />
+                        {getStackedBars(communityData.explicitDataArray)}
+                    </div>);
             }
             case EExplanationTypes.medoid: {
 
                 const medoid = allUsers.find((value) => { return value.id === explanation.explanation_data.id });
 
-                return <React.Fragment>
-                    <hr />
-                    <NodePanel
-                        tittle={"Medoid Attributes"}
-                        node={medoid}
-                        hideLabel={hideLabel}
-                        artworks={artworks}
-                    />
-                </React.Fragment>;
+                return (
+                    <React.Fragment>
+                        <hr />
+                        <NodePanel
+                            tittle={"Medoid Attributes"}
+                            node={medoid}
+                            hideLabel={hideLabel}
+                            artworks={artworks}
+                        />
+                    </React.Fragment>);
             }
             case EExplanationTypes.implicit_attributes: {
                 //Prepare the data for the stackedBarGraph
@@ -166,22 +171,26 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
 
                 if (dimStrat !== undefined) {
 
-                    return <div>
-                        <hr />
-                        <div> {explanation.explanation_data.label}</div>
-                        <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
-                        <div> {<StackedBarGraph
-                            tittle={""}
-                            commData={{ map: new Map(), array: array } as IExplicitCommData}
-                            dimStrat={dimStrat}
-                        />}</div>
-                    </div>
+                    return (
+                        <div>
+                            <hr />
+                            <div> {explanation.explanation_data.label}</div>
+                            <div> {getWordClouds(explanation.explanation_data.data)}</div>
+                            <div>
+                                <StackedBarGraph
+                                    tittle={""}
+                                    data={explanation.explanation_data.data as IStringNumberRelation[]}
+                                    dim={undefined}
+                                />
+                            </div>
+                        </div>);
                 } else {
-                    return <div>
-                        <hr />
-                        <div> {explanation.explanation_data.label}</div>
-                        <div> {getImplicitDataClouds(explanation.explanation_data.data)}</div>
-                    </div>
+                    return (
+                        <div>
+                            <hr />
+                            <div> {explanation.explanation_data.label}</div>
+                            <div> {getWordClouds(explanation.explanation_data.data)}</div>
+                        </div>);
                 }
 
 
@@ -195,23 +204,25 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
     }
 }
 
+
+
 /**
  * Returns all stacked bar graphs of a community.
  * @param community source community.
  * @returns a react component array with the community's stacked bar.
  */
-function getStackedBars(community: ICommunityData, dimStrat: NodeDimensionStrategy | undefined) {
+function getStackedBars(data: IExplicitCommData[] | undefined) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
-    if (community.explicitCommunityArray !== undefined && dimStrat !== undefined) {
+    if (data !== undefined && data.length > 0) {
 
-        for (let i = 0; i < community.explicitCommunityArray.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             content.push(
                 <StackedBarGraph
                     key={i}
-                    tittle={community.explicitCommunityArray[i][0]}
-                    commData={community.explicitCommunityArray[i][1]}
-                    dimStrat={dimStrat}
+                    tittle={data[i].key}
+                    data={data[i].values}
+                    dim={data[i].dimension}
                 />
             );
         }
@@ -236,30 +247,29 @@ function getContainerStyle(currentState: string): React.CSSProperties {
     return newStyle;
 }
 
-function getImplicitDataClouds(data: anyProperty): React.ReactNode {
+/**
+ * Creates two word cloud graphs
+ * @param data parameters that will be represented in the cloud
+ * @returns a react node with two diferent word clouds visualizations.
+ */
+export function getWordClouds(data: IStringNumberRelation[]): React.ReactNode {
     try {
-        const array = [];
-        const keys = Object.keys(data);
-
-        for (let i = 0; i < keys.length; i++) {
-            array[i] = { value: keys[i], count: data[keys[i]] };
-        }
-
         return (
-            <div>
+            <React.Fragment>
                 <span style={{
                     height: "10px",
                     display: "block",
                 }} />
                 <WordCloudGraph
-                    data={array}
+                    data={data}
                 />
                 <SingleTreeMap
-                    data={array}
+                    data={data}
                 />
-            </div>);
+            </React.Fragment>);
     } catch (e: any) {
         console.log("Error while creating a wordCloud from implicit attributes data");
         console.log(e);
+        return <React.Fragment />
     }
 }

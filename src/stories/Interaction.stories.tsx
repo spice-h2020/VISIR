@@ -33,11 +33,11 @@ export const ExampleA = Template.bind({});
 const interaction: IInteraction = {
   artwork_id: '1',
   feelings: 'scettico',
-  extracted_emotions: {
-    "Serenity": 0.7,
-    "Trust": 0.3,
-    "Fear": 0.5
-  }
+  extracted_emotions: [
+    { value: "Serenity", count: 0.7 },
+    { value: "Trust", count: 0.3 },
+    { value: "Fear", count: 0.5 }
+  ]
 }
 
 ExampleA.args = {
@@ -51,12 +51,12 @@ export const ExampleB = Template.bind({});
 const interactionB: IInteraction = {
   artwork_id: '2',
   feelings: 'Vociare, odori, curiosità, calore',
-  extracted_emotions: {
-    "Surprise": 0.622342,
-    "Anger": 1,
-    "Disgust": 1,
-    "Love": 1
-  }
+  extracted_emotions: [
+    { value: "Surprise", count: 0.62 },
+    { value: "Anger", count: 1 },
+    { value: "Disgust", count: 1 },
+    { value: "Love", count: 1 }
+  ]
 }
 
 ExampleB.args = {

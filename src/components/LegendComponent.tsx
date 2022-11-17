@@ -10,7 +10,7 @@
 import { DimAttribute, Dimensions, nodeConst } from '../constants/nodes';
 import { EButtonState } from '../constants/viewOptions';
 //Packages
-import React, { useEffect } from "react";
+import React from "react";
 //Local files
 import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';

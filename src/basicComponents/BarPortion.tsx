@@ -11,8 +11,9 @@ import { Dimensions, nodeConst } from "../constants/nodes";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
 import { ShapeForm } from "./ShapeForm";
+import { IStringNumberRelation } from "../constants/perspectivesTypes";
 
-const barPortion: React.CSSProperties = {
+const barPortionStyle: React.CSSProperties = {
     display: "flex",
     height: "100%",
 
@@ -30,80 +31,78 @@ const barPortion: React.CSSProperties = {
 }
 
 interface StackedBarProps {
-    /**
-     * Tittle/value of the graph.
-     */
-    percentile: number,
-    /**
-     * Text to show when hovering a bar portion.
-     */
-    hoverText: string,
-    /**
-     * Order of this bar portion in a stacked bar.
-     */
-    portionOrder: number,
+    data: IStringNumberRelation;
     /**
      * Dimensions represented in the portion.
      */
     dim: Dimensions | undefined
     /**
-     * Index of the value of this stacked bar in its dimension. Used to know what color/shape to use.
+     * In case there is a dimension, the index of this data in the dimension map. Used to know what's the color/shape 
      */
     dimensionIndex: number,
+    /**
+     * The order of this portion in the whole barGraph
+     */
+    portionOrder: number,
+
 }
 
 /**
  * UI component that creates a portion of a stacked bar graph.
  */
 export const BarPortion = ({
-    percentile: value,
-    hoverText,
-    portionOrder,
+    data,
     dim,
-    dimensionIndex
+    dimensionIndex,
+    portionOrder
 }: StackedBarProps) => {
 
-    const [text, setText] = useState<string>(`${value}%`);
-    const [symbolActive, setSymbolActive] = useState<boolean>(true);
+    const [text, setText] = useState<string>(`${data.count}%`);
+    const [isSymbolActive, setSymbolActive] = useState<boolean>(true);
 
     const htmlRef = useRef(null);
 
-    //Remove the inner text if the width of the portion is too small
+
     useEffect(() => {
-        if (htmlRef !== null && htmlRef.current !== null) {
-            const width = (htmlRef.current as HTMLElement).clientWidth;
+        clampTextInsidePortion(htmlRef, setText, setSymbolActive, data.count);
+    }, [htmlRef, data, data.count]);
 
-            if (width <= 14.0) {
-                setText("");
-                setSymbolActive(false);
-            } else if (width <= 38) {
-                setText((value.toFixed(0)).toString());
-                setSymbolActive(false);
-            } else {
-                setText(`${value}%`);
-                setSymbolActive(true);
-            }
-        }
+    let style: React.CSSProperties = JSON.parse(JSON.stringify(barPortionStyle));
 
-    }, [htmlRef, value]);
-
-    let style: React.CSSProperties = JSON.parse(JSON.stringify(barPortion));
-
-    style.width = `${value}%`;
+    style.width = `${data.count}%`;
     style.background = getBackgroundColor(dimensionIndex, dim, portionOrder);
     style.color = getTextColor(dimensionIndex, dim, portionOrder);
 
-    hoverText = `${hoverText === "" ? "(empty)" : hoverText} ${value}%`;
+    const hoverTitle = `${data.value === "" ? "(empty)" : data.value} ${data.count}%`;
 
     return (
-        <span ref={htmlRef} title={hoverText} className="bar-portion" style={style}>
-            <div className="row" style={{ alignItems: "center" }}>
+        <span ref={htmlRef} title={hoverTitle} className="bar-portion" style={style}>
+            <div className="row" style={{ alignItems: "center", fontWeight: "bold" }}>
                 {text}
                 <span style={{ width: "3px" }} />
-                {symbolActive === true ? getSymbol(dimensionIndex, dim, portionOrder) : ""}
+                {isSymbolActive === true ? getSymbol(dimensionIndex, dim, portionOrder) : ""}
             </div>
         </span>);
 };
+
+function clampTextInsidePortion(htmlRef: React.MutableRefObject<null>, setText: React.Dispatch<React.SetStateAction<string>>,
+    setSymbolActive: React.Dispatch<React.SetStateAction<boolean>>, count: number) {
+
+    if (htmlRef !== null && htmlRef.current !== null) {
+        const width = (htmlRef.current as HTMLElement).clientWidth;
+
+        if (width <= 14.0) {
+            setText("");
+            setSymbolActive(false);
+        } else if (width <= 38) {
+            setText((count.toFixed(0)).toString());
+            setSymbolActive(false);
+        } else {
+            setText(`${count}%`);
+            setSymbolActive(true);
+        }
+    }
+}
 
 function getBackgroundColor(dimensionIndex: number, dim: Dimensions | undefined, portionOrder: number) {
     switch (dim) {

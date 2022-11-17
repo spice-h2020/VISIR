@@ -8,6 +8,7 @@
 //Packages
 import React from 'react';
 import { TagCloud } from 'react-tagcloud'
+import { IStringNumberRelation } from '../constants/perspectivesTypes';
 
 const tagCloudStyle: React.CSSProperties = {
     maxHeight: "200px",
@@ -18,14 +19,13 @@ const tagCloudStyle: React.CSSProperties = {
     margin: "auto",
 
     textAlign: "center",
+    fontWeight: "bold",
 }
 
 interface WordCloudProps {
     minSize?: number;
     maxSize?: number;
-    data: {
-        props?: {}; value: string, count: number
-    }[];
+    data: IStringNumberRelation[];
 }
 
 /**
@@ -38,9 +38,13 @@ export const WordCloudGraph = ({
 }: WordCloudProps) => {
 
     for (let obj of data) {
-        obj.props = {
-            title: `${obj.count * 100}%`
+
+        if (obj.count <= 10) {
+            obj.count *= 100;
         }
+
+        obj.props = { title: `${obj.count}%` }
+
     }
 
     return (
@@ -49,6 +53,7 @@ export const WordCloudGraph = ({
                 tags={data}
                 minSize={minSize}
                 maxSize={maxSize}
+                colorOptions={{ luminosity: "dark" }}
             />
         </div>
     );

@@ -3,7 +3,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ILegendDataAction } from "../App";
+import { ILegendDataAction } from "../constants/auxTypes";
 import { DimAttribute, Dimensions } from "../constants/nodes"
 import { IUserData } from "../constants/perspectivesTypes";
 //Local files

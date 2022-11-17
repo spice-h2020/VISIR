@@ -16,7 +16,7 @@ import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network"
 import { DataSet } from "vis-data";
 //Local Files
 import BoxesController from "./boxesController";
-import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 import NodeLocation from "./nodeLocation";
 import NodeExplicitComms from "./nodeExplicitComms";
 import NodeVisualsCtrl from "./nodeVisualsCtrl";
@@ -49,6 +49,7 @@ export default class NetworkController {
 
     //Ready flag
     isReady: boolean;
+
     /**
      * Constructor of the class 
      * @param perspectiveData Data of this perspective
@@ -80,7 +81,7 @@ export default class NetworkController {
         this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
 
         this.isReady = true;
-        this.eventsCtrl.zoomToNodes();
+        this.eventsCtrl.zoomToNodes([]);
     }
 
     /**

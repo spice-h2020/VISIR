@@ -6,8 +6,8 @@
  */
 //Packages
 import React from "react";
-import { IExplicitCommData } from "../constants/perspectivesTypes";
-import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import { Dimensions } from "../constants/nodes";
+import { IStringNumberRelation } from "../constants/perspectivesTypes";
 //Local files
 import { BarPortion } from "./BarPortion";
 
@@ -25,15 +25,18 @@ const barContainer: React.CSSProperties = {
 
 interface StackedBarGraphProps {
     /**
-     * Tittle of the graph.
+     * Key/tittle of the data represented in the graph.
      */
     tittle: string,
     /**
-     * pairs (string, number) that will be represented in the stacked bar.
+     * Dimension of the data represented in the graph.
      */
-    commData: IExplicitCommData,
-
-    dimStrat: NodeDimensionStrategy;
+    dim: Dimensions | undefined,
+    /**
+     * pairs (string, number) that will be represented in the stacked bar. Props must include the index of the dimension
+     * for graphs of attributes that have a dimension.
+     */
+    data: IStringNumberRelation[],
 }
 
 /**
@@ -41,47 +44,32 @@ interface StackedBarGraphProps {
  */
 export const StackedBarGraph = ({
     tittle,
-    commData,
-    dimStrat
+    dim,
+    data,
 }: StackedBarGraphProps) => {
 
     const bars = new Array<React.ReactNode>();
-    const dim = commData.dimension;
 
-    if (commData !== undefined && commData.array !== undefined) {
-        for (let i = 0; i < commData.array.length; i++) {
+    for (let i = 0; i < data.length; i++) {
 
-            let dimIndex = 0;
-            const attribute = dimStrat.attributesArray.find((value) => {
-                return value.dimension === dim;
-            })
-            if (attribute !== undefined) {
-                dimIndex = attribute.values.findIndex((value) => {
-                    return commData.array !== undefined && commData.array[i][0] === value;
-                })
-            }
-
-            bars.push(
-                <BarPortion
-                    key={i}
-                    hoverText={commData.array[i][0]}
-                    percentile={commData.array[i][1]}
-                    portionOrder={i}
-                    dimensionIndex={dimIndex}
-                    dim={dim}
-                />
-            );
-        }
+        bars.push(
+            <BarPortion
+                key={i}
+                data={data[i]}
+                dim={dim}
+                dimensionIndex={dim !== undefined ? data[i].props : 0}
+                portionOrder={i}
+            />
+        );
     }
+
 
     return (
         <div>
             <div style={stackedBarTittle}>{tittle}</div>
-
             <div style={barContainer} className="row">
                 {bars}
             </div>
-
         </div>);
 };
 
