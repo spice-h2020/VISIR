@@ -26,7 +26,7 @@ export function validatePerspectiveIDfile(arg: any): types.PerspectiveId[] {
         }
 
         if (arg.length === undefined || arg.length <= 0) {
-            throw Error(`Perspectives Ids and names file does not have any perspective`);
+            arg.length = 0;
         }
 
         for (let i = 0; i < arg.length; i++) {
@@ -235,30 +235,32 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
         }
         arg.explanation_type = types.EExplanationTypes[arg.explanation_type];
 
-        if (arg.explanation_data === undefined) {
-            throw Error(`Explanation_data is undefined`);
-        }
-        if (typeof (arg.explanation_data) !== "object") {
-            throw Error(`Explanation_data is not an object or an array`);
-        }
-
-        if (arg.visible === undefined) {
-            arg.visible = false;
-        } else {
-            if (typeof (arg.visible) !== "boolean") {
-                throw Error(`Visible is not a boolean`);
+        if (arg.explanation_type !== types.EExplanationTypes.explicit_attributes) {
+            if (arg.explanation_data === undefined) {
+                throw Error(`Explanation_data is undefined`);
             }
-        }
-
-        switch (arg.explanation_type) {
-            //Explicit attributes doesnt require a validation
-            case types.EExplanationTypes.medoid: {
-                arg = isMedoidExplanationValid(arg);
-                break;
+            if (typeof (arg.explanation_data) !== "object") {
+                throw Error(`Explanation_data is not an object or an array`);
             }
-            case types.EExplanationTypes.implicit_attributes: {
-                arg = isImplicitAttributesExplanationValid(arg);
-                break;
+
+            if (arg.visible === undefined) {
+                arg.visible = false;
+            } else {
+                if (typeof (arg.visible) !== "boolean") {
+                    throw Error(`Visible is not a boolean`);
+                }
+            }
+
+            switch (arg.explanation_type) {
+                //Explicit attributes doesnt require a validation
+                case types.EExplanationTypes.medoid: {
+                    arg = isMedoidExplanationValid(arg);
+                    break;
+                }
+                case types.EExplanationTypes.implicit_attributes: {
+                    arg = isImplicitAttributesExplanationValid(arg);
+                    break;
+                }
             }
         }
 
