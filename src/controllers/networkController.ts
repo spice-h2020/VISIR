@@ -16,7 +16,7 @@ import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network"
 import { DataSet } from "vis-data";
 //Local Files
 import BoxesController from "./boxesController";
-import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 import NodeLocation from "./nodeLocation";
 import NodeExplicitComms from "./nodeExplicitComms";
 import NodeVisualsCtrl from "./nodeVisualsCtrl";

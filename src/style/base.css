@@ -72,6 +72,10 @@ img.mainIcon {
     /* filter: brightness(76.9%) hue-rotate(1deg) saturate(62.8%);  Only brightness filter works */
 }
 
+.fixedWidth-15vw {
+    width: 15vw;
+}
+
 /*------------------------------------------
 //         BUTTONS
 //------------------------------------------*/
@@ -218,9 +222,6 @@ img.mainIcon {
 
 /* Button that toggles an accordion */
 .btn-accordion {
-    padding: 18px;
-    width: 100%;
-
     padding: 8px 8px 12px 8px;
     background-color: var(--bodyBackground);
     color: black;
@@ -276,9 +277,9 @@ img.mainIcon {
 
 /*Little triangle after a button */
 .btn.down-arrow::after {
-    display: inline-block;
     margin-left: 0.255em;
     vertical-align: 0.255em;
+    display: inline-block;
     content: "";
     border-top: 0.3em solid;
     border-right: 0.3em solid transparent;
@@ -288,7 +289,7 @@ img.mainIcon {
 
 /*Little + after a button*/
 .btn.plus::after {
-    margin-left: 5px;
+    margin-left: 0.255em;
     scale: 1.5;
     display: inline-block;
     content: "+";

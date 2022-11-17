@@ -11,7 +11,7 @@
 //Constants
 import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
-import { DimAttribute } from './constants/nodes';
+import { ILegendData, legendDataReducer } from './constants/auxTypes';
 //Packages
 import { useReducer, useState } from 'react';
 //Local files
@@ -21,38 +21,14 @@ import { FileSourceDropdown } from './components/FileSourceDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import { LegendComponent } from './components/LegendComponent';
+import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import RequestManager from './managers/requestManager';
 
 import './style/base.css';
-import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
-import { ILegendData } from './constants/auxTypes';
 
 interface AppProps {
   perspectiveId1: string | null,
   perspectiveId2: string | null
-}
-
-export interface ILegendDataAction {
-  type: "dims" | "anon" | "anonGroup" | "reset";
-  newData: boolean | DimAttribute[];
-}
-
-function legendDataReducer(currentState: ILegendData, action: ILegendDataAction) {
-  switch (action.type) {
-    case "dims":
-      currentState.dims = action.newData as DimAttribute[];
-      break;
-    case "anon":
-      currentState.anonimous = action.newData as boolean;
-      break;
-    case "anonGroup":
-      currentState.anonGroup = action.newData as boolean;
-      break;
-    case "reset":
-      return { dims: [], anonimous: false, anonGroup: false } as ILegendData;
-  }
-
-  return JSON.parse(JSON.stringify(currentState));
 }
 
 export const App = ({

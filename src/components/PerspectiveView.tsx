@@ -15,9 +15,8 @@ import { ISelectedObject, ESelectedObjectAction, IStateFunctions } from '../cons
 import React, { useEffect, useState, useRef } from "react";
 //Local files
 import NetworkController from '../controllers/networkController';
-import NodeDimensionStrategy from '../managers/nodeDimensionStat';
+import NodeDimensionStrategy from '../managers/nodeDimensionStrat';
 import { DataTable } from './DataColumn';
-import { nodeConst } from '../constants/nodes';
 
 const networkContainer: React.CSSProperties = {
     margin: "0px 1.5% 15px 1.5%",

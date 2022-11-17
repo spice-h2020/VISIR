@@ -11,15 +11,13 @@
 //Constants
 import { IPerspectiveData, EPerspectiveVisState } from "../constants/perspectivesTypes";
 import { ViewOptions, EAppCollapsedState } from "../constants/viewOptions"
-import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendData } from "../constants/auxTypes";
+import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer, useState } from "react";
 //Local files
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
-import NodeDimensionStrategy from "../managers/nodeDimensionStat";
-import { DimAttribute } from "../constants/nodes";
-import { ILegendDataAction } from "../App";
+import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 
 const perspectiveContainers: React.CSSProperties = {
     display: "flex",
@@ -73,7 +71,6 @@ export const PerspectivesGroups = ({
     }
 
 
-
     //When the collapsed state changes, we clear both datatables
     useEffect(() => {
         setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
@@ -88,6 +85,7 @@ export const PerspectivesGroups = ({
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [leftPerspective, rightPerspective]);
 
     useEffect(() => {

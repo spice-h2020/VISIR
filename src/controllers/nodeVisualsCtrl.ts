@@ -12,13 +12,12 @@
 import { IUserData } from "../constants/perspectivesTypes";
 import { Dimensions, DimAttribute, nodeConst } from "../constants/nodes"
 import { ViewOptions } from "../constants/viewOptions";
-import { IStateFunctions } from "../constants/auxTypes";
+import { ILegendDataAction, IStateFunctions } from "../constants/auxTypes";
 //Packages
 import { DataSetNodes, Node } from "vis-network";
 //Local files
-import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 import { ExplicitData } from "./nodeExplicitComms";
-import { ILegendDataAction } from "../App";
 
 export default class NodeVisualsCtrl {
     dimStrat: NodeDimensionStrategy;

@@ -52,6 +52,14 @@ interface DropdownProps {
      * Extra class name to add to the dropdown button.
      */
     extraClassButton?: string;
+    /**
+     * 
+     */
+    hoverText?: string;
+    /**
+     * 
+     */
+    maxWidth?: string;
 }
 
 /**
@@ -63,7 +71,7 @@ export const Dropdown = ({
     content = "Dropdown",
     extraClassButton = "down-arrow",
     closeWhenOutsideClick = true,
-
+    hoverText = "",
 }: DropdownProps) => {
 
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -87,6 +95,7 @@ export const Dropdown = ({
                         setShowDropDown(!showDropDown);
                     }}
                     extraClassName={extraClassButton}
+                    hoverText={hoverText}
                 />
                 <div style={getContentStyle(showDropDown)}>
                     {items}

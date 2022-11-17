@@ -4,11 +4,11 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ILegendDataAction } from "../App";
+import { ILegendDataAction } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
 import { ICommunityExplanation, ICommunityData, EExplanationTypes, IUserData, IStringNumberRelation } from "../constants/perspectivesTypes";
 //Local files
-import NodeDimensionStrategy from "../managers/nodeDimensionStat";
+import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 
 //Aux class to help structure and collect all the values of an Explicit Community
 export class ExplicitData {
