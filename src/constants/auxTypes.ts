@@ -31,7 +31,7 @@ export interface IBoundingBox {
  */
 export interface ILegendData {
     dims: DimAttribute[],
-    anonimous: boolean,
+    anonymous: boolean,
     anonGroup: boolean,
 }
 
@@ -75,13 +75,13 @@ export function legendDataReducer(currentState: ILegendData, action: ILegendData
             currentState.dims = action.newData as DimAttribute[];
             break;
         case "anon":
-            currentState.anonimous = action.newData as boolean;
+            currentState.anonymous = action.newData as boolean;
             break;
         case "anonGroup":
             currentState.anonGroup = action.newData as boolean;
             break;
         case "reset":
-            return { dims: [], anonimous: false, anonGroup: false } as ILegendData;
+            return { dims: [], anonymous: false, anonGroup: false } as ILegendData;
     }
 
     return JSON.parse(JSON.stringify(currentState));

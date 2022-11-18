@@ -94,7 +94,7 @@ export default class NodeExplicitComms {
 
         if (explicitKeys.length === 0 || this.areKeysUnknown(node, explicitKeys)) {
 
-            node.isAnonimous = true;
+            node.isAnonymous = true;
             this.hasAnon = true;
 
             setLegendData({
@@ -105,7 +105,7 @@ export default class NodeExplicitComms {
             this.communitiesData[node.implicit_community].anonUsers.push(node.id);
 
         } else {
-            node.isAnonimous = false;
+            node.isAnonymous = false;
 
             explicitKeys.forEach((key) => {
 

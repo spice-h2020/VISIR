@@ -67,7 +67,7 @@ export const LegendComponent = ({
     if (legendData !== undefined && legendData.dims !== undefined && legendData.dims.length > 0) {
 
         const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick);
-        const anonRows: React.ReactNode = getAnonButtons(legendData.anonGroup, legendData.anonimous, legendConf, onLegendClick);
+        const anonRows: React.ReactNode = getAnonButtons(legendData.anonGroup, legendData.anonymous, legendConf, onLegendClick);
 
         const legendContent =
             <React.Fragment key={0}>
@@ -208,13 +208,13 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
 
         output =
             <div key={2} className='col'>
-                <h3 key={1} style={columnTittle} title="Anonymous Users" >  Anonimous Users </h3>
+                <h3 key={1} style={columnTittle} title="Anonymous Users" >  Anonymous Users </h3>
                 <Button
                     key={2}
                     content={<div className='row'>
                         <div> Users without any explicit data </div>
                         <span style={{ width: "5px" }} />
-                        <img alt={"Anonimous user icon"} src={nodeConst.defaultAnon} style={{ height: "20px" }}></img>
+                        <img alt={"Anonymous user icon"} src={nodeConst.defaultAnon} style={{ height: "20px" }}></img>
                     </div>}
                     state={buttonState}
                     extraClassName={"btn-legend btn-dropdown"}

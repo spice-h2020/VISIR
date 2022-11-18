@@ -231,7 +231,7 @@ export default class NodeVisualsCtrl {
             }
         }
 
-        if (node.isAnonimous && this.legendConfig!.get(`${nodeConst.anonymousGroupKey}User`)) {
+        if (node.isAnonymous && this.legendConfig!.get(`${nodeConst.anonymousGroupKey}User`)) {
             hideNode = true;
         }
 

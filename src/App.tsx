@@ -43,7 +43,7 @@ export const App = ({
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
 
   //Current dimension attributes data to create the legend buttons/options
-  const [legendData, setLegendData] = useReducer(legendDataReducer, { dims: [], anonimous: false, anonGroup: false } as ILegendData);
+  const [legendData, setLegendData] = useReducer(legendDataReducer, { dims: [], anonymous: false, anonGroup: false } as ILegendData);
 
   //Current available perspectives for the dropdowns
   const [allPerspectivesIds, setAllPerspectivesIds] = useState<PerspectiveId[]>([]);

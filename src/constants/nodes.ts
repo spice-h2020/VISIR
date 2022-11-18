@@ -36,7 +36,7 @@ export interface DimAttribute {
  * Constant values of configuration for the nodes.
  */
 export const nodeConst = {
-    //Id of the node that is a group of completely anonimous users
+    //Id of the node that is a group of completely anonymous users
     anonymousGroupKey: "anonymous",
     //Value of an explicit community without value. When all explicit communities are equal to this, the user will be unknown
     unknownCommunityValue: "unknown",
@@ -56,7 +56,7 @@ export const nodeConst = {
     defaultSize: 15,
     medoidSize: 25,
     selectedSize: 35,
-    anonimousSizeIncrease: 5,
+    anonymousSizeIncrease: 5,
 
     //Default value for a background color when the explicit community doesnt change it.
     defaultColor: "rgb(30, 236, 164, 1)",
