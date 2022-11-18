@@ -10,6 +10,8 @@ import { validatePerspectiveDataJSON, validatePerspectiveIDfile } from '../const
 import { PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
+//Config file
+import config from '../appConfig.json';
 
 export default class RequestManager {
 
@@ -31,7 +33,8 @@ export default class RequestManager {
 
         this.keyToUrl.set(EFileSource.Local, "./data/");
         this.keyToUrl.set(EFileSource.Develop, "https://raw.githubusercontent.com/MarcoExpPer/SPICE-visualization-ReactPort/develop/public/data/");
-        this.keyToUrl.set(EFileSource.Api, "http://localhost:8080/visualizationAPI/");
+
+        this.keyToUrl.set(EFileSource.Api, config.API_URI);
     }
 
     /**
