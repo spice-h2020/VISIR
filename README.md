@@ -39,13 +39,13 @@ Prerequisite: [Node](https://nodejs.org/en/).
 
 ______________________
 ## How to use the app.
-
 0. By default if the URL contains perspective1 and/or perspective2 variables, the app will try to request and activate those perspectives. These URL variables are optional, there are other ways to pick between perspectives.
     1. An example of a URL with IDs is the following "http://localhost:3000/?perspective1=5&perspective2=6" Where 5 and 6 are the id of the files.
 
 1. First you need to tell the app where the perspectives you want to see are located. With the FileSource dropdown you can pick between some options (local app files is the default option).
     1. Keep in mind, the moment file source is changed, the app will disable all active perspectives and will try to reload the URL perspectives if they exist.
     2. Currently the API server is not active, so unless you launch it localy, this option wont work.
+    3. If its planed to use the API server, VISIR by default uses the local URI. To change this it's necesary to open the appConfig.json file located inside the src folder and edit "API_URI" field with the desired URI.
 
 2. Now you need to pick what perspectives you want to see. One way is the URL parameters as mentioned, the other way is to use the select perspective dropdowns. Clicking the name of the desired perspective will disable the prevously active perspective, if there is one, and load the new one.
     1. If a perspective is highlighted in red, it means its the current active perspective in this side of the app.
