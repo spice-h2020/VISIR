@@ -7,14 +7,17 @@
 import { EFileSource, initialOptions, EButtonState } from "../constants/viewOptions";
 import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
-import { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { Dropdown } from "../basicComponents/Dropdown";
+import { Dropright as DropRight } from "../basicComponents/DropRight";
+//Config file
+import config from '../appConfig.json';
 
 interface FileSourceDropdownProps {
     //On click handler
-    setFileSource: (fileSource: EFileSource) => void;
+    setFileSource: Function;
 }
 
 /**
@@ -26,16 +29,20 @@ export const FileSourceDropdown = ({
 
     const [states, setStates] = useReducer(bStateArrayReducer, init());
 
-    const changeFileSource = (newFileSource: EFileSource) => {
-        if (states[newFileSource] === EButtonState.unactive) {
-            setFileSource(newFileSource);
+    const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
 
-            setStates({
-                action: EbuttonStateArrayAction.activeOne,
-                index: newFileSource,
-                newState: EButtonState.active
-            });
-        }
+        setStates({
+            action: EbuttonStateArrayAction.activeOne,
+            index: newFileSource,
+            newState: EButtonState.loading
+        });
+
+        setFileSource(newFileSource, () => setStates({
+            action: EbuttonStateArrayAction.activeOne,
+            index: newFileSource,
+            newState: EButtonState.active
+        }), apiURL);
+
     }
 
     //Init the app with the initial option executed.
@@ -44,7 +51,8 @@ export const FileSourceDropdown = ({
         // eslint-disable-next-line
     }, []);
 
-    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states)
+    const inputRef = React.useRef<HTMLInputElement>(null);
+    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef)
 
     return (
         <Dropdown
@@ -73,7 +81,28 @@ const init = (): EButtonState[] => {
  * @param selectedItems State of the buttons.
  * @returns returns an array of React components.
  */
-function getButtons(changeFileSource: Function, selectedItems: EButtonState[]): React.ReactNode[] {
+function getButtons(changeFileSource: Function, selectedItems: EButtonState[], inputRef: React.RefObject<HTMLInputElement>): React.ReactNode[] {
+
+    const imageSrc = selectedItems[EFileSource.Api] === EButtonState.active ? "./images/update-white.png" : "./images/update-red.png";
+
+    const dropRightContent = [
+        <div className="row" key={1}>
+            <input type="text" ref={inputRef} defaultValue={config.API_URI}
+                style={{ height: "1rem", alignSelf: "center", width: "20rem" }}
+            />
+            <Button
+                content={<img src={imageSrc} style={{ width: "25px", verticalAlign: "middle" }} alt="update Icon" />}
+                onClick={() => {
+                    if (inputRef.current) {
+                        changeFileSource(EFileSource.Api, inputRef.current.value);
+                    }
+
+                }}
+                state={selectedItems[EFileSource.Api]}
+                extraClassName={selectedItems[EFileSource.Api] === EButtonState.active ? "primary" : ""}
+            />
+        </div>
+    ];
     return [
         <Button
             content="Local app files"
@@ -82,19 +111,12 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[]): 
             key={1}
             extraClassName={"btn-dropdown"}
         />,
-        <Button
-            content="Github Develop"
-            onClick={() => { changeFileSource(EFileSource.Develop); }}
-            state={selectedItems[EFileSource.Develop]}
-            key={2}
-            extraClassName={"btn-dropdown"}
-        />,
-        <Button
-            content="Use the API (WIP)"
-            onClick={() => { changeFileSource(EFileSource.Api); }}
+        <DropRight
+            key={4}
+            items={dropRightContent}
             state={selectedItems[EFileSource.Api]}
-            key={3}
-            extraClassName={"btn-dropdown"}
+            content="Api URL"
+            extraClassButton="transparent btn-dropdown dropdown-inner down-right"
         />
     ];
 }

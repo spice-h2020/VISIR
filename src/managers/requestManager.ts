@@ -10,15 +10,14 @@ import { validatePerspectiveDataJSON, validatePerspectiveIDfile } from '../const
 import { PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
-//Config file
-import config from '../appConfig.json';
 
 export default class RequestManager {
 
     isActive: boolean;
     axios: Axios;
-    keyToUrl: Map<EFileSource, string>;
     usingAPI: boolean;
+
+    localURL: string = "./data";
 
     /**
      * Constructor of the class
@@ -28,13 +27,6 @@ export default class RequestManager {
         this.usingAPI = false;
 
         this.axios = new Axios();
-
-        this.keyToUrl = new Map<EFileSource, string>();
-
-        this.keyToUrl.set(EFileSource.Local, "./data/");
-        this.keyToUrl.set(EFileSource.Develop, "https://raw.githubusercontent.com/MarcoExpPer/SPICE-visualization-ReactPort/develop/public/data/");
-
-        this.keyToUrl.set(EFileSource.Api, config.API_URI);
     }
 
     /**
@@ -106,7 +98,7 @@ export default class RequestManager {
      * When the request is finished, executes a callback function with all the new ids as parameter, undefined if
      * something went wrong.
      */
-    requestAllPerspectivesIds(callback: Function) {
+    requestAllPerspectivesIds(callback: Function, stateCallback?: Function) {
 
         this.getAllPerspectives()
             .then((response) => {
@@ -114,6 +106,7 @@ export default class RequestManager {
                     const allIds: PerspectiveId[] = validatePerspectiveIDfile(JSON.parse(response.data));
 
                     callback(allIds);
+                    if (stateCallback) stateCallback();
                 } else {
                     throw new Error(`All IDs file was ${response.statusText}`);
                 }
@@ -121,6 +114,7 @@ export default class RequestManager {
             .catch((error) => {
 
                 callback(undefined);
+                if (stateCallback) stateCallback();
 
                 console.log(`All IDs file was not found:`);
                 console.log(error);
@@ -150,8 +144,8 @@ export default class RequestManager {
      * Update the baseURL of the requestManager
      * @param {EFileSource} newKey the key of the new fileSource
      */
-    changeBaseURL(newKey: EFileSource) {
-        const newUrl = this.keyToUrl.get(newKey);
+    changeBaseURL(newKey: EFileSource, apiURL?: string) {
+        const newUrl = newKey === EFileSource.Local ? this.localURL : apiURL;
 
         this.usingAPI = newKey === EFileSource.Api;
 

@@ -13,10 +13,6 @@ export enum EFileSource {
      */
     Local,
     /**
-     * Develop SPICE_visualization-react repository
-     */
-    Develop,
-    /**
      * Conecting to the API
      */
     Api,
