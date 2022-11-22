@@ -106,8 +106,12 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
         for (let i = 0; i < community.explanations.length; i++) {
             if (community.explanations[i].visible) {
-                content.push(<React.Fragment key={5 + i * 2}> {getCommunityExplanation(community,
-                    community.explanations[i], allUsers, hideLabel, artworks, dimStrat)} </React.Fragment>);
+                content.push(
+                    <React.Fragment key={5 + i * 2}>
+                        {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel,
+                            artworks, dimStrat)}
+                    </React.Fragment>);
+
                 content.push(<br key={6 + i * 2} />);
             }
         }
@@ -169,31 +173,19 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                     array.push([keys[i], explanation.explanation_data.data[keys[i]]]);
                 }
 
-                if (dimStrat !== undefined) {
-
-                    return (
+                return (
+                    <div>
+                        <hr />
+                        <div> {explanation.explanation_data.label}</div>
+                        <div> {getWordClouds(explanation.explanation_data.data)}</div>
                         <div>
-                            <hr />
-                            <div> {explanation.explanation_data.label}</div>
-                            <div> {getWordClouds(explanation.explanation_data.data)}</div>
-                            <div>
-                                <StackedBarGraph
-                                    tittle={""}
-                                    data={explanation.explanation_data.data as IStringNumberRelation[]}
-                                    dim={undefined}
-                                />
-                            </div>
-                        </div>);
-                } else {
-                    return (
-                        <div>
-                            <hr />
-                            <div> {explanation.explanation_data.label}</div>
-                            <div> {getWordClouds(explanation.explanation_data.data)}</div>
-                        </div>);
-                }
-
-
+                            <StackedBarGraph
+                                tittle={""}
+                                data={explanation.explanation_data.data as IStringNumberRelation[]}
+                                dim={undefined}
+                            />
+                        </div>
+                    </div>);
             }
             default: {
                 console.log("Unrecognized explanation type");
