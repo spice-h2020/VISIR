@@ -56,10 +56,6 @@ interface DropdownProps {
      * 
      */
     hoverText?: string;
-    /**
-     * 
-     */
-    maxWidth?: string;
 }
 
 /**
@@ -117,12 +113,21 @@ export const Dropdown = ({
 };
 
 
-/**
- * Aux function that execute a callback function when u click outside of the ref component.
- * @param state State that will add/delete the events based on its value.
- * @param ref Reference of the html object of the component to detect a click outside it.
- * @param callback Function executed when the user clicks outside the ref component.
- */
+
+
+
+function getContentStyle(currentState: Boolean): React.CSSProperties {
+    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(contentStyle)));
+
+    if (currentState) {
+        newStyle.display = "block";
+    } else {
+        newStyle.display = "none";
+    }
+
+    return newStyle;
+}
+
 const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, callback: Function, closeWhenOutsideClick: boolean) => {
 
     useEffect(() => {
@@ -148,16 +153,3 @@ const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, c
 
     }, [state, closeWhenOutsideClick, ref, callback]);
 };
-
-
-function getContentStyle(currentState: Boolean): React.CSSProperties {
-    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(contentStyle)));
-
-    if (currentState) {
-        newStyle.display = "block";
-    } else {
-        newStyle.display = "none";
-    }
-
-    return newStyle;
-}
