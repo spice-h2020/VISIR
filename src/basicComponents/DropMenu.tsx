@@ -56,9 +56,13 @@ interface DropMenuProps {
      */
     hoverText?: string;
     /**
-     * Extra class name to add to the main button.
+     * Extra class to add to the main button.
      */
     extraClassButton?: string;
+    /**
+     * Extra class to add to the drop menu container.
+     */
+    extraClassContainer?: string;
     /**
      * Active close dropdown when outside click functionality.
      */
@@ -88,6 +92,7 @@ export const DropMenu = ({
     content = "Dropdown",
     hoverText = "",
     extraClassButton = "down-arrow",
+    extraClassContainer = "",
     closeWhenOutsideClick = true,
     state = undefined,
     menuDirection = EDropMenuDirection.down,
@@ -162,11 +167,18 @@ export const DropMenu = ({
                         </div>
                     break;
                 }
+
+            default: {
+                innerDropMenu =
+                    <div key={-2} onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}>
+                        {innerDropMenu}
+                    </div>
+                break;
+            }
         }
 
-        console.log(containerRef.current?.clientWidth);
         return (
-            <div key={-3} style={getMainMenuStyle(menuDirection)} ref={containerRef}>
+            <div key={-3} style={getMainMenuStyle(menuDirection)} className={extraClassContainer} ref={containerRef}>
                 {innerDropMenu}
             </div>
         )
@@ -175,6 +187,7 @@ export const DropMenu = ({
     } else {
         return (
             <div key={-5} style={getMainMenuStyle(menuDirection)}
+                className={extraClassContainer}
                 ref={containerRef}
             >
                 <Button

@@ -10,10 +10,9 @@ import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTyp
 import React, { useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
-import { Dropdown } from "../basicComponents/Dropdown";
-import { Dropright as DropRight } from "../basicComponents/DropRight";
 //Config file
 import config from '../appConfig.json';
+import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 
 interface FileSourceDropdownProps {
     //On click handler
@@ -55,10 +54,11 @@ export const FileSourceDropdown = ({
     const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef)
 
     return (
-        <Dropdown
+        <DropMenu
             items={fileSourceButtons}
             content="File Source"
             extraClassButton="transparent down-arrow"
+            menuDirection={EDropMenuDirection.down}
         />
     );
 };
@@ -105,18 +105,21 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[], i
     ];
     return [
         <Button
+            key={1}
             content="Local app files"
             onClick={() => { changeFileSource(EFileSource.Local); }}
             state={selectedItems[EFileSource.Local]}
-            key={1}
             extraClassName={"btn-dropdown"}
         />,
-        <DropRight
-            key={4}
+        <DropMenu
+            key={2}
             items={dropRightContent}
             state={selectedItems[EFileSource.Api]}
             content="Api URL"
-            extraClassButton="transparent btn-dropdown dropdown-inner down-right"
+            extraClassButton="transparent btn-dropdown down-right"
+            extraClassContainer="dropdown-inner"
+            hoverChangesState={true}
+            menuDirection={EDropMenuDirection.right}
         />
     ];
 }

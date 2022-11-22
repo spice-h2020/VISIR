@@ -10,8 +10,8 @@ import { bStateArrayReducer, EbuttonStateArrayAction } from "../constants/auxTyp
 import React, { Dispatch, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
-import { Dropdown } from "../basicComponents/Dropdown";
 import { Slider } from "../basicComponents/Slider";
+import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 
 const hrStyle: React.CSSProperties = {
     margin: "0.1rem 0",
@@ -89,10 +89,11 @@ export const OptionsDropdown = ({
     ];
 
     return (
-        <Dropdown
+        <DropMenu
             items={[optionsButtons]}
             content="Options"
             extraClassButton="transparent down-arrow"
+            menuDirection={EDropMenuDirection.down}
         />
     );
 };

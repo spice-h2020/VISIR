@@ -1,11 +1,9 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
 import { EButtonState } from '../constants/viewOptions';
 import '../style/base.css';
 import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
-import { Dropright } from '../basicComponents/DropRight';
 
 export default {
     title: 'Example/DropMenus',

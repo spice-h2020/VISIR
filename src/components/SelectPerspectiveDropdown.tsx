@@ -18,9 +18,9 @@ import { bStateArrayReducer, EbuttonStateArrayAction, IbStateArrayAction } from 
 import React, { useEffect, useReducer, useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
-import { Dropdown } from "../basicComponents/Dropdown";
 import RequestManager from "../managers/requestManager";
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from "../constants/perspectivesTypes";
+import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 
 const buttonText: React.CSSProperties = {
     width: "90%",
@@ -102,7 +102,7 @@ export const SelectPerspectiveDropdown = ({
 
     if (allIds === undefined || states.length === 0) {
         return (
-            <Dropdown
+            <DropMenu
                 items={[]}
                 content="No available perspectives"
                 extraClassButton="primary down-arrow fixedWidth-15vw"
@@ -113,7 +113,7 @@ export const SelectPerspectiveDropdown = ({
     const perspectivesButtons: React.ReactNode[] = getButtons(allIds, states, setStates, setAllIds, setActivePerspective, isLeftDropdown, requestMan);
 
     return (
-        <Dropdown
+        <DropMenu
             items={perspectivesButtons}
             content={
                 <div style={buttonText}>
@@ -121,6 +121,7 @@ export const SelectPerspectiveDropdown = ({
                 </div>}
             extraClassButton="primary down-arrow fixedWidth-15vw"
             hoverText={text}
+            menuDirection={EDropMenuDirection.down}
         />
     );
 };

@@ -12,10 +12,10 @@ import { EButtonState } from '../constants/viewOptions';
 //Packages
 import React from "react";
 //Local files
-import { Dropdown } from '../basicComponents/Dropdown';
 import { Button } from '../basicComponents/Button';
 import { ColorStain } from '../basicComponents/ColorStain';
 import { ILegendData } from '../constants/auxTypes';
+import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
 
 const columnTittle: React.CSSProperties = {
     whiteSpace: "nowrap",
@@ -80,22 +80,25 @@ export const LegendComponent = ({
             </React.Fragment>
         return (
             <div className="legend-container">
-                <Dropdown
+                <DropMenu
                     items={[legendContent]}
                     content="Legend"
                     extraClassButton="plus primary"
                     closeWhenOutsideClick={false}
+                    menuDirection={EDropMenuDirection.down}
                 />
             </div>
         );
 
     } else {
-        return (<Dropdown
-            items={[]}
-            content="Unactive Legend"
-            extraClassButton="plus primary"
-            closeWhenOutsideClick={false}
-        />)
+        return (
+            <DropMenu
+                items={[]}
+                content="Unactive Legend"
+                extraClassButton="plus primary"
+                closeWhenOutsideClick={false}
+                menuDirection={EDropMenuDirection.down}
+            />)
 
     }
 };
