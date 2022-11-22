@@ -59,24 +59,28 @@ export const App = ({
     setLeftPerspective(undefined);
     setRightPerspective(undefined);
 
-    for (let i = 0; i < newIds.length; i++) {
+    if (newIds) {
+      for (let i = 0; i < newIds.length; i++) {
 
-      if (newIds[i].id === perspectiveId1) {
-        newIds[i].isActive = PerspectiveActiveState.left;
-        requestManager.requestPerspectiveFIle(perspectiveId1, newIds[i].name, setLeftPerspective);
+        if (newIds[i].id === perspectiveId1) {
+          newIds[i].isActive = PerspectiveActiveState.left;
+          requestManager.requestPerspectiveFIle(perspectiveId1, newIds[i].name, setLeftPerspective);
 
-      } else if (newIds[i].id === perspectiveId2 && perspectiveId2 !== perspectiveId1) {
+        } else if (newIds[i].id === perspectiveId2 && perspectiveId2 !== perspectiveId1) {
 
-        newIds[i].isActive = PerspectiveActiveState.right;
-        requestManager.requestPerspectiveFIle(perspectiveId2, newIds[i].name, setRightPerspective);
+          newIds[i].isActive = PerspectiveActiveState.right;
+          requestManager.requestPerspectiveFIle(perspectiveId2, newIds[i].name, setRightPerspective);
 
-      } else {
+        } else {
 
-        newIds[i].isActive = PerspectiveActiveState.unactive;
+          newIds[i].isActive = PerspectiveActiveState.unactive;
+        }
       }
-    }
 
-    setAllPerspectivesIds(newIds);
+      setAllPerspectivesIds(newIds);
+    } else {
+      setAllPerspectivesIds([]);
+    }
   }
 
   return (
@@ -92,9 +96,9 @@ export const App = ({
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown
-            setFileSource={(fileSource: EFileSource) => {
-              requestManager.changeBaseURL(fileSource);
-              requestManager.requestAllPerspectivesIds(initPerspectives);
+            setFileSource={(fileSource: EFileSource, changeItemState: Function, apiURL?: string,) => {
+              requestManager.changeBaseURL(fileSource, apiURL);
+              requestManager.requestAllPerspectivesIds(initPerspectives, changeItemState);
             }}
           />,
           <OptionsDropdown

@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Tooltip } from '../basicComponents/Tooltip';
-import { SelectedObject } from '../constants/auxTypes';
-import { CommunityData, ExplanationTypes, UserData } from '../constants/perspectivesTypes';
+import { ISelectedObject } from "../constants/auxTypes";
+import { ECommunityType, EExplanationTypes, ICommunityData, IUserData } from "../constants/perspectivesTypes";
 
 import '../style/base.css';
 
@@ -15,15 +15,18 @@ const Template: ComponentStory<typeof Tooltip> = (args) => <Tooltip {...args} />
 
 export const userExample = Template.bind({});
 
-const user: UserData = {
+const user: IUserData = {
   id: '01',
   label: 'user1',
   implicit_community: 0,
   explicit_community: { ageGroup: "adult", Language: "ESP" },
-  interactions: []
+  interactions: [],
+  isMedoid: false,
+  isAnonymous: false,
+  isAnonGroup: false
 }
 
-const userObject: SelectedObject = {
+const userObject: ISelectedObject = {
   obj: user,
   position: { x: 100, y: 150 }
 }
@@ -33,20 +36,22 @@ userExample.args = {
 
 export const commExample = Template.bind({});
 
-const comm: CommunityData = {
+const comm: ICommunityData = {
   id: "0",
   name: 'Community 1',
   explanations: [{
-    explanation_type: ExplanationTypes.explicit_attributes,
+    explanation_type: EExplanationTypes.explicit_attributes,
     explanation_data: {},
     visible: true,
   },
   ],
   users: [],
-  explicitCommunity: {}
-
+  explicitCommunity: {},
+  anonUsers: [],
+  type: ECommunityType.implicit,
+  explicitDataMap: new Map<string, Map<string, number>>()
 }
-const commObject: SelectedObject = {
+const commObject: ISelectedObject = {
   obj: comm,
   position: { x: 100, y: 150 }
 }
