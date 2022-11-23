@@ -7,12 +7,13 @@
 import { EFileSource, initialOptions, EButtonState } from "../constants/viewOptions";
 import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
+import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 //Config file
 import config from '../appConfig.json';
-import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
+
 
 interface FileSourceDropdownProps {
     //On click handler
@@ -43,12 +44,6 @@ export const FileSourceDropdown = ({
         }), apiURL);
 
     }
-
-    //Init the app with the initial option executed.
-    useEffect(() => {
-        setFileSource(initialOptions.fileSource);
-        // eslint-disable-next-line
-    }, []);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
     const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef)
