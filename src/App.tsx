@@ -9,11 +9,11 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer } from './constants/viewOptions';
+import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer, initialOptions } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { ILegendData, legendDataReducer } from './constants/auxTypes';
 //Packages
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -55,6 +55,19 @@ export const App = ({
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
 
+  const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
+    requestManager.changeBaseURL(fileSource, apiURL);
+    requestManager.requestAllPerspectivesIds(initPerspectives, changeItemState);
+  }
+
+  //When the app starts, select the initial fileSource and load its perspectives
+  useEffect(() => {
+    updateFileSource(initialOptions.fileSource);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+
   function initPerspectives(newIds: PerspectiveId[]) {
     setLeftPerspective(undefined);
     setRightPerspective(undefined);
@@ -83,6 +96,7 @@ export const App = ({
     }
   }
 
+
   return (
     <div>
       <Navbar
@@ -96,10 +110,7 @@ export const App = ({
             onClick={() => { window.location.reload() }}
           />,
           <FileSourceDropdown
-            setFileSource={(fileSource: EFileSource, changeItemState: Function, apiURL?: string,) => {
-              requestManager.changeBaseURL(fileSource, apiURL);
-              requestManager.requestAllPerspectivesIds(initPerspectives, changeItemState);
-            }}
+            setFileSource={updateFileSource}
           />,
           <OptionsDropdown
             setViewOptions={setViewOptions}

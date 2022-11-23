@@ -10,6 +10,8 @@ import { validatePerspectiveDataJSON, validatePerspectiveIDfile } from '../const
 import { PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
+//Config
+import config from '../appConfig.json';
 
 export default class RequestManager {
 
@@ -142,12 +144,16 @@ export default class RequestManager {
 
     /**
      * Update the baseURL of the requestManager
-     * @param {EFileSource} newKey the key of the new fileSource
+     * @param {EFileSource} newSource the new fileSource
      */
-    changeBaseURL(newKey: EFileSource, apiURL?: string) {
-        const newUrl = newKey === EFileSource.Local ? this.localURL : apiURL;
+    changeBaseURL(newSource: EFileSource, apiURL?: string) {
+        let newUrl = newSource === EFileSource.Local ? this.localURL : apiURL;
 
-        this.usingAPI = newKey === EFileSource.Api;
+        if (apiURL === undefined && newSource === EFileSource.Api) {
+            newUrl = config.API_URI;
+        }
+
+        this.usingAPI = newSource === EFileSource.Api;
 
         if (this.isActive && this.axios) {
             this.axios.defaults.baseURL = newUrl;
