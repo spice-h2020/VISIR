@@ -39,7 +39,7 @@ export const ShapeForm = ({
     return (
 
         <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-            height={`${20 * scale}px`}
+            height={`${1.2 * scale}rem`}
             viewBox="0 0 100.000000 100.000000"
             preserveAspectRatio="xMidYMid meet">
 

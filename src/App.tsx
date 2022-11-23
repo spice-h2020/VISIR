@@ -101,14 +101,16 @@ export const App = ({
     <div>
       <Navbar
         leftAlignedItems={[
-          <Button
-            content={<div className='row' style={{ alignItems: "center" }}>
-              <img style={{ height: "40px" }} src="./images/VISIR-red.png" alt="VISIR icon" />
-              <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
-            </div>}
-            extraClassName="transparent tittle mainBtn"
-            onClick={() => { window.location.reload() }}
-          />,
+          <div style={{ margin: "0px 5px" }}>
+            <Button
+              content={<div className='row' style={{ alignItems: "center" }}>
+                <img style={{ height: "40px" }} src="./images/VISIR-red.png" alt="VISIR icon" />
+                <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
+              </div>}
+              extraClassName="transparent tittle mainBtn"
+              onClick={() => { window.location.reload() }}
+            />
+          </div>,
           <FileSourceDropdown
             setFileSource={updateFileSource}
           />,

@@ -19,7 +19,7 @@ const sectionTittleStyle: React.CSSProperties = {
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
-    margin: "5px 0px"
+    margin: "0.5rem 0px"
 }
 
 interface NodePanelProps {
@@ -27,7 +27,6 @@ interface NodePanelProps {
     node: IUserData | undefined;
     hideLabel: boolean;
     artworks: IArtworkData[];
-
 }
 
 /**
@@ -55,7 +54,7 @@ export const NodePanel = ({
             content.push(<div className="row" key={2 + i}> {`${keys[i]}: ${node.explicit_community[keys[i]]}`} </div>);
         }
 
-        content.push(<div key={-1} style={{ margin: "5px 0px" }}> {getInteractionsAccordion(node, artworks)} </div>);
+        content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks)} </div>);
     }
 
     if (content.length === 0) {
@@ -103,7 +102,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
         }
 
         content =
-            <div style={{ margin: "5px 0px" }}>
+            <div style={{ margin: "0.5rem 0px" }}>
                 <Accordion
                     items={interactions}
                     tittles={tittles}

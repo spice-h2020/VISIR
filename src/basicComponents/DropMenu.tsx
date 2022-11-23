@@ -1,7 +1,8 @@
 /**
  * @fileoverview This file creates a button that when activated, shows an extra menu. 
  * The main button can be activated by click or by hovering.
- * The extra menu will be hidden if the user clicks outside the extra menu.
+ * The extra menu can be hidden if the user clicks outside the extra menu or by clicking the main button.
+ * The behaviour will depend on the properties
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -28,10 +29,9 @@ const dropdownStyle: React.CSSProperties = {
 const contentStyle: React.CSSProperties = {
     position: "fixed",
     zIndex: "10",
-    padding: "0.5rem 0",
+    padding: "0.5rem 0.3rem",
 
-    minWidth: "160px",
-    boxShadow: "0px 8px 16px 0px rgba(0, 0, 0, 0.2)",
+    boxShadow: "0px 0.5rem 1.5rem 0px rgba(0, 0, 0, 0.2)",
     backgroundColor: "white",
 
     backgroundClip: "padding-box",
@@ -241,8 +241,8 @@ const getMainMenuStyle = (menuDirection: EDropMenuDirection) => {
 
     switch (menuDirection) {
         case EDropMenuDirection.down: {
-            newStyle.marginLeft = "10px";
-            newStyle.marginRight = "10px";
+            newStyle.marginLeft = "0.5rem";
+            newStyle.marginRight = "0.5rem";
             break;
         }
     }

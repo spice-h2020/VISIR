@@ -86,7 +86,7 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[], i
                 style={{ height: "1rem", alignSelf: "center", width: "20rem" }}
             />
             <Button
-                content={<img src={imageSrc} style={{ width: "25px", verticalAlign: "middle" }} alt="update Icon" />}
+                content={<img src={imageSrc} style={{ width: "1.4rem", verticalAlign: "middle" }} alt="update Icon" />}
                 onClick={() => {
                     if (inputRef.current) {
                         changeFileSource(EFileSource.Api, inputRef.current.value);
