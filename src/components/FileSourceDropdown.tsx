@@ -14,6 +14,17 @@ import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 //Config file
 import config from '../appConfig.json';
 
+const inputTextStyle: React.CSSProperties = {
+    width: "20rem",
+    fontSize: "1rem",
+    alignSelf: "center",
+}
+
+const updateImgStyle: React.CSSProperties = {
+    width: "1.4rem",
+    verticalAlign: "middle"
+}
+
 
 interface FileSourceDropdownProps {
     //On click handler
@@ -83,10 +94,10 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[], i
     const dropRightContent = [
         <div className="row" key={1}>
             <input type="text" ref={inputRef} defaultValue={config.API_URI}
-                style={{ height: "1rem", alignSelf: "center", width: "20rem" }}
+                style={inputTextStyle}
             />
             <Button
-                content={<img src={imageSrc} style={{ width: "1.4rem", verticalAlign: "middle" }} alt="update Icon" />}
+                content={<img src={imageSrc} style={updateImgStyle} alt="update Icon" />}
                 onClick={() => {
                     if (inputRef.current) {
                         changeFileSource(EFileSource.Api, inputRef.current.value);
