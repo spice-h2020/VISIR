@@ -48,7 +48,7 @@ export const FileSourceDropdown = ({
 
     const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
 
-        setLoadingState({ isActive: true, msg: `Loading ${EFileSource[newFileSource]}` })
+        setLoadingState({ isActive: true, msg: `Requesting files to ${EFileSource[newFileSource]}` })
 
         setStates({
             action: EbuttonStateArrayAction.activeOne,
