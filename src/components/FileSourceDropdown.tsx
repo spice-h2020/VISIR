@@ -13,7 +13,7 @@ import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 //Config file
 import config from '../appConfig.json';
-import { LoadingFrontPanel } from "../basicComponents/LoadingFrontPanel";
+import { ILoadingState, LoadingFrontPanel } from "../basicComponents/LoadingFrontPanel";
 
 const inputTextStyle: React.CSSProperties = {
     width: "20rem",
@@ -30,6 +30,8 @@ const updateImgStyle: React.CSSProperties = {
 interface FileSourceDropdownProps {
     //On click handler
     setFileSource: Function;
+
+    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
 }
 
 /**
@@ -37,18 +39,16 @@ interface FileSourceDropdownProps {
  */
 export const FileSourceDropdown = ({
     setFileSource,
+    setLoadingState
 }: FileSourceDropdownProps) => {
 
     const [states, setStates] = useReducer(bStateArrayReducer, init());
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [loadingMsg, setLoadingMsg] = useState<string>("");
 
 
     const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
 
-        setLoadingMsg(`Loading ${EFileSource[newFileSource]}`)
-        setIsLoading(true);
+        setLoadingState({ isActive: true, msg: `Loading ${EFileSource[newFileSource]}` })
 
         setStates({
             action: EbuttonStateArrayAction.activeOne,
@@ -57,7 +57,8 @@ export const FileSourceDropdown = ({
         });
 
         const callback = () => {
-            setIsLoading(false);
+            setLoadingState({ isActive: false })
+
             setStates({
                 action: EbuttonStateArrayAction.activeOne,
                 index: newFileSource,
@@ -85,10 +86,7 @@ export const FileSourceDropdown = ({
                 extraClassButton="transparent down-arrow"
                 menuDirection={EDropMenuDirection.down}
             />
-            <LoadingFrontPanel
-                isActive={isLoading}
-                message={loadingMsg}
-            />
+
         </React.Fragment>
     );
 };

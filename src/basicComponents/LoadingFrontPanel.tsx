@@ -51,31 +51,31 @@ const innerPanelStyle: React.CSSProperties = {
 };
 
 
+export interface ILoadingState {
+    isActive: boolean,
+    msg?: React.ReactNode,
+}
+
 interface LoadingFrontPanelProps {
     /**
-     * Message shown to the user.
+     * State of the loading panel.
      */
-    message?: React.ReactNode;
-    /**
-     * If the loading panel is active or not.
-     */
-    isActive: boolean;
+    state: ILoadingState;
 }
 
 /**
  * UI component that executes a function when clicked.
  */
 export const LoadingFrontPanel = ({
-    message = "",
-    isActive,
+    state,
 }: LoadingFrontPanelProps) => {
 
-    const [active, setActive] = useState<boolean>(isActive);
+    const [active, setActive] = useState<boolean>(state?.isActive);
     const [numDots, setNumdots] = useState<number>(1);
 
     useEffect(() => {
-        setActive(isActive);
-    }, [isActive]);
+        setActive(state.isActive);
+    }, [state, state.isActive]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -86,14 +86,13 @@ export const LoadingFrontPanel = ({
     }, []);
 
     const darkBackground: React.CSSProperties = JSON.parse(JSON.stringify(darkBackgroundStyle));
-    darkBackground.display = active ? "flex" : "none";
 
     return (
 
-        <div style={darkBackground}>
+        <div style={darkBackground} className={active ? "toVisibleAnim" : "toHiddenAnim"}>
             <div style={innerPanelStyle} >
                 <Spinner scale={1} />
-                <span style={loadingText}> {message + '.'.repeat(numDots)} </span>
+                <span style={loadingText}> {state.msg + '.'.repeat(numDots)} </span>
             </div>
         </div >
     );

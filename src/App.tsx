@@ -25,11 +25,14 @@ import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdow
 import RequestManager from './managers/requestManager';
 
 import './style/base.css';
+import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFrontPanel';
 
 interface AppProps {
   perspectiveId1: string | null,
   perspectiveId2: string | null
 }
+
+
 
 export const App = ({
 
@@ -54,6 +57,9 @@ export const App = ({
 
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
+
+  //Parameters to activate/disactivate and edit the loading spinner.
+  const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
 
   const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
     requestManager.changeBaseURL(fileSource, apiURL);
@@ -105,6 +111,7 @@ export const App = ({
           </div>,
           <FileSourceDropdown
             setFileSource={updateFileSource}
+            setLoadingState={SetLoadingState}
           />,
           <OptionsDropdown
             setViewOptions={setViewOptions}
@@ -118,6 +125,7 @@ export const App = ({
             allIds={allPerspectivesIds}
             isLeftDropdown={true}
             requestMan={requestManager}
+            setLoadingState={SetLoadingState}
           />,
           <Button
             content="<<"
@@ -146,6 +154,7 @@ export const App = ({
             allIds={allPerspectivesIds}
             isLeftDropdown={false}
             requestMan={requestManager}
+            setLoadingState={SetLoadingState}
           />,
         ]}
         rightAlignedItems={[
@@ -165,6 +174,11 @@ export const App = ({
         collapsedState={collapseState}
         viewOptions={viewOptions}
         setLegendData={setLegendData}
+        setLoadingState={SetLoadingState}
+      />
+
+      <LoadingFrontPanel
+        state={loadingState}
       />
     </div>
   );

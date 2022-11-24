@@ -14,8 +14,7 @@ const Template: ComponentStory<typeof LoadingFrontPanel> = (args) => <LoadingFro
 
 export const normal = Template.bind({});
 normal.args = {
-    message: "Loading Nothing",
-    isActive: true
+    state: { isActive: true, msg: "Loading something" }
 };
 
 

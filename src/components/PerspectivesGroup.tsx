@@ -18,6 +18,7 @@ import { useEffect, useReducer, useState } from "react";
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
+import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 const perspectiveContainers: React.CSSProperties = {
     display: "flex",
@@ -46,6 +47,8 @@ interface PerspectivesGroupProps {
      * Function to setup the legend's data.
      */
     setLegendData: React.Dispatch<ILegendDataAction>,
+
+    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
 }
 
 /**
@@ -57,6 +60,7 @@ export const PerspectivesGroups = ({
     collapsedState,
     viewOptions,
     setLegendData,
+    setLoadingState,
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
@@ -105,6 +109,7 @@ export const PerspectivesGroups = ({
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
             perspectiveState={leftState}
+            setLoadingState={setLoadingState}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -117,6 +122,7 @@ export const PerspectivesGroups = ({
             networkFocusID={networkFocusID}
             perspectiveState={rightState}
             mirror={true}
+            setLoadingState={setLoadingState}
         />
 
     return (

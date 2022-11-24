@@ -547,3 +547,39 @@ input[type="range"]::-ms-track {
         transform: rotate(360deg);
     }
 }
+
+@keyframes toVisible {
+    from {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@keyframes toHidden {
+    from {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    to {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+.toVisibleAnim {
+    animation-name: toVisible;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.toHiddenAnim {
+    animation-name: toHidden;
+    animation-duration: 0s;
+    animation-fill-mode: forwards;
+}
