@@ -109,7 +109,7 @@ export const SelectPerspectiveDropdown = ({
             <DropMenu
                 items={[]}
                 content="No available perspectives"
-                extraClassButton="primary down-arrow fixedWidth-15vw"
+                extraClassButton="transparent down-arrow fixedWidth-15vw"
             />
         );
     }
