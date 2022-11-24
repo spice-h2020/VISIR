@@ -7,12 +7,13 @@
 import { EFileSource, initialOptions, EButtonState } from "../constants/viewOptions";
 import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 //Config file
 import config from '../appConfig.json';
+import { LoadingFrontPanel } from "../basicComponents/LoadingFrontPanel";
 
 const inputTextStyle: React.CSSProperties = {
     width: "20rem",
@@ -40,7 +41,14 @@ export const FileSourceDropdown = ({
 
     const [states, setStates] = useReducer(bStateArrayReducer, init());
 
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [loadingMsg, setLoadingMsg] = useState<string>("");
+
+
     const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
+
+        setLoadingMsg(`Loading ${EFileSource[newFileSource]}`)
+        setIsLoading(true);
 
         setStates({
             action: EbuttonStateArrayAction.activeOne,
@@ -48,24 +56,40 @@ export const FileSourceDropdown = ({
             newState: EButtonState.loading
         });
 
-        setFileSource(newFileSource, () => setStates({
-            action: EbuttonStateArrayAction.activeOne,
-            index: newFileSource,
-            newState: EButtonState.active
-        }), apiURL);
+        const callback = () => {
+            setIsLoading(false);
+            setStates({
+                action: EbuttonStateArrayAction.activeOne,
+                index: newFileSource,
+                newState: EButtonState.active
+            })
+        }
 
+        setFileSource(newFileSource, callback, apiURL);
     }
+
+    //When the app starts, select the initial fileSource and load its perspectives
+    useEffect(() => {
+        changeFileSource(initialOptions.fileSource);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
     const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef)
 
     return (
-        <DropMenu
-            items={fileSourceButtons}
-            content="File Source"
-            extraClassButton="transparent down-arrow"
-            menuDirection={EDropMenuDirection.down}
-        />
+        <React.Fragment>
+            <DropMenu
+                items={fileSourceButtons}
+                content="File Source"
+                extraClassButton="transparent down-arrow"
+                menuDirection={EDropMenuDirection.down}
+            />
+            <LoadingFrontPanel
+                isActive={isLoading}
+                message={loadingMsg}
+            />
+        </React.Fragment>
     );
 };
 
@@ -102,7 +126,6 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[], i
                     if (inputRef.current) {
                         changeFileSource(EFileSource.Api, inputRef.current.value);
                     }
-
                 }}
                 state={selectedItems[EFileSource.Api]}
                 extraClassName={selectedItems[EFileSource.Api] === EButtonState.active ? "primary" : ""}

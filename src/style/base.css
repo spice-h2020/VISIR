@@ -68,11 +68,6 @@ body {
     letter-spacing: var(--titleLetterSpacing);
 }
 
-img.mainIcon {
-
-    /* filter: brightness(76.9%) hue-rotate(1deg) saturate(62.8%);  Only brightness filter works */
-}
-
 .fixedWidth-15vw {
     width: 15vw;
 }
@@ -536,4 +531,19 @@ input[type="range"]::-ms-track {
 
 .bar-portion:last-child {
     border-right: 1px solid black;
+}
+
+/*------------------------------------------
+//         ANIMATIONS
+//------------------------------------------*/
+
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }

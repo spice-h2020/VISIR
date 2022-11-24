@@ -60,14 +60,6 @@ export const App = ({
     requestManager.requestAllPerspectivesIds(initPerspectives, changeItemState);
   }
 
-  //When the app starts, select the initial fileSource and load its perspectives
-  useEffect(() => {
-    updateFileSource(initialOptions.fileSource);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-
-
   function initPerspectives(newIds: PerspectiveId[]) {
     setLeftPerspective(undefined);
     setRightPerspective(undefined);
