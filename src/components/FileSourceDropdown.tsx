@@ -7,13 +7,13 @@
 import { EFileSource, initialOptions, EButtonState } from "../constants/viewOptions";
 import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 //Config file
 import config from '../appConfig.json';
-import { ILoadingState, LoadingFrontPanel } from "../basicComponents/LoadingFrontPanel";
+import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 const inputTextStyle: React.CSSProperties = {
     width: "20rem",

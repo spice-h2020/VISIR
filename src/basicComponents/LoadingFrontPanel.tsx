@@ -1,9 +1,7 @@
 /**
- * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
- * The button can also be disabled to negate any interaction with it, or change its colors with the state : ButtonState
- * property.
- * If auto toggle parameter is true, the button will automaticaly change its state between active and 
- * unactive when clicked.
+ * @fileoverview This files creates popup that darken the background. The popup has a customizable loading text
+ * and a spinner spining while loading.
+ * When the popup appears, it does it in a transition. When it dissapear, it does it instantly.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -64,7 +62,7 @@ interface LoadingFrontPanelProps {
 }
 
 /**
- * UI component that executes a function when clicked.
+ * UI component that shows loading feedback to the user.
  */
 export const LoadingFrontPanel = ({
     state,
@@ -77,6 +75,7 @@ export const LoadingFrontPanel = ({
         setActive(state.isActive);
     }, [state, state.isActive]);
 
+    //Adds points to the end of the text every half seccond
     useEffect(() => {
         const intervalId = setInterval(() => {
             setNumdots(prev => Math.max((prev + 1) % 4, 1));

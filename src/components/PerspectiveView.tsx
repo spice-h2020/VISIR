@@ -137,11 +137,11 @@ export const PerspectiveView = ({
     //Create the vis network controller
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
+            setLoadingState({ isActive: true, msg: `Loading ${perspectiveData.name}` });
 
             if (networkFocusID === undefined) {
                 sf.setNetworkFocusId(perspectiveData.id);
             }
-            setLoadingState({ isActive: true, msg: `Loading ${perspectiveData.name}` });
 
             setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
                 sf, dimStrat, networkFocusID!, setLoadingState));
