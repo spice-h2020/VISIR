@@ -587,3 +587,22 @@ input[type="range"]::-ms-track {
     animation-duration: 0s;
     animation-fill-mode: forwards;
 }
+
+@keyframes bigBlink {
+    0% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.5;
+    }
+
+    100% {
+        scale: 1;
+    }
+}
+
+.blinkSizeAnim.primary {
+    animation-name: bigBlink;
+    animation-duration: 1.5s;
+}

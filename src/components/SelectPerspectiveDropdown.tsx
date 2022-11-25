@@ -124,7 +124,7 @@ export const SelectPerspectiveDropdown = ({
                 <div style={buttonText}>
                     {text}
                 </div>}
-            extraClassButton="primary down-arrow fixedWidth-15vw"
+            extraClassButton="primary down-arrow fixedWidth-15vw blinkSizeAnim"
             hoverText={text}
             menuDirection={EDropMenuDirection.down}
         />
