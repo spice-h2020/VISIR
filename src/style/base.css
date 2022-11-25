@@ -234,8 +234,10 @@ body {
     opacity: 75%;
 }
 
+
 .accordion-menu:first-child .btn-accordion {
     border-radius: 10px 10px 0px 0px;
+
 }
 
 .accordion-menu:last-child .btn-accordion {

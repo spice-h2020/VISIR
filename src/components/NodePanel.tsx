@@ -51,7 +51,7 @@ export const NodePanel = ({
         const keys = Object.keys(node.explicit_community);
 
         for (let i = 0; i < keys.length; i++) {
-            content.push(<div className="row" key={2 + i}> {`${keys[i]}: ${node.explicit_community[keys[i]]}`} </div>);
+            content.push(<div className="row" key={2 + i}> <strong> {`${keys[i]}:`} </strong> &nbsp; {node.explicit_community[keys[i]]} </div>);
         }
 
         content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks)} </div>);
@@ -82,28 +82,42 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
 
     if (node !== undefined && node.interactions !== undefined) {
 
-        if (node.interactions !== undefined) {
-            const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } = getInteractionsPanel(node.interactions, artworks, false);
-
-            content.push(
-                <div key={0} style={{ margin: "0.5rem 0px" }}>
-                    <Accordion
-                        items={interactionPanels}
-                        tittles={tittles}
-                    />
-                </div>);
-        }
         if (node.community_interactions !== undefined) {
-            const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } = getInteractionsPanel(node.interactions, artworks, true);
+            const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
+                getInteractionsPanel(node.community_interactions, artworks, true);
 
-            content.push(
-                <div key={1} style={{ margin: "0.5rem 0px" }}>
-                    <Accordion
-                        items={interactionPanels}
-                        tittles={tittles}
-                    />
-                </div>);
+            if (interactionPanels.length > 0) {
+                content.push(
+                    <div key={1} style={{ margin: "0.5rem 0px" }}>
+                        <strong>
+                            Interactions used in the clustering:
+                        </strong>
+                        <Accordion
+                            items={interactionPanels}
+                            tittles={tittles}
+                        />
+                    </div>);
+            }
         }
+
+        if (node.interactions !== undefined) {
+            const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
+                getInteractionsPanel(node.interactions, artworks, false);
+
+            if (interactionPanels.length > 0) {
+                content.push(
+                    <div key={0} style={{ margin: "0.5rem 0px" }}>
+                        <strong>
+                            Other user interactions:
+                        </strong>
+                        <Accordion
+                            items={interactionPanels}
+                            tittles={tittles}
+                        />
+                    </div>);
+            }
+        }
+
     }
 
     return content;
