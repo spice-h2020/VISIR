@@ -274,6 +274,18 @@
                         "Love": 1
                     }
                 }
+            ],
+            "community_interactions": [
+                {
+                    "artwork_id": "2",
+                    "feelings": "Vociare, odori, curiosità, calore",
+                    "extracted_emotions": {
+                        "Surprise": 0.622342,
+                        "Anger": 1,
+                        "Disgust": 1,
+                        "Love": 1
+                    }
+                }
             ]
         },
         {

@@ -79,7 +79,8 @@ export default class NodeExplicitComms {
      * @param node source node
      * @param dimStrat dimension strategy controller
      */
-    parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined, setLegendData: React.Dispatch<ILegendDataAction>) {
+    parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined,
+        setLegendData: React.Dispatch<ILegendDataAction>, unique: boolean) {
         if (node.id === nodeConst.anonymousGroupKey) {
             node.isAnonGroup = true;
             this.hasAnonGroup = true;
@@ -109,7 +110,7 @@ export default class NodeExplicitComms {
 
             explicitKeys.forEach((key) => {
 
-                if (dimStrat === undefined) {
+                if (dimStrat === undefined || unique) {
                     this.updateExplicitData(key, node);
                 }
 

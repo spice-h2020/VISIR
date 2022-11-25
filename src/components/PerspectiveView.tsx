@@ -48,6 +48,10 @@ interface PerspectiveViewProps {
     mirror?: boolean;
 
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+    /**
+     * If its the unique active perspective in the app
+     */
+    unique: boolean;
 }
 
 /**
@@ -63,6 +67,7 @@ export const PerspectiveView = ({
     perspectiveState,
     mirror = false,
     setLoadingState,
+    unique,
 }: PerspectiveViewProps) => {
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
@@ -144,10 +149,9 @@ export const PerspectiveView = ({
             }
 
             setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
-                sf, dimStrat, networkFocusID!, setLoadingState));
+                sf, dimStrat, networkFocusID!, setLoadingState, unique));
 
             setLoadingState({ isActive: false });
-
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);

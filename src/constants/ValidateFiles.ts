@@ -391,9 +391,23 @@ function isUserDataValid(arg: any): types.IUserData {
             } catch (e: any) {
                 throw Error(`Interaction of the user (${arg.id}) has problems: ${e.message}`);
             }
+        }
 
-        } else {
-            arg.interactions = "";
+        if (arg.community_interactions === undefined) {
+            arg.community_interactions = [];
+        }
+
+        const nCommInteractions = Object.keys(arg.community_interactions).length;
+        if (nCommInteractions > 0) {
+
+            try {
+                for (let i = 0; i < nCommInteractions; i++) {
+                    arg.community_interactions[i] = isInteractionValid(arg.community_interactions[i]);
+                }
+            } catch (e: any) {
+                throw Error(`Community interaction of the user (${arg.id}) has problems: ${e.message}`);
+            }
+
         }
 
         return arg;

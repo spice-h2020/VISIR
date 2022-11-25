@@ -74,7 +74,6 @@ export const PerspectivesGroups = ({
         setSelectedObject: setSelectedObject,
     }
 
-
     //When the collapsed state changes, we clear both datatables
     useEffect(() => {
         setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
@@ -84,6 +83,7 @@ export const PerspectivesGroups = ({
     //When a new perspective is loaded, we clear all configuration
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
+
             setLegendData({ type: "reset", newData: false });
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
@@ -110,6 +110,7 @@ export const PerspectivesGroups = ({
             networkFocusID={networkFocusID}
             perspectiveState={leftState}
             setLoadingState={setLoadingState}
+            unique={rightPerspective === undefined}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -123,6 +124,7 @@ export const PerspectivesGroups = ({
             perspectiveState={rightState}
             mirror={true}
             setLoadingState={setLoadingState}
+            unique={leftPerspective === undefined}
         />
 
     return (

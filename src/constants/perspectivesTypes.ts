@@ -124,7 +124,9 @@ export interface IUserData extends anyProperty {
     label: string;
     implicit_community: number;
     explicit_community: anyProperty;
+
     interactions: IInteraction[];
+    community_interactions: IInteraction[];
 
     isMedoid: boolean;
     isAnonymous: boolean;

@@ -5,7 +5,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, IUserData }
+import { IArtworkData, IInteraction, IUserData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
@@ -78,37 +78,54 @@ export const NodePanel = ({
  * @returns a react component with the node's interactions accordion.
  */
 function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[]) {
-    let content: React.ReactNode = <React.Fragment />;
+    let content: React.ReactNode[] = [];
 
     if (node !== undefined && node.interactions !== undefined) {
 
-        const tittles: string[] = new Array<string>();
-        const interactions: React.ReactNode[] = new Array<React.ReactNode>();
+        if (node.interactions !== undefined) {
+            const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } = getInteractionsPanel(node.interactions, artworks, false);
 
-        for (let i = 0; i < node.interactions.length; i++) {
-
-            const interaction = node.interactions[i];
-            const artwork = artworks.find((element: IArtworkData) => { return element.id === interaction.artwork_id });
-
-            if (artwork !== undefined) {
-                tittles.push(artwork.tittle);
-                interactions.push(
-                    <InteractionPanel
-                        artworksData={artworks}
-                        interaction={interaction}
+            content.push(
+                <div key={0} style={{ margin: "0.5rem 0px" }}>
+                    <Accordion
+                        items={interactionPanels}
+                        tittles={tittles}
                     />
-                );
-            }
+                </div>);
         }
+        if (node.community_interactions !== undefined) {
+            const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } = getInteractionsPanel(node.interactions, artworks, true);
 
-        content =
-            <div style={{ margin: "0.5rem 0px" }}>
-                <Accordion
-                    items={interactions}
-                    tittles={tittles}
-                />
-            </div>;
+            content.push(
+                <div key={1} style={{ margin: "0.5rem 0px" }}>
+                    <Accordion
+                        items={interactionPanels}
+                        tittles={tittles}
+                    />
+                </div>);
+        }
     }
 
     return content;
+}
+
+function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkData[], isCommunity: boolean) {
+    const tittles: string[] = new Array<string>();
+    const interactionPanels: React.ReactNode[] = new Array<React.ReactNode>();
+
+    for (let i = 0; i < interactions.length; i++) {
+
+        const interaction = interactions[i];
+        const artwork = artworks.find((element: IArtworkData) => { return element.id === interaction.artwork_id; });
+
+        if (artwork !== undefined) {
+            tittles.push(artwork.tittle);
+            interactionPanels.push(
+                <InteractionPanel
+                    artworksData={artworks}
+                    interaction={interaction} />
+            );
+        }
+    }
+    return { interactionPanels, tittles };
 }

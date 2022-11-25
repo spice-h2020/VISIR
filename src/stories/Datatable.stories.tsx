@@ -55,6 +55,7 @@ const node: IUserData = {
             { value: "Love", count: 1 }
         ]
     }] as IInteraction[],
+    community_interactions: [],
     isMedoid: false,
     isAnonymous: false,
     isAnonGroup: false
@@ -157,6 +158,7 @@ const allUsers = [
                 { value: "Fear", count: 0.5 }
             ]
         }] as IInteraction[],
+        community_interactions: [],
         isMedoid: true,
         isAnonymous: false,
         isAnonGroup: false
@@ -198,6 +200,7 @@ const allUsers = [
                 { value: "Love", count: 1 }
             ]
         }] as IInteraction[],
+        community_interactions: [],
         isMedoid: false,
         isAnonymous: false,
         isAnonGroup: false

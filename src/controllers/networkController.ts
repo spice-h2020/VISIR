@@ -63,7 +63,7 @@ export default class NetworkController {
      */
     constructor(perspectiveData: IPerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: IStateFunctions,
         dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string,
-        setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>) {
+        setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, unique: boolean) {
 
         this.setLoadingState = setLoadingState;
         this.isReady = false;
@@ -79,7 +79,7 @@ export default class NetworkController {
         this.createOptions();
         this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
 
-        this.parseNodes(perspectiveData, dimStrat, sf, viewOptions);
+        this.parseNodes(perspectiveData, dimStrat, sf, viewOptions, unique);
         this.parseEdges(this.edges, perspectiveData.similarity, viewOptions);
 
         this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
@@ -95,17 +95,18 @@ export default class NetworkController {
      * @param sf Functions that change the state
      * @param viewOptions Options that change the visualization
      */
-    parseNodes(perspectiveData: IPerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions, viewOptions: ViewOptions) {
+    parseNodes(perspectiveData: IPerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions,
+        viewOptions: ViewOptions, unique: boolean) {
         const explicitCtrl = new NodeExplicitComms(perspectiveData.communities);
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
 
         perspectiveData.users.forEach((user: IUserData) => {
-            explicitCtrl.parseExplicitCommunity(user, dimStrat, sf.setLegendData);
+            explicitCtrl.parseExplicitCommunity(user, dimStrat, sf.setLegendData, unique);
             nodeLocation.updateNodeGroup(user, perspectiveData.communities);
         });
         explicitCtrl.sortExplicitData();
 
-        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions);
+        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions, unique);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
         perspectiveData.users.forEach((user: IUserData) => {
