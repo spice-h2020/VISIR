@@ -5,7 +5,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, IUserData }
+import { IArtworkData, IInteraction, IUserData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
@@ -19,7 +19,7 @@ const sectionTittleStyle: React.CSSProperties = {
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
-    margin: "5px 0px"
+    margin: "0.5rem 0px"
 }
 
 interface NodePanelProps {
@@ -27,7 +27,6 @@ interface NodePanelProps {
     node: IUserData | undefined;
     hideLabel: boolean;
     artworks: IArtworkData[];
-
 }
 
 /**
@@ -52,10 +51,10 @@ export const NodePanel = ({
         const keys = Object.keys(node.explicit_community);
 
         for (let i = 0; i < keys.length; i++) {
-            content.push(<div className="row" key={2 + i}> {`${keys[i]}: ${node.explicit_community[keys[i]]}`} </div>);
+            content.push(<div className="row" key={2 + i}> <strong> {`${keys[i]}:`} </strong> &nbsp; {node.explicit_community[keys[i]]} </div>);
         }
 
-        content.push(<div key={-1} style={{ margin: "5px 0px" }}> {getInteractionsAccordion(node, artworks)} </div>);
+        content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks)} </div>);
     }
 
     if (content.length === 0) {
@@ -79,37 +78,68 @@ export const NodePanel = ({
  * @returns a react component with the node's interactions accordion.
  */
 function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[]) {
-    let content: React.ReactNode = <React.Fragment />;
+    let content: React.ReactNode[] = [];
 
     if (node !== undefined && node.interactions !== undefined) {
 
-        const tittles: string[] = new Array<string>();
-        const interactions: React.ReactNode[] = new Array<React.ReactNode>();
+        if (node.community_interactions !== undefined) {
+            const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
+                getInteractionsPanel(node.community_interactions, artworks, true);
 
-        for (let i = 0; i < node.interactions.length; i++) {
-
-            const interaction = node.interactions[i];
-            const artwork = artworks.find((element: IArtworkData) => { return element.id === interaction.artwork_id });
-
-            if (artwork !== undefined) {
-                tittles.push(artwork.tittle);
-                interactions.push(
-                    <InteractionPanel
-                        artworksData={artworks}
-                        interaction={interaction}
-                    />
-                );
+            if (interactionPanels.length > 0) {
+                content.push(
+                    <div key={1} style={{ margin: "0.5rem 0px" }}>
+                        <strong>
+                            Interactions used in the clustering:
+                        </strong>
+                        <Accordion
+                            items={interactionPanels}
+                            tittles={tittles}
+                        />
+                    </div>);
             }
         }
 
-        content =
-            <div style={{ margin: "5px 0px" }}>
-                <Accordion
-                    items={interactions}
-                    tittles={tittles}
-                />
-            </div>;
+        if (node.no_community_interactions !== undefined) {
+            const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
+                getInteractionsPanel(node.no_community_interactions, artworks, false);
+
+            if (interactionPanels.length > 0) {
+                content.push(
+                    <div key={0} style={{ margin: "0.5rem 0px" }}>
+                        <strong>
+                            Other user interactions:
+                        </strong>
+                        <Accordion
+                            items={interactionPanels}
+                            tittles={tittles}
+                        />
+                    </div>);
+            }
+        }
+
     }
 
     return content;
+}
+
+function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkData[], isCommunity: boolean) {
+    const tittles: string[] = new Array<string>();
+    const interactionPanels: React.ReactNode[] = new Array<React.ReactNode>();
+
+    for (let i = 0; i < interactions.length; i++) {
+
+        const interaction = interactions[i];
+        const artwork = artworks.find((element: IArtworkData) => { return element.id === interaction.artwork_id; });
+
+        if (artwork !== undefined) {
+            tittles.push(artwork.tittle);
+            interactionPanels.push(
+                <InteractionPanel
+                    artworksData={artworks}
+                    interaction={interaction} />
+            );
+        }
+    }
+    return { interactionPanels, tittles };
 }

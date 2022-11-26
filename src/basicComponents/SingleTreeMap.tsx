@@ -35,10 +35,6 @@ export const SingleTreeMap = ({
     const serieData = [];
 
     for (const obj of data) {
-        if (obj.count <= 10) {
-            obj.count *= 100;
-        }
-
         serieData.push({
             x: obj.value,
             y: obj.count
@@ -53,7 +49,7 @@ export const SingleTreeMap = ({
         <div style={{
             width: "80%",
             margin: "auto",
-            maxHeight: "200px"
+            maxHeight: "20vh"
         }}>
             <ReactApexChart
                 options={options}

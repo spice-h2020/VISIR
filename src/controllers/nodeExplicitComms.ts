@@ -79,7 +79,8 @@ export default class NodeExplicitComms {
      * @param node source node
      * @param dimStrat dimension strategy controller
      */
-    parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined, setLegendData: React.Dispatch<ILegendDataAction>) {
+    parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined,
+        setLegendData: React.Dispatch<ILegendDataAction>, unique: boolean) {
         if (node.id === nodeConst.anonymousGroupKey) {
             node.isAnonGroup = true;
             this.hasAnonGroup = true;
@@ -109,7 +110,7 @@ export default class NodeExplicitComms {
 
             explicitKeys.forEach((key) => {
 
-                if (dimStrat === undefined) {
+                if (dimStrat === undefined || unique) {
                     this.updateExplicitData(key, node);
                 }
 
@@ -245,7 +246,7 @@ export default class NodeExplicitComms {
 
                     for (let i = 0; i < sortedArray.length; i++) {
                         let dimIndex = dimAttribute?.values.findIndex((value) => { return value === sortedArray[i][0] }) ?? 0;
-
+                        console.log(Number(sortedArray[i][1].toFixed(2)));
                         wordInputArray.push(
                             {
                                 value: sortedArray[i][0],

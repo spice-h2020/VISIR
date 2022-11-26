@@ -11,11 +11,10 @@ import { TagCloud } from 'react-tagcloud'
 import { IStringNumberRelation } from '../constants/perspectivesTypes';
 
 const tagCloudStyle: React.CSSProperties = {
-    maxHeight: "200px",
-    border: "1px solid black",
+    maxHeight: "20vh",
     cursor: "default",
     backgroundColor: "white",
-    width: "80%",
+    width: "60%",
     margin: "auto",
 
     textAlign: "center",
@@ -38,13 +37,7 @@ export const WordCloudGraph = ({
 }: WordCloudProps) => {
 
     for (let obj of data) {
-
-        if (obj.count <= 10) {
-            obj.count *= 100;
-        }
-
         obj.props = { title: `${obj.count}%` }
-
     }
 
     return (

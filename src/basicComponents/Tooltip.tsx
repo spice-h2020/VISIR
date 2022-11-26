@@ -27,11 +27,14 @@ const tooltipContent: React.CSSProperties = {
 }
 
 const tooltipHeader: React.CSSProperties = {
-    paddingLeft: "10px",
+    paddingLeft: "1rem",
     marginBottom: "0",
     borderRadius: "6px 6px 0px 0px",
     backgroundColor: "var(--headerBackground)",
     border: "2px solid var(--grayLineColor)",
+
+    display: "flex",
+    justifyContent: "space-between",
 }
 
 const tooltipTittleStyle: React.CSSProperties = {
@@ -53,11 +56,11 @@ const tooltipBodyStyle: React.CSSProperties = {
 
 const tooltipArrow: React.CSSProperties = {
     position: "absolute",
-    borderWidth: "5px",
+    borderWidth: "0.5rem",
     borderStyle: "solid",
     top: "50%",
     right: "100%",
-    marginTop: "-5px",
+    marginTop: "-0.5rem",
     borderColor: "transparent black transparent transparent",
 }
 

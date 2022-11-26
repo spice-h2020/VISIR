@@ -26,19 +26,26 @@ const sectionTittleStyle: React.CSSProperties = {
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
-    margin: "5px 0px"
+    margin: "1rem 0px"
 }
 
 const tableContainer: React.CSSProperties = {
     margin: "auto",
-    padding: "16px 16px 24px 16px",
+    padding: "0.5rem 1rem",
     backgroundColor: "white",
     border: "1px solid #dadce0",
     boxSizing: "border-box",
     borderRadius: "8px",
+
+    height: "fit-content",
     width: "100%",
-    maxWidth: "500px",
+
+    maxHeight: "80vh",
+    maxWidth: "35vw",
+
     wordWrap: "break-word",
+
+    overflowY: "auto",
 }
 
 interface DataTableProps {
@@ -117,7 +124,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
         }
 
         return (
-            <div style={{ borderTop: "1px #dadce0 inset", paddingTop: "3px" }} key={2}>
+            <div style={{ borderTop: "1px #dadce0 inset" }} key={2}>
                 {tittle}
                 {content}
             </div>
@@ -231,7 +238,7 @@ function getContainerStyle(currentState: string): React.CSSProperties {
     let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(tableContainer)));
 
     if (currentState === "active") {
-        newStyle.borderLeft = "7px solid var(--primaryButtonColor)";
+        newStyle.borderLeft = "0.5rem solid var(--primaryButtonColor)";
     } else {
         newStyle.borderLeft = "1px solid #dadce0";
     }

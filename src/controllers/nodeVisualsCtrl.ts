@@ -39,9 +39,10 @@ export default class NodeVisualsCtrl {
      * @param explicitData All the explicit data of this network
      * @param viewOptions Options that change how the network is seeing
      */
-    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions, explicitData: ExplicitData[], viewOptions: ViewOptions) {
+    constructor(dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions, explicitData: ExplicitData[],
+        viewOptions: ViewOptions, unique: boolean) {
 
-        if (dimStrat === undefined) {
+        if (dimStrat === undefined || unique) {
             this.dimStrat = this.createDimensionStrategy(explicitData, viewOptions.border, sf.setLegendData);
             sf.setDimensionStrategy(this.dimStrat);
         } else {

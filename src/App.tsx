@@ -9,11 +9,11 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer, initialOptions } from './constants/viewOptions';
+import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { ILegendData, legendDataReducer } from './constants/auxTypes';
 //Packages
-import { useEffect, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -25,11 +25,14 @@ import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdow
 import RequestManager from './managers/requestManager';
 
 import './style/base.css';
+import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFrontPanel';
 
 interface AppProps {
   perspectiveId1: string | null,
   perspectiveId2: string | null
 }
+
+
 
 export const App = ({
 
@@ -55,18 +58,13 @@ export const App = ({
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
 
+  //Parameters to activate/disactivate and edit the loading spinner.
+  const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
+
   const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
     requestManager.changeBaseURL(fileSource, apiURL);
     requestManager.requestAllPerspectivesIds(initPerspectives, changeItemState);
   }
-
-  //When the app starts, select the initial fileSource and load its perspectives
-  useEffect(() => {
-    updateFileSource(initialOptions.fileSource);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-
 
   function initPerspectives(newIds: PerspectiveId[]) {
     setLeftPerspective(undefined);
@@ -101,16 +99,19 @@ export const App = ({
     <div>
       <Navbar
         leftAlignedItems={[
-          <Button
-            content={<div className='row' style={{ alignItems: "center" }}>
-              <img style={{ height: "40px" }} src="./images/VISIR-red.png" alt="VISIR icon" />
-              <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
-            </div>}
-            extraClassName="transparent tittle mainBtn"
-            onClick={() => { window.location.reload() }}
-          />,
+          <div style={{ margin: "0px 5px" }}>
+            <Button
+              content={<div className='row' style={{ alignItems: "center" }}>
+                <img style={{ height: "40px" }} src="./images/VISIR-red.png" alt="VISIR icon" />
+                <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
+              </div>}
+              extraClassName="transparent tittle mainBtn"
+              onClick={() => { window.location.reload() }}
+            />
+          </div>,
           <FileSourceDropdown
             setFileSource={updateFileSource}
+            setLoadingState={SetLoadingState}
           />,
           <OptionsDropdown
             setViewOptions={setViewOptions}
@@ -124,6 +125,7 @@ export const App = ({
             allIds={allPerspectivesIds}
             isLeftDropdown={true}
             requestMan={requestManager}
+            setLoadingState={SetLoadingState}
           />,
           <Button
             content="<<"
@@ -152,6 +154,7 @@ export const App = ({
             allIds={allPerspectivesIds}
             isLeftDropdown={false}
             requestMan={requestManager}
+            setLoadingState={SetLoadingState}
           />,
         ]}
         rightAlignedItems={[
@@ -171,6 +174,11 @@ export const App = ({
         collapsedState={collapseState}
         viewOptions={viewOptions}
         setLegendData={setLegendData}
+        setLoadingState={SetLoadingState}
+      />
+
+      <LoadingFrontPanel
+        state={loadingState}
       />
     </div>
   );

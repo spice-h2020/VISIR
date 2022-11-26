@@ -15,12 +15,12 @@ import { getWordClouds } from "../components/DataColumn";
 const interactionBox: React.CSSProperties = {
     borderLeft: "1px solid var(--grayLineColor)",
     borderRight: "1px solid var(--grayLineColor)",
-    padding: "5px",
+    padding: "0.5rem",
 }
 
 const userFeelings: React.CSSProperties = {
     width: "80%",
-    margin: "15px auto",
+    margin: "1rem auto",
     border: "2px dashed var(--primaryButtonColor)",
     boxSizing: "border-box",
     textAlign: "center",

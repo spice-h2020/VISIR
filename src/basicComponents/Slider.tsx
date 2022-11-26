@@ -7,8 +7,8 @@
 import { useState } from "react";
 
 const sliderContainer: React.CSSProperties = {
-    padding: "12px 16px",
-    margin: "0px",
+    padding: "0.7rem 0.7rem",
+
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",

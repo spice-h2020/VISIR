@@ -21,7 +21,7 @@ export const ColorStain = ({
     return (
         <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
             style={{ verticalAlign: "middle" }}
-            height={`${20 * scale}px`}
+            height={`${1.6 * scale}rem`}
             viewBox="0 0 142.000000 142.000000"
             preserveAspectRatio="xMidYMid meet">
 
