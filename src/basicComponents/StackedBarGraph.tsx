@@ -50,6 +50,13 @@ export const StackedBarGraph = ({
 
     const bars = new Array<React.ReactNode>();
 
+    //Temporal hack to represent values with 0.
+    if (isAllZero(data)) {
+        for (let i = 0; i < data.length; i++) {
+            data[i].count = Number((1 / data.length * 100).toFixed(2));
+        }
+    }
+
     for (let i = 0; i < data.length; i++) {
 
         bars.push(
@@ -73,3 +80,15 @@ export const StackedBarGraph = ({
         </div>);
 };
 
+
+function isAllZero(data: IStringNumberRelation[]) {
+    let isAllZero = true;
+
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].count !== 0) {
+            return false;
+        }
+    }
+
+    return isAllZero;
+}
