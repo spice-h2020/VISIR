@@ -18,6 +18,7 @@ import { useEffect, useReducer, useState } from "react";
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
+import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 const perspectiveContainers: React.CSSProperties = {
     display: "flex",
@@ -46,6 +47,8 @@ interface PerspectivesGroupProps {
      * Function to setup the legend's data.
      */
     setLegendData: React.Dispatch<ILegendDataAction>,
+
+    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
 }
 
 /**
@@ -57,6 +60,7 @@ export const PerspectivesGroups = ({
     collapsedState,
     viewOptions,
     setLegendData,
+    setLoadingState,
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
@@ -70,7 +74,6 @@ export const PerspectivesGroups = ({
         setSelectedObject: setSelectedObject,
     }
 
-
     //When the collapsed state changes, we clear both datatables
     useEffect(() => {
         setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
@@ -80,6 +83,7 @@ export const PerspectivesGroups = ({
     //When a new perspective is loaded, we clear all configuration
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined) {
+
             setLegendData({ type: "reset", newData: false });
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
@@ -105,6 +109,8 @@ export const PerspectivesGroups = ({
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
             perspectiveState={leftState}
+            setLoadingState={setLoadingState}
+            unique={rightPerspective === undefined}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -117,6 +123,8 @@ export const PerspectivesGroups = ({
             networkFocusID={networkFocusID}
             perspectiveState={rightState}
             mirror={true}
+            setLoadingState={setLoadingState}
+            unique={leftPerspective === undefined}
         />
 
     return (

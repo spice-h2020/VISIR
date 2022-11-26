@@ -14,12 +14,12 @@ import { BarPortion } from "./BarPortion";
 const stackedBarTittle: React.CSSProperties = {
     padding: "0em 0.5em",
     float: "left",
-    margin: "3px 0px",
+    margin: "0.3rem 0px",
 }
 
 const barContainer: React.CSSProperties = {
     width: "100%",
-    height: "30px",
+    height: "2rem",
     color: "black",
 }
 

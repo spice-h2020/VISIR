@@ -17,6 +17,7 @@ import React, { useEffect, useState, useRef } from "react";
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/nodeDimensionStrat';
 import { DataTable } from './DataColumn';
+import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
 
 const networkContainer: React.CSSProperties = {
     margin: "0px 1.5% 15px 1.5%",
@@ -45,6 +46,12 @@ interface PerspectiveViewProps {
     perspectiveState: EPerspectiveVisState;
     //If true, mirror the dataTable and vis.js network position
     mirror?: boolean;
+
+    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+    /**
+     * If its the unique active perspective in the app
+     */
+    unique: boolean;
 }
 
 /**
@@ -59,6 +66,8 @@ export const PerspectiveView = ({
     networkFocusID,
     perspectiveState,
     mirror = false,
+    setLoadingState,
+    unique,
 }: PerspectiveViewProps) => {
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
@@ -133,12 +142,16 @@ export const PerspectiveView = ({
     //Create the vis network controller
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
+            setLoadingState({ isActive: true, msg: `Loading ${perspectiveData.name}` });
 
             if (networkFocusID === undefined) {
                 sf.setNetworkFocusId(perspectiveData.id);
             }
+
             setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
-                sf, dimStrat, networkFocusID!));
+                sf, dimStrat, networkFocusID!, setLoadingState, unique));
+
+            setLoadingState({ isActive: false });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);

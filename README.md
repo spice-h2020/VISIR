@@ -26,7 +26,7 @@ Prerequisite: [Docker](https://www.docker.com/).
 
 3. Run the docker container with the following command `docker-compose -f docker-compose.dev.yml up` inside the project folder.
 
-4. The app will be automaticaly launched in `http://localhost:3001/` once the previous command finishes, so open that URL in your web browser.
+4. The app will be automaticaly launched in `http://localhost:3000/` once the previous command finishes, so open that URL in your web browser.
 
 ### Using Node.js and NPM. 
 Prerequisite: [Node](https://nodejs.org/en/).

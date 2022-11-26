@@ -44,8 +44,9 @@ export const Accordion = ({
     }
 
     return (
-        <React.Fragment>
+        //This div is necesary for the :fistChild properties of all accordion item
+        <div>
             {components}
-        </React.Fragment>
+        </div>
     );
 };

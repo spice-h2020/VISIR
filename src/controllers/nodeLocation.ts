@@ -107,30 +107,6 @@ export default class NodeLocation {
         } else {
             const nodePos: IPoint = this.getNodePos(this.nodeGroups[group], node.id);
 
-
-            // if (node.id === "ox8G7avH") {
-            //     console.log("Node raro");
-            //     console.log(nodePos.y);
-
-            // }
-            // if (node.id === "RQ4a2nIG") {
-            //     console.log("hmm")
-            //     console.log(nodePos.y);
-            // }
-            // if (node.id === "fqybaAk8") {
-            //     console.log("Node 2 raro");
-            //     console.log(nodePos.y);
-
-            // }
-            // if (node.id === "cBjFhvjx") {
-            //     console.log("hmm 2")
-            //     console.log(nodePos.y);
-            // }
-
-
-
-
-
             node.x = nodePos.x;
             node.y = nodePos.y;
         }

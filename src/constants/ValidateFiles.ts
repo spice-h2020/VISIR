@@ -235,6 +235,7 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
         }
         arg.explanation_type = types.EExplanationTypes[arg.explanation_type];
 
+        //Explicit attributes doesnt require a validation
         if (arg.explanation_type !== types.EExplanationTypes.explicit_attributes) {
             if (arg.explanation_data === undefined) {
                 throw Error(`Explanation_data is undefined`);
@@ -252,7 +253,6 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
             }
 
             switch (arg.explanation_type) {
-                //Explicit attributes doesnt require a validation
                 case types.EExplanationTypes.medoid: {
                     arg = isMedoidExplanationValid(arg);
                     break;
@@ -315,7 +315,7 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
         for (let i = 0; i < keys.length; i++) {
             newData.push({
                 value: keys[i],
-                count: arg.explanation_data.data[keys[i]]
+                count: Number(arg.explanation_data.data[keys[i]].toFixed(2))
             });
         }
 
@@ -391,9 +391,40 @@ function isUserDataValid(arg: any): types.IUserData {
             } catch (e: any) {
                 throw Error(`Interaction of the user (${arg.id}) has problems: ${e.message}`);
             }
+        }
 
-        } else {
-            arg.interactions = "";
+        if (arg.community_interactions === undefined) {
+            arg.community_interactions = [];
+        }
+
+        const nCommInteractions = Object.keys(arg.community_interactions).length;
+        if (nCommInteractions > 0) {
+
+            try {
+                for (let i = 0; i < nCommInteractions; i++) {
+                    arg.community_interactions[i] = isInteractionValid(arg.community_interactions[i]);
+                }
+            } catch (e: any) {
+                throw Error(`Community interaction of the user (${arg.id}) has problems: ${e.message}`);
+            }
+
+        }
+
+        if (arg.no_community_interactions === undefined) {
+            arg.no_community_interactions = [];
+        }
+
+        const nNoCommInteractions = Object.keys(arg.no_community_interactions).length;
+        if (nNoCommInteractions > 0) {
+
+            try {
+                for (let i = 0; i < nNoCommInteractions; i++) {
+                    arg.no_community_interactions[i] = isInteractionValid(arg.no_community_interactions[i]);
+                }
+            } catch (e: any) {
+                throw Error(`No-community interaction of the user (${arg.id}) has problems: ${e.message}`);
+            }
+
         }
 
         return arg;

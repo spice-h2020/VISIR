@@ -42,7 +42,8 @@
 
     --smallButtonFont: "0.8em";
 
-    --sliderThumbSize: 15px;
+    --sliderThumbSize: 1rem;
+    --LegendItemsSize: 1.2rem;
 }
 
 * {
@@ -65,11 +66,6 @@ body {
     font-family: var(--titleFont);
     font-size: var(--titleFontSize);
     letter-spacing: var(--titleLetterSpacing);
-}
-
-img.mainIcon {
-
-    /* filter: brightness(76.9%) hue-rotate(1deg) saturate(62.8%);  Only brightness filter works */
 }
 
 .fixedWidth-15vw {
@@ -128,10 +124,13 @@ img.mainIcon {
     background-color: #555;
 }
 
+.dark.disabled {
+    background-color: transparent;
+}
+
 .transparent {
     border: none;
     background-color: transparent;
-    margin: 0px 5px;
     color: black;
 }
 
@@ -153,8 +152,7 @@ img.mainIcon {
 .btn-dropdown {
     display: block;
     width: 100%;
-    height: 40px;
-    padding: 12px 16px;
+    height: 2.5rem;
     margin: 0;
 
     color: black;
@@ -170,15 +168,6 @@ img.mainIcon {
 
 .btn-dropdown.disabled:hover {
     background-color: transparent;
-}
-
-
-.btn-dropdownbtn:first-child {
-    margin-top: 0.1rem;
-}
-
-.btn-dropdown:last-child {
-    margin-bottom: 0.1rem;
 }
 
 .btn-dropdown:hover {
@@ -205,11 +194,8 @@ img.mainIcon {
     text-align: center;
 
     color: black;
-    height: 20px;
-    width: 20px;
-
-    margin: 0cm;
-    padding: 0cm;
+    height: 1rem;
+    width: 1rem;
 }
 
 .btn-close {
@@ -222,13 +208,12 @@ img.mainIcon {
 
 /* Button that toggles an accordion */
 .btn-accordion {
-    padding: 8px 8px 12px 8px;
+    padding: 1rem 0rem 1rem 1rem;
     background-color: var(--bodyBackground);
     color: black;
     border: 1px solid var(--grayLineColor);
 
     width: 100%;
-    max-width: 500px;
     word-wrap: break-word;
 
     border-radius: 0px;
@@ -249,8 +234,10 @@ img.mainIcon {
     opacity: 75%;
 }
 
+
 .accordion-menu:first-child .btn-accordion {
     border-radius: 10px 10px 0px 0px;
+
 }
 
 .accordion-menu:last-child .btn-accordion {
@@ -277,37 +264,37 @@ img.mainIcon {
 
 /*Little triangle after a button */
 .btn.down-arrow::after {
-    margin-left: 0.255rem;
+    margin-left: 0.20rem;
     vertical-align: 0.255rem;
     display: inline-block;
     content: "";
-    border-top: 0.3em solid;
-    border-right: 0.3em solid transparent;
+    border-top: 0.3rem solid;
+    border-right: 0.3rem solid transparent;
     border-bottom: 0;
-    border-left: 0.3em solid transparent;
+    border-left: 0.3rem solid transparent;
 }
 
 .down-right::after {
-    margin-left: 0.45rem;
+    margin-left: 0.20rem;
     vertical-align: 0.15rem;
     display: inline-block;
     content: "";
-    border-top: 0.3em solid transparent;
-    border-right: 0.3em solid transparent;
-    border-bottom: 0.3em solid transparent;
-    border-left: 0.3em solid;
+    border-top: 0.3rem solid transparent;
+    border-right: 0.3rem solid transparent;
+    border-bottom: 0.3rem solid transparent;
+    border-left: 0.3rem solid;
 }
 
 /*Little + after a button*/
 .btn.plus::after {
-    margin-left: 0.255em;
+    margin-left: 0.20rem;
     scale: 1.5;
     display: inline-block;
     content: "+";
 }
 
 .btn.plus.active::after {
-    margin-left: 5px;
+    margin-left: 0.20rem;
     scale: 1.5;
     display: inline-block;
     content: "-";
@@ -327,9 +314,9 @@ img.mainIcon {
 
 input[type="range"] {
     -webkit-appearance: none;
-    margin-top: 10px;
+    margin-top: 0.7rem;
     width: 100%;
-    height: 7px;
+    height: 0.5rem;
     background: var(--secondaryButtonColor);
     border-radius: 5px;
     background-image: linear-gradient(var(--primaryButtonColor), var(--primaryButtonColor));
@@ -416,8 +403,8 @@ input[type="range"]::-ms-track {
 /* box shape with border color*/
 .box {
     float: left;
-    height: 20px;
-    width: 20px;
+    height: var(--LegendItemsSize);
+    width: var(--LegendItemsSize);
     margin: auto;
     padding: 0px !important;
     border: 1px solid black;
@@ -426,8 +413,8 @@ input[type="range"]::-ms-track {
 
 /*Parent shape*/
 .legend-shape {
-    width: 20px;
-    height: 20px;
+    width: var(--LegendItemsSize);
+    height: var(--LegendItemsSize);
     background: rgb(0, 0, 0);
 }
 
@@ -550,4 +537,74 @@ input[type="range"]::-ms-track {
 
 .bar-portion:last-child {
     border-right: 1px solid black;
+}
+
+/*------------------------------------------
+//         ANIMATIONS
+//------------------------------------------*/
+
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes toVisible {
+    from {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@keyframes toHidden {
+    from {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    to {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+.toVisibleAnim {
+    animation-name: toVisible;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.toHiddenAnim {
+    animation-name: toHidden;
+    animation-duration: 0s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes bigBlink {
+    0% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.5;
+    }
+
+    100% {
+        scale: 1;
+    }
+}
+
+.blinkSizeAnim.primary {
+    animation-name: bigBlink;
+    animation-duration: 1.5s;
 }

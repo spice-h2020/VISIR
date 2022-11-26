@@ -14,8 +14,9 @@ const navBarContainer: React.CSSProperties = {
     boxSizing: "border-box",
     display: "flex",
     flexWrap: "wrap",
-    paddingTop: "0.7rem",
-    paddingBottom: "0.7rem",
+
+    paddingTop: "0.5rem",
+    paddingBottom: "0.5rem",
 
     position: "fixed",
     top: "0",

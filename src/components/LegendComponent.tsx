@@ -19,8 +19,8 @@ import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
 
 const columnTittle: React.CSSProperties = {
     whiteSpace: "nowrap",
-    margin: "5px 10px",
-    paddingBottom: "5px",
+    margin: "0.3rem 0.5rem",
+    paddingBottom: "0.7rem",
     borderBottom: "black 1px inset",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -165,12 +165,11 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
     switch (dim) {
         case Dimensions.Color:
             return (
-                <div title={value} className="row" style={{ alignItems: "self-end" }} key={index}>
-                    <div className="col-9" style={buttonContentRow}> {value} </div>
+                <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
+                    <div style={buttonContentRow}> {value} </div>
                     <div style={{ width: "20px", height: "20px" }}>
                         <ColorStain
                             color={nodeConst.nodeDimensions.getColor(index)}
-                            scale={1.3}
                         />
                     </div>
                 </div>
@@ -179,15 +178,15 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
 
         case Dimensions.Shape:
             return (
-                <div title={value} className="row" style={{ alignItems: "self-end" }} key={index}>
-                    <div className="col-9" style={buttonContentRow}> {value} </div>
+                <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
+                    <div style={buttonContentRow}> {value} </div>
                     <div className={`legend-shape ${nodeConst.nodeDimensions.getShape(index).name}`}></div>
                 </div>
             );
         case Dimensions.Border:
             return (
-                <div title={value} className="row" style={{ alignItems: "self-end" }} key={index}>
-                    <div className="col-9" style={buttonContentRow}> {value} </div>
+                <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
+                    <div style={buttonContentRow}> {value} </div>
                     <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
                 </div>
             );
@@ -210,14 +209,14 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
         };
 
         output =
-            <div key={2} className='col'>
+            <div key={2} className='col' >
                 <h3 key={1} style={columnTittle} title="Anonymous Users" >  Anonymous Users </h3>
                 <Button
                     key={2}
-                    content={<div className='row'>
+                    content={<div className='row' >
                         <div> Users without any explicit data </div>
-                        <span style={{ width: "5px" }} />
-                        <img alt={"Anonymous user icon"} src={nodeConst.defaultAnon} style={{ height: "20px" }}></img>
+                        <span style={{ width: "1rem" }} />
+                        <img alt={"Anonymous user icon"} src={nodeConst.defaultAnon} style={{ height: "1.4rem" }}></img>
                     </div>}
                     state={buttonState}
                     extraClassName={"btn-legend btn-dropdown"}

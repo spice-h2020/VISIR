@@ -1,7 +1,7 @@
 /**
  * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
  * The button can also be disabled to negate any interaction with it, or change its colors with the state : ButtonState
- * properties.
+ * property.
  * If auto toggle parameter is true, the button will automaticaly change its state between active and 
  * unactive when clicked.
  * @package Requires React package. 
@@ -25,6 +25,7 @@ interface ButtonProps {
    * Auto toggle button state on click.
    */
   autoToggle?: boolean;
+
   onClick?: (params: any) => void;
   /**
    * Extra class name to add and change the CSS.
