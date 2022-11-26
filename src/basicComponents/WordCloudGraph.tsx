@@ -37,13 +37,7 @@ export const WordCloudGraph = ({
 }: WordCloudProps) => {
 
     for (let obj of data) {
-
-        if (obj.count <= 10) {
-            obj.count *= 100;
-        }
-
         obj.props = { title: `${obj.count}%` }
-
     }
 
     return (

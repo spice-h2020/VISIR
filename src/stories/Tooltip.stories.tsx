@@ -22,6 +22,7 @@ const user: IUserData = {
   explicit_community: { ageGroup: "adult", Language: "ESP" },
   interactions: [],
   community_interactions: [],
+  no_community_interactions: [],
   isMedoid: false,
   isAnonymous: false,
   isAnonGroup: false

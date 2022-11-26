@@ -56,6 +56,7 @@ const node: IUserData = {
         ]
     }] as IInteraction[],
     community_interactions: [],
+    no_community_interactions: [],
     isMedoid: false,
     isAnonymous: false,
     isAnonGroup: false
@@ -159,6 +160,7 @@ const allUsers = [
             ]
         }] as IInteraction[],
         community_interactions: [],
+        no_community_interactions: [],
         isMedoid: true,
         isAnonymous: false,
         isAnonGroup: false
@@ -201,6 +203,7 @@ const allUsers = [
             ]
         }] as IInteraction[],
         community_interactions: [],
+        no_community_interactions: [],
         isMedoid: false,
         isAnonymous: false,
         isAnonGroup: false

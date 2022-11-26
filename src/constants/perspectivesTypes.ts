@@ -127,6 +127,7 @@ export interface IUserData extends anyProperty {
 
     interactions: IInteraction[];
     community_interactions: IInteraction[];
+    no_community_interactions: IInteraction[];
 
     isMedoid: boolean;
     isAnonymous: boolean;

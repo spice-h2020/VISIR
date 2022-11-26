@@ -100,9 +100,9 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
             }
         }
 
-        if (node.interactions !== undefined) {
+        if (node.no_community_interactions !== undefined) {
             const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
-                getInteractionsPanel(node.interactions, artworks, false);
+                getInteractionsPanel(node.no_community_interactions, artworks, false);
 
             if (interactionPanels.length > 0) {
                 content.push(

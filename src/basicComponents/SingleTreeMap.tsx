@@ -35,10 +35,6 @@ export const SingleTreeMap = ({
     const serieData = [];
 
     for (const obj of data) {
-        if (obj.count <= 10) {
-            obj.count *= 100;
-        }
-
         serieData.push({
             x: obj.value,
             y: obj.count
