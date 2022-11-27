@@ -22,6 +22,11 @@ const sectionTittleStyle: React.CSSProperties = {
     margin: "0.5rem 0px"
 }
 
+const frenchIndent: React.CSSProperties = {
+    textIndent: "-30px",
+    paddingLeft: "40px"
+}
+
 interface NodePanelProps {
     tittle: String;
     node: IUserData | undefined;
@@ -45,13 +50,14 @@ export const NodePanel = ({
     if (node !== undefined) {
 
         if (!hideLabel) {
-            content.push(<div className="row" key={1}> <strong> Label: </strong> &nbsp; {node.label} </div>);
+            content.push(<p style={frenchIndent} key={1}> <strong> Label: </strong> &nbsp; {node.label} </p>);
         }
 
         const keys = Object.keys(node.explicit_community);
 
         for (let i = 0; i < keys.length; i++) {
-            content.push(<div className="row" key={2 + i}> <strong> {`${keys[i]}:`} </strong> &nbsp; {node.explicit_community[keys[i]]} </div>);
+            content.push(
+                <p key={2 + i} style={frenchIndent}> <strong> {`${keys[i]}:`} </strong> &nbsp; {node.explicit_community[keys[i]]} </p >);
         }
 
         content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks)} </div>);
