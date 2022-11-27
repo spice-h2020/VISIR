@@ -16,6 +16,7 @@ import { Button } from '../basicComponents/Button';
 import { ColorStain } from '../basicComponents/ColorStain';
 import { ILegendData } from '../constants/auxTypes';
 import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
+import { ShapeForm } from '../basicComponents/ShapeForm';
 
 const columnTittle: React.CSSProperties = {
     whiteSpace: "nowrap",
@@ -30,7 +31,7 @@ const columnTittle: React.CSSProperties = {
 const buttonContentRow: React.CSSProperties = {
     overflow: "hidden",
     textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
 }
 
 const columnStyle: React.CSSProperties = {
@@ -162,37 +163,39 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
  * @returns a react component.
  */
 const getButtonContent = (value: string, dim: Dimensions, index: number): React.ReactNode => {
+    let icon: React.ReactNode = "";
+
+    const maxButtonTextLength = 100;
+
     switch (dim) {
         case Dimensions.Color:
-            return (
-                <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
-                    <div style={buttonContentRow}> {value} </div>
-                    <div style={{ width: "20px", height: "20px" }}>
-                        <ColorStain
-                            color={nodeConst.nodeDimensions.getColor(index)}
-                        />
-                    </div>
-                </div>
-
-            );
-
+            icon =
+                <ColorStain
+                    color={nodeConst.nodeDimensions.getColor(index)}
+                />
+            break;
         case Dimensions.Shape:
-            return (
-                <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
-                    <div style={buttonContentRow}> {value} </div>
-                    <div className={`legend-shape ${nodeConst.nodeDimensions.getShape(index).name}`}></div>
-                </div>
-            );
+            icon =
+                <ShapeForm
+                    scale={1}
+                    shape={nodeConst.nodeDimensions.getShape(index).name}
+                />
+            break;
         case Dimensions.Border:
-            return (
-                <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
-                    <div style={buttonContentRow}> {value} </div>
-                    <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
-                </div>
-            );
+            icon =
+                <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
+            break;
         default:
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
+    return (
+        <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
+            <div style={buttonContentRow}> {value.substring(0, maxButtonTextLength)} </div>
+            <div style={{ width: "1vw" }}>
+                {icon}
+            </div>
+        </div>
+    );
 }
 
 function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map<string, boolean>,

@@ -90,7 +90,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
                 content.push(
                     <div key={1} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            Interactions used in the clustering:
+                            interactions related to this user's community:
                         </strong>
                         <Accordion
                             items={interactionPanels}
