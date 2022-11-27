@@ -173,7 +173,6 @@ export const PerspectiveView = ({
 
             hideLabel={viewOptions.hideLabels}
             state={networkState}
-            dimStrat={dimStrat}
         />
 
         return (

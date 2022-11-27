@@ -58,7 +58,6 @@ interface DataTableProps {
 
     hideLabel: boolean;
     state: string;
-    dimStrat: NodeDimensionStrategy | undefined;
 }
 
 /**
@@ -72,10 +71,9 @@ export const DataTable = ({
     allUsers,
     hideLabel,
     state,
-    dimStrat,
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks, dimStrat);
+    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks);
 
     return (
         <div className={state} style={getContainerStyle(state)}>
@@ -100,7 +98,7 @@ export const DataTable = ({
  * @returns a react component with the community's panel.
  */
 function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean,
-    artworks: IArtworkData[], dimStrat: NodeDimensionStrategy | undefined) {
+    artworks: IArtworkData[]) {
 
     if (community !== undefined) {
         const tittle = <div key={0} style={sectionTittleStyle}> Community Attributes </div>;
@@ -116,7 +114,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
                 content.push(
                     <React.Fragment key={5 + i * 2}>
                         {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel,
-                            artworks, dimStrat)}
+                            artworks)}
                     </React.Fragment>);
 
                 content.push(<br key={6 + i * 2} />);
@@ -143,7 +141,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @returns a react component with the explanations.
  */
 function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[],
-    hideLabel: boolean, artworks: IArtworkData[], dimStrat: NodeDimensionStrategy | undefined) {
+    hideLabel: boolean, artworks: IArtworkData[]) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
@@ -172,27 +170,44 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                     </React.Fragment>);
             }
             case EExplanationTypes.implicit_attributes: {
-                //Prepare the data for the stackedBarGraph
-                const array: [string, number][] = [];
 
-                const keys = Object.keys(explanation.explanation_data.data);
-                for (let i = 0; i < keys.length; ++i) {
-                    array.push([keys[i], explanation.explanation_data.data[keys[i]]]);
-                }
+                if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
+                    console.log(explanation.explanation_data);
+                    let textData: React.ReactNode[] = [];
 
-                return (
-                    <div>
-                        <hr />
-                        <div> {explanation.explanation_data.label}</div>
-                        <div> {getWordClouds(explanation.explanation_data.data)}</div>
+                    for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
+                        textData.push(
+                            <li key={i} style={{ marginLeft: "2rem" }}>
+                                {explanation.explanation_data.data[i].value}
+                                <br />
+                            </li >);
+                    }
+
+                    return (
                         <div>
-                            <StackedBarGraph
-                                tittle={""}
-                                data={explanation.explanation_data.data as IStringNumberRelation[]}
-                                dim={undefined}
-                            />
+                            <hr />
+                            <div> {explanation.explanation_data.label}</div>
+                            <div>
+                                {textData}
+                            </div>
                         </div>
-                    </div>);
+                    )
+                } else {
+
+                    return (
+                        <div>
+                            <hr />
+                            <div> {explanation.explanation_data.label}</div>
+                            <div> {getWordClouds(explanation.explanation_data.data)}</div>
+                            <div>
+                                <StackedBarGraph
+                                    tittle={""}
+                                    data={explanation.explanation_data.data as IStringNumberRelation[]}
+                                    dim={undefined}
+                                />
+                            </div>
+                        </div>);
+                }
             }
             default: {
                 console.log("Unrecognized explanation type");
@@ -271,4 +286,21 @@ export function getWordClouds(data: IStringNumberRelation[]): React.ReactNode {
         console.log(e);
         return <React.Fragment />
     }
+}
+
+/**
+ * Check if all the count parameters are zero
+ * @param data 
+ * @returns 
+ */
+function isAllZero(data: IStringNumberRelation[]) {
+    let isAllZero = true;
+
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].count !== 0) {
+            return false;
+        }
+    }
+
+    return isAllZero;
 }

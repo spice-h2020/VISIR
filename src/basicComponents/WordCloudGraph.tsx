@@ -14,7 +14,7 @@ const tagCloudStyle: React.CSSProperties = {
     maxHeight: "20vh",
     cursor: "default",
     backgroundColor: "white",
-    width: "60%",
+    width: "80%",
     margin: "auto",
 
     textAlign: "center",
@@ -38,6 +38,8 @@ export const WordCloudGraph = ({
 
     for (let obj of data) {
         obj.props = { title: `${obj.count}%` }
+
+        obj.value = obj.value === "" ? "(empty)" : obj.value;
     }
 
     return (
