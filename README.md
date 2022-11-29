@@ -102,6 +102,8 @@ _______________________
 
 - Change default NPM deploy port: Update the parameter `PORT` from the .env file located here [./.env](./.env)
 
+_______________________
+
 ## Complete user guide
 
 In this section all the app will be explained from a user point of view.
