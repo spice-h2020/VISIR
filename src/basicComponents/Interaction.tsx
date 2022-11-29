@@ -24,6 +24,7 @@ const userFeelings: React.CSSProperties = {
     border: "2px dashed var(--primaryButtonColor)",
     boxSizing: "border-box",
     textAlign: "center",
+    padding: "1rem",
 }
 
 const artworkImage: React.CSSProperties = {

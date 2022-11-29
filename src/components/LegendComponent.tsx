@@ -165,8 +165,6 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
 const getButtonContent = (value: string, dim: Dimensions, index: number): React.ReactNode => {
     let icon: React.ReactNode = "";
 
-    const maxButtonTextLength = 100;
-
     switch (dim) {
         case Dimensions.Color:
             icon =
@@ -188,9 +186,12 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
         default:
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
+
+    value = value === "" ? "(empty)" : value;
+
     return (
         <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
-            <div style={buttonContentRow}> {value.substring(0, maxButtonTextLength)} </div>
+            <div style={buttonContentRow}> {value} </div>
             <div style={{ width: "1vw" }}>
                 {icon}
             </div>
