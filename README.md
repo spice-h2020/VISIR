@@ -13,6 +13,11 @@ Documentation explained in the [wiki](https://github.com/MarcoExpPer/SPICE-visua
 3. [How to add more testing files](#How-to-add-more-testing-files)
 4. [Preconfiguration available](#Preconfiguration-available)
 5. [Complete user guide](#Complete-user-guide)
+    1. [Loading](#Loading)
+    2. [Toolbar](#Toolbar)
+    1. [Perspective representation](#Perspective-representation)
+    2. [Clicking the network](#Clicking-the-network)
+    2. [DataColumn](#DataColumn)
 
 ## How to run the application localy
 There are 2 ways of running the application. Docker allows for an easy one command instalation, Node.js allows to introduce new testing files. Both options start with these steps.
@@ -99,6 +104,8 @@ _______________________
 
 ## Complete user guide
 
+In this section all the app will be explained from a user point of view.
+
 ### Loading
 When the app starts, it will request files to the API. If the API is not well defined, unavailable or is not corectly configured, an error will pop explaining what was the problem. Accept the error to continue using the  app. It's not a critical problem if the api is not intended to be used.
 
@@ -110,11 +117,11 @@ From left to right:
     - Local app files to use the testing files available inside the app.
     - Click or hover Api URL to open a dropright. This dropdown allows to update the file source with the URL in the text box, clicking the update icon/btn at the right will trigger the update.
 - **Options** is another dropdown to pick diferent options that will change how to visualize the perspectives. Options that are active are highlighted in red.
-    - Hide node labels will toggle node's labels visibility from the visualization and from the dataColumn.
-    - Hide unselected edges wil toggle edge visibility of the edges not directly connected to the clicked node/user. If no node is clicked, all edges will be hidden.
-    - Minimum similarity slider allows to remove from the visualization all edges that are less than the value selected. Higher values can improve performance.
-    - Remove % of edges slider allows to randomly remove edges to reduce the amount of edges displayed. Higher values will increase performance.
-    - Activate node's borders activate a third visualization dimension available to perspectives that include 3 or more explicit attributes. The new dimension is the color of the border of a node. Currently there are no examples of this button and it may not work properly.
+    - **Hide node labels** will toggle node's labels visibility from the visualization and from the dataColumn.
+    - **Hide unselected edges** wil toggle edge visibility of the edges not directly connected to the clicked node/user. If no node is clicked, all edges will be hidden.
+    - **Minimum similarity** slider allows to remove from the visualization all edges that are less than the value selected. Higher values can improve performance.
+    - **Remove % of edges** slider allows to randomly remove a % of edges to reduce the amount of edges displayed. Higher values will increase performance.
+    - **Activate node's borders** activates a third visualization dimension available to perspectives that include 3 or more explicit attributes. The new dimension is the color of the border of a node. Currently there are no examples of this button and it may not work properly.
 - **Select perspective A** dropdown let the user pick what perspective want to visualize. When there are no available perspectives, it will be white and barely visible. When some perspectives are available, first it will do a little animation while changing its color to red.
     - The dropdown has a row for each of the available perspectives.
     - If a perspective is highlighted in red, its the current active perspective in this dropdown. Clickig it will desactivate it.
@@ -146,7 +153,7 @@ Finally, the **size** of the node represents if its the medoid user of the commu
 
 The lines that goes from a node to another node represent that those nodes are connected by a similarity value. The value is equal or higher than the value selected in the minimum similarity slider.
 
-### Network clicks
+### Clicking the network
 
 Once any perspective is active, the user can interact with the network by clicking it.
 
@@ -165,11 +172,11 @@ After the accordion, a new accordion will include the user's interactions that a
 
     There are diferent types of explanations trying to explain why this community exist and what are the relations between the users inside. The order and quantity of these explanations can also change from one perspective to another and even from one community to another from the same perspective.
 
-    - Explicit Explanation:
+    - **Explicit Explanation**:
     Shows a bar divided in portions that represents an explicit community. Each portion represents one of the explicit community value. Hovering above a portion will show the name of the value.
-    - Medoid Explanation:
+    - **Medoid Explanation**:
     Shows the node information of the medoid user/node.
-    - Implicit Explanation: 
+    - **Implicit Explanation**: 
     Shows a percentage distribution of an implicit attribute in a wordCloud or in some cases, only shows a list of the most representative implicit attributes.
 
 
