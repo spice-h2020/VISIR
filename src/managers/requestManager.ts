@@ -13,8 +13,6 @@ import { Axios } from 'axios'
 //Config
 import config from '../appConfig.json';
 
-console.log(process.env.VAR);
-
 export default class RequestManager {
 
     isActive: boolean;
