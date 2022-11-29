@@ -18,7 +18,6 @@ import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
 import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
 import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
-import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
