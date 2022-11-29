@@ -20,6 +20,10 @@ export default class RequestManager {
     usingAPI: boolean;
 
     localURL: string = "./data";
+    apiBaseURL: string = "visualizationAPI/";
+
+    allPerspectivesGET: string = "/index/";
+    singlePerspectiveGET: string = "/file/";
 
     /**
      * Constructor of the class
@@ -38,7 +42,7 @@ export default class RequestManager {
     init(baseURL: string | undefined) {
         if (baseURL !== undefined) {
             this.axios = new Axios({
-                baseURL: baseURL,
+                baseURL: `${baseURL}${this.apiBaseURL}`,
                 timeout: 2000,
             });
             this.isActive = true;
@@ -82,7 +86,7 @@ export default class RequestManager {
      * @returns {Object} Returns the file
      */
     getPerspective(id: string) {
-        const realID = this.usingAPI ? `file/${id}` : `${id}.json`;
+        const realID = this.usingAPI ? `${this.singlePerspectiveGET}${id}` : `${id}.json`;
 
         return this.axios.get(realID, {
             params: {}
@@ -129,7 +133,7 @@ export default class RequestManager {
      * @returns {Object} returns the information of all perspectives
      */
     getAllPerspectives() {
-        const perspectiveFilesName = this.usingAPI ? "/index" : "dataList.json";
+        const perspectiveFilesName = this.usingAPI ? this.allPerspectivesGET : "dataList.json";
 
         return this.axios.get(perspectiveFilesName, {
             params: {}

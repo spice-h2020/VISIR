@@ -40,6 +40,7 @@ export const App = ({
   perspectiveId2
 
 }: AppProps) => {
+
   const [requestManager] = useState<RequestManager>(new RequestManager());
 
   //Current options that change how the user view each perspective
