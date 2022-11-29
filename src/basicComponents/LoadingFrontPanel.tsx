@@ -67,7 +67,6 @@ interface LoadingFrontPanelProps {
 export const LoadingFrontPanel = ({
     state,
 }: LoadingFrontPanelProps) => {
-
     const [active, setActive] = useState<boolean>(state?.isActive);
     const [numDots, setNumdots] = useState<number>(1);
 
@@ -77,17 +76,20 @@ export const LoadingFrontPanel = ({
 
     //Adds points to the end of the text every half seccond
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            setNumdots(prev => Math.max((prev + 1) % 4, 1));
-        }, 500);
+        if (active) {
+            const intervalId = setInterval(() => {
+                setNumdots(prev => Math.max((prev + 1) % 4, 1));
+            }, 500);
 
-        return () => clearInterval(intervalId);
-    }, []);
+            return () => clearInterval(intervalId);
+        }
+    }, [active]);
 
     const darkBackground: React.CSSProperties = JSON.parse(JSON.stringify(darkBackgroundStyle));
-
+    if (state.msg === undefined) {
+        return <React.Fragment />
+    }
     return (
-
         <div style={darkBackground} className={active ? "toVisibleAnim" : "toHiddenAnim"}>
             <div style={innerPanelStyle} >
                 <Spinner scale={1} />

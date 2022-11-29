@@ -9,8 +9,10 @@ Documentation explained in the [wiki](https://github.com/MarcoExpPer/SPICE-visua
 1. [How to run the application localy](#How-to-run-the-application-localy)
     1. [Using Docker](#Using-Docker)
     2. [Using Node.js and NPM](#Using-Node.js-and-NPM)
-2. [How to use the app](#How-to-use-the-app)
+2. [Easy how to use guide](#Easy-how-to-use-the-app)
 3. [How to add more testing files](#How-to-add-more-testing-files)
+4. [Preconfiguration available](#Preconfiguration-available)
+5. [Complete user guide](#Complete-user-guide)
 
 ## How to run the application localy
 There are 2 ways of running the application. Docker allows for an easy one command instalation, Node.js allows to introduce new testing files. Both options start with these steps.
@@ -38,7 +40,7 @@ Prerequisite: [Node](https://nodejs.org/en/).
 5. The app will automaticaly be opened by your web browser in the localhost port 3000. If it hasn't opened, try manualy opening the page `http://localhost:3000/`
 
 ______________________
-## How to use the app.
+## Easy how to use the app.
 0. By default if the URL contains perspective1 and/or perspective2 variables, the app will try to request and activate those perspectives. These URL variables are optional, there are other ways to pick between perspectives.
     1. An example of a URL with IDs is the following "http://localhost:3000/?perspective1=5&perspective2=6" Where 5 and 6 are the id of the files.
 
@@ -85,5 +87,16 @@ To add testing files using LocalFile file source options, you need to do the fol
 
 Once all of these changes are completed, the node.js instalation should already see the changes on the search engine. Reloading the page may help.
 Docker instalation will need to re-execute the instalation process to create the ocker container with the changes. It's recommended to remove all previously loaded docker containers and images of this application.
-
 _______________________
+
+## Preconfiguration available
+
+- Change default API url: Update the parameter `API_URI` in the app config file [located here](./src/appConfig.json)`
+
+- Change default Docker deploy port: Update the parameter `ports`, only the number before the two points (:) in the docker compose yml file [located here](./docker-compose.dev.yml)
+
+- Change default NPM deploy port: Update the parameter `ports`, only the number before the two points (:) in the docker compose yml file [located here](./docker-compose.dev.yml)
+
+## Complete user guide
+
+- When the app starts, it will try to load the API
