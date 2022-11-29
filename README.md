@@ -96,11 +96,11 @@ _______________________
 
 ## Preconfiguration available
 
-- Change default API url: Update the parameter `API_URI` in the app config file [located here](./src/appConfig.json)`
+- Change default API url: Update the parameter `API_URI` in the app config file located here [./src/appConfig.json](./src/appConfig.json) 
 
-- Change default Docker deploy port: Update the parameter `DOCKER_PORT` from the .env file [located here](./.env)
+- Change default Docker deploy port: Update the parameter `DOCKER_PORT` from the .env file located here [./.env](./.env)
 
-- Change default NPM deploy port: Update the parameter `PORT` from the .env file [located here](./.env)
+- Change default NPM deploy port: Update the parameter `PORT` from the .env file located here [./.env](./.env)
 
 ## Complete user guide
 
