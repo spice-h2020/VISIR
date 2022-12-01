@@ -21,7 +21,7 @@ import { ExplicitData } from "./nodeExplicitComms";
 
 export default class NodeVisualsCtrl {
     dimStrat: NodeDimensionStrategy;
-    legendConfig: Map<string, boolean>;
+    legendConfig: Map<string, Map<string, boolean>>;
 
     /**
      * Nodes that are currently selected
@@ -148,7 +148,7 @@ export default class NodeVisualsCtrl {
      * nodes are from this network and what are from other networks
      */
     selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[],
-        legendConfig: Map<string, boolean> | undefined = undefined) {
+        legendConfig: Map<string, Map<string, boolean>> | undefined = undefined) {
 
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = selectedNodes;
@@ -187,7 +187,7 @@ export default class NodeVisualsCtrl {
      * @param allNodes all nodes of the network
      * @param legendConfig Optional parameters that if included, will update the legend configuration of this network
      */
-    colorAllNodes(allNodes: DataSetNodes, legendConfig: Map<string, boolean> | undefined = undefined) {
+    colorAllNodes(allNodes: DataSetNodes, legendConfig: Map<string, Map<string, boolean>> | undefined = undefined) {
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = [];
         this.focusedNodes = [];
@@ -223,16 +223,18 @@ export default class NodeVisualsCtrl {
         let hideNode = false;
         const keys = Object.keys(node.explicit_community);
 
+
         for (let i = 0; i < keys.length; i++) {
             const value = node.explicit_community[keys[i]]
+            const valuesMap = this.legendConfig.get(keys[i]);
 
-            if (this.legendConfig!.get(value)) {
+            if (valuesMap?.get(value)) {
                 hideNode = true;
                 break;
             }
         }
 
-        if (node.isAnonymous && this.legendConfig!.get(`${nodeConst.anonymousGroupKey}User`)) {
+        if (node.isAnonymous && this.legendConfig!.get(`${nodeConst.anonymousGroupKey}User`)?.get(`${nodeConst.anonymousGroupKey}User`)) {
             hideNode = true;
         }
 

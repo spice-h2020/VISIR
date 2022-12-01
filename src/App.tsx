@@ -41,7 +41,10 @@ export const App = ({
 
 }: AppProps) => {
 
-  const [requestManager] = useState<RequestManager>(new RequestManager());
+  //Parameters to activate/disactivate and edit the loading spinner.
+  const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
+
+  const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState));
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
@@ -58,9 +61,6 @@ export const App = ({
 
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
-
-  //Parameters to activate/disactivate and edit the loading spinner.
-  const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
 
   const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
     requestManager.changeBaseURL(fileSource, apiURL);

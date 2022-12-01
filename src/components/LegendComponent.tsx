@@ -48,7 +48,7 @@ interface LegendTooltipProps {
     /**
      * Configuration of the legend with the explicit communities that should be hidden/shown.
      */
-    legendConf: Map<string, boolean>;
+    legendConf: Map<string, Map<string, boolean>>;
     /**
      * Function to change the legend configuration that changes how nodes will be seen.
      */
@@ -111,7 +111,7 @@ export const LegendComponent = ({
  * @param onClick Function executed when a legend row is clicked.
  * @returns all the column buttons.
  */
-function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, boolean>,
+function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Map<string, boolean>>,
     onClick: Function): React.ReactNode[] {
 
     const rows = new Array<React.ReactNode>();
@@ -120,6 +120,12 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
         if (legendData[i].active) {
             const buttonsColumn = new Array<React.ReactNode>();
 
+            let valueMap = legendConf.get(legendData[i].key);
+            if (valueMap === undefined) {
+                legendConf.set(legendData[i].key, new Map<string, boolean>);
+                valueMap = legendConf.get(legendData[i].key);
+            }
+
             for (let j = 0; j < legendData[i].values.length; j++) {
                 const value = legendData[i].values[j];
 
@@ -127,16 +133,12 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, bo
                     <Button
                         key={i * 10 + j}
                         content={getButtonContent(value, legendData[i].dimension, j)}
-                        state={legendConf.get(value) ? EButtonState.active : EButtonState.unactive}
+                        state={valueMap!.get(value) ? EButtonState.active : EButtonState.unactive}
                         extraClassName={"btn-legend btn-dropdown"}
                         onClick={() => {
-                            legendConf.set(value, !legendConf.get(value));
 
-                            const newMap = new Map(JSON.parse(
-                                JSON.stringify(Array.from(legendConf))
-                            ));
-
-                            onClick(newMap);
+                            valueMap!.set(value, !valueMap!.get(value));
+                            onClick(new Map(legendConf));
                         }} />
                 );
             }
@@ -199,16 +201,22 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
     );
 }
 
-function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map<string, boolean>,
+function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map<string, Map<string
+    , boolean>>,
     onClick: Function): React.ReactNode {
 
     let output: React.ReactNode = undefined;
 
     if (anonymous) {
         let buttonState: EButtonState = EButtonState.unactive;
-        const currentState = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
 
-        if (currentState !== undefined && currentState) {
+        let valueMap = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
+        if (valueMap === undefined) {
+            legendConf.set(`${nodeConst.anonymousGroupKey}User`, new Map<string, boolean>);
+            valueMap = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
+        }
+
+        if (valueMap?.get(`${nodeConst.anonymousGroupKey}User`)) {
             buttonState = EButtonState.active;
         };
 
@@ -225,13 +233,8 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
                     state={buttonState}
                     extraClassName={"btn-legend btn-dropdown"}
                     onClick={() => {
-                        legendConf.set(`${nodeConst.anonymousGroupKey}User`, !currentState);
-
-                        const newMap = new Map(JSON.parse(
-                            JSON.stringify(Array.from(legendConf))
-                        ));
-
-                        onClick(newMap);
+                        valueMap!.set(`${nodeConst.anonymousGroupKey}User`, !valueMap!.get(`${nodeConst.anonymousGroupKey}User`));
+                        onClick(new Map(legendConf));
                     }} />
             </div >;
     }
