@@ -7,7 +7,7 @@
 //Constants
 import { EFileSource, initialOptions } from '../constants/viewOptions';
 import { validatePerspectiveDataJSON, validatePerspectiveIDfile } from '../constants/ValidateFiles';
-import { PerspectiveId } from '../constants/perspectivesTypes';
+import { IPerspectiveData, PerspectiveId as IPerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
 //Config
@@ -52,7 +52,7 @@ export default class RequestManager {
     init(baseURL: string | undefined) {
         if (baseURL !== undefined) {
             this.axios = new Axios({
-                baseURL: this.usingAPI ? `${baseURL}${this.apiBaseURL}` : baseURL,
+                baseURL: baseURL,
                 timeout: 2000,
             });
             this.isActive = true;
@@ -72,14 +72,21 @@ export default class RequestManager {
         this.getPerspective(perspectiveId)
             .then((response: any) => {
                 if (response.status === 200) {
-                    const perspectiveJson = validatePerspectiveDataJSON(JSON.parse(response.data));
-                    perspectiveJson.id = perspectiveId;
-                    perspectiveJson.name = perspectiveJson.name === undefined ? name : perspectiveJson.name;
+
+                    let perspective: IPerspectiveData;
+                    if (typeof response.data === "object") {
+                        perspective = validatePerspectiveDataJSON(response.data);
+                    } else {
+                        perspective = validatePerspectiveDataJSON(JSON.parse(response.data));
+                    }
+
+                    perspective.id = perspectiveId;
+                    perspective.name = perspective.name === undefined ? name : perspective.name;
 
                     this.setLoadingState({ isActive: false });
-                    callback(perspectiveJson);
+                    callback(perspective);
                 } else {
-                    throw new Error(`Perspective ${perspectiveId} was ${response.statusText}`);
+                    throw new Error(`Error wuile getting Perspective ${perspectiveId}: ${response.statusText}`);
                 }
             })
             .catch((error: any) => {
@@ -103,7 +110,13 @@ export default class RequestManager {
         this.getAllPerspectives()
             .then((response: any) => {
                 if (response.status === 200) {
-                    const allIds: PerspectiveId[] = validatePerspectiveIDfile(JSON.parse(response.data));
+
+                    let allIds: IPerspectiveId[] = [];
+                    if (typeof response.data === "object") {
+                        allIds = validatePerspectiveIDfile(response.data);
+                    } else {
+                        allIds = validatePerspectiveIDfile(JSON.parse(response.data));
+                    }
 
                     callback(allIds);
                     if (stateCallback) stateCallback();
@@ -129,7 +142,7 @@ export default class RequestManager {
   */
     getPerspective(id: string) {
         this.currentJobWaitTime = 0;
-        return this.requeestToUrl(this.usingAPI ? `${this.singlePerspectiveGET}${id}` : `${id}.json`);
+        return this.requestToUrl(this.usingAPI ? `${this.apiBaseURL}${this.singlePerspectiveGET}${id}` : `${id}.json`);
     }
 
     /**
@@ -138,22 +151,25 @@ export default class RequestManager {
      */
     getAllPerspectives() {
         this.currentJobWaitTime = 0;
-        return this.requeestToUrl(this.usingAPI ? this.allPerspectivesGET : "dataList.json");
+        return this.requestToUrl(this.usingAPI ? `${this.apiBaseURL}${this.allPerspectivesGET}` : "dataList.json");
     }
 
-    requeestToUrl(url: string): any {
+    requestToUrl(url: string): any {
         console.log(`Request to ${this.axios.defaults.baseURL}${url}`);
 
         return this.axios.get(url, {})
             .then(async (response) => {
                 const data = JSON.parse(response.data);
 
-                if (data.path !== undefined) {
-                    await delay(this.jobTimeOut);
+                if (response.status === 202) {
 
+                    await delay(this.jobTimeOut);
                     return this.askJobInProgress(data.path);
+
+                } else if (response.status === 200) {
+                    return { status: response.status, data: data };;
                 } else {
-                    return response;
+                    throw new Error(`Error while requestion a file to ${url}: ${response.statusText}`);
                 }
             })
             .catch((error) => {
@@ -171,36 +187,24 @@ export default class RequestManager {
         }
         this.setLoadingState({ isActive: true, msg: `Community Model is busy. Trying again (${this.currentJobWaitTime / 2})` });
 
-
         return this.axios.get(url, {})
             .then(async (response) => {
-                const jobInProgress: { inProgress: boolean, outputData: any } = this.isJobInProgress(response.data);
+                const data = JSON.parse(response.data);
 
-                if (jobInProgress.inProgress) {
+                if (response.status === 202) {
+
                     await delay(this.jobTimeOut);
+                    return this.askJobInProgress(data.job.path);
 
-                    return this.askJobInProgress(jobInProgress.outputData);
+                } else if (response.status === 200) {
+                    return { status: response.status, data: data.job.data };
                 } else {
-                    return response;
+                    throw new Error(`Error while waiting for a job in path ${url}: ${response.statusText}`);
                 }
             })
             .catch((error) => {
                 throw error;
             });
-    }
-
-    isJobInProgress(data: any): { inProgress: boolean, outputData: any } {
-        const outputData = JSON.parse(data);
-
-        if (outputData.job !== undefined) {
-            if (outputData.job["job-status"] === "SUCCESS") {
-                return { inProgress: false, outputData: outputData.job.data }
-            } else {
-                return { inProgress: true, outputData: outputData.job.path }
-            }
-        } else {
-            throw (new Error(`Job received is undefined ${outputData}`));
-        }
     }
 
     /**
