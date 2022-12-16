@@ -19,7 +19,8 @@ const sectionTittleStyle: React.CSSProperties = {
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
-    margin: "0.5rem 0px"
+    margin: "0.5rem 0px",
+    color: "var(--title)"
 }
 
 const frenchIndent: React.CSSProperties = {

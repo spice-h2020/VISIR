@@ -189,8 +189,6 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
 
-    value = value === "" ? "(empty)" : value;
-
     return (
         <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
             <div style={buttonContentRow}> {value} </div>

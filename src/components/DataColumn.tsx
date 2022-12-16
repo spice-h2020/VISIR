@@ -25,7 +25,8 @@ const sectionTittleStyle: React.CSSProperties = {
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
-    margin: "1rem 0px"
+    margin: "1rem 0px",
+    color: "var(--title)"
 }
 
 const tableContainer: React.CSSProperties = {
@@ -171,7 +172,6 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
             case EExplanationTypes.implicit_attributes: {
 
                 if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
-                    console.log(explanation.explanation_data);
                     let textData: React.ReactNode[] = [];
 
                     for (let i = 0; i < explanation.explanation_data.data.length; ++i) {

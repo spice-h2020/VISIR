@@ -102,7 +102,7 @@ export default class NetworkController {
 
         perspectiveData.users.forEach((user: IUserData) => {
             explicitCtrl.parseExplicitCommunity(user, dimStrat, sf.setLegendData, unique);
-            nodeLocation.updateNodeGroup(user, perspectiveData.communities);
+            nodeLocation.updateNodeGroup(user);
         });
         explicitCtrl.sortExplicitData();
 

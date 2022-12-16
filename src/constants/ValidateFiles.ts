@@ -313,9 +313,11 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
         const newData: types.IStringNumberRelation[] = [];
 
         for (let i = 0; i < keys.length; i++) {
+            const newCount = Number(arg.explanation_data.data[keys[i]].toFixed(2));
+
             newData.push({
                 value: keys[i],
-                count: Number(arg.explanation_data.data[keys[i]].toFixed(2))
+                count: newCount
             });
         }
 
@@ -375,6 +377,13 @@ function isUserDataValid(arg: any): types.IUserData {
 
         if (typeof (arg.explicit_community) !== "object") {
             throw Error(`Explicit community of the user (${arg.id}) is not an object. There may not be any explicit community values`);
+        }
+
+        const keys = Object.keys(arg.explicit_community);
+        for (let i = 0; i < keys.length; ++i) {
+            if (arg.explicit_community[keys[i]] === "") {
+                arg.explicit_community[keys[i]] = "(empty)";
+            }
         }
 
         if (arg.interactions === undefined) {
