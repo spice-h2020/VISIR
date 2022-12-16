@@ -7,7 +7,7 @@ import { ECommunityType, EExplanationTypes, IArtworkData, ICommunityData, IExpli
 import '../style/base.css';
 
 export default {
-    title: 'Example/newDatatable',
+    title: 'Complete/newDatatable',
     component: DataTable,
 
 } as ComponentMeta<typeof DataTable>;

@@ -5,7 +5,7 @@ import { EButtonState } from '../constants/viewOptions';
 import '../style/base.css';
 
 export default {
-    title: 'Example/Loading',
+    title: 'Basic/Loading',
     component: LoadingFrontPanel,
 
 } as ComponentMeta<typeof LoadingFrontPanel>;

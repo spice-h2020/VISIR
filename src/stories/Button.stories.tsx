@@ -5,7 +5,7 @@ import { EButtonState } from '../constants/viewOptions';
 import '../style/base.css';
 
 export default {
-  title: 'Example/Button',
+  title: 'Basic/Button',
   component: Button,
 
 } as ComponentMeta<typeof Button>;

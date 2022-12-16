@@ -6,7 +6,7 @@ import { IArtworkData, IInteraction } from '../constants/perspectivesTypes';
 import '../style/base.css';
 
 export default {
-    title: 'Example/Accordion',
+    title: 'Complex/Accordion',
     component: Accordion,
 
 } as ComponentMeta<typeof Accordion>;

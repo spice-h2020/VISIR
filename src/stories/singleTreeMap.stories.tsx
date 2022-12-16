@@ -4,7 +4,7 @@ import { SingleTreeMap } from '../basicComponents/SingleTreeMap';
 import '../style/base.css';
 
 export default {
-    title: 'Example/WordCloud',
+    title: 'Basic/WordCloud',
     component: SingleTreeMap,
 
 } as ComponentMeta<typeof SingleTreeMap>;
