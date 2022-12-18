@@ -120,6 +120,10 @@ body {
     background-color: var(--primaryButtonColor);
 }
 
+.primary.active {
+    background-color: #ff605d;
+}
+
 .secondary {
     background-color: var(--secondaryButtonColor);
 }

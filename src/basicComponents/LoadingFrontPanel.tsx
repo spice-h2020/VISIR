@@ -85,12 +85,11 @@ export const LoadingFrontPanel = ({
         }
     }, [active]);
 
-    const darkBackground: React.CSSProperties = JSON.parse(JSON.stringify(darkBackgroundStyle));
     if (state.msg === undefined) {
         return <React.Fragment />
     }
     return (
-        <div style={darkBackground} className={active ? "toVisibleAnim" : "toHiddenAnim"}>
+        <div style={darkBackgroundStyle} className={active ? "toVisibleAnim" : "toHiddenAnim"}>
             <div style={innerPanelStyle} >
                 <Spinner scale={1} />
                 <span style={loadingText}> {state.msg + '.'.repeat(numDots)} </span>

@@ -4,6 +4,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
+import { IConfigurationSeed, INameAndTypePair, ISimilarityFunction } from "./configurationToolTypes";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 import { ECommunityType } from "./perspectivesTypes";
@@ -58,14 +59,12 @@ export function validatePerspectiveIDfile(arg: any): types.PerspectiveId[] {
         }
 
         console.log(`Perspective IDs file validation has been completed -> `);
-        console.log(arg);
+        console.log(arg as types.PerspectiveId[]);
 
         return arg;
     } catch (e: any) {
         throw Error(`Perspective IDs file is not valid: ${e.message}`);
     }
-
-
 }
 
 //#endregion
@@ -627,4 +626,177 @@ function isArtworkDataValid(arg: any): types.IArtworkData {
 
 //#endregion 
 
+//#region Configuration Seed
 
+export function validateConfigurationSeed(arg: any): IConfigurationSeed {
+    try {
+        if (arg === undefined) {
+            throw Error(`Configuration Seed is undefined`);
+        }
+
+        if (arg.artwork_attributes === undefined) {
+            throw Error(`Artwork attributes are undefined`);
+        }
+
+        if (typeof (arg.artwork_attributes) !== "object") {
+            throw Error(`Artwork attributes are not an object`);
+        }
+
+        if (arg.user_attributes === undefined) {
+            throw Error(`User attributes are undefined`);
+        }
+
+        if (typeof (arg.user_attributes) !== "object") {
+            throw Error(`User attributes are not an object`);
+        }
+
+        if (arg.interaction_similarity_functions === undefined) {
+            throw Error(`Interactions Similarity Functions are undefined`);
+        }
+
+        if (typeof (arg.interaction_similarity_functions) !== "object") {
+            throw Error(`Interactions Similarity Functions are not an object`);
+        }
+
+        for (let i = 0; i < arg.artwork_attributes.length; i++) {
+            arg.artwork_attributes[i] = isArtworkAttributesValid(arg.artwork_attributes[i]);
+        }
+        for (let i = 0; i < arg.user_attributes.length; i++) {
+            arg.user_attributes[i] = isNameAndTypePairValid(arg.user_attributes[i]);
+        }
+        for (let i = 0; i < arg.interaction_similarity_functions.length; i++) {
+            arg.interaction_similarity_functions[i] = isInteractSimFuncsValid(arg.interaction_similarity_functions[i]);
+        }
+
+        console.log(`Configuration seed file has been completed -> `);
+        console.log(arg as IConfigurationSeed);
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Configuration Seed file is not valid: ${e.message}`);
+    }
+}
+
+function isArtworkAttributesValid(arg: any): ISimilarityFunction {
+    try {
+
+        if (arg.sim_function === undefined) {
+            throw Error(`Sim function is undefined`);
+        }
+
+        arg = arg.sim_function;
+
+        if (arg.name === undefined) {
+            throw Error(`Name is undefined`);
+        }
+        if (typeof (arg.name) !== "string") {
+            try {
+                arg.name = String(arg.name);
+            } catch (e: any) {
+                throw Error(`Name is not a string`);
+            }
+        }
+
+        if (arg.params === undefined) {
+            arg.params = [];
+        }
+
+        if (arg.on_attribute === undefined) {
+            throw Error(`Onattribute of the sim function (${arg.arg.name}) is undefined`);
+        }
+
+        if (typeof (arg.on_attribute) !== "object") {
+            throw Error(`Onattribute of the sim function (${arg.arg.name}) is not an object`);
+        }
+
+        arg.on_attribute = isNameAndTypePairValid(arg.on_attribute);
+        return arg;
+    } catch (e: any) {
+        throw Error(`artwork attribute data data is not valid: ${e.message}`);
+    }
+}
+
+function isNameAndTypePairValid(arg: any): INameAndTypePair {
+    try {
+
+        if (arg === undefined) {
+            throw Error(`Name and Type data is undefined`);
+        }
+
+        if (arg.att_name === undefined) {
+            throw Error(`Att name is undefined`);
+        }
+        if (typeof (arg.att_name) !== "string") {
+            try {
+                arg.att_name = String(arg.att_name);
+            } catch (e: any) {
+                throw Error(`Att name is not a string`);
+            }
+        }
+
+        if (arg.att_type === undefined) {
+            throw Error(`Att type is undefined`);
+        }
+        if (typeof (arg.att_type) !== "string") {
+            try {
+                arg.att_type = String(arg.att_type);
+            } catch (e: any) {
+                throw Error(`Att type is not a string`);
+            }
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Name and Type data is not valid: ${e.message}`);
+    }
+}
+
+function isInteractSimFuncsValid(arg: any): ISimilarityFunction {
+    try {
+
+        if (arg.sim_function === undefined) {
+            throw Error(`Sim function is undefined`);
+        }
+
+        arg = arg.sim_function;
+
+        if (arg.name === undefined) {
+            throw Error(`Name is undefined`);
+        }
+        if (typeof (arg.name) !== "string") {
+            try {
+                arg.name = String(arg.name);
+            } catch (e: any) {
+                throw Error(`Name is not a string`);
+            }
+        }
+
+        if (arg.params === undefined) {
+            arg.params = [];
+        }
+
+        if (arg.on_attribute === undefined) {
+            throw Error(`Onattribute of the sim function (${arg.name}) is undefined`);
+        }
+
+        if (typeof (arg.on_attribute) !== "object") {
+            throw Error(`Onattribute of the sim function (${arg.name}) is not an object`);
+        }
+
+        arg.on_attribute = isNameAndTypePairValid(arg.on_attribute);
+
+        if (arg.interaction_object === undefined) {
+            throw Error(`interaction_object of the sim function (${arg.name}) is undefined`);
+        }
+        if (typeof (arg.interaction_object) !== "object") {
+            throw Error(`interaction_object of the sim function (${arg.name}) is not an object`);
+        }
+
+        arg.interaction_object = isNameAndTypePairValid(arg.interaction_object);
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Interaction similarity function data is not valid: ${e.message}`);
+    }
+}
+//#endregion

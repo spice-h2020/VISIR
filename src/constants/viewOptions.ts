@@ -77,7 +77,7 @@ export const initialOptions = {
     /**
      * What type of URL will be picked to GET requests. Request Manager has the map that relates each fileSource option with its url
      */
-    fileSource: EFileSource.Api,
+    fileSource: EFileSource.Local,
     /**
      * Hide the labels of all nodes in the canvas and in the tooltip and datatable
      */
@@ -97,7 +97,7 @@ export const initialOptions = {
     /**
      * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
      */
-    deleteEdges: 75
+    deleteEdges: 75,
 }
 /**
  * Class that contains the value of all visualization options that will change how the user see the networks

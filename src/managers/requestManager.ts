@@ -6,7 +6,7 @@
  */
 //Constants
 import { EFileSource, initialOptions } from '../constants/viewOptions';
-import { validatePerspectiveDataJSON, validatePerspectiveIDfile } from '../constants/ValidateFiles';
+import { validateConfigurationSeed, validatePerspectiveDataJSON, validatePerspectiveIDfile } from '../constants/ValidateFiles';
 import { IPerspectiveData, PerspectiveId as IPerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
@@ -14,14 +14,15 @@ import { Axios } from 'axios'
 import config from '../appConfig.json';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
 
-export default class RequestManager {
 
+export default class RequestManager {
     isActive: boolean;
     axios: Axios;
     usingAPI: boolean;
 
     localURL: string = "./data/";
-    apiBaseURL: string = "visualizationAPI/";
+    perspectivesBaseURL: string = "visualizationAPI/";
+    confToolBaseURL: string = "v1.1/seed";
 
     allPerspectivesGET: string = "/index/";
     singlePerspectiveGET: string = "/file/";
@@ -98,6 +99,16 @@ export default class RequestManager {
                 alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
             });
     }
+    /**
+    * Send a GET petition to obtain a singleFile in a directory
+    * @param id Id of the file we want to get.
+    * @returns {Object} Returns the file
+    */
+    getPerspective(id: string) {
+        this.currentJobWaitTime = 0;
+        return this.requestToUrl(this.usingAPI ? `${this.perspectivesBaseURL}${this.singlePerspectiveGET}${id}` : `${id}.json`);
+    }
+
 
     /**
      * Send a request for the id and names of all available perspectives.
@@ -134,24 +145,51 @@ export default class RequestManager {
                 alert(`All IDs file was not found: ${error.message}`);
             });
     }
-
-    /**
-  * Send a GET petition to obtain a singleFile in a directory
-  * @param id Id of the file we want to get.
-  * @returns {Object} Returns the file
-  */
-    getPerspective(id: string) {
-        this.currentJobWaitTime = 0;
-        return this.requestToUrl(this.usingAPI ? `${this.apiBaseURL}${this.singlePerspectiveGET}${id}` : `${id}.json`);
-    }
-
     /**
      * Get all perspectives information 
      * @returns {Object} returns the information of all perspectives
      */
     getAllPerspectives() {
         this.currentJobWaitTime = 0;
-        return this.requestToUrl(this.usingAPI ? `${this.apiBaseURL}${this.allPerspectivesGET}` : "dataList.json");
+        return this.requestToUrl(this.usingAPI ? `${this.perspectivesBaseURL}${this.allPerspectivesGET}` : "dataList.json");
+    }
+
+    requestConfigurationToolSeed(callback: Function, stateCallback?: Function) {
+        this.setLoadingState({ isActive: true, msg: `Requesting configuration tool seed` });
+
+        this.getConfigurationToolSeed()
+            .then((response: any) => {
+                if (response.status === 200) {
+
+                    console.log(response.data);
+                    let data = typeof response.data === "object" ? response.data : JSON.parse(response.data);
+
+                    data = validateConfigurationSeed(data);
+
+                    callback(data);
+                    if (stateCallback) stateCallback();
+
+                } else {
+                    throw new Error(`Error while getting Configuration tool Seed. ${response.statusText}`);
+                }
+            })
+            .catch((error: any) => {
+
+                callback(undefined);
+                if (stateCallback) stateCallback();
+
+                console.log(`Configuration tool seed was not found:`);
+                console.log(error);
+                alert(`Configuration tool seed was not found: ${error.message}`);
+            });
+    }
+    getConfigurationToolSeed() {
+        this.currentJobWaitTime = 0;
+        if (config.useLocalSeedFile) {
+            return this.requestToUrl("configurationTool/seedFile.json");
+        } else {
+            return this.requestToUrl(this.usingAPI ? this.confToolBaseURL : "configurationTool/seedFile.json");
+        }
     }
 
     requestToUrl(url: string): any {
@@ -169,7 +207,7 @@ export default class RequestManager {
                 } else if (response.status === 200) {
                     return { status: response.status, data: data };;
                 } else {
-                    throw new Error(`Error while requestion a file to ${url}: ${response.statusText}`);
+                    throw new Error(`Error while requestion a file to ${this.axios.defaults.baseURL}${url}: ${response.statusText}`);
                 }
             })
             .catch((error) => {
@@ -224,10 +262,30 @@ export default class RequestManager {
 
         console.log(`Source url changed to ${newUrl}`)
     }
+
+    postEntryPoint = "/v1.1/perspective";
+
+    sendNewConfigSeed(newConfiguration: any) {
+        const oldURL = this.axios.defaults.baseURL;
+        this.axios.defaults.baseURL = "http://localhost:8080/";
+
+        this.axios.post(this.postEntryPoint, {
+            newConfiguration,
+        })
+            .then((response) => {
+                const data = JSON.parse(response.data);
+                window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
+            })
+            .catch((err) => {
+                console.log(err);
+                window.alert(err);
+            });
+
+        this.axios.defaults.baseURL = oldURL;
+    }
 }
 
 
 function delay(seconds: number) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000));
-
 }

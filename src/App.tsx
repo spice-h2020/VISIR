@@ -27,6 +27,7 @@ import RequestManager from './managers/requestManager';
 import './style/base.css';
 import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFrontPanel';
 import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
+import { ConfigurationTool } from './components/ConfigurationTool';
 
 interface AppProps {
   perspectiveId1: string | null,
@@ -64,6 +65,9 @@ export const App = ({
   const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
 
   const [windowWidth, setWindowWidth] = useState<number>(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
+
+  const [isConfigToolActive, setIsConfigToolActive] = useState<boolean>(false);
+
 
   const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
     requestManager.changeBaseURL(fileSource, apiURL);
@@ -195,6 +199,19 @@ export const App = ({
       }}
     />
 
+
+  const toggleConfTool =
+    <Button
+      content="OpenConfTool"
+      extraClassName={`dark`}
+      onClick={(state: EButtonState) => {
+        if (state !== EButtonState.disabled) {
+          setIsConfigToolActive(!isConfigToolActive);
+        }
+      }}
+      state={isConfigToolActive ? EButtonState.active : EButtonState.unactive}
+    />
+
   const hamburgerContent = [];
   let navBar: React.ReactNode;
 
@@ -278,6 +295,7 @@ export const App = ({
         ]}
         rightAlignedItems={[
           legendDrop,
+          toggleConfTool
         ]}
       />
   }
@@ -297,6 +315,12 @@ export const App = ({
         setLoadingState={SetLoadingState}
       />
 
+      <ConfigurationTool
+        requestManager={requestManager}
+        isActive={isConfigToolActive}
+        setLoadingState={SetLoadingState}
+        setIsActive={setIsConfigToolActive}
+      />
       <LoadingFrontPanel
         state={loadingState}
       />
