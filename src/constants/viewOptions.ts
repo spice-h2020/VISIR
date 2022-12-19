@@ -127,7 +127,7 @@ export class ViewOptions {
     /**
      * Configuration of the the legend dropdown that will change some nodes to colorless based on what the user selects
      */
-    legendConfig: Map<string, boolean>;
+    legendConfig: Map<string, Map<string, boolean>>;
 
     /**
      * Constructor of the class
@@ -136,7 +136,7 @@ export class ViewOptions {
         this.hideLabels = initialOptions.hideLabels === EButtonState.active;
         this.hideEdges = initialOptions.hideEdges === EButtonState.active;
         this.border = initialOptions.border === EButtonState.active;
-        this.legendConfig = new Map<string, boolean>();
+        this.legendConfig = new Map<string, Map<string, boolean>>();
         this.edgeThreshold = initialOptions.edgeThreshold;
         this.deleteEdges = initialOptions.deleteEdges;
     }

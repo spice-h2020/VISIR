@@ -121,7 +121,6 @@ export const DropMenu = ({
         }
     }
 
-
     if (items.length !== 0) {
         const mainButtonState = state === undefined ?
             showDropDown ? EButtonState.active : EButtonState.unactive
@@ -153,26 +152,22 @@ export const DropMenu = ({
                     }}
                 />
 
-                {<div key={0} style={getExtraMenuStyle(showDropDown, containerRef, menuDirection)}>
+                {<div key={0} style={getExtraMenuStyle(showDropDown, containerRef, menuDirection)}
+                    onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}
+                >
                     {items}
                 </div>}
             </React.Fragment>
 
+        //Place the dropright content at the same height as the btn that activates it
         switch (menuDirection) {
             case EDropMenuDirection.right:
-                {
-                    innerDropMenu =
-                        <div key={-2} className='row' onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}>
-                            {innerDropMenu}
-                        </div>
-                    break;
-                }
-
-            default: {
                 innerDropMenu =
-                    <div key={-2} onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}>
+                    <div key={-2} className='row' onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}>
                         {innerDropMenu}
                     </div>
+                break;
+            default: {
                 break;
             }
         }
@@ -255,7 +250,8 @@ function getExtraMenuStyle(currentState: Boolean, ref: React.RefObject<HTMLDivEl
     let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(contentStyle)));
 
     if (currentState) {
-        newStyle.display = "block";
+        newStyle.display = "flex";
+        newStyle.flexDirection = "column"
     } else {
         newStyle.display = "none";
     }

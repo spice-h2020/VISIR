@@ -217,7 +217,6 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
             }
         }
 
-
     }, [viewOptions.legendConfig, netMgr]);
 
     useEffect(() => {

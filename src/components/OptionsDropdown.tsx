@@ -21,13 +21,16 @@ const hrStyle: React.CSSProperties = {
 
 interface OptionsDropdownProps {
     setViewOptions: Dispatch<IViewOptionAction>;
+
+    insideHamburger?: boolean;
 }
 
 /**
  * Dropdown component that holds diferent options that change some of the view options of the network.
  */
 export const OptionsDropdown = ({
-    setViewOptions
+    setViewOptions,
+    insideHamburger = false,
 }: OptionsDropdownProps) => {
 
     const [states, setStates] = useReducer(bStateArrayReducer, init());
@@ -88,14 +91,26 @@ export const OptionsDropdown = ({
             extraClassName={"btn-dropdown"} />
     ];
 
-    return (
-        <DropMenu
-            items={[optionsButtons]}
-            content="Options"
-            extraClassButton="transparent down-arrow"
-            menuDirection={EDropMenuDirection.down}
-        />
-    );
+    if (!insideHamburger) {
+        return (
+            <DropMenu
+                items={[optionsButtons]}
+                content="Options"
+                extraClassButton="transparent down-arrow"
+                menuDirection={EDropMenuDirection.down}
+            />
+        );
+    } else {
+        return (
+            <DropMenu
+                items={[optionsButtons]}
+                content="Options"
+                extraClassButton="transparent down-arrow btn-dropdown"
+                menuDirection={EDropMenuDirection.right}
+            />
+        );
+    }
+
 };
 
 /**

@@ -13,7 +13,7 @@ import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollaps
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { ILegendData, legendDataReducer } from './constants/auxTypes';
 //Packages
-import { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 //Local files
 import { Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -26,6 +26,7 @@ import RequestManager from './managers/requestManager';
 
 import './style/base.css';
 import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFrontPanel';
+import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
 
 interface AppProps {
   perspectiveId1: string | null,
@@ -41,7 +42,10 @@ export const App = ({
 
 }: AppProps) => {
 
-  const [requestManager] = useState<RequestManager>(new RequestManager());
+  //Parameters to activate/disactivate and edit the loading spinner.
+  const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
+
+  const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState));
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
@@ -59,8 +63,7 @@ export const App = ({
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
 
-  //Parameters to activate/disactivate and edit the loading spinner.
-  const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
+  const [windowWidth, setWindowWidth] = useState<number>(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
 
   const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
     requestManager.changeBaseURL(fileSource, apiURL);
@@ -95,79 +98,195 @@ export const App = ({
     }
   }
 
+  //Re-render the component when the windows is resized
+  useEffect(() => {
+    function onWindowResize() {
+      setWindowWidth(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
+    }
+
+    window.addEventListener('resize', onWindowResize)
+  })
+
+  //Remove components from the navBar and add them to the hamburger btn based on the viewport width
+  let small = windowWidth < 1100;
+  let tooSmall = windowWidth < 600;
+
+  const mainBtn = small === false ?
+    <div style={{ margin: "0px 5px" }}>
+      <Button
+        content={<div className='row' style={{ alignItems: "center" }}>
+          <img style={{ height: "40px" }} src="./images/VISIR-red.png" alt="VISIR icon" />
+          <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
+        </div>}
+        extraClassName="transparent tittle mainBtn"
+        onClick={() => { window.location.reload() }}
+      />
+    </div> : <React.Fragment />;
+
+  const fileSourceDrop =
+    <FileSourceDropdown
+      key={0}
+      setFileSource={updateFileSource}
+      setLoadingState={SetLoadingState}
+      insideHamburger={small}
+    />;
+
+  const optionsDrop =
+    <OptionsDropdown
+      key={1}
+      setViewOptions={setViewOptions}
+      insideHamburger={small}
+    />
+
+  const selectLeft =
+    <SelectPerspectiveDropdown
+      tittle={'Select perspective A'}
+      setAllIds={setAllPerspectivesIds}
+      setActivePerspective={setLeftPerspective}
+      allIds={allPerspectivesIds}
+      isLeftDropdown={true}
+      requestMan={requestManager}
+      setLoadingState={SetLoadingState}
+      insideHamburger={tooSmall}
+    />
+
+  const selectRight =
+    <SelectPerspectiveDropdown
+      tittle={'Select perspective B'}
+      setAllIds={setAllPerspectivesIds}
+      setActivePerspective={setRightPerspective}
+      allIds={allPerspectivesIds}
+      isLeftDropdown={false}
+      requestMan={requestManager}
+      setLoadingState={SetLoadingState}
+      insideHamburger={tooSmall}
+    />
+
+  const collapseLeft =
+    <Button
+      content="<<"
+      onClick={(state: EButtonState) => {
+        if (state !== EButtonState.disabled) {
+          setCollapseState(EAppCollapsedState.toTheLeft);
+        }
+      }}
+      extraClassName={`first dark`}
+      state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
+    />
+
+  const collapseRight =
+    <Button
+      content=">>"
+      extraClassName={`second dark`}
+      onClick={(state: EButtonState) => {
+        if (state !== EButtonState.disabled) {
+          setCollapseState(EAppCollapsedState.toTheRight);
+        }
+      }}
+      state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
+    />
+
+  const legendDrop =
+    <LegendComponent
+      legendData={legendData}
+      legendConf={viewOptions.legendConfig}
+      onLegendClick={(newMap: Map<string, boolean>) => {
+        setViewOptions({ updateType: "legendConfig", newValue: newMap, });
+      }}
+    />
+
+  const hamburgerContent = [];
+  let navBar: React.ReactNode;
+
+  if (tooSmall) {
+    hamburgerContent.push(fileSourceDrop);
+    hamburgerContent.push(optionsDrop);
+    hamburgerContent.push(selectLeft);
+    hamburgerContent.push(selectRight);
+
+    const hamburgerBtn =
+      <DropMenu
+        key={0}
+        content={
+          <div className='row' style={{ alignItems: "center" }}>
+            <img style={{ height: "40px" }} src="./images/hamburgerBtn.svg" alt="VISIR icon" />
+          </div>}
+        extraClassButton="transparent mainBtn"
+        menuDirection={EDropMenuDirection.down}
+
+        items={hamburgerContent}
+      />
+
+    navBar =
+      <Navbar
+        leftAlignedItems={[
+          hamburgerBtn,
+        ]}
+        midAlignedItems={[
+          collapseLeft,
+          collapseRight,
+        ]}
+        rightAlignedItems={[
+          legendDrop,
+        ]}
+      />
+  } else if (small) {
+    hamburgerContent.push(fileSourceDrop);
+    hamburgerContent.push(optionsDrop);
+
+    const hamburgerBtn =
+      <DropMenu
+        key={0}
+        content={
+          <div className='row' style={{ alignItems: "center" }}>
+            <img style={{ height: "40px" }} src="./images/hamburgerBtn.svg" alt="VISIR icon" />
+          </div>}
+        extraClassButton="transparent mainBtn"
+        menuDirection={EDropMenuDirection.down}
+
+        items={hamburgerContent}
+      />
+
+    navBar =
+      <Navbar
+        leftAlignedItems={[
+          hamburgerBtn,
+        ]}
+        midAlignedItems={[
+          selectLeft,
+          collapseLeft,
+          collapseRight,
+          selectRight,
+        ]}
+        rightAlignedItems={[
+          legendDrop,
+        ]}
+      />
+  } else {
+    navBar =
+      <Navbar
+        leftAlignedItems={[
+          mainBtn,
+          fileSourceDrop,
+          optionsDrop,
+        ]}
+        midAlignedItems={[
+          selectLeft,
+          collapseLeft,
+          collapseRight,
+          selectRight,
+        ]}
+        rightAlignedItems={[
+          legendDrop,
+        ]}
+      />
+  }
+
+
 
   return (
     <div>
-      <Navbar
-        leftAlignedItems={[
-          <div style={{ margin: "0px 5px" }}>
-            <Button
-              content={<div className='row' style={{ alignItems: "center" }}>
-                <img style={{ height: "40px" }} src="./images/VISIR-red.png" alt="VISIR icon" />
-                <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
-              </div>}
-              extraClassName="transparent tittle mainBtn"
-              onClick={() => { window.location.reload() }}
-            />
-          </div>,
-          <FileSourceDropdown
-            setFileSource={updateFileSource}
-            setLoadingState={SetLoadingState}
-          />,
-          <OptionsDropdown
-            setViewOptions={setViewOptions}
-          />,
-        ]}
-        midAlignedItems={[
-          <SelectPerspectiveDropdown
-            tittle={'Select perspective A'}
-            setAllIds={setAllPerspectivesIds}
-            setActivePerspective={setLeftPerspective}
-            allIds={allPerspectivesIds}
-            isLeftDropdown={true}
-            requestMan={requestManager}
-            setLoadingState={SetLoadingState}
-          />,
-          <Button
-            content="<<"
-            onClick={(state: EButtonState) => {
-              if (state !== EButtonState.disabled) {
-                setCollapseState(EAppCollapsedState.toTheLeft);
-              }
-            }}
-            extraClassName={`first dark`}
-            state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
-          />,
-          <Button
-            content=">>"
-            extraClassName={`second dark`}
-            onClick={(state: EButtonState) => {
-              if (state !== EButtonState.disabled) {
-                setCollapseState(EAppCollapsedState.toTheRight);
-              }
-            }}
-            state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
-          />,
-          <SelectPerspectiveDropdown
-            tittle={'Select perspective B'}
-            setAllIds={setAllPerspectivesIds}
-            setActivePerspective={setRightPerspective}
-            allIds={allPerspectivesIds}
-            isLeftDropdown={false}
-            requestMan={requestManager}
-            setLoadingState={SetLoadingState}
-          />,
-        ]}
-        rightAlignedItems={[
-          <LegendComponent
-            legendData={legendData}
-            legendConf={viewOptions.legendConfig}
-            onLegendClick={(newMap: Map<string, boolean>) => {
-              setViewOptions({ updateType: "legendConfig", newValue: newMap, });
-            }}
-          />,
-        ]}
-      />
+      {navBar}
       <span style={{ height: "75px", display: "flex" }}></span>
       <PerspectivesGroups
         leftPerspective={leftPerspective}

@@ -29,7 +29,8 @@ const buttonText: React.CSSProperties = {
     textAlign: "center",
     whiteSpace: "nowrap",
     overflow: "hidden",
-    textOverflow: "ellipsis"
+    textOverflow: "ellipsis",
+    maxWidth: "15vw",
 }
 
 interface SelectPerspectiveProps {
@@ -47,6 +48,7 @@ interface SelectPerspectiveProps {
     requestMan: RequestManager,
 
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+    insideHamburger?: boolean,
 }
 
 
@@ -61,7 +63,8 @@ export const SelectPerspectiveDropdown = ({
     allIds,
     isLeftDropdown,
     requestMan,
-    setLoadingState
+    setLoadingState,
+    insideHamburger = false,
 }: SelectPerspectiveProps) => {
 
     const [states, setStates] = useReducer(bStateArrayReducer, []);
@@ -117,18 +120,36 @@ export const SelectPerspectiveDropdown = ({
     const perspectivesButtons: React.ReactNode[] = getButtons(allIds, states, setStates, setAllIds, setActivePerspective,
         isLeftDropdown, requestMan, setLoadingState);
 
-    return (
-        <DropMenu
-            items={perspectivesButtons}
-            content={
-                <div style={buttonText}>
-                    {text}
-                </div>}
-            extraClassButton="primary down-arrow fixedWidth-15vw blinkSizeAnim"
-            hoverText={text}
-            menuDirection={EDropMenuDirection.down}
-        />
-    );
+    if (!insideHamburger) {
+        return (
+            <DropMenu
+                items={perspectivesButtons}
+                content={
+                    <div style={buttonText}>
+                        {text}
+                    </div>}
+                extraClassButton="primary down-arrow fixedWidth-15vw blinkSizeAnim"
+                hoverText={text}
+                menuDirection={EDropMenuDirection.down}
+            />
+        );
+    } else {
+        let hamburgerBtnStyle = JSON.parse(JSON.stringify(buttonText));
+        hamburgerBtnStyle.maxWidth = "10vw";
+
+        return (
+            <DropMenu
+                items={perspectivesButtons}
+                content={
+                    <div style={hamburgerBtnStyle}>
+                        {text}
+                    </div>}
+                extraClassButton="primary down-arrow fixedWidth-10vw blinkSizeAnim btn-dropdown"
+                hoverText={text}
+                menuDirection={EDropMenuDirection.right}
+            />
+        );
+    }
 };
 
 /**

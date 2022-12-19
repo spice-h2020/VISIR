@@ -32,6 +32,8 @@ interface FileSourceDropdownProps {
     setFileSource: Function;
 
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+
+    insideHamburger?: boolean;
 }
 
 /**
@@ -39,12 +41,11 @@ interface FileSourceDropdownProps {
  */
 export const FileSourceDropdown = ({
     setFileSource,
-    setLoadingState
+    setLoadingState,
+    insideHamburger = false,
 }: FileSourceDropdownProps) => {
 
     const [states, setStates] = useReducer(bStateArrayReducer, init());
-
-
 
     const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
 
@@ -78,17 +79,29 @@ export const FileSourceDropdown = ({
     const inputRef = React.useRef<HTMLInputElement>(null);
     const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef)
 
-    return (
-        <React.Fragment>
-            <DropMenu
-                items={fileSourceButtons}
-                content="File Source"
-                extraClassButton="transparent down-arrow"
-                menuDirection={EDropMenuDirection.down}
-            />
-
-        </React.Fragment>
-    );
+    if (!insideHamburger) {
+        return (
+            <React.Fragment>
+                <DropMenu
+                    items={fileSourceButtons}
+                    content="File Source"
+                    extraClassButton="transparent down-arrow"
+                    menuDirection={EDropMenuDirection.down}
+                />
+            </React.Fragment>
+        );
+    } else {
+        return (
+            <React.Fragment>
+                <DropMenu
+                    items={fileSourceButtons}
+                    content="File Source"
+                    extraClassButton="transparent down-arrow btn-dropdown"
+                    menuDirection={EDropMenuDirection.right}
+                />
+            </React.Fragment>
+        );
+    }
 };
 
 /**
