@@ -7,7 +7,7 @@
 import { Dispatch } from "react";
 import { DimAttribute } from "./nodes";
 //Local files
-import { ICommunityData, IUserData } from "./perspectivesTypes";
+import { anyProperty, ICommunityData, IUserData } from "./perspectivesTypes";
 import { EButtonState } from "./viewOptions";
 
 /**
@@ -29,7 +29,7 @@ export interface IBoundingBox {
 /**
  * Interface of a translation json
  */
-export interface ITranslation {
+export interface ITranslation extends anyProperty {
     toolbar: {
         fileSourceDrop: {
             name: string,
@@ -68,6 +68,7 @@ export interface ITranslation {
         medoidTittle: string,
         mainInteractionsTittle: string,
         otherInteractionsTittle: string,
+        labelText: string,
     },
     legend: {
         anonymousRow: string,
@@ -77,13 +78,59 @@ export interface ITranslation {
 
 export class CTranslation {
     t!: ITranslation;
+    humanizators: [Map<string, string>, Map<string, string>];
 
     constructor(newT: ITranslation | undefined) {
-        if (newT) {
-            this.t = newT;
-        } else {
-            this.t = this.defaultT();
+        this.t = this.initT(newT);
+        this.humanizators = [new Map<string, string>(), new Map<string, string>()];
+    }
+
+    setHumanizator(index: number, humanizator: Map<string, string>) {
+        this.humanizators[index] = humanizator;
+    }
+
+    initT(newT: ITranslation | undefined) {
+        let initial = this.defaultT();
+
+        if (newT === undefined) {
+            return initial;
         }
+
+
+        const keys = Object.keys(initial);
+        for (const key of keys) {
+
+            if (newT[key] !== undefined) {
+
+                if (typeof initial[key] === "object") {
+                    const subKeys = Object.keys(initial[key]);
+
+                    for (const subkey of subKeys) {
+
+                        if (newT[key][subkey] !== undefined) {
+
+                            if (typeof initial[key][subkey] === "object") {
+                                const subsubKeys = Object.keys(initial[key][subkey]);
+
+                                for (const subsubkey of subsubKeys) {
+
+                                    if (newT[key][subkey][subsubkey] === undefined) {
+                                        newT[key][subkey][subsubkey] = initial[key][subkey][subsubkey];
+                                    }
+                                }
+                            }
+
+                        } else {
+                            newT[key][subkey] = initial[key][subkey];
+                        }
+                    }
+                }
+
+            } else {
+                newT[key] = initial[key];
+            }
+        }
+        return newT;
     }
 
     defaultT() {
@@ -125,7 +172,8 @@ export class CTranslation {
                 anonymous: "Anonymous",
                 medoidTittle: "Medoid Attributes",
                 mainInteractionsTittle: "Interactions related to this user's community:",
-                otherInteractionsTittle: "Other user interactions:"
+                otherInteractionsTittle: "Other user interactions:",
+                labelText: "label"
             },
             legend: {
                 anonymousRow: "Anonymous Users",
@@ -311,3 +359,23 @@ export function bStateArrayReducer(state: EButtonState[], stateAction: IbStateAr
 //#endregion
 
 //#endregion
+
+
+
+export function removeSpecialCase(s: string) {
+
+    //Remove case letters in middle of the word
+    let array = s.split(/(?=[A-Z])/);
+
+    for (let i = 1; i < array.length; i++) {
+        array[i] = array[i].toLowerCase();
+    }
+
+    s = array.join(" ").toString();
+
+    //Remove snake case if it exists
+    array = s.split("_");
+    s = array.toString();
+
+    return s;
+}

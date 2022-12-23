@@ -12,7 +12,7 @@ import React from "react";
 //Local files
 import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
-import { CTranslation } from "../constants/auxTypes";
+import { CTranslation, removeSpecialCase } from "../constants/auxTypes";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -54,14 +54,14 @@ export const NodePanel = ({
     if (node !== undefined) {
 
         if (!hideLabel) {
-            content.push(<p style={frenchIndent} key={1}> <strong> Label: </strong> &nbsp; {node.label} </p>);
+            content.push(<p style={frenchIndent} key={1}> <strong> {`${tClass.t.dataColumn.labelText}:`} </strong> &nbsp; {node.label} </p>);
         }
 
         const keys = Object.keys(node.explicit_community);
 
         for (let i = 0; i < keys.length; i++) {
             content.push(
-                <p key={2 + i} style={frenchIndent}> <strong> {`${keys[i]}:`} </strong> &nbsp; {node.explicit_community[keys[i]]} </p >);
+                <p key={2 + i} style={frenchIndent}> <strong> {removeSpecialCase(keys[i])} </strong> &nbsp; {removeSpecialCase(node.explicit_community[keys[i]])} </p >);
         }
 
         content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, tClass)} </div>);

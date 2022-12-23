@@ -133,6 +133,10 @@ export function validatePerspectiveDataJSON(arg: any): types.IPerspectiveData {
             arg.artworks[i] = isArtworkDataValid(arg.artworks[i]);
         }
 
+        if (arg.localizator !== undefined && typeof (arg.localizator) === "object") {
+            arg.localizator = isLocalizatorValid(arg.localizator);
+        }
+
         console.log(`Perspective file validation has been completed -> `);
         console.log(arg as types.IPerspectiveData);
 
@@ -313,6 +317,10 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
 
         for (let i = 0; i < keys.length; i++) {
             const newCount = Number(arg.explanation_data.data[keys[i]].toFixed(2));
+
+            if (keys[i] === "") {
+                keys[i] = "(empty)"
+            }
 
             newData.push({
                 value: keys[i],
@@ -621,6 +629,35 @@ function isArtworkDataValid(arg: any): types.IArtworkData {
 
     } catch (e: any) {
         throw Error(`Artwork data is not valid: ${e.message}`);
+    }
+}
+
+
+function isLocalizatorValid(arg: any) {
+    try {
+        const keys = Object.keys(arg);
+        const newData = new Map<string, Map<string, string> | string>();
+
+        for (const key of keys) {
+            const subKeys = Object.keys(arg[key as any]);
+            if (typeof subKeys === "object") {
+
+                const newMap = new Map<string, string>();
+                for (const subkey of subKeys) {
+                    newMap.set(subkey, arg[key as any][subkey as any]);
+                }
+
+                newData.set(key, newMap);
+
+            } else {
+                newData.set(key, keys[key as any]);
+            }
+        }
+
+        return newData;
+
+    } catch (e: any) {
+        throw Error(`Localizator data is not valid: ${e.message}`);
     }
 }
 

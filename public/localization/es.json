@@ -9,8 +9,8 @@
             "name": "Opciones",
             "hideLabels": "Ocultar etiquetas",
             "hideEdges": "Ocultar aristas sin seleccionar",
-            "minSimilarity": "Similitud minima:",
-            "removeEdges": "Eliminar un % de las aristas:"
+            "minSimilarity": "Similitud minima",
+            "removeEdges": "Eliminar un % de las aristas"
         },
         "selectPerspective": {
             "defaultName": "Seleccionar perspectiva",
@@ -32,11 +32,12 @@
     },
     "dataColumn": {
         "citizenTittle": "Atributos del ciudadano",
-        "citizenAmount": "Total de ciudadanos:",
-        "anonymous": "Anonimos:",
+        "citizenAmount": "Total de ciudadanos",
+        "anonymous": "Anónimos",
         "medoidTittle": "Atributos del medoide",
-        "mainInteractionsTittle": "Interacciones relacionadas con la comunidad del usuario:",
-        "otherInteractionsTittle": "Otras interacciones:"
+        "mainInteractionsTittle": "Interacciones relacionadas con la comunidad del usuario",
+        "otherInteractionsTittle": "Otras interacciones",
+        "labelText": "Etiqueta"
     },
     "legend": {
         "anonymousRow": "Usuarios anonimos",

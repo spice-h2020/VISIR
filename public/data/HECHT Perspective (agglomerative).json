@@ -37223,6 +37223,21 @@
     }
   ],
   "artworks": [],
-  "fileId": ""
+  "fileId": "",
+  "localizator": {
+    "DemographicsReligous": {
+      "tag": "Demographics Religous",
+      "S": "Secular",
+      "R": "Religious",
+      "M": "Moderated"
+    },
+    "DemographicsPolitics": {
+      "VL": "Very left",
+      "L": "Left",
+      "C": "Center",
+      "R": "Right",
+      "VR": "Very right",
+      "DK": "Dont know"
+    }
+  }
 }
-
