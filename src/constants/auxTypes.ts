@@ -27,6 +27,115 @@ export interface IBoundingBox {
 }
 
 /**
+ * Interface of a translation json
+ */
+export interface ITranslation {
+    toolbar: {
+        fileSourceDrop: {
+            name: string,
+            localFiles: string,
+            Api_URL: string,
+        },
+        optionsDrop: {
+            name: string,
+            hideLabels: string,
+            hideEdges: string,
+            minSimilarity: string,
+            removeEdges: string,
+        },
+        selectPerspective: {
+            defaultName: string,
+            noPerspectiveName: string,
+        },
+        legend: {
+            name: string,
+            noLegend: string,
+        }
+    },
+    loadingText: {
+        requestFiles: string,
+        requestPerspective: string,
+        requestingAllPerspectives: string,
+        requestingConfToolSeed: string,
+        CMisBusy: string,
+        simpleRequest: string,
+        simpleLoading: string,
+    },
+    dataColumn: {
+        citizenTittle: string,
+        citizenAmount: string,
+        anonymous: string,
+        medoidTittle: string,
+        mainInteractionsTittle: string,
+        otherInteractionsTittle: string,
+    },
+    legend: {
+        anonymousRow: string,
+        anonymousExplanation: string,
+    }
+}
+
+export class CTranslation {
+    t!: ITranslation;
+
+    constructor(newT: ITranslation | undefined) {
+        if (newT) {
+            this.t = newT;
+        } else {
+            this.t = this.defaultT();
+        }
+    }
+
+    defaultT() {
+        const t: ITranslation = {
+            toolbar: {
+                fileSourceDrop: {
+                    name: "File Source",
+                    localFiles: "Local app files",
+                    Api_URL: "Api URL"
+                },
+                optionsDrop: {
+                    name: "Options",
+                    hideLabels: "Hide node labels",
+                    hideEdges: "Hide unselected Edges",
+                    minSimilarity: "Minimum similarity:",
+                    removeEdges: "Remove % of edges:"
+                },
+                selectPerspective: {
+                    defaultName: "Select perspective",
+                    noPerspectiveName: "No available perspectives",
+                },
+                legend: {
+                    name: "Legend",
+                    noLegend: "Unactive Legend",
+                }
+            },
+            loadingText: {
+                requestFiles: "Requesting files to",
+                requestPerspective: "Requesting perspective",
+                requestingAllPerspectives: "Requesting file with All perspectives",
+                requestingConfToolSeed: "Requesting configuration tool seed",
+                CMisBusy: "Community Model is busy. Trying again",
+                simpleRequest: "Requesting",
+                simpleLoading: "Loading"
+            },
+            dataColumn: {
+                citizenTittle: "Citizen Attributes",
+                citizenAmount: "Total Citizens:",
+                anonymous: "Anonymous",
+                medoidTittle: "Medoid Attributes",
+                mainInteractionsTittle: "Interactions related to this user's community:",
+                otherInteractionsTittle: "Other user interactions:"
+            },
+            legend: {
+                anonymousRow: "Anonymous Users",
+                anonymousExplanation: "Users without any explicit data"
+            }
+        }
+        return t;
+    }
+}
+/**
  * Legend data source
  */
 export interface ILegendData {

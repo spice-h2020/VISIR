@@ -11,7 +11,7 @@
 //Constants
 import { IPerspectiveData, EPerspectiveVisState } from "../constants/perspectivesTypes";
 import { ViewOptions, EAppCollapsedState } from "../constants/viewOptions"
-import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction } from "../constants/auxTypes";
+import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction, CTranslation } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer, useState } from "react";
 //Local files
@@ -48,7 +48,9 @@ interface PerspectivesGroupProps {
      */
     setLegendData: React.Dispatch<ILegendDataAction>,
 
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>,
+
+    translationClass: CTranslation,
 }
 
 /**
@@ -61,6 +63,7 @@ export const PerspectivesGroups = ({
     viewOptions,
     setLegendData,
     setLoadingState,
+    translationClass: tClass,
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
@@ -111,6 +114,7 @@ export const PerspectivesGroups = ({
             perspectiveState={leftState}
             setLoadingState={setLoadingState}
             unique={rightPerspective === undefined}
+            translationClass={tClass}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -125,6 +129,7 @@ export const PerspectivesGroups = ({
             mirror={true}
             setLoadingState={setLoadingState}
             unique={leftPerspective === undefined}
+            translationClass={tClass}
         />
 
     return (

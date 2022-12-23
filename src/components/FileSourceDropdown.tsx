@@ -5,7 +5,7 @@
  */
 //Constants
 import { EFileSource, initialOptions, EButtonState } from "../constants/viewOptions";
-import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
+import { EbuttonStateArrayAction, bStateArrayReducer, CTranslation } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useReducer } from "react";
 //Local files
@@ -32,8 +32,10 @@ interface FileSourceDropdownProps {
     setFileSource: Function;
 
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+    translationClass: CTranslation;
 
     insideHamburger?: boolean;
+
 }
 
 /**
@@ -43,13 +45,14 @@ export const FileSourceDropdown = ({
     setFileSource,
     setLoadingState,
     insideHamburger = false,
+    translationClass: tClass,
 }: FileSourceDropdownProps) => {
 
     const [states, setStates] = useReducer(bStateArrayReducer, init());
 
     const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
 
-        setLoadingState({ isActive: true, msg: `Requesting files to ${EFileSource[newFileSource]}` })
+        setLoadingState({ isActive: true, msg: `${tClass.t.loadingText.requestFiles} ${EFileSource[newFileSource]}` })
 
         setStates({
             action: EbuttonStateArrayAction.activeOne,
@@ -77,14 +80,14 @@ export const FileSourceDropdown = ({
     }, []);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef)
+    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef, tClass)
 
     if (!insideHamburger) {
         return (
             <React.Fragment>
                 <DropMenu
                     items={fileSourceButtons}
-                    content="File Source"
+                    content={tClass.t.toolbar.fileSourceDrop.name}
                     extraClassButton="transparent down-arrow"
                     menuDirection={EDropMenuDirection.down}
                 />
@@ -95,7 +98,7 @@ export const FileSourceDropdown = ({
             <React.Fragment>
                 <DropMenu
                     items={fileSourceButtons}
-                    content="File Source"
+                    content={tClass.t.toolbar.fileSourceDrop.name}
                     extraClassButton="transparent down-arrow btn-dropdown"
                     menuDirection={EDropMenuDirection.right}
                 />
@@ -122,7 +125,8 @@ const init = (): EButtonState[] => {
  * @param selectedItems State of the buttons.
  * @returns returns an array of React components.
  */
-function getButtons(changeFileSource: Function, selectedItems: EButtonState[], inputRef: React.RefObject<HTMLInputElement>): React.ReactNode[] {
+function getButtons(changeFileSource: Function, selectedItems: EButtonState[], inputRef: React.RefObject<HTMLInputElement>
+    , tClass: CTranslation): React.ReactNode[] {
 
     const imageSrc = selectedItems[EFileSource.Api] === EButtonState.active ? "./images/update-white.png" : "./images/update-red.png";
 
@@ -146,7 +150,7 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[], i
     return [
         <Button
             key={1}
-            content="Local app files"
+            content={tClass.t.toolbar.fileSourceDrop.localFiles}
             onClick={() => { changeFileSource(EFileSource.Local); }}
             state={selectedItems[EFileSource.Local]}
             extraClassName={"btn-dropdown"}
@@ -155,7 +159,7 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[], i
             key={2}
             items={dropRightContent}
             state={selectedItems[EFileSource.Api]}
-            content="Api URL"
+            content={tClass.t.toolbar.fileSourceDrop.Api_URL}
             extraClassButton="transparent btn-dropdown down-right"
             extraClassContainer="dropdown-inner"
             hoverChangesState={true}

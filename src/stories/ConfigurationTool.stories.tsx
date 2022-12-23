@@ -2,6 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { SetStateAction } from 'react';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
 import { ConfigurationTool } from '../components/ConfigurationTool';
+import { CTranslation } from '../constants/auxTypes';
 import { EFileSource } from '../constants/viewOptions';
 import RequestManager from '../managers/requestManager';
 
@@ -15,7 +16,7 @@ export default {
 
 const Template: ComponentStory<typeof ConfigurationTool> = (args) => <ConfigurationTool {...args} />;
 
-const rqMan = new RequestManager(setLoadingState);
+const rqMan = new RequestManager(setLoadingState, new CTranslation(undefined));
 rqMan.changeBaseURL(EFileSource.Local);
 
 export const Primary = Template.bind({});

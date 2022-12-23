@@ -13,6 +13,7 @@ import { Axios } from 'axios'
 //Config
 import config from '../appConfig.json';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
+import { CTranslation } from '../constants/auxTypes';
 
 
 export default class RequestManager {
@@ -36,11 +37,14 @@ export default class RequestManager {
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+    tClass: CTranslation;
+
     /**
      * Constructor of the class
      */
-    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>) {
+    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, tClass: CTranslation) {
         this.setLoadingState = setLoadingState;
+        this.tClass = tClass
 
         this.isActive = initialOptions.fileSource === EFileSource.Api;
         this.usingAPI = false;
@@ -70,7 +74,7 @@ export default class RequestManager {
      * if something went wrong.
      */
     requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting perspective ${name}` });
+        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestPerspective} ${name}` });
 
         this.getPerspective(perspectiveId)
             .then((response: any) => {
@@ -117,7 +121,7 @@ export default class RequestManager {
      * something went wrong.
      */
     requestAllPerspectivesIds(callback: Function, stateCallback?: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting file with All perspectives` });
+        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestingAllPerspectives}` });
 
         this.getAllPerspectives()
             .then((response: any) => {
@@ -154,7 +158,7 @@ export default class RequestManager {
     }
 
     requestConfigurationToolSeed(callback: Function, stateCallback?: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting configuration tool seed` });
+        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestingConfToolSeed}` });
 
         this.getConfigurationToolSeed()
             .then((response: any) => {
@@ -217,7 +221,7 @@ export default class RequestManager {
         if (this.currentJobWaitTime > this.jobMaxWaitTime) {
             throw new Error("Max wait time for the community model reached");
         }
-        this.setLoadingState({ isActive: true, msg: `Community Model is busy. Trying again (${this.currentJobWaitTime / 2})` });
+        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.CMisBusy} (${this.currentJobWaitTime / 2})` });
 
         return this.axios.get(url, {})
             .then(async (response) => {

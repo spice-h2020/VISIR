@@ -18,6 +18,7 @@ import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
 import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
 import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
+import { CTranslation } from "../constants/auxTypes";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -58,6 +59,8 @@ interface DataTableProps {
 
     hideLabel: boolean;
     state: string;
+
+    translationClass: CTranslation;
 }
 
 /**
@@ -71,20 +74,21 @@ export const DataTable = ({
     allUsers,
     hideLabel,
     state,
+    translationClass: tClass,
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks);
+    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks, tClass);
 
     return (
         <div className={state} style={getContainerStyle(state)}>
             <h2 key={0} className="tittle" style={{ fontSize: "1.5rem" }}>  {tittle} </h2>
             <NodePanel
                 key={1}
-                tittle={"Citizen Attributes"}
+                tittle={tClass.t.dataColumn.citizenTittle}
                 node={node}
                 hideLabel={hideLabel}
                 artworks={artworks}
-            />
+                translationClass={tClass} />
             {CommunityPanel}
 
         </div>
@@ -98,15 +102,15 @@ export const DataTable = ({
  * @returns a react component with the community's panel.
  */
 function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean,
-    artworks: IArtworkData[]) {
+    artworks: IArtworkData[], tClass: CTranslation) {
 
     if (community !== undefined) {
         const tittle = <div key={0} style={sectionTittleStyle}> Community Attributes </div>;
         let content: React.ReactNode[] = [];
 
         content.push(<div className="row" key={1}> <strong> Name: </strong> &nbsp; {community.name} </div>);
-        content.push(<div className="row" key={2}> {` Total Citizens: ${community.users.length}`} </div>);
-        content.push(<div className="row" key={23}> {` Anonymous: ${community.anonUsers.length}`} </div>);
+        content.push(<div className="row" key={2}> {` ${tClass.t.dataColumn.citizenAmount} ${community.users.length}`} </div>);
+        content.push(<div className="row" key={23}> {` ${tClass.t.dataColumn.anonymous} ${community.anonUsers.length}`} </div>);
         content.push(<br key={4} />);
 
         for (let i = 0; i < community.explanations.length; i++) {
@@ -114,7 +118,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
                 content.push(
                     <React.Fragment key={5 + i * 2}>
                         {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel,
-                            artworks)}
+                            artworks, tClass)}
                     </React.Fragment>);
 
                 content.push(<br key={6 + i * 2} />);
@@ -141,7 +145,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @returns a react component with the explanations.
  */
 function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[],
-    hideLabel: boolean, artworks: IArtworkData[]) {
+    hideLabel: boolean, artworks: IArtworkData[], tClass: CTranslation) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
@@ -162,10 +166,11 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                     <React.Fragment>
                         <hr />
                         <NodePanel
-                            tittle={"Medoid Attributes"}
+                            tittle={tClass.t.dataColumn.medoidTittle}
                             node={medoid}
                             hideLabel={hideLabel}
                             artworks={artworks}
+                            translationClass={tClass}
                         />
                     </React.Fragment>);
             }

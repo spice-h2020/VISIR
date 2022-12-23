@@ -11,7 +11,7 @@
 //Constants
 import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
-import { ILegendData, legendDataReducer } from './constants/auxTypes';
+import { CTranslation, ILegendData, ITranslation, legendDataReducer } from './constants/auxTypes';
 //Packages
 import React, { useEffect, useReducer, useState } from 'react';
 //Local files
@@ -29,6 +29,8 @@ import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFront
 import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
 import { ConfigurationTool } from './components/ConfigurationTool';
 
+import config from './appConfig.json';
+
 interface AppProps {
   perspectiveId1: string | null,
   perspectiveId2: string | null
@@ -43,10 +45,28 @@ export const App = ({
 
 }: AppProps) => {
 
+  const [currentLanguage, setCurrentLanguage] = useState<CTranslation>(new CTranslation(undefined))
+
+  useEffect(() => {
+    fetch(`localization/${config.LANG}.json`
+      , {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (language) {
+        setCurrentLanguage(new CTranslation(language));
+      });
+  }, [])
+
   //Parameters to activate/disactivate and edit the loading spinner.
   const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
 
-  const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState));
+  const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState, currentLanguage));
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
@@ -133,6 +153,7 @@ export const App = ({
       setFileSource={updateFileSource}
       setLoadingState={SetLoadingState}
       insideHamburger={small}
+      translationClass={currentLanguage}
     />;
 
   const optionsDrop =
@@ -140,11 +161,12 @@ export const App = ({
       key={1}
       setViewOptions={setViewOptions}
       insideHamburger={small}
+      translationClass={currentLanguage}
     />
 
   const selectLeft =
     <SelectPerspectiveDropdown
-      tittle={'Select perspective A'}
+      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} A`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setLeftPerspective}
       allIds={allPerspectivesIds}
@@ -152,11 +174,12 @@ export const App = ({
       requestMan={requestManager}
       setLoadingState={SetLoadingState}
       insideHamburger={tooSmall}
+      translationClass={currentLanguage}
     />
 
   const selectRight =
     <SelectPerspectiveDropdown
-      tittle={'Select perspective B'}
+      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} B`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setRightPerspective}
       allIds={allPerspectivesIds}
@@ -164,6 +187,7 @@ export const App = ({
       requestMan={requestManager}
       setLoadingState={SetLoadingState}
       insideHamburger={tooSmall}
+      translationClass={currentLanguage}
     />
 
   const collapseLeft =
@@ -197,6 +221,7 @@ export const App = ({
       onLegendClick={(newMap: Map<string, boolean>) => {
         setViewOptions({ updateType: "legendConfig", newValue: newMap, });
       }}
+      translationClass={currentLanguage}
     />
 
 
@@ -313,6 +338,7 @@ export const App = ({
         viewOptions={viewOptions}
         setLegendData={setLegendData}
         setLoadingState={SetLoadingState}
+        translationClass={currentLanguage}
       />
 
       <ConfigurationTool

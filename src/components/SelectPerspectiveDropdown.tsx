@@ -13,7 +13,7 @@
  */
 //Constants
 import { EButtonState } from "../constants/viewOptions"
-import { bStateArrayReducer, EbuttonStateArrayAction, IbStateArrayAction } from "../constants/auxTypes";
+import { bStateArrayReducer, CTranslation, EbuttonStateArrayAction, IbStateArrayAction, ITranslation } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useReducer, useState } from "react";
 //Local files
@@ -46,6 +46,7 @@ interface SelectPerspectiveProps {
     isLeftDropdown: boolean,
 
     requestMan: RequestManager,
+    translationClass: CTranslation;
 
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     insideHamburger?: boolean,
@@ -63,6 +64,7 @@ export const SelectPerspectiveDropdown = ({
     allIds,
     isLeftDropdown,
     requestMan,
+    translationClass: tClass,
     setLoadingState,
     insideHamburger = false,
 }: SelectPerspectiveProps) => {
@@ -111,14 +113,14 @@ export const SelectPerspectiveDropdown = ({
         return (
             <DropMenu
                 items={[]}
-                content="No available perspectives"
+                content={tClass.t.toolbar.selectPerspective.noPerspectiveName}
                 extraClassButton="transparent down-arrow fixedWidth-15vw"
             />
         );
     }
 
     const perspectivesButtons: React.ReactNode[] = getButtons(allIds, states, setStates, setAllIds, setActivePerspective,
-        isLeftDropdown, requestMan, setLoadingState);
+        isLeftDropdown, requestMan, setLoadingState, tClass);
 
     if (!insideHamburger) {
         return (
@@ -165,7 +167,7 @@ export const SelectPerspectiveDropdown = ({
  */
 function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: React.Dispatch<IbStateArrayAction>,
     setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager,
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>): React.ReactNode[] {
+    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, tClass: CTranslation): React.ReactNode[] {
 
     const maxButtonNameLength = 85;
     const buttons = new Array<React.ReactNode>();
@@ -203,7 +205,7 @@ function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: 
                         //Request the unactive perspective
                         setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.loading });
 
-                        setLoadingState({ isActive: true, msg: `Requesting ${allIdsToEdit[i].id}` });
+                        setLoadingState({ isActive: true, msg: `${tClass.t.loadingText.simpleRequest} ${allIdsToEdit[i].id}` });
 
                         requestMan.requestPerspectiveFIle(allIdsToEdit[i].id, allIdsToEdit[i].name,
                             /**
