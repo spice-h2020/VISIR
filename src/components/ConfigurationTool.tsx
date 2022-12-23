@@ -116,11 +116,13 @@ export const ConfigurationTool = ({
     const textAreaRef = useRef(null);
 
     useEffect(() => {
-        requestManager.requestConfigurationToolSeed((seed: IConfigurationSeed) => {
-            setSeed(seed)
-            setLoadingState({ isActive: false });
-        });
-    }, []);
+        if (isActive) {
+            requestManager.requestConfigurationToolSeed((seed: IConfigurationSeed) => {
+                setSeed(seed)
+                setLoadingState({ isActive: false });
+            });
+        }
+    }, [isActive]);
 
 
     useEffect(() => {
@@ -333,7 +335,6 @@ export const ConfigurationTool = ({
 
     }, [textAreaContent]);
 
-    console.log(isActive);
     const backgroundStyle: React.CSSProperties = JSON.parse(JSON.stringify(devModeBackgroundStyle));
     backgroundStyle.display = isDevMode ? "block" : "none";
 
@@ -571,8 +572,4 @@ function getCheckboxStyle(hide: boolean): React.CSSProperties {
     }
 
     return style;
-}
-
-function UseRef(arg0: null) {
-    throw new Error("Function not implemented.");
 }

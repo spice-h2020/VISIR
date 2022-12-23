@@ -107,7 +107,7 @@ export const SelectPerspectiveDropdown = ({
         }
     }, [allIds, isLeftDropdown, tittle]);
 
-    if (allIds === undefined || states.length === 0) {
+    if (allIds === undefined || allIds.length === 0 || states.length === 0) {
         return (
             <DropMenu
                 items={[]}
@@ -171,6 +171,8 @@ function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: 
     const buttons = new Array<React.ReactNode>();
 
     const allIdsToEdit: PerspectiveId[] = JSON.parse(JSON.stringify(allIds));
+    console.log("all ids")
+    console.log(allIdsToEdit)
     const currentActivePerspective = allIdsToEdit.find((value) => {
         if (isLeft) {
             return value.isActive === PerspectiveActiveState.left;
