@@ -110,9 +110,7 @@ export default class NodeExplicitComms {
 
             explicitKeys.forEach((key) => {
 
-                if (dimStrat === undefined || unique) {
-                    this.updateExplicitData(key, node);
-                }
+                this.updateExplicitData(key, node);
 
                 node.isMedoid = this.medoidNodes.includes(node.id);
 

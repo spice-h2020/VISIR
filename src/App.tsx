@@ -11,7 +11,7 @@
 //Constants
 import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
-import { CTranslation, ILegendData, ITranslation, legendDataReducer } from './constants/auxTypes';
+import { CTranslation, DiferentAttrbError, ILegendData, ITranslation, legendDataReducer } from './constants/auxTypes';
 //Packages
 import React, { useEffect, useReducer, useState } from 'react';
 //Local files
@@ -325,7 +325,26 @@ export const App = ({
       />
   }
 
+  function cancelPerspective(idToCancel: string) {
 
+    const allIds: PerspectiveId[] = JSON.parse(JSON.stringify(allPerspectivesIds));
+
+    for (let id of allIds) {
+      if (id.id === idToCancel) {
+        if (id.isActive === PerspectiveActiveState.left) {
+          setLeftPerspective(undefined);
+        } else {
+          setRightPerspective(undefined);
+        }
+
+        alert(`Perspective ${id.name} has diferent attributes than the other active perspective.`)
+        id.isActive = PerspectiveActiveState.unactive;
+        break;
+      }
+    }
+
+    setAllPerspectivesIds(allIds);
+  }
 
   return (
     <div>
@@ -339,6 +358,7 @@ export const App = ({
         setLegendData={setLegendData}
         setLoadingState={SetLoadingState}
         translationClass={currentLanguage}
+        cancelPerspective={cancelPerspective}
       />
 
       <ConfigurationTool
@@ -350,8 +370,7 @@ export const App = ({
       <LoadingFrontPanel
         state={loadingState}
       />
-    </div>
-  );
+    </div>);
 }
 
 

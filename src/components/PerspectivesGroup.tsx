@@ -51,6 +51,7 @@ interface PerspectivesGroupProps {
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>,
 
     translationClass: CTranslation,
+    cancelPerspective: (idToCancel: string) => (void),
 }
 
 /**
@@ -64,6 +65,7 @@ export const PerspectivesGroups = ({
     setLegendData,
     setLoadingState,
     translationClass: tClass,
+    cancelPerspective,
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
@@ -115,6 +117,7 @@ export const PerspectivesGroups = ({
             setLoadingState={setLoadingState}
             unique={rightPerspective === undefined}
             translationClass={tClass}
+            cancelPerspective={cancelPerspective}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -130,6 +133,7 @@ export const PerspectivesGroups = ({
             setLoadingState={setLoadingState}
             unique={leftPerspective === undefined}
             translationClass={tClass}
+            cancelPerspective={cancelPerspective}
         />
 
     return (

@@ -360,7 +360,14 @@ export function bStateArrayReducer(state: EButtonState[], stateAction: IbStateAr
 
 //#endregion
 
+export class DiferentAttrbError extends Error {
+    constructor(msg: string) {
+        super(msg);
 
+        // Set the prototype explicitly.
+        Object.setPrototypeOf(this, DiferentAttrbError.prototype);
+    }
+}
 
 export function removeSpecialCase(s: string) {
 

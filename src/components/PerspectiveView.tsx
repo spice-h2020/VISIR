@@ -10,7 +10,7 @@
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
 import { IUserData, ICommunityData, EPerspectiveVisState, IPerspectiveData } from '../constants/perspectivesTypes';
-import { ISelectedObject, ESelectedObjectAction, IStateFunctions, CTranslation } from '../constants/auxTypes';
+import { ISelectedObject, ESelectedObjectAction, IStateFunctions, CTranslation, DiferentAttrbError } from '../constants/auxTypes';
 //Packages
 import React, { useEffect, useState, useRef } from "react";
 //Local files
@@ -54,6 +54,7 @@ interface PerspectiveViewProps {
     unique: boolean;
 
     translationClass: CTranslation,
+    cancelPerspective: (idToCancel: string) => (void),
 }
 
 /**
@@ -71,6 +72,7 @@ export const PerspectiveView = ({
     setLoadingState,
     unique,
     translationClass: tClass,
+    cancelPerspective,
 }: PerspectiveViewProps) => {
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
@@ -151,9 +153,17 @@ export const PerspectiveView = ({
                 sf.setNetworkFocusId(perspectiveData.id);
             }
 
-            setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
-                sf, dimStrat, networkFocusID!, setLoadingState, unique));
 
+            try {
+                setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
+                    sf, dimStrat, networkFocusID!, setLoadingState, unique));
+
+            } catch (error) {
+                if (error instanceof DiferentAttrbError) {
+                    cancelPerspective(perspectiveData.id);
+                }
+
+            }
             setLoadingState({ isActive: false });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
