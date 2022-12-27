@@ -69,6 +69,7 @@ export interface ITranslation extends anyProperty {
         mainInteractionsTittle: string,
         otherInteractionsTittle: string,
         labelText: string,
+        unknownUserAttrb: string,
     },
     legend: {
         anonymousRow: string,
@@ -173,7 +174,8 @@ export class CTranslation {
                 medoidTittle: "Medoid Attributes",
                 mainInteractionsTittle: "Interactions related to this user's community:",
                 otherInteractionsTittle: "Other user interactions:",
-                labelText: "label"
+                labelText: "label",
+                unknownUserAttrb: "All users' attributes are unknown"
             },
             legend: {
                 anonymousRow: "Anonymous Users",

@@ -14,8 +14,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import RequestManager from "../managers/requestManager";
-import { IConfigurationSeed, ISimilarityFunction } from "../constants/configurationToolTypes";
+import { ESimilarity, IConfigurationSeed } from "../constants/ConfigToolUtils";
 import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
+
+import * as config from "../constants/ConfigToolUtils";
 
 const darkBackgroundStyle: React.CSSProperties = {
     background: "rgba(0, 0, 0, 0.3)",
@@ -77,14 +79,6 @@ interface ConfToolProps {
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
 }
 
-enum ESimilarity {
-    Same,
-    Similar,
-    Different
-}
-
-const noneSelectedName = "Select option";
-
 /**
  * UI component that executes a function when clicked.
  */
@@ -102,7 +96,7 @@ export const ConfigurationTool = ({
     const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.Same);
     const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.Same);
     //Middle select option state
-    const [selectedOption, setSelectedOption] = useState<[String, number]>([noneSelectedName, -1]);
+    const [selectedOption, setSelectedOption] = useState<[String, number]>([config.noneSelectedName, -1]);
     //Checkboxes state
     const [citizenAttr, setCitizenAttr] = useState<Map<string, boolean>>(new Map<string, boolean>());
     const [artworksAttr, setArtworksAttr] = useState<Map<string, boolean>>(new Map<string, boolean>());
@@ -115,6 +109,7 @@ export const ConfigurationTool = ({
     const [textAreaHeight, setTextAreaHeight] = useState<number>(0);
     const textAreaRef = useRef(null);
 
+    //When the configuration tool is active, check for the latest configuration seed
     useEffect(() => {
         if (isActive) {
             requestManager.requestConfigurationToolSeed((seed: IConfigurationSeed) => {
@@ -124,7 +119,7 @@ export const ConfigurationTool = ({
         }
     }, [isActive]);
 
-
+    //Init the new citizen and artworks attributes
     useEffect(() => {
         if (seed !== undefined) {
             //Init citizen attr
@@ -143,189 +138,7 @@ export const ConfigurationTool = ({
         }
     }, [seed]);
 
-
-    function createConfigurationFile() {
-
-        if (seed) {
-            let newConfig: any = {
-                user_attributes: [],
-                interaction_similarity_functions: [],
-                similarity_functions: []
-            };
-
-            citizenAttr.forEach((value, key) => {
-                if (value) {
-                    newConfig.user_attributes.push({
-                        att_name: key,
-                        att_type: "String"
-                    });
-                }
-            });
-
-            if (selectedOption[0] != noneSelectedName) {
-                switch (similarity1) {
-                    case ESimilarity.Same: {
-                        let obj = { sim_function: {} as any };
-                        obj.sim_function = JSON.parse(JSON.stringify(
-                            seed.interaction_similarity_functions[selectedOption[1]]))
-
-                        obj.sim_function.name = "EqualSimilarityDAO";
-
-                        newConfig.interaction_similarity_functions.push(obj);
-                        break;
-                    }
-                    case ESimilarity.Similar: {
-                        let obj = { sim_function: {} as any };
-                        obj.sim_function = JSON.parse(JSON.stringify(
-                            seed.interaction_similarity_functions[selectedOption[1]]))
-
-                        newConfig.interaction_similarity_functions.push(obj)
-
-                        break;
-                    }
-                    case ESimilarity.Different: {
-                        let obj = { sim_function: {} as any };
-                        obj.sim_function = JSON.parse(JSON.stringify(
-                            seed.interaction_similarity_functions[selectedOption[1]]))
-                        obj.sim_function.dissimilar = true;
-                        newConfig.interaction_similarity_functions.push(obj)
-
-                        break;
-                    }
-                }
-            }
-
-            switch (similarity2) {
-                case ESimilarity.Same: {
-                    let sim = {
-                        "sim_function": {
-                            "name": "EqualSimilarityDAO",
-                            "params": [],
-                            "on_attribute": {
-                                "att_name": "id",
-                                "att_type": "String"
-                            }
-                        }
-                    };
-                    newConfig.similarity_functions.push(sim);
-                    break;
-                }
-                case ESimilarity.Similar: {
-                    seed.artwork_attributes.forEach((value) => {
-                        const name = value.on_attribute.att_name;
-
-                        if (artworksAttr.get(name)) {
-                            newConfig.similarity_functions.push({
-                                sim_function: {
-                                    dissimilar: false,
-                                    name: value.name,
-                                    on_attribute: value.on_attribute,
-                                    params: value.params,
-                                }
-                            })
-                        }
-                    });
-
-                    if (newConfig.similarity_functions.length === 0) {
-                        let sim = {
-                            "sim_function": {
-                                "name": "EqualSimilarityDAO",
-                                "params": [],
-                                "on_attribute": {
-                                    "att_name": "id",
-                                    "att_type": "String"
-                                }
-                            }
-                        };
-                        newConfig.similarity_functions.push(sim);
-                    }
-
-                    break;
-                }
-                case ESimilarity.Different: {
-                    seed.artwork_attributes.forEach((value) => {
-                        const name = value.on_attribute.att_name;
-
-                        if (artworksAttr.get(name)) {
-                            newConfig.similarity_functions.push({
-                                sim_function: {
-                                    dissimilar: true,
-                                    name: value.name,
-                                    on_attribute: value.on_attribute,
-                                    params: value.params,
-                                }
-                            })
-                        }
-                    });
-
-                    break;
-                }
-            }
-
-            let configName = perspectiveName.replaceAll(" ", "_");
-
-            if (configName === "") {
-
-                switch (similarity1) {
-                    case ESimilarity.Same: {
-                        configName = "E-";
-                        break;
-                    }
-                    case ESimilarity.Similar: {
-                        configName = "S-";
-                        break;
-                    }
-                    case ESimilarity.Different: {
-                        configName = "D-";
-                        break;
-                    }
-                }
-
-                if (newConfig.interaction_similarity_functions.length != 0)
-                    configName += seed.interaction_similarity_functions[selectedOption[1]].on_attribute.att_name;
-
-                switch (similarity2) {
-                    case ESimilarity.Same: {
-                        configName += "-E-";
-                        break;
-                    }
-                    case ESimilarity.Similar: {
-                        configName += "-S-";
-                        break;
-                    }
-                    case ESimilarity.Different: {
-                        configName += "-D-";
-                        break;
-                    }
-                }
-                configName += "artworks";
-
-                let artwork_attributesName: String[] = [];
-                seed.artwork_attributes.forEach((value) => {
-                    const name = value.on_attribute.att_name;
-
-                    if (artworksAttr.get(name)) {
-                        artwork_attributesName.push(value.on_attribute.att_name);
-                    }
-                });
-
-                if (artwork_attributesName.length && similarity2 != ESimilarity.Same)
-                    configName = configName + " (" + artwork_attributesName.join(", ") + ")";
-
-            }
-
-            newConfig["name"] = configName;
-            newConfig["id"] = configName;
-
-            newConfig["algorithm"] = {
-                "name": "agglomerative",
-                "params": []
-            };
-
-            return newConfig;
-        }
-    }
-
+    //Update the size of the TextArea that shows the json sent to configurate the CM
     useEffect(() => {
         const ref = textAreaRef as any;
 
@@ -335,6 +148,7 @@ export const ConfigurationTool = ({
 
     }, [textAreaContent]);
 
+    //Toggle the background dev mode if dev mode is active
     const backgroundStyle: React.CSSProperties = JSON.parse(JSON.stringify(devModeBackgroundStyle));
     backgroundStyle.display = isDevMode ? "block" : "none";
 
@@ -392,7 +206,7 @@ export const ConfigurationTool = ({
                     </div>
 
                     <div key={1} className="row">
-                        {getCitizenAttributeSelector(similarity1, seed, citizenAttr, setCitizenAttr)}
+                        {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
                         {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr)}
                     </div>
                     <div key={2} style={{ marginTop: "5px" }}>
@@ -402,11 +216,14 @@ export const ConfigurationTool = ({
 
                             onClick={
                                 () => {
-                                    const newConfiguration = createConfigurationFile();
-                                    setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
+                                    if (seed) {
+                                        const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
+                                            artworksAttr, selectedOption, similarity1, similarity2, perspectiveName);
 
+                                        setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
-                                    requestManager.sendNewConfigSeed(newConfiguration);
+                                        requestManager.sendNewConfigSeed(newConfiguration);
+                                    }
                                 }
                             }
                         />
@@ -421,6 +238,12 @@ export const ConfigurationTool = ({
     );
 };
 
+/**
+ * Creates a dropdown to pick between diferent ESimilarity Options
+ * @param sim current ESimilarity value selected
+ * @param setSimilarity callback executed when an option is selected
+ * @returns 
+ */
 function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function): React.ReactNode[] {
     const buttons: React.ReactNode[] = [];
 
@@ -442,9 +265,15 @@ function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function): React
     return buttons;
 }
 
-function getCitizenAttributeSelector(sim: ESimilarity, seed: IConfigurationSeed | undefined,
-    citizenAttr: Map<string, boolean>, setCitizenAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>)
-    : React.ReactNode {
+/**
+ * Creates several checkboxes to select the citizen attributes to use in the clustering
+ * @param seed configuration seed
+ * @param citizenAttr current state of the checkboxes
+ * @param setCitizenAttr callback executed when a checkbox is clicked
+ * @returns 
+ */
+function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citizenAttr: Map<string, boolean>,
+    setCitizenAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>): React.ReactNode {
 
     if (seed === undefined) {
         return <React.Fragment key={0}></React.Fragment>;
@@ -477,8 +306,15 @@ function getCitizenAttributeSelector(sim: ESimilarity, seed: IConfigurationSeed 
     }
 }
 
-
-function getArtworkAttributeSelector(sim: ESimilarity, seed: IConfigurationSeed | undefined,
+/**
+ * Creates several checkboxes to select the artworks attributes to use in the clustering
+ * @param sim2 Similarity value of the second similarity dropdown. If === Same, the checkboxes will be disabled
+ * @param seed configuration seed
+ * @param artworksAttr current state of the checkboxes
+ * @param setArtworksAttr callback executed when a checkbox is clicked 
+ * @returns 
+ */
+function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed | undefined,
     artworksAttr: Map<string, boolean>, setArtworksAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>)
     : React.ReactNode {
 
@@ -489,17 +325,17 @@ function getArtworkAttributeSelector(sim: ESimilarity, seed: IConfigurationSeed 
 
         for (let i = 0; i < seed.artwork_attributes.length; i++) {
             const onAttribute = seed.artwork_attributes[i].on_attribute;
-            const isChecked: boolean | undefined = artworksAttr.get(onAttribute.att_name) && sim !== ESimilarity.Same;
+            const isChecked: boolean | undefined = artworksAttr.get(onAttribute.att_name) && sim2 !== ESimilarity.Same;
 
             checkboxes.push(
                 <div key={i} className="row">
-                    <input type="checkbox" style={getCheckboxStyle(sim === ESimilarity.Same)} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
+                    <input type="checkbox" style={getCheckboxStyle(sim2 === ESimilarity.Same)} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
                         onChange={() => {
                             artworksAttr.set(onAttribute.att_name, !isChecked);
                             setArtworksAttr(new Map(artworksAttr));
                         }
                         } />
-                    <label htmlFor={`art-${onAttribute.att_name}`} style={getCheckboxStyle(sim === ESimilarity.Same)}>
+                    <label htmlFor={`art-${onAttribute.att_name}`} style={getCheckboxStyle(sim2 === ESimilarity.Same)}>
                         {onAttribute.att_name}
                     </label>
                 </div>)
@@ -513,6 +349,13 @@ function getArtworkAttributeSelector(sim: ESimilarity, seed: IConfigurationSeed 
     }
 }
 
+/**
+ * Creates the middle dropdown
+ * @param selectedOption current st
+ * @param seed configuration seed
+ * @param setSelectedOption callback executed when a selected option is clicked
+ * @returns 
+ */
 function getOptionSelector(selectedOption: [String, number], seed: IConfigurationSeed | undefined,
     setSelectedOption: Function): React.ReactNode {
 
@@ -521,14 +364,15 @@ function getOptionSelector(selectedOption: [String, number], seed: IConfiguratio
     } else {
 
         const items = [];
+        //Create the default-no-options-selected option
         items.push(
             <Button
                 key={-1}
-                content={noneSelectedName}
-                state={noneSelectedName === selectedOption[0] ? EButtonState.active : EButtonState.unactive}
+                content={config.noneSelectedName}
+                state={config.noneSelectedName === selectedOption[0] ? EButtonState.active : EButtonState.unactive}
                 onClick={
                     () => {
-                        setSelectedOption([noneSelectedName, -1]);
+                        setSelectedOption([config.noneSelectedName, -1]);
                     }
                 }
                 extraClassName={"btn-dropdown"}

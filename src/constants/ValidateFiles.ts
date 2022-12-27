@@ -4,7 +4,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IConfigurationSeed, INameAndTypePair, ISimilarityFunction } from "./configurationToolTypes";
+import { IConfigurationSeed, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 import { ECommunityType } from "./perspectivesTypes";

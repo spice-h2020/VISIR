@@ -37,7 +37,8 @@
         "medoidTittle": "Medoid Attributes",
         "mainInteractionsTittle": "Interactions related to this user's community",
         "otherInteractionsTittle": "Other user interactions",
-        "labelText": "label"
+        "labelText": "label",
+        "unknownUserAttrb": "All users' attributes are unknown"
     },
     "legend": {
         "anonymousRow": "Anonymous Users",

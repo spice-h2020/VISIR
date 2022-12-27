@@ -33,7 +33,7 @@ export default class RequestManager {
     singlePerspectiveGet: string = "visualizationAPI/file/";
 
     confSeedGET: string = "v1.1/seed";
-    confSeedPOST: string = "/v1.1/perspective";
+    confSeedPOST: string = "v1.1/perspective";
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
@@ -266,17 +266,36 @@ export default class RequestManager {
     }
 
     sendNewConfigSeed(newConfiguration: any) {
+        //For some reason, CM gets blocked when axios send a petition
         //newConfiguration = JSON.stringify(newConfiguration)
 
-        this.axios.post(this.confSeedPOST,
-            newConfiguration,
-        )
-            .then((response) => {
-                const data = JSON.parse(response.data);
-                window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
+        // this.axios.post(this.confSeedPOST,
+        //     newConfiguration,
+        // )
+        //     .then((response) => {
+        //         const data = JSON.parse(response.data);
+        //         window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //         window.alert(err);
+        //     });
+
+        fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newConfiguration)
+        })
+            .then(res => res.json())
+            .then(function (res) {
+                console.log("response: " + res)
+                window.alert("inserted perspectiveId: " + res.insertedPerspectiveId);
             })
-            .catch((err) => {
-                console.log(err);
+            .catch(function (err) {
+                console.log(err)
                 window.alert(err);
             });
     }

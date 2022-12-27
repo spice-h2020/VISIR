@@ -155,7 +155,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                 return (
                     <div>
                         <hr />
-                        {getStackedBars(communityData.explicitDataArray)}
+                        {getStackedBars(communityData.explicitDataArray, tClass)}
                     </div>);
             }
             case EExplanationTypes.medoid: {
@@ -229,7 +229,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
  * @param community source community.
  * @returns a react component array with the community's stacked bar.
  */
-function getStackedBars(data: IExplicitCommData[] | undefined) {
+function getStackedBars(data: IExplicitCommData[] | undefined, tClass: CTranslation) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
     if (data !== undefined && data.length > 0) {
@@ -246,7 +246,7 @@ function getStackedBars(data: IExplicitCommData[] | undefined) {
         }
     } else {
         content.push(
-            <div key={0} > All users' attributes are unknown</div>
+            <div key={0} > {tClass.t.dataColumn.unknownUserAttrb}</div>
         );
     }
 
