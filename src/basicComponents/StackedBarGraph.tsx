@@ -37,6 +37,7 @@ interface StackedBarGraphProps {
      * for graphs of attributes that have a dimension.
      */
     data: IStringNumberRelation[],
+
 }
 
 /**
@@ -50,7 +51,7 @@ export const StackedBarGraph = ({
 
     const bars = new Array<React.ReactNode>();
 
-    //Temporal hack to represent values with 0.
+    //Hack to represent values whose all value is 0.
     if (isAllZero(data)) {
         for (let i = 0; i < data.length; i++) {
             data[i].count = Number((1 / data.length * 100).toFixed(2));

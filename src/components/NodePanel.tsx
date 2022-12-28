@@ -5,7 +5,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, IInteraction, IUserData }
+import { IArtworkData, IHumanizator, IInteraction, IUserData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
@@ -35,6 +35,7 @@ interface NodePanelProps {
     hideLabel: boolean;
     artworks: IArtworkData[];
     translationClass: CTranslation;
+    humanizator: IHumanizator;
 }
 
 /**
@@ -46,6 +47,7 @@ export const NodePanel = ({
     hideLabel,
     artworks,
     translationClass: tClass,
+    humanizator,
 }: NodePanelProps) => {
 
     const tittleContainer = <div key={0} style={sectionTittleStyle}> {tittle} </div>;
@@ -58,10 +60,23 @@ export const NodePanel = ({
         }
 
         const keys = Object.keys(node.explicit_community);
+        const legendHuman = humanizator.legendAttrb;
 
         for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            let value = node.explicit_community[keys[i]];
+
+            for (const legendAttr of legendHuman) {
+                const humanKey = legendAttr.get(key);
+                if (humanKey) {
+                    const humanValue = legendAttr.get(value);
+
+                    key = humanKey;
+                    value = humanValue ? humanValue : value;
+                }
+            }
             content.push(
-                <p key={2 + i} style={frenchIndent}> <strong> {removeSpecialCase(keys[i])} </strong> &nbsp; {removeSpecialCase(node.explicit_community[keys[i]])} </p >);
+                <p key={2 + i} style={frenchIndent}> <strong> {key} </strong> &nbsp; {value} </p >);
         }
 
         content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, tClass)} </div>);

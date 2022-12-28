@@ -162,8 +162,10 @@ export const PerspectiveView = ({
                 if (error instanceof DiferentAttrbError) {
                     cancelPerspective(perspectiveData.id);
                 }
-
             }
+
+            tClass.setHumanizator(mirror, perspectiveData.localizator);
+
             setLoadingState({ isActive: false });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -188,6 +190,7 @@ export const PerspectiveView = ({
                 hideLabel={viewOptions.hideLabels}
                 state={networkState}
                 translationClass={tClass}
+                humanizator={tClass.getHumanizator(mirror)}
             />
 
         return (

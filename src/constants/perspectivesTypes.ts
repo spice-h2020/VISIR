@@ -39,7 +39,7 @@ export interface IPerspectiveData {
     users: IUserData[];
     similarity: IEdgeData[];
     artworks: IArtworkData[],
-
+    localizator: IHumanizator,
     id: string,
     name: string,
 }
@@ -163,6 +163,12 @@ export interface IArtworkData {
     year: number;
     image: string
 }
+
+export interface IHumanizator {
+    legendAttrb: Map<string, string>[];
+    normalAttrb: Map<string, string>;
+}
+
 
 //#endregion
 

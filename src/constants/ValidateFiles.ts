@@ -135,6 +135,11 @@ export function validatePerspectiveDataJSON(arg: any): types.IPerspectiveData {
 
         if (arg.localizator !== undefined && typeof (arg.localizator) === "object") {
             arg.localizator = isLocalizatorValid(arg.localizator);
+        } else {
+            arg.localizator = {
+                normalAttrb: new Map<string, string>(),
+                legendAttrb: new Array<Map<string, string>>()
+            } as types.IHumanizator;
         }
 
         console.log(`Perspective file validation has been completed -> `);
@@ -633,28 +638,32 @@ function isArtworkDataValid(arg: any): types.IArtworkData {
 }
 
 
-function isLocalizatorValid(arg: any) {
+function isLocalizatorValid(arg: any): types.IHumanizator {
     try {
         const keys = Object.keys(arg);
-        const newData = new Map<string, Map<string, string> | string>();
+
+        let legendAttrb: Map<string, string>[] = [];
+        let normalAttrb = new Map<string, string>();
 
         for (const key of keys) {
-            const subKeys = Object.keys(arg[key as any]);
-            if (typeof subKeys === "object") {
-
-                const newMap = new Map<string, string>();
-                for (const subkey of subKeys) {
-                    newMap.set(subkey, arg[key as any][subkey as any]);
-                }
-
-                newData.set(key, newMap);
-
+            if (key !== "legendAttrb") {
+                normalAttrb.set(key, arg[key]);
             } else {
-                newData.set(key, keys[key as any]);
+                for (const legendObj of arg[key]) {
+                    const objKeys = Object.keys(legendObj);
+                    const newLegendAttrbMap = new Map<string, string>();
+
+                    for (const objKey of objKeys) {
+                        newLegendAttrbMap.set(objKey, legendObj[objKey]);
+                    }
+
+                    legendAttrb.push(newLegendAttrbMap);
+                }
             }
         }
 
-        return newData;
+        return { normalAttrb: normalAttrb, legendAttrb: legendAttrb };
+
 
     } catch (e: any) {
         throw Error(`Localizator data is not valid: ${e.message}`);

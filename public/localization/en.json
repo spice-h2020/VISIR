@@ -38,7 +38,9 @@
         "mainInteractionsTittle": "Interactions related to this user's community",
         "otherInteractionsTittle": "Other user interactions",
         "labelText": "label",
-        "unknownUserAttrb": "All users' attributes are unknown"
+        "unknownUserAttrb": "All users' attributes are unknown",
+        "communityPanelTittle": "Community Attributes",
+        "communityNameLabel": "Name"
     },
     "legend": {
         "anonymousRow": "Anonymous Users",

@@ -7,7 +7,7 @@
 import { Dispatch } from "react";
 import { DimAttribute } from "./nodes";
 //Local files
-import { anyProperty, ICommunityData, IUserData } from "./perspectivesTypes";
+import { anyProperty, ICommunityData, IHumanizator, IUserData } from "./perspectivesTypes";
 import { EButtonState } from "./viewOptions";
 
 /**
@@ -70,6 +70,8 @@ export interface ITranslation extends anyProperty {
         otherInteractionsTittle: string,
         labelText: string,
         unknownUserAttrb: string,
+        communityPanelTittle: string,
+        communityNameLabel: string,
     },
     legend: {
         anonymousRow: string,
@@ -79,15 +81,28 @@ export interface ITranslation extends anyProperty {
 
 export class CTranslation {
     t!: ITranslation;
-    humanizators: [Map<string, string>, Map<string, string>];
+    humanizators: IHumanizator[];
 
     constructor(newT: ITranslation | undefined) {
         this.t = this.initT(newT);
-        this.humanizators = [new Map<string, string>(), new Map<string, string>()];
+        this.humanizators = [];
+
+        for (let i = 0; i < 2; i++) {
+            this.humanizators.push({
+                legendAttrb: [],
+                normalAttrb: new Map<string, string>()
+            });
+        }
     }
 
-    setHumanizator(index: number, humanizator: Map<string, string>) {
-        this.humanizators[index] = humanizator;
+    setHumanizator(isRight: boolean, humanizator: IHumanizator) {
+        console.log("setting humanizator");
+        console.log(humanizator);
+        this.humanizators[isRight ? 1 : 0] = humanizator;
+    }
+
+    getHumanizator(isRight: boolean) {
+        return this.humanizators[isRight ? 1 : 0];
     }
 
     initT(newT: ITranslation | undefined) {
@@ -175,7 +190,9 @@ export class CTranslation {
                 mainInteractionsTittle: "Interactions related to this user's community:",
                 otherInteractionsTittle: "Other user interactions:",
                 labelText: "label",
-                unknownUserAttrb: "All users' attributes are unknown"
+                unknownUserAttrb: "All users' attributes are unknown",
+                communityPanelTittle: "Community Attributes",
+                communityNameLabel: "Name"
             },
             legend: {
                 anonymousRow: "Anonymous Users",

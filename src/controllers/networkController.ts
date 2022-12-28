@@ -117,7 +117,6 @@ export default class NetworkController {
 
         explicitCtrl.calcExplicitPercentile(this.nodeVisuals.dimStrat);
 
-
         this.nodes.update(perspectiveData.users);
     }
 
