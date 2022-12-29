@@ -194,7 +194,6 @@ export default class RequestManager {
 
         return this.axios.get(url, {})
             .then(async (response) => {
-                console.log(`Request to ${this.axios.defaults.baseURL}${url}`);
                 console.log(response)
 
                 const data = JSON.parse(response.data);

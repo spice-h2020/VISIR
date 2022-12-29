@@ -13,7 +13,7 @@
  */
 //Constants
 import { EButtonState } from "../constants/viewOptions"
-import { bStateArrayReducer, CTranslation, EbuttonStateArrayAction, IbStateArrayAction, ITranslation } from "../constants/auxTypes";
+import { bStateArrayReducer, CTranslation, EbuttonStateArrayAction, IbStateArrayAction } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useReducer, useState } from "react";
 //Local files
@@ -173,8 +173,7 @@ function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: 
     const buttons = new Array<React.ReactNode>();
 
     const allIdsToEdit: PerspectiveId[] = JSON.parse(JSON.stringify(allIds));
-    console.log("all ids")
-    console.log(allIdsToEdit)
+
     const currentActivePerspective = allIdsToEdit.find((value) => {
         if (isLeft) {
             return value.isActive === PerspectiveActiveState.left;

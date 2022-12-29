@@ -14,7 +14,7 @@ import React from "react";
 //Local files
 import { Button } from '../basicComponents/Button';
 import { ColorStain } from '../basicComponents/ColorStain';
-import { CTranslation, ILegendData, ITranslation } from '../constants/auxTypes';
+import { CTranslation, ILegendData } from '../constants/auxTypes';
 import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
 import { ShapeForm } from '../basicComponents/ShapeForm';
 
@@ -139,7 +139,7 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
 
             let valueMap = legendConf.get(legendData[i].key);
             if (valueMap === undefined) {
-                legendConf.set(legendData[i].key, new Map<string, boolean>);
+                legendConf.set(legendData[i].key, new Map<string, boolean>());
                 valueMap = legendConf.get(legendData[i].key);
             }
 
@@ -234,7 +234,7 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
 
         let valueMap = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
         if (valueMap === undefined) {
-            legendConf.set(`${nodeConst.anonymousGroupKey}User`, new Map<string, boolean>);
+            legendConf.set(`${nodeConst.anonymousGroupKey}User`, new Map<string, boolean>());
             valueMap = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
         }
 

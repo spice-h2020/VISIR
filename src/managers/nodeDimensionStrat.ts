@@ -84,9 +84,6 @@ export default class NodeDimensionStrategy {
     }
 
     checkAttrDiferences(newAttributes: DimAttribute[]) {
-        console.log(newAttributes);
-        console.log(this.attributesArray);
-
         if (newAttributes.length <= 0) {
             return false;
         }
