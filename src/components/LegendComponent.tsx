@@ -70,7 +70,7 @@ export const LegendComponent = ({
 
     if (legendData !== undefined && legendData.dims !== undefined && legendData.dims.length > 0) {
 
-        const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick);
+        const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick, tClass);
         const anonRows: React.ReactNode = getAnonButtons(legendData.anonGroup, legendData.anonymous, legendConf,
             onLegendClick, tClass);
 
@@ -116,13 +116,26 @@ export const LegendComponent = ({
  * @returns all the column buttons.
  */
 function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Map<string, boolean>>,
-    onClick: Function): React.ReactNode[] {
+    onClick: Function, tClass: CTranslation): React.ReactNode[] {
 
     const rows = new Array<React.ReactNode>();
+    const humanizator = tClass.legendHuman;
 
     for (let i = 0; i < legendData.length; i++) {
         if (legendData[i].active) {
             const buttonsColumn = new Array<React.ReactNode>();
+
+            let legendHumanizator = undefined;
+            let legendHumanTittle = legendData[i].key;
+
+            for (const legendHumanObj of humanizator) {
+                const humanTittle = legendHumanObj.get(legendData[i].key);
+
+                if (humanTittle) {
+                    legendHumanTittle = humanTittle
+                    legendHumanizator = legendHumanObj;
+                }
+            }
 
             let valueMap = legendConf.get(legendData[i].key);
             if (valueMap === undefined) {
@@ -132,11 +145,17 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
 
             for (let j = 0; j < legendData[i].values.length; j++) {
                 const value = legendData[i].values[j];
+                let valueText = value;
+
+                if (legendHumanizator) {
+                    const humanValue = legendHumanizator.get(value);
+                    valueText = humanValue ? humanValue : value;
+                }
 
                 buttonsColumn.push(
                     <Button
                         key={i * 10 + j}
-                        content={getButtonContent(value, legendData[i].dimension, j)}
+                        content={getButtonContent(valueText, legendData[i].dimension, j)}
                         state={valueMap!.get(value) ? EButtonState.active : EButtonState.unactive}
                         extraClassName={"btn-legend btn-dropdown"}
                         onClick={() => {
@@ -147,10 +166,12 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
                 );
             }
 
+
+
             const colum =
                 <div className='col' style={getLegendColumnStyle(i === legendData.length)}
                     key={i}>
-                    <h3 style={columnTittle} title={legendData[i].key}>{legendData[i].key} </h3>
+                    <h3 style={columnTittle} title={legendHumanTittle}>{legendHumanTittle} </h3>
                     {buttonsColumn}
                 </div>;
 

@@ -158,13 +158,13 @@ export const PerspectiveView = ({
                 setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
                     sf, dimStrat, networkFocusID!, setLoadingState, unique));
 
+                tClass.setHumanizator(mirror, perspectiveData.localizator);
+
             } catch (error) {
                 if (error instanceof DiferentAttrbError) {
                     cancelPerspective(perspectiveData.id);
                 }
             }
-
-            tClass.setHumanizator(mirror, perspectiveData.localizator);
 
             setLoadingState({ isActive: false });
         }

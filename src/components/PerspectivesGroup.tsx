@@ -85,17 +85,18 @@ export const PerspectivesGroups = ({
         setNetworkFocusID(undefined);
     }, [collapsedState]);
 
-    //When a new perspective is loaded, we clear all configuration
+    //When no perspective is loaded, we clear all configuration
     useEffect(() => {
-        if (leftPerspective === undefined && rightPerspective === undefined) {
-
+        if (leftPerspective === undefined && rightPerspective === undefined && dimensionStrategy !== undefined) {
+            console.log("Reset");
             setLegendData({ type: "reset", newData: false });
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
+            tClass.clearHumanizators()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [leftPerspective, rightPerspective]);
+    }, [leftPerspective, rightPerspective, dimensionStrategy]);
 
     useEffect(() => {
         if (dimensionStrategy !== undefined)

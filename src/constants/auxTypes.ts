@@ -81,30 +81,37 @@ export interface ITranslation extends anyProperty {
 
 export class CTranslation {
     t!: ITranslation;
-    humanizators: IHumanizator[];
+    humanizators!: IHumanizator[];
+    legendHuman!: Map<string, string>[];
 
     constructor(newT: ITranslation | undefined) {
         this.t = this.initT(newT);
-        this.humanizators = [];
 
-        for (let i = 0; i < 2; i++) {
-            this.humanizators.push({
-                legendAttrb: [],
-                normalAttrb: new Map<string, string>()
-            });
-        }
+        this.clearHumanizators();
     }
 
     setHumanizator(isRight: boolean, humanizator: IHumanizator) {
-        console.log("setting humanizator");
-        console.log(humanizator);
         this.humanizators[isRight ? 1 : 0] = humanizator;
+
+        this.legendHuman = humanizator.legendAttrb;
     }
 
     getHumanizator(isRight: boolean) {
         return this.humanizators[isRight ? 1 : 0];
     }
 
+    clearHumanizators() {
+        this.humanizators = [];
+        for (let i = 0; i < 2; i++) {
+            this.humanizators.push({
+                legendAttrb: [],
+                normalAttrb: new Map<string, string>()
+            });
+        }
+
+        this.legendHuman = [];
+
+    }
     initT(newT: ITranslation | undefined) {
         let initial = this.defaultT();
 
