@@ -73,7 +73,7 @@ export const BarPortion = ({
     style.background = getBackgroundColor(dimensionIndex, dim, portionOrder);
     style.color = getTextColor(dimensionIndex, dim, portionOrder);
 
-    const hoverTitle = `${data.value === "" ? "(empty)" : data.value} ${data.count}%`;
+    const hoverTitle = `${data.value} ${data.count}%`;
 
     return (
         <span ref={htmlRef} title={hoverTitle} className="bar-portion" style={style}>

@@ -11,7 +11,7 @@
 //Constants
 import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
-import { ILegendData, legendDataReducer } from './constants/auxTypes';
+import { CTranslation, ILegendData, legendDataReducer } from './constants/auxTypes';
 //Packages
 import React, { useEffect, useReducer, useState } from 'react';
 //Local files
@@ -27,13 +27,14 @@ import RequestManager from './managers/requestManager';
 import './style/base.css';
 import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFrontPanel';
 import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
+import { ConfigurationTool } from './components/ConfigurationTool';
+
+import config from './appConfig.json';
 
 interface AppProps {
   perspectiveId1: string | null,
   perspectiveId2: string | null
 }
-
-
 
 export const App = ({
 
@@ -42,10 +43,16 @@ export const App = ({
 
 }: AppProps) => {
 
+  const [currentLanguage, setCurrentLanguage] = useState<CTranslation>(new CTranslation(undefined))
+
+  useEffect(() => {
+    selectInitialLanguage(setCurrentLanguage);
+  }, [])
+
   //Parameters to activate/disactivate and edit the loading spinner.
   const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
 
-  const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState));
+  const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState, currentLanguage));
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
@@ -63,41 +70,9 @@ export const App = ({
   //Current state of the perspectives collapse buttons
   const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
 
+  const [isConfigToolActive, setIsConfigToolActive] = useState<boolean>(false);
+
   const [windowWidth, setWindowWidth] = useState<number>(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
-
-  const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
-    requestManager.changeBaseURL(fileSource, apiURL);
-    requestManager.requestAllPerspectivesIds(initPerspectives, changeItemState);
-  }
-
-  function initPerspectives(newIds: PerspectiveId[]) {
-    setLeftPerspective(undefined);
-    setRightPerspective(undefined);
-
-    if (newIds) {
-      for (let i = 0; i < newIds.length; i++) {
-
-        if (newIds[i].id === perspectiveId1) {
-          newIds[i].isActive = PerspectiveActiveState.left;
-          requestManager.requestPerspectiveFIle(perspectiveId1, newIds[i].name, setLeftPerspective);
-
-        } else if (newIds[i].id === perspectiveId2 && perspectiveId2 !== perspectiveId1) {
-
-          newIds[i].isActive = PerspectiveActiveState.right;
-          requestManager.requestPerspectiveFIle(perspectiveId2, newIds[i].name, setRightPerspective);
-
-        } else {
-
-          newIds[i].isActive = PerspectiveActiveState.unactive;
-        }
-      }
-
-      setAllPerspectivesIds(newIds);
-    } else {
-      setAllPerspectivesIds([]);
-    }
-  }
-
   //Re-render the component when the windows is resized
   useEffect(() => {
     function onWindowResize() {
@@ -107,10 +82,20 @@ export const App = ({
     window.addEventListener('resize', onWindowResize)
   })
 
+
+  const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
+    requestManager.changeBaseURL(fileSource, apiURL);
+    requestManager.requestAllPerspectivesIds((newIds: PerspectiveId[]) => {
+      initPerspectivess(setLeftPerspective, setRightPerspective, newIds, perspectiveId1, requestManager, perspectiveId2,
+        setAllPerspectivesIds);
+    }, changeItemState);
+  }
+
   //Remove components from the navBar and add them to the hamburger btn based on the viewport width
   let small = windowWidth < 1100;
   let tooSmall = windowWidth < 600;
 
+  //Button that refresh the web page
   const mainBtn = small === false ?
     <div style={{ margin: "0px 5px" }}>
       <Button
@@ -123,24 +108,29 @@ export const App = ({
       />
     </div> : <React.Fragment />;
 
+  //Dropdown to pick the api url and the file source
   const fileSourceDrop =
     <FileSourceDropdown
       key={0}
       setFileSource={updateFileSource}
       setLoadingState={SetLoadingState}
       insideHamburger={small}
+      translationClass={currentLanguage}
     />;
 
+  //Dropdown to select the different visualization options
   const optionsDrop =
     <OptionsDropdown
       key={1}
       setViewOptions={setViewOptions}
       insideHamburger={small}
+      translationClass={currentLanguage}
     />
 
+  //Dropdown to select the active perspective at the left of the app
   const selectLeft =
     <SelectPerspectiveDropdown
-      tittle={'Select perspective A'}
+      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} A`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setLeftPerspective}
       allIds={allPerspectivesIds}
@@ -148,11 +138,13 @@ export const App = ({
       requestMan={requestManager}
       setLoadingState={SetLoadingState}
       insideHamburger={tooSmall}
+      translationClass={currentLanguage}
     />
 
+  //Dropdown to select the active perspective at the right of the app 
   const selectRight =
     <SelectPerspectiveDropdown
-      tittle={'Select perspective B'}
+      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} B`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setRightPerspective}
       allIds={allPerspectivesIds}
@@ -160,8 +152,10 @@ export const App = ({
       requestMan={requestManager}
       setLoadingState={SetLoadingState}
       insideHamburger={tooSmall}
+      translationClass={currentLanguage}
     />
 
+  //Button to collapse the visualization to the left if there are more than 1 active perspectove
   const collapseLeft =
     <Button
       content="<<"
@@ -174,6 +168,7 @@ export const App = ({
       state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
     />
 
+  //Button to collapse the visualization to the right if there are more than 1 active perspectove
   const collapseRight =
     <Button
       content=">>"
@@ -186,6 +181,7 @@ export const App = ({
       state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
     />
 
+  //Menu to see the legend and activate/disactive diferent node visualizations
   const legendDrop =
     <LegendComponent
       legendData={legendData}
@@ -193,11 +189,26 @@ export const App = ({
       onLegendClick={(newMap: Map<string, boolean>) => {
         setViewOptions({ updateType: "legendConfig", newValue: newMap, });
       }}
+      translationClass={currentLanguage}
+    />
+
+  //Temporal button to activate the CM configuration tool
+  const toggleConfTool =
+    <Button
+      content="OpenConfTool"
+      extraClassName={`dark`}
+      onClick={(state: EButtonState) => {
+        if (state !== EButtonState.disabled) {
+          setIsConfigToolActive(!isConfigToolActive);
+        }
+      }}
+      state={isConfigToolActive ? EButtonState.active : EButtonState.unactive}
     />
 
   const hamburgerContent = [];
   let navBar: React.ReactNode;
 
+  //If its too small, everything is included in the hamburger button except the legend and the collapse buttons
   if (tooSmall) {
     hamburgerContent.push(fileSourceDrop);
     hamburgerContent.push(optionsDrop);
@@ -230,6 +241,7 @@ export const App = ({
           legendDrop,
         ]}
       />
+    //If its a bit small, only the file source and options dropdown will be included in the hamburger button.
   } else if (small) {
     hamburgerContent.push(fileSourceDrop);
     hamburgerContent.push(optionsDrop);
@@ -278,11 +290,31 @@ export const App = ({
         ]}
         rightAlignedItems={[
           legendDrop,
+          toggleConfTool
         ]}
       />
   }
 
+  //Executed when its necesary to cancel the loading of a perspective
+  function cancelPerspective(idToCancel: string) {
+    const allIds: PerspectiveId[] = JSON.parse(JSON.stringify(allPerspectivesIds));
 
+    for (let id of allIds) {
+      if (id.id === idToCancel) {
+        if (id.isActive === PerspectiveActiveState.left) {
+          setLeftPerspective(undefined);
+        } else {
+          setRightPerspective(undefined);
+        }
+
+        alert(`Perspective ${id.name} has diferent attributes than the other active perspective.`)
+        id.isActive = PerspectiveActiveState.unactive;
+        break;
+      }
+    }
+
+    setAllPerspectivesIds(allIds);
+  }
 
   return (
     <div>
@@ -295,13 +327,64 @@ export const App = ({
         viewOptions={viewOptions}
         setLegendData={setLegendData}
         setLoadingState={SetLoadingState}
+        translationClass={currentLanguage}
+        cancelPerspective={cancelPerspective}
       />
 
+      <ConfigurationTool
+        requestManager={requestManager}
+        isActive={isConfigToolActive}
+        setLoadingState={SetLoadingState}
+        setIsActive={setIsConfigToolActive}
+      />
       <LoadingFrontPanel
         state={loadingState}
       />
-    </div>
-  );
+    </div>);
 }
 
+
+function initPerspectivess(setLeftPerspective: React.Dispatch<React.SetStateAction<IPerspectiveData | undefined>>, setRightPerspective: React.Dispatch<React.SetStateAction<IPerspectiveData | undefined>>, newIds: PerspectiveId[], perspectiveId1: string | null, requestManager: RequestManager, perspectiveId2: string | null, setAllPerspectivesIds: React.Dispatch<React.SetStateAction<PerspectiveId[]>>) {
+  setLeftPerspective(undefined);
+  setRightPerspective(undefined);
+
+  if (newIds) {
+    for (let i = 0; i < newIds.length; i++) {
+
+      if (newIds[i].id === perspectiveId1) {
+        newIds[i].isActive = PerspectiveActiveState.left;
+        requestManager.requestPerspectiveFIle(perspectiveId1, newIds[i].name, setLeftPerspective);
+
+      } else if (newIds[i].id === perspectiveId2 && perspectiveId2 !== perspectiveId1) {
+
+        newIds[i].isActive = PerspectiveActiveState.right;
+        requestManager.requestPerspectiveFIle(perspectiveId2, newIds[i].name, setRightPerspective);
+
+      } else {
+
+        newIds[i].isActive = PerspectiveActiveState.unactive;
+      }
+    }
+
+    setAllPerspectivesIds(newIds);
+  } else {
+    setAllPerspectivesIds([]);
+  }
+}
+
+function selectInitialLanguage(setCurrentLanguage: React.Dispatch<React.SetStateAction<CTranslation>>) {
+  fetch(`localization/${config.LANG}.json`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (language) {
+      setCurrentLanguage(new CTranslation(language));
+    });
+}
 

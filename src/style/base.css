@@ -72,6 +72,10 @@ body {
     width: 15vw;
 }
 
+.fixedWidth-10vw {
+    width: 10vw;
+}
+
 /*------------------------------------------
 //         BUTTONS
 //------------------------------------------*/
@@ -114,6 +118,10 @@ body {
 /* A few basic button colors */
 .primary {
     background-color: var(--primaryButtonColor);
+}
+
+.primary.active {
+    background-color: #ff605d;
 }
 
 .secondary {

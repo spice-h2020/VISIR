@@ -21,6 +21,7 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
-, "Dropdown.stories.tsx"  ]
+    "src",
+    "Dropdown.stories.tsx"
+  ]
 }

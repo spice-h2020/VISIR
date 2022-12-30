@@ -4,7 +4,7 @@ import { IArtworkData, IInteraction } from '../constants/perspectivesTypes';
 import '../style/base.css';
 
 export default {
-  title: 'Example/Interaction',
+  title: 'Complex/Interaction',
   component: InteractionPanel,
 
 } as ComponentMeta<typeof InteractionPanel>;

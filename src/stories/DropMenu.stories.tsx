@@ -6,7 +6,7 @@ import '../style/base.css';
 import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
 
 export default {
-    title: 'Example/DropMenus',
+    title: 'Basic/DropMenus',
     component: DropMenu,
 } as ComponentMeta<typeof DropMenu>;
 

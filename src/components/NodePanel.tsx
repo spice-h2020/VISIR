@@ -5,13 +5,14 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, IInteraction, IUserData }
+import { IArtworkData, IHumanizator, IInteraction, IUserData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
 //Local files
 import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
+import { CTranslation, removeSpecialCase } from "../constants/auxTypes";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -19,7 +20,8 @@ const sectionTittleStyle: React.CSSProperties = {
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
-    margin: "0.5rem 0px"
+    margin: "0.5rem 0px",
+    color: "var(--title)"
 }
 
 const frenchIndent: React.CSSProperties = {
@@ -32,6 +34,8 @@ interface NodePanelProps {
     node: IUserData | undefined;
     hideLabel: boolean;
     artworks: IArtworkData[];
+    translationClass: CTranslation;
+    humanizator: IHumanizator;
 }
 
 /**
@@ -42,6 +46,8 @@ export const NodePanel = ({
     node,
     hideLabel,
     artworks,
+    translationClass: tClass,
+    humanizator,
 }: NodePanelProps) => {
 
     const tittleContainer = <div key={0} style={sectionTittleStyle}> {tittle} </div>;
@@ -50,17 +56,30 @@ export const NodePanel = ({
     if (node !== undefined) {
 
         if (!hideLabel) {
-            content.push(<p style={frenchIndent} key={1}> <strong> Label: </strong> &nbsp; {node.label} </p>);
+            content.push(<p style={frenchIndent} key={1}> <strong> {`${tClass.t.dataColumn.labelText}:`} </strong> &nbsp; {node.label} </p>);
         }
 
         const keys = Object.keys(node.explicit_community);
+        const legendHuman = humanizator.legendAttrb;
 
         for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            let value = node.explicit_community[keys[i]];
+
+            for (const legendAttr of legendHuman) {
+                const humanKey = legendAttr.get(key);
+                if (humanKey) {
+                    const humanValue = legendAttr.get(value);
+
+                    key = humanKey;
+                    value = humanValue ? humanValue : value;
+                }
+            }
             content.push(
-                <p key={2 + i} style={frenchIndent}> <strong> {`${keys[i]}:`} </strong> &nbsp; {node.explicit_community[keys[i]]} </p >);
+                <p key={2 + i} style={frenchIndent}> <strong> {key} </strong> &nbsp; {value} </p >);
         }
 
-        content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks)} </div>);
+        content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, tClass)} </div>);
     }
 
     if (content.length === 0) {
@@ -83,7 +102,7 @@ export const NodePanel = ({
  * @param artworks all artworks' data
  * @returns a react component with the node's interactions accordion.
  */
-function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[]) {
+function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[], tClass: CTranslation) {
     let content: React.ReactNode[] = [];
 
     if (node !== undefined && node.interactions !== undefined) {
@@ -96,7 +115,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
                 content.push(
                     <div key={1} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            interactions related to this user's community:
+                            {`${tClass.t.dataColumn.mainInteractionsTittle}`}
                         </strong>
                         <Accordion
                             items={interactionPanels}
@@ -114,7 +133,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
                 content.push(
                     <div key={0} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            Other user interactions:
+                            {`${tClass.t.dataColumn.otherInteractionsTittle}`}
                         </strong>
                         <Accordion
                             items={interactionPanels}

@@ -8,7 +8,7 @@ import '../style/base.css';
 import { DropMenu } from '../basicComponents/DropMenu';
 
 export default {
-  title: 'Example/Navbar',
+  title: 'Basic/Navbar',
   component: Navbar,
   argTypes: { onClick: { action: 'option clicked' } },
 

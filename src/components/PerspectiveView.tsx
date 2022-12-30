@@ -10,7 +10,7 @@
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
 import { IUserData, ICommunityData, EPerspectiveVisState, IPerspectiveData } from '../constants/perspectivesTypes';
-import { ISelectedObject, ESelectedObjectAction, IStateFunctions } from '../constants/auxTypes';
+import { ISelectedObject, ESelectedObjectAction, IStateFunctions, CTranslation, DiferentAttrbError } from '../constants/auxTypes';
 //Packages
 import React, { useEffect, useState, useRef } from "react";
 //Local files
@@ -52,6 +52,9 @@ interface PerspectiveViewProps {
      * If its the unique active perspective in the app
      */
     unique: boolean;
+
+    translationClass: CTranslation,
+    cancelPerspective: (idToCancel: string) => (void),
 }
 
 /**
@@ -68,6 +71,8 @@ export const PerspectiveView = ({
     mirror = false,
     setLoadingState,
     unique,
+    translationClass: tClass,
+    cancelPerspective,
 }: PerspectiveViewProps) => {
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
@@ -142,14 +147,24 @@ export const PerspectiveView = ({
     //Create the vis network controller
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
-            setLoadingState({ isActive: true, msg: `Loading ${perspectiveData.name}` });
+            setLoadingState({ isActive: true, msg: `${tClass.t.loadingText.simpleLoading} ${perspectiveData.name}` });
 
             if (networkFocusID === undefined) {
                 sf.setNetworkFocusId(perspectiveData.id);
             }
 
-            setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
-                sf, dimStrat, networkFocusID!, setLoadingState, unique));
+
+            try {
+                setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
+                    sf, dimStrat, networkFocusID!, setLoadingState, unique));
+
+                tClass.setHumanizator(mirror, perspectiveData.localizator);
+
+            } catch (error) {
+                if (error instanceof DiferentAttrbError) {
+                    cancelPerspective(perspectiveData.id);
+                }
+            }
 
             setLoadingState({ isActive: false });
         }
@@ -163,17 +178,20 @@ export const PerspectiveView = ({
     const networkContainer = <div style={getNetworkContainerStyle(perspectiveState)} key={1} ref={visJsRef} />
 
     if (perspectiveState !== EPerspectiveVisState.collapsed) {
-        const dataCol = <DataTable
-            tittle={perspectiveData.name}
-            node={selectedNode}
-            community={selectedCommunity}
+        const dataCol =
+            <DataTable
+                tittle={perspectiveData.name}
+                node={selectedNode}
+                community={selectedCommunity}
 
-            artworks={perspectiveData.artworks}
-            allUsers={perspectiveData.users}
+                artworks={perspectiveData.artworks}
+                allUsers={perspectiveData.users}
 
-            hideLabel={viewOptions.hideLabels}
-            state={networkState}
-        />
+                hideLabel={viewOptions.hideLabels}
+                state={networkState}
+                translationClass={tClass}
+                humanizator={tClass.getHumanizator(mirror)}
+            />
 
         return (
             <div className="row" style={{ flexDirection: mirror ? "row-reverse" : "row" }} key={10}>

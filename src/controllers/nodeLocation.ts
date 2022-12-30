@@ -68,8 +68,8 @@ export default class NodeLocation {
         const areaPartitions = [];
         for (let i = 0; targetAngle < pi2; i++) {
             areaPartitions[i] = {
-                x: Math.cos(targetAngle) * (partitionsDistance * nAreas),
-                y: Math.sin(targetAngle) * (partitionsDistance * nAreas)
+                x: parseFloat((Math.cos(targetAngle) * (partitionsDistance * nAreas)).toFixed(3)),
+                y: parseFloat((Math.sin(targetAngle) * (partitionsDistance * nAreas)).toFixed(3))
             };
 
             targetAngle += angleSlice;
@@ -83,7 +83,7 @@ export default class NodeLocation {
      * Add the node to the its group
      * @param node source node
      */
-    updateNodeGroup(node: IUserData, communities: ICommunityData[]) {
+    updateNodeGroup(node: IUserData) {
         const group = node.implicit_community;
 
         if (!node.isMedoid) {

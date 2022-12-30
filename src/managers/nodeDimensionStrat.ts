@@ -82,4 +82,34 @@ export default class NodeDimensionStrategy {
             newData: attributes
         });
     }
+
+    checkAttrDiferences(newAttributes: DimAttribute[]) {
+        if (newAttributes.length <= 0) {
+            return false;
+        }
+
+        for (const attr of newAttributes) {
+
+            //Check if the key of attr exist 
+            const foundKey = this.attributesArray.find((e) => {
+                return e.key === attr.key;
+            })
+
+            if (foundKey) {
+                //If the key exists, check if all values of attr.values exist in the found key
+                for (const value of attr.values) {
+                    if (!foundKey.values.find((e) => {
+                        return e === value;
+                    })) {
+                        return false;
+                    }
+                }
+
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

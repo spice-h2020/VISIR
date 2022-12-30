@@ -12,7 +12,7 @@
 import { IUserData } from "../constants/perspectivesTypes";
 import { Dimensions, DimAttribute, nodeConst } from "../constants/nodes"
 import { ViewOptions } from "../constants/viewOptions";
-import { ILegendDataAction, IStateFunctions } from "../constants/auxTypes";
+import { DiferentAttrbError, ILegendDataAction, IStateFunctions } from "../constants/auxTypes";
 //Packages
 import { DataSetNodes, Node } from "vis-network";
 //Local files
@@ -20,7 +20,7 @@ import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 import { ExplicitData } from "./nodeExplicitComms";
 
 export default class NodeVisualsCtrl {
-    dimStrat: NodeDimensionStrategy;
+    dimStrat!: NodeDimensionStrategy;
     legendConfig: Map<string, Map<string, boolean>>;
 
     /**
@@ -42,11 +42,8 @@ export default class NodeVisualsCtrl {
     constructor(dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions, explicitData: ExplicitData[],
         viewOptions: ViewOptions, unique: boolean) {
 
-        if (dimStrat === undefined || unique) {
-            this.dimStrat = this.createDimensionStrategy(explicitData, viewOptions.border, sf.setLegendData);
-            sf.setDimensionStrategy(this.dimStrat);
-        } else {
-            this.dimStrat = dimStrat;
+        if (this.createDimensionStrategy(explicitData, viewOptions.border, sf.setLegendData, dimStrat, unique)) {
+            sf.setDimensionStrategy(this!.dimStrat);
         }
         this.legendConfig = viewOptions.legendConfig;
 
@@ -61,7 +58,8 @@ export default class NodeVisualsCtrl {
      * @param setLegendData Set the legend data to update the legend contents
      * @returns Returns the new created dimension strategy
      */
-    createDimensionStrategy(explicitData: ExplicitData[], showBorder: boolean, setLegendData: React.Dispatch<ILegendDataAction>) {
+    createDimensionStrategy(explicitData: ExplicitData[], showBorder: boolean, setLegendData: React.Dispatch<ILegendDataAction>,
+        dimStrat: NodeDimensionStrategy | undefined, unique: boolean) {
         const attributes = new Array<DimAttribute>();
 
         if (explicitData[0] !== undefined) {
@@ -91,7 +89,18 @@ export default class NodeVisualsCtrl {
             })
         }
 
-        return new NodeDimensionStrategy(attributes, setLegendData);
+        if (dimStrat === undefined || unique) {
+            this.dimStrat = new NodeDimensionStrategy(attributes, setLegendData);
+            return true;
+        } else {
+            if (dimStrat.checkAttrDiferences(attributes)) {
+                this.dimStrat = dimStrat;
+                return false;
+            } else {
+                throw new DiferentAttrbError("The new perspective has different attributes");
+            }
+
+        }
     }
 
     setNodeInitialVisuals(node: IUserData, hideLabel: boolean) {

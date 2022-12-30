@@ -36,7 +36,7 @@ export const SingleTreeMap = ({
 
     for (const obj of data) {
         serieData.push({
-            x: obj.value === "" ? "(empty)" : obj.value,
+            x: obj.value,
             y: obj.count
         })
     }

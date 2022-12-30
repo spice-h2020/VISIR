@@ -6,7 +6,7 @@ import { ECommunityType, EExplanationTypes, ICommunityData, IUserData } from "..
 import '../style/base.css';
 
 export default {
-  title: 'Example/Tooltip',
+  title: 'Complex/Tooltip',
   component: Tooltip,
 
 } as ComponentMeta<typeof Tooltip>;

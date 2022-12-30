@@ -8,7 +8,7 @@ import { IStringNumberRelation } from '../constants/perspectivesTypes';
 import '../style/base.css';
 
 export default {
-    title: 'Example/Bars',
+    title: 'Basic/Bars',
     component: StackedBarGraph,
 
 } as ComponentMeta<typeof StackedBarGraph>;

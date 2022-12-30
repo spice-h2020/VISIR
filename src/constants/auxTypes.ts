@@ -7,7 +7,7 @@
 import { Dispatch } from "react";
 import { DimAttribute } from "./nodes";
 //Local files
-import { ICommunityData, IUserData } from "./perspectivesTypes";
+import { anyProperty, ICommunityData, IHumanizator, IUserData } from "./perspectivesTypes";
 import { EButtonState } from "./viewOptions";
 
 /**
@@ -26,6 +26,189 @@ export interface IBoundingBox {
     }
 }
 
+/**
+ * Interface of a translation json
+ */
+export interface ITranslation extends anyProperty {
+    toolbar: {
+        fileSourceDrop: {
+            name: string,
+            localFiles: string,
+            Api_URL: string,
+        },
+        optionsDrop: {
+            name: string,
+            hideLabels: string,
+            hideEdges: string,
+            minSimilarity: string,
+            removeEdges: string,
+        },
+        selectPerspective: {
+            defaultName: string,
+            noPerspectiveName: string,
+        },
+        legend: {
+            name: string,
+            noLegend: string,
+        }
+    },
+    loadingText: {
+        requestFiles: string,
+        requestPerspective: string,
+        requestingAllPerspectives: string,
+        requestingConfToolSeed: string,
+        CMisBusy: string,
+        simpleRequest: string,
+        simpleLoading: string,
+    },
+    dataColumn: {
+        citizenTittle: string,
+        citizenAmount: string,
+        anonymous: string,
+        medoidTittle: string,
+        mainInteractionsTittle: string,
+        otherInteractionsTittle: string,
+        labelText: string,
+        unknownUserAttrb: string,
+        communityPanelTittle: string,
+        communityNameLabel: string,
+    },
+    legend: {
+        anonymousRow: string,
+        anonymousExplanation: string,
+    }
+}
+
+export class CTranslation {
+    t!: ITranslation;
+    humanizators!: IHumanizator[];
+    legendHuman!: Map<string, string>[];
+
+    constructor(newT: ITranslation | undefined) {
+        this.t = this.initT(newT);
+
+        this.clearHumanizators();
+    }
+
+    setHumanizator(isRight: boolean, humanizator: IHumanizator) {
+        this.humanizators[isRight ? 1 : 0] = humanizator;
+
+        this.legendHuman = humanizator.legendAttrb;
+    }
+
+    getHumanizator(isRight: boolean) {
+        return this.humanizators[isRight ? 1 : 0];
+    }
+
+    clearHumanizators() {
+        this.humanizators = [];
+        for (let i = 0; i < 2; i++) {
+            this.humanizators.push({
+                legendAttrb: [],
+                normalAttrb: new Map<string, string>()
+            });
+        }
+
+        this.legendHuman = [];
+
+    }
+    initT(newT: ITranslation | undefined) {
+        let initial = this.defaultT();
+
+        if (newT === undefined) {
+            return initial;
+        }
+
+
+        const keys = Object.keys(initial);
+        for (const key of keys) {
+
+            if (newT[key] !== undefined) {
+
+                if (typeof initial[key] === "object") {
+                    const subKeys = Object.keys(initial[key]);
+
+                    for (const subkey of subKeys) {
+
+                        if (newT[key][subkey] !== undefined) {
+
+                            if (typeof initial[key][subkey] === "object") {
+                                const subsubKeys = Object.keys(initial[key][subkey]);
+
+                                for (const subsubkey of subsubKeys) {
+
+                                    if (newT[key][subkey][subsubkey] === undefined) {
+                                        newT[key][subkey][subsubkey] = initial[key][subkey][subsubkey];
+                                    }
+                                }
+                            }
+
+                        } else {
+                            newT[key][subkey] = initial[key][subkey];
+                        }
+                    }
+                }
+
+            } else {
+                newT[key] = initial[key];
+            }
+        }
+        return newT;
+    }
+
+    defaultT() {
+        const t: ITranslation = {
+            toolbar: {
+                fileSourceDrop: {
+                    name: "File Source",
+                    localFiles: "Local app files",
+                    Api_URL: "Api URL"
+                },
+                optionsDrop: {
+                    name: "Options",
+                    hideLabels: "Hide node labels",
+                    hideEdges: "Hide unselected Edges",
+                    minSimilarity: "Minimum similarity:",
+                    removeEdges: "Remove % of edges:"
+                },
+                selectPerspective: {
+                    defaultName: "Select perspective",
+                    noPerspectiveName: "No available perspectives",
+                },
+                legend: {
+                    name: "Legend",
+                    noLegend: "Unactive Legend",
+                }
+            },
+            loadingText: {
+                requestFiles: "Requesting files to",
+                requestPerspective: "Requesting perspective",
+                requestingAllPerspectives: "Requesting file with All perspectives",
+                requestingConfToolSeed: "Requesting configuration tool seed",
+                CMisBusy: "Community Model is busy. Trying again",
+                simpleRequest: "Requesting",
+                simpleLoading: "Loading"
+            },
+            dataColumn: {
+                citizenTittle: "Citizen Attributes",
+                citizenAmount: "Total Citizens:",
+                anonymous: "Anonymous",
+                medoidTittle: "Medoid Attributes",
+                mainInteractionsTittle: "Interactions related to this user's community:",
+                otherInteractionsTittle: "Other user interactions:",
+                labelText: "label",
+                unknownUserAttrb: "All users' attributes are unknown",
+                communityPanelTittle: "Community Attributes",
+                communityNameLabel: "Name"
+            },
+            legend: {
+                anonymousRow: "Anonymous Users",
+                anonymousExplanation: "Users without any explicit data"
+            }
+        }
+        return t;
+    }
+}
 /**
  * Legend data source
  */
@@ -202,3 +385,30 @@ export function bStateArrayReducer(state: EButtonState[], stateAction: IbStateAr
 //#endregion
 
 //#endregion
+
+export class DiferentAttrbError extends Error {
+    constructor(msg: string) {
+        super(msg);
+
+        // Set the prototype explicitly.
+        Object.setPrototypeOf(this, DiferentAttrbError.prototype);
+    }
+}
+
+export function removeSpecialCase(s: string) {
+
+    //Remove case letters in middle of the word
+    let array = s.split(/(?=[A-Z])/);
+
+    for (let i = 1; i < array.length; i++) {
+        array[i] = array[i].toLowerCase();
+    }
+
+    s = array.join(" ").toString();
+
+    //Remove snake case if it exists
+    array = s.split("_");
+    s = array.toString();
+
+    return s;
+}

@@ -11,7 +11,7 @@
 //Constants
 import { IPerspectiveData, EPerspectiveVisState } from "../constants/perspectivesTypes";
 import { ViewOptions, EAppCollapsedState } from "../constants/viewOptions"
-import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction } from "../constants/auxTypes";
+import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction, CTranslation } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer, useState } from "react";
 //Local files
@@ -48,7 +48,10 @@ interface PerspectivesGroupProps {
      */
     setLegendData: React.Dispatch<ILegendDataAction>,
 
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>,
+
+    translationClass: CTranslation,
+    cancelPerspective: (idToCancel: string) => (void),
 }
 
 /**
@@ -61,6 +64,8 @@ export const PerspectivesGroups = ({
     viewOptions,
     setLegendData,
     setLoadingState,
+    translationClass: tClass,
+    cancelPerspective,
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
@@ -80,17 +85,17 @@ export const PerspectivesGroups = ({
         setNetworkFocusID(undefined);
     }, [collapsedState]);
 
-    //When a new perspective is loaded, we clear all configuration
+    //When no perspective is loaded, we clear all configuration
     useEffect(() => {
-        if (leftPerspective === undefined && rightPerspective === undefined) {
-
+        if (leftPerspective === undefined && rightPerspective === undefined && dimensionStrategy !== undefined) {
             setLegendData({ type: "reset", newData: false });
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
+            tClass.clearHumanizators();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [leftPerspective, rightPerspective]);
+    }, [leftPerspective, rightPerspective, dimensionStrategy]);
 
     useEffect(() => {
         if (dimensionStrategy !== undefined)
@@ -111,6 +116,8 @@ export const PerspectivesGroups = ({
             perspectiveState={leftState}
             setLoadingState={setLoadingState}
             unique={rightPerspective === undefined}
+            translationClass={tClass}
+            cancelPerspective={cancelPerspective}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -125,6 +132,8 @@ export const PerspectivesGroups = ({
             mirror={true}
             setLoadingState={setLoadingState}
             unique={leftPerspective === undefined}
+            translationClass={tClass}
+            cancelPerspective={cancelPerspective}
         />
 
     return (

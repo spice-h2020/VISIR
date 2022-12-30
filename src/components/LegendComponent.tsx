@@ -14,7 +14,7 @@ import React from "react";
 //Local files
 import { Button } from '../basicComponents/Button';
 import { ColorStain } from '../basicComponents/ColorStain';
-import { ILegendData } from '../constants/auxTypes';
+import { CTranslation, ILegendData } from '../constants/auxTypes';
 import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
 import { ShapeForm } from '../basicComponents/ShapeForm';
 
@@ -53,6 +53,8 @@ interface LegendTooltipProps {
      * Function to change the legend configuration that changes how nodes will be seen.
      */
     onLegendClick: Function;
+
+    translationClass: CTranslation;
 }
 
 /**
@@ -63,12 +65,14 @@ export const LegendComponent = ({
     legendData,
     legendConf,
     onLegendClick,
+    translationClass: tClass,
 }: LegendTooltipProps) => {
 
     if (legendData !== undefined && legendData.dims !== undefined && legendData.dims.length > 0) {
 
-        const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick);
-        const anonRows: React.ReactNode = getAnonButtons(legendData.anonGroup, legendData.anonymous, legendConf, onLegendClick);
+        const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick, tClass);
+        const anonRows: React.ReactNode = getAnonButtons(legendData.anonGroup, legendData.anonymous, legendConf,
+            onLegendClick, tClass);
 
         const legendContent =
             <React.Fragment key={0}>
@@ -83,7 +87,7 @@ export const LegendComponent = ({
             <div className="legend-container">
                 <DropMenu
                     items={[legendContent]}
-                    content="Legend"
+                    content={tClass.t.toolbar.legend.name}
                     extraClassButton="plus primary"
                     closeWhenOutsideClick={false}
                     menuDirection={EDropMenuDirection.down}
@@ -95,7 +99,7 @@ export const LegendComponent = ({
         return (
             <DropMenu
                 items={[]}
-                content="Unactive Legend"
+                content={tClass.t.toolbar.legend.noLegend}
                 extraClassButton="plus primary"
                 closeWhenOutsideClick={false}
                 menuDirection={EDropMenuDirection.down}
@@ -112,27 +116,46 @@ export const LegendComponent = ({
  * @returns all the column buttons.
  */
 function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Map<string, boolean>>,
-    onClick: Function): React.ReactNode[] {
+    onClick: Function, tClass: CTranslation): React.ReactNode[] {
 
     const rows = new Array<React.ReactNode>();
+    const humanizator = tClass.legendHuman;
 
     for (let i = 0; i < legendData.length; i++) {
         if (legendData[i].active) {
             const buttonsColumn = new Array<React.ReactNode>();
 
+            let legendHumanizator = undefined;
+            let legendHumanTittle = legendData[i].key;
+
+            for (const legendHumanObj of humanizator) {
+                const humanTittle = legendHumanObj.get(legendData[i].key);
+
+                if (humanTittle) {
+                    legendHumanTittle = humanTittle
+                    legendHumanizator = legendHumanObj;
+                }
+            }
+
             let valueMap = legendConf.get(legendData[i].key);
             if (valueMap === undefined) {
-                legendConf.set(legendData[i].key, new Map<string, boolean>);
+                legendConf.set(legendData[i].key, new Map<string, boolean>());
                 valueMap = legendConf.get(legendData[i].key);
             }
 
             for (let j = 0; j < legendData[i].values.length; j++) {
                 const value = legendData[i].values[j];
+                let valueText = value;
+
+                if (legendHumanizator) {
+                    const humanValue = legendHumanizator.get(value);
+                    valueText = humanValue ? humanValue : value;
+                }
 
                 buttonsColumn.push(
                     <Button
                         key={i * 10 + j}
-                        content={getButtonContent(value, legendData[i].dimension, j)}
+                        content={getButtonContent(valueText, legendData[i].dimension, j)}
                         state={valueMap!.get(value) ? EButtonState.active : EButtonState.unactive}
                         extraClassName={"btn-legend btn-dropdown"}
                         onClick={() => {
@@ -143,10 +166,12 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
                 );
             }
 
+
+
             const colum =
                 <div className='col' style={getLegendColumnStyle(i === legendData.length)}
                     key={i}>
-                    <h3 style={columnTittle} title={legendData[i].key}>{legendData[i].key} </h3>
+                    <h3 style={columnTittle} title={legendHumanTittle}>{legendHumanTittle} </h3>
                     {buttonsColumn}
                 </div>;
 
@@ -189,8 +214,6 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
 
-    value = value === "" ? "(empty)" : value;
-
     return (
         <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
             <div style={buttonContentRow}> {value} </div>
@@ -202,8 +225,7 @@ const getButtonContent = (value: string, dim: Dimensions, index: number): React.
 }
 
 function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map<string, Map<string
-    , boolean>>,
-    onClick: Function): React.ReactNode {
+    , boolean>>, onClick: Function, tClass: CTranslation): React.ReactNode {
 
     let output: React.ReactNode = undefined;
 
@@ -212,7 +234,7 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
 
         let valueMap = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
         if (valueMap === undefined) {
-            legendConf.set(`${nodeConst.anonymousGroupKey}User`, new Map<string, boolean>);
+            legendConf.set(`${nodeConst.anonymousGroupKey}User`, new Map<string, boolean>());
             valueMap = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
         }
 
@@ -222,13 +244,13 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
 
         output =
             <div key={2} className='col' >
-                <h3 key={1} style={columnTittle} title="Anonymous Users" >  Anonymous Users </h3>
+                <h3 key={1} style={columnTittle} title={`${tClass.t.legend.anonymousRow}`} >  {`${tClass.t.legend.anonymousRow}`} </h3>
                 <Button
                     key={2}
                     content={<div className='row' >
-                        <div> Users without any explicit data </div>
+                        <div> {`${tClass.t.legend.anonymousExplanation}`} </div>
                         <span style={{ width: "1rem" }} />
-                        <img alt={"Anonymous user icon"} src={nodeConst.defaultAnon} style={{ height: "1.4rem" }}></img>
+                        <img alt={`${tClass.t.legend.anonymousRow} icon`} src={nodeConst.defaultAnon} style={{ height: "1.4rem" }}></img>
                     </div>}
                     state={buttonState}
                     extraClassName={"btn-legend btn-dropdown"}
