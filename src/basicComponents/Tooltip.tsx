@@ -15,6 +15,7 @@ import { Button } from "./Button";
 const tooltipContainer: React.CSSProperties = {
     position: "relative",
     display: "inline-block",
+    height: "0%",
     borderBottom: "1px dotted black"
 }
 
