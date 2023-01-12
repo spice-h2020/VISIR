@@ -241,13 +241,6 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                             <hr />
                             <div> {humanLabel ? humanLabel : explanation.explanation_data.label}</div>
                             <div> {getWordClouds(explanation.explanation_data.data)}</div>
-                            <div>
-                                <StackedBarGraph
-                                    tittle={""}
-                                    data={explanation.explanation_data.data as IStringNumberRelation[]}
-                                    dim={undefined}
-                                />
-                            </div>
                         </div>);
                 }
             }
