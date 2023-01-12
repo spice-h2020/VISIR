@@ -234,8 +234,16 @@ export default class RequestManager {
                     if (data.job["job-state"] === "STARTED") {
                         await delay(this.jobTimeOut);
                         return this.askJobInProgress(data.job.path);
+
                     } else {
-                        return { status: response.status, data: data.job.data };
+                        if (data.job["job-status"] == "ERROR") {
+
+                            console.log(`Job with an error, ${data.job.data}`)
+                            throw new Error(`Community Model had an error: ${data.job.data}`)
+
+                        } else {
+                            return { status: response.status, data: data.job.data };
+                        }
                     }
                 } else {
                     throw new Error(`Error while waiting for a job in path ${url}: ${response.statusText}`);
@@ -264,16 +272,29 @@ export default class RequestManager {
         console.log(`Source url changed to ${newUrl}`)
     }
 
-    sendNewConfigSeed(newConfiguration: any) {
+    sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void,
+        callback: Function) {
         //For some reason, CM gets blocked when axios send a petition
         //newConfiguration = JSON.stringify(newConfiguration)
 
         // this.axios.post(this.confSeedPOST,
         //     newConfiguration,
-        // )
+        //     {
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json'
+        //         },
+        //     })
         //     .then((response) => {
         //         const data = JSON.parse(response.data);
         //         window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
+
+        //         if(this.usingAPI){
+        //             updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
+        //         }else{
+        //             updateFileSource(EFileSource.Local)
+        //         }
+
         //     })
         //     .catch((err) => {
         //         console.log(err);
@@ -289,13 +310,22 @@ export default class RequestManager {
             body: JSON.stringify(newConfiguration)
         })
             .then(res => res.json())
-            .then(function (res) {
+            .then((res) => {
                 console.log("response: " + res)
-                window.alert("inserted perspectiveId: " + res.insertedPerspectiveId);
+                window.alert("inserted perspectiveId: hmm" + res.insertedPerspectiveId);
+
+                if (this.usingAPI) {
+                    updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
+                } else {
+                    updateFileSource(EFileSource.Local)
+                }
+
+                callback();
             })
             .catch(function (err) {
                 console.log(err)
                 window.alert(err);
+                callback();
             });
     }
 }

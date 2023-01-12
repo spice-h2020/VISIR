@@ -8,7 +8,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { EButtonState } from "../constants/viewOptions";
+import { EButtonState, EFileSource } from "../constants/viewOptions";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../basicComponents/Button";
@@ -77,6 +77,7 @@ interface ConfToolProps {
     isActive: boolean
     setIsActive: React.Dispatch<React.SetStateAction<boolean>>
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
+    updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void;
 }
 
 /**
@@ -86,7 +87,8 @@ export const ConfigurationTool = ({
     requestManager,
     isActive,
     setIsActive,
-    setLoadingState
+    setLoadingState,
+    updateFileSource,
 }: ConfToolProps) => {
     const [isDevMode, setIsDevMode] = useState<boolean>(false);
 
@@ -222,7 +224,7 @@ export const ConfigurationTool = ({
 
                                         setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
-                                        requestManager.sendNewConfigSeed(newConfiguration);
+                                        requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => setLoadingState({ isActive: false }));
                                     }
                                 }
                             }

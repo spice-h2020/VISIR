@@ -336,6 +336,7 @@ export const App = ({
         isActive={isConfigToolActive}
         setLoadingState={SetLoadingState}
         setIsActive={setIsConfigToolActive}
+        updateFileSource={updateFileSource}
       />
       <LoadingFrontPanel
         state={loadingState}
