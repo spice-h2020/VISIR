@@ -27,7 +27,7 @@ export default class RequestManager {
     currentJobWaitTime: number = 0;
 
     //URL to ask for files when local url is selected
-    baseLocalURL: string = "./data";
+    baseLocalURL: string = "./data/";
 
     allPerspectivesGET: string = "visualizationAPI/index";
     singlePerspectiveGet: string = "visualizationAPI/file/";
