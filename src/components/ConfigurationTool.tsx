@@ -136,7 +136,7 @@ export const ConfigurationTool = ({
                 }
             });
         }
-    }, [isActive]);
+    }, [isActive, requestManager, setLoadingState]);
 
     //Init the new citizen and artworks attributes
     useEffect(() => {
