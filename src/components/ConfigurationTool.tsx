@@ -33,24 +33,23 @@ const darkBackgroundStyle: React.CSSProperties = {
 
 const innerPanelStyle: React.CSSProperties = {
     display: "flex",
-    width: "80vw",
-    height: "80vh",
+    width: "90vw",
+    height: "90vh",
 
     //Center the panel in the view screen
     position: "fixed",
     top: "50%",
     left: "50%",
-    marginTop: "-40vh",
-    marginLeft: "-40vw",
+    marginTop: "-45vh",
+    marginLeft: "-45vw",
 
     background: "var(--bodyBackground)",
     borderRadius: "15px",
 
-    alignItems: "center",
-    justifyContent: "center",
     flexDirection: "column",
-    alignContent: "center",
     flexWrap: "nowrap",
+    justifyContent: "flex-start",
+    alignItems: "center",
 
     overflowY: "auto"
 };
@@ -62,7 +61,15 @@ const firstRowStyle: React.CSSProperties = {
     flexWrap: "nowrap",
     alignContent: "stretch",
     alignItems: "center",
-    width: "100%"
+    width: "100%",
+    marginTop: "10px"
+}
+
+const fromStyle: React.CSSProperties = {
+    alignSelf: "self-start",
+    marginLeft: "5%",
+    width: "70%",
+    height: "100%"
 }
 
 const devModeBackgroundStyle: React.CSSProperties = {
@@ -72,6 +79,10 @@ const devModeBackgroundStyle: React.CSSProperties = {
     opacity: "20%",
     color: "gray"
 }
+
+const firstRowButtonsHeight = "60px";
+const contentColumnHeight = "65vh";
+
 interface ConfToolProps {
     requestManager: RequestManager
     isActive: boolean
@@ -117,6 +128,12 @@ export const ConfigurationTool = ({
             requestManager.requestConfigurationToolSeed((seed: IConfigurationSeed) => {
                 setSeed(seed)
                 setLoadingState({ isActive: false });
+
+                if (seed.interaction_similarity_functions.length === 0) {
+                    alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
+                } else {
+                    setSelectedOption([seed.interaction_similarity_functions[0].on_attribute.att_name, 0]);
+                }
             });
         }
     }, [isActive]);
@@ -161,18 +178,22 @@ export const ConfigurationTool = ({
                     DEV MODE
                 </div>
 
-                <div key={0} className="row" style={firstRowStyle}>
-                    <Button
-                        content="Dev mode "
-                        extraClassName="primary"
-                        state={isDevMode ? EButtonState.active : EButtonState.unactive}
-                        onClick={() => { setIsDevMode(!isDevMode); }}
-                    />
-                    <Button
-                        content=""
-                        extraClassName="btn-close transparent"
-                        onClick={() => { setIsActive(false); }}
-                    />
+                <div key={0} style={firstRowStyle}>
+                    <span style={{ marginLeft: "10px" }}>
+                        <Button
+                            content="Dev mode "
+                            extraClassName="dark"
+                            state={isDevMode ? EButtonState.active : EButtonState.unactive}
+                            onClick={() => { setIsDevMode(!isDevMode); }}
+                        />
+                    </span>
+                    <span style={{ marginRight: "10px" }}>
+                        <Button
+                            content=""
+                            extraClassName="btn-close transparent"
+                            onClick={() => { setIsActive(false); }}
+                        />
+                    </span>
                 </div>
                 <div>
                     <label htmlFor="f-perspective_name">Perspective Name:</label>
@@ -185,56 +206,59 @@ export const ConfigurationTool = ({
                     />
 
                 </div>
-                <form key={1} id="form-config" action="" method="get">
-                    <div key={0} className="row">
-                        <DropMenu
-                            key={0}
-                            items={getSimilarityDropdown(similarity1, setSimilarity1)}
-                            content={ESimilarity[similarity1]}
-                            menuDirection={EDropMenuDirection.down}
-                            extraClassButton={"transparent down-arrow fixedWidth-10vw"}
-                        />
-                        {getOptionSelector(selectedOption, seed, setSelectedOption)}
+                <div className="row" style={{ alignSelf: "stretch" }}>
+                    <form key={1} id="form-config" action="" method="get" style={fromStyle}>
+                        <div key={0} className="row" style={{ height: `${firstRowButtonsHeight}`, alignItems: "center", justifyContent: "space-around" }}>
+                            <DropMenu
+                                key={0}
+                                items={getSimilarityDropdown(similarity1, setSimilarity1)}
+                                content={ESimilarity[similarity1]}
+                                menuDirection={EDropMenuDirection.down}
+                                extraClassButton={"transparent down-arrow"}
+                            />
+                            {getOptionSelector(selectedOption, seed, setSelectedOption)}
 
-                        <span key={2} style={{ alignSelf: "center" }}> in </span>
-                        <DropMenu
-                            key={3}
-                            items={getSimilarityDropdown(similarity2, setSimilarity2)}
-                            content={ESimilarity[similarity2]}
-                            menuDirection={EDropMenuDirection.down}
-                            extraClassButton={"transparent down-arrow fixedWidth-10vw"}
-                        />
-                        <span key={4} style={{ alignSelf: "center" }}> artworks. </span>
-                    </div>
+                            <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> in </span>
+                            <DropMenu
+                                key={3}
+                                items={getSimilarityDropdown(similarity2, setSimilarity2)}
+                                content={ESimilarity[similarity2]}
+                                menuDirection={EDropMenuDirection.down}
+                                extraClassButton={"transparent down-arrow"}
+                            />
+                            <span key={4} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
+                        </div>
 
-                    <div key={1} className="row">
-                        {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
-                        {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr)}
-                    </div>
-                    <div key={2} style={{ marginTop: "5px" }}>
-                        <Button
-                            content="Send"
-                            extraClassName="primary"
+                        <div key={1} className="row" style={{ height: `${contentColumnHeight}`, overflowY: "auto", marginRight: "5%" }}>
+                            {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
+                            {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr)}
+                        </div>
+                    </form>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "30%", marginRight: "5%" }}>
+                        <div key={2} style={{ height: `${firstRowButtonsHeight}` }}>
+                            <Button
+                                content="Send Perspective"
+                                extraClassName="primary"
 
-                            onClick={
-                                () => {
-                                    if (seed) {
-                                        const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
-                                            artworksAttr, selectedOption, similarity1, similarity2, perspectiveName);
+                                onClick={
+                                    () => {
+                                        if (seed) {
+                                            const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
+                                                artworksAttr, selectedOption, similarity1, similarity2, perspectiveName);
 
-                                        setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
+                                            setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
-                                        requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => setLoadingState({ isActive: false }));
+                                            requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => setLoadingState({ isActive: false }));
+                                        }
                                     }
                                 }
-                            }
-                        />
+                            />
+                        </div>
+                        <div style={{ height: `${contentColumnHeight}`, width: "100%" }}>
+                            <textarea ref={textAreaRef} readOnly value={textAreaContent} style={getTextAreaStyle(textAreaHeight)} />
+                        </div>
                     </div>
-                </form>
-
-                <textarea ref={textAreaRef} readOnly value={textAreaContent} style={{ height: `${textAreaHeight}px`, width: "30vw" }}>
-
-                </textarea>
+                </div>
             </div>
         </div >
     );
@@ -301,7 +325,7 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
         }
 
         return (
-            <fieldset key={0} className="row" style={{ flexDirection: "column" }}>
+            <fieldset key={0} className="row" style={{ flexDirection: "column", width: "100%" }}>
                 {checkboxes}
             </fieldset>
         )
@@ -344,7 +368,7 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
         }
 
         return (
-            <fieldset key={1} className="row" style={{ flexDirection: "column" }}>
+            <fieldset key={1} className="row" style={{ flexDirection: "column", width: "100%" }}>
                 {checkboxes}
             </fieldset>
         )
@@ -366,20 +390,6 @@ function getOptionSelector(selectedOption: [String, number], seed: IConfiguratio
     } else {
 
         const items = [];
-        //Create the default-no-options-selected option
-        items.push(
-            <Button
-                key={-1}
-                content={config.noneSelectedName}
-                state={config.noneSelectedName === selectedOption[0] ? EButtonState.active : EButtonState.unactive}
-                onClick={
-                    () => {
-                        setSelectedOption([config.noneSelectedName, -1]);
-                    }
-                }
-                extraClassName={"btn-dropdown"}
-            />
-        );
 
         for (let i = 0; i < seed.interaction_similarity_functions.length; i++) {
             const name = seed.interaction_similarity_functions[i].on_attribute.att_name;
@@ -403,7 +413,7 @@ function getOptionSelector(selectedOption: [String, number], seed: IConfiguratio
                 items={items}
                 content={`${selectedOption[0].charAt(0).toUpperCase()}${selectedOption[0].slice(1)}`}
                 menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent down-arrow fixedWidth-10vw"}
+                extraClassButton={"transparent down-arrow"}
             />);
     }
 }
@@ -415,6 +425,18 @@ function getCheckboxStyle(hide: boolean): React.CSSProperties {
         pointerEvents: hide ? "none" : "auto",
         opacity: hide ? "30%" : "100%",
         userSelect: "none"
+    }
+
+    return style;
+}
+
+function getTextAreaStyle(textAreaHeight: number): React.CSSProperties {
+
+    const style: React.CSSProperties = {
+        overflowY: "auto",
+        height: `${textAreaHeight}px`,
+        maxHeight: "100%",
+        width: "100%"
     }
 
     return style;
