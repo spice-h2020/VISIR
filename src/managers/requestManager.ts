@@ -279,24 +279,27 @@ export default class RequestManager {
         //         console.log(err);
         //         window.alert(err);
         //     });
-
-        fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newConfiguration)
-        })
-            .then(res => res.json())
-            .then(function (res) {
-                console.log("response: " + res)
-                window.alert("inserted perspectiveId: " + res.insertedPerspectiveId);
+        if (this.usingAPI) {
+            fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newConfiguration)
             })
-            .catch(function (err) {
-                console.log(err)
-                window.alert(err);
-            });
+                .then(res => res.json())
+                .then(function (res) {
+                    console.log("response: " + res)
+                    window.alert("inserted perspectiveId: " + res.insertedPerspectiveId);
+                })
+                .catch(function (err) {
+                    console.log(err)
+                    window.alert(err);
+                });
+        } else {
+            window.alert("New perspectives cant be send without an active Community Model");
+        }
     }
 }
 
