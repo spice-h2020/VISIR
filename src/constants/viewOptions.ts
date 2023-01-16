@@ -77,7 +77,7 @@ export const initialOptions = {
     /**
      * What type of URL will be picked to GET requests. Request Manager has the map that relates each fileSource option with its url
      */
-    fileSource: EFileSource.Api,
+    fileSource: EFileSource.Local,
     /**
      * Hide the labels of all nodes in the canvas and in the tooltip and datatable
      */

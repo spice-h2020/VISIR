@@ -4,7 +4,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { EFileSource, initialOptions, EButtonState } from "../constants/viewOptions";
+import { EFileSource, EButtonState } from "../constants/viewOptions";
 import { EbuttonStateArrayAction, bStateArrayReducer, CTranslation } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useReducer } from "react";
@@ -35,6 +35,7 @@ interface FileSourceDropdownProps {
     translationClass: CTranslation;
 
     insideHamburger?: boolean;
+    curentFileSource: [EFileSource, String];
 
 }
 
@@ -46,9 +47,10 @@ export const FileSourceDropdown = ({
     setLoadingState,
     insideHamburger = false,
     translationClass: tClass,
+    curentFileSource,
 }: FileSourceDropdownProps) => {
 
-    const [states, setStates] = useReducer(bStateArrayReducer, init());
+    const [states, setStates] = useReducer(bStateArrayReducer, init(curentFileSource[0]));
 
     const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
 
@@ -75,7 +77,7 @@ export const FileSourceDropdown = ({
 
     //When the app starts, select the initial fileSource and load its perspectives
     useEffect(() => {
-        changeFileSource(initialOptions.fileSource);
+        changeFileSource(curentFileSource[0]);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -110,11 +112,11 @@ export const FileSourceDropdown = ({
 /**
  * Calculates the initial state of the dropdown.
  */
-const init = (): EButtonState[] => {
+const init = (initialOption: EFileSource): EButtonState[] => {
     const initialState = new Array(Object.keys(EFileSource).length / 2);
 
     initialState.fill(EButtonState.unactive);
-    initialState[initialOptions.fileSource] = EButtonState.active;
+    initialState[initialOption] = EButtonState.active;
 
     return initialState;
 }
