@@ -266,7 +266,7 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
                     break;
                 }
                 case types.EExplanationTypes.implicit_attributes: {
-                    arg = isImplicitAttributesExplanationValid(arg);
+                    //arg = isImplicitAttributesExplanationValid(arg);
                     break;
                 }
             }

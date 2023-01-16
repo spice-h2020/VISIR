@@ -19,6 +19,8 @@ import { NodePanel } from "./NodePanel";
 import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
 import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
 import { CTranslation } from "../constants/auxTypes";
+import { ArtworkPanel } from "../basicComponents/ArtworkPanel";
+import { Accordion } from "../basicComponents/Accordion";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -203,45 +205,81 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                     </React.Fragment>);
             }
             case EExplanationTypes.implicit_attributes: {
-                //Humanize the values used in the world clouds
-                const humanLabel = humanizator.normalAttrb.get(explanation.explanation_data.label);
-                if (humanizator !== undefined) {
-                    for (let i = 0; i < explanation.explanation_data.data.length; i++) {
-                        const humanData = humanizator.normalAttrb.get(explanation.explanation_data.data[i].value);
-                        explanation.explanation_data.data[i].value = humanData ? humanData : explanation.explanation_data.data[i].value;
-                    }
-                }
 
-                //Create the explanation
-                if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
-                    let textData: React.ReactNode[] = [];
+                if (explanation.explanation_data.accordionMode) {
+                    let accordionItems: React.ReactNode[] = [];
 
-                    for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
-                        const humanValue = humanizator.normalAttrb.get(explanation.explanation_data.data[i].value);
-                        textData.push(
-                            <li key={i} style={{ marginLeft: "2rem" }}>
-                                {humanValue ? humanValue : explanation.explanation_data.data[i].value}
-                                <br />
-                            </li >);
-                    }
+                    const keys = Object.keys(explanation.explanation_data.data)
+                    //Check each iconclass familty
+                    for (let key in keys) {
+                        let artworksPanels: React.ReactNode[] = [];
 
-                    return (
-                        <div>
-                            <hr />
-                            <div> {humanLabel ? humanLabel : explanation.explanation_data.label}</div>
+                        const data: string[] = explanation.explanation_data.data[keys[key]];
+                        //Check each of the related artworks
+                        for (let i = 0; i < data.length; i++) {
+                            console.log(data[i]);
+
+                            artworksPanels.push(<ArtworkPanel artworksData={artworks} id={data[i]} />);
+                        }
+
+                        //console.log(artworksPanels);
+                        accordionItems.push(
                             <div>
-                                {textData}
+                                {keys[key]}
+                                {artworksPanels}
                             </div>
-                        </div>
-                    )
-                } else {
+                        );
 
+                    }
                     return (
                         <div>
-                            <hr />
-                            <div> {humanLabel ? humanLabel : explanation.explanation_data.label}</div>
-                            <div> {getWordClouds(explanation.explanation_data.data)}</div>
+                            <div> {explanation.explanation_data.label} </div>
+                            <Accordion items={accordionItems} tittles={keys} />
                         </div>);
+
+
+
+                } else { //TEMPORAL FIX TO TEST NEW EXPLANATION FORMAT
+                    //Humanize the values used in the world clouds
+                    const humanLabel = humanizator.normalAttrb.get(explanation.explanation_data.label);
+                    if (humanizator !== undefined) {
+                        for (let i = 0; i < explanation.explanation_data.data.length; i++) {
+                            const humanData = humanizator.normalAttrb.get(explanation.explanation_data.data[i].value);
+                            explanation.explanation_data.data[i].value = humanData ? humanData : explanation.explanation_data.data[i].value;
+                        }
+                    }
+
+                    //Create the explanation
+                    if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
+                        let textData: React.ReactNode[] = [];
+
+                        for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
+                            const humanValue = humanizator.normalAttrb.get(explanation.explanation_data.data[i].value);
+                            textData.push(
+                                <li key={i} style={{ marginLeft: "2rem" }}>
+                                    {humanValue ? humanValue : explanation.explanation_data.data[i].value}
+                                    <br />
+                                </li >);
+                        }
+
+                        return (
+                            <div>
+                                <hr />
+                                <div> {humanLabel ? humanLabel : explanation.explanation_data.label}</div>
+                                <div>
+                                    {textData}
+                                </div>
+                            </div>
+                        )
+                    } else {
+
+                        return (
+                            <div>
+                                <hr />
+                                <div> {humanLabel ? humanLabel : explanation.explanation_data.label}</div>
+                                <div> {getWordClouds(explanation.explanation_data.data)}</div>
+                            </div>);
+                    }
                 }
             }
             default: {
