@@ -282,13 +282,13 @@ export default class RequestManager {
         axios.post(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, newConfiguration)
             .then((response: any) => {
                 console.log(response);
-                const data = JSON.parse(response.data);
-                window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
+                //const data = JSON.parse(response.data);
+                window.alert("inserted perspectiveId: " + response.data.insertedPerspectiveId);
 
                 if (this.usingAPI) {
-                    updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
+                    updateFileSource(EFileSource.Api, callback, this.axios.defaults.baseURL)
                 } else {
-                    updateFileSource(EFileSource.Local)
+                    updateFileSource(EFileSource.Local, callback)
                 }
 
             })
