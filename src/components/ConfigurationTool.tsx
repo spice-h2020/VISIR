@@ -51,7 +51,9 @@ const innerPanelStyle: React.CSSProperties = {
     justifyContent: "flex-start",
     alignItems: "center",
 
-    overflowY: "auto"
+    overflowY: "auto",
+    border: "2px solid var(--primaryButtonColor)",
+    borderLeft: "10px solid var(--primaryButtonColor)"
 };
 
 const firstRowStyle: React.CSSProperties = {
