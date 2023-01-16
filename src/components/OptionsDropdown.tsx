@@ -4,8 +4,8 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { EButtonState, initialOptions, IViewOptionAction, ViewOptions } from "../constants/viewOptions";
-import { bStateArrayReducer, CTranslation, EbuttonStateArrayAction, ITranslation } from "../constants/auxTypes";
+import { EButtonState, IViewOptionAction, ViewOptions } from "../constants/viewOptions";
+import { bStateArrayReducer, CTranslation, EbuttonStateArrayAction } from "../constants/auxTypes";
 //Packages
 import React, { Dispatch, useReducer } from "react";
 //Local files
@@ -24,6 +24,7 @@ interface OptionsDropdownProps {
     translationClass: CTranslation;
 
     insideHamburger?: boolean;
+    viewOptions: ViewOptions;
 }
 
 /**
@@ -33,9 +34,10 @@ export const OptionsDropdown = ({
     setViewOptions,
     translationClass: tClass,
     insideHamburger = false,
+    viewOptions,
 }: OptionsDropdownProps) => {
 
-    const [states, setStates] = useReducer(bStateArrayReducer, init());
+    const [states, setStates] = useReducer(bStateArrayReducer, init(viewOptions));
 
     const onClick = (index: number, updateType: keyof ViewOptions) => {
         if (states[index] !== EButtonState.loading) {
@@ -70,7 +72,7 @@ export const OptionsDropdown = ({
         <Slider
             content={tClass.t.toolbar.optionsDrop.minSimilarity}
             onInput={(value: number) => { setViewOptions({ updateType: "edgeThreshold", newValue: value }); }}
-            initialValue={initialOptions.edgeThreshold}
+            initialValue={viewOptions.edgeThreshold}
             key={3}
         />,
         <hr key={4} style={hrStyle} />,
@@ -80,17 +82,10 @@ export const OptionsDropdown = ({
             minimum={0}
             maximum={100}
             step={10}
-            initialValue={initialOptions.deleteEdges}
+            initialValue={viewOptions.deleteEdges}
             onInput={(value: number) => { setViewOptions({ updateType: "deleteEdges", newValue: value }); }}
             key={5}
-        />,
-        // <hr key={8} style={hrStyle} />,
-        // <Button
-        //     content={translationFile ? translationFile.toolbar.optionsDrop.border : "Activate Border"}
-        //     onClick={() => { onClick(3, "border"); }}
-        //     state={states[3]}
-        //     key={9}
-        //     extraClassName={"btn-dropdown"} />
+        />
     ];
 
     if (!insideHamburger) {
@@ -118,12 +113,11 @@ export const OptionsDropdown = ({
 /**
  * Calculates the initial state of the dropdown.
  */
-const init = (): EButtonState[] => {
+const init = (viewOptions: ViewOptions): EButtonState[] => {
     const initialState: EButtonState[] = [];
 
-    initialState.push(initialOptions.hideLabels);
-    initialState.push(initialOptions.hideEdges);
-    initialState.push(initialOptions.border);
+    initialState.push(viewOptions.hideLabels ? EButtonState.active : EButtonState.unactive);
+    initialState.push(viewOptions.hideEdges ? EButtonState.active : EButtonState.unactive);
 
     return initialState;
 }

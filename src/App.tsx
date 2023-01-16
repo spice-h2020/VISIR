@@ -9,7 +9,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer } from './constants/viewOptions';
+import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer, initialOptions } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { CTranslation, ILegendData, legendDataReducer } from './constants/auxTypes';
 //Packages
@@ -30,6 +30,7 @@ import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
 import { ConfigurationTool } from './components/ConfigurationTool';
 
 import config from './appConfig.json';
+import { HamburguerIcon } from './basicComponents/HamburgerButton';
 
 interface AppProps {
   perspectiveId1: string | null,
@@ -56,6 +57,7 @@ export const App = ({
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
+  const [fileSource, setFileSource] = useState<[EFileSource, String]>([initialOptions.fileSource, config.API_URI])
 
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useReducer(legendDataReducer, { dims: [], anonymous: false, anonGroup: false } as ILegendData);
@@ -84,6 +86,8 @@ export const App = ({
 
 
   const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
+    setFileSource([fileSource, apiURL ? apiURL : ""]);
+
     requestManager.changeBaseURL(fileSource, apiURL);
     requestManager.requestAllPerspectivesIds((newIds: PerspectiveId[]) => {
       initPerspectivess(setLeftPerspective, setRightPerspective, newIds, perspectiveId1, requestManager, perspectiveId2,
@@ -116,6 +120,7 @@ export const App = ({
       setLoadingState={SetLoadingState}
       insideHamburger={small}
       translationClass={currentLanguage}
+      curentFileSource={fileSource}
     />;
 
   //Dropdown to select the different visualization options
@@ -125,6 +130,7 @@ export const App = ({
       setViewOptions={setViewOptions}
       insideHamburger={small}
       translationClass={currentLanguage}
+      viewOptions={viewOptions}
     />
 
   //Dropdown to select the active perspective at the left of the app
@@ -219,8 +225,8 @@ export const App = ({
       <DropMenu
         key={0}
         content={
-          <div className='row' style={{ alignItems: "center" }}>
-            <img style={{ height: "40px" }} src="./images/hamburgerBtn.svg" alt="VISIR icon" />
+          <div className='row' style={{ alignItems: "center", height: "40px" }}>
+            <HamburguerIcon />
           </div>}
         extraClassButton="transparent mainBtn"
         menuDirection={EDropMenuDirection.down}
@@ -250,8 +256,8 @@ export const App = ({
       <DropMenu
         key={0}
         content={
-          <div className='row' style={{ alignItems: "center" }}>
-            <img style={{ height: "40px" }} src="./images/hamburgerBtn.svg" alt="VISIR icon" />
+          <div className='row' style={{ alignItems: "center", height: "40px" }}>
+            <HamburguerIcon />
           </div>}
         extraClassButton="transparent mainBtn"
         menuDirection={EDropMenuDirection.down}
@@ -336,6 +342,7 @@ export const App = ({
         isActive={isConfigToolActive}
         setLoadingState={SetLoadingState}
         setIsActive={setIsConfigToolActive}
+        updateFileSource={updateFileSource}
       />
       <LoadingFrontPanel
         state={loadingState}

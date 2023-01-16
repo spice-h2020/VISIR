@@ -28,6 +28,11 @@ export const SingleTreeMap = ({
             toolbar: {
                 show: false
             }
+        },
+        tooltip: {
+            y: {
+                formatter: (value) => { return value + "%" },
+            },
         }
     };
 
