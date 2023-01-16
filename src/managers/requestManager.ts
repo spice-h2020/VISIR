@@ -274,16 +274,15 @@ export default class RequestManager {
 
     sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void,
         callback: Function) {
-        // For some reason, CM gets blocked when axios send a petition
 
+        // For some reason, CM receives an empty object when axios does the post request.
         //newConfiguration = JSON.stringify(newConfiguration)
-        // console.log(`${this.axios.defaults.baseURL}${this.confSeedPOST}`)
-        const axios = require('axios');
-        axios.post(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, newConfiguration)
-            .then((response: any) => {
-                console.log(response);
-                //const data = JSON.parse(response.data);
-                window.alert("inserted perspectiveId: " + response.data.insertedPerspectiveId);
+        /*
+        this.axios.post(this.confSeedPOST,
+            newConfiguration)
+            .then((response) => {
+                const data = JSON.parse(response.data);
+                window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
 
                 if (this.usingAPI) {
                     updateFileSource(EFileSource.Api, callback, this.axios.defaults.baseURL)
@@ -292,55 +291,40 @@ export default class RequestManager {
                 }
 
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 console.log(err);
                 window.alert(err);
             });
+        */
 
-        // this.axios.post(this.confSeedPOST,
-        //     newConfiguration)
-        //     .then((response) => {
-        //         const data = JSON.parse(response.data);
-        //         window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
+        if (this.usingAPI) {
+            fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newConfiguration)
+            })
+                .then(res => res.json())
+                .then((res) => {
+                    console.log("response: " + res)
+                    window.alert("inserted perspectiveId: hmm" + res.insertedPerspectiveId);
 
-        //         if (this.usingAPI) {
-        //             updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
-        //         } else {
-        //             updateFileSource(EFileSource.Local)
-        //         }
+                    if (this.usingAPI) {
+                        updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
+                    } else {
+                        updateFileSource(EFileSource.Local)
+                    }
 
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //         window.alert(err);
-        //     });
-
-        // fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(newConfiguration)
-        // })
-        //     .then(res => res.json())
-        //     .then((res) => {
-        //         console.log("response: " + res)
-        //         window.alert("inserted perspectiveId: hmm" + res.insertedPerspectiveId);
-
-        //         if (this.usingAPI) {
-        //             updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
-        //         } else {
-        //             updateFileSource(EFileSource.Local)
-        //         }
-
-        //         callback();
-        //     })
-        //     .catch(function (err) {
-        //         console.log(err)
-        //         window.alert(err);
-        //         callback();
-        //     });
+                    callback();
+                })
+                .catch(function (err) {
+                    console.log(err)
+                    window.alert(err);
+                    callback();
+                });
+        }
     }
 }
 
