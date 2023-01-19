@@ -4,7 +4,8 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IConfigurationSeed, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
+import { FORMERR } from "dns";
+import { IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 import { ECommunityType } from "./perspectivesTypes";
@@ -704,6 +705,14 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
             throw Error(`Interactions Similarity Functions are not an object`);
         }
 
+        if (arg.algorithm === undefined) {
+            throw Error(`Algorithms are undefined`);
+        }
+
+        if (typeof (arg.algorithm) !== "object") {
+            throw Error(`Algorithms are not an object`);
+        }
+
         for (let i = 0; i < arg.artwork_attributes.length; i++) {
             arg.artwork_attributes[i] = isArtworkAttributesValid(arg.artwork_attributes[i]);
         }
@@ -713,8 +722,11 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         for (let i = 0; i < arg.interaction_similarity_functions.length; i++) {
             arg.interaction_similarity_functions[i] = isInteractSimFuncsValid(arg.interaction_similarity_functions[i]);
         }
+        for (let i = 0; i < arg.algorithm.length; i++) {
+            arg.algorithm[i] = isAlgorithmValid(arg.algorithm[i]);
+        }
 
-        console.log(`Configuration seed file has been completed -> `);
+        console.log(`Configuration seed file validation has been completed -> `);
         console.log(arg as IConfigurationSeed);
 
         return arg;
@@ -723,30 +735,8 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
     }
 }
 
-function isArtworkAttributesValid(arg: any): ISimilarityFunction {
+function isArtworkAttributesValid(arg: any): IArtworkAttribute {
     try {
-
-        if (arg.sim_function === undefined) {
-            throw Error(`Sim function is undefined`);
-        }
-
-        arg = arg.sim_function;
-
-        if (arg.name === undefined) {
-            throw Error(`Name is undefined`);
-        }
-        if (typeof (arg.name) !== "string") {
-            try {
-                arg.name = String(arg.name);
-            } catch (e: any) {
-                throw Error(`Name is not a string`);
-            }
-        }
-
-        if (arg.params === undefined) {
-            arg.params = [];
-        }
-
         if (arg.on_attribute === undefined) {
             throw Error(`Onattribute of the sim function (${arg.arg.name}) is undefined`);
         }
@@ -756,6 +746,18 @@ function isArtworkAttributesValid(arg: any): ISimilarityFunction {
         }
 
         arg.on_attribute = isNameAndTypePairValid(arg.on_attribute);
+
+        if (arg.sim_function === undefined) {
+            throw Error(`sim function is undefined`);
+        }
+        if (typeof (arg.sim_function) !== "object") {
+            throw Error(`sim function is not an object`);
+        }
+
+        for (let i = 0; i < arg.sim_function.length; i++) {
+            arg.sim_function[i] = isAlgorithmValid(arg.sim_function[i]);
+        }
+
         return arg;
     } catch (e: any) {
         throw Error(`artwork attribute data data is not valid: ${e.message}`);
@@ -843,6 +845,34 @@ function isInteractSimFuncsValid(arg: any): ISimilarityFunction {
         return arg;
     } catch (e: any) {
         throw Error(`Interaction similarity function data is not valid: ${e.message}`);
+    }
+}
+
+function isAlgorithmValid(arg: any): IAlgorithm {
+    try {
+
+        if (arg.name === undefined) {
+            throw Error(`Name is undefined`);
+        }
+        if (typeof (arg.name) !== "string") {
+            try {
+                arg.name = String(arg.name);
+            } catch (e: any) {
+                throw Error(`Name is not a string`);
+            }
+        }
+
+        if (arg.params === undefined) {
+            arg.params = [];
+        }
+
+        if (arg.default === undefined) {
+            arg.default = false;
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Algorythm data is not valid: ${e.message}`);
     }
 }
 //#endregion

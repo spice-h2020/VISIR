@@ -27,10 +27,10 @@ import RequestManager from './managers/requestManager';
 import './style/base.css';
 import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFrontPanel';
 import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
-import { ConfigurationTool } from './components/ConfigurationTool';
 
 import config from './appConfig.json';
 import { HamburguerIcon } from './basicComponents/HamburgerButton';
+import { ConfigurationTool } from './components/ConfigurationTool';
 
 interface AppProps {
   perspectiveId1: string | null,

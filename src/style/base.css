@@ -308,12 +308,34 @@ body {
     content: "-";
 }
 
+.big-height {
+    height: 100%;
+}
+
 /*------------------------------------------
 //         DROPDOWN
 //------------------------------------------*/
 
 .dropdown-inner {
     width: 100%;
+}
+
+.dropdown-minimumSize {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+.checkbox-row {
+    transition: all 0s;
+    box-sizing: border-box;
+    border-bottom: 2px solid transparent;
+}
+
+.checkbox-row.active:hover {
+    border-bottom: 2px solid var(--primaryButtonColor);
 }
 
 /*------------------------------------------

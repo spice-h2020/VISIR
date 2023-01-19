@@ -32,7 +32,6 @@ const darkBackgroundStyle: React.CSSProperties = {
 }
 
 const innerPanelStyle: React.CSSProperties = {
-    display: "flex",
     width: "90vw",
     height: "90vh",
 
@@ -46,44 +45,34 @@ const innerPanelStyle: React.CSSProperties = {
     background: "var(--bodyBackground)",
     borderRadius: "15px",
 
-    flexDirection: "column",
-    flexWrap: "nowrap",
-    justifyContent: "flex-start",
-    alignItems: "center",
-
     overflowY: "auto",
     border: "2px solid var(--primaryButtonColor)",
     borderLeft: "10px solid var(--primaryButtonColor)"
 };
 
-const firstRowStyle: React.CSSProperties = {
-    justifyContent: "space-between",
+const topButtonsStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "row",
     flexWrap: "nowrap",
-    alignContent: "stretch",
+    justifyContent: "space-between",
     alignItems: "center",
-    width: "100%",
-    marginTop: "10px"
-}
 
-const fromStyle: React.CSSProperties = {
-    alignSelf: "self-start",
-    marginLeft: "5%",
-    width: "70%",
-    height: "100%"
+    marginTop: "10px",
+    height: "5vh"
 }
 
 const devModeBackgroundStyle: React.CSSProperties = {
-    position: "fixed",
-    fontSize: "150px",
+    fontSize: "2rem",
     fontWeight: "bolder",
     opacity: "20%",
     color: "gray"
 }
 
-const firstRowButtonsHeight = "60px";
-const contentColumnHeight = "65vh";
+const fieldsetStyle: React.CSSProperties = {
+    flexDirection: "column",
+    overflow: "auto"
+
+}
 
 interface ConfToolProps {
     requestManager: RequestManager
@@ -93,6 +82,10 @@ interface ConfToolProps {
     updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void;
 }
 
+const emptyAlgorithm: config.IAlgorithm = { name: "undefined Algorithm", params: [], default: true }
+const emptyOption: config.ISimilarityFunction = {
+    name: "undefined option", params: [], on_attribute: { att_name: "none", att_type: "string", }, interaction_object: { att_name: "none", att_type: "string", }
+}
 /**
  * UI component that executes a function when clicked.
  */
@@ -107,14 +100,20 @@ export const ConfigurationTool = ({
 
     //Written perspective name
     const [perspectiveName, setPerspectiveName] = useState<string>("");
+    //Selected algorythm
+    const [selectedAlgorithm, setSelectedAlgorithm] = useState<config.IAlgorithm>(emptyAlgorithm);
     //Similarity Dropdown states
     const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.Same);
     const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.Same);
     //Middle select option state
-    const [selectedOption, setSelectedOption] = useState<[String, number]>([config.noneSelectedName, -1]);
+    const [selectedOption, setSelectedOption] = useState<config.ISimilarityFunction>(emptyOption);
     //Checkboxes state
     const [citizenAttr, setCitizenAttr] = useState<Map<string, boolean>>(new Map<string, boolean>());
     const [artworksAttr, setArtworksAttr] = useState<Map<string, boolean>>(new Map<string, boolean>());
+    //ArtworkAttrbDropdowns state
+    const [artworksAttrDrop, setArtworksAttrDrop] = useState<Map<string, boolean[]>>(new Map<string, boolean[]>());
+
+    const [isTextAreaActive, setIsTextAreaActive] = useState<boolean>(false);
 
     //Seed for all the configuration
     const [seed, setSeed] = useState<IConfigurationSeed>();
@@ -127,14 +126,29 @@ export const ConfigurationTool = ({
     //When the configuration tool is active, check for the latest configuration seed
     useEffect(() => {
         if (isActive) {
-            requestManager.requestConfigurationToolSeed((seed: IConfigurationSeed) => {
-                setSeed(seed)
-                setLoadingState({ isActive: false });
+            requestManager.requestConfigurationToolSeed((newSeed: IConfigurationSeed) => {
 
-                if (seed.interaction_similarity_functions.length === 0) {
-                    alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
-                } else {
-                    setSelectedOption([seed.interaction_similarity_functions[0].on_attribute.att_name, 0]);
+                if (newSeed !== undefined) {
+                    if (newSeed.interaction_similarity_functions.length === 0) {
+                        alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
+                    } else {
+                        setSeed(newSeed)
+                        setLoadingState({ isActive: false });
+                        setSelectedOption(newSeed.interaction_similarity_functions[0]);
+                    }
+
+                    try {
+                        setArtworksAttrDrop(config.initArtworksAttrDrop(newSeed.artwork_attributes));
+                    } catch (error: any) {
+                        throw Error("Failed while setting artworks attributes " + error);
+                    }
+
+                    try {
+                        setSelectedAlgorithm(config.initAlgorythmDrop(newSeed.algorithm));
+                    } catch (error: any) {
+                        throw Error("Failed while setting default Algorythm attributes " + error);
+                    }
+
                 }
             });
         }
@@ -167,20 +181,18 @@ export const ConfigurationTool = ({
             setTextAreaHeight(ref.current.scrollHeight);
         }
 
-    }, [textAreaContent]);
+    }, [textAreaContent, isTextAreaActive]);
 
     //Toggle the background dev mode if dev mode is active
     const backgroundStyle: React.CSSProperties = JSON.parse(JSON.stringify(devModeBackgroundStyle));
+
     backgroundStyle.display = isDevMode ? "block" : "none";
 
     return (
         <div style={darkBackgroundStyle} className={isActive ? "toVisibleAnim" : "toHiddenAnim"}>
             <div style={innerPanelStyle}>
-                <div style={backgroundStyle}>
-                    DEV MODE
-                </div>
-
-                <div key={0} style={firstRowStyle}>
+                {/*Row with the buttons to open DEV MODE or exit the application */}
+                <div style={topButtonsStyle}>
                     <span style={{ marginLeft: "10px" }}>
                         <Button
                             content="Dev mode "
@@ -189,6 +201,9 @@ export const ConfigurationTool = ({
                             onClick={() => { setIsDevMode(!isDevMode); }}
                         />
                     </span>
+                    <div style={backgroundStyle}>
+                        DEV MODE
+                    </div>
                     <span style={{ marginRight: "10px" }}>
                         <Button
                             content=""
@@ -197,8 +212,13 @@ export const ConfigurationTool = ({
                         />
                     </span>
                 </div>
-                <div>
-                    <label htmlFor="f-perspective_name">Perspective Name:</label>
+                {/*Row with the perspective name and algorithm selector*/}
+                <div style={{
+                    display: "flex", height: "5vh",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    <label htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
                     <input type="text" id="f-perspective_name" name="f-perspective_name"
                         onChange={
                             (element) => {
@@ -206,61 +226,110 @@ export const ConfigurationTool = ({
                             }
                         }
                     />
+                    <span style={{ width: "2rem" }} />
+                    {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
 
                 </div>
-                <div className="row" style={{ alignSelf: "stretch" }}>
-                    <form key={1} id="form-config" action="" method="get" style={fromStyle}>
-                        <div key={0} className="row" style={{ height: `${firstRowButtonsHeight}`, alignItems: "center", justifyContent: "space-around" }}>
-                            <DropMenu
-                                key={0}
-                                items={getSimilarityDropdown(similarity1, setSimilarity1)}
-                                content={ESimilarity[similarity1]}
-                                menuDirection={EDropMenuDirection.down}
-                                extraClassButton={"transparent down-arrow"}
-                            />
-                            {getOptionSelector(selectedOption, seed, setSelectedOption)}
+                {/*Row with the sentence and the dropdowns to select*/}
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "nowrap",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                    height: "7vh"
+                }}>
+                    <DropMenu
+                        key={0}
+                        items={getSimilarityDropdown(similarity1, setSimilarity1)}
+                        content={ESimilarity[similarity1]}
+                        menuDirection={EDropMenuDirection.down}
+                        extraClassButton={"transparent down-arrow"}
+                    />
+                    {getOptionSelector(selectedOption, seed, setSelectedOption)}
 
-                            <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> in </span>
-                            <DropMenu
-                                key={3}
-                                items={getSimilarityDropdown(similarity2, setSimilarity2)}
-                                content={ESimilarity[similarity2]}
-                                menuDirection={EDropMenuDirection.down}
-                                extraClassButton={"transparent down-arrow"}
-                            />
-                            <span key={4} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
-                        </div>
+                    <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> in </span>
+                    <DropMenu
+                        key={3}
+                        items={getSimilarityDropdown(similarity2, setSimilarity2)}
+                        content={ESimilarity[similarity2]}
+                        menuDirection={EDropMenuDirection.down}
+                        extraClassButton={"transparent down-arrow"}
+                    />
+                    <span key={4} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
+                </div>
+                {/*Row with the fieldsets, and the button to open/close the json export object */}
+                <div style={{
+                    height: "60vh",
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "nowrap"
+                }}>
+                    {/*Fieldsets with the attributes*/}
+                    <div style={{
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        flexWrap: "nowrap",
+                        overflowX: "hidden",
 
-                        <div key={1} className="row" style={{ height: `${contentColumnHeight}`, overflowY: "auto", marginRight: "5%" }}>
+                        width: "100%"
+                    }}>
+                        <fieldset key={0} style={{ height: "-webkit-fill-available", overflowY: "auto", minInlineSize: "auto", width: "35%" }}>
                             {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
-                            {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr)}
-                        </div>
-                    </form>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "30%", marginRight: "5%" }}>
-                        <div key={2} style={{ height: `${firstRowButtonsHeight}` }}>
-                            <Button
-                                content="Send Perspective"
-                                extraClassName="primary"
+                        </fieldset>
+                        <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.Same === similarity2)}>
+                            {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr, artworksAttrDrop,
+                                setArtworksAttrDrop, isDevMode)}
+                        </fieldset>
+                    </div>
+                    {/*Button to collapse the text area*/}
+                    <div style={{ height: "100%", display: `${isDevMode ? "block" : "none"}` }}>
+                        <Button
+                            content={`${isTextAreaActive ? ">>" : "<<"}`}
+                            onClick={() => {
+                                setIsTextAreaActive(!isTextAreaActive);
+                            }}
+                            extraClassName={"big-height dark"}
+                        />
 
-                                onClick={
-                                    () => {
-                                        if (seed) {
-                                            const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
-                                                artworksAttr, selectedOption, similarity1, similarity2, perspectiveName);
-
-                                            setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
-
-                                            requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => setLoadingState({ isActive: false }));
-                                        }
-                                    }
-                                }
-                            />
-                        </div>
-                        <div style={{ height: `${contentColumnHeight}`, width: "100%" }}>
-                            <textarea ref={textAreaRef} readOnly value={textAreaContent} style={getTextAreaStyle(textAreaHeight)} />
+                    </div>
+                    {/*Text area*/}
+                    <div style={{ height: "100%", width: `${isTextAreaActive ? "30%" : "0%"}` }}>
+                        <div style={{ height: `100%`, textAlign: "center" }}>
+                            <textarea ref={textAreaRef} readOnly value={textAreaContent} style={getTextAreaStyle(textAreaHeight, isTextAreaActive)} />
                         </div>
                     </div>
                 </div>
+                {/*Last row with the send button*/}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    margin: "1rem 0px",
+                    height: "5vh"
+                }}>
+                    <Button
+                        content="Send Perspective"
+                        extraClassName="primary"
+
+                        onClick={
+                            () => {
+                                if (seed) {
+                                    const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
+                                        artworksAttr, artworksAttrDrop, selectedOption, similarity1, similarity2,
+                                        perspectiveName, selectedAlgorithm);
+
+                                    setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
+
+                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => setLoadingState({ isActive: false }));
+                                }
+                            }
+                        }
+                    />
+                </div>
+
+
             </div>
         </div >
     );
@@ -293,6 +362,46 @@ function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function): React
     return buttons;
 }
 
+
+function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, selectedAlgorythm: config.IAlgorithm, setSelectedAlgorythm: Function): React.ReactNode {
+
+    if (seed !== undefined) {
+        const dropdownItems: React.ReactNode[] = []
+        const algorithms = seed.algorithm;
+
+        for (let i = 0; i < algorithms.length; i++) {
+            dropdownItems.push(
+                <Button
+                    key={i}
+                    content={algorithms[i].name}
+                    state={algorithms[i].name === selectedAlgorythm.name ? EButtonState.active : EButtonState.unactive}
+                    onClick={
+                        () => {
+                            setSelectedAlgorythm(algorithms[i]);
+                        }
+                    }
+                    extraClassName={"btn-dropdown"}
+                />
+            )
+        }
+
+        return (
+            <DropMenu
+                items={dropdownItems}
+                content={selectedAlgorythm.name}
+                extraClassButton={"primary down-arrow"}
+            />
+        );
+    } else {
+        <DropMenu
+            items={[]}
+            content={"Select algorithm"}
+            extraClassButton={"primary down-arrow"}
+        />
+    }
+
+}
+
 /**
  * Creates several checkboxes to select the citizen attributes to use in the clustering
  * @param seed configuration seed
@@ -301,10 +410,10 @@ function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function): React
  * @returns 
  */
 function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citizenAttr: Map<string, boolean>,
-    setCitizenAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>): React.ReactNode {
+    setCitizenAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>): React.ReactNode[] {
 
     if (seed === undefined) {
-        return <React.Fragment key={0}></React.Fragment>;
+        return [<React.Fragment></React.Fragment>];
     } else {
         const checkboxes = [];
 
@@ -313,26 +422,24 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
             const isChecked: boolean | undefined = citizenAttr.get(userAttribute.att_name);
 
             checkboxes.push(
-                <div key={i} className="row">
-                    <input type="checkbox" id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false}
+                <div key={i} className="row checkbox-row active">
+                    <input key={1} type="checkbox" style={{ cursor: "pointer" }} id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false}
                         onChange={() => {
                             citizenAttr.set(userAttribute.att_name, !isChecked);
                             setCitizenAttr(new Map(citizenAttr));
                         }
                         } />
-                    <label htmlFor={`cit-${userAttribute.att_name}`} style={{ userSelect: "none" }}>
+                    <label key={2} htmlFor={`cit-${userAttribute.att_name}`} style={{ userSelect: "none", cursor: "pointer" }}>
                         {userAttribute.att_name}
                     </label>
                 </div>)
         }
 
-        return (
-            <fieldset key={0} className="row" style={{ flexDirection: "column", width: "100%" }}>
-                {checkboxes}
-            </fieldset>
-        )
+        return checkboxes
     }
 }
+
+
 
 /**
  * Creates several checkboxes to select the artworks attributes to use in the clustering
@@ -343,11 +450,12 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
  * @returns 
  */
 function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed | undefined,
-    artworksAttr: Map<string, boolean>, setArtworksAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>)
-    : React.ReactNode {
+    artworksAttr: Map<string, boolean>, setArtworksAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>,
+    artworksAttrDrop: Map<string, boolean[]>, setArtworksAttrDrop: Function, isDevMode: boolean)
+    : React.ReactNode[] {
 
     if (seed === undefined) {
-        return <React.Fragment key={1}></React.Fragment>;
+        return [<React.Fragment></React.Fragment>];
     } else {
         const checkboxes = [];
 
@@ -356,27 +464,102 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
             const isChecked: boolean | undefined = artworksAttr.get(onAttribute.att_name) && sim2 !== ESimilarity.Same;
 
             checkboxes.push(
-                <div key={i} className="row">
-                    <input type="checkbox" style={getCheckboxStyle(sim2 === ESimilarity.Same)} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
-                        onChange={() => {
-                            artworksAttr.set(onAttribute.att_name, !isChecked);
-                            setArtworksAttr(new Map(artworksAttr));
-                        }
-                        } />
-                    <label htmlFor={`art-${onAttribute.att_name}`} style={getCheckboxStyle(sim2 === ESimilarity.Same)}>
-                        {onAttribute.att_name}
-                    </label>
-                </div>)
+                <div key={i} className={`checkbox-row ${ESimilarity.Same === sim2 ? "" : "active"}`}
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        flexWrap: "nowrap",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        minInlineSize: "auto"
+                    }}>
+                    <div style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} >
+                        <input type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
+                            onChange={() => {
+                                artworksAttr.set(onAttribute.att_name, !isChecked);
+                                setArtworksAttr(new Map(artworksAttr));
+                            }}
+                        />
+                        <label htmlFor={`art-${onAttribute.att_name}`} title={onAttribute.att_name} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }}>
+                            {onAttribute.att_name}
+                        </label>
+                    </div>
+                    <div style={{
+                        display: "flex",
+                        direction: "rtl"
+                    }}>
+                        {getSingleArtworkAttributeDropdown(seed.artwork_attributes[i].on_attribute.att_name,
+                            seed.artwork_attributes[i].sim_function, artworksAttrDrop, setArtworksAttrDrop, isDevMode)}
+                    </div>
+                </div >
+            )
         }
 
-        return (
-            <fieldset key={1} className="row" style={{ flexDirection: "column", width: "100%" }}>
-                {checkboxes}
-            </fieldset>
-        )
+        const localStyle: React.CSSProperties = JSON.parse(JSON.stringify(fieldsetStyle));
+        localStyle.width = "100%";
+
+        return checkboxes
     }
 }
 
+function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.IAlgorithm[],
+    artworksAttrDrop: Map<string, boolean[]>, setArtworksAttrDrop: Function, isDevMode: boolean) {
+
+    const buttonStates = artworksAttrDrop.get(attrName);
+
+    if (buttonStates === undefined) {
+        return <div />
+    }
+
+    const dropMenuItems: React.ReactNode[] = [];
+    let selectedName;
+
+    for (let i = 0; i < algorithms.length; i++) {
+
+        if (buttonStates[i]) {
+            selectedName = algorithms[i].name;
+        }
+
+        dropMenuItems.push(
+            <Button
+                key={i}
+                content={algorithms[i].name}
+                state={buttonStates[i] ? EButtonState.active : EButtonState.unactive}
+                onClick={
+                    () => {
+                        const newMap = new Map(artworksAttrDrop);
+                        const newButtonState = newMap.get(attrName);
+
+                        if (newButtonState !== undefined) {
+                            for (let j = 0; j < newButtonState.length; j++) {
+                                if (j === i) {
+                                    newButtonState[j] = true;
+                                } else {
+                                    newButtonState[j] = false;
+                                }
+                            }
+                            setArtworksAttrDrop(newMap);
+                        }
+                    }
+                }
+                extraClassName={"btn-dropdown"}
+            />
+        )
+    }
+
+    return (
+        <div title={selectedName} style={{ display: `${isDevMode ? "block" : "none"}` }}>
+            <DropMenu
+                items={dropMenuItems}
+                content={selectedName}
+                extraClassButton={"transparent down-arrow dropdown-minimumSize"}
+            />
+        </div>
+    );
+}
 /**
  * Creates the middle dropdown
  * @param selectedOption current st
@@ -384,7 +567,7 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
  * @param setSelectedOption callback executed when a selected option is clicked
  * @returns 
  */
-function getOptionSelector(selectedOption: [String, number], seed: IConfigurationSeed | undefined,
+function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: IConfigurationSeed | undefined,
     setSelectedOption: Function): React.ReactNode {
 
     if (!seed) {
@@ -400,45 +583,49 @@ function getOptionSelector(selectedOption: [String, number], seed: IConfiguratio
                 <Button
                     key={i}
                     content={`${name.charAt(0).toUpperCase()}${name.slice(1)}`}
-                    state={name === selectedOption[0] ? EButtonState.active : EButtonState.unactive}
+                    state={name === selectedOption.on_attribute.att_name ? EButtonState.active : EButtonState.unactive}
                     onClick={
                         () => {
-                            setSelectedOption([name, i]);
+                            setSelectedOption(seed.interaction_similarity_functions[i]);
                         }
                     }
                     extraClassName={"btn-dropdown"}
                 />
             );
         }
+
         return (
             <DropMenu
                 items={items}
-                content={`${selectedOption[0].charAt(0).toUpperCase()}${selectedOption[0].slice(1)}`}
+                content={`${selectedOption.on_attribute.att_name.charAt(0).toUpperCase()}${selectedOption.on_attribute.att_name.slice(1)}`}
                 menuDirection={EDropMenuDirection.down}
                 extraClassButton={"transparent down-arrow"}
             />);
     }
 }
 
-
-function getCheckboxStyle(hide: boolean): React.CSSProperties {
+function getArtworkCheckboxStyle(hide: boolean): React.CSSProperties {
 
     const style: React.CSSProperties = {
         pointerEvents: hide ? "none" : "auto",
         opacity: hide ? "30%" : "100%",
-        userSelect: "none"
+        userSelect: "none",
+        height: "-webkit-fill-available",
+        overflowY: "auto",
+        minInlineSize: "auto",
+        width: "100%",
     }
 
     return style;
 }
 
-function getTextAreaStyle(textAreaHeight: number): React.CSSProperties {
-
+function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): React.CSSProperties {
     const style: React.CSSProperties = {
         overflowY: "auto",
-        height: `${textAreaHeight}px`,
+        height: `${textAreaHeight < 10 ? "5rem" : textAreaHeight}px`,
         maxHeight: "100%",
-        width: "100%"
+        width: "90%",
+        display: `${isTextAreaActive ? "inline-block" : "none"}`
     }
 
     return style;
