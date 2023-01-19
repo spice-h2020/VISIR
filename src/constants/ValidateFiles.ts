@@ -266,7 +266,7 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
                     break;
                 }
                 case types.EExplanationTypes.implicit_attributes: {
-                    //arg = isImplicitAttributesExplanationValid(arg);
+                    arg = isImplicitAttributesExplanationValid(arg);
                     break;
                 }
             }
@@ -317,23 +317,27 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
             throw Error(`Data attribute is not an object`);
         }
 
-        const keys = Object.keys(arg.explanation_data.data);
-        const newData: types.IStringNumberRelation[] = [];
+        if (arg.explanation_data.accordionMode === undefined) {
+            arg.explanation_data.accordionMode = false;
 
-        for (let i = 0; i < keys.length; i++) {
-            const newCount = Number(arg.explanation_data.data[keys[i]].toFixed(2));
+            const keys = Object.keys(arg.explanation_data.data);
+            const newData: types.IStringNumberRelation[] = [];
 
-            if (keys[i] === "") {
-                keys[i] = "(empty)"
+            for (let i = 0; i < keys.length; i++) {
+                const newCount = Number(arg.explanation_data.data[keys[i]].toFixed(2));
+
+                if (keys[i] === "") {
+                    keys[i] = "(empty)"
+                }
+
+                newData.push({
+                    value: keys[i],
+                    count: newCount
+                });
             }
 
-            newData.push({
-                value: keys[i],
-                count: newCount
-            });
+            arg.explanation_data.data = newData;
         }
-
-        arg.explanation_data.data = newData;
 
         return arg;
     } catch (e: any) {
