@@ -237,7 +237,7 @@ export default class RequestManager {
                         return this.askJobInProgress(data.job.path);
 
                     } else {
-                        if (data.job["job-status"] == "ERROR") {
+                        if (data.job["job-status"] === "ERROR") {
 
                             console.log(`Job with an error, ${data.job.data}`)
                             throw new Error(`Community Model had an error: ${data.job.data}`)

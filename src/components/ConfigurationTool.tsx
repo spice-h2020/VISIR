@@ -192,20 +192,22 @@ export const ConfigurationTool = ({
         <div style={darkBackgroundStyle} className={isActive ? "toVisibleAnim" : "toHiddenAnim"}>
             <div style={innerPanelStyle}>
                 {/*Row with the buttons to open DEV MODE or exit the application */}
-                <div style={topButtonsStyle}>
-                    <span style={{ marginLeft: "10px" }}>
+                <div key={0} style={topButtonsStyle}>
+                    <span key={0} style={{ marginLeft: "10px" }}>
                         <Button
+                            key={0}
                             content="Dev mode "
                             extraClassName="dark"
                             state={isDevMode ? EButtonState.active : EButtonState.unactive}
                             onClick={() => { setIsDevMode(!isDevMode); }}
                         />
                     </span>
-                    <div style={backgroundStyle}>
+                    <div key={1} style={backgroundStyle}>
                         DEV MODE
                     </div>
-                    <span style={{ marginRight: "10px" }}>
+                    <span key={2} style={{ marginRight: "10px" }}>
                         <Button
+                            key={1}
                             content=""
                             extraClassName="btn-close transparent"
                             onClick={() => { setIsActive(false); }}
@@ -213,25 +215,27 @@ export const ConfigurationTool = ({
                     </span>
                 </div>
                 {/*Row with the perspective name and algorithm selector*/}
-                <div style={{
+                <div key={1} style={{
                     display: "flex", height: "5vh",
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    <label htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
-                    <input type="text" id="f-perspective_name" name="f-perspective_name"
+                    <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
+                    <input key={1} type="text" id="f-perspective_name" name="f-perspective_name"
                         onChange={
                             (element) => {
                                 setPerspectiveName(element.target.value)
                             }
                         }
                     />
-                    <span style={{ width: "2rem" }} />
-                    {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
+                    <span key={2} style={{ width: "2rem" }} />
+                    <React.Fragment key={3} >
+                        {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
+                    </React.Fragment>
 
                 </div>
                 {/*Row with the sentence and the dropdowns to select*/}
-                <div style={{
+                <div key={2} style={{
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "nowrap",
@@ -246,7 +250,9 @@ export const ConfigurationTool = ({
                         menuDirection={EDropMenuDirection.down}
                         extraClassButton={"transparent down-arrow"}
                     />
-                    {getOptionSelector(selectedOption, seed, setSelectedOption)}
+                    <React.Fragment key={1}>
+                        {getOptionSelector(selectedOption, seed, setSelectedOption)}
+                    </React.Fragment>
 
                     <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> in </span>
                     <DropMenu
@@ -259,14 +265,14 @@ export const ConfigurationTool = ({
                     <span key={4} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
                 </div>
                 {/*Row with the fieldsets, and the button to open/close the json export object */}
-                <div style={{
+                <div key={3} style={{
                     height: "60vh",
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "nowrap"
                 }}>
                     {/*Fieldsets with the attributes*/}
-                    <div style={{
+                    <div key={0} style={{
                         height: "100%",
                         display: "flex",
                         flexDirection: "row",
@@ -284,7 +290,7 @@ export const ConfigurationTool = ({
                         </fieldset>
                     </div>
                     {/*Button to collapse the text area*/}
-                    <div style={{ height: "100%", display: `${isDevMode ? "block" : "none"}` }}>
+                    <div key={1} style={{ height: "100%", display: `${isDevMode ? "block" : "none"}` }}>
                         <Button
                             content={`${isTextAreaActive ? ">>" : "<<"}`}
                             onClick={() => {
@@ -292,17 +298,16 @@ export const ConfigurationTool = ({
                             }}
                             extraClassName={"big-height dark"}
                         />
-
                     </div>
                     {/*Text area*/}
-                    <div style={{ height: "100%", width: `${isTextAreaActive ? "30%" : "0%"}` }}>
+                    <div key={2} style={{ height: "100%", width: `${isTextAreaActive ? "30%" : "0%"}` }}>
                         <div style={{ height: `100%`, textAlign: "center" }}>
                             <textarea ref={textAreaRef} readOnly value={textAreaContent} style={getTextAreaStyle(textAreaHeight, isTextAreaActive)} />
                         </div>
                     </div>
                 </div>
                 {/*Last row with the send button*/}
-                <div style={{
+                <div key={4} style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -328,8 +333,6 @@ export const ConfigurationTool = ({
                         }
                     />
                 </div>
-
-
             </div>
         </div >
     );
@@ -387,6 +390,7 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
 
         return (
             <DropMenu
+                key={0}
                 items={dropdownItems}
                 content={selectedAlgorythm.name}
                 extraClassButton={"primary down-arrow"}
@@ -394,6 +398,7 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
         );
     } else {
         <DropMenu
+            key={0}
             items={[]}
             content={"Select algorithm"}
             extraClassButton={"primary down-arrow"}
@@ -455,7 +460,7 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
     : React.ReactNode[] {
 
     if (seed === undefined) {
-        return [<React.Fragment></React.Fragment>];
+        return [<div key={0}></div>];
     } else {
         const checkboxes = [];
 
@@ -476,30 +481,27 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
                         whiteSpace: "nowrap",
                         minInlineSize: "auto"
                     }}>
-                    <div style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} >
-                        <input type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
+                    {/* <div key={0} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} >
+                        <input key={0} type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
                             onChange={() => {
                                 artworksAttr.set(onAttribute.att_name, !isChecked);
                                 setArtworksAttr(new Map(artworksAttr));
                             }}
                         />
-                        <label htmlFor={`art-${onAttribute.att_name}`} title={onAttribute.att_name} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }}>
+                        <label key={1} htmlFor={`art-${onAttribute.att_name}`} title={onAttribute.att_name} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }}>
                             {onAttribute.att_name}
                         </label>
-                    </div>
-                    <div style={{
+                    </div> */}
+                    {/* <div key={1} style={{
                         display: "flex",
                         direction: "rtl"
                     }}>
                         {getSingleArtworkAttributeDropdown(seed.artwork_attributes[i].on_attribute.att_name,
                             seed.artwork_attributes[i].sim_function, artworksAttrDrop, setArtworksAttrDrop, isDevMode)}
-                    </div>
+                    </div> */}
                 </div >
             )
         }
-
-        const localStyle: React.CSSProperties = JSON.parse(JSON.stringify(fieldsetStyle));
-        localStyle.width = "100%";
 
         return checkboxes
     }
@@ -571,7 +573,13 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: ICo
     setSelectedOption: Function): React.ReactNode {
 
     if (!seed) {
-        return ("");
+        return (
+            <DropMenu
+                items={[]}
+                content={`No options available`}
+                menuDirection={EDropMenuDirection.down}
+                extraClassButton={"transparent down-arrow"}
+            />);
     } else {
 
         const items = [];

@@ -325,8 +325,9 @@ export const App = ({
   return (
     <div>
       {navBar}
-      <span style={{ height: "75px", display: "flex" }}></span>
+      <span key={0} style={{ height: "75px", display: "flex" }}></span>
       <PerspectivesGroups
+        key={1}
         leftPerspective={leftPerspective}
         rightPerspective={rightPerspective}
         collapsedState={collapseState}
@@ -338,6 +339,7 @@ export const App = ({
       />
 
       <ConfigurationTool
+        key={2}
         requestManager={requestManager}
         isActive={isConfigToolActive}
         setLoadingState={SetLoadingState}
@@ -345,6 +347,7 @@ export const App = ({
         updateFileSource={updateFileSource}
       />
       <LoadingFrontPanel
+        key={3}
         state={loadingState}
       />
     </div>);
