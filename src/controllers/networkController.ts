@@ -110,7 +110,7 @@ export default class NetworkController {
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
         perspectiveData.users.forEach((user: IUserData) => {
-            nodeLocation.setNodeLocation(user);
+            nodeLocation.setNodeLocation(user, explicitCtrl.communitiesData[user.implicit_community].type);
             this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.hideLabels);
             this.bbCtrl.calculateBoundingBoxes(user);
         });
