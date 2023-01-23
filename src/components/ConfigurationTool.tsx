@@ -481,7 +481,7 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
                         whiteSpace: "nowrap",
                         minInlineSize: "auto"
                     }}>
-                    {/* <div key={0} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} >
+                    {<div key={0} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} >
                         <input key={0} type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
                             onChange={() => {
                                 artworksAttr.set(onAttribute.att_name, !isChecked);
@@ -491,14 +491,14 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
                         <label key={1} htmlFor={`art-${onAttribute.att_name}`} title={onAttribute.att_name} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }}>
                             {onAttribute.att_name}
                         </label>
-                    </div> */}
-                    {/* <div key={1} style={{
+                    </div>}
+                    {<div key={1} style={{
                         display: "flex",
                         direction: "rtl"
                     }}>
                         {getSingleArtworkAttributeDropdown(seed.artwork_attributes[i].on_attribute.att_name,
                             seed.artwork_attributes[i].sim_function, artworksAttrDrop, setArtworksAttrDrop, isDevMode)}
-                    </div> */}
+                    </div>}
                 </div >
             )
         }
