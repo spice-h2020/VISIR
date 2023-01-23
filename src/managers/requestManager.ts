@@ -157,30 +157,31 @@ export default class RequestManager {
         return this.requestToUrl(this.usingAPI ? `${this.allPerspectivesGET}` : "dataList.json");
     }
 
-    requestConfigurationToolSeed(callback: Function, stateCallback?: Function) {
+    requestConfigurationToolSeed(callback: Function) {
         this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestingConfToolSeed}` });
+
 
         this.getConfigurationToolSeed()
             .then((response: any) => {
+
                 if (response.status === 200) {
                     let data = typeof response.data === "object" ? response.data : JSON.parse(response.data);
 
                     data = validateConfigurationSeed(data);
 
                     callback(data);
-                    if (stateCallback) stateCallback();
 
                 } else {
                     throw new Error(`Error while getting Configuration tool Seed. ${response.statusText}`);
                 }
             })
             .catch((error: any) => {
-
                 callback(undefined);
-                if (stateCallback) stateCallback();
 
                 console.log(`Configuration tool seed was not found:`);
                 console.log(error);
+                this.setLoadingState({ isActive: false });
+
                 alert(`Configuration tool seed was not found: ${error.message}`);
             });
     }
@@ -236,7 +237,7 @@ export default class RequestManager {
                         return this.askJobInProgress(data.job.path);
 
                     } else {
-                        if (data.job["job-status"] == "ERROR") {
+                        if (data.job["job-status"] === "ERROR") {
 
                             console.log(`Job with an error, ${data.job.data}`)
                             throw new Error(`Community Model had an error: ${data.job.data}`)

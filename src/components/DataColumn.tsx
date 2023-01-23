@@ -217,8 +217,6 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                         const data: string[] = explanation.explanation_data.data[keys[key]];
                         //Check each of the related artworks
                         for (let i = 0; i < data.length; i++) {
-                            console.log(data[i]);
-
                             artworksPanels.push(<ArtworkPanel artworksData={artworks} id={data[i]} />);
                         }
 

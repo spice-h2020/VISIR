@@ -8,7 +8,7 @@
 //Constants
 import { IPoint } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
-import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
+import { ECommunityType, ICommunityData, IUserData } from "../constants/perspectivesTypes";
 
 /**
  * Aux interface to help group nodes in their partition of the canvas's layout
@@ -75,7 +75,6 @@ export default class NodeLocation {
             targetAngle += angleSlice;
         }
 
-
         return areaPartitions as IPoint[];
     }
 
@@ -96,7 +95,7 @@ export default class NodeLocation {
      * Set the node location to its position in the group
      * @param node node to edit
      */
-    setNodeLocation(node: IUserData) {
+    setNodeLocation(node: IUserData, communityType: ECommunityType) {
         const group = node.implicit_community;
 
         if (node.isMedoid) {
@@ -105,7 +104,7 @@ export default class NodeLocation {
             node.y = this.nodeGroups[group].partition.center.y;
 
         } else {
-            const nodePos: IPoint = this.getNodePos(this.nodeGroups[group], node.id);
+            const nodePos: IPoint = this.getNodePos(this.nodeGroups[group], node.id, communityType);
 
             node.x = nodePos.x;
             node.y = nodePos.y;
@@ -118,22 +117,34 @@ export default class NodeLocation {
      * @param nodeId id of the node
      * @returns point coordinates
      */
-    getNodePos(group: INodeGroup, nodeId: string): IPoint {
+    getNodePos(group: INodeGroup, nodeId: string, communityType: ECommunityType): IPoint {
+
         let size = group.partition.nNodes < 7 ? 8 : group.partition.nNodes;
-
         const center = group.partition.center;
-        const nodeIndex = group.nodes.indexOf(nodeId);;
+        const nodeIndex = group.nodes.indexOf(nodeId);
 
-        const output = { x: 0, y: 0 };
+        let output = { x: 0, y: 0 };
 
-        const angleSlice = (2 * Math.PI) / group.partition.nNodes;
-        let targetAngle = angleSlice * nodeIndex;
+        if (communityType === ECommunityType.implicit) {
 
-        output.x = center.x + Math.cos(targetAngle) * size * nodeConst.betweenNodesDistance;
-        output.y = center.y + Math.sin(targetAngle) * size * nodeConst.betweenNodesDistance;
+            const angleSlice = (2 * Math.PI) / group.partition.nNodes;
+            let targetAngle = angleSlice * nodeIndex;
 
-        output.x = parseFloat(output.x.toFixed(10));
-        output.y = parseFloat(output.y.toFixed(10));
+            output.x = center.x + Math.cos(targetAngle) * size * nodeConst.betweenNodesDistance;
+            output.y = center.y + Math.sin(targetAngle) * size * nodeConst.betweenNodesDistance;
+
+            output.x = parseFloat(output.x.toFixed(10));
+            output.y = parseFloat(output.y.toFixed(10));
+
+        } else {
+
+            const rows = Math.sqrt(size);
+            const xIndex = nodeIndex % rows;
+            const yIndex = nodeIndex / rows;
+
+            output.x = center.x + xIndex * 45;
+            output.y = center.y + yIndex * 45;
+        }
 
         return output;
     }
