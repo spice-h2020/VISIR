@@ -229,9 +229,9 @@ export const ConfigurationTool = ({
                         }
                     />
                     <span key={2} style={{ width: "2rem" }} />
-                    <React.Fragment key={3} >
+                    <div key={3} style={{ display: `${isDevMode ? "block" : "none"}` }}>
                         {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
-                    </React.Fragment>
+                    </div>
 
                 </div>
                 {/*Row with the sentence and the dropdowns to select*/}
