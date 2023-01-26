@@ -10,9 +10,6 @@ export enum ESimilarity {
     Different
 }
 
-export const noneSelectedName = "Select option";
-
-
 //#region Seed interfaces
 export interface IConfigurationSeed {
     artwork_attributes: IArtworkAttribute[];
@@ -44,6 +41,7 @@ export interface IAlgorithm {
     default: boolean
 }
 
+export const defaultWeightValue = 0.5;
 
 //#endregion
 
@@ -79,7 +77,7 @@ export function initAlgorythmDrop(algorythms: IAlgorithm[]): IAlgorithm {
 export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: Map<string, boolean>,
     artworksAttr: Map<string, boolean>, artworksDropdownAttr: Map<string, boolean[]>,
     selectedOption: ISimilarityFunction, similarity1: ESimilarity, similarity2: ESimilarity, perspectiveName: string,
-    algorithm: IAlgorithm) {
+    algorithm: IAlgorithm, algWeight: number) {
 
     let newConfig: any = {
         user_attributes: [],
@@ -102,7 +100,8 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
 
     newConfig["algorithm"] = {
         "name": algorithm.name,
-        "params": algorithm.params
+        "params": algorithm.params,
+        "weight": algWeight
     };
 
     return newConfig;
