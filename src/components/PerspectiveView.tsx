@@ -228,7 +228,7 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
                 netMgr.nodeVisuals.colorAllNodes(netMgr.nodes, viewOptions.legendConfig);
             } else {
                 netMgr.nodeVisuals.selectNodes(netMgr.nodes, netMgr.nodeVisuals.selectedNodes,
-                    netMgr.nodeVisuals.focusedNodes, viewOptions.legendConfig);
+                    netMgr.nodeVisuals.focusedNodes, viewOptions.legendConfig, netMgr.nodeVisuals.borderSelectedNodes);
             }
         }
 

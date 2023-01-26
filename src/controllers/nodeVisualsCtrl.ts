@@ -28,9 +28,14 @@ export default class NodeVisualsCtrl {
      */
     selectedNodes: Array<string>;
     /**
+     * Nodes that are currently selected and have border on.
+     */
+    borderSelectedNodes: Array<string>;
+    /**
      * Nodes that the user specificaly selected and its focused on.
      */
     focusedNodes: Array<string>;
+
 
     /**
      * Constructor of the class
@@ -48,6 +53,7 @@ export default class NodeVisualsCtrl {
         this.legendConfig = viewOptions.legendConfig;
 
         this.selectedNodes = new Array<string>();
+        this.borderSelectedNodes = new Array<string>();
         this.focusedNodes = new Array<string>();
     }
 
@@ -161,6 +167,7 @@ export default class NodeVisualsCtrl {
 
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = selectedNodes;
+        this.borderSelectedNodes = addBorderNodes;
         this.focusedNodes = focusedId;
 
         this.legendConfig = legendConfig === undefined ? this.legendConfig : legendConfig;
@@ -205,6 +212,7 @@ export default class NodeVisualsCtrl {
     colorAllNodes(allNodes: DataSetNodes, legendConfig: Map<string, Map<string, boolean>> | undefined = undefined) {
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = [];
+        this.borderSelectedNodes = [];
         this.focusedNodes = [];
 
         this.legendConfig = legendConfig === undefined ? this.legendConfig : legendConfig;
