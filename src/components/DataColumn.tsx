@@ -12,7 +12,7 @@ import {
 }
     from "../constants/perspectivesTypes";
 //Packages
-import React from "react";
+import React, { useMemo } from "react";
 //Local files
 import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
@@ -81,7 +81,8 @@ export const DataTable = ({
     humanizator,
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks, tClass, humanizator);
+    console.log(community);
+    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, hideLabel, artworks, tClass, humanizator), [community, allUsers, hideLabel, artworks, tClass, humanizator]);
 
     return (
         <div className={state} style={getContainerStyle(state)}>

@@ -66,7 +66,7 @@ export const nodeConst = {
     //Default shape in case explicit community doesnt change it.
     defaultShape: { name: "hexagon", vAdjust: -35 } as shapeData,
 
-    defaultBorderWidth: 0,
+    defaultBorderWidth: 1,
     selectedBorderWidth: 2,
 
     defaultBorderColorWidth: 2,

@@ -157,7 +157,7 @@ export default class NodeVisualsCtrl {
      * nodes are from this network and what are from other networks
      */
     selectNodes(allNodes: DataSetNodes, selectedNodes: string[], focusedId: string[],
-        legendConfig: Map<string, Map<string, boolean>> | undefined = undefined) {
+        legendConfig: Map<string, Map<string, boolean>> | undefined = undefined, addBorderNodes: string[] = []) {
 
         const newNodes: Node[] = new Array<Node>();
         this.selectedNodes = selectedNodes;
@@ -173,8 +173,11 @@ export default class NodeVisualsCtrl {
                 this.hideNodeVisuals(node as IUserData);
 
             } else if (selectedNodes.includes(id as string)) {
-                this.coloredNodeVisuals(node as IUserData);
-
+                if (addBorderNodes.includes(id as string)) {
+                    this.coloredAndBorderNodeVisuals(node as IUserData);
+                } else {
+                    this.coloredNodeVisuals(node as IUserData);
+                }
             } else if (focusedId.includes(id as string)) {
                 existingNodes.push(id as string);
                 this.focusedNodeVisuals(node as IUserData);
@@ -220,8 +223,12 @@ export default class NodeVisualsCtrl {
         this.dimStrat.nodeToDefault(node);
     }
 
+    coloredAndBorderNodeVisuals(node: IUserData) {
+        this.dimStrat.nodeToDefault(node, true, false);
+    }
+
     focusedNodeVisuals(node: IUserData) {
-        this.dimStrat.nodeToDefault(node, true);
+        this.dimStrat.nodeToDefault(node, true, true);
     }
 
     hideNodeVisuals(node: IUserData) {

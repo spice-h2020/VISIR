@@ -114,6 +114,7 @@ export interface ICommunityExplanation extends anyProperty {
     explanation_type: EExplanationTypes;
     explanation_data: anyProperty;
     visible: boolean;
+    order: number;
 }
 
 /**

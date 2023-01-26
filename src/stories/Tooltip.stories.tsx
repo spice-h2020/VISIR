@@ -45,6 +45,7 @@ const comm: ICommunityData = {
     explanation_type: EExplanationTypes.explicit_attributes,
     explanation_data: {},
     visible: true,
+    order: 0,
   },
   ],
   users: [],

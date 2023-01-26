@@ -203,6 +203,8 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
             arg.explanations[i] = isCommunityExplanationValid(arg.explanations[i]);
         }
 
+        arg.explanations.sort((v1: types.ICommunityExplanation, v2: types.ICommunityExplanation) => v1.order - v2.order)
+
         if (arg["community-type"] === undefined) {
             arg.type = ECommunityType.inexistent;
 
@@ -217,10 +219,6 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
 
             arg.type = ECommunityType[arg["community-type"]];
             if (arg.type === undefined) {
-                console.log(`Community type of the community (${arg.id}) doesnt have an available type, it was defaulted
-                to implicit. Available types -> ` );
-                console.log(Object.keys(ECommunityType));
-
                 arg.type = ECommunityType.implicit;
             }
         }
@@ -264,13 +262,17 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
             switch (arg.explanation_type) {
                 case types.EExplanationTypes.medoid: {
                     arg = isMedoidExplanationValid(arg);
+                    arg.order = 2;
                     break;
                 }
                 case types.EExplanationTypes.implicit_attributes: {
                     arg = isImplicitAttributesExplanationValid(arg);
+                    arg.order = 1;
                     break;
                 }
             }
+        } else {
+            arg.order = 0;
         }
 
         return arg;
@@ -279,6 +281,7 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
         throw Error(`Community explanation is not valid: ${e.message}`);
     }
 }
+
 function isMedoidExplanationValid(arg: any): types.ICommunityExplanation {
     try {
         if (arg.explanation_data.id === undefined) {

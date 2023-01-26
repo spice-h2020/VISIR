@@ -217,7 +217,7 @@ export default class EventsCtrl {
      * @param community Community selected
      */
     externalCommunityClicked(community: ICommunityData) {
-        const localNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, [], community.users);
+        const localNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, community.users, [], undefined, community.users);
 
         this.netCtrl.edgeCtrl.unselectEdges();
         this.zoomToNodes(localNodes);

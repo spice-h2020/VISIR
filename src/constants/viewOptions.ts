@@ -93,11 +93,11 @@ export const initialOptions = {
     /**
      * Threshold that controls the minimum value edges must have to be shown. Selected edges have priority above this
      */
-    edgeThreshold: 0.5,
+    edgeThreshold: 0.8,
     /**
      * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
      */
-    deleteEdges: 75,
+    deleteEdges: 0,
 }
 /**
  * Class that contains the value of all visualization options that will change how the user see the networks
