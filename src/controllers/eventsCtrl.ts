@@ -189,6 +189,7 @@ export default class EventsCtrl {
             this.selectedObject = node;
 
             const selectedNodes = this.netCtrl.edgeCtrl.selectEdges(node.id);
+            selectedNodes.push(nodeId);
 
             this.zoomToNodes(selectedNodes);
 

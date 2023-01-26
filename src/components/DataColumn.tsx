@@ -81,7 +81,6 @@ export const DataTable = ({
     humanizator,
 }: DataTableProps) => {
 
-    console.log(community);
     const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, hideLabel, artworks, tClass, humanizator), [community, allUsers, hideLabel, artworks, tClass, humanizator]);
 
     return (

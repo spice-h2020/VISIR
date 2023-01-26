@@ -172,17 +172,20 @@ export default class NodeVisualsCtrl {
             if (this.isHidedByLegend(node as IUserData)) {
                 this.hideNodeVisuals(node as IUserData);
 
+            }
+            else if (focusedId.includes(id as string)) {
+                existingNodes.push(id as string);
+
+                this.focusedNodeVisuals(node as IUserData);
+
             } else if (selectedNodes.includes(id as string)) {
                 if (addBorderNodes.includes(id as string)) {
                     this.coloredAndBorderNodeVisuals(node as IUserData);
                 } else {
                     this.coloredNodeVisuals(node as IUserData);
                 }
-            } else if (focusedId.includes(id as string)) {
-                existingNodes.push(id as string);
-                this.focusedNodeVisuals(node as IUserData);
-
-            } else {
+            }
+            else {
                 this.hideNodeVisuals(node as IUserData);
             }
 

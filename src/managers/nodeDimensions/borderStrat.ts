@@ -57,6 +57,6 @@ export default class BorderStrategy extends GenericStrategy {
         if (this.attr !== undefined && this.attr.active)
             user["borderWidth"] = nodeConst.defaultBorderColorWidth;
         else
-            user["borderWidth"] = nodeConst.defaultBorderWidth;
+            user["borderWidth"] = 0;
     }
 }
