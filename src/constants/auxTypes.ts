@@ -7,7 +7,7 @@
 import { Dispatch } from "react";
 import { DimAttribute } from "./nodes";
 //Local files
-import { anyProperty, ICommunityData, IHumanizator, IUserData } from "./perspectivesTypes";
+import { anyProperty, ICommunityData, IUserData } from "./perspectivesTypes";
 import { EButtonState } from "./viewOptions";
 
 /**
@@ -81,44 +81,17 @@ export interface ITranslation extends anyProperty {
 
 export class CTranslation {
     t!: ITranslation;
-    humanizators!: IHumanizator[];
-    legendHuman!: Map<string, string>[];
 
     constructor(newT: ITranslation | undefined) {
         this.t = this.initT(newT);
-
-        this.clearHumanizators();
     }
 
-    setHumanizator(isRight: boolean, humanizator: IHumanizator) {
-        this.humanizators[isRight ? 1 : 0] = humanizator;
-
-        this.legendHuman = humanizator.legendAttrb;
-    }
-
-    getHumanizator(isRight: boolean) {
-        return this.humanizators[isRight ? 1 : 0];
-    }
-
-    clearHumanizators() {
-        this.humanizators = [];
-        for (let i = 0; i < 2; i++) {
-            this.humanizators.push({
-                legendAttrb: [],
-                normalAttrb: new Map<string, string>()
-            });
-        }
-
-        this.legendHuman = [];
-
-    }
     initT(newT: ITranslation | undefined) {
         let initial = this.defaultT();
 
         if (newT === undefined) {
             return initial;
         }
-
 
         const keys = Object.keys(initial);
         for (const key of keys) {

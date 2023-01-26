@@ -134,15 +134,6 @@ export function validatePerspectiveDataJSON(arg: any): types.IPerspectiveData {
             arg.artworks[i] = isArtworkDataValid(arg.artworks[i]);
         }
 
-        if (arg.localizator !== undefined && typeof (arg.localizator) === "object") {
-            arg.localizator = isLocalizatorValid(arg.localizator);
-        } else {
-            arg.localizator = {
-                normalAttrb: new Map<string, string>(),
-                legendAttrb: new Array<Map<string, string>>()
-            } as types.IHumanizator;
-        }
-
         console.log(`Perspective file validation has been completed -> `);
         console.log(arg as types.IPerspectiveData);
 
@@ -642,39 +633,6 @@ function isArtworkDataValid(arg: any): types.IArtworkData {
 
     } catch (e: any) {
         throw Error(`Artwork data is not valid: ${e.message}`);
-    }
-}
-
-
-function isLocalizatorValid(arg: any): types.IHumanizator {
-    try {
-        const keys = Object.keys(arg);
-
-        let legendAttrb: Map<string, string>[] = [];
-        let normalAttrb = new Map<string, string>();
-
-        for (const key of keys) {
-            if (key !== "legendAttrb") {
-                normalAttrb.set(key, arg[key]);
-            } else {
-                for (const legendObj of arg[key]) {
-                    const objKeys = Object.keys(legendObj);
-                    const newLegendAttrbMap = new Map<string, string>();
-
-                    for (const objKey of objKeys) {
-                        newLegendAttrbMap.set(objKey, legendObj[objKey]);
-                    }
-
-                    legendAttrb.push(newLegendAttrbMap);
-                }
-            }
-        }
-
-        return { normalAttrb: normalAttrb, legendAttrb: legendAttrb };
-
-
-    } catch (e: any) {
-        throw Error(`Localizator data is not valid: ${e.message}`);
     }
 }
 

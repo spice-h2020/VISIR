@@ -119,23 +119,10 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
     onClick: Function, tClass: CTranslation): React.ReactNode[] {
 
     const rows = new Array<React.ReactNode>();
-    const humanizator = tClass.legendHuman;
 
     for (let i = 0; i < legendData.length; i++) {
         if (legendData[i].active) {
             const buttonsColumn = new Array<React.ReactNode>();
-
-            let legendHumanizator = undefined;
-            let legendHumanTittle = legendData[i].key;
-
-            for (const legendHumanObj of humanizator) {
-                const humanTittle = legendHumanObj.get(legendData[i].key);
-
-                if (humanTittle) {
-                    legendHumanTittle = humanTittle
-                    legendHumanizator = legendHumanObj;
-                }
-            }
 
             let valueMap = legendConf.get(legendData[i].key);
             if (valueMap === undefined) {
@@ -146,11 +133,6 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
             for (let j = 0; j < legendData[i].values.length; j++) {
                 const value = legendData[i].values[j];
                 let valueText = value;
-
-                if (legendHumanizator) {
-                    const humanValue = legendHumanizator.get(value);
-                    valueText = humanValue ? humanValue : value;
-                }
 
                 buttonsColumn.push(
                     <Button
@@ -171,7 +153,7 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
             const colum =
                 <div className='col' style={getLegendColumnStyle(i === legendData.length)}
                     key={i}>
-                    <h3 style={columnTittle} title={legendHumanTittle}>{legendHumanTittle} </h3>
+                    <h3 style={columnTittle} title={legendData[i].key}>{legendData[i].key} </h3>
                     {buttonsColumn}
                 </div>;
 
