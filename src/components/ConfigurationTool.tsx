@@ -434,7 +434,7 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
     setCitizenAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>): React.ReactNode[] {
 
     if (seed === undefined) {
-        return [<React.Fragment></React.Fragment>];
+        return [<React.Fragment key={0}></React.Fragment>];
     } else {
         const checkboxes = [];
 
