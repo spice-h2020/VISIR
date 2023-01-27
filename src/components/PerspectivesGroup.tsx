@@ -92,7 +92,6 @@ export const PerspectivesGroups = ({
             setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
-            tClass.clearHumanizators();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [leftPerspective, rightPerspective, dimensionStrategy]);

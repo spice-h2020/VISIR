@@ -158,8 +158,6 @@ export const PerspectiveView = ({
                 setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
                     sf, dimStrat, networkFocusID!, setLoadingState, unique));
 
-                tClass.setHumanizator(mirror, perspectiveData.localizator);
-
             } catch (error) {
                 if (error instanceof DiferentAttrbError) {
                     cancelPerspective(perspectiveData.id);
@@ -190,7 +188,6 @@ export const PerspectiveView = ({
                 hideLabel={viewOptions.hideLabels}
                 state={networkState}
                 translationClass={tClass}
-                humanizator={tClass.getHumanizator(mirror)}
             />
 
         return (
@@ -231,7 +228,7 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
                 netMgr.nodeVisuals.colorAllNodes(netMgr.nodes, viewOptions.legendConfig);
             } else {
                 netMgr.nodeVisuals.selectNodes(netMgr.nodes, netMgr.nodeVisuals.selectedNodes,
-                    netMgr.nodeVisuals.focusedNodes, viewOptions.legendConfig);
+                    netMgr.nodeVisuals.focusedNodes, viewOptions.legendConfig, netMgr.nodeVisuals.borderSelectedNodes);
             }
         }
 

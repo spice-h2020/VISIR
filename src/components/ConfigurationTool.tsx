@@ -18,6 +18,7 @@ import { ESimilarity, IConfigurationSeed } from "../constants/ConfigToolUtils";
 import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 import * as config from "../constants/ConfigToolUtils";
+import { Slider } from "../basicComponents/Slider";
 
 const darkBackgroundStyle: React.CSSProperties = {
     background: "rgba(0, 0, 0, 0.3)",
@@ -68,11 +69,7 @@ const devModeBackgroundStyle: React.CSSProperties = {
     color: "gray"
 }
 
-const fieldsetStyle: React.CSSProperties = {
-    flexDirection: "column",
-    overflow: "auto"
 
-}
 
 interface ConfToolProps {
     requestManager: RequestManager
@@ -102,6 +99,8 @@ export const ConfigurationTool = ({
     const [perspectiveName, setPerspectiveName] = useState<string>("");
     //Selected algorythm
     const [selectedAlgorithm, setSelectedAlgorithm] = useState<config.IAlgorithm>(emptyAlgorithm);
+    const [algorythmWeigth, setAlgorythmWeight] = useState<number>(config.defaultWeightValue);
+
     //Similarity Dropdown states
     const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.Same);
     const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.Same);
@@ -220,17 +219,30 @@ export const ConfigurationTool = ({
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
-                    <input key={1} type="text" id="f-perspective_name" name="f-perspective_name"
-                        onChange={
-                            (element) => {
-                                setPerspectiveName(element.target.value)
+                    <div style={{
+                        borderBottom: "2px solid red", display: "flex", justifyContent: "center",
+                        alignItems: "center", height: "100%", paddingBottom: "3px"
+                    }}>
+                        <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
+                        <input key={1} type="text" id="f-perspective_name" name="f-perspective_name"
+                            onChange={
+                                (element) => {
+                                    setPerspectiveName(element.target.value)
+                                }
                             }
-                        }
-                    />
-                    <span key={2} style={{ width: "2rem" }} />
-                    <div key={3} style={{ display: `${isDevMode ? "block" : "none"}` }}>
-                        {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
+                        />
+                        <span key={2} style={{ width: "2rem" }} />
+                        <div key={3} style={{ display: `${isDevMode ? "block" : "none"}` }}>
+                            {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
+                            <Slider
+                                initialValue={algorythmWeigth}
+                                onInput={(value: number) => { setAlgorythmWeight(value) }}
+                                minimum={0.0}
+                                maximum={1.0}
+                                step={0.1}
+                                content={"Weight"}
+                            />
+                        </div>
                     </div>
 
                 </div>
@@ -323,7 +335,7 @@ export const ConfigurationTool = ({
                                 if (seed) {
                                     const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
                                         artworksAttr, artworksAttrDrop, selectedOption, similarity1, similarity2,
-                                        perspectiveName, selectedAlgorithm);
+                                        perspectiveName, selectedAlgorithm, algorythmWeigth);
 
                                     setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
@@ -393,7 +405,7 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
                 key={0}
                 items={dropdownItems}
                 content={selectedAlgorythm.name}
-                extraClassButton={"primary down-arrow"}
+                extraClassButton={"primary down-arrow "}
             />
         );
     } else {
@@ -418,7 +430,7 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
     setCitizenAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>): React.ReactNode[] {
 
     if (seed === undefined) {
-        return [<React.Fragment></React.Fragment>];
+        return [<React.Fragment key={0}></React.Fragment>];
     } else {
         const checkboxes = [];
 

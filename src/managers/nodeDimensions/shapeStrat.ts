@@ -18,7 +18,7 @@ export default class ShapeStrategy extends GenericStrategy {
      * Changes the shape and font's vertical align
      * @param user user to edit
      */
-    change(user: IUserData, isFocus: boolean) {
+    change(user: IUserData, isFocus: boolean, increasedSize: boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
             if (user.isAnonGroup) {
@@ -56,7 +56,7 @@ export default class ShapeStrategy extends GenericStrategy {
             }
         }
 
-        if (isFocus) {
+        if (isFocus && increasedSize) {
             user.size = nodeConst.selectedSize;
         } else if (user.isMedoid) {
             user.size = nodeConst.medoidSize;

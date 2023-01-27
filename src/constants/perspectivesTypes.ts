@@ -39,7 +39,6 @@ export interface IPerspectiveData {
     users: IUserData[];
     similarity: IEdgeData[];
     artworks: IArtworkData[],
-    localizator: IHumanizator,
     id: string,
     name: string,
 }
@@ -55,6 +54,7 @@ export interface ICommunityData extends anyProperty {
     name: string;
     explanations: ICommunityExplanation[];
     users: string[];
+    artworks: string[];
     anonUsers: string[];
     type: ECommunityType;
 
@@ -114,6 +114,7 @@ export interface ICommunityExplanation extends anyProperty {
     explanation_type: EExplanationTypes;
     explanation_data: anyProperty;
     visible: boolean;
+    order: number;
 }
 
 /**
@@ -163,12 +164,6 @@ export interface IArtworkData {
     year: number;
     image: string
 }
-
-export interface IHumanizator {
-    legendAttrb: Map<string, string>[];
-    normalAttrb: Map<string, string>;
-}
-
 
 //#endregion
 

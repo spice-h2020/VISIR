@@ -70,11 +70,13 @@ const comm: ICommunityData = {
             explanation_type: EExplanationTypes.explicit_attributes,
             explanation_data: {},
             visible: true,
+            order: 0
         },
         {
             explanation_type: EExplanationTypes.medoid,
             explanation_data: { id: "0" },
             visible: true,
+            order: 1
         },
         {
             explanation_type: EExplanationTypes.implicit_attributes,
@@ -87,9 +89,11 @@ const comm: ICommunityData = {
 
             },
             visible: true,
+            order: 2
         },
     ],
     users: ["1", "2", "3", "4", "5", "6"],
+    artworks: [],
     explicitDataArray: [
         {
             key: "Language",

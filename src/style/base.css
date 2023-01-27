@@ -216,7 +216,7 @@ body {
 
 /* Button that toggles an accordion */
 .btn-accordion {
-    padding: 1rem 0rem 1rem 1rem;
+    padding: 0.5rem 0.5rem 1rem 1rem;
     background-color: var(--bodyBackground);
     color: black;
     border: 1px solid var(--grayLineColor);
@@ -225,6 +225,7 @@ body {
     word-wrap: break-word;
 
     border-radius: 0px;
+    height: 2.5rem;
 }
 
 .btn-accordion:hover {

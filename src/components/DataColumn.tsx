@@ -8,11 +8,11 @@
 //Constants
 import {
     IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData
-    , IExplicitCommData, IStringNumberRelation, IHumanizator
+    , IExplicitCommData, IStringNumberRelation
 }
     from "../constants/perspectivesTypes";
 //Packages
-import React from "react";
+import React, { useMemo } from "react";
 //Local files
 import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
@@ -63,7 +63,6 @@ interface DataTableProps {
     state: string;
 
     translationClass: CTranslation;
-    humanizator: IHumanizator;
 }
 
 /**
@@ -77,11 +76,10 @@ export const DataTable = ({
     allUsers,
     hideLabel,
     state,
-    translationClass: tClass,
-    humanizator,
+    translationClass: tClass
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = getCommunityPanel(community, allUsers, hideLabel, artworks, tClass, humanizator);
+    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, hideLabel, artworks, tClass), [community, allUsers, hideLabel, artworks, tClass]);
 
     return (
         <div className={state} style={getContainerStyle(state)}>
@@ -93,7 +91,6 @@ export const DataTable = ({
                 hideLabel={hideLabel}
                 artworks={artworks}
                 translationClass={tClass}
-                humanizator={humanizator}
             />
             {CommunityPanel}
 
@@ -108,7 +105,7 @@ export const DataTable = ({
  * @returns a react component with the community's panel.
  */
 function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean,
-    artworks: IArtworkData[], tClass: CTranslation, humanizator: IHumanizator) {
+    artworks: IArtworkData[], tClass: CTranslation) {
 
     if (community !== undefined) {
         const tittle = <div key={0} style={sectionTittleStyle}> {tClass.t.dataColumn.communityPanelTittle} </div>;
@@ -119,15 +116,38 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
         content.push(<div className="row" key={23}> {` ${tClass.t.dataColumn.anonymous} ${community.anonUsers.length}`} </div>);
         content.push(<br key={4} />);
 
+        //Add accordion with the artworks
+        let accordionItems: React.ReactNode[] = [];
+        let tittles: string[] = [];
+
+        for (let i = 0; i < community.artworks.length; i++) {
+
+            const artworkData = artworks.find((element: IArtworkData) => { return element.id === community.artworks[i] })
+            tittles.push(artworkData?.tittle ? artworkData.tittle : "a");
+
+            accordionItems.push(
+                <div key={i}>
+                    {<ArtworkPanel artworksData={artworks} id={community.artworks[i]} />}
+                </div>
+            );
+
+        }
+        content.push(
+            <div key={5}>
+                <div key={0}> {"Artworks related to this community: "} </div>
+                <Accordion key={1} items={accordionItems} tittles={tittles} />
+            </div>);
+
+        //Add community explanations
         for (let i = 0; i < community.explanations.length; i++) {
             if (community.explanations[i].visible) {
                 content.push(
-                    <React.Fragment key={5 + i * 2}>
+                    <React.Fragment key={6 + i * 2}>
                         {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel,
-                            artworks, tClass, humanizator)}
+                            artworks, tClass)}
                     </React.Fragment>);
 
-                content.push(<br key={6 + i * 2} />);
+                content.push(<br key={7 + i * 2} />);
             }
         }
 
@@ -151,7 +171,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @returns a react component with the explanations.
  */
 function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[],
-    hideLabel: boolean, artworks: IArtworkData[], tClass: CTranslation, humanizator: IHumanizator) {
+    hideLabel: boolean, artworks: IArtworkData[], tClass: CTranslation) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
@@ -159,28 +179,6 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
 
         switch (explanation.explanation_type) {
             case EExplanationTypes.explicit_attributes: {
-                //Humanize the text outputs of the stacked bars
-                if (communityData.explicitDataArray !== undefined && communityData.explicitDataArray.length) {
-                    const data = communityData.explicitDataArray;
-
-                    for (let i = 0; i < data.length; i++) {
-
-                        const tittle = data[i].key;
-                        const values = data[i].values;
-
-                        for (const legendAttrb of humanizator.legendAttrb) {
-                            const humanTittle = legendAttrb.get(tittle);
-
-                            data[i].key = humanTittle ? humanTittle : data[i].key;
-
-                            for (let i = 0; i < values.length; i++) {
-                                const humanData = legendAttrb.get(values[i].value);
-                                values[i].value = humanData ? humanData : values[i].value;
-                            }
-                        }
-                    }
-                }
-                //Return the explanation
                 return (
                     <div>
                         <hr />
@@ -200,12 +198,11 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                             hideLabel={hideLabel}
                             artworks={artworks}
                             translationClass={tClass}
-                            humanizator={humanizator}
                         />
                     </React.Fragment>);
             }
             case EExplanationTypes.implicit_attributes: {
-
+                //New explanation type that shows information in an accordion of artworks
                 if (explanation.explanation_data.accordionMode) {
                     let accordionItems: React.ReactNode[] = [];
 
@@ -237,25 +234,14 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
 
 
 
-                } else { //TEMPORAL FIX TO TEST NEW EXPLANATION FORMAT
-                    //Humanize the values used in the world clouds
-                    const humanLabel = humanizator.normalAttrb.get(explanation.explanation_data.label);
-                    if (humanizator !== undefined) {
-                        for (let i = 0; i < explanation.explanation_data.data.length; i++) {
-                            const humanData = humanizator.normalAttrb.get(explanation.explanation_data.data[i].value);
-                            explanation.explanation_data.data[i].value = humanData ? humanData : explanation.explanation_data.data[i].value;
-                        }
-                    }
-
-                    //Create the explanation
+                } else { //If theres no values for a wordCloud, we just show the information in plain text rows. 
                     if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
                         let textData: React.ReactNode[] = [];
 
                         for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
-                            const humanValue = humanizator.normalAttrb.get(explanation.explanation_data.data[i].value);
                             textData.push(
                                 <li key={i} style={{ marginLeft: "2rem" }}>
-                                    {humanValue ? humanValue : explanation.explanation_data.data[i].value}
+                                    {explanation.explanation_data.data[i].value}
                                     <br />
                                 </li >);
                         }
@@ -263,7 +249,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                         return (
                             <div>
                                 <hr />
-                                <div> {humanLabel ? humanLabel : explanation.explanation_data.label}</div>
+                                <div> {explanation.explanation_data.label}</div>
                                 <div>
                                     {textData}
                                 </div>
@@ -274,7 +260,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                         return (
                             <div>
                                 <hr />
-                                <div> {humanLabel ? humanLabel : explanation.explanation_data.label}</div>
+                                <div> {explanation.explanation_data.label}</div>
                                 <div> {getWordClouds(explanation.explanation_data.data)}</div>
                             </div>);
                     }

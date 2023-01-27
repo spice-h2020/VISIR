@@ -134,15 +134,6 @@ export function validatePerspectiveDataJSON(arg: any): types.IPerspectiveData {
             arg.artworks[i] = isArtworkDataValid(arg.artworks[i]);
         }
 
-        if (arg.localizator !== undefined && typeof (arg.localizator) === "object") {
-            arg.localizator = isLocalizatorValid(arg.localizator);
-        } else {
-            arg.localizator = {
-                normalAttrb: new Map<string, string>(),
-                legendAttrb: new Array<Map<string, string>>()
-            } as types.IHumanizator;
-        }
-
         console.log(`Perspective file validation has been completed -> `);
         console.log(arg as types.IPerspectiveData);
 
@@ -203,6 +194,8 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
             arg.explanations[i] = isCommunityExplanationValid(arg.explanations[i]);
         }
 
+        arg.explanations.sort((v1: types.ICommunityExplanation, v2: types.ICommunityExplanation) => v1.order - v2.order)
+
         if (arg["community-type"] === undefined) {
             arg.type = ECommunityType.inexistent;
 
@@ -217,10 +210,6 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
 
             arg.type = ECommunityType[arg["community-type"]];
             if (arg.type === undefined) {
-                console.log(`Community type of the community (${arg.id}) doesnt have an available type, it was defaulted
-                to implicit. Available types -> ` );
-                console.log(Object.keys(ECommunityType));
-
                 arg.type = ECommunityType.implicit;
             }
         }
@@ -264,13 +253,17 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
             switch (arg.explanation_type) {
                 case types.EExplanationTypes.medoid: {
                     arg = isMedoidExplanationValid(arg);
+                    arg.order = 2;
                     break;
                 }
                 case types.EExplanationTypes.implicit_attributes: {
                     arg = isImplicitAttributesExplanationValid(arg);
+                    arg.order = 1;
                     break;
                 }
             }
+        } else {
+            arg.order = 0;
         }
 
         return arg;
@@ -279,6 +272,7 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
         throw Error(`Community explanation is not valid: ${e.message}`);
     }
 }
+
 function isMedoidExplanationValid(arg: any): types.ICommunityExplanation {
     try {
         if (arg.explanation_data.id === undefined) {
@@ -639,39 +633,6 @@ function isArtworkDataValid(arg: any): types.IArtworkData {
 
     } catch (e: any) {
         throw Error(`Artwork data is not valid: ${e.message}`);
-    }
-}
-
-
-function isLocalizatorValid(arg: any): types.IHumanizator {
-    try {
-        const keys = Object.keys(arg);
-
-        let legendAttrb: Map<string, string>[] = [];
-        let normalAttrb = new Map<string, string>();
-
-        for (const key of keys) {
-            if (key !== "legendAttrb") {
-                normalAttrb.set(key, arg[key]);
-            } else {
-                for (const legendObj of arg[key]) {
-                    const objKeys = Object.keys(legendObj);
-                    const newLegendAttrbMap = new Map<string, string>();
-
-                    for (const objKey of objKeys) {
-                        newLegendAttrbMap.set(objKey, legendObj[objKey]);
-                    }
-
-                    legendAttrb.push(newLegendAttrbMap);
-                }
-            }
-        }
-
-        return { normalAttrb: normalAttrb, legendAttrb: legendAttrb };
-
-
-    } catch (e: any) {
-        throw Error(`Localizator data is not valid: ${e.message}`);
     }
 }
 

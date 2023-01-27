@@ -18,14 +18,14 @@ export default class BorderStrategy extends GenericStrategy {
      * Changes the border's color and width
      * @param user user to edit
      */
-    change(user: IUserData, isFocus: boolean) {
+    change(user: IUserData, isFocus: boolean, increasedSize: boolean) {
         if (this.attr !== undefined && this.attr.active) {
 
             const value = user.explicit_community[this.attr.key];
 
             user["color"].border = this.dimensionMap.get(value);
 
-            if (isFocus) {
+            if (isFocus && increasedSize) {
                 user["borderWidth"] = nodeConst.selectedBorderColorWidth;
             } else {
                 user["borderWidth"] = nodeConst.defaultBorderColorWidth;
@@ -36,9 +36,12 @@ export default class BorderStrategy extends GenericStrategy {
             user["color"].border = "black";
 
             if (isFocus) {
-                user["borderWidth"] = nodeConst.selectedBorderWidth;
+                if (increasedSize)
+                    user["borderWidth"] = nodeConst.selectedBorderWidth;
+                else
+                    user["borderWidth"] = nodeConst.defaultBorderWidth;
             } else {
-                user["borderWidth"] = nodeConst.defaultBorderWidth;
+                user["borderWidth"] = 0;
             }
 
         }
@@ -54,6 +57,6 @@ export default class BorderStrategy extends GenericStrategy {
         if (this.attr !== undefined && this.attr.active)
             user["borderWidth"] = nodeConst.defaultBorderColorWidth;
         else
-            user["borderWidth"] = nodeConst.defaultBorderWidth;
+            user["borderWidth"] = 0;
     }
 }

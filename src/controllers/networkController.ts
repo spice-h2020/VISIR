@@ -101,10 +101,12 @@ export default class NetworkController {
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
 
         perspectiveData.users.forEach((user: IUserData) => {
-            explicitCtrl.parseExplicitCommunity(user, dimStrat, sf.setLegendData, unique);
+            explicitCtrl.parseExplicitCommunity(user, sf.setLegendData);
+            explicitCtrl.parseArtworksRelatedToTheCommunity(user);
             nodeLocation.updateNodeGroup(user);
         });
         explicitCtrl.sortExplicitData();
+        explicitCtrl.makeArtworksUnique();
 
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions, unique);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
