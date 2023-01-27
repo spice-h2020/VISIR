@@ -126,28 +126,28 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
             tittles.push(artworkData?.tittle ? artworkData.tittle : "a");
 
             accordionItems.push(
-                <div>
+                <div key={i}>
                     {<ArtworkPanel artworksData={artworks} id={community.artworks[i]} />}
                 </div>
             );
 
         }
         content.push(
-            <div>
-                <div> {"Artworks related to this community: "} </div>
-                <Accordion items={accordionItems} tittles={tittles} />
+            <div key={5}>
+                <div key={0}> {"Artworks related to this community: "} </div>
+                <Accordion key={1} items={accordionItems} tittles={tittles} />
             </div>);
 
         //Add community explanations
         for (let i = 0; i < community.explanations.length; i++) {
             if (community.explanations[i].visible) {
                 content.push(
-                    <React.Fragment key={5 + i * 2}>
+                    <React.Fragment key={6 + i * 2}>
                         {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel,
                             artworks, tClass)}
                     </React.Fragment>);
 
-                content.push(<br key={6 + i * 2} />);
+                content.push(<br key={7 + i * 2} />);
             }
         }
 
