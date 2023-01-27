@@ -69,11 +69,7 @@ const devModeBackgroundStyle: React.CSSProperties = {
     color: "gray"
 }
 
-const fieldsetStyle: React.CSSProperties = {
-    flexDirection: "column",
-    overflow: "auto"
 
-}
 
 interface ConfToolProps {
     requestManager: RequestManager

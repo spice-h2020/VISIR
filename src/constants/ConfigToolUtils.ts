@@ -61,8 +61,6 @@ export function initArtworksAttrDrop(attributes: IArtworkAttribute[]): Map<strin
 }
 
 export function initAlgorythmDrop(algorythms: IAlgorithm[]): IAlgorithm {
-    console.log(algorythms);
-
     for (let alg of algorythms) {
         if (alg.default) {
             return alg;
