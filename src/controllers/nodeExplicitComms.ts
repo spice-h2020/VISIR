@@ -79,8 +79,7 @@ export default class NodeExplicitComms {
      * @param node source node
      * @param dimStrat dimension strategy controller
      */
-    parseExplicitCommunity(node: IUserData, dimStrat: NodeDimensionStrategy | undefined,
-        setLegendData: React.Dispatch<ILegendDataAction>, unique: boolean) {
+    parseExplicitCommunity(node: IUserData, setLegendData: React.Dispatch<ILegendDataAction>) {
         if (node.id === nodeConst.anonymousGroupKey) {
             node.isAnonGroup = true;
             this.hasAnonGroup = true;
@@ -116,6 +115,22 @@ export default class NodeExplicitComms {
 
                 this.updateExplicitCommunityCount(key, node);
             });
+        }
+    }
+
+    parseArtworksRelatedToTheCommunity(node: IUserData) {
+        if (this.communitiesData[node.implicit_community].artworks === undefined) {
+            this.communitiesData[node.implicit_community].artworks = [];
+        }
+
+        for (let i = 0; i < node.interactions.length; i++) {
+            this.communitiesData[node.implicit_community].artworks.push(node.interactions[i].artwork_id)
+        }
+    }
+
+    makeArtworksUnique() {
+        for (let i = 0; i < this.communitiesData.length; i++) {
+            this.communitiesData[i].artworks = this.communitiesData[i].artworks.filter((value, index, array) => array.indexOf(value) === index);
         }
     }
 

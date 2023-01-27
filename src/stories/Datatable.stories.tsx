@@ -93,6 +93,7 @@ const comm: ICommunityData = {
         },
     ],
     users: ["1", "2", "3", "4", "5", "6"],
+    artworks: [],
     explicitDataArray: [
         {
             key: "Language",

@@ -54,6 +54,7 @@ export interface ICommunityData extends anyProperty {
     name: string;
     explanations: ICommunityExplanation[];
     users: string[];
+    artworks: string[];
     anonUsers: string[];
     type: ECommunityType;
 

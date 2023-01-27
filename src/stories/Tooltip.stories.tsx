@@ -49,6 +49,7 @@ const comm: ICommunityData = {
   },
   ],
   users: [],
+  artworks: [],
   explicitCommunity: {},
   anonUsers: [],
   type: ECommunityType.implicit,

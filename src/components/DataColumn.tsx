@@ -116,6 +116,29 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
         content.push(<div className="row" key={23}> {` ${tClass.t.dataColumn.anonymous} ${community.anonUsers.length}`} </div>);
         content.push(<br key={4} />);
 
+        //Add accordion with the artworks
+        let accordionItems: React.ReactNode[] = [];
+        let tittles: string[] = [];
+
+        for (let i = 0; i < community.artworks.length; i++) {
+
+            const artworkData = artworks.find((element: IArtworkData) => { return element.id === community.artworks[i] })
+            tittles.push(artworkData?.tittle ? artworkData.tittle : "a");
+
+            accordionItems.push(
+                <div>
+                    {<ArtworkPanel artworksData={artworks} id={community.artworks[i]} />}
+                </div>
+            );
+
+        }
+        content.push(
+            <div>
+                <div> {"Artworks related to this community: "} </div>
+                <Accordion items={accordionItems} tittles={tittles} />
+            </div>);
+
+        //Add community explanations
         for (let i = 0; i < community.explanations.length; i++) {
             if (community.explanations[i].visible) {
                 content.push(
@@ -179,7 +202,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                     </React.Fragment>);
             }
             case EExplanationTypes.implicit_attributes: {
-
+                //New explanation type that shows information in an accordion of artworks
                 if (explanation.explanation_data.accordionMode) {
                     let accordionItems: React.ReactNode[] = [];
 
@@ -211,8 +234,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
 
 
 
-                } else { //New explanation format in an accordion 
-                    //Create the explanation
+                } else { //If theres no values for a wordCloud, we just show the information in plain text rows. 
                     if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
                         let textData: React.ReactNode[] = [];
 
