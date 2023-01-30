@@ -120,21 +120,25 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
         let accordionItems: React.ReactNode[] = [];
         let tittles: string[] = [];
 
-        for (let i = 0; i < community.artworks.length; i++) {
+        for (let i = community.representative_artworks.length - 1; i >= 0; i--) {
 
-            const artworkData = artworks.find((element: IArtworkData) => { return element.id === community.artworks[i] })
-            tittles.push(artworkData?.tittle ? artworkData.tittle : "a");
+            const artworkData = artworks.find((element: IArtworkData) => { return element.id === community.representative_artworks[i][0] })
+            tittles.push(artworkData?.tittle ? `${artworkData.tittle} - Interactions: ${community.representative_artworks[i][1]}` :
+                `no Tittle - Interactions: ${community.representative_artworks[i][1]}`);
 
             accordionItems.push(
                 <div key={i}>
-                    {<ArtworkPanel artworksData={artworks} id={community.artworks[i]} />}
+                    {<ArtworkPanel artworksData={artworks}
+                        id={community.representative_artworks[i][0]}
+                        nInteractions={community.representative_artworks[i][1]}
+                    />}
                 </div>
             );
 
         }
         content.push(
             <div key={5}>
-                <div key={0}> {"Artworks related to this community: "} </div>
+                <div key={0}> {"Artworks relevant to this community: "} </div>
                 <Accordion key={1} items={accordionItems} tittles={tittles} />
             </div>);
 
