@@ -294,9 +294,11 @@ export const ConfigurationTool = ({
                         width: "100%"
                     }}>
                         <fieldset key={0} style={{ height: "-webkit-fill-available", overflowY: "auto", minInlineSize: "auto", width: "35%" }}>
+                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>Legend Attributes</h3>
                             {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
                         </fieldset>
                         <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.Same === similarity2)}>
+                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>Artworks Attributes</h3>
                             {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr, artworksAttrDrop,
                                 setArtworksAttrDrop, isDevMode)}
                         </fieldset>
