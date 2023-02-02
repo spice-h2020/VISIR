@@ -101,17 +101,32 @@ export const PerspectiveView = ({
                 //If a node has been clicked.
                 if (selectedObject.obj.explanations === undefined && selectedObject.obj.id !== undefined) {
 
-                    const nodeData = netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
+                    const nodeData: IUserData = netManager.nodes.get(selectedObject.obj.id) as IUserData;
 
-                    //If the node doesnt exist in this network
-                    if (nodeData === undefined) {
+                    //If the node exist in this network
+                    if (nodeData !== undefined) {
+                        //If its a medoid node
+                        if (nodeData.isMedoid) {
+                            if (selectedObject.sourceID === netManager.id) {
+                                netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
+                                setSelectedNode(nodeData as IUserData);
+                                setSelectedCommunity(netManager.bbCtrl.comData[nodeData.implicit_community]);
+                            } else {
+                                netManager.eventsCtrl.nothingClicked();
+                                setSelectedNode(undefined);
+                                setSelectedCommunity(undefined);
+                            }
+                            //If its a normal node that exist in this network
+                        } else {
+                            netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
+                            setSelectedNode(nodeData as IUserData);
+                            setSelectedCommunity(netManager.bbCtrl.comData[nodeData.implicit_community]);
+                        }
+
+                        //If the node doesnt exist in this network
+                    } else {
                         setSelectedNode(undefined);
                         setSelectedCommunity(undefined);
-
-                    }//If the node exists in this network 
-                    else {
-                        setSelectedNode(nodeData as IUserData);
-                        setSelectedCommunity(netManager.bbCtrl.comData[nodeData.implicit_community]);
                     }
 
                 } //If a community has been clicked
