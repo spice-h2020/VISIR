@@ -232,19 +232,21 @@ export default class RequestManager {
 
                 if (response.status === 200 || response.status === 202) {
 
-                    if (data.job["job-state"] === "STARTED") {
-                        await delay(this.jobTimeOut);
-                        return this.askJobInProgress(data.job.path);
+                    switch (data.job["job-state"]) {
 
-                    } else {
-                        if (data.job["job-status"] === "ERROR") {
-
+                        case "ERROR":
                             console.log(`Job with an error, ${data.job.data}`)
                             throw new Error(`Community Model had an error: ${data.job.data}`)
 
-                        } else {
+                        case "COMPLETED":
                             return { status: response.status, data: data.job.data };
-                        }
+
+                        case "STARTED":
+                        default:
+                            await delay(this.jobTimeOut);
+                            return this.askJobInProgress(data.job.path);
+
+
                     }
                 } else {
                     throw new Error(`Error while waiting for a job in path ${url}: ${response.statusText}`);

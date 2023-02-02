@@ -11,6 +11,7 @@ import { IArtworkData, IStringNumberRelation, IInteraction } from "../constants/
 //Packages
 import { useEffect, useState } from "react";
 import { getWordClouds } from "../components/DataColumn";
+import React from "react";
 
 const interactionBox: React.CSSProperties = {
     borderLeft: "1px solid var(--grayLineColor)",
@@ -36,6 +37,7 @@ const artworkImage: React.CSSProperties = {
 interface ArtworkPanelProps {
     artworksData: IArtworkData[];
     id: string;
+    nInteractions?: number;
 }
 
 /**
@@ -44,6 +46,7 @@ interface ArtworkPanelProps {
 export const ArtworkPanel = ({
     artworksData,
     id,
+    nInteractions,
 }: ArtworkPanelProps) => {
 
     const [artworkData, setArtworkData] = useState<IArtworkData>();
@@ -67,6 +70,9 @@ export const ArtworkPanel = ({
                             {artworkData.tittle}&nbsp;
                             ({artworkData.year})
                         </div>
+                        <br />
+                        {getNInteractionsRow(nInteractions)}
+
                     </div>
                     <div className="col">
                         <img style={artworkImage} src={artworkData.image}
@@ -81,3 +87,15 @@ export const ArtworkPanel = ({
             <div> </div>
         );
 };
+
+
+
+function getNInteractionsRow(nInteractions: number | undefined) {
+    if (nInteractions !== undefined)
+        return (<div className="row">
+            Number of interactions: &nbsp; {nInteractions}
+        </div>)
+    else {
+        return <React.Fragment />
+    }
+}
