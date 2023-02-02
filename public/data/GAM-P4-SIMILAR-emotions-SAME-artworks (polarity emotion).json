@@ -1,67 +1,15 @@
 {
     "_id": {
-        "$oid": "63c918757d14f20dca8ac593"
+        "$oid": "63c91bc7dcf894a835c77f15"
     },
-    "name": "P3-SIMILAR-emotions-SAME-artworks",
-    "perspectiveId": "63c9185f849565347da46569 (0.5) kmedoids",
+    "name": "P4-SIMILAR-emotions-SAME-artworks (polarity emotion)",
+    "perspectiveId": "63c91bb4f0aaa62df076880e (0.45) kmedoids",
     "communities": [
         {
-            "id": "63c9185f849565347da46569-0",
-            "perspectiveId": "63c9185f849565347da46569",
+            "id": "63c91bb4f0aaa62df076880e-0",
+            "perspectiveId": "63c91bb4f0aaa62df076880e",
             "community-type": "implicit",
             "name": "Community 0",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "GdMZ5rXI"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
-                        "data": {
-                            "joy": 11.11111111111111,
-                            "sadness": 11.11111111111111
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (id):",
-                        "data": {
-                            "35323": 22.22222222222222
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "GdMZ5rXI",
-                "NROrO0c9",
-                "Q13Gnsty",
-                "Sz5Wx2XD",
-                "V337a5b8",
-                "anqHwMQ0",
-                "eLXgq0Hx",
-                "lkkZ1lUv",
-                "ox8G7avH"
-            ]
-        },
-        {
-            "id": "63c9185f849565347da46569-1",
-            "perspectiveId": "63c9185f849565347da46569",
-            "community-type": "implicit",
-            "name": "Community 1",
             "explanations": [
                 {
                     "explanation_type": "medoid",
@@ -75,9 +23,12 @@
                     "explanation_data": {
                         "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
                         "data": {
-                            "joy": 60,
-                            "love": 20,
-                            "serenity": 20
+                            "joy": 12.5,
+                            "sadness": 12.5,
+                            "fear": 6.25,
+                            "anticipation": 6.25,
+                            "love": 6.25,
+                            "serenity": 6.25
                         }
                     },
                     "visible": true
@@ -87,9 +38,10 @@
                     "explanation_data": {
                         "label": "Percentage distribution of the implicit attribute (id):",
                         "data": {
-                            "35360": 20,
-                            "35459": 20,
-                            "39138": 60
+                            "35310": 6.25,
+                            "35323": 12.5,
+                            "35499": 12.5,
+                            "39138": 18.75
                         }
                     },
                     "visible": true
@@ -101,18 +53,277 @@
                 }
             ],
             "users": [
-                "FbEHiNmP",
+                "7zL8hKS8",
+                "BNtsz8zb",
+                "EEm3fSZd",
+                "GdMZ5rXI",
                 "KQTGApjD",
-                "cmq6JZxJ",
+                "NROrO0c9",
+                "Q13Gnsty",
+                "Sz5Wx2XD",
+                "V337a5b8",
+                "Wsip5y7A",
+                "anqHwMQ0",
+                "eLXgq0Hx",
+                "loEoYm9R",
+                "ox8G7avH",
                 "q2BDj1os",
                 "sXKZ1IUH"
             ]
         },
         {
-            "id": "63c9185f849565347da46569-2",
-            "perspectiveId": "63c9185f849565347da46569",
+            "id": "63c91bb4f0aaa62df076880e-1",
+            "perspectiveId": "63c91bb4f0aaa62df076880e",
+            "community-type": "implicit",
+            "name": "Community 1",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "JgevtrSb"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
+                        "data": {
+                            "joy": 66.66666666666666,
+                            "serenity": 33.33333333333333
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (id):",
+                        "data": {
+                            "35227": 33.33333333333333,
+                            "39200": 66.66666666666666
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "FVhf7OMw",
+                "JgevtrSb",
+                "lkkZ1lUv"
+            ]
+        },
+        {
+            "id": "63c91bb4f0aaa62df076880e-2",
+            "perspectiveId": "63c91bb4f0aaa62df076880e",
             "community-type": "implicit",
             "name": "Community 2",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "2LIm9lcH"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
+                        "data": {
+                            "love": 50,
+                            "joy": 33.33333333333333,
+                            "sadness": 16.666666666666664
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (id):",
+                        "data": {
+                            "35230": 83.33333333333334,
+                            "35374": 16.666666666666664
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "2LIm9lcH",
+                "3K9AMmqU",
+                "PxrTX0Ln",
+                "WYCImqGm",
+                "Y0WXF1LR",
+                "oTT3YRMN"
+            ]
+        },
+        {
+            "id": "63c91bb4f0aaa62df076880e-3",
+            "perspectiveId": "63c91bb4f0aaa62df076880e",
+            "community-type": "implicit",
+            "name": "Community 3",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "Bf5Sj3ON"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
+                        "data": {
+                            "joy": 50,
+                            "fear": 30,
+                            "sadness": 10,
+                            "serenity": 10
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (id):",
+                        "data": {
+                            "35362": 40,
+                            "39347": 60
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "2JfmseEG",
+                "BTKF72et",
+                "Bf5Sj3ON",
+                "GV4z5ANK",
+                "LvIeXwcT",
+                "N72IRgFy",
+                "SIbOTAP7",
+                "W7Wnqxw4",
+                "WsK2A1ab",
+                "onDqgFnI"
+            ]
+        },
+        {
+            "id": "63c91bb4f0aaa62df076880e-4",
+            "perspectiveId": "63c91bb4f0aaa62df076880e",
+            "community-type": "implicit",
+            "name": "Community 4",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "6rK3p7za"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
+                        "data": {
+                            "joy": 100
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (id):",
+                        "data": {
+                            "35208": 25,
+                            "39416": 75
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "6rK3p7za",
+                "FQFaM9D4",
+                "RQ4a2nIG",
+                "jTb1qXEo"
+            ]
+        },
+        {
+            "id": "63c91bb4f0aaa62df076880e-5",
+            "perspectiveId": "63c91bb4f0aaa62df076880e",
+            "community-type": "implicit",
+            "name": "Community 5",
+            "explanations": [
+                {
+                    "explanation_type": "medoid",
+                    "explanation_data": {
+                        "id": "R4frFK0J"
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
+                        "data": {
+                            "surprise": 50,
+                            "fear": 50
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "implicit_attributes",
+                    "explanation_data": {
+                        "label": "Percentage distribution of the implicit attribute (id):",
+                        "data": {
+                            "39175": 100
+                        }
+                    },
+                    "visible": true
+                },
+                {
+                    "explanation_type": "explicit_attributes",
+                    "explanation_data": {},
+                    "visible": true
+                }
+            ],
+            "users": [
+                "R4frFK0J",
+                "cBjFhvjx",
+                "e4aM9WL7",
+                "xi3DCToA"
+            ]
+        },
+        {
+            "id": "63c91bb4f0aaa62df076880e-6",
+            "perspectiveId": "63c91bb4f0aaa62df076880e",
+            "community-type": "implicit",
+            "name": "Community 6",
             "explanations": [
                 {
                     "explanation_type": "medoid",
@@ -159,256 +370,15 @@
             ]
         },
         {
-            "id": "63c9185f849565347da46569-3",
-            "perspectiveId": "63c9185f849565347da46569",
-            "community-type": "implicit",
-            "name": "Community 3",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "R4frFK0J"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
-                        "data": {
-                            "surprise": 66.66666666666666,
-                            "fear": 33.33333333333333
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (id):",
-                        "data": {
-                            "39175": 100
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "R4frFK0J",
-                "e4aM9WL7",
-                "xi3DCToA"
-            ]
-        },
-        {
-            "id": "63c9185f849565347da46569-4",
-            "perspectiveId": "63c9185f849565347da46569",
-            "community-type": "implicit",
-            "name": "Community 4",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "Bf5Sj3ON"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
-                        "data": {
-                            "joy": 55.55555555555556,
-                            "fear": 33.33333333333333,
-                            "sadness": 11.11111111111111
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (id):",
-                        "data": {
-                            "35362": 33.33333333333333,
-                            "39347": 66.66666666666666
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "2JfmseEG",
-                "BTKF72et",
-                "Bf5Sj3ON",
-                "GV4z5ANK",
-                "N72IRgFy",
-                "SIbOTAP7",
-                "W7Wnqxw4",
-                "WsK2A1ab",
-                "onDqgFnI"
-            ]
-        },
-        {
-            "id": "63c9185f849565347da46569-5",
-            "perspectiveId": "63c9185f849565347da46569",
-            "community-type": "implicit",
-            "name": "Community 5",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "FVhf7OMw"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
-                        "data": {
-                            "joy": 66.66666666666666,
-                            "anger": 33.33333333333333
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (id):",
-                        "data": {
-                            "39200": 100
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "7zL8hKS8",
-                "FVhf7OMw",
-                "JgevtrSb"
-            ]
-        },
-        {
-            "id": "63c9185f849565347da46569-6",
-            "perspectiveId": "63c9185f849565347da46569",
-            "community-type": "implicit",
-            "name": "Community 6",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "6rK3p7za"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
-                        "data": {
-                            "joy": 100
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (id):",
-                        "data": {
-                            "35208": 25,
-                            "39416": 75
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "6rK3p7za",
-                "FQFaM9D4",
-                "RQ4a2nIG",
-                "jTb1qXEo"
-            ]
-        },
-        {
-            "id": "63c9185f849565347da46569-7",
-            "perspectiveId": "63c9185f849565347da46569",
+            "id": "63c91bb4f0aaa62df076880e-7",
+            "perspectiveId": "63c91bb4f0aaa62df076880e",
             "community-type": "implicit",
             "name": "Community 7",
             "explanations": [
                 {
                     "explanation_type": "medoid",
                     "explanation_data": {
-                        "id": "PxrTX0Ln"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
-                        "data": {
-                            "love": 60,
-                            "joy": 40
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (id):",
-                        "data": {
-                            "35230": 100
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "2LIm9lcH",
-                "PxrTX0Ln",
-                "WYCImqGm",
-                "Y0WXF1LR",
-                "oTT3YRMN"
-            ]
-        },
-        {
-            "id": "63c9185f849565347da46569-8",
-            "perspectiveId": "63c9185f849565347da46569",
-            "community-type": "implicit",
-            "name": "Community 8",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "gD630RD1"
+                        "id": "B3N0HGw4"
                     },
                     "visible": true
                 },
@@ -427,7 +397,8 @@
                     "explanation_data": {
                         "label": "Percentage distribution of the implicit attribute (id):",
                         "data": {
-                            "35445": 100
+                            "35360": 60,
+                            "35445": 40
                         }
                     },
                     "visible": true
@@ -440,112 +411,19 @@
             ],
             "users": [
                 "B3N0HGw4",
-                "LvIeXwcT",
+                "FbEHiNmP",
+                "cmq6JZxJ",
                 "gD630RD1",
                 "x2AUnHqw"
             ]
-        },
-        {
-            "id": "63c9185f849565347da46569-9",
-            "perspectiveId": "63c9185f849565347da46569",
-            "community-type": "implicit",
-            "name": "Community 9",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "BNtsz8zb"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
-                        "data": {
-                            "anger": 66.66666666666666,
-                            "joy": 33.33333333333333
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (id):",
-                        "data": {
-                            "35229": 66.66666666666666,
-                            "39648": 33.33333333333333
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "BNtsz8zb",
-                "Wsip5y7A",
-                "cBjFhvjx"
-            ]
-        },
-        {
-            "id": "63c9185f849565347da46569-10",
-            "perspectiveId": "63c9185f849565347da46569",
-            "community-type": "implicit",
-            "name": "Community 10",
-            "explanations": [
-                {
-                    "explanation_type": "medoid",
-                    "explanation_data": {
-                        "id": "3K9AMmqU"
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
-                        "data": {
-                            "fear": 66.66666666666666,
-                            "joy": 33.33333333333333
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "implicit_attributes",
-                    "explanation_data": {
-                        "label": "Percentage distribution of the implicit attribute (id):",
-                        "data": {
-                            "35222": 66.66666666666666,
-                            "35310": 33.33333333333333
-                        }
-                    },
-                    "visible": true
-                },
-                {
-                    "explanation_type": "explicit_attributes",
-                    "explanation_data": {},
-                    "visible": true
-                }
-            ],
-            "users": [
-                "3K9AMmqU",
-                "EEm3fSZd",
-                "loEoYm9R"
-            ]
         }
     ],
-    "numberOfCommunities": 11,
+    "numberOfCommunities": 8,
     "users": [
         {
             "id": "2GROTNeg",
             "label": "2GROTNeg",
-            "group": 2,
+            "group": 6,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -590,7 +468,7 @@
         {
             "id": "2JfmseEG",
             "label": "2JfmseEG",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -653,7 +531,7 @@
         {
             "id": "2LIm9lcH",
             "label": "2LIm9lcH",
-            "group": 7,
+            "group": 2,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -696,7 +574,7 @@
         {
             "id": "3K9AMmqU",
             "label": "3K9AMmqU",
-            "group": 10,
+            "group": 2,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -726,26 +604,26 @@
             ],
             "community_interactions": [
                 {
-                    "artwork_id": "35222",
-                    "feelings": "fear ",
+                    "artwork_id": "35374",
+                    "feelings": "sad",
                     "extracted_emotions": {
-                        "fear": 0.92
+                        "sadness": 1.9673313000000001
                     }
-                },
+                }
+            ],
+            "no_community_interactions": [
                 {
                     "artwork_id": "35310",
                     "feelings": "happy ",
                     "extracted_emotions": {
                         "joy": 1.8254855
                     }
-                }
-            ],
-            "no_community_interactions": [
+                },
                 {
-                    "artwork_id": "35374",
-                    "feelings": "sad",
+                    "artwork_id": "35222",
+                    "feelings": "fear ",
                     "extracted_emotions": {
-                        "sadness": 1.9673313000000001
+                        "fear": 0.92
                     }
                 }
             ]
@@ -753,7 +631,7 @@
         {
             "id": "6rK3p7za",
             "label": "6rK3p7za",
-            "group": 6,
+            "group": 4,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -796,7 +674,7 @@
         {
             "id": "7zL8hKS8",
             "label": "7zL8hKS8",
-            "group": 5,
+            "group": 0,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -810,7 +688,8 @@
                     }
                 }
             ],
-            "community_interactions": [
+            "community_interactions": [],
+            "no_community_interactions": [
                 {
                     "artwork_id": "39200",
                     "feelings": "",
@@ -818,13 +697,12 @@
                         "anger": 0.8
                     }
                 }
-            ],
-            "no_community_interactions": []
+            ]
         },
         {
             "id": "B3N0HGw4",
             "label": "B3N0HGw4",
-            "group": 8,
+            "group": 7,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -868,7 +746,7 @@
         {
             "id": "BNtsz8zb",
             "label": "BNtsz8zb",
-            "group": 9,
+            "group": 0,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -890,16 +768,15 @@
                     }
                 }
             ],
-            "community_interactions": [
+            "community_interactions": [],
+            "no_community_interactions": [
                 {
                     "artwork_id": "35229",
                     "feelings": "different views of life",
                     "extracted_emotions": {
                         "anger": 0.8
                     }
-                }
-            ],
-            "no_community_interactions": [
+                },
                 {
                     "artwork_id": "35217",
                     "feelings": "me",
@@ -913,7 +790,7 @@
         {
             "id": "BTKF72et",
             "label": "BTKF72et",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "Art interests me little"
@@ -974,7 +851,7 @@
         {
             "id": "Bf5Sj3ON",
             "label": "Bf5Sj3ON",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "Art interests me little"
@@ -1000,20 +877,20 @@
             ],
             "community_interactions": [
                 {
-                    "artwork_id": "39347",
-                    "feelings": "quando faccio incubi  ",
-                    "extracted_emotions": {
-                        "disgust": 1,
-                        "fear": 1.9152404
-                    }
-                },
-                {
                     "artwork_id": "35362",
                     "feelings": "quello che \u00e8 successo la scorsa estate, quando ero quasi affogata nel mare ",
                     "extracted_emotions": {
                         "joy": 1.7643106,
                         "interest": 1,
                         "fear": 0.92
+                    }
+                },
+                {
+                    "artwork_id": "39347",
+                    "feelings": "quando faccio incubi  ",
+                    "extracted_emotions": {
+                        "disgust": 1,
+                        "fear": 1.9152404
                     }
                 }
             ],
@@ -1022,7 +899,7 @@
         {
             "id": "EEm3fSZd",
             "label": "EEm3fSZd",
-            "group": 10,
+            "group": 0,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "Art interests me little"
@@ -1044,16 +921,15 @@
                     }
                 }
             ],
-            "community_interactions": [
+            "community_interactions": [],
+            "no_community_interactions": [
                 {
                     "artwork_id": "35230",
                     "feelings": "",
                     "extracted_emotions": {
                         "joy": 0.8300000000000001
                     }
-                }
-            ],
-            "no_community_interactions": [
+                },
                 {
                     "artwork_id": "35222",
                     "feelings": "PAURA",
@@ -1067,7 +943,7 @@
         {
             "id": "FQFaM9D4",
             "label": "FQFaM9D4",
-            "group": 6,
+            "group": 4,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1114,7 +990,7 @@
         {
             "id": "FVhf7OMw",
             "label": "FVhf7OMw",
-            "group": 5,
+            "group": 1,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1157,7 +1033,7 @@
         {
             "id": "FbEHiNmP",
             "label": "FbEHiNmP",
-            "group": 1,
+            "group": 7,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1185,7 +1061,7 @@
         {
             "id": "GV4z5ANK",
             "label": "GV4z5ANK",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1222,15 +1098,6 @@
                     "extracted_emotions": {
                         "fear": 0.92
                     }
-                }
-            ],
-            "no_community_interactions": [
-                {
-                    "artwork_id": "35381",
-                    "feelings": "chills",
-                    "extracted_emotions": {
-                        "joy": 0.81
-                    }
                 },
                 {
                     "artwork_id": "35323",
@@ -1239,6 +1106,15 @@
                         "sadness": 1,
                         "joy": 0.81,
                         "serenity": 1
+                    }
+                }
+            ],
+            "no_community_interactions": [
+                {
+                    "artwork_id": "35381",
+                    "feelings": "chills",
+                    "extracted_emotions": {
+                        "joy": 0.81
                     }
                 }
             ]
@@ -1274,7 +1150,7 @@
         {
             "id": "HoNIcWZY",
             "label": "HoNIcWZY",
-            "group": 2,
+            "group": 6,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1302,7 +1178,7 @@
         {
             "id": "JgevtrSb",
             "label": "JgevtrSb",
-            "group": 5,
+            "group": 1,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have no interest in art"
@@ -1334,6 +1210,14 @@
             ],
             "community_interactions": [
                 {
+                    "artwork_id": "35227",
+                    "feelings": "i miei nonni che fanno un bel picnic in riva al mare",
+                    "extracted_emotions": {
+                        "joy": 1,
+                        "interest": 1
+                    }
+                },
+                {
                     "artwork_id": "39200",
                     "feelings": "un pescatore che nuota nel mare",
                     "extracted_emotions": {
@@ -1342,14 +1226,6 @@
                 }
             ],
             "no_community_interactions": [
-                {
-                    "artwork_id": "35227",
-                    "feelings": "i miei nonni che fanno un bel picnic in riva al mare",
-                    "extracted_emotions": {
-                        "joy": 1,
-                        "interest": 1
-                    }
-                },
                 {
                     "artwork_id": "35364",
                     "feelings": "mia zia, che aveva molti figli e si prendeva sempre cura con gentilezza di loro",
@@ -1363,7 +1239,7 @@
         {
             "id": "KQTGApjD",
             "label": "KQTGApjD",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "Art interests me little"
@@ -1377,7 +1253,8 @@
                     }
                 }
             ],
-            "community_interactions": [
+            "community_interactions": [],
+            "no_community_interactions": [
                 {
                     "artwork_id": "35459",
                     "feelings": "allegro, nonni, estate",
@@ -1385,13 +1262,12 @@
                         "joy": 1.9905802000000001
                     }
                 }
-            ],
-            "no_community_interactions": []
+            ]
         },
         {
             "id": "LW3Klzvx",
             "label": "LW3Klzvx",
-            "group": 2,
+            "group": 6,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1450,7 +1326,7 @@
         {
             "id": "LvIeXwcT",
             "label": "LvIeXwcT",
-            "group": 8,
+            "group": 3,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1487,19 +1363,6 @@
             ],
             "community_interactions": [
                 {
-                    "artwork_id": "35445",
-                    "feelings": "pensierosa , quando studiavo , un pomeriggio di autunno sul fiume ",
-                    "extracted_emotions": {
-                        "interest": 1,
-                        "disgust": 0.14,
-                        "trust": 0.76917523,
-                        "sadness": 1,
-                        "joy": 1.3729748000000002
-                    }
-                }
-            ],
-            "no_community_interactions": [
-                {
                     "artwork_id": "35362",
                     "feelings": "malinconica Emma tranquilla , la mia infanzia , una giornata tranquilla ",
                     "extracted_emotions": {
@@ -1516,12 +1379,25 @@
                         "disgust": 0.14
                     }
                 }
+            ],
+            "no_community_interactions": [
+                {
+                    "artwork_id": "35445",
+                    "feelings": "pensierosa , quando studiavo , un pomeriggio di autunno sul fiume ",
+                    "extracted_emotions": {
+                        "interest": 1,
+                        "disgust": 0.14,
+                        "trust": 0.76917523,
+                        "sadness": 1,
+                        "joy": 1.3729748000000002
+                    }
+                }
             ]
         },
         {
             "id": "N72IRgFy",
             "label": "N72IRgFy",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have no interest in art"
@@ -1579,7 +1455,7 @@
         {
             "id": "PxrTX0Ln",
             "label": "PxrTX0Ln",
-            "group": 7,
+            "group": 2,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1660,7 +1536,7 @@
         {
             "id": "R4frFK0J",
             "label": "R4frFK0J",
-            "group": 3,
+            "group": 5,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1688,7 +1564,7 @@
         {
             "id": "RQ4a2nIG",
             "label": "RQ4a2nIG",
-            "group": 6,
+            "group": 4,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1718,7 +1594,7 @@
         {
             "id": "SIbOTAP7",
             "label": "SIbOTAP7",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1806,8 +1682,7 @@
                     }
                 }
             ],
-            "community_interactions": [],
-            "no_community_interactions": [
+            "community_interactions": [
                 {
                     "artwork_id": "35310",
                     "feelings": "depressed, coming winter",
@@ -1817,12 +1692,13 @@
                         "disgust": 0.14
                     }
                 }
-            ]
+            ],
+            "no_community_interactions": []
         },
         {
             "id": "W7Wnqxw4",
             "label": "W7Wnqxw4",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1864,7 +1740,7 @@
         {
             "id": "WYCImqGm",
             "label": "WYCImqGm",
-            "group": 7,
+            "group": 2,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "Art interests me little"
@@ -1907,7 +1783,7 @@
         {
             "id": "WsK2A1ab",
             "label": "WsK2A1ab",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have no interest in art"
@@ -1952,7 +1828,7 @@
         {
             "id": "Wsip5y7A",
             "label": "Wsip5y7A",
-            "group": 9,
+            "group": 0,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -1982,15 +1858,6 @@
             ],
             "community_interactions": [
                 {
-                    "artwork_id": "39648",
-                    "feelings": "casa",
-                    "extracted_emotions": {
-                        "joy": 0.81
-                    }
-                }
-            ],
-            "no_community_interactions": [
-                {
                     "artwork_id": "39182",
                     "feelings": "moda",
                     "extracted_emotions": {
@@ -2004,12 +1871,21 @@
                         "fear": 0.92
                     }
                 }
+            ],
+            "no_community_interactions": [
+                {
+                    "artwork_id": "39648",
+                    "feelings": "casa",
+                    "extracted_emotions": {
+                        "joy": 0.81
+                    }
+                }
             ]
         },
         {
             "id": "Y0WXF1LR",
             "label": "Y0WXF1LR",
-            "group": 7,
+            "group": 2,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "Art interests me little"
@@ -2096,7 +1972,7 @@
         {
             "id": "cBjFhvjx",
             "label": "cBjFhvjx",
-            "group": 9,
+            "group": 5,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -2127,12 +2003,22 @@
             ],
             "community_interactions": [
                 {
+                    "artwork_id": "39175",
+                    "feelings": "Vecchiaia",
+                    "extracted_emotions": {
+                        "disgust": 0.14,
+                        "fear": 0.9177645999999999
+                    }
+                },
+                {
                     "artwork_id": "35229",
                     "feelings": "LSD ",
                     "extracted_emotions": {
                         "anger": 0.8
                     }
-                },
+                }
+            ],
+            "no_community_interactions": [
                 {
                     "artwork_id": "39648",
                     "feelings": "Casa",
@@ -2140,22 +2026,12 @@
                         "joy": 0.8300000000000001
                     }
                 }
-            ],
-            "no_community_interactions": [
-                {
-                    "artwork_id": "39175",
-                    "feelings": "Vecchiaia",
-                    "extracted_emotions": {
-                        "disgust": 0.14,
-                        "fear": 0.9177645999999999
-                    }
-                }
             ]
         },
         {
             "id": "cmq6JZxJ",
             "label": "cmq6JZxJ",
-            "group": 1,
+            "group": 7,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "Art interests me little"
@@ -2192,13 +2068,6 @@
             ],
             "community_interactions": [
                 {
-                    "artwork_id": "39138",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "disgust": 0.14
-                    }
-                },
-                {
                     "artwork_id": "35360",
                     "feelings": "",
                     "extracted_emotions": {
@@ -2215,6 +2084,13 @@
             ],
             "no_community_interactions": [
                 {
+                    "artwork_id": "39138",
+                    "feelings": "",
+                    "extracted_emotions": {
+                        "disgust": 0.14
+                    }
+                },
+                {
                     "artwork_id": "35381",
                     "feelings": "",
                     "extracted_emotions": {
@@ -2226,7 +2102,7 @@
         {
             "id": "e4aM9WL7",
             "label": "e4aM9WL7",
-            "group": 3,
+            "group": 5,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "My work is about art"
@@ -2254,9 +2130,7 @@
                     "extracted_emotions": {
                         "fear": 0.92
                     }
-                }
-            ],
-            "no_community_interactions": [
+                },
                 {
                     "artwork_id": "35229",
                     "feelings": "al mare\n\n",
@@ -2264,7 +2138,8 @@
                         "joy": 2.4666995
                     }
                 }
-            ]
+            ],
+            "no_community_interactions": []
         },
         {
             "id": "eLXgq0Hx",
@@ -2286,8 +2161,7 @@
                     }
                 }
             ],
-            "community_interactions": [],
-            "no_community_interactions": [
+            "community_interactions": [
                 {
                     "artwork_id": "35499",
                     "feelings": "in trepidazione per l'attesa dell'estate, Che oggi fa troppo freddo. Che odio il freddo perch\u00e8 mancano 2 giorni a Natale, Alle vacanze",
@@ -2298,12 +2172,13 @@
                         "anger": 1
                     }
                 }
-            ]
+            ],
+            "no_community_interactions": []
         },
         {
             "id": "gD630RD1",
             "label": "gD630RD1",
-            "group": 8,
+            "group": 7,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have no interest in art"
@@ -2335,7 +2210,7 @@
         {
             "id": "jTb1qXEo",
             "label": "jTb1qXEo",
-            "group": 6,
+            "group": 4,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have no interest in art"
@@ -2396,7 +2271,7 @@
         {
             "id": "lkkZ1lUv",
             "label": "lkkZ1lUv",
-            "group": 0,
+            "group": 1,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "My work is about art"
@@ -2421,8 +2296,7 @@
                     }
                 }
             ],
-            "community_interactions": [],
-            "no_community_interactions": [
+            "community_interactions": [
                 {
                     "artwork_id": "35227",
                     "feelings": "la tranquillit\u00e0 di una pausa pranzo durante un giorno di lavoro",
@@ -2433,7 +2307,9 @@
                         "joy": 1,
                         "serenity": 1.9848156000000001
                     }
-                },
+                }
+            ],
+            "no_community_interactions": [
                 {
                     "artwork_id": "35433",
                     "feelings": "la stanchezza alla fine della giornata e il ritorno a casa",
@@ -2446,7 +2322,7 @@
         {
             "id": "loEoYm9R",
             "label": "loEoYm9R",
-            "group": 10,
+            "group": 0,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -2478,6 +2354,13 @@
             ],
             "community_interactions": [
                 {
+                    "artwork_id": "39138",
+                    "feelings": "",
+                    "extracted_emotions": {
+                        "joy": 0.8300000000000001
+                    }
+                },
+                {
                     "artwork_id": "35310",
                     "feelings": "sensazione di pace ed inquietudine insieme",
                     "extracted_emotions": {
@@ -2488,13 +2371,6 @@
                 }
             ],
             "no_community_interactions": [
-                {
-                    "artwork_id": "39138",
-                    "feelings": "",
-                    "extracted_emotions": {
-                        "joy": 0.8300000000000001
-                    }
-                },
                 {
                     "artwork_id": "35308",
                     "feelings": "",
@@ -2507,7 +2383,7 @@
         {
             "id": "oTT3YRMN",
             "label": "oTT3YRMN",
-            "group": 7,
+            "group": 2,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have no interest in art"
@@ -2554,7 +2430,7 @@
         {
             "id": "onDqgFnI",
             "label": "onDqgFnI",
-            "group": 4,
+            "group": 3,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -2639,7 +2515,7 @@
         {
             "id": "q2BDj1os",
             "label": "q2BDj1os",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "Art interests me little"
@@ -2667,7 +2543,7 @@
         {
             "id": "sXKZ1IUH",
             "label": "sXKZ1IUH",
-            "group": 1,
+            "group": 0,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -2702,9 +2578,7 @@
                         "joy": 0.8300000000000001,
                         "serenity": 2
                     }
-                }
-            ],
-            "no_community_interactions": [
+                },
                 {
                     "artwork_id": "39182",
                     "feelings": "curioso, interessato, la casa dello zio di un amico, una ragazza in attesa di qualcosa o qualcuno. Le \u00e8 venuta una idea",
@@ -2715,12 +2589,13 @@
                         "trust": 1.9214504
                     }
                 }
-            ]
+            ],
+            "no_community_interactions": []
         },
         {
             "id": "x2AUnHqw",
             "label": "x2AUnHqw",
-            "group": 8,
+            "group": 7,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -2781,7 +2656,7 @@
         {
             "id": "xi3DCToA",
             "label": "xi3DCToA",
-            "group": 3,
+            "group": 5,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -2809,7 +2684,7 @@
         {
             "id": "yjlouq5U",
             "label": "yjlouq5U",
-            "group": 2,
+            "group": 6,
             "explicit_community": {
                 "deaf": "Yes",
                 "RelationshipWithArt": "I have a strong interest in art"
@@ -2833,18 +2708,18 @@
             ],
             "community_interactions": [
                 {
+                    "artwork_id": "35433",
+                    "feelings": "  ritorno a casa",
+                    "extracted_emotions": {
+                        "joy": 0.8300000000000001
+                    }
+                },
+                {
                     "artwork_id": "35330",
                     "feelings": "una cosa rilassante",
                     "extracted_emotions": {
                         "joy": 0.81,
                         "interest": 1
-                    }
-                },
-                {
-                    "artwork_id": "35433",
-                    "feelings": "  ritorno a casa",
-                    "extracted_emotions": {
-                        "joy": 0.8300000000000001
                     }
                 }
             ],
@@ -2853,7 +2728,7 @@
         {
             "id": "zZbRbDHJ",
             "label": "zZbRbDHJ",
-            "group": 2,
+            "group": 6,
             "explicit_community": {
                 "deaf": "No",
                 "RelationshipWithArt": "Art interests me little"
@@ -2977,7 +2852,7 @@
         {
             "u1": "2GROTNeg",
             "u2": "GV4z5ANK",
-            "value": 0.22
+            "value": 0.33
         },
         {
             "u1": "2GROTNeg",
@@ -3022,7 +2897,7 @@
         {
             "u1": "2GROTNeg",
             "u2": "PxrTX0Ln",
-            "value": 0
+            "value": 0.25
         },
         {
             "u1": "2GROTNeg",
@@ -3092,7 +2967,7 @@
         {
             "u1": "2GROTNeg",
             "u2": "cmq6JZxJ",
-            "value": 0.17
+            "value": 0.25
         },
         {
             "u1": "2GROTNeg",
@@ -3262,7 +3137,7 @@
         {
             "u1": "2JfmseEG",
             "u2": "LvIeXwcT",
-            "value": 0.31
+            "value": 0.33
         },
         {
             "u1": "2JfmseEG",
@@ -3387,7 +3262,7 @@
         {
             "u1": "2JfmseEG",
             "u2": "onDqgFnI",
-            "value": 0.08
+            "value": 0
         },
         {
             "u1": "2JfmseEG",
@@ -3582,7 +3457,7 @@
         {
             "u1": "2LIm9lcH",
             "u2": "Y0WXF1LR",
-            "value": 0.31
+            "value": 0.25
         },
         {
             "u1": "2LIm9lcH",
@@ -4122,7 +3997,7 @@
         {
             "u1": "6rK3p7za",
             "u2": "onDqgFnI",
-            "value": 0.08
+            "value": 0
         },
         {
             "u1": "6rK3p7za",
@@ -4192,7 +4067,7 @@
         {
             "u1": "7zL8hKS8",
             "u2": "FVhf7OMw",
-            "value": 0.25
+            "value": 0
         },
         {
             "u1": "7zL8hKS8",
@@ -4217,7 +4092,7 @@
         {
             "u1": "7zL8hKS8",
             "u2": "JgevtrSb",
-            "value": 0.17
+            "value": 0
         },
         {
             "u1": "7zL8hKS8",
@@ -4547,7 +4422,7 @@
         {
             "u1": "B3N0HGw4",
             "u2": "cmq6JZxJ",
-            "value": 0.23
+            "value": 0.25
         },
         {
             "u1": "B3N0HGw4",
@@ -4562,7 +4437,7 @@
         {
             "u1": "B3N0HGw4",
             "u2": "gD630RD1",
-            "value": 0.46
+            "value": 0.5
         },
         {
             "u1": "B3N0HGw4",
@@ -4622,7 +4497,7 @@
         {
             "u1": "B3N0HGw4",
             "u2": "zZbRbDHJ",
-            "value": 0.08
+            "value": 0
         },
         {
             "u1": "BNtsz8zb",
@@ -4682,7 +4557,7 @@
         {
             "u1": "BNtsz8zb",
             "u2": "LW3Klzvx",
-            "value": 0.17
+            "value": 0
         },
         {
             "u1": "BNtsz8zb",
@@ -4742,7 +4617,7 @@
         {
             "u1": "BNtsz8zb",
             "u2": "WYCImqGm",
-            "value": 0.25
+            "value": 0
         },
         {
             "u1": "BNtsz8zb",
@@ -4777,7 +4652,7 @@
         {
             "u1": "BNtsz8zb",
             "u2": "e4aM9WL7",
-            "value": 0
+            "value": 0.25
         },
         {
             "u1": "BNtsz8zb",
@@ -4812,7 +4687,7 @@
         {
             "u1": "BNtsz8zb",
             "u2": "onDqgFnI",
-            "value": 0
+            "value": 0.17
         },
         {
             "u1": "BNtsz8zb",
@@ -5122,7 +4997,7 @@
         {
             "u1": "Bf5Sj3ON",
             "u2": "LvIeXwcT",
-            "value": 0.31
+            "value": 0.33
         },
         {
             "u1": "Bf5Sj3ON",
@@ -5562,7 +5437,7 @@
         {
             "u1": "FQFaM9D4",
             "u2": "R4frFK0J",
-            "value": 0
+            "value": 0.25
         },
         {
             "u1": "FQFaM9D4",
@@ -5617,7 +5492,7 @@
         {
             "u1": "FQFaM9D4",
             "u2": "cBjFhvjx",
-            "value": 0.08
+            "value": 0.17
         },
         {
             "u1": "FQFaM9D4",
@@ -5627,7 +5502,7 @@
         {
             "u1": "FQFaM9D4",
             "u2": "e4aM9WL7",
-            "value": 0.38
+            "value": 0.5
         },
         {
             "u1": "FQFaM9D4",
@@ -5662,7 +5537,7 @@
         {
             "u1": "FQFaM9D4",
             "u2": "onDqgFnI",
-            "value": 0.08
+            "value": 0
         },
         {
             "u1": "FQFaM9D4",
@@ -5687,7 +5562,7 @@
         {
             "u1": "FQFaM9D4",
             "u2": "xi3DCToA",
-            "value": 0
+            "value": 0.25
         },
         {
             "u1": "FQFaM9D4",
@@ -6137,7 +6012,7 @@
         {
             "u1": "GV4z5ANK",
             "u2": "PxrTX0Ln",
-            "value": 0.08
+            "value": 0.17
         },
         {
             "u1": "GV4z5ANK",
@@ -6482,7 +6357,7 @@
         {
             "u1": "HoNIcWZY",
             "u2": "LW3Klzvx",
-            "value": 0.17
+            "value": 0.33
         },
         {
             "u1": "HoNIcWZY",
@@ -6642,7 +6517,7 @@
         {
             "u1": "HoNIcWZY",
             "u2": "yjlouq5U",
-            "value": 0.46
+            "value": 0.5
         },
         {
             "u1": "HoNIcWZY",
@@ -6672,7 +6547,7 @@
         {
             "u1": "JgevtrSb",
             "u2": "NROrO0c9",
-            "value": 0.06
+            "value": 0
         },
         {
             "u1": "JgevtrSb",
@@ -6772,7 +6647,7 @@
         {
             "u1": "JgevtrSb",
             "u2": "lkkZ1lUv",
-            "value": 0.31
+            "value": 0.33
         },
         {
             "u1": "JgevtrSb",
@@ -6782,7 +6657,7 @@
         {
             "u1": "JgevtrSb",
             "u2": "oTT3YRMN",
-            "value": 0.29
+            "value": 0.33
         },
         {
             "u1": "JgevtrSb",
@@ -6977,7 +6852,7 @@
         {
             "u1": "KQTGApjD",
             "u2": "x2AUnHqw",
-            "value": 0.31
+            "value": 0.33
         },
         {
             "u1": "KQTGApjD",
@@ -7152,7 +7027,7 @@
         {
             "u1": "LW3Klzvx",
             "u2": "yjlouq5U",
-            "value": 0.14
+            "value": 0.33
         },
         {
             "u1": "LW3Klzvx",
@@ -7162,7 +7037,7 @@
         {
             "u1": "LvIeXwcT",
             "u2": "N72IRgFy",
-            "value": 0.31
+            "value": 0.33
         },
         {
             "u1": "LvIeXwcT",
@@ -7282,7 +7157,7 @@
         {
             "u1": "LvIeXwcT",
             "u2": "onDqgFnI",
-            "value": 0.06
+            "value": 0
         },
         {
             "u1": "LvIeXwcT",
@@ -7677,7 +7552,7 @@
         {
             "u1": "PxrTX0Ln",
             "u2": "Y0WXF1LR",
-            "value": 0.31
+            "value": 0.25
         },
         {
             "u1": "PxrTX0Ln",
@@ -7692,7 +7567,7 @@
         {
             "u1": "PxrTX0Ln",
             "u2": "cmq6JZxJ",
-            "value": 0.06
+            "value": 0.12
         },
         {
             "u1": "PxrTX0Ln",
@@ -7962,7 +7837,7 @@
         {
             "u1": "R4frFK0J",
             "u2": "cBjFhvjx",
-            "value": 0.25
+            "value": 0.33
         },
         {
             "u1": "R4frFK0J",
@@ -7972,7 +7847,7 @@
         {
             "u1": "R4frFK0J",
             "u2": "e4aM9WL7",
-            "value": 0.38
+            "value": 0.5
         },
         {
             "u1": "R4frFK0J",
@@ -8137,7 +8012,7 @@
         {
             "u1": "RQ4a2nIG",
             "u2": "onDqgFnI",
-            "value": 0.08
+            "value": 0
         },
         {
             "u1": "RQ4a2nIG",
@@ -8667,7 +8542,7 @@
         {
             "u1": "WYCImqGm",
             "u2": "cBjFhvjx",
-            "value": 0.17
+            "value": 0
         },
         {
             "u1": "WYCImqGm",
@@ -8862,7 +8737,7 @@
         {
             "u1": "Wsip5y7A",
             "u2": "cBjFhvjx",
-            "value": 0.17
+            "value": 0
         },
         {
             "u1": "Wsip5y7A",
@@ -8877,7 +8752,7 @@
         {
             "u1": "Wsip5y7A",
             "u2": "eLXgq0Hx",
-            "value": 0.08
+            "value": 0.17
         },
         {
             "u1": "Wsip5y7A",
@@ -8922,7 +8797,7 @@
         {
             "u1": "Wsip5y7A",
             "u2": "sXKZ1IUH",
-            "value": 0.06
+            "value": 0.17
         },
         {
             "u1": "Wsip5y7A",
@@ -9127,7 +9002,7 @@
         {
             "u1": "cBjFhvjx",
             "u2": "e4aM9WL7",
-            "value": 0.17
+            "value": 0.33
         },
         {
             "u1": "cBjFhvjx",
@@ -9162,7 +9037,7 @@
         {
             "u1": "cBjFhvjx",
             "u2": "onDqgFnI",
-            "value": 0
+            "value": 0.17
         },
         {
             "u1": "cBjFhvjx",
@@ -9187,7 +9062,7 @@
         {
             "u1": "cBjFhvjx",
             "u2": "xi3DCToA",
-            "value": 0.25
+            "value": 0.33
         },
         {
             "u1": "cBjFhvjx",
@@ -9227,7 +9102,7 @@
         {
             "u1": "cmq6JZxJ",
             "u2": "loEoYm9R",
-            "value": 0.19
+            "value": 0.25
         },
         {
             "u1": "cmq6JZxJ",
@@ -9247,12 +9122,12 @@
         {
             "u1": "cmq6JZxJ",
             "u2": "q2BDj1os",
-            "value": 0.03
+            "value": 0
         },
         {
             "u1": "cmq6JZxJ",
             "u2": "sXKZ1IUH",
-            "value": 0.04
+            "value": 0
         },
         {
             "u1": "cmq6JZxJ",
@@ -9332,7 +9207,7 @@
         {
             "u1": "e4aM9WL7",
             "u2": "xi3DCToA",
-            "value": 0.38
+            "value": 0.5
         },
         {
             "u1": "e4aM9WL7",
@@ -9467,7 +9342,7 @@
         {
             "u1": "gD630RD1",
             "u2": "zZbRbDHJ",
-            "value": 0.08
+            "value": 0
         },
         {
             "u1": "jTb1qXEo",
@@ -9507,7 +9382,7 @@
         {
             "u1": "jTb1qXEo",
             "u2": "x2AUnHqw",
-            "value": 0.31
+            "value": 0.33
         },
         {
             "u1": "jTb1qXEo",
@@ -9597,7 +9472,7 @@
         {
             "u1": "loEoYm9R",
             "u2": "sXKZ1IUH",
-            "value": 0.31
+            "value": 0.33
         },
         {
             "u1": "loEoYm9R",
