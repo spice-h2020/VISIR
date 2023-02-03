@@ -397,22 +397,6 @@ function isUserDataValid(arg: any): types.IUserData {
             }
         }
 
-        if (arg.interactions === undefined) {
-            arg.interactions = [];
-        }
-
-        const nInteractions = Object.keys(arg.interactions).length;
-        if (nInteractions > 0) {
-
-            try {
-                for (let i = 0; i < nInteractions; i++) {
-                    arg.interactions[i] = isInteractionValid(arg.interactions[i]);
-                }
-            } catch (e: any) {
-                throw Error(`Interaction of the user (${arg.id}) has problems: ${e.message}`);
-            }
-        }
-
         if (arg.community_interactions === undefined) {
             arg.community_interactions = [];
         }
@@ -444,7 +428,6 @@ function isUserDataValid(arg: any): types.IUserData {
             } catch (e: any) {
                 throw Error(`No-community interaction of the user (${arg.id}) has problems: ${e.message}`);
             }
-
         }
 
         return arg;

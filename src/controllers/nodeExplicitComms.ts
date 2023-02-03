@@ -124,9 +124,9 @@ export default class NodeExplicitComms {
             this.communitiesData[node.implicit_community].allArtworks = new Map<string, number>();
         }
 
-        for (let i = 0; i < node.interactions.length; i++) {
-            const currentN = this.communitiesData[node.implicit_community].allArtworks.get(node.interactions[i].artwork_id);
-            this.communitiesData[node.implicit_community].allArtworks.set(node.interactions[i].artwork_id, currentN ? currentN + 1 : 1);
+        for (let i = 0; i < node.community_interactions.length; i++) {
+            const currentN = this.communitiesData[node.implicit_community].allArtworks.get(node.community_interactions[i].artwork_id);
+            this.communitiesData[node.implicit_community].allArtworks.set(node.community_interactions[i].artwork_id, currentN ? currentN + 1 : 1);
         }
     }
 

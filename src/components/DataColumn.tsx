@@ -93,7 +93,6 @@ export const DataTable = ({
                 translationClass={tClass}
             />
             {CommunityPanel}
-
         </div>
     )
 };
@@ -134,8 +133,8 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
                     />}
                 </div>
             );
-
         }
+
         content.push(
             <div key={5}>
                 <div key={0}> {"Artworks relevant to this community: "} </div>
