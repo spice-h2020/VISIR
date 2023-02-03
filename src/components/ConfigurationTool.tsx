@@ -274,7 +274,17 @@ export const ConfigurationTool = ({
                         menuDirection={EDropMenuDirection.down}
                         extraClassButton={"transparent down-arrow"}
                     />
-                    <span key={4} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
+                    <div key={4} style={getArtworksSliderStyle(similarity2 === ESimilarity.Same, isDevMode)}>
+                        <Slider
+                            initialValue={algorythmWeigth}
+                            onInput={(value: number) => { setAlgorythmWeight(value) }}
+                            minimum={0.0}
+                            maximum={1.0}
+                            step={0.1}
+                            content={`${ESimilarity[similarity2]} Weight: `}
+                        />
+                    </div>
+                    <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
                 </div>
                 {/*Row with the fieldsets, and the button to open/close the json export object */}
                 <div key={3} style={{
@@ -441,16 +451,14 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
             const isChecked: boolean | undefined = citizenAttr.get(userAttribute.att_name);
 
             checkboxes.push(
-                <div key={i} className="row checkbox-row active">
-                    <input key={1} type="checkbox" style={{ cursor: "pointer" }} id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false}
-                        onChange={() => {
-                            citizenAttr.set(userAttribute.att_name, !isChecked);
-                            setCitizenAttr(new Map(citizenAttr));
-                        }
-                        } />
-                    <label key={2} htmlFor={`cit-${userAttribute.att_name}`} style={{ userSelect: "none", cursor: "pointer" }}>
-                        {userAttribute.att_name}
-                    </label>
+                <div key={i} className="row checkbox-row active" style={{ userSelect: "none", cursor: "pointer" }}
+                    title={userAttribute.att_name} onClick={() => {
+                        citizenAttr.set(userAttribute.att_name, !isChecked);
+                        setCitizenAttr(new Map(citizenAttr));
+                    }}>
+                    <input key={1} type="checkbox" style={{ userSelect: "none", cursor: "pointer" }} id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false} />
+                    {userAttribute.att_name}
+
                 </div>)
         }
 
@@ -495,16 +503,14 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
                         whiteSpace: "nowrap",
                         minInlineSize: "auto"
                     }}>
-                    {<div key={0} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} >
-                        <input key={0} type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
-                            onChange={() => {
-                                artworksAttr.set(onAttribute.att_name, !isChecked);
-                                setArtworksAttr(new Map(artworksAttr));
-                            }}
-                        />
-                        <label key={1} htmlFor={`art-${onAttribute.att_name}`} title={onAttribute.att_name} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }}>
-                            {onAttribute.att_name}
-                        </label>
+                    {<div key={0} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} onClick={() => {
+                        artworksAttr.set(onAttribute.att_name, !isChecked);
+                        setArtworksAttr(new Map(artworksAttr));
+                    }}>
+                        <input key={0} type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`}
+                            value={onAttribute.att_name} checked={isChecked ? isChecked : false} />
+
+                        {onAttribute.att_name}
                     </div>}
                     {<div key={1} style={{
                         display: "flex",
@@ -648,6 +654,17 @@ function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): Re
         maxHeight: "100%",
         width: "90%",
         display: `${isTextAreaActive ? "inline-block" : "none"}`
+    }
+
+    return style;
+}
+
+function getArtworksSliderStyle(hide: boolean, isDevMode: boolean) {
+
+    const style: React.CSSProperties =
+    {
+        display: `${isDevMode ? "block" : "none"}`,
+        opacity: hide ? "30%" : "100%",
     }
 
     return style;
