@@ -33,6 +33,8 @@ export default class NetworkController {
     edgeCtrl!: EdgeVisualsCtrl;
     //Node visuals controller
     nodeVisuals!: NodeVisualsCtrl;
+    //Communities controller
+    explicitCtrl!: NodeExplicitComms;
 
     //Network event controller
     eventsCtrl: EventsCtrl;
@@ -79,10 +81,13 @@ export default class NetworkController {
         this.createOptions();
         this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
 
+        this.explicitCtrl = new NodeExplicitComms(perspectiveData.communities);
+
         this.parseNodes(perspectiveData, dimStrat, sf, viewOptions, unique);
         this.parseEdges(this.edges, perspectiveData.similarity, viewOptions);
 
         this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
+
 
         this.isReady = true;
         this.eventsCtrl.zoomToNodes([]);
@@ -97,27 +102,27 @@ export default class NetworkController {
      */
     parseNodes(perspectiveData: IPerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions,
         viewOptions: ViewOptions, unique: boolean) {
-        const explicitCtrl = new NodeExplicitComms(perspectiveData.communities);
+
         const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
 
         perspectiveData.users.forEach((user: IUserData) => {
-            explicitCtrl.parseExplicitCommunity(user, sf.setLegendData);
-            explicitCtrl.parseArtworksRelatedToTheCommunity(user);
+            this.explicitCtrl.parseExplicitCommunity(user, sf.setLegendData);
+            this.explicitCtrl.parseArtworksRelatedToTheCommunity(user);
             nodeLocation.updateNodeGroup(user);
         });
-        explicitCtrl.sortExplicitData();
-        explicitCtrl.makeArtworksUnique();
+        this.explicitCtrl.sortExplicitData();
+        this.explicitCtrl.makeArtworksUnique(viewOptions.nRelevantCommArtworks);
 
-        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions, unique);
+        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, this.explicitCtrl.explicitData, viewOptions, unique);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
         perspectiveData.users.forEach((user: IUserData) => {
-            nodeLocation.setNodeLocation(user, explicitCtrl.communitiesData[user.implicit_community].type);
+            nodeLocation.setNodeLocation(user, this.explicitCtrl.communitiesData[user.implicit_community].type);
             this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.hideLabels);
             this.bbCtrl.calculateBoundingBoxes(user);
         });
 
-        explicitCtrl.calcExplicitPercentile(this.nodeVisuals.dimStrat);
+        this.explicitCtrl.calcExplicitPercentile(this.nodeVisuals.dimStrat);
 
         this.nodes.update(perspectiveData.users);
     }

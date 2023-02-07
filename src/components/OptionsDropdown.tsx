@@ -75,16 +75,26 @@ export const OptionsDropdown = ({
             initialValue={viewOptions.edgeThreshold}
             key={3}
         />,
-        <hr key={4} style={hrStyle} />,
+        // <hr key={4} style={hrStyle} />,
+        // <Slider
+        //     content={tClass.t.toolbar.optionsDrop.removeEdges}
+        //     contentUnit="%"
+        //     minimum={0}
+        //     maximum={100}
+        //     step={10}
+        //     initialValue={viewOptions.deleteEdges}
+        //     onInput={(value: number) => { setViewOptions({ updateType: "deleteEdges", newValue: value }); }}
+        //     key={5}
+        // />
+        <hr key={6} style={hrStyle} />,
         <Slider
-            content={tClass.t.toolbar.optionsDrop.removeEdges}
-            contentUnit="%"
+            content={"Number of relevant artworks"}
             minimum={0}
-            maximum={100}
-            step={10}
-            initialValue={viewOptions.deleteEdges}
-            onInput={(value: number) => { setViewOptions({ updateType: "deleteEdges", newValue: value }); }}
-            key={5}
+            maximum={10}
+            step={1}
+            initialValue={viewOptions.nRelevantCommArtworks}
+            onInput={(value: number) => { setViewOptions({ updateType: "nRelevantCommArtworks", newValue: value }); }}
+            key={7}
         />
     ];
 

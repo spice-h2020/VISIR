@@ -250,6 +250,13 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
     }, [viewOptions.legendConfig, netMgr]);
 
     useEffect(() => {
+        if (netMgr !== undefined && netMgr.isReady && netMgr.explicitCtrl !== undefined) {
+            netMgr.explicitCtrl.makeArtworksUnique(viewOptions.nRelevantCommArtworks);
+        }
+
+    }, [viewOptions.nRelevantCommArtworks, netMgr]);
+
+    useEffect(() => {
         if (netMgr !== undefined && netMgr.isReady) {
             netMgr.nodeVisuals.toggleNodeLabels(netMgr.nodes, viewOptions.hideLabels);
         }

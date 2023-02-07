@@ -3,6 +3,7 @@
  * has the initial options of the options dropdown
  * @author Marco Expósito Pérez
  */
+import config from '../appConfig.json';
 
 /**
  * Available "all perspective file/details" sources
@@ -98,6 +99,10 @@ export const initialOptions = {
      * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
      */
     deleteEdges: 0,
+    /**
+     * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
+     */
+    nRelevantCommArtworks: config.N_Representative_Artworks,
 }
 /**
  * Class that contains the value of all visualization options that will change how the user see the networks
@@ -129,6 +134,8 @@ export class ViewOptions {
      */
     legendConfig: Map<string, Map<string, boolean>>;
 
+    nRelevantCommArtworks: number;
+
     /**
      * Constructor of the class
      */
@@ -139,6 +146,7 @@ export class ViewOptions {
         this.legendConfig = new Map<string, Map<string, boolean>>();
         this.edgeThreshold = initialOptions.edgeThreshold;
         this.deleteEdges = initialOptions.deleteEdges;
+        this.nRelevantCommArtworks = initialOptions.nRelevantCommArtworks;
     }
 }
 
