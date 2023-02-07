@@ -434,5 +434,23 @@
             "params": [],
             "default": false
         }
+    ],
+    "artworks": [
+        {
+            "name": "Sponde del Po",
+            "id": "Sponde"
+        },
+        {
+            "name": "Ritorno alla stalla (La ritirata)",
+            "id": "Ritorno"
+        },
+        {
+            "name": "Pugilatore",
+            "id": "Pugil"
+        },
+        {
+            "name": "Piccola composizione (Fantome incantato)",
+            "id": "Piccola"
+        }
     ]
 }

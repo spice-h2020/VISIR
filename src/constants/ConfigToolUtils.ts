@@ -15,7 +15,8 @@ export interface IConfigurationSeed {
     artwork_attributes: IArtworkAttribute[];
     user_attributes: INameAndTypePair[];
     interaction_similarity_functions: ISimilarityFunction[];
-    algorithm: IAlgorithm[]
+    algorithm: IAlgorithm[],
+    artworks: INameAndIdPair[]
 }
 
 export interface IArtworkAttribute {
@@ -39,6 +40,11 @@ export interface IAlgorithm {
     name: string,
     params: any[],
     default: boolean
+}
+
+export interface INameAndIdPair {
+    name: string,
+    id: string,
 }
 
 export const defaultWeightValue = 0.5;
@@ -75,7 +81,7 @@ export function initAlgorythmDrop(algorythms: IAlgorithm[]): IAlgorithm {
 export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: Map<string, boolean>,
     artworksAttr: Map<string, boolean>, artworksDropdownAttr: Map<string, boolean[]>,
     selectedOption: ISimilarityFunction, similarity1: ESimilarity, similarity2: ESimilarity, perspectiveName: string,
-    algorithm: IAlgorithm, algWeight: number) {
+    algorithm: IAlgorithm, algWeight: number, selectedArtwork: INameAndIdPair | undefined) {
 
     let newConfig: any = {
         user_attributes: [],
@@ -85,7 +91,7 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
 
     fillUserAttributes(citizenAttr, newConfig);
     fillInteractionSimilarityFunctions(selectedOption, similarity1, seed, newConfig);
-    fillSimilarityFunctions(similarity2, newConfig, seed, artworksAttr, artworksDropdownAttr);
+    fillSimilarityFunctions(similarity2, newConfig, seed, artworksAttr, artworksDropdownAttr, selectedArtwork);
 
     let configName = perspectiveName.replaceAll(" ", "_");
 
@@ -158,20 +164,43 @@ function getDefaultName(similarity1: ESimilarity, configName: string, newConfig:
 }
 
 function fillSimilarityFunctions(similarity2: ESimilarity, newConfig: any, seed: IConfigurationSeed, artworksAttr: Map<string, boolean>,
-    artworksDropdownAttr: Map<string, boolean[]>) {
+    artworksDropdownAttr: Map<string, boolean[]>, selectedArtwork: INameAndIdPair | undefined) {
 
     switch (similarity2) {
+
         case ESimilarity.Same: {
-            let sim = {
-                "sim_function": {
-                    "name": "EqualSimilarityDAO",
-                    "params": [],
-                    "on_attribute": {
-                        "att_name": "id",
-                        "att_type": "String"
+            let sim;
+            if (selectedArtwork === undefined) {
+                sim = {
+                    "sim_function": {
+                        "name": "EqualSimilarityDAO",
+                        "params": [],
+                        "on_attribute": {
+                            "att_name": "id",
+                            "att_type": "String"
+                        }
                     }
-                }
-            };
+                };
+
+
+            } else {
+                sim = {
+                    "sim_function": {
+                        "name": "EqualSimilarityDAO",
+                        "params": [
+                            {
+                                "artworkId": `${selectedArtwork.id}`,
+                                "att_type": "String"
+                            }
+                        ],
+                        "on_attribute": {
+                            "att_name": "id",
+                            "att_type": "String"
+                        }
+                    }
+                };
+            }
+
             newConfig.similarity_functions.push(sim);
             break;
         }

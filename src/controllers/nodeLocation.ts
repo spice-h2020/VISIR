@@ -98,7 +98,7 @@ export default class NodeLocation {
     setNodeLocation(node: IUserData, communityType: ECommunityType) {
         const group = node.implicit_community;
 
-        if (node.isMedoid) {
+        if (node.isMedoid && communityType !== ECommunityType.inexistent) {
 
             node.x = this.nodeGroups[group].partition.center.x;
             node.y = this.nodeGroups[group].partition.center.y;
@@ -138,12 +138,14 @@ export default class NodeLocation {
 
         } else {
 
-            const rows = Math.sqrt(size);
-            const xIndex = nodeIndex % rows;
+            const rows = Math.ceil(Math.sqrt(size));
+
+
+            const xIndex = Math.ceil(nodeIndex % rows);
             const yIndex = nodeIndex / rows;
 
-            output.x = center.x + xIndex * 45;
-            output.y = center.y + yIndex * 45;
+            output.x = center.x + xIndex * 30;
+            output.y = center.y + yIndex * 30;
         }
 
         return output;

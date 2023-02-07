@@ -5,7 +5,7 @@
  */
 //Constants
 import { FORMERR } from "dns";
-import { IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
+import { IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndIdPair, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 import { ECommunityType } from "./perspectivesTypes";
@@ -661,6 +661,15 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
             throw Error(`Algorithms are not an object`);
         }
 
+        if (arg.artworks === undefined) {
+            throw Error(`Artworks are undefined`);
+        }
+
+        if (typeof (arg.artworks) !== "object") {
+            throw Error(`Artworks are not an object`);
+        }
+
+
         for (let i = 0; i < arg.artwork_attributes.length; i++) {
             arg.artwork_attributes[i] = isArtworkAttributesValid(arg.artwork_attributes[i]);
         }
@@ -672,6 +681,9 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         }
         for (let i = 0; i < arg.algorithm.length; i++) {
             arg.algorithm[i] = isAlgorithmValid(arg.algorithm[i]);
+        }
+        for (let i = 0; i < arg.artworks.length; i++) {
+            arg.artworks[i] = isNameAndIdPairValid(arg.artworks[i]);
         }
 
         console.log(`Configuration seed file validation has been completed -> `);
@@ -744,6 +756,41 @@ function isNameAndTypePairValid(arg: any): INameAndTypePair {
         return arg;
     } catch (e: any) {
         throw Error(`Name and Type data is not valid: ${e.message}`);
+    }
+}
+
+function isNameAndIdPairValid(arg: any): INameAndIdPair {
+    try {
+
+        if (arg === undefined) {
+            throw Error(`Name and ID data is undefined`);
+        }
+
+        if (arg.name === undefined) {
+            throw Error(`Name is undefined`);
+        }
+        if (typeof (arg.name) !== "string") {
+            try {
+                arg.name = String(arg.name);
+            } catch (e: any) {
+                throw Error(`Name is not a string`);
+            }
+        }
+
+        if (arg.id === undefined) {
+            throw Error(`Id is undefined`);
+        }
+        if (typeof (arg.id) !== "string") {
+            try {
+                arg.id = String(arg.id);
+            } catch (e: any) {
+                throw Error(`Id is not a string`);
+            }
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Name and id data is not valid: ${e.message}`);
     }
 }
 

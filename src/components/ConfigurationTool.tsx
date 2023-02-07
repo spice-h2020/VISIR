@@ -100,6 +100,8 @@ export const ConfigurationTool = ({
     //Selected algorythm
     const [selectedAlgorithm, setSelectedAlgorithm] = useState<config.IAlgorithm>(emptyAlgorithm);
     const [algorythmWeigth, setAlgorythmWeight] = useState<number>(config.defaultWeightValue);
+    //Selected artwork
+    const [selectedArtwork, setSelectedArtwork] = useState<config.INameAndIdPair>();
 
     //Similarity Dropdown states
     const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.Same);
@@ -146,6 +148,12 @@ export const ConfigurationTool = ({
                         setSelectedAlgorithm(config.initAlgorythmDrop(newSeed.algorithm));
                     } catch (error: any) {
                         throw Error("Failed while setting default Algorythm attributes " + error);
+                    }
+
+                    try {
+                        setSelectedArtwork(newSeed.artworks[0]);
+                    } catch (error: any) {
+                        throw Error("Failed while setting default Artwork " + error);
                     }
 
                 }
@@ -274,15 +282,9 @@ export const ConfigurationTool = ({
                         menuDirection={EDropMenuDirection.down}
                         extraClassButton={"transparent down-arrow"}
                     />
-                    <div key={4} style={getArtworksSliderStyle(similarity2 === ESimilarity.Same, isDevMode)}>
-                        <Slider
-                            initialValue={algorythmWeigth}
-                            onInput={(value: number) => { setAlgorythmWeight(value) }}
-                            minimum={0.0}
-                            maximum={1.0}
-                            step={0.1}
-                            content={`${ESimilarity[similarity2]} Weight: `}
-                        />
+                    <div key={4} style={getArtworsSliderDropdownStyle(isDevMode)}>
+                        {getArtworsSliderOrDropdown(algorythmWeigth, setAlgorythmWeight, similarity2, selectedArtwork,
+                            setSelectedArtwork, seed)}
                     </div>
                     <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
                 </div>
@@ -347,11 +349,12 @@ export const ConfigurationTool = ({
                                 if (seed) {
                                     const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
                                         artworksAttr, artworksAttrDrop, selectedOption, similarity1, similarity2,
-                                        perspectiveName, selectedAlgorithm, algorythmWeigth);
+                                        perspectiveName, selectedAlgorithm, algorythmWeigth, selectedArtwork);
 
                                     setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
-                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => setLoadingState({ isActive: false }));
+                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource,
+                                        () => setLoadingState({ isActive: false }));
                                 }
                             }
                         }
@@ -665,12 +668,63 @@ function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): Re
     return style;
 }
 
-function getArtworksSliderStyle(hide: boolean, isDevMode: boolean) {
+
+function getArtworsSliderOrDropdown(algorythmWeigth: number, setAlgorythm: Function, similarity2: ESimilarity,
+    selectedArtwork: config.INameAndIdPair | undefined, setSelectedArtwork: Function, seed: IConfigurationSeed | undefined): React.ReactNode {
+
+    if (similarity2 !== ESimilarity.Same) {
+
+        return (
+            <Slider
+                initialValue={algorythmWeigth}
+                onInput={(value: number) => { setAlgorythm(value) }}
+                minimum={0.0}
+                maximum={1.0}
+                step={0.1}
+                content={`${ESimilarity[similarity2]} Weight: `}
+            />);
+
+    } else if (seed !== undefined && selectedArtwork !== undefined) {
+
+        const items = [];
+
+        for (let i = 0; i < seed.artworks.length; i++) {
+            const name = seed.artworks[i].name;
+
+            items.push(
+                <Button
+                    key={i}
+                    content={`${name.charAt(0).toUpperCase()}${name.slice(1)}`}
+                    state={seed.artworks[i].id === selectedArtwork.id ? EButtonState.active : EButtonState.unactive}
+                    onClick={
+                        () => {
+                            setSelectedArtwork(seed.artworks[i]);
+                        }
+                    }
+                    extraClassName={"btn-dropdown"}
+                />
+            );
+        }
+
+        return (
+            <DropMenu
+                items={items}
+                content={`${selectedArtwork.name.charAt(0).toUpperCase()}${selectedArtwork.name.slice(1)}`}
+                menuDirection={EDropMenuDirection.down}
+                extraClassButton={"secondary down-arrow"}
+            />
+        );
+
+    } else {
+        return "";
+    }
+}
+
+function getArtworsSliderDropdownStyle(isDevMode: boolean) {
 
     const style: React.CSSProperties =
     {
         display: `${isDevMode ? "block" : "none"}`,
-        opacity: hide ? "30%" : "100%",
     }
 
     return style;
