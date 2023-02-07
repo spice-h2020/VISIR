@@ -456,7 +456,11 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
                         citizenAttr.set(userAttribute.att_name, !isChecked);
                         setCitizenAttr(new Map(citizenAttr));
                     }}>
-                    <input key={1} type="checkbox" style={{ userSelect: "none", cursor: "pointer" }} id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false} />
+                    {/*The on change is a dummy function needed to not get error because otherwise the checked 
+                        property changes without onChange being implemented*/}
+                    <input key={1} type="checkbox" style={{ userSelect: "none", cursor: "pointer" }}
+                        id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false}
+                        onChange={() => { }} />
                     {userAttribute.att_name}
 
                 </div>)
@@ -507,8 +511,10 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
                         artworksAttr.set(onAttribute.att_name, !isChecked);
                         setArtworksAttr(new Map(artworksAttr));
                     }}>
+                        {/*The on change is a dummy function needed to not get error because otherwise the checked 
+                        property changes without onChange being implemented*/}
                         <input key={0} type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`}
-                            value={onAttribute.att_name} checked={isChecked ? isChecked : false} />
+                            value={onAttribute.att_name} checked={isChecked ? isChecked : false} onChange={() => { }} />
 
                         {onAttribute.att_name}
                     </div>}
