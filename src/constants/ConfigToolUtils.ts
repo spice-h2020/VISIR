@@ -16,7 +16,8 @@ export interface IConfigurationSeed {
     user_attributes: INameAndTypePair[];
     interaction_similarity_functions: ISimilarityFunction[];
     algorithm: IAlgorithm[],
-    artworks: INameAndIdPair[]
+    artworks: INameAndIdPair[],
+    HetchStructure: boolean
 }
 
 export interface IArtworkAttribute {
@@ -48,6 +49,15 @@ export interface INameAndIdPair {
 }
 
 export const defaultWeightValue = 0.5;
+export const defaultArtworkWeightValue = 0.5;
+
+export const HetchMidSentence = "for users with";
+export const midSentence = "in";
+export const HetchLastWord = "beliefs.";
+export const lastWord = "artworks."
+
+export const HetchSimilarity1 = [ESimilarity.Similar, ESimilarity.Same];
+export const HetchSimilarity2 = [ESimilarity.Similar, ESimilarity.Same];
 
 //#endregion
 
@@ -81,7 +91,7 @@ export function initAlgorythmDrop(algorythms: IAlgorithm[]): IAlgorithm {
 export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: Map<string, boolean>,
     artworksAttr: Map<string, boolean>, artworksDropdownAttr: Map<string, boolean[]>,
     selectedOption: ISimilarityFunction, similarity1: ESimilarity, similarity2: ESimilarity, perspectiveName: string,
-    algorithm: IAlgorithm, algWeight: number, selectedArtwork: INameAndIdPair | undefined) {
+    algorithm: IAlgorithm, algWeight: number, selectedArtwork: INameAndIdPair | undefined, artworksWeight: number) {
 
     let newConfig: any = {
         user_attributes: [],
@@ -105,7 +115,8 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
     newConfig["algorithm"] = {
         "name": algorithm.name,
         "params": algorithm.params,
-        "weight": algWeight
+        "weight": algWeight,
+        "weightArtworks": artworksWeight
     };
 
     return newConfig;

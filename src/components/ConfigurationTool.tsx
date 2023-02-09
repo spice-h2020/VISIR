@@ -95,11 +95,15 @@ export const ConfigurationTool = ({
 }: ConfToolProps) => {
     const [isDevMode, setIsDevMode] = useState<boolean>(false);
 
+    //Seed for all the configuration
+    const [seed, setSeed] = useState<IConfigurationSeed>();
+
     //Written perspective name
     const [perspectiveName, setPerspectiveName] = useState<string>("");
     //Selected algorythm
     const [selectedAlgorithm, setSelectedAlgorithm] = useState<config.IAlgorithm>(emptyAlgorithm);
     const [algorythmWeigth, setAlgorythmWeight] = useState<number>(config.defaultWeightValue);
+    const [artworksWeight, setArtworksWeight] = useState<number>(config.defaultArtworkWeightValue);
     //Selected artwork
     const [selectedArtwork, setSelectedArtwork] = useState<config.INameAndIdPair>();
 
@@ -116,8 +120,9 @@ export const ConfigurationTool = ({
 
     const [isTextAreaActive, setIsTextAreaActive] = useState<boolean>(false);
 
-    //Seed for all the configuration
-    const [seed, setSeed] = useState<IConfigurationSeed>();
+
+
+
     //TextArea at the end content
     const [textAreaContent, setTextAreaContent] = useState<string>("");
 
@@ -156,6 +161,8 @@ export const ConfigurationTool = ({
                         throw Error("Failed while setting default Artwork " + error);
                     }
 
+                    setSimilarity1(newSeed?.HetchStructure ? config.HetchSimilarity1[0] : ESimilarity.Same);
+                    setSimilarity2(newSeed?.HetchStructure ? config.HetchSimilarity2[0] : ESimilarity.Same);
                 }
             });
         }
@@ -265,7 +272,7 @@ export const ConfigurationTool = ({
                 }}>
                     <DropMenu
                         key={0}
-                        items={getSimilarityDropdown(similarity1, setSimilarity1)}
+                        items={getSimilarityDropdown(similarity1, setSimilarity1, seed?.HetchStructure)}
                         content={ESimilarity[similarity1]}
                         menuDirection={EDropMenuDirection.down}
                         extraClassButton={"transparent down-arrow"}
@@ -274,19 +281,19 @@ export const ConfigurationTool = ({
                         {getOptionSelector(selectedOption, seed, setSelectedOption)}
                     </React.Fragment>
 
-                    <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> in </span>
+                    <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchMidSentence : config.midSentence}`} </span>
                     <DropMenu
                         key={3}
-                        items={getSimilarityDropdown(similarity2, setSimilarity2)}
+                        items={getSimilarityDropdown(similarity2, setSimilarity2, seed?.HetchStructure, true)}
                         content={ESimilarity[similarity2]}
                         menuDirection={EDropMenuDirection.down}
                         extraClassButton={"transparent down-arrow"}
                     />
                     <div key={4} style={getArtworsSliderDropdownStyle(isDevMode)}>
-                        {getArtworsSliderOrDropdown(algorythmWeigth, setAlgorythmWeight, similarity2, selectedArtwork,
+                        {getArtworsSliderOrDropdown(artworksWeight, setArtworksWeight, similarity2, selectedArtwork,
                             setSelectedArtwork, seed)}
                     </div>
-                    <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
+                    <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchLastWord : config.lastWord}`} </span>
                 </div>
                 {/*Row with the fieldsets, and the button to open/close the json export object */}
                 <div key={3} style={{
@@ -349,7 +356,7 @@ export const ConfigurationTool = ({
                                 if (seed) {
                                     const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
                                         artworksAttr, artworksAttrDrop, selectedOption, similarity1, similarity2,
-                                        perspectiveName, selectedAlgorithm, algorythmWeigth, selectedArtwork);
+                                        perspectiveName, selectedAlgorithm, algorythmWeigth, selectedArtwork, artworksWeight);
 
                                     setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
@@ -371,25 +378,47 @@ export const ConfigurationTool = ({
  * @param setSimilarity callback executed when an option is selected
  * @returns 
  */
-function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function): React.ReactNode[] {
+function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function, HetchStructure: boolean | undefined,
+    isSecond: boolean = false): React.ReactNode[] {
     const buttons: React.ReactNode[] = [];
 
-    for (let i = 0; i < Object.keys(ESimilarity).length / 2; i++) {
-        buttons.push(
-            <Button
-                key={i}
-                content={ESimilarity[i]}
-                state={sim === i ? EButtonState.active : EButtonState.unactive}
-                onClick={
-                    () => {
-                        setSimilarity(i);
+    if (HetchStructure) {
+        const similarityToCheck = isSecond ? config.HetchSimilarity2 : config.HetchSimilarity1;
+
+        for (let i = 0; i < similarityToCheck.length; i++) {
+            buttons.push(
+                <Button
+                    key={i}
+                    content={ESimilarity[similarityToCheck[i]]}
+                    state={sim === similarityToCheck[i] ? EButtonState.active : EButtonState.unactive}
+                    onClick={
+                        () => {
+                            setSimilarity(similarityToCheck[i]);
+                        }
                     }
-                }
-                extraClassName={"btn-dropdown"}
-            />
-        )
+                    extraClassName={"btn-dropdown"}
+                />
+            )
+        }
+    } else {
+        for (let i = 0; i < Object.keys(ESimilarity).length / 2; i++) {
+            buttons.push(
+                <Button
+                    key={i}
+                    content={ESimilarity[i]}
+                    state={sim === i ? EButtonState.active : EButtonState.unactive}
+                    onClick={
+                        () => {
+                            setSimilarity(i);
+                        }
+                    }
+                    extraClassName={"btn-dropdown"}
+                />
+            )
+        }
     }
     return buttons;
+
 }
 
 
@@ -669,15 +698,15 @@ function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): Re
 }
 
 
-function getArtworsSliderOrDropdown(algorythmWeigth: number, setAlgorythm: Function, similarity2: ESimilarity,
+function getArtworsSliderOrDropdown(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity,
     selectedArtwork: config.INameAndIdPair | undefined, setSelectedArtwork: Function, seed: IConfigurationSeed | undefined): React.ReactNode {
 
     if (similarity2 !== ESimilarity.Same) {
 
         return (
             <Slider
-                initialValue={algorythmWeigth}
-                onInput={(value: number) => { setAlgorythm(value) }}
+                initialValue={artworksWeight}
+                onInput={(value: number) => { setArtworksWeight(value) }}
                 minimum={0.0}
                 maximum={1.0}
                 step={0.1}

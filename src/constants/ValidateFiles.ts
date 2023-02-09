@@ -669,6 +669,13 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
             throw Error(`Artworks are not an object`);
         }
 
+        if (arg.HetchStructure === undefined) {
+            arg.HetchStructure = false;
+        }
+
+        if (typeof (arg.HetchStructure) !== "boolean") {
+            throw Error(`HetchStructure is not a boolean`);
+        }
 
         for (let i = 0; i < arg.artwork_attributes.length; i++) {
             arg.artwork_attributes[i] = isArtworkAttributesValid(arg.artwork_attributes[i]);
