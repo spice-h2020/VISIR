@@ -104,7 +104,7 @@ export const PerspectiveView = ({
                     const nodeData: IUserData = netManager.nodes.get(selectedObject.obj.id) as IUserData;
 
                     //If the node exist in this network
-                    if (nodeData !== undefined) {
+                    if (nodeData !== undefined && nodeData !== null) {
                         //If its a medoid node
                         if (nodeData.isMedoid) {
                             if (selectedObject.sourceID === netManager.id) {
