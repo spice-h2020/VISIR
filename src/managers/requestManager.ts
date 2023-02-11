@@ -97,7 +97,7 @@ export default class RequestManager {
                 }
             })
             .catch((error: any) => {
-
+                this.setLoadingState({ isActive: false });
                 callback(undefined);
 
                 console.log(`Perspective file with id: (${perspectiveId}) was not found: ${error}`);
@@ -140,6 +140,7 @@ export default class RequestManager {
                 }
             })
             .catch((error: any) => {
+                this.setLoadingState({ isActive: false });
 
                 callback(undefined);
                 if (stateCallback) stateCallback();
@@ -253,6 +254,8 @@ export default class RequestManager {
                 }
             })
             .catch((error) => {
+                this.setLoadingState({ isActive: false });
+
                 throw error;
             });
     }
@@ -275,31 +278,10 @@ export default class RequestManager {
         console.log(`Source url changed to ${newUrl}`)
     }
 
-    sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void,
-        callback: Function) {
+    sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource,
+        changeItemState?: Function, apiURL?: string) => void, callback: Function) {
 
         // For some reason, CM receives an empty object when axios does the post request.
-        //newConfiguration = JSON.stringify(newConfiguration)
-        /*
-        this.axios.post(this.confSeedPOST,
-            newConfiguration)
-            .then((response) => {
-                const data = JSON.parse(response.data);
-                window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
-
-                if (this.usingAPI) {
-                    updateFileSource(EFileSource.Api, callback, this.axios.defaults.baseURL)
-                } else {
-                    updateFileSource(EFileSource.Local, callback)
-                }
-
-            })
-            .catch((err) => {
-                console.log(err);
-                window.alert(err);
-            });
-        */
-
         if (this.usingAPI) {
             fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
                 method: 'POST',
@@ -311,9 +293,12 @@ export default class RequestManager {
             })
                 .then(res => res.json())
                 .then((res) => {
+                    this.setLoadingState({ isActive: false });
+
                     console.log("response: " + res)
                     window.alert("inserted perspectiveId: hmm" + res.insertedPerspectiveId);
 
+                    this.setLoadingState({ isActive: false })
                     if (this.usingAPI) {
                         updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
                     } else {
@@ -322,7 +307,9 @@ export default class RequestManager {
 
                     callback();
                 })
-                .catch(function (err) {
+                .catch((err) => {
+                    this.setLoadingState({ isActive: false })
+
                     console.log(err)
                     window.alert(err);
                     callback();

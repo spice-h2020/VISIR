@@ -133,13 +133,12 @@ export const ConfigurationTool = ({
     useEffect(() => {
         if (isActive) {
             requestManager.requestConfigurationToolSeed((newSeed: IConfigurationSeed) => {
-
+                setLoadingState({ isActive: false });
                 if (newSeed !== undefined) {
                     if (newSeed.interaction_similarity_functions.length === 0) {
                         alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
                     } else {
                         setSeed(newSeed)
-                        setLoadingState({ isActive: false });
                         setSelectedOption(newSeed.interaction_similarity_functions[0]);
                     }
 
@@ -289,7 +288,7 @@ export const ConfigurationTool = ({
                         menuDirection={EDropMenuDirection.down}
                         extraClassButton={"transparent down-arrow"}
                     />
-                    <div key={4} style={getArtworsSliderDropdownStyle(isDevMode)}>
+                    <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}>
                         {getArtworsSliderOrDropdown(artworksWeight, setArtworksWeight, similarity2, selectedArtwork,
                             setSelectedArtwork, seed)}
                     </div>
@@ -749,11 +748,12 @@ function getArtworsSliderOrDropdown(artworksWeight: number, setArtworksWeight: F
     }
 }
 
-function getArtworsSliderDropdownStyle(isDevMode: boolean) {
+function getArtworsSliderDropdownStyle(isDevMode: boolean, similarity: ESimilarity) {
 
+    let shouldDisplay = isDevMode || similarity === ESimilarity.Same
     const style: React.CSSProperties =
     {
-        display: `${isDevMode ? "block" : "none"}`,
+        display: `${shouldDisplay ? "block" : "none"}`,
     }
 
     return style;
