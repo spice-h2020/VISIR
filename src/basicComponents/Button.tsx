@@ -35,6 +35,10 @@ interface ButtonProps {
    * Text that will be shown to the user when hovering the button.
    */
   hoverText?: string;
+  /**
+  * Icon added to the end of the btn
+  */
+  postIcon?: React.ReactNode;
 }
 
 /**
@@ -47,6 +51,7 @@ export const Button = ({
   onClick = (): void => { },
   extraClassName = "",
   hoverText = "",
+  postIcon,
 }: ButtonProps) => {
 
   const [buttonState, setButtonState] = useState<EButtonState>(state);
@@ -56,7 +61,6 @@ export const Button = ({
   }, [state]);
 
   const buttonClassState = buttonState !== EButtonState.unactive ? EButtonState[buttonState] : "";
-
   return (
     <button title={hoverText} type="button" className={`btn ${extraClassName} ${buttonClassState}`}
       onClick={(): void => {
@@ -70,7 +74,10 @@ export const Button = ({
         }
       }}
     >
-      {content}
+      <div style={{ display: "inline-flex", width: "-webkit-fill-available", padding: "0.7rem 0.7rem" }}>
+        <div style={{ width: "96%" }}> {content} </div>
+        {postIcon ? <div style={{ alignSelf: "center", display: "flex", paddingRight: "1rem" }}> {postIcon} </div> : ""}
+      </div>
     </button >
   );
 };

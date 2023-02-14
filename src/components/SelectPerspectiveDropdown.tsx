@@ -24,13 +24,10 @@ import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 const buttonText: React.CSSProperties = {
-    width: "90%",
-    float: "left",
     textAlign: "center",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    maxWidth: "15vw",
 }
 
 interface SelectPerspectiveProps {
@@ -70,7 +67,7 @@ export const SelectPerspectiveDropdown = ({
 }: SelectPerspectiveProps) => {
 
     const [states, setStates] = useReducer(bStateArrayReducer, []);
-    const [text, setText] = useState<string>(tittle);
+    const [mainBtnText, setMainBtnText] = useState<string>(tittle);
 
 
     /*Init all dropdown items to unactive except the active perspectives that will be active or disabled depending on
@@ -86,7 +83,7 @@ export const SelectPerspectiveDropdown = ({
                     if (allIds[i].isActive === PerspectiveActiveState.left) {
                         if (isLeftDropdown) {
                             hasPerspective = true;
-                            setText(allIds[i].name);
+                            setMainBtnText(allIds[i].name);
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.active });
                         } else {
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.disabled });
@@ -94,7 +91,7 @@ export const SelectPerspectiveDropdown = ({
                     } else if (allIds[i].isActive === PerspectiveActiveState.right) {
                         if (!isLeftDropdown) {
                             hasPerspective = true;
-                            setText(allIds[i].name);
+                            setMainBtnText(allIds[i].name);
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.active });
                         } else {
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.disabled });
@@ -104,7 +101,7 @@ export const SelectPerspectiveDropdown = ({
             }
 
             if (!hasPerspective) {
-                setText(tittle);
+                setMainBtnText(tittle);
             }
         }
     }, [allIds, isLeftDropdown, tittle]);
@@ -114,7 +111,7 @@ export const SelectPerspectiveDropdown = ({
             <DropMenu
                 items={[]}
                 content={tClass.t.toolbar.selectPerspective.noPerspectiveName}
-                extraClassButton="transparent down-arrow fixedWidth-15vw"
+                extraClassButton="transparent down-arrow maximum-width"
             />
         );
     }
@@ -128,11 +125,12 @@ export const SelectPerspectiveDropdown = ({
                 items={perspectivesButtons}
                 content={
                     <div style={buttonText}>
-                        {text}
+                        {mainBtnText}
                     </div>}
-                extraClassButton="primary down-arrow fixedWidth-15vw blinkSizeAnim"
-                hoverText={text}
+                extraClassButton="primary blinkSizeAnim maximum-width"
+                hoverText={mainBtnText}
                 menuDirection={EDropMenuDirection.down}
+                postIcon={<div className="down-arrow" />}
             />
         );
     } else {
@@ -144,11 +142,12 @@ export const SelectPerspectiveDropdown = ({
                 items={perspectivesButtons}
                 content={
                     <div style={hamburgerBtnStyle}>
-                        {text}
+                        {mainBtnText}
                     </div>}
                 extraClassButton="primary down-arrow fixedWidth-10vw blinkSizeAnim btn-dropdown"
-                hoverText={text}
+                hoverText={mainBtnText}
                 menuDirection={EDropMenuDirection.right}
+                postIcon={<div className="down-arrow" />}
             />
         );
     }

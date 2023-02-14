@@ -97,12 +97,14 @@ export default class RequestManager {
                 }
             })
             .catch((error: any) => {
-                this.setLoadingState({ isActive: false });
                 callback(undefined);
 
                 console.log(`Perspective file with id: (${perspectiveId}) was not found: ${error}`);
                 console.log(error);
                 alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
+
+            }).finally(() => {
+                this.setLoadingState({ isActive: false });
             });
     }
     /**
@@ -140,14 +142,15 @@ export default class RequestManager {
                 }
             })
             .catch((error: any) => {
-                this.setLoadingState({ isActive: false });
-
                 callback(undefined);
                 if (stateCallback) stateCallback();
 
                 console.log(`All IDs file was not found:`);
                 console.log(error);
                 alert(`All IDs file was not found: ${error.message}`);
+            })
+            .finally(() => {
+                this.setLoadingState({ isActive: false });
             });
     }
     /**
@@ -184,6 +187,8 @@ export default class RequestManager {
                 this.setLoadingState({ isActive: false });
 
                 alert(`Configuration tool seed was not found: ${error.message}`);
+            }).finally(() => {
+                this.setLoadingState({ isActive: false });
             });
     }
     getConfigurationToolSeed() {
@@ -213,7 +218,9 @@ export default class RequestManager {
             })
             .catch((error) => {
                 throw error;
-            });
+            }).finally(() => {
+                this.setLoadingState({ isActive: false });
+            });;
     }
 
     askJobInProgress(url: any): any {
@@ -257,7 +264,9 @@ export default class RequestManager {
                 this.setLoadingState({ isActive: false });
 
                 throw error;
-            });
+            }).finally(() => {
+                this.setLoadingState({ isActive: false });
+            });;
     }
 
     /**
@@ -313,7 +322,9 @@ export default class RequestManager {
                     console.log(err)
                     window.alert(err);
                     callback();
-                });
+                }).finally(() => {
+                    this.setLoadingState({ isActive: false });
+                });;
         }
     }
 }

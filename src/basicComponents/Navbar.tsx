@@ -8,23 +8,37 @@
 import React from "react";
 
 const navBarContainer: React.CSSProperties = {
-    listStyleType: "none",
-    overflow: "hidden",
     backgroundColor: "rgb(248, 249, 250)",
-    boxSizing: "border-box",
-    display: "flex",
-    flexWrap: "wrap",
 
-    paddingTop: "0.5rem",
-    paddingBottom: "0.5rem",
+    paddingTop: "0.25rem",
+    paddingBottom: "0.25rem",
 
     position: "fixed",
     top: "0",
 
-    zIndex: "100",
-    height: "70px",
+    height: "4rem",
     width: "100%",
+    zIndex: "100",
+
+
+    display: "inline-flex",
+    flexWrap: "nowrap",
+    boxSizing: "border-box"
 }
+
+const colStyle: React.CSSProperties = {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center"
+}
+
+export enum EScreenSize {
+    normal,
+    small,
+    smallest,
+}
+
 interface NavbarProps {
     /**
      * Components aligned to the left of the navBar.
@@ -38,6 +52,8 @@ interface NavbarProps {
      * Components aligned to the right of the navBar.
      */
     rightAlignedItems?: React.ReactNode[];
+
+    screenSize: EScreenSize;
 }
 
 /**
@@ -47,27 +63,22 @@ export const Navbar = ({
     leftAlignedItems = [],
     midAlignedItems = [],
     rightAlignedItems = [],
+    screenSize = EScreenSize.normal
 }: NavbarProps) => {
 
     return (
         <div style={navBarContainer}>
-            <div className="col-4"
-                style={{ flexDirection: "row", display: "flex" }}
-            >
+            <div style={getColStyle(0, screenSize)}>
                 {leftAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div className="col-4"
-                style={{ display: "contents" }}
-            >
+            <div style={getColStyle(1, screenSize)}>
                 {midAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div className="col-4"
-                style={{ flexDirection: "row-reverse", display: "flex" }}
-            >
+            <div style={getColStyle(2, screenSize)}>
                 {rightAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
@@ -75,3 +86,57 @@ export const Navbar = ({
         </div>
     );
 };
+
+const showDebugColor = false;
+function getColStyle(i: number, screenSize: EScreenSize) {
+
+    const newStyle: React.CSSProperties = JSON.parse(JSON.stringify(colStyle));
+
+    switch (i) {
+        case 0: {
+            if (showDebugColor) newStyle.backgroundColor = "rgba(255, 0, 0, 0.25)";
+            switch (screenSize) {
+                case EScreenSize.normal:
+                    newStyle.width = "25vw";
+                    break;
+                default: {
+                    newStyle.width = "10vw";
+                }
+            }
+
+            break;
+        }
+        case 1: {
+            if (showDebugColor) newStyle.backgroundColor = "rgba(255, 255, 0, 0.25)";
+            switch (screenSize) {
+                case EScreenSize.normal:
+                    newStyle.width = "50vw";
+                    break;
+                case EScreenSize.small:
+                    newStyle.width = "70vw";
+                    break;
+                case EScreenSize.smallest:
+                    newStyle.width = "10vw";
+            }
+            newStyle.justifyContent = "center"
+            break;
+        }
+        case 2: {
+            if (showDebugColor) newStyle.backgroundColor = "rgba(255, 0, 255, 0.25)";
+            switch (screenSize) {
+                case EScreenSize.normal:
+                    newStyle.width = "25vw";
+                    break;
+                case EScreenSize.small:
+                    newStyle.width = "25vw";
+                    break;
+                case EScreenSize.smallest:
+                    newStyle.width = "80vw";
+            }
+
+            break;
+        }
+    }
+
+    return newStyle
+}

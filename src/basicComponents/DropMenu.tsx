@@ -23,6 +23,7 @@ export enum EDropMenuDirection {
 const dropdownStyle: React.CSSProperties = {
     float: "left",
     overflow: "hidden",
+    width: "100%"
 }
 
 
@@ -85,6 +86,10 @@ interface DropMenuProps {
      * buttonFixatesState has priority over this. If the main button is clicked, this property will be ignored.
      */
     hoverChangesState?: boolean;
+    /**
+     * Icon added to the end of the btn that toggles the dropdown
+     */
+    postIcon?: React.ReactNode;
 }
 
 export const DropMenu = ({
@@ -98,6 +103,8 @@ export const DropMenu = ({
     menuDirection = EDropMenuDirection.down,
     buttonFixatesState = true,
     hoverChangesState = false,
+    postIcon,
+
 }: DropMenuProps) => {
 
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -126,7 +133,7 @@ export const DropMenu = ({
             showDropDown ? EButtonState.active : EButtonState.unactive
             : state;
 
-        let innerDropMenu: React.ReactNode =
+        let mainBtn: React.ReactNode =
             <React.Fragment>
                 <Button
                     key={-1}
@@ -134,6 +141,7 @@ export const DropMenu = ({
                     state={mainButtonState}
                     extraClassName={extraClassButton}
                     hoverText={hoverText}
+                    postIcon={postIcon}
                     onClick={() => {
                         if (buttonFixatesState) {
                             if (showDropDown) {
@@ -162,9 +170,9 @@ export const DropMenu = ({
         //Place the dropright content at the same height as the btn that activates it
         switch (menuDirection) {
             case EDropMenuDirection.right:
-                innerDropMenu =
+                mainBtn =
                     <div key={-2} className='row' onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}>
-                        {innerDropMenu}
+                        {mainBtn}
                     </div>
                 break;
             default: {
@@ -174,7 +182,7 @@ export const DropMenu = ({
 
         return (
             <div key={-3} style={getMainMenuStyle(menuDirection)} className={extraClassContainer} ref={containerRef}>
-                {innerDropMenu}
+                {mainBtn}
             </div>
         )
 
@@ -190,6 +198,7 @@ export const DropMenu = ({
                     content={content}
                     state={EButtonState.disabled}
                     extraClassName={extraClassButton}
+                    postIcon={postIcon}
                 />
             </div >
         );
@@ -233,14 +242,6 @@ const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, c
 
 const getMainMenuStyle = (menuDirection: EDropMenuDirection) => {
     let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(dropdownStyle)));
-
-    switch (menuDirection) {
-        case EDropMenuDirection.down: {
-            newStyle.marginLeft = "0.5rem";
-            newStyle.marginRight = "0.5rem";
-            break;
-        }
-    }
 
     return newStyle;
 }

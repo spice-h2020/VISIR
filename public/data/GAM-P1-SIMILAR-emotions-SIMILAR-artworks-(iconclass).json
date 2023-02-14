@@ -201,6 +201,7 @@
                 "anqHwMQ0",
                 "eLXgq0Hx",
                 "ox8G7avH",
+                "MyDummyUser",
                 "centroid2"
             ]
         },
@@ -342,6 +343,17 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "MyDummyUser",
+            "label": "MyDummyUser",
+            "group": 3,
+            "explicit_community": {
+                "Gender": "Female",
+                "RelationshipWithArt": "I have a strong interest in art"
+            },
+            "community_interactions": [],
+            "no_community_interactions": []
         },
         {
             "id": "2JfmseEG",

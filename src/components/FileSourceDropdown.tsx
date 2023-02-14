@@ -14,18 +14,13 @@ import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 //Config file
 import config from '../appConfig.json';
 import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const inputTextStyle: React.CSSProperties = {
     width: "20rem",
-    fontSize: "1rem",
+    fontSize: "0.9rem",
     alignSelf: "center",
 }
-
-const updateImgStyle: React.CSSProperties = {
-    width: "1.4rem",
-    verticalAlign: "middle"
-}
-
 
 interface FileSourceDropdownProps {
     //On click handler
@@ -82,15 +77,15 @@ export const FileSourceDropdown = ({
     }, []);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef, tClass)
+    const fileSourceButtons: React.ReactNode[] = getButtons(changeFileSource, states, inputRef)
 
     if (!insideHamburger) {
         return (
             <React.Fragment>
                 <DropMenu
                     items={fileSourceButtons}
-                    content={tClass.t.toolbar.fileSourceDrop.name}
-                    extraClassButton="transparent down-arrow"
+                    content={<FontAwesomeIcon color='red' size='xl' icon={["fas", "file-arrow-down"]} />}
+                    extraClassButton="transparent"
                     menuDirection={EDropMenuDirection.down}
                 />
             </React.Fragment>
@@ -101,7 +96,7 @@ export const FileSourceDropdown = ({
                 <DropMenu
                     items={fileSourceButtons}
                     content={tClass.t.toolbar.fileSourceDrop.name}
-                    extraClassButton="transparent down-arrow btn-dropdown"
+                    extraClassButton="transparent btn-dropdown"
                     menuDirection={EDropMenuDirection.right}
                 />
             </React.Fragment>
@@ -127,45 +122,42 @@ const init = (initialOption: EFileSource): EButtonState[] => {
  * @param selectedItems State of the buttons.
  * @returns returns an array of React components.
  */
-function getButtons(changeFileSource: Function, selectedItems: EButtonState[], inputRef: React.RefObject<HTMLInputElement>
-    , tClass: CTranslation): React.ReactNode[] {
+function getButtons(changeFileSource: Function, selectedItems: EButtonState[],
+    inputRef: React.RefObject<HTMLInputElement>): React.ReactNode[] {
 
-    const imageSrc = selectedItems[EFileSource.Api] === EButtonState.active ? "./images/update-white.png" : "./images/update-red.png";
+    const useApiFunction = () => {
+        if (inputRef.current) {
+            changeFileSource(EFileSource.Api, inputRef.current.value);
+        }
+    }
 
     const dropRightContent = [
-        <div className="row" key={1}>
-            <input type="text" ref={inputRef} defaultValue={config.API_URI}
+        <div className="row" style={{ alignItems: "center" }} key={1}>
+            <label htmlFor="f-urlSource" style={{ marginRight: "5px" }}> Use url: </label>
+            <input type="text" id="f-urlSource" ref={inputRef} defaultValue={config.API_URI}
                 style={inputTextStyle}
-            />
-            <Button
-                content={<img src={imageSrc} style={updateImgStyle} alt="update Icon" />}
-                onClick={() => {
-                    if (inputRef.current) {
-                        changeFileSource(EFileSource.Api, inputRef.current.value);
+                onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                        useApiFunction();
                     }
                 }}
-                state={selectedItems[EFileSource.Api]}
-                extraClassName={selectedItems[EFileSource.Api] === EButtonState.active ? "primary" : ""}
             />
         </div>
     ];
     return [
         <Button
             key={1}
-            content={tClass.t.toolbar.fileSourceDrop.localFiles}
+            content={"Use local files"}
             onClick={() => { changeFileSource(EFileSource.Local); }}
             state={selectedItems[EFileSource.Local]}
             extraClassName={"btn-dropdown"}
         />,
-        <DropMenu
+        <Button
             key={2}
-            items={dropRightContent}
+            content={dropRightContent}
             state={selectedItems[EFileSource.Api]}
-            content={tClass.t.toolbar.fileSourceDrop.Api_URL}
-            extraClassButton="transparent btn-dropdown down-right"
-            extraClassContainer="dropdown-inner"
-            hoverChangesState={true}
-            menuDirection={EDropMenuDirection.right}
+            extraClassName={"btn-dropdown"}
+
         />
     ];
 }

@@ -15,7 +15,7 @@ import { CTranslation, ILegendData, legendDataReducer } from './constants/auxTyp
 //Packages
 import React, { useEffect, useReducer, useState } from 'react';
 //Local files
-import { Navbar } from './basicComponents/Navbar';
+import { EScreenSize, Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
 import { FileSourceDropdown } from './components/FileSourceDropdown';
 import { OptionsDropdown } from './components/OptionsDropdown';
@@ -31,6 +31,10 @@ import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
 import config from './appConfig.json';
 import { HamburguerIcon } from './basicComponents/HamburgerButton';
 import { ConfigurationTool } from './components/ConfigurationTool';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
 
 interface AppProps {
   perspectiveId1: string | null,
@@ -57,7 +61,7 @@ export const App = ({
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
-  const [fileSource, setFileSource] = useState<[EFileSource, String]>([initialOptions.fileSource, config.API_URI])
+  const [fileSource, setFileSource] = useState<[EFileSource, string]>([initialOptions.fileSource, config.API_URI])
 
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useReducer(legendDataReducer, { dims: [], anonymous: false, anonGroup: false } as ILegendData);
@@ -96,11 +100,12 @@ export const App = ({
   }
 
   //Remove components from the navBar and add them to the hamburger btn based on the viewport width
-  let small = windowWidth < 1100;
-  let tooSmall = windowWidth < 600;
+  let screenSize: EScreenSize = windowWidth < 600 ? EScreenSize.smallest :
+    windowWidth < 1200 ? EScreenSize.small : EScreenSize.normal;
+
 
   //Button that refresh the web page
-  const mainBtn = small === false ?
+  const mainBtn = screenSize !== EScreenSize.normal ?
     <div style={{ margin: "0px 5px" }}>
       <Button
         content={<div className='row' style={{ alignItems: "center" }}>
@@ -118,7 +123,7 @@ export const App = ({
       key={0}
       setFileSource={updateFileSource}
       setLoadingState={SetLoadingState}
-      insideHamburger={small}
+      insideHamburger={screenSize !== EScreenSize.normal}
       translationClass={currentLanguage}
       curentFileSource={fileSource}
     />;
@@ -128,7 +133,7 @@ export const App = ({
     <OptionsDropdown
       key={1}
       setViewOptions={setViewOptions}
-      insideHamburger={small}
+      insideHamburger={screenSize !== EScreenSize.normal}
       translationClass={currentLanguage}
       viewOptions={viewOptions}
     />
@@ -143,7 +148,7 @@ export const App = ({
       isLeftDropdown={true}
       requestMan={requestManager}
       setLoadingState={SetLoadingState}
-      insideHamburger={tooSmall}
+      insideHamburger={screenSize === EScreenSize.smallest}
       translationClass={currentLanguage}
     />
 
@@ -157,35 +162,39 @@ export const App = ({
       isLeftDropdown={false}
       requestMan={requestManager}
       setLoadingState={SetLoadingState}
-      insideHamburger={tooSmall}
+      insideHamburger={screenSize === EScreenSize.smallest}
       translationClass={currentLanguage}
     />
 
   //Button to collapse the visualization to the left if there are more than 1 active perspectove
   const collapseLeft =
-    <Button
-      content="<<"
-      onClick={(state: EButtonState) => {
-        if (state !== EButtonState.disabled) {
-          setCollapseState(EAppCollapsedState.toTheLeft);
-        }
-      }}
-      extraClassName={`first dark`}
-      state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
-    />
+    <div style={{ width: leftPerspective !== undefined && rightPerspective !== undefined ? "100%" : "0%" }}>
+      <Button
+        content="<<"
+        onClick={(state: EButtonState) => {
+          if (state !== EButtonState.disabled) {
+            setCollapseState(EAppCollapsedState.toTheLeft);
+          }
+        }}
+        extraClassName={`first dark`}
+        state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
+      />
+    </div>
 
   //Button to collapse the visualization to the right if there are more than 1 active perspectove
   const collapseRight =
-    <Button
-      content=">>"
-      extraClassName={`second dark`}
-      onClick={(state: EButtonState) => {
-        if (state !== EButtonState.disabled) {
-          setCollapseState(EAppCollapsedState.toTheRight);
-        }
-      }}
-      state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
-    />
+    <div style={{ width: leftPerspective !== undefined && rightPerspective !== undefined ? "100%" : "0%" }}>
+      <Button
+        content=">>"
+        extraClassName={`second dark`}
+        onClick={(state: EButtonState) => {
+          if (state !== EButtonState.disabled) {
+            setCollapseState(EAppCollapsedState.toTheRight);
+          }
+        }}
+        state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
+      />
+    </div>
 
   //Menu to see the legend and activate/disactive diferent node visualizations
   const legendDrop =
@@ -215,7 +224,7 @@ export const App = ({
   let navBar: React.ReactNode;
 
   //If its too small, everything is included in the hamburger button except the legend and the collapse buttons
-  if (tooSmall) {
+  if (screenSize === EScreenSize.smallest) {
     hamburgerContent.push(fileSourceDrop);
     hamburgerContent.push(optionsDrop);
     hamburgerContent.push(selectLeft);
@@ -246,9 +255,10 @@ export const App = ({
         rightAlignedItems={[
           legendDrop,
         ]}
+        screenSize={screenSize}
       />
     //If its a bit small, only the file source and options dropdown will be included in the hamburger button.
-  } else if (small) {
+  } else if (screenSize === EScreenSize.small) {
     hamburgerContent.push(fileSourceDrop);
     hamburgerContent.push(optionsDrop);
 
@@ -279,25 +289,40 @@ export const App = ({
         rightAlignedItems={[
           legendDrop,
         ]}
+        screenSize={screenSize}
       />
+
   } else {
     navBar =
       <Navbar
         leftAlignedItems={[
-          mainBtn,
-          fileSourceDrop,
-          optionsDrop,
+          <div style={{ margin: "0px 5px" }}>
+            <Button
+              content={<div className='row' style={{ alignItems: "center" }}>
+                <img style={{ height: "40px" }} src="./images/VISIR-red.png" alt="VISIR icon" />
+                <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
+              </div>}
+              extraClassName="transparent tittle mainBtn"
+              onClick={() => { window.location.reload() }}
+            />
+          </div>,
+          <FileSourceDropdown
+            key={0}
+            setFileSource={updateFileSource}
+            setLoadingState={SetLoadingState}
+            insideHamburger={screenSize !== EScreenSize.normal}
+            translationClass={currentLanguage}
+            curentFileSource={fileSource}
+          />
         ]}
         midAlignedItems={[
           selectLeft,
-          collapseLeft,
-          collapseRight,
           selectRight,
         ]}
         rightAlignedItems={[
-          legendDrop,
-          toggleConfTool
+
         ]}
+        screenSize={screenSize}
       />
   }
 
@@ -322,9 +347,181 @@ export const App = ({
     setAllPerspectivesIds(allIds);
   }
 
+  const inputTextStyle: React.CSSProperties = {
+    width: "10rem",
+    fontSize: "1rem",
+    alignSelf: "center",
+  }
+
+  const updateImgStyle: React.CSSProperties = {
+    width: "1.4rem",
+    verticalAlign: "middle"
+  }
+
+  let keyIndex = 0;
+  const visirBtn =
+    <Button
+      key={++keyIndex}
+      content={
+        <div className='row' style={{ alignItems: "center" }}>
+          <img style={{ height: "40px" }} src="./images/VISIR-red.png" alt="VISIR icon" />
+          <div className="tittle" style={{ marginLeft: "10px" }}>VISIR</div>
+        </div>}
+      extraClassName="transparent tittle mainBtn"
+      onClick={() => { window.location.reload() }}
+    />
+
+  const fileSourceBtn =
+    <FileSourceDropdown
+      key={++keyIndex}
+      setFileSource={updateFileSource}
+      setLoadingState={SetLoadingState}
+      insideHamburger={screenSize !== EScreenSize.normal}
+      translationClass={currentLanguage}
+      curentFileSource={fileSource}
+    />
+
+  const optionsBtn =
+    <OptionsDropdown
+      key={++keyIndex}
+      setViewOptions={setViewOptions}
+      insideHamburger={screenSize !== EScreenSize.normal}
+      translationClass={currentLanguage}
+      viewOptions={viewOptions}
+    />
+
+  const savePerspectives =
+    <Button
+      key={++keyIndex}
+      content={<FontAwesomeIcon color='black' size='xl' icon={["fas", "floppy-disk"]} />}
+      extraClassName={"transparent"}
+    />
+
+  const configToolBtn =
+    <Button
+      content={<FontAwesomeIcon color='black' size='xl' icon={["fas", "gear"]} />}
+      extraClassName={`transparent`}
+      onClick={(state: EButtonState) => {
+        if (state !== EButtonState.disabled) {
+          setIsConfigToolActive(!isConfigToolActive);
+        }
+      }}
+      state={isConfigToolActive ? EButtonState.active : EButtonState.unactive}
+    />
+
+  const updateBtn =
+    <Button
+      key={++keyIndex}
+      content={<FontAwesomeIcon color='white' style={{ height: "1rem" }} icon={["fas", "arrows-rotate"]} />}
+      onClick={() => {
+        updateFileSource(fileSource[0], () => { }, fileSource[1]);
+      }}
+      extraClassName={"mid dark"}
+    />
+
+  const leftSelectBtn =
+    <SelectPerspectiveDropdown
+      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} A`}
+      setAllIds={setAllPerspectivesIds}
+      setActivePerspective={setLeftPerspective}
+      allIds={allPerspectivesIds}
+      isLeftDropdown={true}
+      requestMan={requestManager}
+      setLoadingState={SetLoadingState}
+      insideHamburger={screenSize === EScreenSize.smallest}
+      translationClass={currentLanguage}
+    />
+
+  const rightSelectBtn =
+    <SelectPerspectiveDropdown
+      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} B`}
+      setAllIds={setAllPerspectivesIds}
+      setActivePerspective={setRightPerspective}
+      allIds={allPerspectivesIds}
+      isLeftDropdown={false}
+      requestMan={requestManager}
+      setLoadingState={SetLoadingState}
+      insideHamburger={screenSize === EScreenSize.smallest}
+      translationClass={currentLanguage}
+    />
+
+  //Button to collapse the visualization to the left if there are more than 1 active perspectove
+  const leftCollapse =
+    <div style={{ width: leftPerspective !== undefined && rightPerspective !== undefined ? "100%" : "0%" }}>
+      <Button
+        content="<"
+        onClick={(state: EButtonState) => {
+          if (state !== EButtonState.disabled) {
+            setCollapseState(EAppCollapsedState.toTheLeft);
+          }
+        }}
+        extraClassName={`first dark`}
+        state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
+      />
+    </div>
+
+  //Button to collapse the visualization to the right if there are more than 1 active perspectove
+  const rightCollapse =
+    <div style={{ width: leftPerspective !== undefined && rightPerspective !== undefined ? "100%" : "0%" }}>
+      <Button
+        content=">"
+        extraClassName={`second dark`}
+        onClick={(state: EButtonState) => {
+          if (state !== EButtonState.disabled) {
+            setCollapseState(EAppCollapsedState.toTheRight);
+          }
+        }}
+        state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
+      />
+    </div>
+
+  const legendBtn =
+    <LegendComponent
+      legendData={legendData}
+      legendConf={viewOptions.legendConfig}
+      onLegendClick={(newMap: Map<string, boolean>) => {
+        setViewOptions({ updateType: "legendConfig", newValue: newMap, });
+      }}
+      translationClass={currentLanguage}
+    />
+  const newNavBar =
+    <Navbar
+      leftAlignedItems={[
+        visirBtn,
+        <div style={{ display: "inline-flex", borderRight: "white solid 1px" }}>
+          {fileSourceBtn}
+          {optionsBtn}
+        </div>,
+        <div style={{ display: "inline-flex" }}>
+          {savePerspectives}
+          {configToolBtn}
+        </div>
+      ]}
+      midAlignedItems={[
+        <div style={{ marginLeft: "5px", width: "20vw" }}>
+          {leftSelectBtn}
+        </div>,
+        <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center" }}>
+          {leftCollapse}
+          {updateBtn}
+          {rightCollapse}
+        </div>,
+        <div style={{ marginRight: "5px", width: "20vw" }}>
+          {rightSelectBtn}
+        </div>,
+
+      ]}
+      rightAlignedItems={[
+        <div style={{ marginLeft: "auto" }}>
+          {legendBtn}
+        </div>
+      ]}
+      screenSize={screenSize}
+    />
+
   return (
     <div>
-      {navBar}
+      {newNavBar}
       <span key={0} style={{ height: "75px", display: "flex" }}></span>
       <PerspectivesGroups
         key={1}
@@ -346,6 +543,7 @@ export const App = ({
         setIsActive={setIsConfigToolActive}
         updateFileSource={updateFileSource}
       />
+
       <LoadingFrontPanel
         key={3}
         state={loadingState}

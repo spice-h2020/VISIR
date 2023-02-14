@@ -12,6 +12,7 @@ import React, { Dispatch, useReducer } from "react";
 import { Button } from "../basicComponents/Button";
 import { Slider } from "../basicComponents/Slider";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const hrStyle: React.CSSProperties = {
     margin: "0.1rem 0",
@@ -102,8 +103,8 @@ export const OptionsDropdown = ({
         return (
             <DropMenu
                 items={[optionsButtons]}
-                content={tClass.t.toolbar.optionsDrop.name}
-                extraClassButton="transparent down-arrow"
+                content={<FontAwesomeIcon color='red' size='xl' icon={["fas", "screwdriver-wrench"]} />}
+                extraClassButton="transparent"
                 menuDirection={EDropMenuDirection.down}
             />
         );
@@ -111,8 +112,8 @@ export const OptionsDropdown = ({
         return (
             <DropMenu
                 items={[optionsButtons]}
-                content={tClass.t.toolbar.optionsDrop.name}
-                extraClassButton="transparent down-arrow btn-dropdown"
+                content={<FontAwesomeIcon color='red' size='xl' icon={["fas", "screwdriver-wrench"]} />}
+                extraClassButton="transparent btn-dropdown"
                 menuDirection={EDropMenuDirection.right}
             />
         );
