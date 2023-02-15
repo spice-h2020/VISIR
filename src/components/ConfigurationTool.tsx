@@ -222,8 +222,9 @@ export const ConfigurationTool = ({
                         <Button
                             key={1}
                             content=""
-                            extraClassName="btn-close transparent"
+                            extraClassName="dark btn-close"
                             onClick={() => { setIsActive(false); }}
+                            postIcon={<div className="icon-close"></div>}
                         />
                     </span>
                 </div>
@@ -235,7 +236,7 @@ export const ConfigurationTool = ({
                 }}>
                     <div style={{
                         borderBottom: "2px solid red", display: "flex", justifyContent: "center",
-                        alignItems: "center", height: "100%", paddingBottom: "3px"
+                        alignItems: "center", height: "100%", paddingBottom: "1rem"
                     }}>
                         <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
                         <input key={1} type="text" id="f-perspective_name" name="f-perspective_name"
@@ -246,16 +247,20 @@ export const ConfigurationTool = ({
                             }
                         />
                         <span key={2} style={{ width: "2rem" }} />
-                        <div key={3} style={{ display: `${isDevMode ? "block" : "none"}` }}>
-                            {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
-                            <Slider
-                                initialValue={algorythmWeigth}
-                                onInput={(value: number) => { setAlgorythmWeight(value) }}
-                                minimum={0.0}
-                                maximum={1.0}
-                                step={0.1}
-                                content={"Weight"}
-                            />
+                        <div key={3} style={{ display: `${isDevMode ? "inline-flex" : "none"}`, alignItems: "center" }}>
+                            <div style={{ width: "50%" }}>
+                                {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
+                            </div>
+                            <div style={{ width: "50%" }}>
+                                <Slider
+                                    initialValue={algorythmWeigth}
+                                    onInput={(value: number) => { setAlgorythmWeight(value) }}
+                                    minimum={0.0}
+                                    maximum={1.0}
+                                    step={0.1}
+                                    content={"Weight"}
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -267,32 +272,46 @@ export const ConfigurationTool = ({
                     flexWrap: "nowrap",
                     justifyContent: "space-evenly",
                     alignItems: "center",
-                    height: "7vh"
+                    height: "7vh",
+                    margin: "0.4rem 0px"
                 }}>
-                    <DropMenu
-                        key={0}
-                        items={getSimilarityDropdown(similarity1, setSimilarity1, seed?.HetchStructure)}
-                        content={ESimilarity[similarity1]}
-                        menuDirection={EDropMenuDirection.down}
-                        extraClassButton={"transparent down-arrow"}
-                    />
-                    <React.Fragment key={1}>
-                        {getOptionSelector(selectedOption, seed, setSelectedOption)}
-                    </React.Fragment>
-
-                    <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchMidSentence : config.midSentence}`} </span>
-                    <DropMenu
-                        key={3}
-                        items={getSimilarityDropdown(similarity2, setSimilarity2, seed?.HetchStructure, true)}
-                        content={ESimilarity[similarity2]}
-                        menuDirection={EDropMenuDirection.down}
-                        extraClassButton={"transparent down-arrow"}
-                    />
-                    <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}>
-                        {getArtworsSliderOrDropdown(artworksWeight, setArtworksWeight, similarity2, selectedArtwork,
-                            setSelectedArtwork, seed)}
+                    <div>
+                        <DropMenu
+                            key={0}
+                            items={getSimilarityDropdown(similarity1, setSimilarity1, seed?.HetchStructure)}
+                            content={ESimilarity[similarity1]}
+                            menuDirection={EDropMenuDirection.down}
+                            extraClassButton={"transparent"}
+                            postIcon={<div className="down-arrow" />}
+                        />
                     </div>
-                    <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchLastWord : config.lastWord}`} </span>
+                    <div>
+                        <React.Fragment key={1}>
+                            {getOptionSelector(selectedOption, seed, setSelectedOption)}
+                        </React.Fragment>
+                    </div>
+                    <div>
+                        <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchMidSentence : config.midSentence}`} </span>
+                    </div>
+                    <div>
+                        <DropMenu
+                            key={3}
+                            items={getSimilarityDropdown(similarity2, setSimilarity2, seed?.HetchStructure, true)}
+                            content={ESimilarity[similarity2]}
+                            menuDirection={EDropMenuDirection.down}
+                            extraClassButton={"transparent"}
+                            postIcon={<div className="down-arrow" />}
+                        />
+                    </div>
+                    <div>
+                        <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}>
+                            {getArtworsSliderOrDropdown(artworksWeight, setArtworksWeight, similarity2, selectedArtwork,
+                                setSelectedArtwork, seed)}
+                        </div>
+                    </div>
+                    <div>
+                        <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchLastWord : config.lastWord}`} </span>
+                    </div>
                 </div>
                 {/*Row with the fieldsets, and the button to open/close the json export object */}
                 <div key={3} style={{
@@ -448,7 +467,8 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
                 key={0}
                 items={dropdownItems}
                 content={selectedAlgorythm.name}
-                extraClassButton={"primary down-arrow "}
+                extraClassButton={"primary"}
+                postIcon={<div className="down-arrow" />}
             />
         );
     } else {
@@ -456,7 +476,8 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
             key={0}
             items={[]}
             content={"Select algorithm"}
-            extraClassButton={"primary down-arrow"}
+            extraClassButton={"primary"}
+            postIcon={<div className="down-arrow" />}
         />
     }
 
@@ -614,7 +635,8 @@ function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.
             <DropMenu
                 items={dropMenuItems}
                 content={selectedName}
-                extraClassButton={"transparent down-arrow dropdown-minimumSize"}
+                extraClassButton={"transparent dropdown-minimumSize"}
+                postIcon={<div className="down-arrow" />}
             />
         </div>
     );
@@ -635,7 +657,8 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: ICo
                 items={[]}
                 content={`No options available`}
                 menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent down-arrow"}
+                extraClassButton={"transparent"}
+                postIcon={<div className="down-arrow" />}
             />);
     } else {
 
@@ -664,7 +687,8 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: ICo
                 items={items}
                 content={`${selectedOption.on_attribute.att_name.charAt(0).toUpperCase()}${selectedOption.on_attribute.att_name.slice(1)}`}
                 menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent down-arrow"}
+                extraClassButton={"transparent"}
+                postIcon={<div className="down-arrow" />}
             />);
     }
 }
@@ -739,7 +763,8 @@ function getArtworsSliderOrDropdown(artworksWeight: number, setArtworksWeight: F
                 items={items}
                 content={`${selectedArtwork.name.charAt(0).toUpperCase()}${selectedArtwork.name.slice(1)}`}
                 menuDirection={EDropMenuDirection.down}
-                extraClassButton={"secondary down-arrow"}
+                extraClassButton={"primary"}
+                postIcon={<div className="down-arrow" />}
             />
         );
 

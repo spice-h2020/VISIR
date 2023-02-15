@@ -111,7 +111,8 @@ export const SelectPerspectiveDropdown = ({
             <DropMenu
                 items={[]}
                 content={tClass.t.toolbar.selectPerspective.noPerspectiveName}
-                extraClassButton="transparent down-arrow maximum-width"
+                extraClassButton="transparent maximum-width"
+                postIcon={<div className="down-arrow" />}
             />
         );
     }

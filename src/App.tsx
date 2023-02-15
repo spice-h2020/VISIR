@@ -447,7 +447,7 @@ export const App = ({
 
   //Button to collapse the visualization to the left if there are more than 1 active perspectove
   const leftCollapse =
-    <div style={{ width: leftPerspective !== undefined && rightPerspective !== undefined ? "100%" : "0%" }}>
+    <div>
       <Button
         content="<"
         onClick={(state: EButtonState) => {
@@ -462,7 +462,7 @@ export const App = ({
 
   //Button to collapse the visualization to the right if there are more than 1 active perspectove
   const rightCollapse =
-    <div style={{ width: leftPerspective !== undefined && rightPerspective !== undefined ? "100%" : "0%" }}>
+    <div>
       <Button
         content=">"
         extraClassName={`second dark`}
@@ -484,11 +484,12 @@ export const App = ({
       }}
       translationClass={currentLanguage}
     />
+
   const newNavBar =
     <Navbar
       leftAlignedItems={[
         visirBtn,
-        <div style={{ display: "inline-flex", borderRight: "white solid 1px" }}>
+        <div style={{ display: "inline-flex", borderRight: "black solid 1px" }}>
           {fileSourceBtn}
           {optionsBtn}
         </div>,

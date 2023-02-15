@@ -98,6 +98,24 @@ body {
     box-sizing: border-box;
 }
 
+.btn-content {
+    display: inline-flex !important;
+    width: -webkit-fill-available !important;
+    padding: 0.7rem 0.7rem !important;
+}
+
+.dropdown-minimumSize>.btn-content {
+    display: inline-flex !important;
+    width: -webkit-fill-available !important;
+    padding: 0rem 0rem !important;
+}
+
+.dropdown-mediumSize>.btn-content {
+    display: inline-flex !important;
+    width: -webkit-fill-available !important;
+    padding: 0.3rem 0.3rem !important;
+}
+
 .maximum-width {
     width: 100%;
 }
@@ -157,7 +175,6 @@ body {
 /*Buttons of the collapse perspective options*/
 .first.btn {
     border-radius: 100% 0px 0px 100% !important;
-    border-right: 1px solid black;
 }
 
 .mid.btn {
@@ -165,10 +182,8 @@ body {
     margin: 0px 1px;
 }
 
-
 .second.btn {
     border-radius: 0px 100% 100% 0px !important;
-    border-left: 1px solid black;
 }
 
 /*Button that is an item of a dropdown*/
@@ -207,25 +222,22 @@ body {
     color: var(--buttonTextColor);
 }
 
+.btn-close {
+    height: 2.4rem;
+    width: 2.4rem;
+}
+
 /*Button that is just an X*/
-.btn-close::after {
+.icon-close::after {
     display: inline-block;
     content: "X";
     font-size: large;
 
     text-align: center;
 
-    color: black;
+    color: white;
     height: 1rem;
     width: 1rem;
-}
-
-.btn-close {
-    text-align: right;
-}
-
-.btn-close:hover {
-    box-shadow: none;
 }
 
 /* Button that toggles an accordion */
@@ -330,6 +342,10 @@ body {
     content: '-';
 }
 
+.dark.plus {
+    color: #555;
+}
+
 .minus {
     margin-left: 0.20rem;
     scale: 1.5;
@@ -351,8 +367,8 @@ body {
 
 .dropdown-minimumSize {
     height: 100%;
-    margin: 0px;
-    padding: 0px;
+    margin: 0px !important;
+    padding: 0px !important;
     overflow-x: hidden;
     white-space: nowrap;
 }
