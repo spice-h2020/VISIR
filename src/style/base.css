@@ -383,6 +383,14 @@ body {
     border-bottom: 2px solid var(--primaryButtonColor);
 }
 
+.dropdown-content-flip>div {
+    direction: ltr;
+}
+
+.maxHeight-60vh>div {
+    max-height: 60vh !important;
+}
+
 /*------------------------------------------
 //         SLIDER
 //------------------------------------------*/

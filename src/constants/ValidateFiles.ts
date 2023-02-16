@@ -693,6 +693,14 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
             arg.artworks[i] = isNameAndIdPairValid(arg.artworks[i]);
         }
 
+        console.log(arg.artworks[0]);
+
+        arg.artworks.sort((a: INameAndIdPair, b: INameAndIdPair) => {
+            return (a.name < b.name ? -1 : 1)
+        })
+
+        console.log(arg.artworks[0]);
+
         console.log(`Configuration seed file validation has been completed -> `);
         console.log(arg as IConfigurationSeed);
 

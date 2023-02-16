@@ -305,12 +305,14 @@ export const ConfigurationTool = ({
                     </div>
                     <div>
                         <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}>
-                            {getArtworsSliderOrDropdown(artworksWeight, setArtworksWeight, similarity2, selectedArtwork,
-                                setSelectedArtwork, seed)}
+                            {getSimilaritySlider(artworksWeight, setArtworksWeight, similarity2)}
                         </div>
                     </div>
                     <div>
                         <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchLastWord : config.lastWord}`} </span>
+                    </div>
+                    <div style={{ direction: "rtl" }}>
+                        {getNArtworksDropdown(similarity2, selectedArtwork, setSelectedArtwork, seed)}
                     </div>
                 </div>
                 {/*Row with the fieldsets, and the button to open/close the json export object */}
@@ -563,8 +565,8 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
                         artworksAttr.set(onAttribute.att_name, !isChecked);
                         setArtworksAttr(new Map(artworksAttr));
                     }}>
-                        {/*The on change is a dummy function needed to not get error because otherwise the checked 
-                        property changes without onChange being implemented*/}
+                        {/*The on change is a dummy function needed because otherwise "checked" 
+                        property changes wont be correctly updated*/}
                         <input key={0} type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`}
                             value={onAttribute.att_name} checked={isChecked ? isChecked : false} onChange={() => { }} />
 
@@ -721,8 +723,7 @@ function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): Re
 }
 
 
-function getArtworsSliderOrDropdown(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity,
-    selectedArtwork: config.INameAndIdPair | undefined, setSelectedArtwork: Function, seed: IConfigurationSeed | undefined): React.ReactNode {
+function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity): React.ReactNode {
 
     if (similarity2 !== ESimilarity.Same) {
 
@@ -736,10 +737,24 @@ function getArtworsSliderOrDropdown(artworksWeight: number, setArtworksWeight: F
                 content={`${ESimilarity[similarity2]} Weight: `}
             />);
 
-    } else if (seed !== undefined && selectedArtwork !== undefined) {
+    } else {
+        return "";
+    }
+}
 
-        const items = [];
+/**
+ * Returns a dropDown that allows the user to pick what artwork to use when doing "same" artworks
+ * @param similarity2 
+ * @param selectedArtwork 
+ * @param setSelectedArtwork 
+ * @param seed 
+ * @returns 
+ */
+function getNArtworksDropdown(similarity2: ESimilarity, selectedArtwork: config.INameAndIdPair | undefined,
+    setSelectedArtwork: Function, seed: IConfigurationSeed | undefined): React.ReactNode {
+    const items = [];
 
+    if (seed !== undefined && selectedArtwork !== undefined && similarity2 === ESimilarity.Same) {
         for (let i = 0; i < seed.artworks.length; i++) {
             const name = seed.artworks[i].name;
 
@@ -754,6 +769,7 @@ function getArtworsSliderOrDropdown(artworksWeight: number, setArtworksWeight: F
                         }
                     }
                     extraClassName={"btn-dropdown"}
+                    hoverText={name}
                 />
             );
         }
@@ -764,10 +780,11 @@ function getArtworsSliderOrDropdown(artworksWeight: number, setArtworksWeight: F
                 content={`${selectedArtwork.name.charAt(0).toUpperCase()}${selectedArtwork.name.slice(1)}`}
                 menuDirection={EDropMenuDirection.down}
                 extraClassButton={"primary"}
+                extraClassContainer={"dropdown-content-flip maxHeight-60vh"}
                 postIcon={<div className="down-arrow" />}
+                hoverText={selectedArtwork.name}
             />
         );
-
     } else {
         return "";
     }

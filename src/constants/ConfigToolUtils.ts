@@ -56,8 +56,8 @@ export const midSentence = "in";
 export const HetchLastWord = "beliefs.";
 export const lastWord = "artworks."
 
-export const HetchSimilarity1 = [ESimilarity.Similar, ESimilarity.Same];
-export const HetchSimilarity2 = [ESimilarity.Similar, ESimilarity.Same];
+export const HetchSimilarity1 = [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different];
+export const HetchSimilarity2 = [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different];
 
 //#endregion
 
