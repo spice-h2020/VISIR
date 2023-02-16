@@ -14,7 +14,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import RequestManager from "../managers/requestManager";
-import { ESimilarity, IConfigurationSeed, similarity1Map, similarity2Map } from "../constants/ConfigToolUtils";
+import { ESimilarity, IConfigurationSeed } from "../constants/ConfigToolUtils";
 import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 import * as config from "../constants/ConfigToolUtils";

@@ -34,6 +34,7 @@ import { ConfigurationTool } from './components/ConfigurationTool';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AllVisirOptions } from './components/AllVisirOptions';
+import { SavePerspective } from './components/savePerspectives';
 
 
 
@@ -78,6 +79,7 @@ export const App = ({
   const [collapseState, setCollapseState] = useReducer(collapseReducer, EAppCollapsedState.unCollapsed);
 
   const [isConfigToolActive, setIsConfigToolActive] = useState<boolean>(false);
+  const [isSavePerspectiveActive, setIsSavePerspectiveActive] = useState<boolean>(false);
 
   const [windowWidth, setWindowWidth] = useState<number>(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
   //Re-render the component when the windows is resized
@@ -135,6 +137,12 @@ export const App = ({
       content={<FontAwesomeIcon color='black' size='xl' icon={["fas", "floppy-disk"]} />}
       extraClassName={"transparent"}
       hoverText="Save perspectives"
+      onClick={(state: EButtonState) => {
+        if (state !== EButtonState.disabled) {
+          setIsSavePerspectiveActive(!isSavePerspectiveActive);
+        }
+      }}
+      state={isSavePerspectiveActive ? EButtonState.active : EButtonState.unactive}
     />
 
   const configToolBtn =
@@ -403,8 +411,15 @@ export const App = ({
         updateFileSource={updateFileSource}
       />
 
-      <LoadingFrontPanel
+      <SavePerspective
         key={3}
+        isActive={isSavePerspectiveActive}
+        setIsActive={setIsSavePerspectiveActive}
+        allPerspectivesIds={allPerspectivesIds}
+      />
+
+      <LoadingFrontPanel
+        key={4}
         state={loadingState}
       />
     </div>);
