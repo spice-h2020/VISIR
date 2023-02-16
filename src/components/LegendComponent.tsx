@@ -92,6 +92,7 @@ export const LegendComponent = ({
                     closeWhenOutsideClick={false}
                     menuDirection={EDropMenuDirection.down}
                     postIcon={<div className="plus" />}
+                    hoverText="Open Legend"
                 />
             </div>
         );

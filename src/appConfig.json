@@ -3,5 +3,6 @@
 	"LANG": "en",
 	"Example-ucm_uri": "http://147.96.25.144:8080/",
 	"Example-local_url": "http://localhost:8080/",
+	"MAX_GET_REQUEST_TIMEOUT": 2000,
 	"N_Representative_Artworks": 4
 }

@@ -23,7 +23,8 @@ export enum EDropMenuDirection {
 const dropdownStyle: React.CSSProperties = {
     float: "left",
     overflow: "hidden",
-    width: "100%"
+    width: "100%",
+    textAlign: "center"
 }
 
 

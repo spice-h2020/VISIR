@@ -113,6 +113,7 @@ export const SelectPerspectiveDropdown = ({
                 content={tClass.t.toolbar.selectPerspective.noPerspectiveName}
                 extraClassButton="transparent maximum-width"
                 postIcon={<div className="down-arrow" />}
+                hoverText="No available perspectives"
             />
         );
     }
@@ -145,7 +146,7 @@ export const SelectPerspectiveDropdown = ({
                     <div style={hamburgerBtnStyle}>
                         {mainBtnText}
                     </div>}
-                extraClassButton="primary down-arrow fixedWidth-10vw blinkSizeAnim btn-dropdown"
+                extraClassButton="primary maximum-width blinkSizeAnim btn-dropdown"
                 hoverText={mainBtnText}
                 menuDirection={EDropMenuDirection.right}
                 postIcon={<div className="down-arrow" />}

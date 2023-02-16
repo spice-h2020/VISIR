@@ -60,7 +60,7 @@ export default class RequestManager {
         if (baseURL !== undefined) {
             this.axios = new Axios({
                 baseURL: baseURL,
-                timeout: 2000,
+                timeout: config.MAX_GET_REQUEST_TIMEOUT,
             });
             this.isActive = true;
         } else
