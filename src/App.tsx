@@ -123,11 +123,9 @@ export const App = ({
     <AllVisirOptions
       key={++keyIndex}
       setViewOptions={setViewOptions}
-      insideHamburger={screenSize !== EScreenSize.normal}
       translationClass={currentLanguage}
       viewOptions={viewOptions}
       setFileSource={updateFileSource}
-      setLoadingState={SetLoadingState}
       curentFileSource={fileSource}
     />;
 
@@ -164,7 +162,6 @@ export const App = ({
       allIds={allPerspectivesIds}
       isLeftDropdown={true}
       requestMan={requestManager}
-      setLoadingState={SetLoadingState}
       insideHamburger={screenSize === EScreenSize.smallest}
       translationClass={currentLanguage}
     />
@@ -222,7 +219,6 @@ export const App = ({
       allIds={allPerspectivesIds}
       isLeftDropdown={false}
       requestMan={requestManager}
-      setLoadingState={SetLoadingState}
       insideHamburger={screenSize === EScreenSize.smallest}
       translationClass={currentLanguage}
     />
@@ -394,7 +390,6 @@ export const App = ({
         collapsedState={collapseState}
         viewOptions={viewOptions}
         setLegendData={setLegendData}
-        setLoadingState={SetLoadingState}
         translationClass={currentLanguage}
         cancelPerspective={cancelPerspective}
       />

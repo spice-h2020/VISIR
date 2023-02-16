@@ -74,7 +74,7 @@ export default class RequestManager {
      * if something went wrong.
      */
     requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestPerspective} ${name}` });
+        this.setLoadingState({ isActive: true, msg: `Requesting perspective ${name}` });
 
         this.getPerspective(perspectiveId)
             .then((response: any) => {
@@ -90,7 +90,6 @@ export default class RequestManager {
                     perspective.id = perspectiveId;
                     perspective.name = perspective.name === undefined ? name : perspective.name;
 
-                    this.setLoadingState({ isActive: false });
                     callback(perspective);
                 } else {
                     throw new Error(`Error wuile getting Perspective ${perspectiveId}: ${response.statusText}`);
@@ -123,7 +122,7 @@ export default class RequestManager {
      * something went wrong.
      */
     requestAllPerspectivesIds(callback: Function, stateCallback?: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestingAllPerspectives}` });
+        this.setLoadingState({ isActive: true, msg: `Requesting all perspectives` });
 
         this.getAllPerspectives()
             .then((response: any) => {
@@ -162,7 +161,7 @@ export default class RequestManager {
     }
 
     requestConfigurationToolSeed(callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestingConfToolSeed}` });
+        this.setLoadingState({ isActive: true, msg: `Requesting configuration tool seed` });
 
 
         this.getConfigurationToolSeed()
@@ -184,7 +183,6 @@ export default class RequestManager {
 
                 console.log(`Configuration tool seed was not found:`);
                 console.log(error);
-                this.setLoadingState({ isActive: false });
 
                 alert(`Configuration tool seed was not found: ${error.message}`);
             }).finally(() => {
@@ -218,9 +216,7 @@ export default class RequestManager {
             })
             .catch((error) => {
                 throw error;
-            }).finally(() => {
-                this.setLoadingState({ isActive: false });
-            });;
+            });
     }
 
     askJobInProgress(url: any): any {
@@ -229,7 +225,7 @@ export default class RequestManager {
         if (this.currentJobWaitTime > this.jobMaxWaitTime) {
             throw new Error("Max wait time for the community model reached");
         }
-        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.CMisBusy} (${this.currentJobWaitTime / 2})` });
+        this.setLoadingState({ isActive: true, msg: `Community Model is busy (${this.currentJobWaitTime / 2})` });
 
         return this.axios.get(url, {})
             .then(async (response) => {
@@ -261,12 +257,8 @@ export default class RequestManager {
                 }
             })
             .catch((error) => {
-                this.setLoadingState({ isActive: false });
-
                 throw error;
-            }).finally(() => {
-                this.setLoadingState({ isActive: false });
-            });;
+            })
     }
 
     /**
@@ -302,12 +294,8 @@ export default class RequestManager {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    this.setLoadingState({ isActive: false });
-
                     console.log("response: " + res)
-                    window.alert("inserted perspectiveId: hmm" + res.insertedPerspectiveId);
 
-                    this.setLoadingState({ isActive: false })
                     if (this.usingAPI) {
                         updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
                     } else {
@@ -317,8 +305,6 @@ export default class RequestManager {
                     callback();
                 })
                 .catch((err) => {
-                    this.setLoadingState({ isActive: false })
-
                     console.log(err)
                     window.alert(err);
                     callback();

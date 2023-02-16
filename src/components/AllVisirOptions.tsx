@@ -34,11 +34,8 @@ const inputTextStyle: React.CSSProperties = {
 interface AllVisirOptionsProps {
     //On click handler
     setFileSource: Function;
-
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     translationClass: CTranslation;
 
-    insideHamburger?: boolean;
     curentFileSource: [EFileSource, String];
 
     setViewOptions: Dispatch<IViewOptionAction>;
@@ -50,8 +47,6 @@ interface AllVisirOptionsProps {
  */
 export const AllVisirOptions = ({
     setFileSource,
-    setLoadingState,
-    insideHamburger = false,
     translationClass: tClass,
     curentFileSource,
     setViewOptions,
@@ -63,8 +58,6 @@ export const AllVisirOptions = ({
 
     const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
 
-        setLoadingState({ isActive: true, msg: `${tClass.t.loadingText.requestFiles} ${EFileSource[newFileSource]}` })
-
         setFileSourceStates({
             action: EbuttonStateArrayAction.activeOne,
             index: newFileSource,
@@ -72,8 +65,6 @@ export const AllVisirOptions = ({
         });
 
         const callback = () => {
-            setLoadingState({ isActive: false })
-
             setFileSourceStates({
                 action: EbuttonStateArrayAction.activeOne,
                 index: newFileSource,

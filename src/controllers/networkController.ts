@@ -53,7 +53,6 @@ export default class NetworkController {
     //Ready flag
     isReady: boolean;
 
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     /**
      * Constructor of the class 
      * @param perspectiveData Data of this perspective
@@ -64,10 +63,9 @@ export default class NetworkController {
      * @param networkFocusID ID of the current network with the tooltip focus
      */
     constructor(perspectiveData: IPerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: IStateFunctions,
-        dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string,
-        setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, unique: boolean) {
+        dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string, unique: boolean) {
 
-        this.setLoadingState = setLoadingState;
+
         this.isReady = false;
 
         this.id = perspectiveData.id;

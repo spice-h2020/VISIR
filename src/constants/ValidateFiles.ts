@@ -5,7 +5,7 @@
  */
 //Constants
 import { FORMERR } from "dns";
-import { IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndIdPair, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
+import { EConfigToolTypes, IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndIdPair, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 import { ECommunityType } from "./perspectivesTypes";
@@ -669,12 +669,19 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
             throw Error(`Artworks are not an object`);
         }
 
+        //Check what structure does this seed uses
         if (arg.HetchStructure === undefined) {
             arg.HetchStructure = false;
         }
 
         if (typeof (arg.HetchStructure) !== "boolean") {
             throw Error(`HetchStructure is not a boolean`);
+        }
+
+        if (arg.HetchStructure) {
+            arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.HECTH;
+        } else {
+            arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.GENERIC;
         }
 
         for (let i = 0; i < arg.artwork_attributes.length; i++) {
@@ -693,13 +700,9 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
             arg.artworks[i] = isNameAndIdPairValid(arg.artworks[i]);
         }
 
-        console.log(arg.artworks[0]);
-
         arg.artworks.sort((a: INameAndIdPair, b: INameAndIdPair) => {
             return (a.name < b.name ? -1 : 1)
         })
-
-        console.log(arg.artworks[0]);
 
         console.log(`Configuration seed file validation has been completed -> `);
         console.log(arg as IConfigurationSeed);
