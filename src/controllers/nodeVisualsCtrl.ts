@@ -103,9 +103,8 @@ export default class NodeVisualsCtrl {
                 this.dimStrat = dimStrat;
                 return false;
             } else {
-                throw new DiferentAttrbError("The new perspective has different attributes");
+                throw new DiferentAttrbError("Cant load this new perspective because it has diferent legend attributes.");
             }
-
         }
     }
 
