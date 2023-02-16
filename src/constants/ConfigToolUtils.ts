@@ -17,7 +17,8 @@ export interface IConfigurationSeed {
     interaction_similarity_functions: ISimilarityFunction[];
     algorithm: IAlgorithm[],
     artworks: INameAndIdPair[],
-    HetchStructure: boolean
+    configToolType: EConfigToolTypes,
+    HecthStructure: boolean
 }
 
 export interface IArtworkAttribute {
@@ -51,13 +52,37 @@ export interface INameAndIdPair {
 export const defaultWeightValue = 0.5;
 export const defaultArtworkWeightValue = 0.5;
 
-export const HetchMidSentence = "for users with";
-export const midSentence = "in";
-export const HetchLastWord = "beliefs.";
-export const lastWord = "artworks."
+export enum EConfigToolTypes {
+    GENERIC,
+    HECTH,
+    DMH,
+}
 
-export const HetchSimilarity1 = [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different];
-export const HetchSimilarity2 = [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different];
+export const midSentenceMap = new Map<EConfigToolTypes, string>();
+midSentenceMap.set(EConfigToolTypes.GENERIC, "in");
+midSentenceMap.set(EConfigToolTypes.HECTH, "for users with");
+midSentenceMap.set(EConfigToolTypes.DMH, "in");
+
+export const lastSentenceMap = new Map<EConfigToolTypes, string>();
+lastSentenceMap.set(EConfigToolTypes.GENERIC, "artworks.");
+lastSentenceMap.set(EConfigToolTypes.HECTH, "beliefs.");
+lastSentenceMap.set(EConfigToolTypes.DMH, "concepts.");
+
+export const rightSideSentenceMap = new Map<EConfigToolTypes, string>();
+rightSideSentenceMap.set(EConfigToolTypes.GENERIC, "Artworks Attributes");
+rightSideSentenceMap.set(EConfigToolTypes.HECTH, "Beliefs");
+rightSideSentenceMap.set(EConfigToolTypes.DMH, "Concepts Attributes");
+
+export const similarity1Map = new Map<EConfigToolTypes, Array<ESimilarity>>();
+similarity1Map.set(EConfigToolTypes.GENERIC, [ESimilarity.Same, ESimilarity.Different]);
+similarity1Map.set(EConfigToolTypes.HECTH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity1Map.set(EConfigToolTypes.DMH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+
+export const similarity2Map = new Map<EConfigToolTypes, Array<ESimilarity>>();
+similarity2Map.set(EConfigToolTypes.GENERIC, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity2Map.set(EConfigToolTypes.HECTH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity2Map.set(EConfigToolTypes.DMH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+
 
 //#endregion
 
@@ -84,6 +109,49 @@ export function initAlgorythmDrop(algorythms: IAlgorithm[]): IAlgorithm {
     }
 
     return algorythms[0];
+}
+
+export function initMidSentence(type: EConfigToolTypes) {
+    let output = midSentenceMap.get(type);
+    if (output === undefined) output = "";
+
+    return output;
+}
+
+export function initLastSentence(type: EConfigToolTypes) {
+    let output = lastSentenceMap.get(type);
+    if (output === undefined) output = "";
+
+    return output;
+}
+
+export function initRightSideSentence(type: EConfigToolTypes) {
+    let output = rightSideSentenceMap.get(type);
+    if (output === undefined) output = "";
+
+    return output;
+}
+
+export function initSimilarity1(type: EConfigToolTypes, setSimilarity: Function) {
+    let availableValues = similarity1Map.get(type);
+    if (availableValues === undefined) {
+        availableValues = [ESimilarity.Same];
+    }
+
+    setSimilarity(availableValues[0]);
+
+    return availableValues;
+}
+
+export function initSimilarity2(type: EConfigToolTypes, setSimilarity: Function) {
+    let availableValues = similarity2Map.get(type);
+    if (availableValues === undefined) {
+        availableValues = [ESimilarity.Same];
+    }
+
+    setSimilarity(availableValues[0]);
+
+    return availableValues;
 }
 
 //#region Create config file

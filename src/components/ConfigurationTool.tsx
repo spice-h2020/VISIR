@@ -14,7 +14,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import RequestManager from "../managers/requestManager";
-import { ESimilarity, IConfigurationSeed } from "../constants/ConfigToolUtils";
+import { ESimilarity, IConfigurationSeed, similarity1Map, similarity2Map } from "../constants/ConfigToolUtils";
 import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 import * as config from "../constants/ConfigToolUtils";
@@ -110,6 +110,16 @@ export const ConfigurationTool = ({
     //Similarity Dropdown states
     const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.Same);
     const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.Same);
+
+    //Sentence structure
+    const [midSentence, setMidSentence] = useState<string>("");
+    const [lastSentence, setLastSentence] = useState<string>("");
+
+    const [similarity1AvailableValues, setSimilarity1AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+    const [similarity2AvailableValues, setSimilarity2AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+
+    const [rightSideSentence, setRightSideSentence] = useState<string>("");
+
     //Middle select option state
     const [selectedOption, setSelectedOption] = useState<config.ISimilarityFunction>(emptyOption);
     //Checkboxes state
@@ -119,9 +129,6 @@ export const ConfigurationTool = ({
     const [artworksAttrDrop, setArtworksAttrDrop] = useState<Map<string, boolean[]>>(new Map<string, boolean[]>());
 
     const [isTextAreaActive, setIsTextAreaActive] = useState<boolean>(false);
-
-
-
 
     //TextArea at the end content
     const [textAreaContent, setTextAreaContent] = useState<string>("");
@@ -133,7 +140,6 @@ export const ConfigurationTool = ({
     useEffect(() => {
         if (isActive) {
             requestManager.requestConfigurationToolSeed((newSeed: IConfigurationSeed) => {
-                setLoadingState({ isActive: false });
                 if (newSeed !== undefined) {
                     if (newSeed.interaction_similarity_functions.length === 0) {
                         alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
@@ -160,12 +166,42 @@ export const ConfigurationTool = ({
                         throw Error("Failed while setting default Artwork " + error);
                     }
 
-                    setSimilarity1(newSeed?.HetchStructure ? config.HetchSimilarity1[0] : ESimilarity.Same);
-                    setSimilarity2(newSeed?.HetchStructure ? config.HetchSimilarity2[0] : ESimilarity.Same);
+                    try {
+                        setMidSentence(config.initMidSentence(newSeed.configToolType));
+                    } catch (error: any) {
+                        throw Error("Failed while setting mid sentence word " + error);
+                    }
+
+                    try {
+                        setLastSentence(config.initLastSentence(newSeed.configToolType));
+                    } catch (error: any) {
+                        throw Error("Failed while setting mid sentence word " + error);
+                    }
+
+                    try {
+                        setRightSideSentence(config.initRightSideSentence(newSeed.configToolType));
+                    } catch (error: any) {
+                        throw Error("Failed while setting right side word " + error);
+                    }
+
+                    try {
+                        setSimilarity1AvailableValues(config.initSimilarity1(newSeed.configToolType, setSimilarity1));
+                    } catch (error: any) {
+                        throw Error("Failed while setting available similarity1 dropdown " + error);
+                    }
+
+                    try {
+                        setSimilarity2AvailableValues(config.initSimilarity2(newSeed.configToolType, setSimilarity2));
+                    } catch (error: any) {
+                        throw Error("Failed while setting available similarity2 dropdown " + error);
+                    }
+
+
+
                 }
             });
         }
-    }, [isActive, requestManager, setLoadingState]);
+    }, [isActive, requestManager]);
 
     //Init the new citizen and artworks attributes
     useEffect(() => {
@@ -278,7 +314,8 @@ export const ConfigurationTool = ({
                     <div>
                         <DropMenu
                             key={0}
-                            items={getSimilarityDropdown(similarity1, setSimilarity1, seed?.HetchStructure)}
+                            items={getSimilarityDropdown(similarity1, setSimilarity1,
+                                similarity1AvailableValues)}
                             content={ESimilarity[similarity1]}
                             menuDirection={EDropMenuDirection.down}
                             extraClassButton={"transparent"}
@@ -291,12 +328,13 @@ export const ConfigurationTool = ({
                         </React.Fragment>
                     </div>
                     <div>
-                        <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchMidSentence : config.midSentence}`} </span>
+                        <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {midSentence} </span>
                     </div>
                     <div>
                         <DropMenu
                             key={3}
-                            items={getSimilarityDropdown(similarity2, setSimilarity2, seed?.HetchStructure, true)}
+                            items={getSimilarityDropdown(similarity2, setSimilarity2,
+                                similarity2AvailableValues)}
                             content={ESimilarity[similarity2]}
                             menuDirection={EDropMenuDirection.down}
                             extraClassButton={"transparent"}
@@ -309,7 +347,7 @@ export const ConfigurationTool = ({
                         </div>
                     </div>
                     <div>
-                        <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {`${seed?.HetchStructure ? config.HetchLastWord : config.lastWord}`} </span>
+                        <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {lastSentence} </span>
                     </div>
                     <div style={{ direction: "rtl" }}>
                         {getNArtworksDropdown(similarity2, selectedArtwork, setSelectedArtwork, seed)}
@@ -337,7 +375,7 @@ export const ConfigurationTool = ({
                             {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
                         </fieldset>
                         <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.Same === similarity2)}>
-                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>Artworks Attributes</h3>
+                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>{rightSideSentence}</h3>
                             {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr, artworksAttrDrop,
                                 setArtworksAttrDrop, isDevMode)}
                         </fieldset>
@@ -380,8 +418,7 @@ export const ConfigurationTool = ({
 
                                     setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
-                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource,
-                                        () => setLoadingState({ isActive: false }));
+                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => { });
                                 }
                             }
                         }
@@ -398,45 +435,26 @@ export const ConfigurationTool = ({
  * @param setSimilarity callback executed when an option is selected
  * @returns 
  */
-function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function, HetchStructure: boolean | undefined,
-    isSecond: boolean = false): React.ReactNode[] {
+function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
+    similarityAvailableValues: Array<ESimilarity>): React.ReactNode[] {
     const buttons: React.ReactNode[] = [];
 
-    if (HetchStructure) {
-        const similarityToCheck = isSecond ? config.HetchSimilarity2 : config.HetchSimilarity1;
-
-        for (let i = 0; i < similarityToCheck.length; i++) {
-            buttons.push(
-                <Button
-                    key={i}
-                    content={ESimilarity[similarityToCheck[i]]}
-                    state={sim === similarityToCheck[i] ? EButtonState.active : EButtonState.unactive}
-                    onClick={
-                        () => {
-                            setSimilarity(similarityToCheck[i]);
-                        }
+    for (let i = 0; i < similarityAvailableValues.length; i++) {
+        buttons.push(
+            <Button
+                key={i}
+                content={ESimilarity[similarityAvailableValues[i]]}
+                state={sim === similarityAvailableValues[i] ? EButtonState.active : EButtonState.unactive}
+                onClick={
+                    () => {
+                        setSimilarity(similarityAvailableValues[i]);
                     }
-                    extraClassName={"btn-dropdown"}
-                />
-            )
-        }
-    } else {
-        for (let i = 0; i < Object.keys(ESimilarity).length / 2; i++) {
-            buttons.push(
-                <Button
-                    key={i}
-                    content={ESimilarity[i]}
-                    state={sim === i ? EButtonState.active : EButtonState.unactive}
-                    onClick={
-                        () => {
-                            setSimilarity(i);
-                        }
-                    }
-                    extraClassName={"btn-dropdown"}
-                />
-            )
-        }
+                }
+                extraClassName={"btn-dropdown"}
+            />
+        )
     }
+
     return buttons;
 
 }
