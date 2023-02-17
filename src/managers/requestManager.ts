@@ -283,6 +283,8 @@ export default class RequestManager {
     sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource,
         changeItemState?: Function, apiURL?: string) => void, callback: Function) {
 
+        this.setLoadingState({ isActive: true, msg: `Sending a perspective configuration` });
+
         // For some reason, CM receives an empty object when axios does the post request.
         if (this.usingAPI) {
             fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
@@ -307,11 +309,10 @@ export default class RequestManager {
                 })
                 .catch((err) => {
                     console.log(err)
+                    this.setLoadingState({ isActive: false });
                     window.alert(err);
                     callback();
-                }).finally(() => {
-                    this.setLoadingState({ isActive: false });
-                });;
+                });
         }
     }
 }

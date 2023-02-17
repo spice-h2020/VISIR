@@ -174,7 +174,8 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
     let configName = perspectiveName.replaceAll(" ", "_");
 
     if (configName === "") {
-        configName = getDefaultName(similarity1, configName, newConfig, seed, selectedOption, similarity2, artworksAttr);
+        configName = getDefaultName(similarity1, configName, newConfig, seed, selectedOption, similarity2, artworksAttr,
+            selectedArtwork?.name);
     }
 
     newConfig["name"] = configName;
@@ -191,7 +192,8 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
 }
 
 function getDefaultName(similarity1: ESimilarity, configName: string, newConfig: any, seed: IConfigurationSeed,
-    selectedOption: ISimilarityFunction, similarity2: ESimilarity, artworksAttr: Map<string, boolean>) {
+    selectedOption: ISimilarityFunction, similarity2: ESimilarity, artworksAttr: Map<string, boolean>,
+    selectedArtworkName: string | undefined) {
 
     switch (similarity1) {
         case ESimilarity.Same: {
@@ -225,7 +227,11 @@ function getDefaultName(similarity1: ESimilarity, configName: string, newConfig:
             break;
         }
     }
-    configName += "artworks";
+
+    configName += "artworks ";
+    if (selectedArtworkName !== undefined && similarity2 === ESimilarity.Same) {
+        configName += `${selectedArtworkName}`;
+    }
 
     let artwork_attributesName: String[] = [];
     seed.artwork_attributes.forEach((value) => {
@@ -376,14 +382,30 @@ function fillInteractionSimilarityFunctions(selectedOption: ISimilarityFunction,
 }
 
 function fillUserAttributes(citizenAttr: Map<string, boolean>, newConfig: any) {
+    let defaultValue: any = undefined;
+    let hasValue = false;
+
     citizenAttr.forEach((value, key) => {
+
+        if (defaultValue === undefined) {
+            defaultValue = {
+                att_name: key,
+                att_type: "String"
+            };
+        }
+
         if (value) {
+            hasValue = true;
             newConfig.user_attributes.push({
                 att_name: key,
                 att_type: "String"
             });
         }
     });
+
+    if (!hasValue) {
+        newConfig.user_attributes.push(defaultValue);
+    }
 }
 
 

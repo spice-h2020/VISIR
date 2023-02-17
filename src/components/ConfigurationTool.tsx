@@ -264,37 +264,32 @@ export const ConfigurationTool = ({
                         />
                     </span>
                 </div>
-                {/*Row with the perspective name and algorithm selector*/}
+                {/*algorithm selector*/}
                 <div key={1} style={{
                     display: "flex", height: "5vh",
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
                     <div style={{
-                        borderBottom: "2px solid red", display: "flex", justifyContent: "center",
-                        alignItems: "center", height: "100%", paddingBottom: "1rem"
+                        display: "flex", justifyContent: "center",
+                        alignItems: "center", height: "100%", paddingBottom: "1rem",
+                        width: "100%"
                     }}>
-                        <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
-                        <input key={1} type="text" id="f-perspective_name" name="f-perspective_name"
-                            onChange={
-                                (element) => {
-                                    setPerspectiveName(element.target.value)
-                                }
-                            }
-                        />
-                        <span key={2} style={{ width: "2rem" }} />
-                        <div key={3} style={{ display: `${isDevMode ? "inline-flex" : "none"}`, alignItems: "center" }}>
+                        <div key={3} title="The percentage of weight minimum of users that must be represented by the same value
+                        of contributions attributes (emotions, values, sentiments) to make such attribute explanable.
+                        A big value increase the number of communities and maybe, increase the number of users without community."
+                            style={{ display: `${isDevMode ? "inline-flex" : "none"}`, alignItems: "center", width: "50%" }}>
                             <div style={{ width: "50%" }}>
                                 {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
                             </div>
-                            <div style={{ width: "50%" }}>
+                            <div style={{ width: "35%" }}>
                                 <Slider
                                     initialValue={algorythmWeigth}
                                     onInput={(value: number) => { setAlgorythmWeight(value) }}
                                     minimum={0.0}
                                     maximum={1.0}
                                     step={0.1}
-                                    content={"Weight"}
+                                    content={"Explainability weight"}
                                 />
                             </div>
                         </div>
@@ -309,7 +304,9 @@ export const ConfigurationTool = ({
                     justifyContent: "space-evenly",
                     alignItems: "center",
                     height: "7vh",
-                    margin: "0.4rem 0px"
+                    margin: "0.4rem 1%",
+
+                    borderTop: "2px solid red"
                 }}>
                     <div>
                         <DropMenu
@@ -341,16 +338,17 @@ export const ConfigurationTool = ({
                             postIcon={<div className="down-arrow" />}
                         />
                     </div>
-                    <div>
-                        <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}>
+                    <div style={{ display: "inline-flex" }}>
+                        <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {lastSentence} </span>
+
+                        <div style={{ direction: "rtl" }}>
+                            {getNArtworksDropdown(similarity2, selectedArtwork, setSelectedArtwork, seed)}
+                        </div>
+                        <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}
+                            title="Minimum similarity between artworks from two interactions to calculate the similarity between them.
+                        (otherwise its assume as similar)">
                             {getSimilaritySlider(artworksWeight, setArtworksWeight, similarity2)}
                         </div>
-                    </div>
-                    <div>
-                        <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {lastSentence} </span>
-                    </div>
-                    <div style={{ direction: "rtl" }}>
-                        {getNArtworksDropdown(similarity2, selectedArtwork, setSelectedArtwork, seed)}
                     </div>
                 </div>
                 {/*Row with the fieldsets, and the button to open/close the json export object */}
@@ -405,6 +403,14 @@ export const ConfigurationTool = ({
                     margin: "1rem 0px",
                     height: "5vh"
                 }}>
+                    <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
+                    <input key={1} style={{ marginRight: "1rem" }} type="text" id="f-perspective_name" name="f-perspective_name"
+                        onChange={
+                            (element) => {
+                                setPerspectiveName(element.target.value)
+                            }
+                        }
+                    />
                     <Button
                         content="Send Perspective"
                         extraClassName="primary"
@@ -752,7 +758,7 @@ function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function
                 minimum={0.0}
                 maximum={1.0}
                 step={0.1}
-                content={`${ESimilarity[similarity2]} Weight: `}
+                content={`${ESimilarity[similarity2]} Threshold similarity`}
             />);
 
     } else {

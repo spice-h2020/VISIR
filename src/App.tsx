@@ -154,7 +154,7 @@ export const App = ({
         }
       }}
       state={isConfigToolActive ? EButtonState.active : EButtonState.unactive}
-      hoverText="Configuration tool"
+      hoverText="Perspective builder"
     />
 
 
