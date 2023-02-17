@@ -116,7 +116,7 @@ export default class NetworkController {
 
         perspectiveData.users.forEach((user: IUserData) => {
             nodeLocation.setNodeLocation(user, this.explicitCtrl.communitiesData[user.implicit_community].type);
-            this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.hideLabels);
+            this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.showLabels);
             this.bbCtrl.calculateBoundingBoxes(user);
         });
 

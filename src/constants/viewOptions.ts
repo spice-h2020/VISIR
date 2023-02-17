@@ -82,7 +82,7 @@ export const initialOptions = {
     /**
      * Hide the labels of all nodes in the canvas and in the tooltip and datatable
      */
-    hideLabels: EButtonState.active,
+    showLabels: EButtonState.unactive,
     /**
      * Hide all edges except when a node is selected, in such case, only conected edges will be shown
      */
@@ -112,7 +112,7 @@ export class ViewOptions {
     /**
      * Hide the labels of all nodes in the canvas and in the tooltip and datatable
      */
-    hideLabels: boolean;
+    showLabels: boolean;
     /**
      * Hide all edges except when a node is selected, in such case, only conected edges will be shown
      */
@@ -140,7 +140,7 @@ export class ViewOptions {
      * Constructor of the class
      */
     constructor() {
-        this.hideLabels = initialOptions.hideLabels === EButtonState.active;
+        this.showLabels = initialOptions.showLabels === EButtonState.active;
         this.hideEdges = initialOptions.hideEdges === EButtonState.active;
         this.border = initialOptions.border === EButtonState.active;
         this.legendConfig = new Map<string, Map<string, boolean>>();

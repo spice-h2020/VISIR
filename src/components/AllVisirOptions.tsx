@@ -116,7 +116,7 @@ export const AllVisirOptions = ({
     allButtons.push(
         <Button
             content={tClass.t.toolbar.optionsDrop.hideLabels}
-            onClick={() => { onClick(0, "hideLabels"); }}
+            onClick={() => { onClick(0, "showLabels"); }}
             state={optionsStates[0]}
             key={++key}
             extraClassName={"btn-dropdown"} />);
@@ -174,7 +174,7 @@ const initFileSource = (initialOption: EFileSource): EButtonState[] => {
 const initOptions = (viewOptions: ViewOptions): EButtonState[] => {
     const initialState: EButtonState[] = [];
 
-    initialState.push(viewOptions.hideLabels ? EButtonState.active : EButtonState.unactive);
+    initialState.push(viewOptions.showLabels ? EButtonState.active : EButtonState.unactive);
     initialState.push(viewOptions.hideEdges ? EButtonState.active : EButtonState.unactive);
 
     return initialState;

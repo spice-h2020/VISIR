@@ -17,8 +17,6 @@ import React, { useEffect, useReducer, useState } from 'react';
 //Local files
 import { EScreenSize, Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
-import { FileSourceDropdown } from './components/FileSourceDropdown';
-import { OptionsDropdown } from './components/OptionsDropdown';
 import { PerspectivesGroups } from './components/PerspectivesGroup';
 import { LegendComponent } from './components/LegendComponent';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';

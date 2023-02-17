@@ -137,7 +137,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
         content.push(
             <div key={5}>
-                <div key={0}> {"Artworks relevant to this community: "} </div>
+                <div key={0}> {"Relevant artworks to this community: "} </div>
                 <Accordion key={1} items={accordionItems} tittles={tittles} />
             </div>);
 
@@ -184,7 +184,6 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
             case EExplanationTypes.explicit_attributes: {
                 return (
                     <div>
-                        <hr />
                         {getStackedBars(communityData.explicitDataArray, tClass)}
                     </div>);
             }
@@ -251,7 +250,6 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
 
                         return (
                             <div>
-                                <hr />
                                 <div> {explanation.explanation_data.label}</div>
                                 <div>
                                     {textData}
@@ -262,7 +260,6 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
 
                         return (
                             <div>
-                                <hr />
                                 <div> {explanation.explanation_data.label}</div>
                                 <div> {getWordClouds(explanation.explanation_data.data)}</div>
                             </div>);

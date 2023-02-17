@@ -192,7 +192,7 @@ export const PerspectiveView = ({
                 artworks={perspectiveData.artworks}
                 allUsers={perspectiveData.users}
 
-                hideLabel={viewOptions.hideLabels}
+                hideLabel={viewOptions.showLabels}
                 state={networkState}
                 translationClass={tClass}
             />
@@ -250,9 +250,9 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
 
     useEffect(() => {
         if (netMgr !== undefined && netMgr.isReady) {
-            netMgr.nodeVisuals.toggleNodeLabels(netMgr.nodes, viewOptions.hideLabels);
+            netMgr.nodeVisuals.toggleNodeLabels(netMgr.nodes, viewOptions.showLabels);
         }
-    }, [viewOptions.hideLabels, netMgr]);
+    }, [viewOptions.showLabels, netMgr]);
 
     useEffect(() => {
         if (netMgr !== undefined && netMgr.isReady) {
