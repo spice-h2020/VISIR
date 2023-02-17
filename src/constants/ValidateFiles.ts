@@ -662,7 +662,7 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         }
 
         if (arg.artworks === undefined) {
-            throw Error(`Artworks are undefined`);
+            arg.artworks = [];
         }
 
         if (typeof (arg.artworks) !== "object") {

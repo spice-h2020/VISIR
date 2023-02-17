@@ -74,7 +74,7 @@ rightSideSentenceMap.set(EConfigToolTypes.HECTH, "Beliefs");
 rightSideSentenceMap.set(EConfigToolTypes.DMH, "Concepts Attributes");
 
 export const similarity1Map = new Map<EConfigToolTypes, Array<ESimilarity>>();
-similarity1Map.set(EConfigToolTypes.GENERIC, [ESimilarity.Same, ESimilarity.Different]);
+similarity1Map.set(EConfigToolTypes.GENERIC, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
 similarity1Map.set(EConfigToolTypes.HECTH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
 similarity1Map.set(EConfigToolTypes.DMH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
 

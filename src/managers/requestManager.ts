@@ -22,7 +22,7 @@ export default class RequestManager {
     usingAPI: boolean;
 
     jobTimeOut: number = 2; //in seconds
-    jobMaxWaitTime: number = 60; //in seconds
+    jobMaxWaitTime: number = 120; //in seconds
 
     currentJobWaitTime: number = 0;
 

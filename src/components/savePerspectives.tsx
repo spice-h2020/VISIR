@@ -11,7 +11,9 @@
 //Packages
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../basicComponents/Button";
+import { DropMenu } from "../basicComponents/DropMenu";
 import { PerspectiveId } from "../constants/perspectivesTypes";
+import { EButtonState } from "../constants/viewOptions";
 
 
 const darkBackgroundStyle: React.CSSProperties = {
@@ -60,6 +62,11 @@ const TittleStyle: React.CSSProperties = {
     color: "gray"
 }
 
+interface SavePerspectiveId {
+    data: PerspectiveId,
+    state: boolean
+}
+
 interface SavePerspectivesProps {
     isActive: boolean,
     setIsActive: Function,
@@ -74,8 +81,10 @@ export const SavePerspective = ({
     allPerspectivesIds,
 }: SavePerspectivesProps) => {
 
+    const [states, setStates] = useState<Map<string, boolean>>(init(allPerspectivesIds));
+    const [allToggle, setAllToggle] = useState<boolean>(false);
 
-    const perspectiveRows = getPerspectivesInARow(allPerspectivesIds);
+    const perspectiveRows = getPerspectivesInARow(allPerspectivesIds, states, setStates);
     return (
         <div style={darkBackgroundStyle} className={isActive ? "toVisibleAnim" : "toHiddenAnim"}>
             <div style={innerPanelStyle}>
@@ -105,18 +114,45 @@ export const SavePerspective = ({
                         padding: "0px 2%"
                     }}>
                         <div>
-                            <input type="checkbox" id="SelectAll-cb" style={{ scale: "2" }}></input>
+                            <input type="checkbox" id="SelectAll-cb" style={{ scale: "2" }} checked={allToggle}
+                                onChange={() => { }}
+                                onClick={() => {
+                                    const newMap: Map<string, boolean> = new Map<string, boolean>();
+
+                                    for (let i = 0; i < allPerspectivesIds.length; i++) {
+                                        newMap.set(allPerspectivesIds[i].id, !allToggle);
+                                    }
+
+                                    setStates(newMap);
+                                    setAllToggle(!allToggle);
+                                }}
+                            />
                             <label style={{ marginLeft: "5px" }} htmlFor="SelectAll-cb"> Toggle All</label>
                         </div>
                         <div style={{ margin: "10px 5px" }}>
                             <Button
                                 content="Download perspectives"
                                 extraClassName="primary"
+                                onClick={() => {
+
+                                    for (let i = 0; i < allPerspectivesIds.length; i++) {
+                                        if (states.get(allPerspectivesIds[i].id)) {
+                                            console.log("Download " + allPerspectivesIds[i].name + ".json");
+                                            downloadFile("./public/data", allPerspectivesIds[i].name + ".json");
+                                        }
+                                    }
+                                }}
                             />
                         </div>
                     </div>
                     {/*Panel with all perspectives to pick from*/}
-                    <div style={{ border: "1px solid black", marginTop: "1%", maxHeight: "65vh", overflow: "auto" }}>
+                    {/* <div style={{ border: "1px solid black", marginTop: "1%", maxHeight: "65vh", overflow: "auto" }}>
+                        {perspectiveRows}
+                    </div> */}
+                    <div style={{
+                        border: "1px solid black", marginTop: "1%", maxHeight: "65vh", overflow: "auto",
+                        display: "flex", flexDirection: "column"
+                    }}>
                         {perspectiveRows}
                     </div>
                 </div>
@@ -126,21 +162,52 @@ export const SavePerspective = ({
 };
 
 
-function getPerspectivesInARow(allPerspectivesIds: PerspectiveId[]): React.ReactNode[] {
+function getPerspectivesInARow(allPerspectivesIds: PerspectiveId[], states: Map<string, boolean>, setStates: Function): React.ReactNode[] {
     const rows: React.ReactNode[] = [];
-    const scale = 2;
 
     for (let i = 0; i < allPerspectivesIds.length; i++) {
-        let newRow =
-            <div className="row checkbox-row active" style={{ display: "flex", height: "1.5rem", margin: "0.25rem", marginLeft: "5px", alignItems: "center" }}>
-                <input type="checkbox" id={`${allPerspectivesIds[i].id}-cb`} style={{ scale: `1.5` }}></input>
-                <label style={{ marginLeft: "5px", fontSize: "1.2rem" }} htmlFor={`${allPerspectivesIds[i].id}-cb`}>
-                    {allPerspectivesIds[i].name}
-                </label>
-            </div>;
+        let btnRow =
+            <Button
+                key={i}
+                content={`${allPerspectivesIds[i].name}`}
+                state={states.get(allPerspectivesIds[i].id) ? EButtonState.active : EButtonState.unactive}
+                extraClassName="btn-dropdown"
+                onClick={() => {
+                    let newMap = new Map<string, boolean>(states);
 
-        rows.push(newRow);
+                    newMap.set(allPerspectivesIds[i].id, states.get(allPerspectivesIds[i].id) ? false : true);
+                    setStates(newMap);
+                }}
+            />
+
+        rows.push(btnRow);
     }
 
     return [rows];
 }
+
+function init(allPerspectivesIds: PerspectiveId[]) {
+
+    const initialState: Map<string, boolean> = new Map<string, boolean>();
+
+    for (let i = 0; i < allPerspectivesIds.length; i++) {
+        initialState.set(allPerspectivesIds[i].id, false);
+    }
+
+    return initialState;
+}
+
+function downloadFile(url: string, fileName: string) {
+    fetch(url, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
+        .then(res => res.blob())
+        .then(res => {
+            const aElement = document.createElement('a');
+            aElement.setAttribute('download', fileName);
+            const href = URL.createObjectURL(res);
+            aElement.href = href;
+            // aElement.setAttribute('href', href);
+            aElement.setAttribute('target', '_blank');
+            aElement.click();
+            URL.revokeObjectURL(href);
+        });
+};
