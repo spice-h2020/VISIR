@@ -116,7 +116,7 @@ export const SavePerspective = ({
                         </div>
                     </div>
                     {/*Panel with all perspectives to pick from*/}
-                    <div style={{ border: "1px solid black", marginTop: "1%" }}>
+                    <div style={{ border: "1px solid black", marginTop: "1%", maxHeight: "65vh", overflow: "auto" }}>
                         {perspectiveRows}
                     </div>
                 </div>
@@ -128,12 +128,15 @@ export const SavePerspective = ({
 
 function getPerspectivesInARow(allPerspectivesIds: PerspectiveId[]): React.ReactNode[] {
     const rows: React.ReactNode[] = [];
+    const scale = 2;
 
     for (let i = 0; i < allPerspectivesIds.length; i++) {
         let newRow =
-            <div style={{ display: "flex", height: "1.5rem", alignItems: "center" }}>
-                <input type="checkbox" id={`${allPerspectivesIds[i].id}-cb`} style={{ scale: "1.5" }}></input>
-                <label style={{ marginLeft: "5px" }} htmlFor={`${allPerspectivesIds[i].id}-cb`}> {allPerspectivesIds[i].name}</label>
+            <div className="row checkbox-row active" style={{ display: "flex", height: "1.5rem", margin: "0.25rem", marginLeft: "5px", alignItems: "center" }}>
+                <input type="checkbox" id={`${allPerspectivesIds[i].id}-cb`} style={{ scale: `1.5` }}></input>
+                <label style={{ marginLeft: "5px", fontSize: "1.2rem" }} htmlFor={`${allPerspectivesIds[i].id}-cb`}>
+                    {allPerspectivesIds[i].name}
+                </label>
             </div>;
 
         rows.push(newRow);
