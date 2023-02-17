@@ -59,4 +59,13 @@ export default class BorderStrategy extends GenericStrategy {
         else
             user["borderWidth"] = 0;
     }
+
+    update(attributesArray: DimAttribute[]) {
+        this.attr = attributesArray.filter(attr => attr.dimension === Dimensions.Border)[0];
+
+        this.dimensionMap = new Map<string, string>();
+        if (this.attr !== undefined) {
+            this.fillMap(nodeConst.nodeDimensions.getBorder);
+        }
+    }
 }

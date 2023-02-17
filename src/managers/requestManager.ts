@@ -21,8 +21,9 @@ export default class RequestManager {
     axios: Axios;
     usingAPI: boolean;
 
-    jobTimeOut: number = 2; //in seconds
-    jobMaxWaitTime: number = 120; //in seconds
+
+    jobTimeOut: number = 2; //in seconds. Visir wait this time between asking CM for the state of a job
+    jobMaxWaitTime: number = 30; //in seconds. Max wait time of VISIR while asking for a job if its finished
 
     currentJobWaitTime: number = 0;
 
