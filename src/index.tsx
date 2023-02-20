@@ -1,9 +1,15 @@
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
 
+import { faS, faFileArrowDown, faGear, faFloppyDisk, faArrowsRotate, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+
+library.add(faS, faFileArrowDown, faGear, faFloppyDisk, faArrowsRotate, faScrewdriverWrench);
 
 
 const myURL = new URL(window.location.href);

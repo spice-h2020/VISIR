@@ -17,7 +17,6 @@ import React, { useEffect, useState, useRef } from "react";
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/nodeDimensionStrat';
 import { DataTable } from './DataColumn';
-import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
 
 const networkContainer: React.CSSProperties = {
     margin: "0px 1.5% 15px 1.5%",
@@ -46,8 +45,6 @@ interface PerspectiveViewProps {
     perspectiveState: EPerspectiveVisState;
     //If true, mirror the dataTable and vis.js network position
     mirror?: boolean;
-
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     /**
      * If its the unique active perspective in the app
      */
@@ -69,7 +66,6 @@ export const PerspectiveView = ({
     networkFocusID,
     perspectiveState,
     mirror = false,
-    setLoadingState,
     unique,
     translationClass: tClass,
     cancelPerspective,
@@ -104,8 +100,7 @@ export const PerspectiveView = ({
                     const nodeData: IUserData = netManager.nodes.get(selectedObject.obj.id) as IUserData;
 
                     //If the node exist in this network
-                    if (nodeData !== undefined) {
-                        console.log(nodeData.isMedoid);
+                    if (nodeData !== undefined && nodeData !== null) {
                         //If its a medoid node
                         if (nodeData.isMedoid) {
                             if (selectedObject.sourceID === netManager.id) {
@@ -163,8 +158,6 @@ export const PerspectiveView = ({
     //Create the vis network controller
     useEffect(() => {
         if (netManager === undefined && visJsRef !== null && visJsRef !== undefined) {
-            setLoadingState({ isActive: true, msg: `${tClass.t.loadingText.simpleLoading} ${perspectiveData.name}` });
-
             if (networkFocusID === undefined) {
                 sf.setNetworkFocusId(perspectiveData.id);
             }
@@ -172,15 +165,13 @@ export const PerspectiveView = ({
 
             try {
                 setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
-                    sf, dimStrat, networkFocusID!, setLoadingState, unique));
+                    sf, dimStrat, networkFocusID!, unique));
 
             } catch (error) {
                 if (error instanceof DiferentAttrbError) {
                     cancelPerspective(perspectiveData.id);
                 }
             }
-
-            setLoadingState({ isActive: false });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visJsRef]);
@@ -201,7 +192,7 @@ export const PerspectiveView = ({
                 artworks={perspectiveData.artworks}
                 allUsers={perspectiveData.users}
 
-                hideLabel={viewOptions.hideLabels}
+                hideLabel={viewOptions.showLabels}
                 state={networkState}
                 translationClass={tClass}
             />
@@ -251,10 +242,17 @@ function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkControlle
     }, [viewOptions.legendConfig, netMgr]);
 
     useEffect(() => {
-        if (netMgr !== undefined && netMgr.isReady) {
-            netMgr.nodeVisuals.toggleNodeLabels(netMgr.nodes, viewOptions.hideLabels);
+        if (netMgr !== undefined && netMgr.isReady && netMgr.explicitCtrl !== undefined) {
+            netMgr.explicitCtrl.makeArtworksUnique(viewOptions.nRelevantCommArtworks);
         }
-    }, [viewOptions.hideLabels, netMgr]);
+
+    }, [viewOptions.nRelevantCommArtworks, netMgr]);
+
+    useEffect(() => {
+        if (netMgr !== undefined && netMgr.isReady) {
+            netMgr.nodeVisuals.toggleNodeLabels(netMgr.nodes, viewOptions.showLabels);
+        }
+    }, [viewOptions.showLabels, netMgr]);
 
     useEffect(() => {
         if (netMgr !== undefined && netMgr.isReady) {

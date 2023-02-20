@@ -3,6 +3,7 @@
  * has the initial options of the options dropdown
  * @author Marco Expósito Pérez
  */
+import config from '../appConfig.json';
 
 /**
  * Available "all perspective file/details" sources
@@ -81,7 +82,7 @@ export const initialOptions = {
     /**
      * Hide the labels of all nodes in the canvas and in the tooltip and datatable
      */
-    hideLabels: EButtonState.active,
+    showLabels: EButtonState.unactive,
     /**
      * Hide all edges except when a node is selected, in such case, only conected edges will be shown
      */
@@ -98,6 +99,10 @@ export const initialOptions = {
      * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
      */
     deleteEdges: 0,
+    /**
+     * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
+     */
+    nRelevantCommArtworks: config.N_Representative_Artworks,
 }
 /**
  * Class that contains the value of all visualization options that will change how the user see the networks
@@ -107,7 +112,7 @@ export class ViewOptions {
     /**
      * Hide the labels of all nodes in the canvas and in the tooltip and datatable
      */
-    hideLabels: boolean;
+    showLabels: boolean;
     /**
      * Hide all edges except when a node is selected, in such case, only conected edges will be shown
      */
@@ -129,16 +134,19 @@ export class ViewOptions {
      */
     legendConfig: Map<string, Map<string, boolean>>;
 
+    nRelevantCommArtworks: number;
+
     /**
      * Constructor of the class
      */
     constructor() {
-        this.hideLabels = initialOptions.hideLabels === EButtonState.active;
+        this.showLabels = initialOptions.showLabels === EButtonState.active;
         this.hideEdges = initialOptions.hideEdges === EButtonState.active;
         this.border = initialOptions.border === EButtonState.active;
         this.legendConfig = new Map<string, Map<string, boolean>>();
         this.edgeThreshold = initialOptions.edgeThreshold;
         this.deleteEdges = initialOptions.deleteEdges;
+        this.nRelevantCommArtworks = initialOptions.nRelevantCommArtworks;
     }
 }
 

@@ -6,10 +6,10 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IPoint } from "../constants/auxTypes";
+import { IBoundingBox, IPoint } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
 import { ECommunityType, ICommunityData, IUserData } from "../constants/perspectivesTypes";
-
+import config from '../appConfig.json';
 /**
  * Aux interface to help group nodes in their partition of the canvas's layout
  */
@@ -18,64 +18,57 @@ interface INodeGroup {
     partition: {
         center: IPoint,
         nNodes: number
-    }
+    },
+    bb: IBoundingBox
 }
 
 export default class NodeLocation {
 
-    nodeGroups!: Array<INodeGroup>
-
+    nodeGroups: Array<INodeGroup>
+    allCommData: ICommunityData[];
+    radiusMultiplier: number;
     /**
      * Constructor of the class
-     * @param nCommunities number of communities
+     * @param allCommData all communities Data
      * @param nNodes number of nodes
      */
-    constructor(nCommunities: number, nNodes: number) {
-        this.initializeNodeGroups(nCommunities, nNodes);
-    }
-
-    initializeNodeGroups(nCommunities: number, nNodes: number) {
-        const nAreas = nCommunities;
-        const areaPartitions: IPoint[] = this.createNetworkPartitions(nNodes, nAreas);
+    constructor(allCommData: ICommunityData[]) {
+        this.radiusMultiplier = 1;
+        this.allCommData = allCommData;
         this.nodeGroups = new Array<INodeGroup>();
 
-        for (let i = 0; i < nAreas; i++) {
-            this.nodeGroups.push({
-                nodes: new Array<string>(),
+        this.initializeNodeGroups();
+    }
+
+    initializeNodeGroups() {
+        for (let i = 0; i < this.allCommData.length; i++) {
+            const areaPartition: IPoint = this.findCommunityCenter(this.allCommData[i], i, this.allCommData.length);
+
+            const nNodes = this.nodeGroups[i] ? this.nodeGroups[i].partition.nNodes : 0;
+            const users = this.nodeGroups[i] ? this.nodeGroups[i].nodes : new Array<string>();
+
+            this.nodeGroups[i] = {
+                nodes: users,
                 partition: {
-                    center: areaPartitions[i],
-                    nNodes: 0
-                }
-            })
+                    center: areaPartition,
+                    nNodes: nNodes,
+                },
+                bb: { top: areaPartition.y, bottom: areaPartition.y, left: areaPartition.x, right: areaPartition.x }
+            }
         }
     }
 
-    /**
-     * Create partitions in a circle to slot every node group
-     * @param nUsers number of users
-     * @param nAreas number of areas to make
-     * @returns returns an array with the center poin of each partition
-     */
-    createNetworkPartitions(nUsers: number, nAreas: number): IPoint[] {
-        const partitionsDistance = nUsers + nodeConst.groupsBaseDistance + (nAreas * 4);
+    findCommunityCenter(commData: ICommunityData, order: number, nAreas: number) {
+        const distanceFromCenter = nAreas * 30;
         const pi2 = (2 * Math.PI);
 
         //Separate the network area in as many angle slices as necesary
-        const angleSlice = pi2 / nAreas;
-        let targetAngle = 0;
+        const angleSlice = (pi2 / nAreas) * order;
 
-        //Increase the target angle for every group, and set the location of each area partition
-        const areaPartitions = [];
-        for (let i = 0; targetAngle < pi2; i++) {
-            areaPartitions[i] = {
-                x: parseFloat((Math.cos(targetAngle) * (partitionsDistance * nAreas)).toFixed(3)),
-                y: parseFloat((Math.sin(targetAngle) * (partitionsDistance * nAreas)).toFixed(3))
-            };
-
-            targetAngle += angleSlice;
-        }
-
-        return areaPartitions as IPoint[];
+        return {
+            x: parseFloat((Math.cos(angleSlice) * (distanceFromCenter * this.radiusMultiplier)).toFixed(3)),
+            y: parseFloat((Math.sin(angleSlice) * (distanceFromCenter * this.radiusMultiplier)).toFixed(3))
+        } as IPoint;
     }
 
     /**
@@ -98,7 +91,7 @@ export default class NodeLocation {
     setNodeLocation(node: IUserData, communityType: ECommunityType) {
         const group = node.implicit_community;
 
-        if (node.isMedoid) {
+        if (node.isMedoid && communityType !== ECommunityType.inexistent) {
 
             node.x = this.nodeGroups[group].partition.center.x;
             node.y = this.nodeGroups[group].partition.center.y;
@@ -108,6 +101,11 @@ export default class NodeLocation {
 
             node.x = nodePos.x;
             node.y = nodePos.y;
+
+            this.nodeGroups[group].bb.left = this.nodeGroups[group].bb.left > nodePos.x ? nodePos.x : this.nodeGroups[group].bb.left;
+            this.nodeGroups[group].bb.right = this.nodeGroups[group].bb.right < nodePos.x ? nodePos.x : this.nodeGroups[group].bb.right;
+            this.nodeGroups[group].bb.top = this.nodeGroups[group].bb.top > nodePos.y ? nodePos.y : this.nodeGroups[group].bb.top;
+            this.nodeGroups[group].bb.bottom = this.nodeGroups[group].bb.bottom < nodePos.y ? nodePos.y : this.nodeGroups[group].bb.bottom;
         }
     }
 
@@ -118,7 +116,6 @@ export default class NodeLocation {
      * @returns point coordinates
      */
     getNodePos(group: INodeGroup, nodeId: string, communityType: ECommunityType): IPoint {
-
         let size = group.partition.nNodes < 7 ? 8 : group.partition.nNodes;
         const center = group.partition.center;
         const nodeIndex = group.nodes.indexOf(nodeId);
@@ -138,14 +135,40 @@ export default class NodeLocation {
 
         } else {
 
-            const rows = Math.sqrt(size);
-            const xIndex = nodeIndex % rows;
+            const rows = Math.ceil(Math.sqrt(size));
+
+            const xIndex = Math.ceil(nodeIndex % rows);
             const yIndex = nodeIndex / rows;
 
-            output.x = center.x + xIndex * 45;
-            output.y = center.y + yIndex * 45;
+            output.x = center.x + xIndex * 30;
+            output.y = center.y + yIndex * 30;
         }
 
         return output;
+    }
+
+    needMoreIterations(): boolean {
+        for (let i = 0; i < this.nodeGroups.length; i++) {
+            const bbToCheck = this.nodeGroups[i].bb;
+            for (let j = i + 1; j < this.nodeGroups.length; j++) {
+                const secondaryBB = this.nodeGroups[j].bb;
+
+                if (this.areBoundingBoxesOverlaping(bbToCheck, secondaryBB)) {
+                    this.radiusMultiplier += config.NODE_RELOCATION_INCREMENT;
+                    this.initializeNodeGroups();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    areBoundingBoxesOverlaping(a: IBoundingBox, b: IBoundingBox) {
+        if (a.right + 40 > b.left && b.right + 40 > a.left &&
+            a.bottom + 40 > b.top && b.bottom + 40 > a.top) {
+            return true;
+        }
+        return false;
     }
 }

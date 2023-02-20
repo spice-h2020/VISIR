@@ -24,13 +24,10 @@ import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 const buttonText: React.CSSProperties = {
-    width: "90%",
-    float: "left",
     textAlign: "center",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    maxWidth: "15vw",
 }
 
 interface SelectPerspectiveProps {
@@ -48,7 +45,6 @@ interface SelectPerspectiveProps {
     requestMan: RequestManager,
     translationClass: CTranslation;
 
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     insideHamburger?: boolean,
 }
 
@@ -65,12 +61,11 @@ export const SelectPerspectiveDropdown = ({
     isLeftDropdown,
     requestMan,
     translationClass: tClass,
-    setLoadingState,
     insideHamburger = false,
 }: SelectPerspectiveProps) => {
 
     const [states, setStates] = useReducer(bStateArrayReducer, []);
-    const [text, setText] = useState<string>(tittle);
+    const [mainBtnText, setMainBtnText] = useState<string>(tittle);
 
 
     /*Init all dropdown items to unactive except the active perspectives that will be active or disabled depending on
@@ -86,7 +81,7 @@ export const SelectPerspectiveDropdown = ({
                     if (allIds[i].isActive === PerspectiveActiveState.left) {
                         if (isLeftDropdown) {
                             hasPerspective = true;
-                            setText(allIds[i].name);
+                            setMainBtnText(allIds[i].name);
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.active });
                         } else {
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.disabled });
@@ -94,7 +89,7 @@ export const SelectPerspectiveDropdown = ({
                     } else if (allIds[i].isActive === PerspectiveActiveState.right) {
                         if (!isLeftDropdown) {
                             hasPerspective = true;
-                            setText(allIds[i].name);
+                            setMainBtnText(allIds[i].name);
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.active });
                         } else {
                             setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.disabled });
@@ -104,7 +99,7 @@ export const SelectPerspectiveDropdown = ({
             }
 
             if (!hasPerspective) {
-                setText(tittle);
+                setMainBtnText(tittle);
             }
         }
     }, [allIds, isLeftDropdown, tittle]);
@@ -114,13 +109,15 @@ export const SelectPerspectiveDropdown = ({
             <DropMenu
                 items={[]}
                 content={tClass.t.toolbar.selectPerspective.noPerspectiveName}
-                extraClassButton="transparent down-arrow fixedWidth-15vw"
+                extraClassButton="transparent maximum-width"
+                postIcon={<div className="down-arrow" />}
+                hoverText="No available perspectives"
             />
         );
     }
 
     const perspectivesButtons: React.ReactNode[] = getButtons(allIds, states, setStates, setAllIds, setActivePerspective,
-        isLeftDropdown, requestMan, setLoadingState, tClass);
+        isLeftDropdown, requestMan, tClass);
 
     if (!insideHamburger) {
         return (
@@ -128,11 +125,12 @@ export const SelectPerspectiveDropdown = ({
                 items={perspectivesButtons}
                 content={
                     <div style={buttonText}>
-                        {text}
+                        {mainBtnText}
                     </div>}
-                extraClassButton="primary down-arrow fixedWidth-15vw blinkSizeAnim"
-                hoverText={text}
+                extraClassButton="primary blinkSizeAnim maximum-width"
+                hoverText={mainBtnText}
                 menuDirection={EDropMenuDirection.down}
+                postIcon={<div className="down-arrow" />}
             />
         );
     } else {
@@ -144,11 +142,12 @@ export const SelectPerspectiveDropdown = ({
                 items={perspectivesButtons}
                 content={
                     <div style={hamburgerBtnStyle}>
-                        {text}
+                        {mainBtnText}
                     </div>}
-                extraClassButton="primary down-arrow fixedWidth-10vw blinkSizeAnim btn-dropdown"
-                hoverText={text}
+                extraClassButton="primary maximum-width blinkSizeAnim btn-dropdown"
+                hoverText={mainBtnText}
                 menuDirection={EDropMenuDirection.right}
+                postIcon={<div className="down-arrow" />}
             />
         );
     }
@@ -166,8 +165,7 @@ export const SelectPerspectiveDropdown = ({
  * @returns returns an array of react components
  */
 function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: React.Dispatch<IbStateArrayAction>,
-    setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager,
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, tClass: CTranslation): React.ReactNode[] {
+    setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager, tClass: CTranslation): React.ReactNode[] {
 
     const maxButtonNameLength = 85;
     const buttons = new Array<React.ReactNode>();
@@ -204,8 +202,6 @@ function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: 
                         //Request the unactive perspective
                         setStates({ action: EbuttonStateArrayAction.changeOne, index: i, newState: EButtonState.loading });
 
-                        setLoadingState({ isActive: true, msg: `${tClass.t.loadingText.simpleRequest} ${allIdsToEdit[i].id}` });
-
                         requestMan.requestPerspectiveFIle(allIdsToEdit[i].id, allIdsToEdit[i].name,
                             /**
                              * Callback executed when the request and validation of the network data is finished.
@@ -213,7 +209,6 @@ function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: 
                              * @param newPerspective requested perspective's data
                              */
                             (newPerspective: IPerspectiveData) => {
-                                setLoadingState({ isActive: false });
 
                                 if (newPerspective) {
                                     allIdsToEdit[i].isActive = isLeft ? PerspectiveActiveState.left : PerspectiveActiveState.right;

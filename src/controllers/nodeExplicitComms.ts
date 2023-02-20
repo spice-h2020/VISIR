@@ -7,7 +7,6 @@
 import { ILegendDataAction } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
 import { ICommunityExplanation, ICommunityData, EExplanationTypes, IUserData, IStringNumberRelation } from "../constants/perspectivesTypes";
-import config from '../appConfig.json';
 //Local files
 import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 
@@ -124,13 +123,13 @@ export default class NodeExplicitComms {
             this.communitiesData[node.implicit_community].allArtworks = new Map<string, number>();
         }
 
-        for (let i = 0; i < node.interactions.length; i++) {
-            const currentN = this.communitiesData[node.implicit_community].allArtworks.get(node.interactions[i].artwork_id);
-            this.communitiesData[node.implicit_community].allArtworks.set(node.interactions[i].artwork_id, currentN ? currentN + 1 : 1);
+        for (let i = 0; i < node.community_interactions.length; i++) {
+            const currentN = this.communitiesData[node.implicit_community].allArtworks.get(node.community_interactions[i].artwork_id);
+            this.communitiesData[node.implicit_community].allArtworks.set(node.community_interactions[i].artwork_id, currentN ? currentN + 1 : 1);
         }
     }
 
-    makeArtworksUnique() {
+    makeArtworksUnique(nRelevantCommArtworks: number) {
 
         for (let i = 0; i < this.communitiesData.length; i++) {
             const artworksList = Array.from(this.communitiesData[i].allArtworks);
@@ -141,7 +140,7 @@ export default class NodeExplicitComms {
             })
 
             this.communitiesData[i].representative_artworks = artworksList.slice(
-                Math.max(artworksList.length - config.N_Representative_Artworks, 0));
+                Math.max(artworksList.length - nRelevantCommArtworks, 0));
         }
     }
 

@@ -103,9 +103,8 @@ export default class NodeVisualsCtrl {
                 this.dimStrat = dimStrat;
                 return false;
             } else {
-                throw new DiferentAttrbError("The new perspective has different attributes");
+                throw new DiferentAttrbError("Cant load this new perspective because it has diferent legend attributes.");
             }
-
         }
     }
 
@@ -119,12 +118,12 @@ export default class NodeVisualsCtrl {
         this.updateNodeLabel(node, hideLabel);
     }
 
-    toggleNodeLabels(allNodes: DataSetNodes, hideLabel: boolean) {
+    toggleNodeLabels(allNodes: DataSetNodes, showLabel: boolean) {
         const newNodes: Node[] = new Array<Node>();
 
         allNodes.forEach((node) => {
 
-            this.updateNodeLabel(node as IUserData, hideLabel);
+            this.updateNodeLabel(node as IUserData, showLabel);
             newNodes.push(node);
 
         })
@@ -132,8 +131,8 @@ export default class NodeVisualsCtrl {
         allNodes.update(newNodes);
     }
 
-    updateNodeLabel(node: IUserData, hideLabel: boolean) {
-        if (hideLabel) {
+    updateNodeLabel(node: IUserData, showLabel: boolean) {
+        if (!showLabel) {
             if (node.font !== undefined) {
                 node.font.color = "#00000000"
             } else {

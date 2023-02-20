@@ -88,9 +88,11 @@ export const LegendComponent = ({
                 <DropMenu
                     items={[legendContent]}
                     content={tClass.t.toolbar.legend.name}
-                    extraClassButton="plus primary"
+                    extraClassButton="primary"
                     closeWhenOutsideClick={false}
                     menuDirection={EDropMenuDirection.down}
+                    postIcon={<div className="plus" />}
+                    hoverText="Open Legend"
                 />
             </div>
         );
@@ -100,9 +102,10 @@ export const LegendComponent = ({
             <DropMenu
                 items={[]}
                 content={tClass.t.toolbar.legend.noLegend}
-                extraClassButton="plus primary"
+                extraClassButton="primary"
                 closeWhenOutsideClick={false}
                 menuDirection={EDropMenuDirection.down}
+                postIcon={<div className="plus" />}
             />)
 
     }

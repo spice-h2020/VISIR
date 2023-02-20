@@ -92,7 +92,7 @@ export const NodePanel = ({
 function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[], tClass: CTranslation) {
     let content: React.ReactNode[] = [];
 
-    if (node !== undefined && node.interactions !== undefined) {
+    if (node !== undefined) {
 
         if (node.community_interactions !== undefined) {
             const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =

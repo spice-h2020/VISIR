@@ -95,15 +95,31 @@ export const ConfigurationTool = ({
 }: ConfToolProps) => {
     const [isDevMode, setIsDevMode] = useState<boolean>(false);
 
+    //Seed for all the configuration
+    const [seed, setSeed] = useState<IConfigurationSeed>();
+
     //Written perspective name
     const [perspectiveName, setPerspectiveName] = useState<string>("");
     //Selected algorythm
     const [selectedAlgorithm, setSelectedAlgorithm] = useState<config.IAlgorithm>(emptyAlgorithm);
     const [algorythmWeigth, setAlgorythmWeight] = useState<number>(config.defaultWeightValue);
+    const [artworksWeight, setArtworksWeight] = useState<number>(config.defaultArtworkWeightValue);
+    //Selected artwork
+    const [selectedArtwork, setSelectedArtwork] = useState<config.INameAndIdPair>();
 
     //Similarity Dropdown states
     const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.Same);
     const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.Same);
+
+    //Sentence structure
+    const [midSentence, setMidSentence] = useState<string>("");
+    const [lastSentence, setLastSentence] = useState<string>("");
+
+    const [similarity1AvailableValues, setSimilarity1AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+    const [similarity2AvailableValues, setSimilarity2AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+
+    const [rightSideSentence, setRightSideSentence] = useState<string>("");
+
     //Middle select option state
     const [selectedOption, setSelectedOption] = useState<config.ISimilarityFunction>(emptyOption);
     //Checkboxes state
@@ -114,8 +130,6 @@ export const ConfigurationTool = ({
 
     const [isTextAreaActive, setIsTextAreaActive] = useState<boolean>(false);
 
-    //Seed for all the configuration
-    const [seed, setSeed] = useState<IConfigurationSeed>();
     //TextArea at the end content
     const [textAreaContent, setTextAreaContent] = useState<string>("");
 
@@ -126,13 +140,11 @@ export const ConfigurationTool = ({
     useEffect(() => {
         if (isActive) {
             requestManager.requestConfigurationToolSeed((newSeed: IConfigurationSeed) => {
-
                 if (newSeed !== undefined) {
                     if (newSeed.interaction_similarity_functions.length === 0) {
                         alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
                     } else {
                         setSeed(newSeed)
-                        setLoadingState({ isActive: false });
                         setSelectedOption(newSeed.interaction_similarity_functions[0]);
                     }
 
@@ -148,10 +160,48 @@ export const ConfigurationTool = ({
                         throw Error("Failed while setting default Algorythm attributes " + error);
                     }
 
+                    try {
+                        setSelectedArtwork(newSeed.artworks[0]);
+                    } catch (error: any) {
+                        throw Error("Failed while setting default Artwork " + error);
+                    }
+
+                    try {
+                        setMidSentence(config.initMidSentence(newSeed.configToolType));
+                    } catch (error: any) {
+                        throw Error("Failed while setting mid sentence word " + error);
+                    }
+
+                    try {
+                        setLastSentence(config.initLastSentence(newSeed.configToolType));
+                    } catch (error: any) {
+                        throw Error("Failed while setting mid sentence word " + error);
+                    }
+
+                    try {
+                        setRightSideSentence(config.initRightSideSentence(newSeed.configToolType));
+                    } catch (error: any) {
+                        throw Error("Failed while setting right side word " + error);
+                    }
+
+                    try {
+                        setSimilarity1AvailableValues(config.initSimilarity1(newSeed.configToolType, setSimilarity1));
+                    } catch (error: any) {
+                        throw Error("Failed while setting available similarity1 dropdown " + error);
+                    }
+
+                    try {
+                        setSimilarity2AvailableValues(config.initSimilarity2(newSeed.configToolType, setSimilarity2));
+                    } catch (error: any) {
+                        throw Error("Failed while setting available similarity2 dropdown " + error);
+                    }
+
+
+
                 }
             });
         }
-    }, [isActive, requestManager, setLoadingState]);
+    }, [isActive, requestManager]);
 
     //Init the new citizen and artworks attributes
     useEffect(() => {
@@ -208,40 +258,40 @@ export const ConfigurationTool = ({
                         <Button
                             key={1}
                             content=""
-                            extraClassName="btn-close transparent"
+                            extraClassName="dark btn-close"
                             onClick={() => { setIsActive(false); }}
+                            postIcon={<div className="icon-close"></div>}
                         />
                     </span>
                 </div>
-                {/*Row with the perspective name and algorithm selector*/}
+                {/*algorithm selector*/}
                 <div key={1} style={{
                     display: "flex", height: "5vh",
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
                     <div style={{
-                        borderBottom: "2px solid red", display: "flex", justifyContent: "center",
-                        alignItems: "center", height: "100%", paddingBottom: "3px"
+                        display: "flex", justifyContent: "center",
+                        alignItems: "center", height: "100%", paddingBottom: "1rem",
+                        width: "100%"
                     }}>
-                        <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
-                        <input key={1} type="text" id="f-perspective_name" name="f-perspective_name"
-                            onChange={
-                                (element) => {
-                                    setPerspectiveName(element.target.value)
-                                }
-                            }
-                        />
-                        <span key={2} style={{ width: "2rem" }} />
-                        <div key={3} style={{ display: `${isDevMode ? "block" : "none"}` }}>
-                            {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
-                            <Slider
-                                initialValue={algorythmWeigth}
-                                onInput={(value: number) => { setAlgorythmWeight(value) }}
-                                minimum={0.0}
-                                maximum={1.0}
-                                step={0.1}
-                                content={"Weight"}
-                            />
+                        <div key={3} title="The percentage of weight minimum of users that must be represented by the same value
+                        of contributions attributes (emotions, values, sentiments) to make such attribute explanable.
+                        A big value increase the number of communities and maybe, increase the number of users without community."
+                            style={{ display: `${isDevMode ? "inline-flex" : "none"}`, alignItems: "center", width: "50%" }}>
+                            <div style={{ width: "50%" }}>
+                                {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
+                            </div>
+                            <div style={{ width: "35%" }}>
+                                <Slider
+                                    initialValue={algorythmWeigth}
+                                    onInput={(value: number) => { setAlgorythmWeight(value) }}
+                                    minimum={0.0}
+                                    maximum={1.0}
+                                    step={0.1}
+                                    content={"Explainability weight"}
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -253,28 +303,53 @@ export const ConfigurationTool = ({
                     flexWrap: "nowrap",
                     justifyContent: "space-evenly",
                     alignItems: "center",
-                    height: "7vh"
-                }}>
-                    <DropMenu
-                        key={0}
-                        items={getSimilarityDropdown(similarity1, setSimilarity1)}
-                        content={ESimilarity[similarity1]}
-                        menuDirection={EDropMenuDirection.down}
-                        extraClassButton={"transparent down-arrow"}
-                    />
-                    <React.Fragment key={1}>
-                        {getOptionSelector(selectedOption, seed, setSelectedOption)}
-                    </React.Fragment>
+                    height: "7vh",
+                    margin: "0.4rem 1%",
 
-                    <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> in </span>
-                    <DropMenu
-                        key={3}
-                        items={getSimilarityDropdown(similarity2, setSimilarity2)}
-                        content={ESimilarity[similarity2]}
-                        menuDirection={EDropMenuDirection.down}
-                        extraClassButton={"transparent down-arrow"}
-                    />
-                    <span key={4} style={{ alignSelf: "center", margin: "0% 15px" }}> artworks. </span>
+                    borderTop: "2px solid red"
+                }}>
+                    <div>
+                        <DropMenu
+                            key={0}
+                            items={getSimilarityDropdown(similarity1, setSimilarity1,
+                                similarity1AvailableValues)}
+                            content={ESimilarity[similarity1]}
+                            menuDirection={EDropMenuDirection.down}
+                            extraClassButton={"transparent"}
+                            postIcon={<div className="down-arrow" />}
+                        />
+                    </div>
+                    <div>
+                        <React.Fragment key={1}>
+                            {getOptionSelector(selectedOption, seed, setSelectedOption)}
+                        </React.Fragment>
+                    </div>
+                    <div>
+                        <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {midSentence} </span>
+                    </div>
+                    <div>
+                        <DropMenu
+                            key={3}
+                            items={getSimilarityDropdown(similarity2, setSimilarity2,
+                                similarity2AvailableValues)}
+                            content={ESimilarity[similarity2]}
+                            menuDirection={EDropMenuDirection.down}
+                            extraClassButton={"transparent"}
+                            postIcon={<div className="down-arrow" />}
+                        />
+                    </div>
+                    <div style={{ display: "inline-flex" }}>
+                        <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {lastSentence} </span>
+
+                        <div style={{ direction: "rtl" }}>
+                            {getNArtworksDropdown(similarity2, selectedArtwork, setSelectedArtwork, seed)}
+                        </div>
+                        <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}
+                            title="Minimum similarity between artworks from two interactions to calculate the similarity between them.
+                        (otherwise its assume as similar)">
+                            {getSimilaritySlider(artworksWeight, setArtworksWeight, similarity2)}
+                        </div>
+                    </div>
                 </div>
                 {/*Row with the fieldsets, and the button to open/close the json export object */}
                 <div key={3} style={{
@@ -298,7 +373,7 @@ export const ConfigurationTool = ({
                             {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
                         </fieldset>
                         <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.Same === similarity2)}>
-                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>Artworks Attributes</h3>
+                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>{rightSideSentence}</h3>
                             {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr, artworksAttrDrop,
                                 setArtworksAttrDrop, isDevMode)}
                         </fieldset>
@@ -328,6 +403,14 @@ export const ConfigurationTool = ({
                     margin: "1rem 0px",
                     height: "5vh"
                 }}>
+                    <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
+                    <input key={1} style={{ marginRight: "1rem" }} type="text" id="f-perspective_name" name="f-perspective_name"
+                        onChange={
+                            (element) => {
+                                setPerspectiveName(element.target.value)
+                            }
+                        }
+                    />
                     <Button
                         content="Send Perspective"
                         extraClassName="primary"
@@ -337,11 +420,11 @@ export const ConfigurationTool = ({
                                 if (seed) {
                                     const newConfiguration = config.createConfigurationFile(seed, citizenAttr,
                                         artworksAttr, artworksAttrDrop, selectedOption, similarity1, similarity2,
-                                        perspectiveName, selectedAlgorithm, algorythmWeigth);
+                                        perspectiveName, selectedAlgorithm, algorythmWeigth, selectedArtwork, artworksWeight);
 
                                     setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
-                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => setLoadingState({ isActive: false }));
+                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => { });
                                 }
                             }
                         }
@@ -358,25 +441,28 @@ export const ConfigurationTool = ({
  * @param setSimilarity callback executed when an option is selected
  * @returns 
  */
-function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function): React.ReactNode[] {
+function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
+    similarityAvailableValues: Array<ESimilarity>): React.ReactNode[] {
     const buttons: React.ReactNode[] = [];
 
-    for (let i = 0; i < Object.keys(ESimilarity).length / 2; i++) {
+    for (let i = 0; i < similarityAvailableValues.length; i++) {
         buttons.push(
             <Button
                 key={i}
-                content={ESimilarity[i]}
-                state={sim === i ? EButtonState.active : EButtonState.unactive}
+                content={ESimilarity[similarityAvailableValues[i]]}
+                state={sim === similarityAvailableValues[i] ? EButtonState.active : EButtonState.unactive}
                 onClick={
                     () => {
-                        setSimilarity(i);
+                        setSimilarity(similarityAvailableValues[i]);
                     }
                 }
                 extraClassName={"btn-dropdown"}
             />
         )
     }
+
     return buttons;
+
 }
 
 
@@ -407,7 +493,8 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
                 key={0}
                 items={dropdownItems}
                 content={selectedAlgorythm.name}
-                extraClassButton={"primary down-arrow "}
+                extraClassButton={"primary"}
+                postIcon={<div className="down-arrow" />}
             />
         );
     } else {
@@ -415,7 +502,8 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
             key={0}
             items={[]}
             content={"Select algorithm"}
-            extraClassButton={"primary down-arrow"}
+            extraClassButton={"primary"}
+            postIcon={<div className="down-arrow" />}
         />
     }
 
@@ -441,16 +529,18 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
             const isChecked: boolean | undefined = citizenAttr.get(userAttribute.att_name);
 
             checkboxes.push(
-                <div key={i} className="row checkbox-row active">
-                    <input key={1} type="checkbox" style={{ cursor: "pointer" }} id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false}
-                        onChange={() => {
-                            citizenAttr.set(userAttribute.att_name, !isChecked);
-                            setCitizenAttr(new Map(citizenAttr));
-                        }
-                        } />
-                    <label key={2} htmlFor={`cit-${userAttribute.att_name}`} style={{ userSelect: "none", cursor: "pointer" }}>
-                        {userAttribute.att_name}
-                    </label>
+                <div key={i} className="row checkbox-row active" style={{ userSelect: "none", cursor: "pointer" }}
+                    title={userAttribute.att_name} onClick={() => {
+                        citizenAttr.set(userAttribute.att_name, !isChecked);
+                        setCitizenAttr(new Map(citizenAttr));
+                    }}>
+                    {/*The on change is a dummy function needed to not get error because otherwise the checked 
+                        property changes without onChange being implemented*/}
+                    <input key={1} type="checkbox" style={{ userSelect: "none", cursor: "pointer" }}
+                        id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false}
+                        onChange={() => { }} />
+                    {userAttribute.att_name}
+
                 </div>)
         }
 
@@ -495,16 +585,16 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
                         whiteSpace: "nowrap",
                         minInlineSize: "auto"
                     }}>
-                    {<div key={0} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} >
-                        <input key={0} type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`} value={onAttribute.att_name} checked={isChecked ? isChecked : false}
-                            onChange={() => {
-                                artworksAttr.set(onAttribute.att_name, !isChecked);
-                                setArtworksAttr(new Map(artworksAttr));
-                            }}
-                        />
-                        <label key={1} htmlFor={`art-${onAttribute.att_name}`} title={onAttribute.att_name} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }}>
-                            {onAttribute.att_name}
-                        </label>
+                    {<div key={0} style={{ overflowX: "hidden", whiteSpace: "nowrap", cursor: "pointer" }} onClick={() => {
+                        artworksAttr.set(onAttribute.att_name, !isChecked);
+                        setArtworksAttr(new Map(artworksAttr));
+                    }}>
+                        {/*The on change is a dummy function needed because otherwise "checked" 
+                        property changes wont be correctly updated*/}
+                        <input key={0} type="checkbox" style={{ cursor: "pointer" }} id={`art-${onAttribute.att_name}`}
+                            value={onAttribute.att_name} checked={isChecked ? isChecked : false} onChange={() => { }} />
+
+                        {onAttribute.att_name}
                     </div>}
                     {<div key={1} style={{
                         display: "flex",
@@ -571,7 +661,8 @@ function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.
             <DropMenu
                 items={dropMenuItems}
                 content={selectedName}
-                extraClassButton={"transparent down-arrow dropdown-minimumSize"}
+                extraClassButton={"transparent dropdown-minimumSize"}
+                postIcon={<div className="down-arrow" />}
             />
         </div>
     );
@@ -592,7 +683,8 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: ICo
                 items={[]}
                 content={`No options available`}
                 menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent down-arrow"}
+                extraClassButton={"transparent"}
+                postIcon={<div className="down-arrow" />}
             />);
     } else {
 
@@ -621,7 +713,8 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: ICo
                 items={items}
                 content={`${selectedOption.on_attribute.att_name.charAt(0).toUpperCase()}${selectedOption.on_attribute.att_name.slice(1)}`}
                 menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent down-arrow"}
+                extraClassButton={"transparent"}
+                postIcon={<div className="down-arrow" />}
             />);
     }
 }
@@ -648,6 +741,85 @@ function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): Re
         maxHeight: "100%",
         width: "90%",
         display: `${isTextAreaActive ? "inline-block" : "none"}`
+    }
+
+    return style;
+}
+
+
+function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity): React.ReactNode {
+
+    if (similarity2 !== ESimilarity.Same) {
+
+        return (
+            <Slider
+                initialValue={artworksWeight}
+                onInput={(value: number) => { setArtworksWeight(value) }}
+                minimum={0.0}
+                maximum={1.0}
+                step={0.1}
+                content={`${ESimilarity[similarity2]} Threshold similarity`}
+            />);
+
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Returns a dropDown that allows the user to pick what artwork to use when doing "same" artworks
+ * @param similarity2 
+ * @param selectedArtwork 
+ * @param setSelectedArtwork 
+ * @param seed 
+ * @returns 
+ */
+function getNArtworksDropdown(similarity2: ESimilarity, selectedArtwork: config.INameAndIdPair | undefined,
+    setSelectedArtwork: Function, seed: IConfigurationSeed | undefined): React.ReactNode {
+    const items = [];
+
+    if (seed !== undefined && selectedArtwork !== undefined && similarity2 === ESimilarity.Same) {
+        for (let i = 0; i < seed.artworks.length; i++) {
+            const name = seed.artworks[i].name;
+
+            items.push(
+                <Button
+                    key={i}
+                    content={`${name.charAt(0).toUpperCase()}${name.slice(1)}`}
+                    state={seed.artworks[i].id === selectedArtwork.id ? EButtonState.active : EButtonState.unactive}
+                    onClick={
+                        () => {
+                            setSelectedArtwork(seed.artworks[i]);
+                        }
+                    }
+                    extraClassName={"btn-dropdown"}
+                    hoverText={name}
+                />
+            );
+        }
+
+        return (
+            <DropMenu
+                items={items}
+                content={`${selectedArtwork.name.charAt(0).toUpperCase()}${selectedArtwork.name.slice(1)}`}
+                menuDirection={EDropMenuDirection.down}
+                extraClassButton={"primary"}
+                extraClassContainer={"dropdown-content-flip maxHeight-60vh"}
+                postIcon={<div className="down-arrow" />}
+                hoverText={selectedArtwork.name}
+            />
+        );
+    } else {
+        return "";
+    }
+}
+
+function getArtworsSliderDropdownStyle(isDevMode: boolean, similarity: ESimilarity) {
+
+    let shouldDisplay = isDevMode || similarity === ESimilarity.Same
+    const style: React.CSSProperties =
+    {
+        display: `${shouldDisplay ? "block" : "none"}`,
     }
 
     return style;

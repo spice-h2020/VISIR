@@ -24,6 +24,7 @@ const darkBackgroundStyle: React.CSSProperties = {
 
 const loadingText: React.CSSProperties = {
     marginTop: "1rem",
+    textAlign: "center"
 }
 
 const innerPanelStyle: React.CSSProperties = {

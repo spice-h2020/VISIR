@@ -15,7 +15,10 @@ export interface IConfigurationSeed {
     artwork_attributes: IArtworkAttribute[];
     user_attributes: INameAndTypePair[];
     interaction_similarity_functions: ISimilarityFunction[];
-    algorithm: IAlgorithm[]
+    algorithm: IAlgorithm[],
+    artworks: INameAndIdPair[],
+    configToolType: EConfigToolTypes,
+    HecthStructure: boolean
 }
 
 export interface IArtworkAttribute {
@@ -41,7 +44,45 @@ export interface IAlgorithm {
     default: boolean
 }
 
+export interface INameAndIdPair {
+    name: string,
+    id: string,
+}
+
 export const defaultWeightValue = 0.5;
+export const defaultArtworkWeightValue = 0.5;
+
+export enum EConfigToolTypes {
+    GENERIC,
+    HECTH,
+    DMH,
+}
+
+export const midSentenceMap = new Map<EConfigToolTypes, string>();
+midSentenceMap.set(EConfigToolTypes.GENERIC, "in");
+midSentenceMap.set(EConfigToolTypes.HECTH, "for users with");
+midSentenceMap.set(EConfigToolTypes.DMH, "in");
+
+export const lastSentenceMap = new Map<EConfigToolTypes, string>();
+lastSentenceMap.set(EConfigToolTypes.GENERIC, "artworks.");
+lastSentenceMap.set(EConfigToolTypes.HECTH, "beliefs.");
+lastSentenceMap.set(EConfigToolTypes.DMH, "concepts.");
+
+export const rightSideSentenceMap = new Map<EConfigToolTypes, string>();
+rightSideSentenceMap.set(EConfigToolTypes.GENERIC, "Artworks Attributes");
+rightSideSentenceMap.set(EConfigToolTypes.HECTH, "Beliefs");
+rightSideSentenceMap.set(EConfigToolTypes.DMH, "Concepts Attributes");
+
+export const similarity1Map = new Map<EConfigToolTypes, Array<ESimilarity>>();
+similarity1Map.set(EConfigToolTypes.GENERIC, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity1Map.set(EConfigToolTypes.HECTH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity1Map.set(EConfigToolTypes.DMH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+
+export const similarity2Map = new Map<EConfigToolTypes, Array<ESimilarity>>();
+similarity2Map.set(EConfigToolTypes.GENERIC, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity2Map.set(EConfigToolTypes.HECTH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity2Map.set(EConfigToolTypes.DMH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+
 
 //#endregion
 
@@ -70,12 +111,55 @@ export function initAlgorythmDrop(algorythms: IAlgorithm[]): IAlgorithm {
     return algorythms[0];
 }
 
+export function initMidSentence(type: EConfigToolTypes) {
+    let output = midSentenceMap.get(type);
+    if (output === undefined) output = "";
+
+    return output;
+}
+
+export function initLastSentence(type: EConfigToolTypes) {
+    let output = lastSentenceMap.get(type);
+    if (output === undefined) output = "";
+
+    return output;
+}
+
+export function initRightSideSentence(type: EConfigToolTypes) {
+    let output = rightSideSentenceMap.get(type);
+    if (output === undefined) output = "";
+
+    return output;
+}
+
+export function initSimilarity1(type: EConfigToolTypes, setSimilarity: Function) {
+    let availableValues = similarity1Map.get(type);
+    if (availableValues === undefined) {
+        availableValues = [ESimilarity.Same];
+    }
+
+    setSimilarity(availableValues[0]);
+
+    return availableValues;
+}
+
+export function initSimilarity2(type: EConfigToolTypes, setSimilarity: Function) {
+    let availableValues = similarity2Map.get(type);
+    if (availableValues === undefined) {
+        availableValues = [ESimilarity.Same];
+    }
+
+    setSimilarity(availableValues[0]);
+
+    return availableValues;
+}
+
 //#region Create config file
 
 export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: Map<string, boolean>,
     artworksAttr: Map<string, boolean>, artworksDropdownAttr: Map<string, boolean[]>,
     selectedOption: ISimilarityFunction, similarity1: ESimilarity, similarity2: ESimilarity, perspectiveName: string,
-    algorithm: IAlgorithm, algWeight: number) {
+    algorithm: IAlgorithm, algWeight: number, selectedArtwork: INameAndIdPair | undefined, artworksWeight: number) {
 
     let newConfig: any = {
         user_attributes: [],
@@ -85,12 +169,13 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
 
     fillUserAttributes(citizenAttr, newConfig);
     fillInteractionSimilarityFunctions(selectedOption, similarity1, seed, newConfig);
-    fillSimilarityFunctions(similarity2, newConfig, seed, artworksAttr, artworksDropdownAttr);
+    fillSimilarityFunctions(similarity2, newConfig, seed, artworksAttr, artworksDropdownAttr, selectedArtwork);
 
     let configName = perspectiveName.replaceAll(" ", "_");
 
     if (configName === "") {
-        configName = getDefaultName(similarity1, configName, newConfig, seed, selectedOption, similarity2, artworksAttr);
+        configName = getDefaultName(similarity1, configName, newConfig, seed, selectedOption, similarity2, artworksAttr,
+            selectedArtwork?.name);
     }
 
     newConfig["name"] = configName;
@@ -99,14 +184,16 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
     newConfig["algorithm"] = {
         "name": algorithm.name,
         "params": algorithm.params,
-        "weight": algWeight
+        "weight": algWeight,
+        "weightArtworks": artworksWeight
     };
 
     return newConfig;
 }
 
 function getDefaultName(similarity1: ESimilarity, configName: string, newConfig: any, seed: IConfigurationSeed,
-    selectedOption: ISimilarityFunction, similarity2: ESimilarity, artworksAttr: Map<string, boolean>) {
+    selectedOption: ISimilarityFunction, similarity2: ESimilarity, artworksAttr: Map<string, boolean>,
+    selectedArtworkName: string | undefined) {
 
     switch (similarity1) {
         case ESimilarity.Same: {
@@ -140,7 +227,11 @@ function getDefaultName(similarity1: ESimilarity, configName: string, newConfig:
             break;
         }
     }
-    configName += "artworks";
+
+    configName += "artworks ";
+    if (selectedArtworkName !== undefined && similarity2 === ESimilarity.Same) {
+        configName += `${selectedArtworkName}`;
+    }
 
     let artwork_attributesName: String[] = [];
     seed.artwork_attributes.forEach((value) => {
@@ -158,20 +249,43 @@ function getDefaultName(similarity1: ESimilarity, configName: string, newConfig:
 }
 
 function fillSimilarityFunctions(similarity2: ESimilarity, newConfig: any, seed: IConfigurationSeed, artworksAttr: Map<string, boolean>,
-    artworksDropdownAttr: Map<string, boolean[]>) {
+    artworksDropdownAttr: Map<string, boolean[]>, selectedArtwork: INameAndIdPair | undefined) {
 
     switch (similarity2) {
+
         case ESimilarity.Same: {
-            let sim = {
-                "sim_function": {
-                    "name": "EqualSimilarityDAO",
-                    "params": [],
-                    "on_attribute": {
-                        "att_name": "id",
-                        "att_type": "String"
+            let sim;
+            if (selectedArtwork === undefined) {
+                sim = {
+                    "sim_function": {
+                        "name": "EqualSimilarityDAO",
+                        "params": [],
+                        "on_attribute": {
+                            "att_name": "id",
+                            "att_type": "String"
+                        }
                     }
-                }
-            };
+                };
+
+
+            } else {
+                sim = {
+                    "sim_function": {
+                        "name": "EqualSimilarityDAO",
+                        "params": [
+                            {
+                                "artworkId": `${selectedArtwork.id}`,
+                                "att_type": "String"
+                            }
+                        ],
+                        "on_attribute": {
+                            "att_name": "id",
+                            "att_type": "String"
+                        }
+                    }
+                };
+            }
+
             newConfig.similarity_functions.push(sim);
             break;
         }
@@ -268,14 +382,30 @@ function fillInteractionSimilarityFunctions(selectedOption: ISimilarityFunction,
 }
 
 function fillUserAttributes(citizenAttr: Map<string, boolean>, newConfig: any) {
+    let defaultValue: any = undefined;
+    let hasValue = false;
+
     citizenAttr.forEach((value, key) => {
+
+        if (defaultValue === undefined) {
+            defaultValue = {
+                att_name: key,
+                att_type: "String"
+            };
+        }
+
         if (value) {
+            hasValue = true;
             newConfig.user_attributes.push({
                 att_name: key,
                 att_type: "String"
             });
         }
     });
+
+    if (!hasValue) {
+        newConfig.user_attributes.push(defaultValue);
+    }
 }
 
 

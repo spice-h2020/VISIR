@@ -5,7 +5,7 @@
  */
 //Constants
 import { FORMERR } from "dns";
-import { IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
+import { EConfigToolTypes, IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndIdPair, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
 import { ECommunityType } from "./perspectivesTypes";
@@ -397,22 +397,6 @@ function isUserDataValid(arg: any): types.IUserData {
             }
         }
 
-        if (arg.interactions === undefined) {
-            arg.interactions = [];
-        }
-
-        const nInteractions = Object.keys(arg.interactions).length;
-        if (nInteractions > 0) {
-
-            try {
-                for (let i = 0; i < nInteractions; i++) {
-                    arg.interactions[i] = isInteractionValid(arg.interactions[i]);
-                }
-            } catch (e: any) {
-                throw Error(`Interaction of the user (${arg.id}) has problems: ${e.message}`);
-            }
-        }
-
         if (arg.community_interactions === undefined) {
             arg.community_interactions = [];
         }
@@ -444,7 +428,6 @@ function isUserDataValid(arg: any): types.IUserData {
             } catch (e: any) {
                 throw Error(`No-community interaction of the user (${arg.id}) has problems: ${e.message}`);
             }
-
         }
 
         return arg;
@@ -678,6 +661,29 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
             throw Error(`Algorithms are not an object`);
         }
 
+        if (arg.artworks === undefined) {
+            arg.artworks = [];
+        }
+
+        if (typeof (arg.artworks) !== "object") {
+            throw Error(`Artworks are not an object`);
+        }
+
+        //Check what structure does this seed uses
+        if (arg.HetchStructure === undefined) {
+            arg.HetchStructure = false;
+        }
+
+        if (typeof (arg.HetchStructure) !== "boolean") {
+            throw Error(`HetchStructure is not a boolean`);
+        }
+
+        if (arg.HetchStructure) {
+            arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.HECTH;
+        } else {
+            arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.GENERIC;
+        }
+
         for (let i = 0; i < arg.artwork_attributes.length; i++) {
             arg.artwork_attributes[i] = isArtworkAttributesValid(arg.artwork_attributes[i]);
         }
@@ -690,6 +696,13 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         for (let i = 0; i < arg.algorithm.length; i++) {
             arg.algorithm[i] = isAlgorithmValid(arg.algorithm[i]);
         }
+        for (let i = 0; i < arg.artworks.length; i++) {
+            arg.artworks[i] = isNameAndIdPairValid(arg.artworks[i]);
+        }
+
+        arg.artworks.sort((a: INameAndIdPair, b: INameAndIdPair) => {
+            return (a.name < b.name ? -1 : 1)
+        })
 
         console.log(`Configuration seed file validation has been completed -> `);
         console.log(arg as IConfigurationSeed);
@@ -761,6 +774,41 @@ function isNameAndTypePairValid(arg: any): INameAndTypePair {
         return arg;
     } catch (e: any) {
         throw Error(`Name and Type data is not valid: ${e.message}`);
+    }
+}
+
+function isNameAndIdPairValid(arg: any): INameAndIdPair {
+    try {
+
+        if (arg === undefined) {
+            throw Error(`Name and ID data is undefined`);
+        }
+
+        if (arg.name === undefined) {
+            throw Error(`Name is undefined`);
+        }
+        if (typeof (arg.name) !== "string") {
+            try {
+                arg.name = String(arg.name);
+            } catch (e: any) {
+                throw Error(`Name is not a string`);
+            }
+        }
+
+        if (arg.id === undefined) {
+            throw Error(`Id is undefined`);
+        }
+        if (typeof (arg.id) !== "string") {
+            try {
+                arg.id = String(arg.id);
+            } catch (e: any) {
+                throw Error(`Id is not a string`);
+            }
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Name and id data is not valid: ${e.message}`);
     }
 }
 

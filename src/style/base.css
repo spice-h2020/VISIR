@@ -88,11 +88,36 @@ body {
     font-family: var(--textAreaFont);
     font-size: var(--textAreaFontSize);
     border-radius: 5px;
-    height: 3rem;
-    padding: 0.7rem 0.7rem;
+
     color: var(--buttonTextColor);
 
     opacity: 100%;
+    white-space: nowrap;
+    padding: 0px;
+
+    box-sizing: border-box;
+}
+
+.btn-content {
+    display: inline-flex !important;
+    width: -webkit-fill-available !important;
+    padding: 0.7rem 0.7rem !important;
+}
+
+.dropdown-minimumSize>.btn-content {
+    display: inline-flex !important;
+    width: -webkit-fill-available !important;
+    padding: 0rem 0rem !important;
+}
+
+.dropdown-mediumSize>.btn-content {
+    display: inline-flex !important;
+    width: -webkit-fill-available !important;
+    padding: 0.3rem 0.3rem !important;
+}
+
+.maximum-width {
+    width: 100%;
 }
 
 .btn:hover {
@@ -152,6 +177,11 @@ body {
     border-radius: 100% 0px 0px 100% !important;
 }
 
+.mid.btn {
+    border-radius: 0px !important;
+    margin: 0px 1px;
+}
+
 .second.btn {
     border-radius: 0px 100% 100% 0px !important;
 }
@@ -192,25 +222,22 @@ body {
     color: var(--buttonTextColor);
 }
 
+.btn-close {
+    height: 2.4rem;
+    width: 2.4rem;
+}
+
 /*Button that is just an X*/
-.btn-close::after {
+.icon-close::after {
     display: inline-block;
     content: "X";
     font-size: large;
 
     text-align: center;
 
-    color: black;
+    color: white;
     height: 1rem;
     width: 1rem;
-}
-
-.btn-close {
-    text-align: right;
-}
-
-.btn-close:hover {
-    box-shadow: none;
 }
 
 /* Button that toggles an accordion */
@@ -271,7 +298,8 @@ body {
 }
 
 /*Little triangle after a button */
-.btn.down-arrow::after {
+
+.down-arrow {
     margin-left: 0.20rem;
     vertical-align: 0.255rem;
     display: inline-block;
@@ -282,7 +310,8 @@ body {
     border-left: 0.3rem solid transparent;
 }
 
-.down-right::after {
+
+.down-right {
     margin-left: 0.20rem;
     vertical-align: 0.15rem;
     display: inline-block;
@@ -294,14 +323,30 @@ body {
 }
 
 /*Little + after a button*/
-.btn.plus::after {
-    margin-left: 0.20rem;
-    scale: 1.5;
-    display: inline-block;
-    content: "+";
+.plus {
+    display: block;
+    scale: 2;
+    margin-left: 0.5rem;
+    text-align: center;
+    color: white;
+    background-color: transparent;
 }
 
-.btn.plus.active::after {
+.plus::before {
+    display: block;
+    content: '+';
+}
+
+.btn.active>*>*>*.plus::before {
+    display: block;
+    content: '-';
+}
+
+.dark.plus {
+    color: #555;
+}
+
+.minus {
     margin-left: 0.20rem;
     scale: 1.5;
     display: inline-block;
@@ -322,8 +367,8 @@ body {
 
 .dropdown-minimumSize {
     height: 100%;
-    margin: 0px;
-    padding: 0px;
+    margin: 0px !important;
+    padding: 0px !important;
     overflow-x: hidden;
     white-space: nowrap;
 }
@@ -336,6 +381,14 @@ body {
 
 .checkbox-row.active:hover {
     border-bottom: 2px solid var(--primaryButtonColor);
+}
+
+.dropdown-content-flip>div {
+    direction: ltr;
+}
+
+.maxHeight-60vh>div {
+    max-height: 60vh !important;
 }
 
 /*------------------------------------------

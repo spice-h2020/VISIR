@@ -65,8 +65,9 @@ export const AccordionItem = ({
                         newState: state === EButtonState.active ? EButtonState.unactive : EButtonState.active
                     });
                 }}
-                extraClassName="btn-accordion plus"
+                extraClassName="btn-accordion dropdown-mediumSize"
                 hoverText={tittle}
+                postIcon={<div className="dark plus" />}
             />
             <div
                 ref={contentRef}

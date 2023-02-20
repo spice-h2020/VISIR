@@ -48,8 +48,6 @@ interface PerspectivesGroupProps {
      */
     setLegendData: React.Dispatch<ILegendDataAction>,
 
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>,
-
     translationClass: CTranslation,
     cancelPerspective: (idToCancel: string) => (void),
 }
@@ -63,7 +61,6 @@ export const PerspectivesGroups = ({
     collapsedState,
     viewOptions,
     setLegendData,
-    setLoadingState,
     translationClass: tClass,
     cancelPerspective,
 }: PerspectivesGroupProps) => {
@@ -113,7 +110,6 @@ export const PerspectivesGroups = ({
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
             perspectiveState={leftState}
-            setLoadingState={setLoadingState}
             unique={rightPerspective === undefined}
             translationClass={tClass}
             cancelPerspective={cancelPerspective}
@@ -129,7 +125,6 @@ export const PerspectivesGroups = ({
             networkFocusID={networkFocusID}
             perspectiveState={rightState}
             mirror={true}
-            setLoadingState={setLoadingState}
             unique={leftPerspective === undefined}
             translationClass={tClass}
             cancelPerspective={cancelPerspective}
@@ -139,7 +134,7 @@ export const PerspectivesGroups = ({
         <div style={perspectiveContainers}>
             < Tooltip
                 selectedObject={selectedObject}
-                hideLabels={viewOptions.hideLabels}
+                hideLabels={viewOptions.showLabels}
             />
             <div style={widthStyle.get(leftState)}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.id}`}>

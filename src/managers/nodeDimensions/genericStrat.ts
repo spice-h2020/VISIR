@@ -52,6 +52,8 @@ export default abstract class GenericStrategy {
     abstract change(user: IUserData, isFocus: boolean, increasedSize: boolean): void;
     //Change the user properties to make it colorless acordingly with the dimension strategy
     abstract toColorless(user: IUserData): void;
+    //Update the values of the array with the new incorpored keys/values
+    abstract update(attributesArray: DimAttribute[]): void;
 }
 
 
