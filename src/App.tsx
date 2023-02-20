@@ -157,8 +157,6 @@ export const App = ({
       hoverText="Perspective builder"
     />
 
-
-
   const leftSelectBtn =
     <SelectPerspectiveDropdown
       key={++keyIndex}
@@ -414,6 +412,7 @@ export const App = ({
         isActive={isSavePerspectiveActive}
         setIsActive={setIsSavePerspectiveActive}
         allPerspectivesIds={allPerspectivesIds}
+        requestManager={requestManager}
       />
 
       <LoadingFrontPanel

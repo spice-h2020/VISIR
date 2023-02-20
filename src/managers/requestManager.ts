@@ -7,9 +7,9 @@
 //Constants
 import { EFileSource, initialOptions } from '../constants/viewOptions';
 import { validateConfigurationSeed, validatePerspectiveDataJSON, validatePerspectiveIDfile as validateAllPerspectiveIDfile } from '../constants/ValidateFiles';
-import { IPerspectiveData, PerspectiveId as IPerspectiveId } from '../constants/perspectivesTypes';
+import { IPerspectiveData, PerspectiveId as IPerspectiveId, PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
-import { Axios } from 'axios'
+import { Axios, AxiosRequestConfig } from 'axios'
 //Config
 import config from '../appConfig.json';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
@@ -30,11 +30,12 @@ export default class RequestManager {
     //URL to ask for files when local url is selected
     baseLocalURL: string = "./data/";
 
-    allPerspectivesGET: string = "visualizationAPI/index";
-    singlePerspectiveGet: string = "visualizationAPI/file/";
+    allPerspectivesGETurl: string = "visualizationAPI/index";
+    singlePerspectiveGETurl: string = "visualizationAPI/file/";
+    perspectiveConfigGETurl: string = "v1.1/perspectives/"
 
-    confSeedGET: string = "v1.1/seed";
-    confSeedPOST: string = "v1.1/perspective";
+    confSeedGETurl: string = "v1.1/seed";
+    confSeedPOSTurl: string = "v1.1/perspective";
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
@@ -113,7 +114,7 @@ export default class RequestManager {
     * @returns {Object} Returns the file
     */
     getPerspective(id: string) {
-        return this.requestToUrl(this.usingAPI ? `${this.singlePerspectiveGet}${id}` : `${id}.json`);
+        return this.requestToUrl(this.usingAPI ? `${this.singlePerspectiveGETurl}${id}` : `${id}.json`);
     }
 
 
@@ -158,7 +159,7 @@ export default class RequestManager {
      * @returns {Object} returns the information of all perspectives
      */
     getAllPerspectives() {
-        return this.requestToUrl(this.usingAPI ? `${this.allPerspectivesGET}` : "dataList.json");
+        return this.requestToUrl(this.usingAPI ? `${this.allPerspectivesGETurl}` : "dataList.json");
     }
 
     requestConfigurationToolSeed(callback: Function) {
@@ -191,14 +192,14 @@ export default class RequestManager {
             });
     }
     getConfigurationToolSeed() {
-        return this.requestToUrl(this.usingAPI ? this.confSeedGET : "configurationTool/seedFile.json");
+        return this.requestToUrl(this.usingAPI ? this.confSeedGETurl : "configurationTool/seedFile.json");
     }
 
     requestToUrl(url: string): any {
         console.log(`Request to ${this.axios.defaults.baseURL}${url}`);
         this.currentJobWaitTime = 0;
 
-        return this.axios.get(url, {})
+        return this.axios.get(url)
             .then(async (response) => {
                 console.log(response)
 
@@ -214,6 +215,7 @@ export default class RequestManager {
                 } else {
                     throw new Error(`Error while requestion a file to ${this.axios.defaults.baseURL}${url}: ${response.statusText}`);
                 }
+
             })
             .catch((error) => {
                 throw error;
@@ -228,7 +230,7 @@ export default class RequestManager {
         }
         this.setLoadingState({ isActive: true, msg: `Community Model is busy (${this.currentJobWaitTime / 2})` });
 
-        return this.axios.get(url, {})
+        return this.axios.get(url)
             .then(async (response) => {
                 console.log(`Job in ${this.axios.defaults.baseURL}${url}`);
                 console.log(response)
@@ -287,7 +289,7 @@ export default class RequestManager {
 
         // For some reason, CM receives an empty object when axios does the post request.
         if (this.usingAPI) {
-            fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
+            fetch(`${this.axios.defaults.baseURL}${this.confSeedPOSTurl}`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -315,7 +317,43 @@ export default class RequestManager {
                 });
         }
     }
+
+    requestPerspectiveConfig(perspectiveId: PerspectiveId, callback: Function) {
+        this.setLoadingState({ isActive: true, msg: `Requesting perspective configuration file` });
+
+        if (this.usingAPI) {
+            this.requestToUrl(`${this.perspectiveConfigGETurl}${perspectiveId.id.split(" ")[0]}`)
+                .then((response: any) => {
+                    if (response.status === 200) {
+
+                        //Create a link that automaticaly is clicked and downloads the response.data json
+                        const aElement = document.createElement('a');
+                        aElement.setAttribute('download', `${perspectiveId.name}`);
+                        const href = URL.createObjectURL(new Blob([JSON.stringify(response.data)]));
+                        aElement.href = href;
+                        aElement.setAttribute('target', '_blank');
+                        aElement.click();
+                        aElement.remove();
+                        URL.revokeObjectURL(href);
+
+                    } else {
+                        throw new Error(`Error while requesting perspective config ${perspectiveId}: ${response.statusText}`);
+                    }
+                })
+                .catch((error: any) => {
+                    callback(undefined);
+
+                    console.log(`Perspective file with id: (${perspectiveId}) was not found: ${error}`);
+                    console.log(error);
+                    alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
+
+                }).finally(() => {
+                    this.setLoadingState({ isActive: false });
+                });
+        }
+    }
 }
+
 
 
 function delay(seconds: number) {

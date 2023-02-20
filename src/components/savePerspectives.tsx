@@ -14,6 +14,7 @@ import { Button } from "../basicComponents/Button";
 import { DropMenu } from "../basicComponents/DropMenu";
 import { PerspectiveId } from "../constants/perspectivesTypes";
 import { EButtonState } from "../constants/viewOptions";
+import RequestManager from "../managers/requestManager";
 
 
 const darkBackgroundStyle: React.CSSProperties = {
@@ -70,7 +71,8 @@ interface SavePerspectiveId {
 interface SavePerspectivesProps {
     isActive: boolean,
     setIsActive: Function,
-    allPerspectivesIds: PerspectiveId[]
+    allPerspectivesIds: PerspectiveId[],
+    requestManager: RequestManager
 }
 /**
  * UI component that executes a function when clicked.
@@ -79,6 +81,7 @@ export const SavePerspective = ({
     isActive,
     setIsActive,
     allPerspectivesIds,
+    requestManager
 }: SavePerspectivesProps) => {
 
     const [states, setStates] = useState<Map<string, boolean>>(init(allPerspectivesIds));
@@ -137,8 +140,9 @@ export const SavePerspective = ({
 
                                     for (let i = 0; i < allPerspectivesIds.length; i++) {
                                         if (states.get(allPerspectivesIds[i].id)) {
-                                            console.log("Download " + allPerspectivesIds[i].name + ".json");
-                                            downloadFile("./public/data", allPerspectivesIds[i].name + ".json");
+                                            console.log("Download " + allPerspectivesIds[i].id.split(" ")[0] + " whose name is" + allPerspectivesIds[i].name);
+                                            //downloadFile("./public/data", allPerspectivesIds[i].name + ".json");
+                                            requestManager.requestPerspectiveConfig(allPerspectivesIds[i], () => { });
                                         }
                                     }
                                 }}
