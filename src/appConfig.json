@@ -5,5 +5,5 @@
 	"Example-local_url": "http://localhost:8080/",
 	"MAX_GET_REQUEST_TIMEOUT": 2000,
 	"N_Representative_Artworks": 4,
-	"NODE_RELOCATION_INCREMENT": 0.25
+	"NODE_RELOCATION_INCREMENT": 1.25
 }

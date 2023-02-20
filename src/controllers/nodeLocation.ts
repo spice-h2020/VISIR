@@ -41,6 +41,8 @@ export default class NodeLocation {
     }
 
     initializeNodeGroups() {
+        console.log("start");
+
         for (let i = 0; i < this.allCommData.length; i++) {
             const areaPartition: IPoint = this.findCommunityCenter(this.allCommData[i], i, this.allCommData.length);
 
@@ -59,7 +61,7 @@ export default class NodeLocation {
     }
 
     findCommunityCenter(commData: ICommunityData, order: number, nAreas: number) {
-        const distanceFromCenter = nAreas * 30;
+        const distanceFromCenter = nAreas * 50;
         const pi2 = (2 * Math.PI);
 
         //Separate the network area in as many angle slices as necesary
@@ -154,7 +156,7 @@ export default class NodeLocation {
                 const secondaryBB = this.nodeGroups[j].bb;
 
                 if (this.areBoundingBoxesOverlaping(bbToCheck, secondaryBB)) {
-                    this.radiusMultiplier += config.NODE_RELOCATION_INCREMENT;
+                    this.radiusMultiplier *= config.NODE_RELOCATION_INCREMENT;
                     this.initializeNodeGroups();
                     return true;
                 }
