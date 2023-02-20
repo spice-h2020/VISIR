@@ -54,5 +54,9 @@
   {
     "id": "GAM-P14-DISSIMILAR-values-SAME-artworks",
     "name": "GAM-P14-DISSIMILAR-values-SAME-artworks"
+  },
+  {
+    "id": "DMH-P9-SIMILAR-sentiments-SIMILAR-artworks",
+    "name": "DMH-P9-SIMILAR-sentiments-SIMILAR-artworks"
   }
 ]

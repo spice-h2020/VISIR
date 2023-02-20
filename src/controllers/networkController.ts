@@ -101,7 +101,7 @@ export default class NetworkController {
     parseNodes(perspectiveData: IPerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions,
         viewOptions: ViewOptions, unique: boolean) {
 
-        const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
+        const nodeLocation = new NodeLocation(perspectiveData.communities);
 
         perspectiveData.users.forEach((user: IUserData) => {
             this.explicitCtrl.parseExplicitCommunity(user, sf.setLegendData);
@@ -114,8 +114,14 @@ export default class NetworkController {
         this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, this.explicitCtrl.explicitData, viewOptions, unique);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
+        //Check none of the node bounding boxes are overlaping
+        do {
+            perspectiveData.users.forEach((user: IUserData) => {
+                nodeLocation.setNodeLocation(user, this.explicitCtrl.communitiesData[user.implicit_community].type);
+            });
+        } while (nodeLocation.needMoreIterations())
+
         perspectiveData.users.forEach((user: IUserData) => {
-            nodeLocation.setNodeLocation(user, this.explicitCtrl.communitiesData[user.implicit_community].type);
             this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.showLabels);
             this.bbCtrl.calculateBoundingBoxes(user);
         });
