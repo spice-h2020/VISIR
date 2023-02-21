@@ -15,9 +15,10 @@ Documentation explained in the [wiki](https://github.com/MarcoExpPer/SPICE-visua
 5. [Complete user guide](#Complete-user-guide)
     1. [Loading](#Loading)
     2. [Toolbar](#Toolbar)
-    1. [Perspective representation](#Perspective-representation)
-    2. [Clicking the network](#Clicking-the-network)
-    2. [DataColumn](#DataColumn)
+    3. [Perspective Builder](#Perspective-Builder)
+    4. [Perspective representation](#Perspective-representation)
+    5. [Clicking the network](#Clicking-the-network)
+    6. [DataColumn](#DataColumn)
 
 ## How to run the application localy
 There are 2 ways of running the application. Docker allows for an easy one command instalation, Node.js allows to introduce new testing files. Both options start with these steps.
