@@ -75,7 +75,7 @@ export const Button = ({
       }}
     >
       <div className="btn-content">
-        <div style={{ width: "96%" }}> {content} </div>
+        <div style={{ width: "96%", overflow: "hidden" }}> {content} </div>
         {postIcon ? <div style={{ alignSelf: "center", display: "flex", paddingRight: "1rem" }}> {postIcon} </div> : ""}
       </div>
     </button >

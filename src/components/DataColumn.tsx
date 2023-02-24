@@ -24,7 +24,7 @@ import { Accordion } from "../basicComponents/Accordion";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
-    fontWeight: "400",
+    fontWeight: "bold",
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
@@ -59,7 +59,7 @@ interface DataTableProps {
     artworks: IArtworkData[];
     allUsers: IUserData[];
 
-    hideLabel: boolean;
+    showLabel: boolean;
     state: string;
 
     translationClass: CTranslation;
@@ -74,12 +74,12 @@ export const DataTable = ({
     community,
     artworks,
     allUsers,
-    hideLabel,
+    showLabel,
     state,
     translationClass: tClass
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, hideLabel, artworks, tClass), [community, allUsers, hideLabel, artworks, tClass]);
+    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks, tClass), [community, allUsers, showLabel, artworks, tClass]);
 
     return (
         <div className={state} style={getContainerStyle(state)}>
@@ -88,7 +88,7 @@ export const DataTable = ({
                 key={1}
                 tittle={tClass.t.dataColumn.citizenTittle}
                 node={node}
-                hideLabel={hideLabel}
+                showLabel={showLabel}
                 artworks={artworks}
                 translationClass={tClass}
             />
@@ -103,7 +103,7 @@ export const DataTable = ({
  * @param community source community.
  * @returns a react component with the community's panel.
  */
-function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean,
+function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], showLabel: boolean,
     artworks: IArtworkData[], tClass: CTranslation) {
 
     if (community !== undefined) {
@@ -146,7 +146,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
             if (community.explanations[i].visible) {
                 content.push(
                     <React.Fragment key={6 + i * 2}>
-                        {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel,
+                        {getCommunityExplanation(community, community.explanations[i], allUsers, showLabel,
                             artworks, tClass)}
                     </React.Fragment>);
 
@@ -174,7 +174,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @returns a react component with the explanations.
  */
 function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[],
-    hideLabel: boolean, artworks: IArtworkData[], tClass: CTranslation) {
+    showLabel: boolean, artworks: IArtworkData[], tClass: CTranslation) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
@@ -197,7 +197,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                         <NodePanel
                             tittle={tClass.t.dataColumn.medoidTittle}
                             node={medoid}
-                            hideLabel={hideLabel}
+                            showLabel={showLabel}
                             artworks={artworks}
                             translationClass={tClass}
                         />
@@ -322,7 +322,7 @@ function getContainerStyle(currentState: string): React.CSSProperties {
  * @param data parameters that will be represented in the cloud
  * @returns a react node with two diferent word clouds visualizations.
  */
-export function getWordClouds(data: IStringNumberRelation[]): React.ReactNode {
+export function getWordClouds(data: IStringNumberRelation[], showPercentage: boolean = true): React.ReactNode {
     try {
         return (
             <React.Fragment>
@@ -332,9 +332,11 @@ export function getWordClouds(data: IStringNumberRelation[]): React.ReactNode {
                 }} />
                 <WordCloudGraph
                     data={data}
+                    showPercentage={showPercentage}
                 />
                 <SingleTreeMap
                     data={data}
+                    showPercentage={showPercentage}
                 />
             </React.Fragment>);
     } catch (e: any) {

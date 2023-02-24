@@ -240,6 +240,10 @@ body {
     width: 1rem;
 }
 
+.icon-close.black::after {
+    color: black;
+}
+
 /* Button that toggles an accordion */
 .btn-accordion {
     padding: 0.5rem 0.5rem 1rem 1rem;

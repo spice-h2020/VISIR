@@ -25,6 +25,7 @@ interface WordCloudProps {
     minSize?: number;
     maxSize?: number;
     data: IStringNumberRelation[];
+    showPercentage: boolean;
 }
 
 /**
@@ -34,10 +35,13 @@ export const WordCloudGraph = ({
     minSize = 10,
     maxSize = 30,
     data,
+    showPercentage,
 }: WordCloudProps) => {
 
-    for (let obj of data) {
-        obj.props = { title: `${obj.count}%` }
+    if (showPercentage) {
+        for (let obj of data) {
+            obj.props = { title: `${obj.count}%` }
+        }
     }
 
     return (

@@ -150,7 +150,7 @@ export const AllVisirOptions = ({
         <React.Fragment>
             <DropMenu
                 items={allButtons}
-                content={<FontAwesomeIcon color='red' size='xl' style={{ marginRight: "5px" }} icon={["fas", "gear"]} />}
+                content={<FontAwesomeIcon color='red' size='xl' icon={["fas", "gear"]} />}
                 extraClassButton="transparent"
                 menuDirection={EDropMenuDirection.down}
                 hoverText="Options"

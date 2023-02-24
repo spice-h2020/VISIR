@@ -221,7 +221,7 @@ Example.args = {
     artworks: artworkData,
 
     allUsers: allUsers,
-    hideLabel: false
+    showLabel: false
 };
 
 
@@ -230,6 +230,6 @@ export const Empty = Template.bind({});
 Empty.args = {
     artworks: artworkData,
 
-    hideLabel: false
+    showLabel: false
 };
 

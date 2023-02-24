@@ -16,12 +16,12 @@ import { CTranslation } from "../constants/auxTypes";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
-    fontWeight: "400",
+    fontWeight: "bold",
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
     margin: "0.5rem 0px",
-    color: "var(--title)"
+    color: "var(--title)",
 }
 
 const frenchIndent: React.CSSProperties = {
@@ -32,7 +32,7 @@ const frenchIndent: React.CSSProperties = {
 interface NodePanelProps {
     tittle: String;
     node: IUserData | undefined;
-    hideLabel: boolean;
+    showLabel: boolean;
     artworks: IArtworkData[];
     translationClass: CTranslation;
 }
@@ -43,7 +43,7 @@ interface NodePanelProps {
 export const NodePanel = ({
     tittle,
     node,
-    hideLabel,
+    showLabel,
     artworks,
     translationClass: tClass,
 }: NodePanelProps) => {
@@ -53,7 +53,7 @@ export const NodePanel = ({
 
     if (node !== undefined) {
 
-        if (!hideLabel) {
+        if (showLabel) {
             content.push(<p style={frenchIndent} key={1}> <strong> {`${tClass.t.dataColumn.labelText}:`} </strong> &nbsp; {node.label} </p>);
         }
 

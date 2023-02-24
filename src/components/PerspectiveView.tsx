@@ -192,7 +192,7 @@ export const PerspectiveView = ({
                 artworks={perspectiveData.artworks}
                 allUsers={perspectiveData.users}
 
-                hideLabel={viewOptions.showLabels}
+                showLabel={viewOptions.showLabels}
                 state={networkState}
                 translationClass={tClass}
             />

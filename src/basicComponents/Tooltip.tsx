@@ -128,8 +128,9 @@ export const Tooltip = ({
                         <h3 style={tooltipTittleStyle}> {tooltipTittle} </h3>
                         <Button
                             content=""
-                            extraClassName="btn-close transparent"
                             onClick={() => { setActive(false); }}
+                            extraClassName="transparent btn-close"
+                            postIcon={<div className="icon-close black" ></div>}
                         />
                     </div>
                     <div style={tooltipBodyStyle}>

@@ -93,7 +93,7 @@ function getEmotions(extracted_emotions: IStringNumberRelation[] | undefined): R
         return (
             <div>
                 <strong> Makes me feel:</strong>
-                {getWordClouds(extracted_emotions)}
+                {getWordClouds(extracted_emotions, false)}
             </div>);
 
     } else {
