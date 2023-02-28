@@ -20,7 +20,7 @@ interface TooltipProps {
     /**
      * If the tooltip should hide users' labels and ids when shown.
      */
-    hideLabels: boolean;
+    showLabel: boolean;
 }
 
 /**
@@ -28,7 +28,7 @@ interface TooltipProps {
  */
 export const Tooltip = ({
     selectedObject,
-    hideLabels,
+    showLabel,
 }: TooltipProps) => {
     const [isActive, setActive] = useState<Boolean>(false);
     const [yOffset, setYoffset] = useState<number>(0);
@@ -55,10 +55,10 @@ export const Tooltip = ({
         setActive(true);
         setSelecObject(selectedObject?.obj);
 
-    }, [selectedObject?.obj, hideLabels])
+    }, [selectedObject?.obj, showLabel])
 
     const tooltipTittle: React.ReactNode = getTooltipTittle(selectObject);
-    const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, hideLabels);
+    const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, showLabel);
 
     if (selectedObject !== undefined && selectedObject.obj !== undefined && selectedObject.position !== undefined && isActive) {
         const style: React.CSSProperties = {}
@@ -112,7 +112,7 @@ export const getHTMLPosition = (element: HTMLDivElement) => {
 }
 
 
-function getTooltipBody(selectedObject: ICommunityData | IUserData | undefined, hideLabel: boolean) {
+function getTooltipBody(selectedObject: ICommunityData | IUserData | undefined, showLabel: boolean) {
     const body: React.ReactNode[] = []
 
     if (selectedObject !== undefined) {
@@ -122,7 +122,7 @@ function getTooltipBody(selectedObject: ICommunityData | IUserData | undefined, 
 
         } else {
 
-            if (!hideLabel) {
+            if (showLabel) {
                 body.push(<div className="row" key={-1}> <strong> Label: </strong> &nbsp; {selectedObject.label} </div>);
             }
 
