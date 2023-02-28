@@ -197,7 +197,6 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
                             artworksPanels.push(<ArtworkPanel artworksData={artworks} id={data[i]} />);
                         }
 
-                        //console.log(artworksPanels);
                         accordionItems.push(
                             <div>
                                 {keys[key]}
@@ -326,7 +325,7 @@ export function getWordClouds(data: IStringNumberRelation[], showPercentage: boo
  * @param data 
  * @returns 
  */
-function isAllZero(data: IStringNumberRelation[]) {
+export function isAllZero(data: IStringNumberRelation[]) {
     let isAllZero = true;
 
     for (let i = 0; i < data.length; i++) {

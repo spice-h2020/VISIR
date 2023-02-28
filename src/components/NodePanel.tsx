@@ -95,6 +95,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
     if (node !== undefined) {
 
         if (node.community_interactions !== undefined) {
+
             const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
                 getInteractionsPanel(node.community_interactions, artworks, true);
 

@@ -10,17 +10,7 @@
 import { IArtworkData, IStringNumberRelation, IInteraction } from "../constants/perspectivesTypes";
 //Packages
 import { useEffect, useState } from "react";
-import { getWordClouds } from "../components/DataColumn";
-
-
-const userFeelings: React.CSSProperties = {
-    width: "80%",
-    margin: "1rem auto",
-    border: "2px dashed var(--primaryButtonColor)",
-    boxSizing: "border-box",
-    textAlign: "center",
-    padding: "1rem",
-}
+import { getWordClouds, isAllZero } from "../components/DataColumn";
 
 interface InteractionPanelProps {
     artworksData: IArtworkData[];
@@ -79,6 +69,13 @@ export const InteractionPanel = ({
 
 function getEmotions(extracted_emotions: IStringNumberRelation[] | undefined): React.ReactNode {
     if (extracted_emotions !== undefined) {
+
+        if (isAllZero(extracted_emotions)) {
+            for (let pair of extracted_emotions) {
+                pair.count = 1;
+            }
+        }
+
         return (
             <div>
                 <strong> Makes me feel:</strong>
