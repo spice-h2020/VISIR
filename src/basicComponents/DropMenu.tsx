@@ -20,30 +20,6 @@ export enum EDropMenuDirection {
     up
 }
 
-const dropdownStyle: React.CSSProperties = {
-    float: "left",
-    overflow: "hidden",
-    width: "100%",
-    textAlign: "center"
-}
-
-
-const contentStyle: React.CSSProperties = {
-    position: "fixed",
-    zIndex: "10",
-    padding: "0.5rem 0.3rem",
-
-    boxShadow: "0px 0.5rem 1.5rem 0px rgba(0, 0, 0, 0.2)",
-    backgroundColor: "white",
-
-    backgroundClip: "padding-box",
-    border: "2px solid rgba(0, 0, 0, 0.15)",
-    borderRadius: "0.25rem",
-
-    maxHeight: "80vh",
-    overflowY: "auto",
-}
-
 interface DropMenuProps {
     /**
      * Items inside the dropdown.
@@ -161,7 +137,7 @@ export const DropMenu = ({
                     }}
                 />
 
-                {<div key={0} style={getExtraMenuStyle(showDropDown, containerRef, menuDirection)}
+                {<div key={0} className="dropdown-content-wrapper" style={getExtraMenuStyle(showDropDown, containerRef, menuDirection)}
                     onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}
                 >
                     {items}
@@ -182,7 +158,7 @@ export const DropMenu = ({
         }
 
         return (
-            <div key={-3} style={getMainMenuStyle(menuDirection)} className={extraClassContainer} ref={containerRef}>
+            <div key={-3} className={`${extraClassContainer} dropdown-wrapper`} ref={containerRef}>
                 {mainBtn}
             </div>
         )
@@ -190,8 +166,8 @@ export const DropMenu = ({
 
     } else {
         return (
-            <div key={-5} style={getMainMenuStyle(menuDirection)}
-                className={extraClassContainer}
+            <div key={-5}
+                className={`${extraClassContainer} dropdown-wrapper`}
                 ref={containerRef}
             >
                 <Button
@@ -240,16 +216,9 @@ const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, c
     }, [state, closeWhenOutsideClick, ref, callback]);
 };
 
-
-const getMainMenuStyle = (menuDirection: EDropMenuDirection) => {
-    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(dropdownStyle)));
-
-    return newStyle;
-}
-
 function getExtraMenuStyle(currentState: Boolean, ref: React.RefObject<HTMLDivElement>,
     menuDirection: EDropMenuDirection): React.CSSProperties {
-    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(contentStyle)));
+    let newStyle: React.CSSProperties = {};
 
     if (currentState) {
         newStyle.display = "flex";

@@ -6,20 +6,8 @@
  * @author Marco Expósito Pérez
  */
 //Packages
-import React from 'react';
 import { TagCloud } from 'react-tagcloud'
 import { IStringNumberRelation } from '../constants/perspectivesTypes';
-
-const tagCloudStyle: React.CSSProperties = {
-    maxHeight: "20vh",
-    cursor: "default",
-    backgroundColor: "white",
-    width: "80%",
-    margin: "auto",
-
-    textAlign: "center",
-    fontWeight: "bold",
-}
 
 interface WordCloudProps {
     minSize?: number;
@@ -45,7 +33,7 @@ export const WordCloudGraph = ({
     }
 
     return (
-        <div style={tagCloudStyle}>
+        <div className='word-cloud-container'>
             <TagCloud
                 tags={data}
                 minSize={minSize}

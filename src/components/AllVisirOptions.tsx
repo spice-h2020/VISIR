@@ -13,23 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import { Slider } from "../basicComponents/Slider";
-import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 //Config file
 import config from '../appConfig.json';
-
-
-
-const hrStyle: React.CSSProperties = {
-    margin: "0.1rem 0",
-    borderBottom: "1px",
-    borderColor: "black",
-}
-
-const inputTextStyle: React.CSSProperties = {
-    width: "20rem",
-    fontSize: "0.9rem",
-    alignSelf: "center",
-}
 
 interface AllVisirOptionsProps {
     //On click handler
@@ -107,11 +92,8 @@ export const AllVisirOptions = ({
     }
 
     let key = 2;
-    allButtons.push(<hr key={++key} style={{
-        margin: "0.15rem 0",
-        height: "2px",
-        backgroundColor: "black",
-    }} />);
+    allButtons.push(
+        <hr key={++key} className="dropdown-separator bold" />);
 
     allButtons.push(
         <Button
@@ -127,14 +109,14 @@ export const AllVisirOptions = ({
         state={optionsStates[1]}
         key={++key}
         extraClassName={"btn-dropdown"} />);
-    allButtons.push(<hr key={++key} style={hrStyle} />);
+    allButtons.push(<hr key={++key} className="dropdown-separator" />);
     allButtons.push(<Slider
         content={tClass.t.toolbar.optionsDrop.minSimilarity}
         onInput={(value: number) => { setViewOptions({ updateType: "edgeThreshold", newValue: value }); }}
         initialValue={viewOptions.edgeThreshold}
         key={++key}
     />);
-    allButtons.push(<hr key={++key} style={hrStyle} />);
+    allButtons.push(<hr key={++key} className="dropdown-separator" />);
     allButtons.push(<Slider
         content={"Number of relevant artworks"}
         minimum={0}
@@ -200,7 +182,7 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[],
         <div className="row" style={{ alignItems: "center" }} key={1}>
             <label htmlFor="f-urlSource" style={{ marginRight: "5px" }}> Use url: </label>
             <input type="text" id="f-urlSource" ref={inputRef} defaultValue={config.API_URI}
-                style={inputTextStyle}
+                className="url-input-text"
                 onKeyDown={(event) => {
                     if (event.key === 'Enter') {
                         useApiFunction();

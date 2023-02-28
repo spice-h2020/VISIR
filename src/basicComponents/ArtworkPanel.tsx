@@ -7,32 +7,10 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, IStringNumberRelation, IInteraction } from "../constants/perspectivesTypes";
+import { IArtworkData } from "../constants/perspectivesTypes";
 //Packages
 import { useEffect, useState } from "react";
-import { getWordClouds } from "../components/DataColumn";
 import React from "react";
-
-const interactionBox: React.CSSProperties = {
-    borderLeft: "1px solid var(--grayLineColor)",
-    borderRight: "1px solid var(--grayLineColor)",
-    padding: "0.5rem",
-}
-
-const userFeelings: React.CSSProperties = {
-    width: "80%",
-    margin: "1rem auto",
-    border: "2px dashed var(--primaryButtonColor)",
-    boxSizing: "border-box",
-    textAlign: "center",
-    padding: "1rem",
-}
-
-const artworkImage: React.CSSProperties = {
-    maxHeight: "100%",
-    maxWidth: "100%",
-    border: "2px solid var(--grayLineColor)",
-}
 
 interface ArtworkPanelProps {
     artworksData: IArtworkData[];
@@ -59,26 +37,24 @@ export const ArtworkPanel = ({
 
     if (artworkData !== undefined) {
         return (
-            <div style={interactionBox}>
-                <div style={{ maxHeight: "20vh" }} className="row">
-                    <div className="col">
-                        <div style={{ fontSize: "80%" }}>
-                            {artworkData.author}
-                        </div>
-                        <br />
-                        <div className="row">
-                            {artworkData.tittle}&nbsp;
-                            ({artworkData.year})
-                        </div>
-                        <br />
-                        {getNInteractionsRow(nInteractions)}
+            <div className="interaction-container row">
+                <div className="col">
+                    <div style={{ fontSize: "80%" }}>
+                        {artworkData.author}
+                    </div>
+                    <br />
+                    <div className="row">
+                        {artworkData.tittle}&nbsp;
+                        ({artworkData.year})
+                    </div>
+                    <br />
+                    {getNInteractionsRow(nInteractions)}
 
-                    </div>
-                    <div className="col">
-                        <img style={artworkImage} src={artworkData.image}
-                            alt={artworkData.tittle}
-                        />
-                    </div>
+                </div>
+                <div className="col">
+                    <img className="artwork-image" src={artworkData.image}
+                        alt={artworkData.tittle}
+                    />
                 </div>
             </div>
         );

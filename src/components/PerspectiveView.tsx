@@ -123,6 +123,7 @@ export const PerspectiveView = ({
                     } else {
                         setSelectedNode(undefined);
                         setSelectedCommunity(undefined);
+                        netManager.eventsCtrl.nothingClicked();
                     }
 
                 } //If a community has been clicked
@@ -161,7 +162,6 @@ export const PerspectiveView = ({
             if (networkFocusID === undefined) {
                 sf.setNetworkFocusId(perspectiveData.id);
             }
-
 
             try {
                 setNetManager(new NetworkController(perspectiveData, visJsRef.current!, viewOptions,
@@ -216,8 +216,6 @@ export const PerspectiveView = ({
             </div >
         );
     }
-
-
 };
 
 /**

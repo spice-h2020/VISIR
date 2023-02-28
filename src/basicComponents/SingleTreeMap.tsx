@@ -54,11 +54,7 @@ export const SingleTreeMap = ({
     })
 
     return (
-        <div style={{
-            width: "80%",
-            margin: "auto",
-            maxHeight: "20vh"
-        }}>
+        <div className="treemap-container">
             <ReactApexChart
                 options={options}
                 series={series}

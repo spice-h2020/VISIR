@@ -12,11 +12,6 @@ import { IArtworkData, IStringNumberRelation, IInteraction } from "../constants/
 import { useEffect, useState } from "react";
 import { getWordClouds } from "../components/DataColumn";
 
-const interactionBox: React.CSSProperties = {
-    borderLeft: "1px solid var(--grayLineColor)",
-    borderRight: "1px solid var(--grayLineColor)",
-    padding: "0.5rem",
-}
 
 const userFeelings: React.CSSProperties = {
     width: "80%",
@@ -25,12 +20,6 @@ const userFeelings: React.CSSProperties = {
     boxSizing: "border-box",
     textAlign: "center",
     padding: "1rem",
-}
-
-const artworkImage: React.CSSProperties = {
-    maxHeight: "100%",
-    maxWidth: "100%",
-    border: "2px solid var(--grayLineColor)",
 }
 
 interface InteractionPanelProps {
@@ -56,7 +45,7 @@ export const InteractionPanel = ({
 
     if (artworkData !== undefined) {
         return (
-            <div style={interactionBox}>
+            <div className="interaction-container">
                 <div style={{ maxHeight: "20vh" }} className="row">
                     <div className="col">
                         <div style={{ fontSize: "80%" }}>
@@ -69,13 +58,13 @@ export const InteractionPanel = ({
                         </div>
                     </div>
                     <div className="col">
-                        <img style={artworkImage} src={artworkData.image}
+                        <img className="artwork-image" src={artworkData.image}
                             alt={artworkData.tittle}
                         />
                     </div>
                 </div>
                 <div className="row">
-                    <div style={userFeelings}>
+                    <div className="user-makes-me-feel">
                         "{interaction.feelings}"
                     </div>
                 </div>

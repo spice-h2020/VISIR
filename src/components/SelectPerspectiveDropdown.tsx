@@ -21,14 +21,6 @@ import { Button } from "../basicComponents/Button";
 import RequestManager from "../managers/requestManager";
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from "../constants/perspectivesTypes";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
-import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
-
-const buttonText: React.CSSProperties = {
-    textAlign: "center",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-}
 
 interface SelectPerspectiveProps {
     //tittle of the dropdown.
@@ -124,7 +116,7 @@ export const SelectPerspectiveDropdown = ({
             <DropMenu
                 items={perspectivesButtons}
                 content={
-                    <div style={buttonText}>
+                    <div className="btn-select-perspective">
                         {mainBtnText}
                     </div>}
                 extraClassButton="primary blinkSizeAnim maximum-width"
@@ -134,14 +126,14 @@ export const SelectPerspectiveDropdown = ({
             />
         );
     } else {
-        let hamburgerBtnStyle = JSON.parse(JSON.stringify(buttonText));
+        let hamburgerBtnStyle: React.CSSProperties = {};
         hamburgerBtnStyle.maxWidth = "10vw";
 
         return (
             <DropMenu
                 items={perspectivesButtons}
                 content={
-                    <div style={hamburgerBtnStyle}>
+                    <div style={hamburgerBtnStyle} className="btn-select-perspective">
                         {mainBtnText}
                     </div>}
                 extraClassButton="primary maximum-width blinkSizeAnim btn-dropdown"
