@@ -328,8 +328,8 @@ export default class RequestManager {
 
                         //Create a link that automaticaly is clicked and downloads the response.data json
                         const aElement = document.createElement('a');
-                        aElement.setAttribute('download', `${perspectiveId.name}`);
-                        const href = URL.createObjectURL(new Blob([JSON.stringify(response.data)]));
+                        aElement.setAttribute('download', `${perspectiveId.name}.json`);
+                        const href = URL.createObjectURL(new Blob([JSON.stringify(response.data, undefined, 2)], { type: "text/json" }));
                         aElement.href = href;
                         aElement.setAttribute('target', '_blank');
                         aElement.click();

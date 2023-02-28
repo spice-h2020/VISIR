@@ -13,23 +13,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { ShapeForm } from "./ShapeForm";
 import { IStringNumberRelation } from "../constants/perspectivesTypes";
 
-const barPortionStyle: React.CSSProperties = {
-    display: "flex",
-    height: "100%",
-
-    float: "left",
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-
-    cursor: "default",
-
-    fontSize: "small",
-}
-
 interface StackedBarProps {
     data: IStringNumberRelation;
     /**
@@ -67,11 +50,11 @@ export const BarPortion = ({
         clampTextInsidePortion(htmlRef, setText, setSymbolActive, data.count);
     }, [htmlRef, data, data.count]);
 
-    let style: React.CSSProperties = JSON.parse(JSON.stringify(barPortionStyle));
-
-    style.width = `${data.count}%`;
-    style.background = getBackgroundColor(dimensionIndex, dim, portionOrder);
-    style.color = getTextColor(dimensionIndex, dim, portionOrder);
+    let style: React.CSSProperties = {
+        width: `${data.count}%`,
+        background: getBackgroundColor(dimensionIndex, dim, portionOrder),
+        color: getTextColor(dimensionIndex, dim, portionOrder),
+    }
 
     const hoverTitle = `${data.value} ${data.count}%`;
 

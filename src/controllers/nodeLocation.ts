@@ -41,8 +41,6 @@ export default class NodeLocation {
     }
 
     initializeNodeGroups() {
-        console.log("start");
-
         for (let i = 0; i < this.allCommData.length; i++) {
             const areaPartition: IPoint = this.findCommunityCenter(this.allCommData[i], i, this.allCommData.length);
 

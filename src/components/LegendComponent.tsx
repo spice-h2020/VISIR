@@ -18,16 +18,6 @@ import { CTranslation, ILegendData } from '../constants/auxTypes';
 import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
 import { ShapeForm } from '../basicComponents/ShapeForm';
 
-const columnTittle: React.CSSProperties = {
-    whiteSpace: "nowrap",
-    margin: "0.3rem 0.5rem",
-    paddingBottom: "0.7rem",
-    borderBottom: "black 1px inset",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    cursor: "default"
-}
-
 const buttonContentRow: React.CSSProperties = {
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -156,7 +146,7 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
             const colum =
                 <div className='col' style={getLegendColumnStyle(i === legendData.length)}
                     key={i}>
-                    <h3 style={columnTittle} title={legendData[i].key}>{legendData[i].key} </h3>
+                    <h3 className='legend-column-tittle' title={legendData[i].key}>{legendData[i].key} </h3>
                     {buttonsColumn}
                 </div>;
 
@@ -229,14 +219,15 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
 
         output =
             <div key={2} className='col' >
-                <h3 key={1} style={columnTittle} title={`${tClass.t.legend.anonymousRow}`} >  {`${tClass.t.legend.anonymousRow}`} </h3>
+                <h3 key={1} className="legend-column-tittle" title={`${tClass.t.legend.anonymousRow}`} >  {`${tClass.t.legend.anonymousRow}`} </h3>
                 <Button
                     key={2}
-                    content={<div className='row' >
-                        <div> {`${tClass.t.legend.anonymousExplanation}`} </div>
-                        <span style={{ width: "1rem" }} />
-                        <img alt={`${tClass.t.legend.anonymousRow} icon`} src={nodeConst.defaultAnon} style={{ height: "1.4rem" }}></img>
-                    </div>}
+                    content={
+                        <div className='row' >
+                            <div> {`${tClass.t.legend.anonymousExplanation}`} </div>
+                            <span style={{ width: "1rem" }} />
+                            <img alt={`${tClass.t.legend.anonymousRow} icon`} src={nodeConst.defaultAnon} style={{ height: "1.4rem" }}></img>
+                        </div>}
                     state={buttonState}
                     extraClassName={"btn-legend btn-dropdown"}
                     onClick={() => {

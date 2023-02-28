@@ -9,25 +9,11 @@
  */
 
 //Packages
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../basicComponents/Button";
-import { DropMenu } from "../basicComponents/DropMenu";
 import { PerspectiveId } from "../constants/perspectivesTypes";
 import { EButtonState } from "../constants/viewOptions";
 import RequestManager from "../managers/requestManager";
-
-
-const darkBackgroundStyle: React.CSSProperties = {
-    background: "rgba(0, 0, 0, 0.3)",
-
-    position: "fixed",
-    top: "0",
-    right: "0",
-    bottom: "0",
-    left: "0",
-
-    zIndex: 100,
-}
 
 const innerPanelStyle: React.CSSProperties = {
     width: "90vw",
@@ -57,17 +43,6 @@ const topButtonsStyle: React.CSSProperties = {
     justifyContent: "space-between",
 }
 
-const TittleStyle: React.CSSProperties = {
-    fontSize: "2rem",
-    fontWeight: "bolder",
-    color: "gray"
-}
-
-interface SavePerspectiveId {
-    data: PerspectiveId,
-    state: boolean
-}
-
 interface SavePerspectivesProps {
     isActive: boolean,
     setIsActive: Function,
@@ -89,12 +64,12 @@ export const SavePerspective = ({
 
     const perspectiveRows = getPerspectivesInARow(allPerspectivesIds, states, setStates);
     return (
-        <div style={darkBackgroundStyle} className={isActive ? "toVisibleAnim" : "toHiddenAnim"}>
+        <div className={isActive ? "toVisibleAnim dark-background" : "toHiddenAnim dark-background"}>
             <div style={innerPanelStyle}>
                 {/*Row with the buttons to exit the application and the tittle of this application*/}
                 <div key={0} style={topButtonsStyle}>
                     <span />
-                    <h3 key={1} style={TittleStyle}>
+                    <h3 key={1} className="save-perspectives-tittle">
                         Save Perspectives
                     </h3>
                     <span key={2} style={{ marginRight: "10px" }}>

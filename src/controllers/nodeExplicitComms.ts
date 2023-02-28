@@ -91,30 +91,35 @@ export default class NodeExplicitComms {
         }
 
         const explicitKeys = Object.keys(node.explicit_community);
+        node.isMedoid = this.medoidNodes.includes(node.id);
 
-        if (explicitKeys.length === 0 || this.areKeysUnknown(node, explicitKeys)) {
+        if (!node.isMedoid) {
+            if (explicitKeys.length === 0 || this.areKeysUnknown(node, explicitKeys)) {
 
-            node.isAnonymous = true;
-            this.hasAnon = true;
+                node.isAnonymous = true;
+                this.hasAnon = true;
 
-            setLegendData({
-                type: "anon",
-                newData: true
-            });
+                setLegendData({
+                    type: "anon",
+                    newData: true
+                });
 
-            this.communitiesData[node.implicit_community].anonUsers.push(node.id);
+                this.communitiesData[node.implicit_community].anonUsers.push(node.id);
 
+            } else {
+                node.isAnonymous = false;
+
+                explicitKeys.forEach((key) => {
+
+                    this.updateExplicitData(key, node);
+
+                    node.isMedoid = this.medoidNodes.includes(node.id);
+
+                    this.updateExplicitCommunityCount(key, node);
+                });
+            }
         } else {
-            node.isAnonymous = false;
-
-            explicitKeys.forEach((key) => {
-
-                this.updateExplicitData(key, node);
-
-                node.isMedoid = this.medoidNodes.includes(node.id);
-
-                this.updateExplicitCommunityCount(key, node);
-            });
+            this.communitiesData[node.implicit_community].users.splice(this.communitiesData[node.implicit_community].users.indexOf(node.id), 1);
         }
     }
 

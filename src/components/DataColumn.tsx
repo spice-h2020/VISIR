@@ -7,12 +7,12 @@
  */
 //Constants
 import {
-    IArtworkData, ICommunityExplanation as IExplanationData, ICommunityData, EExplanationTypes, IUserData
-    , IExplicitCommData, IStringNumberRelation
+    IArtworkData, ICommunityExplanation, ICommunityData, EExplanationTypes,
+    IUserData, IExplicitCommData, IStringNumberRelation
 }
     from "../constants/perspectivesTypes";
 //Packages
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 //Local files
 import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
@@ -22,35 +22,6 @@ import { CTranslation } from "../constants/auxTypes";
 import { ArtworkPanel } from "../basicComponents/ArtworkPanel";
 import { Accordion } from "../basicComponents/Accordion";
 
-const sectionTittleStyle: React.CSSProperties = {
-    fontSize: "1.2em",
-    fontWeight: "400",
-    fontFamily: "var(--contentFont)",
-    lineHeight: "135%",
-    width: "100%",
-    margin: "1rem 0px",
-    color: "var(--title)"
-}
-
-const tableContainer: React.CSSProperties = {
-    margin: "auto",
-    padding: "0.5rem 1rem",
-    backgroundColor: "white",
-    border: "1px solid #dadce0",
-    boxSizing: "border-box",
-    borderRadius: "8px",
-
-    height: "fit-content",
-    width: "100%",
-
-    maxHeight: "80vh",
-    maxWidth: "35vw",
-
-    wordWrap: "break-word",
-
-    overflowY: "auto",
-}
-
 interface DataTableProps {
     tittle?: String;
     node?: IUserData;
@@ -59,7 +30,7 @@ interface DataTableProps {
     artworks: IArtworkData[];
     allUsers: IUserData[];
 
-    hideLabel: boolean;
+    showLabel: boolean;
     state: string;
 
     translationClass: CTranslation;
@@ -74,21 +45,28 @@ export const DataTable = ({
     community,
     artworks,
     allUsers,
-    hideLabel,
+    showLabel,
     state,
     translationClass: tClass
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, hideLabel, artworks, tClass), [community, allUsers, hideLabel, artworks, tClass]);
+    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks, tClass), [community, allUsers, showLabel, artworks, tClass]);
+    const htmlRef = useRef(null);
+
+    useEffect(() => {
+        if (htmlRef.current !== null) {
+            (htmlRef.current as HTMLDivElement).scrollTo(0, 0);
+        }
+    }, [node, community]);
 
     return (
-        <div className={state} style={getContainerStyle(state)}>
-            <h2 key={0} className="tittle" style={{ fontSize: "1.5rem" }}>  {tittle} </h2>
+        <div className={`dataColumn-container ${state}`} ref={htmlRef} style={getContainerStyle(state)}>
+            <h2 key={0} className="tittle dataColumn-tittle">  {tittle} </h2>
             <NodePanel
                 key={1}
                 tittle={tClass.t.dataColumn.citizenTittle}
                 node={node}
-                hideLabel={hideLabel}
+                showLabel={showLabel}
                 artworks={artworks}
                 translationClass={tClass}
             />
@@ -103,11 +81,11 @@ export const DataTable = ({
  * @param community source community.
  * @returns a react component with the community's panel.
  */
-function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], hideLabel: boolean,
+function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], showLabel: boolean,
     artworks: IArtworkData[], tClass: CTranslation) {
 
     if (community !== undefined) {
-        const tittle = <div key={0} style={sectionTittleStyle}> {tClass.t.dataColumn.communityPanelTittle} </div>;
+        const tittle = <div key={0} className="dataColumn-subtittle"> {tClass.t.dataColumn.communityPanelTittle} </div>;
         let content: React.ReactNode[] = [];
 
         content.push(<div className="row" key={1}> <strong> {tClass.t.dataColumn.communityNameLabel} </strong> &nbsp; {community.name} </div>);
@@ -146,7 +124,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
             if (community.explanations[i].visible) {
                 content.push(
                     <React.Fragment key={6 + i * 2}>
-                        {getCommunityExplanation(community, community.explanations[i], allUsers, hideLabel,
+                        {getCommunityExplanation(community, community.explanations[i], allUsers, showLabel,
                             artworks, tClass)}
                     </React.Fragment>);
 
@@ -173,8 +151,8 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @param explanation data of the explanations to know its type and if it should be visible.
  * @returns a react component with the explanations.
  */
-function getCommunityExplanation(communityData: ICommunityData, explanation: IExplanationData, allUsers: IUserData[],
-    hideLabel: boolean, artworks: IArtworkData[], tClass: CTranslation) {
+function getCommunityExplanation(communityData: ICommunityData, explanation: ICommunityExplanation, allUsers: IUserData[],
+    showLabel: boolean, artworks: IArtworkData[], tClass: CTranslation) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
@@ -197,7 +175,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: IEx
                         <NodePanel
                             tittle={tClass.t.dataColumn.medoidTittle}
                             node={medoid}
-                            hideLabel={hideLabel}
+                            showLabel={showLabel}
                             artworks={artworks}
                             translationClass={tClass}
                         />
@@ -306,7 +284,7 @@ function getStackedBars(data: IExplicitCommData[] | undefined, tClass: CTranslat
 }
 
 function getContainerStyle(currentState: string): React.CSSProperties {
-    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(tableContainer)));
+    let newStyle: React.CSSProperties = {}
 
     if (currentState === "active") {
         newStyle.borderLeft = "0.5rem solid var(--primaryButtonColor)";
@@ -322,19 +300,18 @@ function getContainerStyle(currentState: string): React.CSSProperties {
  * @param data parameters that will be represented in the cloud
  * @returns a react node with two diferent word clouds visualizations.
  */
-export function getWordClouds(data: IStringNumberRelation[]): React.ReactNode {
+export function getWordClouds(data: IStringNumberRelation[], showPercentage: boolean = true): React.ReactNode {
     try {
         return (
             <React.Fragment>
-                <span style={{
-                    height: "10px",
-                    display: "block",
-                }} />
+                <span className="word-cloud-wrapper" />
                 <WordCloudGraph
                     data={data}
+                    showPercentage={showPercentage}
                 />
                 <SingleTreeMap
                     data={data}
+                    showPercentage={showPercentage}
                 />
             </React.Fragment>);
     } catch (e: any) {

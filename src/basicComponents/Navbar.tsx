@@ -7,32 +7,6 @@
 //Packages
 import React from "react";
 
-const navBarContainer: React.CSSProperties = {
-    backgroundColor: "rgb(248, 249, 250)",
-
-    paddingTop: "0.25rem",
-    paddingBottom: "0.25rem",
-
-    position: "fixed",
-    top: "0",
-
-    height: "4rem",
-    width: "100%",
-    zIndex: "100",
-
-
-    display: "inline-flex",
-    flexWrap: "nowrap",
-    boxSizing: "border-box"
-}
-
-const colStyle: React.CSSProperties = {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    alignItems: "center"
-}
-
 export enum EScreenSize {
     normal,
     small,
@@ -67,18 +41,18 @@ export const Navbar = ({
 }: NavbarProps) => {
 
     return (
-        <div style={navBarContainer}>
-            <div style={getColStyle(0, screenSize)}>
+        <div className="navbar-container">
+            <div className="navBar-column" style={getColStyle(0, screenSize)}>
                 {leftAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div style={getColStyle(1, screenSize)}>
+            <div className="navBar-column" style={getColStyle(1, screenSize)}>
                 {midAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div style={getColStyle(2, screenSize)}>
+            <div className="navBar-column" style={getColStyle(2, screenSize)}>
                 {rightAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
@@ -90,7 +64,7 @@ export const Navbar = ({
 const showDebugColor = false;
 function getColStyle(i: number, screenSize: EScreenSize) {
 
-    const newStyle: React.CSSProperties = JSON.parse(JSON.stringify(colStyle));
+    const newStyle: React.CSSProperties = {}
 
     switch (i) {
         case 0: {

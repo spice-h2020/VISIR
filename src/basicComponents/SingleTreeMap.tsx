@@ -10,6 +10,7 @@ import { IStringNumberRelation } from "../constants/perspectivesTypes";
 
 interface SingleTreeMapProps {
     data: IStringNumberRelation[];
+    showPercentage: boolean;
 }
 
 /**
@@ -17,6 +18,7 @@ interface SingleTreeMapProps {
  */
 export const SingleTreeMap = ({
     data,
+    showPercentage,
 }: SingleTreeMapProps) => {
 
     const options: ApexCharts.ApexOptions = {
@@ -30,6 +32,7 @@ export const SingleTreeMap = ({
             }
         },
         tooltip: {
+            enabled: showPercentage,
             y: {
                 formatter: (value) => { return value + "%" },
             },
@@ -51,11 +54,7 @@ export const SingleTreeMap = ({
     })
 
     return (
-        <div style={{
-            width: "80%",
-            margin: "auto",
-            maxHeight: "20vh"
-        }}>
+        <div className="treemap-container">
             <ReactApexChart
                 options={options}
                 series={series}

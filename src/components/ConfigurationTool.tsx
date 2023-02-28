@@ -278,11 +278,11 @@ export const ConfigurationTool = ({
                         <div key={3} title="The percentage of weight minimum of users that must be represented by the same value
                         of contributions attributes (emotions, values, sentiments) to make such attribute explanable.
                         A big value increase the number of communities and maybe, increase the number of users without community."
-                            style={{ display: `${isDevMode ? "inline-flex" : "none"}`, alignItems: "center", width: "50%" }}>
+                            style={{ display: `${isDevMode ? "inline-flex" : "none"}`, alignItems: "center" }}>
                             <div style={{ width: "50%" }}>
                                 {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
                             </div>
-                            <div style={{ width: "35%" }}>
+                            <div style={{ width: "100%" }}>
                                 <Slider
                                     initialValue={algorythmWeigth}
                                     onInput={(value: number) => { setAlgorythmWeight(value) }}

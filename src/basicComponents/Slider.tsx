@@ -6,15 +6,6 @@
 //Packages
 import { useState } from "react";
 
-const sliderContainer: React.CSSProperties = {
-    padding: "0.7rem 0.7rem",
-
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    fontSize: "1rem"
-}
-
 interface SliderProps {
     /**
      * Text above the slider.
@@ -79,7 +70,7 @@ export const Slider = ({
     const size = (parseFloat(value) - minimum) * 100 / (maximum - minimum) + '% 100%';
 
     return (
-        <div style={sliderContainer}>
+        <div className="slider-container">
             {label}
             <input type="range"
                 style={{ backgroundSize: size }}
