@@ -553,15 +553,15 @@ body {
 //------------------------------------------*/
 
 .interaction-container {
-    border-left: "1px solid var(--grayLineColor)";
-    border-right: "1px solid var(--grayLineColor)";
-    padding: "0.5rem";
+    border-left: 1px solid var(--grayLineColor);
+    border-right: 1px solid var(--grayLineColor);
+    padding: 0.5rem;
 }
 
 .artwork-image {
-    max-height: "100%";
-    max-width: "100%";
-    border: "2px solid var(--grayLineColor)";
+    max-height: 100%;
+    max-width: 100%;
+    border: 2px solid var(--grayLineColor);
 }
 
 .user-makes-me-feel {
