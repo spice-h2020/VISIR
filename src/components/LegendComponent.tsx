@@ -141,13 +141,11 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
                         }}
                         postIcon={
                             <div style={{ paddingLeft: "5px" }}>
-                                <ColorStain color={nodeConst.nodeDimensions.getColor(0)} />
+                                {getIcon(valueText, legendData[i].dimension, j)}
                             </div>}
                     />
                 );
             }
-
-
 
             const colum =
                 <div className='col' style={getLegendColumnStyle(i === legendData.length)}
@@ -170,39 +168,30 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
  * @param index index of the community.
  * @returns a react component.
  */
-const getButtonContent = (value: string, dim: Dimensions, index: number): React.ReactNode => {
+const getIcon = (value: string, dim: Dimensions, index: number): React.ReactNode => {
     let icon: React.ReactNode = "";
 
     switch (dim) {
         case Dimensions.Color:
-            icon =
+            return (
                 <ColorStain
                     color={nodeConst.nodeDimensions.getColor(index)}
-                />
-            break;
+                />)
         case Dimensions.Shape:
-            icon =
+            return (
                 <ShapeForm
                     scale={1}
                     shape={nodeConst.nodeDimensions.getShape(index).name}
                 />
-            break;
+            )
         case Dimensions.Border:
-            icon =
+            return (
                 <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
+            )
             break;
         default:
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
-
-    return (
-        <div title={value} className="row" style={{ alignItems: "center", alignContent: "center", justifyContent: "space-between" }} key={index}>
-            <div style={buttonContentRow}> {value} </div>
-            <div style={{ width: "1vw" }}>
-                {icon}
-            </div>
-        </div>
-    );
 }
 
 function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map<string, Map<string
