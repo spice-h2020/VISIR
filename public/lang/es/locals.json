@@ -1,46 +1,90 @@
 {
     "toolbar": {
-        "fileSourceDrop": {
-            "name": "Fuente de archivos",
-            "localFiles": "Archivos locales",
-            "Api_URL": "Api URL"
-        },
-        "optionsDrop": {
-            "name": "Opciones",
-            "hideLabels": "Ocultar etiquetas",
-            "hideEdges": "Ocultar aristas sin seleccionar",
+        "Options": {
+            "hoverText": "Opciones",
+            "useLocalFiles": "Archivos locales",
+            "useURL": "Usar una url",
+            "showLabel": "Mostrar etiquetas",
+            "hideEdges": "Ocultar aristas no seleccionadas",
             "minSimilarity": "Similitud minima",
-            "removeEdges": "Eliminar un % de las aristas"
+            "relevantArtworks": "Cantidad de obras relevantes"
+        },
+        "savePerspective": {
+            "hoverText": "Guardar perspectivas"
+        },
+        "perspectiveBuilder": {
+            "hoverText": "Constructor de perspectivas"
         },
         "selectPerspective": {
-            "defaultName": "Seleccionar perspectiva",
-            "noPerspectiveName": "No hay perspectivas disponibles"
+            "hoverText": "Seleccionar perspectivas",
+            "unselectedName": "Selecciona perspectiva",
+            "noAvailableName": "No hay perspectivas disponibles"
+        },
+        "updateBtn": {
+            "hoverText": "Re-cargar perspectivas"
+        },
+        "collapseBtns": {
+            "leftHoverText": "Reducir perspectiva de la izquierda",
+            "rightHoverText": "Reducir perspectiva de la derecha"
         },
         "legend": {
-            "name": "Legenda",
-            "noLegend": "Legenda inactiva"
+            "hoverText": "Leyenda",
+            "unselectedName": "Leyenda",
+            "noAvailableName": "No hay Leyenda",
+            "anonymousRow": "Usuarios anonimos",
+            "anonymousExplanation": "Usuarios sin comunidades explicitas"
         }
     },
-    "loadingText": {
-        "requestFiles": "Solicitando archivos a",
-        "requestPerspective": "Solicitando perspectiva",
-        "requestingAllPerspectives": "Solicitando el archivo con todas las perspectivas",
-        "requestingConfToolSeed": "Solicitando la configuracion inicial",
-        "CMisBusy": "El objetivo esta ocupado. Intentadolo de nuevo",
-        "simpleRequest": "Solicitando",
-        "simpleLoading": "Cargando"
+    "savePerspectives": {
+        "tittle": "Guardar perspectivas",
+        "toggleLabel": "Mostrar/Ocultar todas",
+        "downloadBtn": "Descargar perspectivas"
+    },
+    "perspectiveBuider": {
+        "devModeBtn": "modo desarrollador",
+        "similarityValues": {
+            "similar": "Similar",
+            "same": "Igual",
+            "dissimilar": "Diferente"
+        },
+        "middleSentence": {
+            "base": "en"
+        },
+        "lastSentence": {
+            "base": "obras"
+        },
+        "leftBoxTittle": {
+            "base": "Atributos de la leyenda"
+        },
+        "rightBoxTittle": {
+            "base": "Atributos de las obras"
+        },
+        "perspectiveNameLabel": "Nombre de la perspectiva",
+        "SendBtn": "Enviar Perspectiva",
+        "AlgorithmSlider": "Peso de explicabilidad",
+        "AlgorithmSliderExplanation": "El procentaje de peso minimo que los usuarios deben tener para considerar que tienen los mismos valores en sus contribuciones (emociones, valores, sentimientos) para hacer esos atributos explicables. Un alto valor aumenta el numero de comunidades y quizas aumente tambien el numero de usuarios sin una comunidades.",
+        "SimilaritySlider": "Limite de similitud",
+        "SimilaritySliderExplanation": "Similitud minima entre obras de dos interacciones para calcular la similityd entre ellas. (Si no, se asume que son iguales)"
     },
     "dataColumn": {
-        "citizenTittle": "Atributos del ciudadano",
-        "citizenAmount": "Total de ciudadanos",
-        "anonymous": "Anónimos",
-        "medoidTittle": "Atributos del medoide",
-        "mainInteractionsTittle": "Interacciones relacionadas con la comunidad del usuario",
-        "otherInteractionsTittle": "Otras interacciones",
-        "labelText": "Etiqueta"
+        "citizenTittle": "Descripcion del ciudadano",
+        "userLabelLabel": "Etiqueta",
+        "relatedContributions": "Contribuciones relacionadas con su comunidad",
+        "otherContributions": "Otras contribuciones",
+        "communityTittle": "Descripcion de la comunidad",
+        "communityNameLabel": "Nombre",
+        "totalCitizensLabel": "Total de ciudadanos",
+        "anonymousLabel": "Anonimos",
+        "relevantArtworks": "Obras relacionadas con la comunidad",
+        "medoidTittle": "Ciudadano representativo"
     },
-    "legend": {
-        "anonymousRow": "Usuarios anonimos",
-        "anonymousExplanation": "Usuarios sin datos explicitos"
+    "loadingText": {
+        "requestFiles": "Requesting files to",
+        "requestPerspective": "Requesting perspective",
+        "requestingAllPerspectives": "Requesting file with All perspectives",
+        "requestingConfToolSeed": "Requesting configuration tool seed",
+        "CMisBusy": "Community Model is busy. Trying again",
+        "simpleRequest": "Requesting",
+        "simpleLoading": "Loading"
     }
 }

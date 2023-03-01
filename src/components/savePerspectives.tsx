@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import { Button } from "../basicComponents/Button";
 import { PerspectiveId } from "../constants/perspectivesTypes";
 import { EButtonState } from "../constants/viewOptions";
+import { ITranslation } from "../managers/CTranslation";
 import RequestManager from "../managers/requestManager";
 
 const innerPanelStyle: React.CSSProperties = {
@@ -47,7 +48,8 @@ interface SavePerspectivesProps {
     isActive: boolean,
     setIsActive: Function,
     allPerspectivesIds: PerspectiveId[],
-    requestManager: RequestManager
+    requestManager: RequestManager,
+    translation: ITranslation | undefined,
 }
 /**
  * UI component that executes a function when clicked.
@@ -56,7 +58,8 @@ export const SavePerspective = ({
     isActive,
     setIsActive,
     allPerspectivesIds,
-    requestManager
+    requestManager,
+    translation
 }: SavePerspectivesProps) => {
 
     const [states, setStates] = useState<Map<string, boolean>>(init(allPerspectivesIds));
@@ -70,7 +73,7 @@ export const SavePerspective = ({
                 <div key={0} style={topButtonsStyle}>
                     <span />
                     <h3 key={1} className="save-perspectives-tittle">
-                        Save Perspectives
+                        {translation?.savePerspectives.tittle}
                     </h3>
                     <span key={2} style={{ marginRight: "10px" }}>
                         <Button
@@ -105,11 +108,11 @@ export const SavePerspective = ({
                                     setAllToggle(!allToggle);
                                 }}
                             />
-                            <label style={{ marginLeft: "5px" }} htmlFor="SelectAll-cb"> Toggle All</label>
+                            <label style={{ marginLeft: "5px" }} htmlFor="SelectAll-cb"> {translation?.savePerspectives.toggleLabel}</label>
                         </div>
                         <div style={{ margin: "10px 5px" }}>
                             <Button
-                                content="Download perspectives"
+                                content={translation?.savePerspectives.downloadBtn}
                                 extraClassName="primary"
                                 onClick={() => {
 

@@ -61,7 +61,7 @@ export const LegendComponent = ({
 
     if (legendData !== undefined && legendData.dims !== undefined && legendData.dims.length > 0) {
 
-        const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick, translation);
+        const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick);
         const anonRows: React.ReactNode = getAnonButtons(legendData.anonGroup, legendData.anonymous, legendConf,
             onLegendClick, translation);
 
@@ -78,12 +78,12 @@ export const LegendComponent = ({
             <div className="legend-container">
                 <DropMenu
                     items={[legendContent]}
-                    content={translation?.toolbar.legend.name}
+                    content={translation?.toolbar.legend.unselectedName}
                     extraClassButton="primary"
                     closeWhenOutsideClick={false}
                     menuDirection={EDropMenuDirection.down}
                     postIcon={<div className="plus" />}
-                    hoverText="Open Legend"
+                    hoverText={translation?.toolbar.legend.hoverText}
                 />
             </div>
         );
@@ -92,7 +92,7 @@ export const LegendComponent = ({
         return (
             <DropMenu
                 items={[]}
-                content={translation?.toolbar.legend.noLegend}
+                content={translation?.toolbar.legend.noAvailableName}
                 extraClassButton="primary"
                 closeWhenOutsideClick={false}
                 menuDirection={EDropMenuDirection.down}
@@ -110,7 +110,7 @@ export const LegendComponent = ({
  * @returns all the column buttons.
  */
 function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Map<string, boolean>>,
-    onClick: Function, translation: ITranslation | undefined): React.ReactNode[] {
+    onClick: Function): React.ReactNode[] {
 
     const rows = new Array<React.ReactNode>();
 
@@ -210,16 +210,16 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
 
         if (valueMap?.get(`${nodeConst.anonymousGroupKey}User`)) {
             buttonState = EButtonState.active;
-        };
+        }
 
         output =
             <div key={2} className='col' >
                 <h3 key={1} className="legend-column-tittle" title={`${translation?.legend.anonymousRow}`} >
-                    {`${translation?.legend.anonymousRow}`}
+                    {`${translation?.toolbar.legend.anonymousRow}`}
                 </h3>
                 <Button
                     key={2}
-                    content={`${translation?.legend.anonymousExplanation}`}
+                    content={`${translation?.toolbar.legend.anonymousExplanation}`}
 
                     state={buttonState}
                     extraClassName={"btn-legend btn-dropdown"}
@@ -228,10 +228,9 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
                         onClick(new Map(legendConf));
                     }}
                     postIcon={
-                        <img alt={`${translation?.legend.anonymousRow} icon`} src={nodeConst.defaultAnon} style={{ height: "1.4rem" }}></img>
+                        <img alt={`${translation?.toolbar.legend.anonymousRow} icon`} src={nodeConst.defaultAnon} style={{ height: "1.4rem" }}></img>
                     }
                 />
-
             </div >;
     }
     return output;

@@ -136,7 +136,7 @@ export const App = ({
       key={++keyIndex}
       content={<FontAwesomeIcon color='black' size='xl' icon={["fas", "floppy-disk"]} />}
       extraClassName={"transparent"}
-      hoverText="Save perspectives"
+      hoverText={currentLanguage?.toolbar.savePerspective.hoverText}
       onClick={(state: EButtonState) => {
         if (state !== EButtonState.disabled) {
           setIsSavePerspectiveActive(!isSavePerspectiveActive);
@@ -156,13 +156,13 @@ export const App = ({
         }
       }}
       state={isConfigToolActive ? EButtonState.active : EButtonState.unactive}
-      hoverText="Perspective builder"
+      hoverText={currentLanguage?.toolbar.perspectiveBuilder.hoverText}
     />
 
   const leftSelectBtn =
     <SelectPerspectiveDropdown
       key={++keyIndex}
-      tittle={`${currentLanguage?.toolbar.selectPerspective.defaultName} A`}
+      tittle={`${currentLanguage?.toolbar.selectPerspective.unselectedName} A`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setLeftPerspective}
       allIds={allPerspectivesIds}
@@ -184,7 +184,7 @@ export const App = ({
         }}
         extraClassName={`first dark`}
         state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
-        hoverText="Collapse perspective to the left"
+        hoverText={currentLanguage?.toolbar.collapseBtns.leftHoverText}
       />
     </div>
 
@@ -196,7 +196,7 @@ export const App = ({
         updateFileSource(fileSource[0], () => { }, fileSource[1]);
       }}
       extraClassName={"mid dark"}
-      hoverText="Update perspectives"
+      hoverText={currentLanguage?.toolbar.updateBtn.hoverText}
     />
 
   //Button to collapse the visualization to the right if there are more than 1 active perspectove
@@ -212,14 +212,14 @@ export const App = ({
           }
         }}
         state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
-        hoverText="Collapse perspective to the right"
+        hoverText={currentLanguage?.toolbar.collapseBtns.rightHoverText}
       />
     </div>
 
   const rightSelectBtn =
     <SelectPerspectiveDropdown
       key={++keyIndex}
-      tittle={`${currentLanguage?.toolbar.selectPerspective.defaultName} B`}
+      tittle={`${currentLanguage?.toolbar.selectPerspective.unselectedName} B`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setRightPerspective}
       allIds={allPerspectivesIds}
@@ -415,6 +415,7 @@ export const App = ({
         setIsActive={setIsSavePerspectiveActive}
         allPerspectivesIds={allPerspectivesIds}
         requestManager={requestManager}
+        translation={currentLanguage}
       />
 
       <LoadingFrontPanel

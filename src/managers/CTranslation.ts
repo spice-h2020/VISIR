@@ -6,52 +6,96 @@ import config from '../appConfig.json';
  */
 export interface ITranslation extends anyProperty {
     toolbar: {
-        fileSourceDrop: {
-            name: string,
-            localFiles: string,
-            Api_URL: string,
-        },
-        optionsDrop: {
-            name: string,
-            hideLabels: string,
-            hideEdges: string,
-            minSimilarity: string,
-            removeEdges: string,
-        },
+        Options: {
+            hoverText: "Options",
+            useLocalFiles: "Use local files",
+            useURL: "Use url",
+            showLabel: "Show labels",
+            hideEdges: "hide unselected Edges",
+            minSimilarity: "Minimum similarity",
+            relevantArtworks: "Number of relevant artworks"
+        }
+        savePerspective: {
+            hoverText: "Save Perspectives"
+        }
+        perspectiveBuilder: {
+            hoverText: "Perspective Builder"
+        }
         selectPerspective: {
-            defaultName: string,
-            noPerspectiveName: string,
-        },
+            hoverText: "Select a perspective",
+            unselectedName: "Select perspective",
+            noAvailableName: "No available perspectives"
+        }
+        updateBtn: {
+            hoverText: "Re-load Perspectives"
+        }
+        collapseBtns: {
+            leftHoverText: "Collapse perspectives to the left",
+            rightHoverText: "Collapse perspectives to the right"
+        }
         legend: {
-            name: string,
-            noLegend: string,
+            hoverText: "Open legend",
+            unselectedName: "Legend",
+            noAvailableName: "Unactive Legend",
+            anonymousRow: "Anonymous Users",
+            anonymousExplanation: "Users without any explicit data"
         }
     },
-    loadingText: {
-        requestFiles: string,
-        requestPerspective: string,
-        requestingAllPerspectives: string,
-        requestingConfToolSeed: string,
-        CMisBusy: string,
-        simpleRequest: string,
-        simpleLoading: string,
-    },
-    dataColumn: {
-        citizenTittle: string,
-        citizenAmount: string,
-        anonymous: string,
-        medoidTittle: string,
-        mainInteractionsTittle: string,
-        otherInteractionsTittle: string,
-        labelText: string,
-        unknownUserAttrb: string,
-        communityPanelTittle: string,
-        communityNameLabel: string,
-    },
-    legend: {
-        anonymousRow: string,
-        anonymousExplanation: string,
+    savePerspectives: {
+        tittle: "Save Perspectives",
+        toggleLabel: "Toggle All",
+        downloadBtn: "Download perspectives"
     }
+    perspectiveBuider: {
+        devModeBtn: "Dev mode",
+        similarityValues: {
+            similar: "Similar",
+            same: "Same",
+            dissimilar: "Diferent"
+        }
+        middleSentence: {
+            base: "in"
+        }
+        lastSentence: {
+            base: "artworks"
+        }
+        leftBoxTittle: {
+            base: "Legend Attributes"
+        }
+        rightBoxTittle: {
+            base: "Artworks Attributes"
+        }
+        perspectiveNameLabel: "Perspective Name",
+        SendBtn: "Send Perspective",
+        AlgorithmSlider: "Explainability weight",
+        AlgorithmSliderExplanation: "The percentage of weight minimum of users that must be represented by the same value of contributions attributes (emotions, values, sentiments) to make such attribute explanable.A big value increase the number of communities and maybe, increase the number of users without community.",
+        SimilaritySlider: "Similar Threshold",
+        SimilaritySliderExplanation: "Minimum similarity between artworks from two interactions to calculate the similarity between them.(otherwise its assume as similar)"
+    }
+    dataColumn: {
+        citizenTittle: "Citizen Description",
+        userLabelLabel: "label",
+        relatedContributions: "Contributions related to its community",
+        otherContributions: "Other contributions",
+        communityTittle: "Community Description",
+        communityNameLabel: "Name",
+        totalCitizensLabel: "Total Citizens",
+        anonymousLabel: "Anonymous",
+        interactionsName: "Interactions",
+        noUserAttrb: "All users' attributes are unknown",
+        relevantArtworks: "Relevant artworks to this community",
+        medoidTittle: "Representative citizen"
+    }
+    loadingText: {
+        requestFiles: "Requesting files to",
+        requestPerspective: "Requesting perspective",
+        requestingAllPerspectives: "Requesting file with All perspectives",
+        requestingConfToolSeed: "Requesting configuration tool seed",
+        CMisBusy: "Community Model is busy. Trying again",
+        simpleRequest: "Requesting",
+        simpleLoading: "Loading"
+    }
+
 }
 
 export class CTranslation {

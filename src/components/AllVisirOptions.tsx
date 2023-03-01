@@ -68,9 +68,7 @@ export const AllVisirOptions = ({
     }, []);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const allButtons: React.ReactNode[] = getButtons(changeFileSource, fileSourceState, inputRef)
-
-
+    const allButtons: React.ReactNode[] = getFileSourceButtons(changeFileSource, fileSourceState, inputRef, translation)
 
     //OPTIONS 
 
@@ -98,28 +96,28 @@ export const AllVisirOptions = ({
 
     allButtons.push(
         <Button
-            content={translation?.toolbar.optionsDrop.hideLabels}
+            content={translation?.toolbar.Options.showLabel}
             onClick={() => { onClick(0, "showLabels"); }}
             state={optionsStates[0]}
             key={++key}
             extraClassName={"btn-dropdown"} />);
 
     allButtons.push(<Button
-        content={translation?.toolbar.optionsDrop.hideEdges}
+        content={translation?.toolbar.Options.hideEdges}
         onClick={() => { onClick(1, "hideEdges"); }}
         state={optionsStates[1]}
         key={++key}
         extraClassName={"btn-dropdown"} />);
     allButtons.push(<hr key={++key} className="dropdown-separator" />);
     allButtons.push(<Slider
-        content={translation?.toolbar.optionsDrop.minSimilarity}
+        content={translation?.toolbar.Options.minSimilarity}
         onInput={(value: number) => { setViewOptions({ updateType: "edgeThreshold", newValue: value }); }}
         initialValue={viewOptions.edgeThreshold}
         key={++key}
     />);
     allButtons.push(<hr key={++key} className="dropdown-separator" />);
     allButtons.push(<Slider
-        content={"Number of relevant artworks"}
+        content={translation?.toolbar.Options.relevantArtworks}
         minimum={0}
         maximum={10}
         step={1}
@@ -136,7 +134,7 @@ export const AllVisirOptions = ({
                 content={<FontAwesomeIcon color='red' size='xl' icon={["fas", "gear"]} />}
                 extraClassButton="transparent"
                 menuDirection={EDropMenuDirection.down}
-                hoverText="Options"
+                hoverText={`${translation?.toolbar.Options.hoverText}`}
             />
         </React.Fragment>
     );
@@ -170,8 +168,8 @@ const initOptions = (viewOptions: ViewOptions): EButtonState[] => {
  * @param selectedItems State of the buttons.
  * @returns returns an array of React components.
  */
-function getButtons(changeFileSource: Function, selectedItems: EButtonState[],
-    inputRef: React.RefObject<HTMLInputElement>): React.ReactNode[] {
+function getFileSourceButtons(changeFileSource: Function, selectedItems: EButtonState[],
+    inputRef: React.RefObject<HTMLInputElement>, translation: ITranslation | undefined): React.ReactNode[] {
 
     const useApiFunction = () => {
         if (inputRef.current) {
@@ -181,7 +179,7 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[],
 
     const dropRightContent = [
         <div className="row" style={{ alignItems: "center" }} key={1}>
-            <label htmlFor="f-urlSource" style={{ marginRight: "5px" }}> Use url: </label>
+            <label htmlFor="f-urlSource" style={{ marginRight: "5px" }}> {`${translation?.toolbar.Options.useURL}`} </label>
             <input type="text" id="f-urlSource" ref={inputRef} defaultValue={config.API_URI}
                 className="url-input-text"
                 onKeyDown={(event) => {
@@ -195,7 +193,7 @@ function getButtons(changeFileSource: Function, selectedItems: EButtonState[],
     return [
         <Button
             key={1}
-            content={"Use local files"}
+            content={`${translation?.toolbar.Options.useLocalFiles}`}
             onClick={() => { changeFileSource(EFileSource.Local); }}
             state={selectedItems[EFileSource.Local]}
             extraClassName={"btn-dropdown"}

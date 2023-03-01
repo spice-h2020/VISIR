@@ -101,7 +101,7 @@ export const SelectPerspectiveDropdown = ({
         return (
             <DropMenu
                 items={[]}
-                content={translation?.toolbar.selectPerspective.noPerspectiveName}
+                content={translation?.toolbar.selectPerspective.noAvailableName}
                 extraClassButton="transparent maximum-width"
                 postIcon={<div className="down-arrow" />}
                 hoverText="No available perspectives"

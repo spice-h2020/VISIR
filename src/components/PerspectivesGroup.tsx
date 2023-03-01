@@ -135,6 +135,7 @@ export const PerspectivesGroups = ({
             < Tooltip
                 selectedObject={selectedObject}
                 showLabel={viewOptions.showLabels}
+                translation={translation}
             />
             <div style={widthStyle.get(leftState)}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.id}`}>

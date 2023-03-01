@@ -1,25 +1,82 @@
 {
     "toolbar": {
-        "fileSourceDrop": {
-            "name": "File Source",
-            "localFiles": "Local app files",
-            "Api_URL": "Api URL"
-        },
-        "optionsDrop": {
-            "name": "Options",
-            "hideLabels": "Show node labels",
+        "Options": {
+            "hoverText": "Options",
+            "useLocalFiles": "Use local files",
+            "useURL": "Use url",
+            "showLabel": "Show labels",
             "hideEdges": "Hide unselected Edges",
             "minSimilarity": "Minimum similarity",
-            "removeEdges": "Remove % of edges"
+            "relevantArtworks": "Number of relevant artworks"
+        },
+        "savePerspective": {
+            "hoverText": "Save Perspectives"
+        },
+        "perspectiveBuilder": {
+            "hoverText": "Perspective Builder"
         },
         "selectPerspective": {
-            "defaultName": "Select perspective",
-            "noPerspectiveName": "No available perspectives"
+            "hoverText": "Select perspective",
+            "unselectedName": "Select perspective",
+            "noAvailableName": "No available perspectives"
+        },
+        "updateBtn": {
+            "hoverText": "Re-load Perspectives"
+        },
+        "collapseBtns": {
+            "leftHoverText": "Collapse perspectives to the left",
+            "rightHoverText": "Collapse perspectives to the right"
         },
         "legend": {
-            "name": "Legend",
-            "noLegend": "Unactive Legend"
+            "hoverText": "Legend",
+            "unselectedName": "Legend",
+            "noAvailableName": "Unactive Legend",
+            "anonymousRow": "Anonymous Users",
+            "anonymousExplanation": "Users without any explicit data"
         }
+    },
+    "savePerspectives": {
+        "tittle": "Save Perspectives",
+        "toggleLabel": "Toggle All",
+        "downloadBtn": "Download perspectives"
+    },
+    "perspectiveBuider": {
+        "devModeBtn": "Dev mode",
+        "similarityValues": {
+            "similar": "Similar",
+            "same": "Same",
+            "dissimilar": "Diferent"
+        },
+        "middleSentence": {
+            "base": "in"
+        },
+        "lastSentence": {
+            "base": "artworks"
+        },
+        "leftBoxTittle": {
+            "base": "Legend Attributes"
+        },
+        "rightBoxTittle": {
+            "base": "Artworks Attributes"
+        },
+        "perspectiveNameLabel": "Perspective Name",
+        "SendBtn": "Send Perspective",
+        "AlgorithmSlider": "Explainability weight",
+        "AlgorithmSliderExplanation": "The percentage of weight minimum of users that must be represented by the same value of contributions attributes (emotions, values, sentiments) to make such attribute explanable.A big value increase the number of communities and maybe, increase the number of users without community.",
+        "SimilaritySlider": "Similar Threshold",
+        "SimilaritySliderExplanation": "Minimum similarity between artworks from two interactions to calculate the similarity between them.(otherwise its assume as similar)"
+    },
+    "dataColumn": {
+        "citizenTittle": "Citizen Description",
+        "userLabelLabel": "Label",
+        "relatedContributions": "Contributions related to its community",
+        "otherContributions": "Other contributions",
+        "communityTittle": "Community Description",
+        "communityNameLabel": "Name",
+        "totalCitizensLabel": "Total Citizens",
+        "anonymousLabel": "Anonymous",
+        "relevantArtworks": "Relevant artworks to this community",
+        "medoidTittle": "Representative citizen"
     },
     "loadingText": {
         "requestFiles": "Requesting files to",
@@ -29,21 +86,5 @@
         "CMisBusy": "Community Model is busy. Trying again",
         "simpleRequest": "Requesting",
         "simpleLoading": "Loading"
-    },
-    "dataColumn": {
-        "citizenTittle": "Citizen Description",
-        "citizenAmount": "Total Citizens",
-        "anonymous": "Anonymous",
-        "medoidTittle": "Representative citizen",
-        "mainInteractionsTittle": "Contributions related to this community",
-        "otherInteractionsTittle": "Other user Contributions",
-        "labelText": "label",
-        "unknownUserAttrb": "All users' attributes are unknown",
-        "communityPanelTittle": "Community Description",
-        "communityNameLabel": "Name"
-    },
-    "legend": {
-        "anonymousRow": "Anonymous Users",
-        "anonymousExplanation": "Users without any explicit data"
     }
 }

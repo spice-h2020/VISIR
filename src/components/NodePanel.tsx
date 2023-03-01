@@ -54,7 +54,7 @@ export const NodePanel = ({
     if (node !== undefined) {
 
         if (showLabel) {
-            content.push(<p style={frenchIndent} key={1}> <strong> {`${translation?.dataColumn.labelText}:`} </strong> &nbsp; {node.label} </p>);
+            content.push(<p style={frenchIndent} key={1}> <strong> {`${translation?.dataColumn.userLabelLabel}:`} </strong> &nbsp; {node.label} </p>);
         }
 
         const keys = Object.keys(node.explicit_community);
@@ -103,7 +103,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
                 content.push(
                     <div key={1} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            {`${translation?.dataColumn.mainInteractionsTittle}`}
+                            {`${translation?.dataColumn.relatedContributions}`}
                         </strong>
                         <Accordion
                             items={interactionPanels}
@@ -121,7 +121,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
                 content.push(
                     <div key={0} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            {`${translation?.dataColumn.otherInteractionsTittle}`}
+                            {`${translation?.dataColumn.otherContributions}`}
                         </strong>
                         <Accordion
                             items={interactionPanels}

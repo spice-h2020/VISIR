@@ -85,12 +85,12 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
     artworks: IArtworkData[], translation: ITranslation | undefined) {
 
     if (community !== undefined) {
-        const tittle = <div key={0} className="dataColumn-subtittle"> {translation?.dataColumn.communityPanelTittle} </div>;
+        const tittle = <div key={0} className="dataColumn-subtittle"> {translation?.dataColumn.communityTittle} </div>;
         let content: React.ReactNode[] = [];
 
         content.push(<div className="row" key={1}> <strong> {translation?.dataColumn.communityNameLabel} </strong> &nbsp; {community.name} </div>);
-        content.push(<div className="row" key={2}> {` ${translation?.dataColumn.citizenAmount} ${community.users.length}`} </div>);
-        content.push(<div className="row" key={23}> {` ${translation?.dataColumn.anonymous} ${community.anonUsers.length}`} </div>);
+        content.push(<div className="row" key={2}> {` ${translation?.dataColumn.totalCitizensLabel} ${community.users.length}`} </div>);
+        content.push(<div className="row" key={23}> {` ${translation?.dataColumn.anonymousLabel} ${community.anonUsers.length}`} </div>);
         content.push(<br key={4} />);
 
         //Add accordion with the artworks
@@ -100,8 +100,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
         for (let i = community.representative_artworks.length - 1; i >= 0; i--) {
 
             const artworkData = artworks.find((element: IArtworkData) => { return element.id === community.representative_artworks[i][0] })
-            tittles.push(artworkData?.tittle ? `${artworkData.tittle} - Interactions: ${community.representative_artworks[i][1]}` :
-                `no Tittle - Interactions: ${community.representative_artworks[i][1]}`);
+            tittles.push(`${artworkData?.tittle} - ${translation?.dataColumn.interactionsName}: ${community.representative_artworks[i][1]}`);
 
             accordionItems.push(
                 <div key={i}>
@@ -115,7 +114,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
         content.push(
             <div key={5}>
-                <div key={0}> {"Relevant artworks to this community: "} </div>
+                <div key={0}> {translation?.dataColumn.relevantArtworks} </div>
                 <Accordion key={1} items={accordionItems} tittles={tittles} />
             </div>);
 
@@ -275,7 +274,7 @@ function getStackedBars(data: IExplicitCommData[] | undefined, translation: ITra
         }
     } else {
         content.push(
-            <div key={0} > {translation?.dataColumn.unknownUserAttrb}</div>
+            <div key={0} > {translation?.dataColumn.noUserAttrb}</div>
         );
     }
 
