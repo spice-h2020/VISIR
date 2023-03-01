@@ -87,13 +87,13 @@ export interface ITranslation extends anyProperty {
         medoidTittle: "Representative citizen"
     }
     loadingText: {
-        requestFiles: "Requesting files to",
         requestPerspective: "Requesting perspective",
-        requestingAllPerspectives: "Requesting file with All perspectives",
+        requestingAllPerspectives: "Requesting All perspectives",
         requestingConfToolSeed: "Requesting configuration tool seed",
+        simpleRequest: "Request to",
         CMisBusy: "Community Model is busy. Trying again",
-        simpleRequest: "Requesting",
-        simpleLoading: "Loading"
+        sendingPerspectiveConfig: "Sending a perspectiva configuration",
+        requestPerspectiveConfig: "Requesting a perspectiva configuration file"
     }
 
 }

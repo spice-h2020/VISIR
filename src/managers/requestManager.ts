@@ -13,7 +13,7 @@ import { Axios } from 'axios'
 //Config
 import config from '../appConfig.json';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
-import { CTranslation, ITranslation } from './CTranslation';
+import { ITranslation } from './CTranslation';
 
 export default class RequestManager {
     isActive: boolean;
@@ -75,7 +75,7 @@ export default class RequestManager {
      * if something went wrong.
      */
     requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting perspective ${name}` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestPerspective} Requesting perspective ${name}` });
 
         this.getPerspective(perspectiveId)
             .then((response: any) => {
@@ -93,7 +93,7 @@ export default class RequestManager {
 
                     callback(perspective);
                 } else {
-                    throw new Error(`Error wuile getting Perspective ${perspectiveId}: ${response.statusText}`);
+                    throw new Error(`Error while getting Perspective ${perspectiveId}: ${response.statusText}`);
                 }
             })
             .catch((error: any) => {
@@ -123,7 +123,7 @@ export default class RequestManager {
      * something went wrong.
      */
     requestAllPerspectivesIds(callback: Function, stateCallback?: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting all perspectives` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingAllPerspectives}` });
 
         this.getAllPerspectives()
             .then((response: any) => {
@@ -162,7 +162,7 @@ export default class RequestManager {
     }
 
     requestConfigurationToolSeed(callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting configuration tool seed` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingConfToolSeed}` });
 
 
         this.getConfigurationToolSeed()
@@ -195,7 +195,7 @@ export default class RequestManager {
     }
 
     requestToUrl(url: string): any {
-        console.log(`Request to ${this.axios.defaults.baseURL}${url}`);
+        console.log(`${this.translation?.loadingText.simpleRequest} ${this.axios.defaults.baseURL}${url}`);
         this.currentJobWaitTime = 0;
 
         return this.axios.get(url)
@@ -227,7 +227,7 @@ export default class RequestManager {
         if (this.currentJobWaitTime > this.jobMaxWaitTime) {
             throw new Error("Max wait time for the community model reached");
         }
-        this.setLoadingState({ isActive: true, msg: `Community Model is busy (${this.currentJobWaitTime / 2})` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.CMisBusy} (${this.currentJobWaitTime / 2})` });
 
         return this.axios.get(url)
             .then(async (response) => {
@@ -284,7 +284,7 @@ export default class RequestManager {
     sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource,
         changeItemState?: Function, apiURL?: string) => void, callback: Function) {
 
-        this.setLoadingState({ isActive: true, msg: `Sending a perspective configuration` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.sendingPerspectiveConfig}` });
 
         // For some reason, CM receives an empty object when axios does the post request.
         if (this.usingAPI) {
@@ -318,7 +318,7 @@ export default class RequestManager {
     }
 
     requestPerspectiveConfig(perspectiveId: PerspectiveId, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting perspective configuration file` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestPerspectiveConfig}` });
 
         if (this.usingAPI) {
             this.requestToUrl(`${this.perspectiveConfigGETurl}${perspectiveId.id.split(" ")[0]}`)
