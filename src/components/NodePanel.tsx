@@ -12,7 +12,7 @@ import React from "react";
 //Local files
 import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
-import { CTranslation } from "../constants/auxTypes";
+import { CTranslation, ITranslation } from "../managers/CTranslation";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -34,7 +34,7 @@ interface NodePanelProps {
     node: IUserData | undefined;
     showLabel: boolean;
     artworks: IArtworkData[];
-    translationClass: CTranslation;
+    translation: ITranslation | undefined;
 }
 
 /**
@@ -45,7 +45,7 @@ export const NodePanel = ({
     node,
     showLabel,
     artworks,
-    translationClass: tClass,
+    translation,
 }: NodePanelProps) => {
 
     const tittleContainer = <div key={0} style={sectionTittleStyle}> {tittle} </div>;
@@ -54,7 +54,7 @@ export const NodePanel = ({
     if (node !== undefined) {
 
         if (showLabel) {
-            content.push(<p style={frenchIndent} key={1}> <strong> {`${tClass.t.dataColumn.labelText}:`} </strong> &nbsp; {node.label} </p>);
+            content.push(<p style={frenchIndent} key={1}> <strong> {`${translation?.dataColumn.labelText}:`} </strong> &nbsp; {node.label} </p>);
         }
 
         const keys = Object.keys(node.explicit_community);
@@ -66,7 +66,7 @@ export const NodePanel = ({
                 <p key={2 + i} style={frenchIndent}> <strong> {key} </strong> &nbsp; {value} </p >);
         }
 
-        content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, tClass)} </div>);
+        content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, translation)} </div>);
     }
 
     if (content.length === 0) {
@@ -89,7 +89,7 @@ export const NodePanel = ({
  * @param artworks all artworks' data
  * @returns a react component with the node's interactions accordion.
  */
-function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[], tClass: CTranslation) {
+function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[], translation: ITranslation | undefined) {
     let content: React.ReactNode[] = [];
 
     if (node !== undefined) {
@@ -103,7 +103,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
                 content.push(
                     <div key={1} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            {`${tClass.t.dataColumn.mainInteractionsTittle}`}
+                            {`${translation?.dataColumn.mainInteractionsTittle}`}
                         </strong>
                         <Accordion
                             items={interactionPanels}
@@ -121,7 +121,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
                 content.push(
                     <div key={0} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            {`${tClass.t.dataColumn.otherInteractionsTittle}`}
+                            {`${translation?.dataColumn.otherInteractionsTittle}`}
                         </strong>
                         <Accordion
                             items={interactionPanels}

@@ -305,7 +305,6 @@ body {
 .btn-icon-content {
     align-self: center;
     display: flex;
-    padding-right: 1rem;
 }
 
 .down-arrow {

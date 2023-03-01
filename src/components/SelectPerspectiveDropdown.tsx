@@ -13,7 +13,7 @@
  */
 //Constants
 import { EButtonState } from "../constants/viewOptions"
-import { bStateArrayReducer, CTranslation, EbuttonStateArrayAction, IbStateArrayAction } from "../constants/auxTypes";
+import { bStateArrayReducer, EbuttonStateArrayAction, IbStateArrayAction } from "../constants/auxTypes";
 //Packages
 import React, { useEffect, useReducer, useState } from "react";
 //Local files
@@ -21,6 +21,7 @@ import { Button } from "../basicComponents/Button";
 import RequestManager from "../managers/requestManager";
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from "../constants/perspectivesTypes";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
+import { CTranslation, ITranslation } from "../managers/CTranslation";
 
 interface SelectPerspectiveProps {
     //tittle of the dropdown.
@@ -35,7 +36,7 @@ interface SelectPerspectiveProps {
     isLeftDropdown: boolean,
 
     requestMan: RequestManager,
-    translationClass: CTranslation;
+    translation: ITranslation | undefined;
 
     insideHamburger?: boolean,
 }
@@ -52,7 +53,7 @@ export const SelectPerspectiveDropdown = ({
     allIds,
     isLeftDropdown,
     requestMan,
-    translationClass: tClass,
+    translation,
     insideHamburger = false,
 }: SelectPerspectiveProps) => {
 
@@ -100,7 +101,7 @@ export const SelectPerspectiveDropdown = ({
         return (
             <DropMenu
                 items={[]}
-                content={tClass.t.toolbar.selectPerspective.noPerspectiveName}
+                content={translation?.toolbar.selectPerspective.noPerspectiveName}
                 extraClassButton="transparent maximum-width"
                 postIcon={<div className="down-arrow" />}
                 hoverText="No available perspectives"
@@ -109,7 +110,7 @@ export const SelectPerspectiveDropdown = ({
     }
 
     const perspectivesButtons: React.ReactNode[] = getButtons(allIds, states, setStates, setAllIds, setActivePerspective,
-        isLeftDropdown, requestMan, tClass);
+        isLeftDropdown, requestMan, translation);
 
     if (!insideHamburger) {
         return (
@@ -157,7 +158,7 @@ export const SelectPerspectiveDropdown = ({
  * @returns returns an array of react components
  */
 function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: React.Dispatch<IbStateArrayAction>,
-    setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager, tClass: CTranslation): React.ReactNode[] {
+    setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager, translation: ITranslation | undefined): React.ReactNode[] {
 
     const maxButtonNameLength = 85;
     const buttons = new Array<React.ReactNode>();

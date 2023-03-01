@@ -9,12 +9,11 @@ import { EFileSource, initialOptions } from '../constants/viewOptions';
 import { validateConfigurationSeed, validatePerspectiveDataJSON, validatePerspectiveIDfile as validateAllPerspectiveIDfile } from '../constants/ValidateFiles';
 import { IPerspectiveData, PerspectiveId as IPerspectiveId, PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
-import { Axios, AxiosRequestConfig } from 'axios'
+import { Axios } from 'axios'
 //Config
 import config from '../appConfig.json';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
-import { CTranslation } from '../constants/auxTypes';
-
+import { CTranslation, ITranslation } from './CTranslation';
 
 export default class RequestManager {
     isActive: boolean;
@@ -39,14 +38,14 @@ export default class RequestManager {
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
-    tClass: CTranslation;
+    translation: ITranslation | undefined;
 
     /**
      * Constructor of the class
      */
-    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, tClass: CTranslation) {
+    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, translation: ITranslation | undefined) {
         this.setLoadingState = setLoadingState;
-        this.tClass = tClass
+        this.translation = translation;
 
         this.isActive = initialOptions.fileSource === EFileSource.Api;
         this.usingAPI = false;

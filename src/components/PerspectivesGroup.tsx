@@ -11,13 +11,14 @@
 //Constants
 import { IPerspectiveData, EPerspectiveVisState } from "../constants/perspectivesTypes";
 import { ViewOptions, EAppCollapsedState } from "../constants/viewOptions"
-import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction, CTranslation } from "../constants/auxTypes";
+import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer, useState } from "react";
 //Local files
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
+import { CTranslation, ITranslation } from "../managers/CTranslation";
 
 const perspectiveContainers: React.CSSProperties = {
     display: "flex",
@@ -47,7 +48,7 @@ interface PerspectivesGroupProps {
      */
     setLegendData: React.Dispatch<ILegendDataAction>,
 
-    translationClass: CTranslation,
+    translation: ITranslation | undefined;
     cancelPerspective: (idToCancel: string) => (void),
 }
 
@@ -60,7 +61,7 @@ export const PerspectivesGroups = ({
     collapsedState,
     viewOptions,
     setLegendData,
-    translationClass: tClass,
+    translation,
     cancelPerspective,
 }: PerspectivesGroupProps) => {
 
@@ -110,7 +111,7 @@ export const PerspectivesGroups = ({
             networkFocusID={networkFocusID}
             perspectiveState={leftState}
             unique={rightPerspective === undefined}
-            translationClass={tClass}
+            translation={translation}
             cancelPerspective={cancelPerspective}
         />
 
@@ -125,7 +126,7 @@ export const PerspectivesGroups = ({
             perspectiveState={rightState}
             mirror={true}
             unique={leftPerspective === undefined}
-            translationClass={tClass}
+            translation={translation}
             cancelPerspective={cancelPerspective}
         />
 

@@ -10,13 +10,14 @@
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
 import { IUserData, ICommunityData, EPerspectiveVisState, IPerspectiveData } from '../constants/perspectivesTypes';
-import { ISelectedObject, ESelectedObjectAction, IStateFunctions, CTranslation, DiferentAttrbError } from '../constants/auxTypes';
+import { ISelectedObject, ESelectedObjectAction, IStateFunctions, DiferentAttrbError } from '../constants/auxTypes';
 //Packages
 import React, { useEffect, useState, useRef } from "react";
 //Local files
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/nodeDimensionStrat';
 import { DataTable } from './DataColumn';
+import { CTranslation, ITranslation } from '../managers/CTranslation';
 
 const networkContainer: React.CSSProperties = {
     margin: "0px 1.5% 15px 1.5%",
@@ -50,7 +51,7 @@ interface PerspectiveViewProps {
      */
     unique: boolean;
 
-    translationClass: CTranslation,
+    translation: ITranslation | undefined;
     cancelPerspective: (idToCancel: string) => (void),
 }
 
@@ -67,7 +68,7 @@ export const PerspectiveView = ({
     perspectiveState,
     mirror = false,
     unique,
-    translationClass: tClass,
+    translation,
     cancelPerspective,
 }: PerspectiveViewProps) => {
 
@@ -194,7 +195,7 @@ export const PerspectiveView = ({
 
                 showLabel={viewOptions.showLabels}
                 state={networkState}
-                translationClass={tClass}
+                translation={translation}
             />
 
         return (

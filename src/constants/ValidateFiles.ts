@@ -574,6 +574,15 @@ function isArtworkDataValid(arg: any): types.IArtworkData {
             }
         }
 
+        if (arg.id === "41768") {
+            console.log(arg.tittle);
+
+            console.log(decodeURIComponent(encodeURIComponent(arg.tittle)));
+
+            arg.tittle = (arg.tittle as string).normalize();
+            console.log(arg.tittle);
+        }
+
         if (arg.author === undefined) {
             throw Error(`Id is undefined`);
         }
@@ -889,3 +898,25 @@ function isAlgorithmValid(arg: any): IAlgorithm {
     }
 }
 //#endregion
+
+function fixedHex(number: any, length: any) {
+    var str = number.toString(16).toUpperCase();
+    while (str.length < length)
+        str = "0" + str;
+    return str;
+}
+
+/* Creates a unicode literal based on the string */
+function unicodeLiteral(str: any) {
+    var i;
+    var result = "";
+    for (i = 0; i < str.length; ++i) {
+        /* You should probably replace this by an isASCII test */
+        if (str.charCodeAt(i) > 126 || str.charCodeAt(i) < 32)
+            result += "\\u" + fixedHex(str.charCodeAt(i), 4);
+        else
+            result += str[i];
+    }
+
+    return result;
+}

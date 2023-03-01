@@ -11,7 +11,7 @@
 //Constants
 import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer, initialOptions } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
-import { CTranslation, ILegendData, legendDataReducer } from './constants/auxTypes';
+import { ILegendData, legendDataReducer } from './constants/auxTypes';
 //Packages
 import React, { useEffect, useReducer, useState } from 'react';
 //Local files
@@ -33,7 +33,7 @@ import { ConfigurationTool } from './components/ConfigurationTool';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AllVisirOptions } from './components/AllVisirOptions';
 import { SavePerspective } from './components/savePerspectives';
-
+import { CTranslation, ITranslation } from './managers/CTranslation';
 
 
 interface AppProps {
@@ -48,10 +48,12 @@ export const App = ({
 
 }: AppProps) => {
 
-  const [currentLanguage, setCurrentLanguage] = useState<CTranslation>(new CTranslation(undefined))
+  const [currentLanguage, setCurrentLanguage] = useState<ITranslation | undefined>(undefined)
 
   useEffect(() => {
-    selectInitialLanguage(setCurrentLanguage);
+    new CTranslation().initializeTranslation(setCurrentLanguage)
+
+    //selectInitialLanguage(setCurrentLanguage);
   }, [])
 
   //Parameters to activate/disactivate and edit the loading spinner.
@@ -123,7 +125,7 @@ export const App = ({
     <AllVisirOptions
       key={++keyIndex}
       setViewOptions={setViewOptions}
-      translationClass={currentLanguage}
+      translation={currentLanguage}
       viewOptions={viewOptions}
       setFileSource={updateFileSource}
       curentFileSource={fileSource}
@@ -160,14 +162,14 @@ export const App = ({
   const leftSelectBtn =
     <SelectPerspectiveDropdown
       key={++keyIndex}
-      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} A`}
+      tittle={`${currentLanguage?.toolbar.selectPerspective.defaultName} A`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setLeftPerspective}
       allIds={allPerspectivesIds}
       isLeftDropdown={true}
       requestMan={requestManager}
       insideHamburger={screenSize === EScreenSize.smallest}
-      translationClass={currentLanguage}
+      translation={currentLanguage}
     />
   //Button to collapse the visualization to the left if there are more than 1 active perspectove
   const leftCollapse =
@@ -217,14 +219,14 @@ export const App = ({
   const rightSelectBtn =
     <SelectPerspectiveDropdown
       key={++keyIndex}
-      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} B`}
+      tittle={`${currentLanguage?.toolbar.selectPerspective.defaultName} B`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setRightPerspective}
       allIds={allPerspectivesIds}
       isLeftDropdown={false}
       requestMan={requestManager}
       insideHamburger={screenSize === EScreenSize.smallest}
-      translationClass={currentLanguage}
+      translation={currentLanguage}
     />
   const legendBtn =
     <LegendComponent
@@ -234,7 +236,7 @@ export const App = ({
       onLegendClick={(newMap: Map<string, boolean>) => {
         setViewOptions({ updateType: "legendConfig", newValue: newMap, });
       }}
-      translationClass={currentLanguage}
+      translation={currentLanguage}
     />
 
   const hamburgerContent = [];
@@ -394,7 +396,7 @@ export const App = ({
         collapsedState={collapseState}
         viewOptions={viewOptions}
         setLegendData={setLegendData}
-        translationClass={currentLanguage}
+        translation={currentLanguage}
         cancelPerspective={cancelPerspective}
       />
 
@@ -451,19 +453,19 @@ function initPerspectivess(setLeftPerspective: React.Dispatch<React.SetStateActi
   }
 }
 
-function selectInitialLanguage(setCurrentLanguage: React.Dispatch<React.SetStateAction<CTranslation>>) {
-  fetch(`localization/${config.LANG}.json`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (language) {
-      setCurrentLanguage(new CTranslation(language));
-    });
-}
+// function selectInitialLanguage(setCurrentLanguage: React.Dispatch<React.SetStateAction<CTranslation>>) {
+//   fetch(`localization/${config.LANG}.json`,
+//     {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Accept': 'application/json'
+//       }
+//     })
+//     .then(function (response) {
+//       return response.json();
+//     })
+//     .then(function (language) {
+//       setCurrentLanguage(new CTranslation(language));
+//     });
+// }
 

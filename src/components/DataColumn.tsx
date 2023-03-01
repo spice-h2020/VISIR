@@ -18,9 +18,9 @@ import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
 import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
 import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
-import { CTranslation } from "../constants/auxTypes";
 import { ArtworkPanel } from "../basicComponents/ArtworkPanel";
 import { Accordion } from "../basicComponents/Accordion";
+import { ITranslation } from "../managers/CTranslation";
 
 interface DataTableProps {
     tittle?: String;
@@ -33,7 +33,7 @@ interface DataTableProps {
     showLabel: boolean;
     state: string;
 
-    translationClass: CTranslation;
+    translation: ITranslation | undefined;
 }
 
 /**
@@ -47,10 +47,10 @@ export const DataTable = ({
     allUsers,
     showLabel,
     state,
-    translationClass: tClass
+    translation
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks, tClass), [community, allUsers, showLabel, artworks, tClass]);
+    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks, translation), [community, allUsers, showLabel, artworks, translation]);
     const htmlRef = useRef(null);
 
     useEffect(() => {
@@ -64,11 +64,11 @@ export const DataTable = ({
             <h2 key={0} className="tittle dataColumn-tittle">  {tittle} </h2>
             <NodePanel
                 key={1}
-                tittle={tClass.t.dataColumn.citizenTittle}
+                tittle={`${translation?.dataColumn.citizenTittle}`}
                 node={node}
                 showLabel={showLabel}
                 artworks={artworks}
-                translationClass={tClass}
+                translation={translation}
             />
             {CommunityPanel}
         </div>
@@ -82,15 +82,15 @@ export const DataTable = ({
  * @returns a react component with the community's panel.
  */
 function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], showLabel: boolean,
-    artworks: IArtworkData[], tClass: CTranslation) {
+    artworks: IArtworkData[], translation: ITranslation | undefined) {
 
     if (community !== undefined) {
-        const tittle = <div key={0} className="dataColumn-subtittle"> {tClass.t.dataColumn.communityPanelTittle} </div>;
+        const tittle = <div key={0} className="dataColumn-subtittle"> {translation?.dataColumn.communityPanelTittle} </div>;
         let content: React.ReactNode[] = [];
 
-        content.push(<div className="row" key={1}> <strong> {tClass.t.dataColumn.communityNameLabel} </strong> &nbsp; {community.name} </div>);
-        content.push(<div className="row" key={2}> {` ${tClass.t.dataColumn.citizenAmount} ${community.users.length}`} </div>);
-        content.push(<div className="row" key={23}> {` ${tClass.t.dataColumn.anonymous} ${community.anonUsers.length}`} </div>);
+        content.push(<div className="row" key={1}> <strong> {translation?.dataColumn.communityNameLabel} </strong> &nbsp; {community.name} </div>);
+        content.push(<div className="row" key={2}> {` ${translation?.dataColumn.citizenAmount} ${community.users.length}`} </div>);
+        content.push(<div className="row" key={23}> {` ${translation?.dataColumn.anonymous} ${community.anonUsers.length}`} </div>);
         content.push(<br key={4} />);
 
         //Add accordion with the artworks
@@ -125,7 +125,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
                 content.push(
                     <React.Fragment key={6 + i * 2}>
                         {getCommunityExplanation(community, community.explanations[i], allUsers, showLabel,
-                            artworks, tClass)}
+                            artworks, translation)}
                     </React.Fragment>);
 
                 content.push(<br key={7 + i * 2} />);
@@ -152,7 +152,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @returns a react component with the explanations.
  */
 function getCommunityExplanation(communityData: ICommunityData, explanation: ICommunityExplanation, allUsers: IUserData[],
-    showLabel: boolean, artworks: IArtworkData[], tClass: CTranslation) {
+    showLabel: boolean, artworks: IArtworkData[], translation: ITranslation | undefined) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
@@ -162,7 +162,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
             case EExplanationTypes.explicit_attributes: {
                 return (
                     <div>
-                        {getStackedBars(communityData.explicitDataArray, tClass)}
+                        {getStackedBars(communityData.explicitDataArray, translation)}
                     </div>);
             }
             case EExplanationTypes.medoid: {
@@ -173,11 +173,11 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
                     <React.Fragment>
                         <hr />
                         <NodePanel
-                            tittle={tClass.t.dataColumn.medoidTittle}
+                            tittle={`${translation?.dataColumn.medoidTittle}`}
                             node={medoid}
                             showLabel={showLabel}
                             artworks={artworks}
-                            translationClass={tClass}
+                            translation={translation}
                         />
                     </React.Fragment>);
             }
@@ -259,7 +259,7 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
  * @param community source community.
  * @returns a react component array with the community's stacked bar.
  */
-function getStackedBars(data: IExplicitCommData[] | undefined, tClass: CTranslation) {
+function getStackedBars(data: IExplicitCommData[] | undefined, translation: ITranslation | undefined) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
     if (data !== undefined && data.length > 0) {
@@ -275,7 +275,7 @@ function getStackedBars(data: IExplicitCommData[] | undefined, tClass: CTranslat
         }
     } else {
         content.push(
-            <div key={0} > {tClass.t.dataColumn.unknownUserAttrb}</div>
+            <div key={0} > {translation?.dataColumn.unknownUserAttrb}</div>
         );
     }
 

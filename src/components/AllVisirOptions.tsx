@@ -5,7 +5,7 @@
  */
 //Constants
 import { EFileSource, EButtonState, IViewOptionAction, ViewOptions } from "../constants/viewOptions";
-import { EbuttonStateArrayAction, bStateArrayReducer, CTranslation } from "../constants/auxTypes";
+import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
 //Packages
 import React, { Dispatch, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,11 +15,12 @@ import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import { Slider } from "../basicComponents/Slider";
 //Config file
 import config from '../appConfig.json';
+import { CTranslation, ITranslation } from "../managers/CTranslation";
 
 interface AllVisirOptionsProps {
     //On click handler
     setFileSource: Function;
-    translationClass: CTranslation;
+    translation: ITranslation | undefined;
 
     curentFileSource: [EFileSource, String];
 
@@ -32,7 +33,7 @@ interface AllVisirOptionsProps {
  */
 export const AllVisirOptions = ({
     setFileSource,
-    translationClass: tClass,
+    translation,
     curentFileSource,
     setViewOptions,
     viewOptions
@@ -97,21 +98,21 @@ export const AllVisirOptions = ({
 
     allButtons.push(
         <Button
-            content={tClass.t.toolbar.optionsDrop.hideLabels}
+            content={translation?.toolbar.optionsDrop.hideLabels}
             onClick={() => { onClick(0, "showLabels"); }}
             state={optionsStates[0]}
             key={++key}
             extraClassName={"btn-dropdown"} />);
 
     allButtons.push(<Button
-        content={tClass.t.toolbar.optionsDrop.hideEdges}
+        content={translation?.toolbar.optionsDrop.hideEdges}
         onClick={() => { onClick(1, "hideEdges"); }}
         state={optionsStates[1]}
         key={++key}
         extraClassName={"btn-dropdown"} />);
     allButtons.push(<hr key={++key} className="dropdown-separator" />);
     allButtons.push(<Slider
-        content={tClass.t.toolbar.optionsDrop.minSimilarity}
+        content={translation?.toolbar.optionsDrop.minSimilarity}
         onInput={(value: number) => { setViewOptions({ updateType: "edgeThreshold", newValue: value }); }}
         initialValue={viewOptions.edgeThreshold}
         key={++key}
