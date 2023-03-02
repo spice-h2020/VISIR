@@ -167,7 +167,9 @@ function getImplicitCommunityValues(implicit_communities: anyProperty): React.Re
     }
 
     const data: React.ReactNode[] = [];
+
     const lastData: React.ReactNode[] = [];
+    const tittles: string[] = [];
 
     for (let i = 0; i < keys.length; i++) {
         //Its a dicctionary variable that its represented with a word cloud
@@ -182,10 +184,11 @@ function getImplicitCommunityValues(implicit_communities: anyProperty): React.Re
                 });
             }
 
+            tittles.push(keys[i]);
+
             lastData.push(
                 <div key={i}>
-                    <strong className=""> {keys[i]}: </strong>
-                    {getWordClouds(wordData, true, true, false)}
+                    {getWordClouds(wordData, true, true, true)}
                 </div>);
 
         } else {
@@ -194,6 +197,14 @@ function getImplicitCommunityValues(implicit_communities: anyProperty): React.Re
         }
     }
 
-    return data.concat(lastData);
+    return (
+        <React.Fragment>
+            {data}
+            <Accordion
+                items={lastData}
+                tittles={tittles}
+            />
+        </React.Fragment>
+    )
 
 }
