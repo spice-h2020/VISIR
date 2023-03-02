@@ -118,8 +118,6 @@ export const SavePerspective = ({
 
                                     for (let i = 0; i < allPerspectivesIds.length; i++) {
                                         if (states.get(allPerspectivesIds[i].id)) {
-                                            console.log("Download " + allPerspectivesIds[i].id.split(" ")[0] + " whose name is" + allPerspectivesIds[i].name);
-                                            //downloadFile("./public/data", allPerspectivesIds[i].name + ".json");
                                             requestManager.requestPerspectiveConfig(allPerspectivesIds[i], () => { });
                                         }
                                     }
@@ -178,18 +176,3 @@ function init(allPerspectivesIds: PerspectiveId[]) {
 
     return initialState;
 }
-
-function downloadFile(url: string, fileName: string) {
-    fetch(url, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
-        .then(res => res.blob())
-        .then(res => {
-            const aElement = document.createElement('a');
-            aElement.setAttribute('download', fileName);
-            const href = URL.createObjectURL(res);
-            aElement.href = href;
-            // aElement.setAttribute('href', href);
-            aElement.setAttribute('target', '_blank');
-            aElement.click();
-            URL.revokeObjectURL(href);
-        });
-};

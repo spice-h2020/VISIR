@@ -190,6 +190,7 @@ export default class RequestManager {
                 this.setLoadingState({ isActive: false });
             });
     }
+
     getConfigurationToolSeed() {
         return this.requestToUrl(this.usingAPI ? this.confSeedGETurl : "configurationTool/seedFile.json");
     }

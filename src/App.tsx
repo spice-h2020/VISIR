@@ -385,9 +385,6 @@ export const App = ({
     setAllPerspectivesIds(allIds);
   }
 
-
-
-
   return (
     <div>
       {navBar}
@@ -407,9 +404,9 @@ export const App = ({
         key={2}
         requestManager={requestManager}
         isActive={isConfigToolActive}
-        setLoadingState={SetLoadingState}
         setIsActive={setIsConfigToolActive}
         updateFileSource={updateFileSource}
+        translation={currentLanguage}
       />
 
       <SavePerspective

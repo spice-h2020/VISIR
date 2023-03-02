@@ -3,8 +3,6 @@
  * has the initial options of the options dropdown
  * @author Marco Expósito Pérez
  */
-import config from '../appConfig.json';
-
 /**
  * Available "all perspective file/details" sources
  */
@@ -102,7 +100,7 @@ export const initialOptions = {
     /**
      * % of edges that will be deleted and never will be shown. Improves performance on heavy edges networks
      */
-    nRelevantCommArtworks: config.N_Representative_Artworks,
+    nRelevantCommArtworks: 4,
 }
 /**
  * Class that contains the value of all visualization options that will change how the user see the networks

@@ -41,30 +41,31 @@
         "downloadBtn": "Descargar perspectivas"
     },
     "perspectiveBuider": {
-        "devModeBtn": "modo desarrollador",
+        "devModeBtn": "Modo desarrollador",
         "similarityValues": {
             "similar": "Similar",
             "same": "Igual",
             "dissimilar": "Diferente"
         },
         "middleSentence": {
-            "base": "en"
+            "base": "en",
+            "hetch": "para usuarios con"
         },
         "lastSentence": {
-            "base": "obras"
+            "base": "Obras.",
+            "hetch": "Creencias."
         },
-        "leftBoxTittle": {
-            "base": "Atributos de la leyenda"
-        },
+        "leftBoxTittle": "Atributos de la Leyenda",
         "rightBoxTittle": {
-            "base": "Atributos de las obras"
+            "base": "Atributos de las Obras",
+            "hetch": "Creencias."
         },
         "perspectiveNameLabel": "Nombre de la perspectiva",
-        "SendBtn": "Enviar Perspectiva",
-        "AlgorithmSlider": "Peso de explicabilidad",
-        "AlgorithmSliderExplanation": "El procentaje de peso minimo que los usuarios deben tener para considerar que tienen los mismos valores en sus contribuciones (emociones, valores, sentimientos) para hacer esos atributos explicables. Un alto valor aumenta el numero de comunidades y quizas aumente tambien el numero de usuarios sin una comunidades.",
-        "SimilaritySlider": "Limite de similitud",
-        "SimilaritySliderExplanation": "Similitud minima entre obras de dos interacciones para calcular la similityd entre ellas. (Si no, se asume que son iguales)"
+        "sendBtn": "Enviar Perspectiva",
+        "algorithmSlider": "Peso de explicabilidad",
+        "algorithmSliderExplanation": "El procentaje de peso minimo que los usuarios deben tener para considerar que tienen los mismos valores en sus contribuciones (emociones, valores, sentimientos) para hacer esos atributos explicables. Un alto valor aumenta el numero de comunidades y quizas aumente tambien el numero de usuarios sin una comunidades.",
+        "similaritySlider": "Limite de similitud",
+        "similaritySliderExplanation": "Similitud minima entre obras de dos interacciones para calcular la similitud entre ellas. (Si no, se asume que son iguales)"
     },
     "dataColumn": {
         "citizenTittle": "Descripcion del ciudadano",
@@ -75,6 +76,8 @@
         "communityNameLabel": "Nombre",
         "totalCitizensLabel": "Total de ciudadanos",
         "anonymousLabel": "Anonimos",
+        "interactionsName": "Interacciones",
+        "noUserAttrb": "Todos los atributos del ciudadano son desconocidos",
         "relevantArtworks": "Obras relacionadas con la comunidad",
         "medoidTittle": "Ciudadano representativo"
     },

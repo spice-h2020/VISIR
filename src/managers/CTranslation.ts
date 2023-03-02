@@ -54,23 +54,24 @@ export interface ITranslation extends anyProperty {
             dissimilar: "Diferent"
         }
         middleSentence: {
-            base: "in"
+            base: "in",
+            hetch: "for users with"
         }
         lastSentence: {
-            base: "artworks"
+            base: "Artworks",
+            hetch: "Beliefs"
         }
-        leftBoxTittle: {
-            base: "Legend Attributes"
-        }
+        leftBoxTittle: "Legend Attributes",
         rightBoxTittle: {
-            base: "Artworks Attributes"
-        }
+            base: "Artworks Attributes",
+            hetch: "Beliefs"
+        },
         perspectiveNameLabel: "Perspective Name",
-        SendBtn: "Send Perspective",
-        AlgorithmSlider: "Explainability weight",
-        AlgorithmSliderExplanation: "The percentage of weight minimum of users that must be represented by the same value of contributions attributes (emotions, values, sentiments) to make such attribute explanable.A big value increase the number of communities and maybe, increase the number of users without community.",
-        SimilaritySlider: "Similar Threshold",
-        SimilaritySliderExplanation: "Minimum similarity between artworks from two interactions to calculate the similarity between them.(otherwise its assume as similar)"
+        sendBtn: "Send Perspective",
+        algorithmSlider: "Explainability weight",
+        algorithmSliderExplanation: "The percentage of weight minimum of users that must be represented by the same value of contributions attributes (emotions, values, sentiments) to make such attribute explanable.A big value increase the number of communities and maybe, increase the number of users without community.",
+        similaritySlider: "Similar Threshold",
+        similaritySliderExplanation: "Minimum similarity between artworks from two interactions to calculate the similarity between them.(otherwise its assume as similar)"
     }
     dataColumn: {
         citizenTittle: "Citizen Description",
@@ -95,7 +96,6 @@ export interface ITranslation extends anyProperty {
         sendingPerspectiveConfig: "Sending a perspectiva configuration",
         requestPerspectiveConfig: "Requesting a perspectiva configuration file"
     }
-
 }
 
 export class CTranslation {

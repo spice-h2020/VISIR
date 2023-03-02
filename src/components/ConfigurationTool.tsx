@@ -19,6 +19,7 @@ import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
 
 import * as config from "../constants/ConfigToolUtils";
 import { Slider } from "../basicComponents/Slider";
+import { ITranslation } from "../managers/CTranslation";
 
 const darkBackgroundStyle: React.CSSProperties = {
     background: "rgba(0, 0, 0, 0.3)",
@@ -69,14 +70,13 @@ const devModeBackgroundStyle: React.CSSProperties = {
     color: "gray"
 }
 
-
-
 interface ConfToolProps {
     requestManager: RequestManager
     isActive: boolean
     setIsActive: React.Dispatch<React.SetStateAction<boolean>>
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void;
+
+    translation: ITranslation | undefined;
 }
 
 const emptyAlgorithm: config.IAlgorithm = { name: "undefined Algorithm", params: [], default: true }
@@ -90,8 +90,8 @@ export const ConfigurationTool = ({
     requestManager,
     isActive,
     setIsActive,
-    setLoadingState,
     updateFileSource,
+    translation
 }: ConfToolProps) => {
     const [isDevMode, setIsDevMode] = useState<boolean>(false);
 
@@ -108,15 +108,15 @@ export const ConfigurationTool = ({
     const [selectedArtwork, setSelectedArtwork] = useState<config.INameAndIdPair>();
 
     //Similarity Dropdown states
-    const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.Same);
-    const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.Same);
+    const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.same);
+    const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.same);
 
     //Sentence structure
     const [midSentence, setMidSentence] = useState<string>("");
     const [lastSentence, setLastSentence] = useState<string>("");
 
-    const [similarity1AvailableValues, setSimilarity1AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
-    const [similarity2AvailableValues, setSimilarity2AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+    const [similarity1AvailableValues, setSimilarity1AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
+    const [similarity2AvailableValues, setSimilarity2AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
 
     const [rightSideSentence, setRightSideSentence] = useState<string>("");
 
@@ -167,19 +167,19 @@ export const ConfigurationTool = ({
                     }
 
                     try {
-                        setMidSentence(config.initMidSentence(newSeed.configToolType));
+                        setMidSentence(config.initMidSentence(newSeed.configToolType, translation));
                     } catch (error: any) {
                         throw Error("Failed while setting mid sentence word " + error);
                     }
 
                     try {
-                        setLastSentence(config.initLastSentence(newSeed.configToolType));
+                        setLastSentence(config.initLastSentence(newSeed.configToolType, translation));
                     } catch (error: any) {
                         throw Error("Failed while setting mid sentence word " + error);
                     }
 
                     try {
-                        setRightSideSentence(config.initRightSideSentence(newSeed.configToolType));
+                        setRightSideSentence(config.initRightSideSentence(newSeed.configToolType, translation));
                     } catch (error: any) {
                         throw Error("Failed while setting right side word " + error);
                     }
@@ -245,14 +245,14 @@ export const ConfigurationTool = ({
                     <span key={0} style={{ marginLeft: "10px" }}>
                         <Button
                             key={0}
-                            content="Dev mode "
+                            content={translation?.perspectiveBuider.devModeBtn}
                             extraClassName="dark"
                             state={isDevMode ? EButtonState.active : EButtonState.unactive}
                             onClick={() => { setIsDevMode(!isDevMode); }}
                         />
                     </span>
                     <div key={1} style={backgroundStyle}>
-                        DEV MODE
+                        {translation?.perspectiveBuider.devModeBtn}
                     </div>
                     <span key={2} style={{ marginRight: "10px" }}>
                         <Button
@@ -275,9 +275,7 @@ export const ConfigurationTool = ({
                         alignItems: "center", height: "100%", paddingBottom: "1rem",
                         width: "100%"
                     }}>
-                        <div key={3} title="The percentage of weight minimum of users that must be represented by the same value
-                        of contributions attributes (emotions, values, sentiments) to make such attribute explanable.
-                        A big value increase the number of communities and maybe, increase the number of users without community."
+                        <div key={3} title={translation?.perspectiveBuider.algorithmSliderExplanation}
                             style={{ display: `${isDevMode ? "inline-flex" : "none"}`, alignItems: "center" }}>
                             <div style={{ width: "50%" }}>
                                 {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
@@ -289,7 +287,7 @@ export const ConfigurationTool = ({
                                     minimum={0.0}
                                     maximum={1.0}
                                     step={0.1}
-                                    content={"Explainability weight"}
+                                    content={translation?.perspectiveBuider.algorithmSlider}
                                 />
                             </div>
                         </div>
@@ -312,7 +310,7 @@ export const ConfigurationTool = ({
                         <DropMenu
                             key={0}
                             items={getSimilarityDropdown(similarity1, setSimilarity1,
-                                similarity1AvailableValues)}
+                                similarity1AvailableValues, translation)}
                             content={ESimilarity[similarity1]}
                             menuDirection={EDropMenuDirection.down}
                             extraClassButton={"transparent"}
@@ -331,7 +329,7 @@ export const ConfigurationTool = ({
                         <DropMenu
                             key={3}
                             items={getSimilarityDropdown(similarity2, setSimilarity2,
-                                similarity2AvailableValues)}
+                                similarity2AvailableValues, translation)}
                             content={ESimilarity[similarity2]}
                             menuDirection={EDropMenuDirection.down}
                             extraClassButton={"transparent"}
@@ -345,9 +343,8 @@ export const ConfigurationTool = ({
                             {getNArtworksDropdown(similarity2, selectedArtwork, setSelectedArtwork, seed)}
                         </div>
                         <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}
-                            title="Minimum similarity between artworks from two interactions to calculate the similarity between them.
-                        (otherwise its assume as similar)">
-                            {getSimilaritySlider(artworksWeight, setArtworksWeight, similarity2)}
+                            title={translation?.perspectiveBuider.similaritySliderExplanation}>
+                            {getSimilaritySlider(artworksWeight, setArtworksWeight, similarity2, translation)}
                         </div>
                     </div>
                 </div>
@@ -369,10 +366,13 @@ export const ConfigurationTool = ({
                         width: "100%"
                     }}>
                         <fieldset key={0} style={{ height: "-webkit-fill-available", overflowY: "auto", minInlineSize: "auto", width: "35%" }}>
-                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>Legend Attributes</h3>
+                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>
+
+                                {`${translation?.perspectiveBuider.leftBoxTittle}`} </h3>
+
                             {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
                         </fieldset>
-                        <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.Same === similarity2)}>
+                        <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.same === similarity2)}>
                             <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>{rightSideSentence}</h3>
                             {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr, artworksAttrDrop,
                                 setArtworksAttrDrop, isDevMode)}
@@ -403,7 +403,7 @@ export const ConfigurationTool = ({
                     margin: "1rem 0px",
                     height: "5vh"
                 }}>
-                    <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
+                    <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}> {translation?.perspectiveBuider.perspectiveNameLabel}:</label>
                     <input key={1} style={{ marginRight: "1rem" }} type="text" id="f-perspective_name" name="f-perspective_name"
                         onChange={
                             (element) => {
@@ -412,7 +412,7 @@ export const ConfigurationTool = ({
                         }
                     />
                     <Button
-                        content="Send Perspective"
+                        content={translation?.perspectiveBuider.sendBtn}
                         extraClassName="primary"
 
                         onClick={
@@ -442,14 +442,20 @@ export const ConfigurationTool = ({
  * @returns 
  */
 function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
-    similarityAvailableValues: Array<ESimilarity>): React.ReactNode[] {
+    similarityAvailableValues: Array<ESimilarity>, translation: ITranslation | undefined): React.ReactNode[] {
     const buttons: React.ReactNode[] = [];
 
+
     for (let i = 0; i < similarityAvailableValues.length; i++) {
+
+        const btnContent = translation?.perspectiveBuider.similarityValues[
+            ESimilarity[similarityAvailableValues[i]] as "same" | "similar" | "dissimilar"
+        ];
+
         buttons.push(
             <Button
                 key={i}
-                content={ESimilarity[similarityAvailableValues[i]]}
+                content={btnContent}
                 state={sim === similarityAvailableValues[i] ? EButtonState.active : EButtonState.unactive}
                 onClick={
                     () => {
@@ -570,10 +576,10 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
 
         for (let i = 0; i < seed.artwork_attributes.length; i++) {
             const onAttribute = seed.artwork_attributes[i].on_attribute;
-            const isChecked: boolean | undefined = artworksAttr.get(onAttribute.att_name) && sim2 !== ESimilarity.Same;
+            const isChecked: boolean | undefined = artworksAttr.get(onAttribute.att_name) && sim2 !== ESimilarity.same;
 
             checkboxes.push(
-                <div key={i} className={`checkbox-row ${ESimilarity.Same === sim2 ? "" : "active"}`}
+                <div key={i} className={`checkbox-row ${ESimilarity.same === sim2 ? "" : "active"}`}
                     style={{
                         display: "flex",
                         flexDirection: "row",
@@ -747,9 +753,10 @@ function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): Re
 }
 
 
-function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity): React.ReactNode {
+function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity,
+    translation: ITranslation | undefined): React.ReactNode {
 
-    if (similarity2 !== ESimilarity.Same) {
+    if (similarity2 !== ESimilarity.same) {
 
         return (
             <Slider
@@ -758,7 +765,7 @@ function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function
                 minimum={0.0}
                 maximum={1.0}
                 step={0.1}
-                content={`${ESimilarity[similarity2]} Threshold similarity`}
+                content={`${translation?.perspectiveBuider.similaritySlider}`}
             />);
 
     } else {
@@ -778,7 +785,7 @@ function getNArtworksDropdown(similarity2: ESimilarity, selectedArtwork: config.
     setSelectedArtwork: Function, seed: IConfigurationSeed | undefined): React.ReactNode {
     const items = [];
 
-    if (seed !== undefined && selectedArtwork !== undefined && similarity2 === ESimilarity.Same) {
+    if (seed !== undefined && selectedArtwork !== undefined && similarity2 === ESimilarity.same) {
         for (let i = 0; i < seed.artworks.length; i++) {
             const name = seed.artworks[i].name;
 
@@ -816,7 +823,7 @@ function getNArtworksDropdown(similarity2: ESimilarity, selectedArtwork: config.
 
 function getArtworsSliderDropdownStyle(isDevMode: boolean, similarity: ESimilarity) {
 
-    let shouldDisplay = isDevMode || similarity === ESimilarity.Same
+    let shouldDisplay = isDevMode || similarity === ESimilarity.same
     const style: React.CSSProperties =
     {
         display: `${shouldDisplay ? "block" : "none"}`,

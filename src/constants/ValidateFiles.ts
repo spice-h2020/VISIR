@@ -582,15 +582,6 @@ function isArtworkDataValid(arg: any): types.IArtworkData {
             }
         }
 
-        if (arg.id === "41768") {
-            console.log(arg.tittle);
-
-            console.log(decodeURIComponent(encodeURIComponent(arg.tittle)));
-
-            arg.tittle = (arg.tittle as string).normalize();
-            console.log(arg.tittle);
-        }
-
         if (arg.author === undefined) {
             throw Error(`Id is undefined`);
         }

@@ -4,10 +4,12 @@
  * @author Marco Expósito Pérez
  */
 
+import { ITranslation } from "../managers/CTranslation";
+
 export enum ESimilarity {
-    Same,
-    Similar,
-    Different
+    same,
+    similar,
+    dissimilar
 }
 
 //#region Seed interfaces
@@ -58,30 +60,15 @@ export enum EConfigToolTypes {
     DMH,
 }
 
-export const midSentenceMap = new Map<EConfigToolTypes, string>();
-midSentenceMap.set(EConfigToolTypes.GENERIC, "in");
-midSentenceMap.set(EConfigToolTypes.HECTH, "for users with");
-midSentenceMap.set(EConfigToolTypes.DMH, "in");
-
-export const lastSentenceMap = new Map<EConfigToolTypes, string>();
-lastSentenceMap.set(EConfigToolTypes.GENERIC, "artworks.");
-lastSentenceMap.set(EConfigToolTypes.HECTH, "beliefs.");
-lastSentenceMap.set(EConfigToolTypes.DMH, "concepts.");
-
-export const rightSideSentenceMap = new Map<EConfigToolTypes, string>();
-rightSideSentenceMap.set(EConfigToolTypes.GENERIC, "Artworks Attributes");
-rightSideSentenceMap.set(EConfigToolTypes.HECTH, "Beliefs");
-rightSideSentenceMap.set(EConfigToolTypes.DMH, "Concepts Attributes");
-
 export const similarity1Map = new Map<EConfigToolTypes, Array<ESimilarity>>();
-similarity1Map.set(EConfigToolTypes.GENERIC, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
-similarity1Map.set(EConfigToolTypes.HECTH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
-similarity1Map.set(EConfigToolTypes.DMH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity1Map.set(EConfigToolTypes.GENERIC, [ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
+similarity1Map.set(EConfigToolTypes.HECTH, [ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
+similarity1Map.set(EConfigToolTypes.DMH, [ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
 
 export const similarity2Map = new Map<EConfigToolTypes, Array<ESimilarity>>();
-similarity2Map.set(EConfigToolTypes.GENERIC, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
-similarity2Map.set(EConfigToolTypes.HECTH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
-similarity2Map.set(EConfigToolTypes.DMH, [ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+similarity2Map.set(EConfigToolTypes.GENERIC, [ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
+similarity2Map.set(EConfigToolTypes.HECTH, [ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
+similarity2Map.set(EConfigToolTypes.DMH, [ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
 
 
 //#endregion
@@ -111,21 +98,43 @@ export function initAlgorythmDrop(algorythms: IAlgorithm[]): IAlgorithm {
     return algorythms[0];
 }
 
-export function initMidSentence(type: EConfigToolTypes) {
+export function initMidSentence(type: EConfigToolTypes, translation: ITranslation | undefined) {
+    const midSentenceMap = new Map<EConfigToolTypes, string>();
+
+    if (translation !== undefined) {
+        midSentenceMap.set(EConfigToolTypes.GENERIC, translation?.perspectiveBuider.middleSentence.base);
+        midSentenceMap.set(EConfigToolTypes.HECTH, translation?.perspectiveBuider.middleSentence.hetch);
+    }
+
     let output = midSentenceMap.get(type);
     if (output === undefined) output = "";
 
     return output;
 }
 
-export function initLastSentence(type: EConfigToolTypes) {
+export function initLastSentence(type: EConfigToolTypes, translation: ITranslation | undefined) {
+    const lastSentenceMap = new Map<EConfigToolTypes, string>();
+
+    if (translation !== undefined) {
+        lastSentenceMap.set(EConfigToolTypes.GENERIC, translation?.perspectiveBuider.lastSentence.base);
+        lastSentenceMap.set(EConfigToolTypes.HECTH, translation?.perspectiveBuider.lastSentence.hetch);
+    }
+
     let output = lastSentenceMap.get(type);
     if (output === undefined) output = "";
 
     return output;
 }
 
-export function initRightSideSentence(type: EConfigToolTypes) {
+export function initRightSideSentence(type: EConfigToolTypes, translation: ITranslation | undefined) {
+    const rightSideSentenceMap = new Map<EConfigToolTypes, string>();
+
+    if (translation !== undefined) {
+        rightSideSentenceMap.set(EConfigToolTypes.GENERIC, translation?.perspectiveBuider.rightBoxTittle.base);
+        rightSideSentenceMap.set(EConfigToolTypes.HECTH, translation?.perspectiveBuider.rightBoxTittle.hetch);
+    }
+
+
     let output = rightSideSentenceMap.get(type);
     if (output === undefined) output = "";
 
@@ -135,7 +144,7 @@ export function initRightSideSentence(type: EConfigToolTypes) {
 export function initSimilarity1(type: EConfigToolTypes, setSimilarity: Function) {
     let availableValues = similarity1Map.get(type);
     if (availableValues === undefined) {
-        availableValues = [ESimilarity.Same];
+        availableValues = [ESimilarity.same];
     }
 
     setSimilarity(availableValues[0]);
@@ -146,7 +155,7 @@ export function initSimilarity1(type: EConfigToolTypes, setSimilarity: Function)
 export function initSimilarity2(type: EConfigToolTypes, setSimilarity: Function) {
     let availableValues = similarity2Map.get(type);
     if (availableValues === undefined) {
-        availableValues = [ESimilarity.Same];
+        availableValues = [ESimilarity.same];
     }
 
     setSimilarity(availableValues[0]);
@@ -196,15 +205,15 @@ function getDefaultName(similarity1: ESimilarity, configName: string, newConfig:
     selectedArtworkName: string | undefined) {
 
     switch (similarity1) {
-        case ESimilarity.Same: {
+        case ESimilarity.same: {
             configName = "E-";
             break;
         }
-        case ESimilarity.Similar: {
+        case ESimilarity.similar: {
             configName = "S-";
             break;
         }
-        case ESimilarity.Different: {
+        case ESimilarity.dissimilar: {
             configName = "D-";
             break;
         }
@@ -214,22 +223,22 @@ function getDefaultName(similarity1: ESimilarity, configName: string, newConfig:
         configName += selectedOption.on_attribute.att_name;
 
     switch (similarity2) {
-        case ESimilarity.Same: {
+        case ESimilarity.same: {
             configName += "-E-";
             break;
         }
-        case ESimilarity.Similar: {
+        case ESimilarity.similar: {
             configName += "-S-";
             break;
         }
-        case ESimilarity.Different: {
+        case ESimilarity.dissimilar: {
             configName += "-D-";
             break;
         }
     }
 
     configName += "artworks ";
-    if (selectedArtworkName !== undefined && similarity2 === ESimilarity.Same) {
+    if (selectedArtworkName !== undefined && similarity2 === ESimilarity.same) {
         configName += `${selectedArtworkName}`;
     }
 
@@ -242,7 +251,7 @@ function getDefaultName(similarity1: ESimilarity, configName: string, newConfig:
         }
     });
 
-    if (artwork_attributesName.length && similarity2 !== ESimilarity.Same)
+    if (artwork_attributesName.length && similarity2 !== ESimilarity.same)
         configName = configName + " (" + artwork_attributesName.join(", ") + ")";
 
     return configName;
@@ -253,7 +262,7 @@ function fillSimilarityFunctions(similarity2: ESimilarity, newConfig: any, seed:
 
     switch (similarity2) {
 
-        case ESimilarity.Same: {
+        case ESimilarity.same: {
             let sim;
             if (selectedArtwork === undefined) {
                 sim = {
@@ -289,7 +298,7 @@ function fillSimilarityFunctions(similarity2: ESimilarity, newConfig: any, seed:
             newConfig.similarity_functions.push(sim);
             break;
         }
-        case ESimilarity.Similar: {
+        case ESimilarity.similar: {
             seed.artwork_attributes.forEach((value) => {
                 const name = value.on_attribute.att_name;
 
@@ -329,7 +338,7 @@ function fillSimilarityFunctions(similarity2: ESimilarity, newConfig: any, seed:
 
             break;
         }
-        case ESimilarity.Different: {
+        case ESimilarity.dissimilar: {
             seed.artwork_attributes.forEach((value) => {
                 const name = value.on_attribute.att_name;
 
@@ -352,7 +361,7 @@ function fillSimilarityFunctions(similarity2: ESimilarity, newConfig: any, seed:
 
 function fillInteractionSimilarityFunctions(selectedOption: ISimilarityFunction, similarity1: ESimilarity, seed: IConfigurationSeed, newConfig: any) {
     switch (similarity1) {
-        case ESimilarity.Same: {
+        case ESimilarity.same: {
             let obj = { sim_function: {} as any };
             obj.sim_function = JSON.parse(JSON.stringify(selectedOption));
 
@@ -361,7 +370,7 @@ function fillInteractionSimilarityFunctions(selectedOption: ISimilarityFunction,
             newConfig.interaction_similarity_functions.push(obj);
             break;
         }
-        case ESimilarity.Similar: {
+        case ESimilarity.similar: {
             let obj = { sim_function: {} as any };
             obj.sim_function = JSON.parse(JSON.stringify(selectedOption));
 
@@ -369,7 +378,7 @@ function fillInteractionSimilarityFunctions(selectedOption: ISimilarityFunction,
 
             break;
         }
-        case ESimilarity.Different: {
+        case ESimilarity.dissimilar: {
             let obj = { sim_function: {} as any };
             obj.sim_function = JSON.parse(JSON.stringify(selectedOption));
             obj.sim_function.dissimilar = true;
