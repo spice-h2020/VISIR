@@ -52,14 +52,17 @@ export const App = ({
 
   useEffect(() => {
     new CTranslation().initializeTranslation(setCurrentLanguage)
-
-    //selectInitialLanguage(setCurrentLanguage);
   }, [])
+
+
 
   //Parameters to activate/disactivate and edit the loading spinner.
   const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
 
   const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState, currentLanguage));
+  useEffect(() => {
+    requestManager.translation = currentLanguage;
+  }, [currentLanguage]);
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
@@ -453,20 +456,3 @@ function initPerspectivess(setLeftPerspective: React.Dispatch<React.SetStateActi
     setAllPerspectivesIds([]);
   }
 }
-
-// function selectInitialLanguage(setCurrentLanguage: React.Dispatch<React.SetStateAction<CTranslation>>) {
-//   fetch(`localization/${config.LANG}.json`,
-//     {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Accept': 'application/json'
-//       }
-//     })
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(function (language) {
-//       setCurrentLanguage(new CTranslation(language));
-//     });
-// }
-
