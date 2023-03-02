@@ -298,19 +298,24 @@ function getContainerStyle(currentState: string): React.CSSProperties {
  * @param data parameters that will be represented in the cloud
  * @returns a react node with two diferent word clouds visualizations.
  */
-export function getWordClouds(data: IStringNumberRelation[], showPercentage: boolean = true): React.ReactNode {
+export function getWordClouds(data: IStringNumberRelation[], showPercentage: boolean = true, showCloud: boolean = true,
+    showTreeMap: boolean = true): React.ReactNode {
     try {
+        const wordCloud = <WordCloudGraph
+            data={data}
+            showPercentage={showPercentage}
+        />
+
+        const treeMap = <SingleTreeMap
+            data={data}
+            showPercentage={showPercentage}
+        />
+
         return (
             <React.Fragment>
                 <span className="word-cloud-wrapper" />
-                <WordCloudGraph
-                    data={data}
-                    showPercentage={showPercentage}
-                />
-                <SingleTreeMap
-                    data={data}
-                    showPercentage={showPercentage}
-                />
+                {showCloud ? wordCloud : ""}
+                {showTreeMap ? treeMap : ""}
             </React.Fragment>);
     } catch (e: any) {
         console.log("Error while creating a wordCloud from implicit attributes data");

@@ -185,7 +185,7 @@ function getImplicitCommunityValues(implicit_communities: anyProperty): React.Re
             lastData.push(
                 <div key={i}>
                     <strong className=""> {keys[i]}: </strong>
-                    {getWordClouds(wordData, true)}
+                    {getWordClouds(wordData, true, true, false)}
                 </div>);
 
         } else {
