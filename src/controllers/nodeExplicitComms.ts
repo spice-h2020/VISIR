@@ -104,7 +104,7 @@ export default class NodeExplicitComms {
                     newData: true
                 });
 
-                this.communitiesData[node.implicit_community].anonUsers.push(node.id);
+                this.communitiesData[node.community_number].anonUsers.push(node.id);
 
             } else {
                 node.isAnonymous = false;
@@ -119,18 +119,18 @@ export default class NodeExplicitComms {
                 });
             }
         } else {
-            this.communitiesData[node.implicit_community].users.splice(this.communitiesData[node.implicit_community].users.indexOf(node.id), 1);
+            this.communitiesData[node.community_number].users.splice(this.communitiesData[node.community_number].users.indexOf(node.id), 1);
         }
     }
 
     parseArtworksRelatedToTheCommunity(node: IUserData) {
-        if (this.communitiesData[node.implicit_community].allArtworks === undefined) {
-            this.communitiesData[node.implicit_community].allArtworks = new Map<string, number>();
+        if (this.communitiesData[node.community_number].allArtworks === undefined) {
+            this.communitiesData[node.community_number].allArtworks = new Map<string, number>();
         }
 
         for (let i = 0; i < node.community_interactions.length; i++) {
-            const currentN = this.communitiesData[node.implicit_community].allArtworks.get(node.community_interactions[i].artwork_id);
-            this.communitiesData[node.implicit_community].allArtworks.set(node.community_interactions[i].artwork_id, currentN ? currentN + 1 : 1);
+            const currentN = this.communitiesData[node.community_number].allArtworks.get(node.community_interactions[i].artwork_id);
+            this.communitiesData[node.community_number].allArtworks.set(node.community_interactions[i].artwork_id, currentN ? currentN + 1 : 1);
         }
     }
 
@@ -197,24 +197,24 @@ export default class NodeExplicitComms {
      * @param node source node
      */
     updateExplicitCommunityCount(key: string, node: IUserData) {
-        const group = node.implicit_community;
+        const community_number = node.community_number;
 
         //Check if the main map is defined
-        if (this.communitiesData[group].explicitDataMap === undefined) {
+        if (this.communitiesData[community_number].explicitDataMap === undefined) {
             //Create the main map
-            this.communitiesData[group].explicitDataMap = new Map<string, Map<string, number>>();
+            this.communitiesData[community_number].explicitDataMap = new Map<string, Map<string, number>>();
 
             //Define the child map of this key
             const newValue = new Map<string, number>();
             newValue.set(node.explicit_community[key], 1);
 
             //Include the new child map in the parent map
-            this.communitiesData[group].explicitDataMap.set(key, newValue);
+            this.communitiesData[community_number].explicitDataMap.set(key, newValue);
 
         } else {
 
             //Check if the child map of this key exist
-            const childMap = this.communitiesData[group].explicitDataMap.get(key);
+            const childMap = this.communitiesData[community_number].explicitDataMap.get(key);
 
             if (childMap !== undefined) {
                 //Check current count of the current value
@@ -235,7 +235,7 @@ export default class NodeExplicitComms {
                 newValue.set(node.explicit_community[key], 1);
 
                 //Include the new child map in the parent map
-                this.communitiesData[group].explicitDataMap.set(key, newValue);
+                this.communitiesData[community_number].explicitDataMap.set(key, newValue);
             }
         }
     }

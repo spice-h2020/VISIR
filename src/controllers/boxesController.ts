@@ -58,7 +58,7 @@ export default class BoxesController {
      * @param node Data of all users of the network
      */
     calculateBoundingBoxes(node: IUserData) {
-        const group: number = node.implicit_community;
+        const community_number: number = node.community_number;
 
         const nodeBB: IBoundingBox = {
             top: node.y - node.size / 2 - configuration.padding,
@@ -67,28 +67,28 @@ export default class BoxesController {
             right: node.x + node.size / 2 + configuration.padding
         }
 
-        if (this.comData[group].bb === undefined) {
+        if (this.comData[community_number].bb === undefined) {
 
-            this.comData[group].bb = nodeBB;
+            this.comData[community_number].bb = nodeBB;
 
-            if (this.comData[group].type !== ECommunityType.inexistent) {
-                this.comData[group].bb.color = configuration.color[group % configuration.color.length];
+            if (this.comData[community_number].type !== ECommunityType.inexistent) {
+                this.comData[community_number].bb.color = configuration.color[community_number % configuration.color.length];
             } else {
-                this.comData[group].bb.color = configuration.inexistentColor;
+                this.comData[community_number].bb.color = configuration.inexistentColor;
             }
 
         } else {
-            if (nodeBB.left < this.comData[group].bb.left)
-                this.comData[group].bb.left = nodeBB.left;
+            if (nodeBB.left < this.comData[community_number].bb.left)
+                this.comData[community_number].bb.left = nodeBB.left;
 
-            if (nodeBB.top < this.comData[group].bb.top)
-                this.comData[group].bb.top = nodeBB.top;
+            if (nodeBB.top < this.comData[community_number].bb.top)
+                this.comData[community_number].bb.top = nodeBB.top;
 
-            if (nodeBB.right > this.comData[group].bb.right)
-                this.comData[group].bb.right = nodeBB.right;
+            if (nodeBB.right > this.comData[community_number].bb.right)
+                this.comData[community_number].bb.right = nodeBB.right;
 
-            if (nodeBB.bottom > this.comData[group].bb.bottom)
-                this.comData[group].bb.bottom = nodeBB.bottom;
+            if (nodeBB.bottom > this.comData[community_number].bb.bottom)
+                this.comData[community_number].bb.bottom = nodeBB.bottom;
         }
     }
 

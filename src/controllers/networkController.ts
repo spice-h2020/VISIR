@@ -117,7 +117,7 @@ export default class NetworkController {
         //Check none of the node bounding boxes are overlaping
         do {
             perspectiveData.users.forEach((user: IUserData) => {
-                nodeLocation.setNodeLocation(user, this.explicitCtrl.communitiesData[user.implicit_community].type);
+                nodeLocation.setNodeLocation(user, this.explicitCtrl.communitiesData[user.community_number].type);
             });
         } while (nodeLocation.needMoreIterations())
 

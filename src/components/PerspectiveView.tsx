@@ -107,7 +107,7 @@ export const PerspectiveView = ({
                             if (selectedObject.sourceID === netManager.id) {
                                 netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
                                 setSelectedNode(nodeData as IUserData);
-                                setSelectedCommunity(netManager.bbCtrl.comData[nodeData.implicit_community]);
+                                setSelectedCommunity(netManager.bbCtrl.comData[nodeData.community_number]);
                             } else {
                                 netManager.eventsCtrl.nothingClicked();
                                 setSelectedNode(undefined);
@@ -117,7 +117,7 @@ export const PerspectiveView = ({
                         } else {
                             netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
                             setSelectedNode(nodeData as IUserData);
-                            setSelectedCommunity(netManager.bbCtrl.comData[nodeData.implicit_community]);
+                            setSelectedCommunity(netManager.bbCtrl.comData[nodeData.community_number]);
                         }
 
                         //If the node doesnt exist in this network

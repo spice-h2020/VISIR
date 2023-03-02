@@ -5,7 +5,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, IInteraction, IUserData }
+import { anyProperty, IArtworkData, IInteraction, IStringNumberRelation, IUserData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
@@ -13,6 +13,7 @@ import React from "react";
 import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
 import { CTranslation, ITranslation } from "../managers/CTranslation";
+import { getWordClouds } from "./DataColumn";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
@@ -65,6 +66,7 @@ export const NodePanel = ({
             content.push(
                 <p key={2 + i} style={frenchIndent}> <strong> {key} </strong> &nbsp; {value} </p >);
         }
+        content.push(<div key={-2}> {getImplicitCommunityValues(node?.implicit_community)} </div>)
 
         content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, translation)} </div>);
     }
@@ -155,4 +157,43 @@ function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkDa
         }
     }
     return { interactionPanels, tittles };
+}
+
+function getImplicitCommunityValues(implicit_communities: anyProperty): React.ReactNode {
+
+    const keys = Object.keys(implicit_communities);
+    if (keys.length === 0) {
+        return <></>
+    }
+
+    const data: React.ReactNode[] = [];
+    const lastData: React.ReactNode[] = [];
+
+    for (let i = 0; i < keys.length; i++) {
+        //Its a dicctionary variable that its represented with a word cloud
+        if (typeof implicit_communities[keys[i]] === "object") {
+            const wordData: IStringNumberRelation[] = [];
+
+            const objectKeys = Object.keys(implicit_communities[keys[i]]);
+            for (let oKey in objectKeys) {
+                wordData.push({
+                    value: objectKeys[oKey],
+                    count: implicit_communities[keys[i]][objectKeys[oKey]]
+                });
+            }
+
+            lastData.push(
+                <div key={i}>
+                    <strong className=""> {keys[i]}: </strong>
+                    {getWordClouds(wordData, true)}
+                </div>);
+
+        } else {
+            //Its a simple variable represented with plain text
+            data.push(<p key={i} style={frenchIndent}> <strong> {keys[i]}: </strong> &nbsp; {implicit_communities[keys[i]]} </p >);
+        }
+    }
+
+    return data.concat(lastData);
+
 }

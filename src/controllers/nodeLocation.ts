@@ -76,11 +76,11 @@ export default class NodeLocation {
      * @param node source node
      */
     updateNodeGroup(node: IUserData) {
-        const group = node.implicit_community;
+        const community_number = node.community_number;
 
         if (!node.isMedoid) {
-            this.nodeGroups[group].nodes.push(node.id);
-            this.nodeGroups[group].partition.nNodes++;
+            this.nodeGroups[community_number].nodes.push(node.id);
+            this.nodeGroups[community_number].partition.nNodes++;
         }
     }
 
@@ -89,23 +89,23 @@ export default class NodeLocation {
      * @param node node to edit
      */
     setNodeLocation(node: IUserData, communityType: ECommunityType) {
-        const group = node.implicit_community;
+        const community_number = node.community_number;
 
         if (node.isMedoid && communityType !== ECommunityType.inexistent) {
 
-            node.x = this.nodeGroups[group].partition.center.x;
-            node.y = this.nodeGroups[group].partition.center.y;
+            node.x = this.nodeGroups[community_number].partition.center.x;
+            node.y = this.nodeGroups[community_number].partition.center.y;
 
         } else {
-            const nodePos: IPoint = this.getNodePos(this.nodeGroups[group], node.id, communityType);
+            const nodePos: IPoint = this.getNodePos(this.nodeGroups[community_number], node.id, communityType);
 
             node.x = nodePos.x;
             node.y = nodePos.y;
 
-            this.nodeGroups[group].bb.left = this.nodeGroups[group].bb.left > nodePos.x ? nodePos.x : this.nodeGroups[group].bb.left;
-            this.nodeGroups[group].bb.right = this.nodeGroups[group].bb.right < nodePos.x ? nodePos.x : this.nodeGroups[group].bb.right;
-            this.nodeGroups[group].bb.top = this.nodeGroups[group].bb.top > nodePos.y ? nodePos.y : this.nodeGroups[group].bb.top;
-            this.nodeGroups[group].bb.bottom = this.nodeGroups[group].bb.bottom < nodePos.y ? nodePos.y : this.nodeGroups[group].bb.bottom;
+            this.nodeGroups[community_number].bb.left = this.nodeGroups[community_number].bb.left > nodePos.x ? nodePos.x : this.nodeGroups[community_number].bb.left;
+            this.nodeGroups[community_number].bb.right = this.nodeGroups[community_number].bb.right < nodePos.x ? nodePos.x : this.nodeGroups[community_number].bb.right;
+            this.nodeGroups[community_number].bb.top = this.nodeGroups[community_number].bb.top > nodePos.y ? nodePos.y : this.nodeGroups[community_number].bb.top;
+            this.nodeGroups[community_number].bb.bottom = this.nodeGroups[community_number].bb.bottom < nodePos.y ? nodePos.y : this.nodeGroups[community_number].bb.bottom;
         }
     }
 

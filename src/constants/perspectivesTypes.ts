@@ -124,8 +124,9 @@ export interface ICommunityExplanation extends anyProperty {
 export interface IUserData extends anyProperty {
     id: string;
     label: string;
-    implicit_community: number;
-    explicit_community: anyProperty;
+    community_number: number;
+    explicit_community: any;
+    implicit_community: anyProperty;
 
     community_interactions: IInteraction[];
     no_community_interactions: IInteraction[];
@@ -133,6 +134,7 @@ export interface IUserData extends anyProperty {
     isMedoid: boolean;
     isAnonymous: boolean;
     isAnonGroup: boolean;
+
 }
 
 /**

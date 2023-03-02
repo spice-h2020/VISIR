@@ -321,7 +321,7 @@
             "label": "2GROTNeg",
             "group": 3,
             "explicit_community": {
-                "Gender": "Female",
+                "Gender": "Special gender to make it easier to find this specific user",
                 "RelationshipWithArt": "I have a strong interest in art"
             },
             "community_interactions": [
@@ -342,9 +342,24 @@
                         "serenity": 1.938286999999999
                     }
                 }
-            ]
+            ],
+            "implicit_community": {
+                "beliefR": "Supports Roman Rebellion because of realistic reasons",
+                "beliefJ": "Traitor",
+                "beliefE": "No opinion",
+                "sentiment.Galilee_Rebellion": {
+                    "Positive": 100
+                },
+                "emotion.Galilee_Rebellion": {
+                    "Joy": 80,
+                    "Love": 20
+                },
+                "values.Galilee_Rebellion": {
+                    "Harm": 100
+                }
+            }
         },
-		{
+        {
             "id": "asdasdasdasdas",
             "label": "asdasdasdasd",
             "group": 3,

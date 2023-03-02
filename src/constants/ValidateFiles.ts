@@ -379,7 +379,7 @@ function isUserDataValid(arg: any): types.IUserData {
                 throw Error(`Group of the user (${arg.id}) is not a number`);
         }
 
-        arg.implicit_community = arg.group;
+        arg.community_number = arg.group;
         delete arg.group;
 
         if (arg.explicit_community === undefined) {
@@ -395,6 +395,14 @@ function isUserDataValid(arg: any): types.IUserData {
             if (arg.explicit_community[keys[i]] === "") {
                 arg.explicit_community[keys[i]] = "(empty)";
             }
+        }
+
+        if (arg.implicit_community === undefined) {
+            arg.implicit_community = {};
+        }
+
+        if (typeof (arg.implicit_community) !== "object") {
+            throw Error(`Implicit community of the user (${arg.id}) is not an object. There may not be any explicit community values`);
         }
 
         if (arg.community_interactions === undefined) {
