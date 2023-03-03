@@ -61,7 +61,7 @@
             "hetch": "Beliefs"
         },
         "perspectiveNameLabel": "Perspective Name",
-        "SendBtn": "Send Perspective",
+        "sendBtn": "Send Perspective",
         "algorithmSlider": "Explainability weight",
         "algorithmSliderExplanation": "The percentage of weight minimum of users that must be represented by the same value of contributions attributes (emotions, values, sentiments) to make such attribute explanable.A big value increase the number of communities and maybe, increase the number of users without community.",
         "similaritySlider": "Similar Threshold",
