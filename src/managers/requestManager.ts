@@ -15,6 +15,8 @@ import config from '../appConfig.json';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
 import { ITranslation } from './CTranslation';
 
+const apiVersion = "v1.1";
+
 export default class RequestManager {
     isActive: boolean;
     axios: Axios;
@@ -29,16 +31,19 @@ export default class RequestManager {
     //URL to ask for files when local url is selected
     baseLocalURL: string = "./data/";
 
-    allPerspectivesGETurl: string = "visualizationAPI/index";
-    singlePerspectiveGETurl: string = "visualizationAPI/file/";
-    perspectiveConfigGETurl: string = "v1.1/perspectives/"
+    allPerspectivesGETurl: string = `${apiVersion}/visir/index`;
+    singlePerspectiveGETurl: string = `${apiVersion}/visir/file/`;
+    perspectiveConfigGETurl: string = `${apiVersion}/perspectives/`;
 
-    confSeedGETurl: string = "v1.1/seed";
-    confSeedPOSTurl: string = "v1.1/perspective";
+    confSeedGETurl: string = `${apiVersion}/visir/seed`;
+    confSeedPOSTurl: string = `${apiVersion}/perspective`;
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     translation: ITranslation | undefined;
+
+    username: string = "user";
+    password: string = "pass";
 
     /**
      * Constructor of the class
@@ -62,6 +67,11 @@ export default class RequestManager {
             this.axios = new Axios({
                 baseURL: baseURL,
                 timeout: config.MAX_GET_REQUEST_TIMEOUT,
+                auth: {
+                    username: this.username,
+                    password: this.password
+                }
+
             });
             this.isActive = true;
         } else
@@ -199,7 +209,12 @@ export default class RequestManager {
         console.log(`${this.translation?.loadingText.simpleRequest} ${this.axios.defaults.baseURL}${url}`);
         this.currentJobWaitTime = 0;
 
-        return this.axios.get(url)
+        return this.axios.get(url, {
+            auth: {
+                username: this.username,
+                password: this.password
+            }
+        })
             .then(async (response) => {
                 console.log(response)
 
@@ -230,7 +245,12 @@ export default class RequestManager {
         }
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.CMisBusy} (${this.currentJobWaitTime / 2})` });
 
-        return this.axios.get(url)
+        return this.axios.get(url, {
+            auth: {
+                username: this.username,
+                password: this.password
+            }
+        })
             .then(async (response) => {
                 console.log(`Job in ${this.axios.defaults.baseURL}${url}`);
                 console.log(response)
