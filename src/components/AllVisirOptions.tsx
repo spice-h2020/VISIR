@@ -177,14 +177,25 @@ function getFileSourceButtons(changeFileSource: Function, selectedItems: EButton
     passRef: React.RefObject<HTMLInputElement>,
     translation: ITranslation | undefined): React.ReactNode[] {
 
+    console.log(selectedItems);
+
     const useApiFunction = () => {
         if (urlRef.current && userRef.current && passRef.current) {
             changeFileSource(EFileSource.Api, urlRef.current.value, userRef.current.value, passRef.current.value);
         }
     }
 
+    const textColor = selectedItems[EFileSource.Api] === EButtonState.active ? "white" : "black";
+    const backgroundColor = selectedItems[EFileSource.Api] === EButtonState.active ? "var(--primaryButtonColor)" : "transparent";
+
     const dropRightContent = [
-        <div className="row" style={{ flexDirection: "column", padding: "0.5rem" }} key={1}>
+        <div className="row" style={{
+            flexDirection: "column", padding: "0.5rem",
+            backgroundColor: backgroundColor,
+            color: textColor
+        }}
+
+            key={1}>
             <div className="row" style={{ marginBottom: "0.4rem" }}>
                 <label htmlFor="f-urlSource" style={{ marginRight: "5px" }}> {`${translation?.toolbar.Options.useURL}`} </label>
                 <input type="text" id="f-urlSource" ref={urlRef} defaultValue={config.API_URI}
