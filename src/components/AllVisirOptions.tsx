@@ -15,14 +15,14 @@ import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import { Slider } from "../basicComponents/Slider";
 //Config file
 import config from '../appConfig.json';
-import { CTranslation, ITranslation } from "../managers/CTranslation";
+import { ITranslation } from "../managers/CTranslation";
 
 interface AllVisirOptionsProps {
     //On click handler
     setFileSource: Function;
     translation: ITranslation | undefined;
 
-    curentFileSource: [EFileSource, String];
+    curentFileSource: [EFileSource, String, String, String];
 
     setViewOptions: Dispatch<IViewOptionAction>;
     viewOptions: ViewOptions;
@@ -42,7 +42,7 @@ export const AllVisirOptions = ({
     //FILE SOURCE OPTIONS
     const [fileSourceState, setFileSourceStates] = useReducer(bStateArrayReducer, initFileSource(curentFileSource[0]));
 
-    const changeFileSource = (newFileSource: EFileSource, apiURL?: string) => {
+    const changeFileSource = (newFileSource: EFileSource, apiURL?: string, apiUser?: string, apiPass?: string) => {
 
         setFileSourceStates({
             action: EbuttonStateArrayAction.activeOne,
@@ -58,7 +58,7 @@ export const AllVisirOptions = ({
             })
         }
 
-        setFileSource(newFileSource, callback, apiURL);
+        setFileSource(newFileSource, callback, apiURL, apiUser, apiPass);
     }
 
     //When the app starts, select the initial fileSource and load its perspectives
@@ -67,8 +67,11 @@ export const AllVisirOptions = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const inputRef = React.useRef<HTMLInputElement>(null);
-    const allButtons: React.ReactNode[] = getFileSourceButtons(changeFileSource, fileSourceState, inputRef, translation)
+    const urlRef = React.useRef<HTMLInputElement>(null);
+    const userRef = React.useRef<HTMLInputElement>(null);
+    const passRef = React.useRef<HTMLInputElement>(null);
+
+    const allButtons: React.ReactNode[] = getFileSourceButtons(changeFileSource, fileSourceState, urlRef, userRef, passRef, translation)
 
     //OPTIONS 
 
@@ -139,6 +142,7 @@ export const AllVisirOptions = ({
         </React.Fragment>
     );
 };
+//<FontAwesomeIcon icon="fa-solid fa-paper-plane-top" />
 
 /**
  * Calculates the initial state of the dropdown.
@@ -169,25 +173,43 @@ const initOptions = (viewOptions: ViewOptions): EButtonState[] => {
  * @returns returns an array of React components.
  */
 function getFileSourceButtons(changeFileSource: Function, selectedItems: EButtonState[],
-    inputRef: React.RefObject<HTMLInputElement>, translation: ITranslation | undefined): React.ReactNode[] {
+    urlRef: React.RefObject<HTMLInputElement>, userRef: React.RefObject<HTMLInputElement>,
+    passRef: React.RefObject<HTMLInputElement>,
+    translation: ITranslation | undefined): React.ReactNode[] {
 
     const useApiFunction = () => {
-        if (inputRef.current) {
-            changeFileSource(EFileSource.Api, inputRef.current.value);
+        if (urlRef.current && userRef.current && passRef.current) {
+            changeFileSource(EFileSource.Api, urlRef.current.value, userRef.current.value, passRef.current.value);
         }
     }
 
     const dropRightContent = [
-        <div className="row" style={{ alignItems: "center" }} key={1}>
-            <label htmlFor="f-urlSource" style={{ marginRight: "5px" }}> {`${translation?.toolbar.Options.useURL}`} </label>
-            <input type="text" id="f-urlSource" ref={inputRef} defaultValue={config.API_URI}
-                className="url-input-text"
-                onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                        useApiFunction();
-                    }
-                }}
-            />
+        <div className="row" style={{ flexDirection: "column", padding: "0.5rem" }} key={1}>
+            <div className="row" style={{ marginBottom: "0.4rem" }}>
+                <label htmlFor="f-urlSource" style={{ marginRight: "5px" }}> {`${translation?.toolbar.Options.useURL}`} </label>
+                <input type="text" id="f-urlSource" ref={urlRef} defaultValue={config.API_URI}
+                    className="url-input-text" />
+
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                    <div className="row"> <label htmlFor="f-userSource" style={{ marginRight: "5px" }} > {`${translation?.toolbar.Options.user}`} </label>
+                        <input type="text" ref={userRef} id="f-userSource" className="user-input-text" defaultValue={config.API_USER} /> </div>
+
+                    <div className="row"> <label htmlFor="f-passSource" style={{ marginRight: "5px" }} > {`${translation?.toolbar.Options.pass}`} </label>
+                        <input type="text" ref={passRef} id="f-passSource" className="user-input-text" defaultValue={config.API_PASS} /> </div>
+                </div>
+                <div>
+                    <Button
+                        extraClassName="primary"
+                        hoverText={`${translation?.toolbar.Options.connectBtnHover}`}
+                        content={<FontAwesomeIcon color='white' size='xl' icon={["fas", "share"]} />}
+                        onClick={() => {
+                            useApiFunction();
+                        }}
+                    />
+                </div>
+            </div>
         </div>
     ];
     return [
@@ -198,12 +220,8 @@ function getFileSourceButtons(changeFileSource: Function, selectedItems: EButton
             state={selectedItems[EFileSource.Local]}
             extraClassName={"btn-dropdown"}
         />,
-        <Button
-            key={2}
-            content={dropRightContent}
-            state={selectedItems[EFileSource.Api]}
-            extraClassName={"btn-dropdown"}
-
-        />
+        <div key={2}>
+            {dropRightContent}
+        </div>
     ];
 }

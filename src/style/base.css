@@ -115,6 +115,12 @@ body {
     align-self: center;
 }
 
+.user-input-text {
+    width: 10rem;
+    font-size: 0.9rem;
+    align-self: center;
+}
+
 .dataColumn-tittle {
     font-size: 1.5rem;
 }

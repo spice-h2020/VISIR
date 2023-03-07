@@ -10,6 +10,8 @@ import { validateConfigurationSeed, validatePerspectiveDataJSON, validatePerspec
 import { IPerspectiveData, PerspectiveId as IPerspectiveId, PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
+import { encode } from "base-64"
+
 //Config
 import config from '../appConfig.json';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
@@ -42,8 +44,8 @@ export default class RequestManager {
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     translation: ITranslation | undefined;
 
-    username: string = "user";
-    password: string = "pass";
+    apiUsername: string = "user";
+    apiPassword: string = "pass";
 
     /**
      * Constructor of the class
@@ -62,14 +64,17 @@ export default class RequestManager {
      * Initialize axios API
      * @param {String} baseURL base url of all axios petitions
      */
-    init(baseURL: string | undefined) {
+    init(baseURL: string | undefined, apiUser?: string, apiPass?: string) {
         if (baseURL !== undefined) {
+            this.apiUsername = apiUser ? apiUser : "";
+            this.apiPassword = apiPass ? apiPass : "";
+
             this.axios = new Axios({
                 baseURL: baseURL,
                 timeout: config.MAX_GET_REQUEST_TIMEOUT,
                 auth: {
-                    username: this.username,
-                    password: this.password
+                    username: this.apiUsername,
+                    password: this.apiPassword
                 }
 
             });
@@ -209,12 +214,7 @@ export default class RequestManager {
         console.log(`${this.translation?.loadingText.simpleRequest} ${this.axios.defaults.baseURL}${url}`);
         this.currentJobWaitTime = 0;
 
-        return this.axios.get(url, {
-            auth: {
-                username: this.username,
-                password: this.password
-            }
-        })
+        return this.axios.get(url)
             .then(async (response) => {
                 console.log(response)
 
@@ -245,12 +245,7 @@ export default class RequestManager {
         }
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.CMisBusy} (${this.currentJobWaitTime / 2})` });
 
-        return this.axios.get(url, {
-            auth: {
-                username: this.username,
-                password: this.password
-            }
-        })
+        return this.axios.get(url)
             .then(async (response) => {
                 console.log(`Job in ${this.axios.defaults.baseURL}${url}`);
                 console.log(response)
@@ -288,7 +283,7 @@ export default class RequestManager {
      * Update the baseURL of the requestManager
      * @param {EFileSource} newSource the new fileSource
      */
-    changeBaseURL(newSource: EFileSource, apiURL?: string) {
+    changeBaseURL(newSource: EFileSource, apiURL?: string, apiUser?: string, apiPass?: string) {
         let newUrl = newSource === EFileSource.Local ? this.baseLocalURL : apiURL;
 
         if (apiURL === undefined && newSource === EFileSource.Api) {
@@ -297,7 +292,7 @@ export default class RequestManager {
 
         this.usingAPI = newSource === EFileSource.Api;
 
-        this.init(newUrl);
+        this.init(newUrl, apiUser, apiPass);
 
         console.log(`Source url changed to ${newUrl}`)
     }
@@ -307,13 +302,18 @@ export default class RequestManager {
 
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.sendingPerspectiveConfig}` });
 
+        console.log(this.apiUsername)
+        console.log(this.apiPassword)
+
         // For some reason, CM receives an empty object when axios does the post request.
         if (this.usingAPI) {
             fetch(`${this.axios.defaults.baseURL}${this.confSeedPOSTurl}`, {
                 method: 'POST',
                 headers: {
+                    "Authorization": `Basic ${encode(`${this.apiUsername}:${this.apiPassword}`)}`,
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+
                 },
                 body: JSON.stringify(newConfiguration)
             })

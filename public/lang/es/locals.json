@@ -3,7 +3,10 @@
         "Options": {
             "hoverText": "Opciones",
             "useLocalFiles": "Archivos locales",
-            "useURL": "Usar una url",
+            "useURL": "CM URL:",
+            "user": "Usuario:",
+            "pass": "Contraseña:",
+            "connectBtnHover": "Conectarse al CM",
             "showLabel": "Mostrar etiquetas",
             "hideEdges": "Ocultar aristas no seleccionadas",
             "minSimilarity": "Similitud minima",
