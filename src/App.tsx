@@ -61,8 +61,10 @@ export const App = ({
 
   const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState, currentLanguage));
   useEffect(() => {
-    requestManager.translation = currentLanguage;
-  }, [currentLanguage]);
+    if (requestManager)
+      requestManager.translation = currentLanguage;
+
+  }, [currentLanguage, requestManager]);
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());

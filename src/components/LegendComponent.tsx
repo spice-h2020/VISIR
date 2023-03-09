@@ -17,7 +17,7 @@ import { ColorStain } from '../basicComponents/ColorStain';
 import { ILegendData } from '../constants/auxTypes';
 import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
 import { ShapeForm } from '../basicComponents/ShapeForm';
-import { CTranslation, ITranslation } from '../managers/CTranslation';
+import { ITranslation } from '../managers/CTranslation';
 
 const buttonContentRow: React.CSSProperties = {
     overflow: "hidden",
@@ -169,8 +169,6 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
  * @returns a react component.
  */
 const getIcon = (value: string, dim: Dimensions, index: number): React.ReactNode => {
-    let icon: React.ReactNode = "";
-
     switch (dim) {
         case Dimensions.Color:
             return (
@@ -188,7 +186,6 @@ const getIcon = (value: string, dim: Dimensions, index: number): React.ReactNode
             return (
                 <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
             )
-            break;
         default:
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
