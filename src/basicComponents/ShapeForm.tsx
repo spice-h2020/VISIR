@@ -12,6 +12,7 @@ interface ShapeFormProps {
     color?: string;
 }
 
+//Diferent paths for the diferent available shapes
 const shapeToPath = new Map<string, string>();
 shapeToPath.set("diamond", "50 0, 0 50, 50 100, 100 50");
 shapeToPath.set("star", "50 5, 61 40, 98 40, 68 62, 79 96, 50 75, 21 96, 32 62, 2 40, 39 40");

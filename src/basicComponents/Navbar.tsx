@@ -26,8 +26,6 @@ interface NavbarProps {
      * Components aligned to the right of the navBar.
      */
     rightAlignedItems?: React.ReactNode[];
-
-    screenSize: EScreenSize;
 }
 
 /**
@@ -36,23 +34,22 @@ interface NavbarProps {
 export const Navbar = ({
     leftAlignedItems = [],
     midAlignedItems = [],
-    rightAlignedItems = [],
-    screenSize = EScreenSize.normal
+    rightAlignedItems = []
 }: NavbarProps) => {
 
     return (
         <div className="navbar-container">
-            <div className="navBar-column" style={getColStyle(0, screenSize)}>
+            <div className="navBar-column">
                 {leftAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div className="navBar-column" style={getColStyle(1, screenSize)}>
+            <div className="navBar-column" style={{ justifyContent: "center" }}>
                 {midAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div className="navBar-column" style={getColStyle(2, screenSize)}>
+            <div className="navBar-column">
                 {rightAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
@@ -60,57 +57,3 @@ export const Navbar = ({
         </div>
     );
 };
-
-const showDebugColor = false;
-function getColStyle(i: number, screenSize: EScreenSize) {
-
-    const newStyle: React.CSSProperties = {}
-
-    switch (i) {
-        case 0: {
-            if (showDebugColor) newStyle.backgroundColor = "rgba(255, 0, 0, 0.25)";
-            switch (screenSize) {
-                case EScreenSize.normal:
-                    newStyle.width = "20vw";
-                    break;
-                default: {
-                    newStyle.width = "10vw";
-                }
-            }
-
-            break;
-        }
-        case 1: {
-            if (showDebugColor) newStyle.backgroundColor = "rgba(255, 255, 0, 0.25)";
-            switch (screenSize) {
-                case EScreenSize.normal:
-                    newStyle.width = "60vw";
-                    break;
-                case EScreenSize.small:
-                    newStyle.width = "70vw";
-                    break;
-                case EScreenSize.smallest:
-                    newStyle.width = "10vw";
-            }
-            newStyle.justifyContent = "center"
-            break;
-        }
-        case 2: {
-            if (showDebugColor) newStyle.backgroundColor = "rgba(255, 0, 255, 0.25)";
-            switch (screenSize) {
-                case EScreenSize.normal:
-                    newStyle.width = "20vw";
-                    break;
-                case EScreenSize.small:
-                    newStyle.width = "25vw";
-                    break;
-                case EScreenSize.smallest:
-                    newStyle.width = "80vw";
-            }
-
-            break;
-        }
-    }
-
-    return newStyle
-}

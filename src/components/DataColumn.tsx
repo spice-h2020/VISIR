@@ -1,7 +1,7 @@
 /**
  * @fileoverview This file creates a table with the data of a community, a user and its interactions.
  * If a user is provided, the communnity will be the users community. Otherwise, no user data will be shown.
- * Community data will include stacked bars and the medoid user information if the explanation configuration allows it.
+ * Community data will include diferent explanations based on the community data.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -66,7 +66,7 @@ export const DataTable = ({
     }, [node, community]);
 
     return (
-        <div className={`dataColumn-container ${state}`} ref={htmlRef} style={getContainerStyle(state)}>
+        <div className={`dataColumn-container ${state}`} ref={htmlRef} style={getDataColumnContainerStyle(state)}>
             <h2 key={0} className="tittle dataColumn-tittle">  {tittle} </h2>
             <NodePanel
                 key={1}
@@ -81,16 +81,21 @@ export const DataTable = ({
     )
 };
 
-
 /**
- * Returns a panel with all the community's information.
- * @param community source community.
- * @returns a react component with the community's panel.
+ * Returns a panel with all the community's data
+ * @param community data of the community
+ * @param allUsers data of all users of the perspective
+ * @param showLabel visualization option value
+ * @param artworks data of all artworks of the perspective
+ * @param translation object to translate text
+ * @param setSelectedAttribute set the current selected attribute for especific community highlighting
+ * @returns 
  */
 function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], showLabel: boolean,
     artworks: IArtworkData[], translation: ITranslation | undefined, setSelectedAttribute: Function) {
 
     if (community !== undefined) {
+        //Add the basic community data
         const tittle = <div key={0} className="dataColumn-subtittle"> {translation?.dataColumn.communityTittle} </div>;
         let content: React.ReactNode[] = [];
 
@@ -99,7 +104,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
         content.push(<div className="row" key={23}> {` ${translation?.dataColumn.anonymousLabel} ${community.anonUsers.length}`} </div>);
         content.push(<br key={4} />);
 
-        //Add accordion with the artworks
+        //Add an accordion with the artworks related to this community
         let accordionItems: React.ReactNode[] = [];
         let tittles: string[] = [];
 
@@ -124,7 +129,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
                 <Accordion key={1} items={accordionItems} tittles={tittles} />
             </div>);
 
-        //Add community explanations
+        //Add all the diferent community explanations
         for (let i = 0; i < community.explanations.length; i++) {
             if (community.explanations[i].visible) {
                 content.push(
@@ -150,11 +155,24 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
 }
 
+
 /**
  * Returns a panel with the explanations of the community based on the explanation parameter configuration.
  * @param communityData source community.
  * @param explanation data of the explanations to know its type and if it should be visible.
  * @returns a react component with the explanations.
+ */
+
+/**
+ * Returns a panel with an available and visible explanation
+ * @param communityData source community
+ * @param explanation data of the explanation
+ * @param allUsers all users of the perspective
+ * @param showLabel visualization option value
+ * @param artworks all artworks of the perspective
+ * @param translation object to translate text
+ * @param setSelectedAttribute set the current selected attribute for especific community highlighting
+ * @returns 
  */
 function getCommunityExplanation(communityData: ICommunityData, explanation: ICommunityExplanation, allUsers: IUserData[],
     showLabel: boolean, artworks: IArtworkData[], translation: ITranslation | undefined, setSelectedAttribute: Function) {
@@ -164,12 +182,14 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
     } else {
 
         switch (explanation.explanation_type) {
+            //Explicit attributes are simply shown in a stacked bar graph with colors representing its dimension
             case EExplanationTypes.explicit_attributes: {
                 return (
                     <div>
                         {getStackedBars(communityData.explicitDataArray, translation)}
                     </div>);
             }
+            //Medoid explanation is shown showing the medoid user data like any other user
             case EExplanationTypes.medoid: {
 
                 const medoid = allUsers.find((value) => { return value.id === explanation.explanation_data.id });
@@ -186,13 +206,15 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
                         />
                     </React.Fragment>);
             }
+            //Implicit attribute explanation are more specific and have diferent modes
             case EExplanationTypes.implicit_attributes: {
-                //New explanation type that shows information in an accordion of artworks
+
+                //Show the explanation data in an accordion with diferent artwork informations inside it
                 if (explanation.explanation_data.accordionMode) {
                     let accordionItems: React.ReactNode[] = [];
 
                     const keys = Object.keys(explanation.explanation_data.data)
-                    //Check each iconclass familty
+                    //Check each iconclass family
                     for (let key in keys) {
                         let artworksPanels: React.ReactNode[] = [];
 
@@ -217,8 +239,10 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
                         </div>);
 
 
+                    //If its not an accordion explanation, try to do a wordCloud explanation
+                } else {
 
-                } else { //If theres no values for a wordCloud, we just show the information in plain text rows. 
+                    //If there are no values for a wordCloud, we just show the information in plain text rows. 
                     if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
                         let textData: React.ReactNode[] = [];
 
@@ -239,7 +263,8 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
                             </div>
                         )
                     } else {
-
+                        /*When an implicit attribute is selected, if possible, will select that attribute in the visualization.
+                        this means all communities with the same attribute key and value will be highlighted*/
                         const onTreeClick = (value: string) => {
                             if (explanation.explanation_key) {
                                 setSelectedAttribute({ key: explanation.explanation_key, value: value })
@@ -266,9 +291,10 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
 
 
 /**
- * Returns all stacked bar graphs of a community.
- * @param community source community.
- * @returns a react component array with the community's stacked bar.
+ * Returns a stacked bar graph of some data
+ * @param data data to use in the stacked graph
+ * @param translation object to translate text
+ * @returns 
  */
 function getStackedBars(data: IExplicitCommData[] | undefined, translation: ITranslation | undefined) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
@@ -293,7 +319,8 @@ function getStackedBars(data: IExplicitCommData[] | undefined, translation: ITra
     return content;
 }
 
-function getContainerStyle(currentState: string): React.CSSProperties {
+//If the perspective of this dataColumn is active, add a red border
+function getDataColumnContainerStyle(currentState: string): React.CSSProperties {
     let newStyle: React.CSSProperties = {}
 
     if (currentState === "active") {
@@ -306,9 +333,12 @@ function getContainerStyle(currentState: string): React.CSSProperties {
 }
 
 /**
- * Creates two word cloud graphs
- * @param data parameters that will be represented in the cloud
- * @returns a react node with two diferent word clouds visualizations.
+ * Creates a word cloud graph and a treeMap graph based on the same data, and pack them in the same container
+ * @param data data source
+ * @param showPercentage if true, both graphs will show its data with a % at the end
+ * @param showCloud If false, the word cloud wont be shown
+ * @param showTreeMap if false, the word cloud wont be shown
+ * @returns 
  */
 export function getWordClouds(data: IStringNumberRelation[], showPercentage: boolean = true, showCloud: boolean = true,
     showTreeMap: boolean = true): React.ReactNode {
@@ -336,6 +366,13 @@ export function getWordClouds(data: IStringNumberRelation[], showPercentage: boo
     }
 }
 
+/**
+ * Same idea as getWordClouds, but it adds temporal support for onTreeClick function to set the selected attribute
+ * @param data data source
+ * @param onTreeClick function to execute when a treeMap rectangle has been clicked
+ * @param key key of the community to separate diferent treeMaps
+ * @returns 
+ */
 export function getCommunityWordCloud(data: IStringNumberRelation[], onTreeClick: Function, key: string | undefined): React.ReactNode {
     try {
         const wordCloud = <WordCloudGraph

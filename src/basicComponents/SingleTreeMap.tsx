@@ -1,13 +1,14 @@
 /**
- * @fileoverview This file Tree map graph but only with one map. Its a diferent way of representing word clouds.
+ * @fileoverview This file Tree map graph but only with one map. Its a diferent way of representing word clouds. Additionaly,
+ * an onTreeClick function may be shared to do something when the user clicks one of the graph rectangles
  * @package Requires React package. 
  * @package Requires ApexChart and its ReactApexChart package. 
  * @author Marco Expósito Pérez
  */
-//Packages
-import { useEffect, useState } from "react";
-import ReactApexChart from "react-apexcharts";
+//Constants
 import { IStringNumberRelation } from "../constants/perspectivesTypes";
+//Packages
+import ReactApexChart from "react-apexcharts";
 
 interface SingleTreeMapProps {
     data: IStringNumberRelation[];

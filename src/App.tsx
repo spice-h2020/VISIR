@@ -27,7 +27,6 @@ import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFront
 import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
 
 import config from './appConfig.json';
-import { HamburguerIcon } from './basicComponents/HamburgerButton';
 import { ConfigurationTool } from './components/ConfigurationTool';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -262,7 +261,7 @@ export const App = ({
         <DropMenu
           content={
             <div className='row' style={{ alignItems: "center", height: "40px" }}>
-              <HamburguerIcon />
+              <FontAwesomeIcon color='black' style={{ height: "2.1rem" }} icon={["fas", "bars"]} />
             </div>}
           extraClassButton="transparent mainBtn"
           menuDirection={EDropMenuDirection.down}
@@ -284,7 +283,6 @@ export const App = ({
               {legendBtn}
             </div>
           ]}
-          screenSize={screenSize}
         />
       break;
     }
@@ -297,7 +295,7 @@ export const App = ({
         <DropMenu
           content={
             <div className='row' style={{ alignItems: "center", height: "40px" }}>
-              <HamburguerIcon />
+              <FontAwesomeIcon color='black' style={{ height: "2.1rem" }} icon={["fas", "bars"]} />
             </div>}
           extraClassButton="transparent mainBtn"
           menuDirection={EDropMenuDirection.down}
@@ -308,7 +306,7 @@ export const App = ({
       navBar = <Navbar
         leftAlignedItems={[hamburgerBtn]}
         midAlignedItems={[
-          <div style={{ marginLeft: "5px", width: "25vw" }}>
+          <div style={{ marginLeft: "5px", width: "30vw" }}>
             {leftSelectBtn}
           </div>,
           <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center" }}>
@@ -316,7 +314,7 @@ export const App = ({
             {updateBtn}
             {rightCollapse}
           </div>,
-          <div style={{ marginRight: "5px", width: "25vw" }}>
+          <div style={{ marginRight: "5px", width: "30vw" }}>
             {rightSelectBtn}
           </div>,
 
@@ -326,7 +324,6 @@ export const App = ({
             {legendBtn}
           </div>
         ]}
-        screenSize={screenSize}
       />
       break;
     }
@@ -362,7 +359,6 @@ export const App = ({
               {legendBtn}
             </div>
           ]}
-          screenSize={screenSize}
         />
       break;
     }

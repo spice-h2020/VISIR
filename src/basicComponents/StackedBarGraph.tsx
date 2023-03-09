@@ -1,15 +1,17 @@
 /**
- * @fileoverview This file creates an horizontal stacked bar graphic. 
- * Each bar portion shows the width % of the portion, hovering will also explain what value is being visualized there.
+ * @fileoverview This file creates an horizontal bar graph. 
+ * Each bar section shows the width % of the portion, hovering will also explain what value is being visualized there.
+ * The color and icons of each section depends on the dimension of the represented data
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
-//Packages
-import React from "react";
+//Constants
 import { Dimensions } from "../constants/nodes";
 import { IStringNumberRelation } from "../constants/perspectivesTypes";
+//Packages
+import React from "react";
 //Local files
-import { BarPortion } from "./BarPortion";
+import { BarSection } from "./BarSection";
 
 interface StackedBarGraphProps {
     /**
@@ -29,7 +31,7 @@ interface StackedBarGraphProps {
 }
 
 /**
- * UI component that shows data in a horizontal stackedbar.
+ * UI component that shows data in a horizontal bar graph.
  */
 export const StackedBarGraph = ({
     tittle,
@@ -39,7 +41,7 @@ export const StackedBarGraph = ({
 
     const bars = new Array<React.ReactNode>();
 
-    //Hack to represent values whose all value is 0.
+    //Hack to represent values whose all value is 0, balancing all its values.
     if (isAllZero(data)) {
         for (let i = 0; i < data.length; i++) {
             data[i].count = Number((1 / data.length * 100).toFixed(2));
@@ -49,7 +51,7 @@ export const StackedBarGraph = ({
     for (let i = 0; i < data.length; i++) {
 
         bars.push(
-            <BarPortion
+            <BarSection
                 key={i}
                 data={data[i]}
                 dim={dim}

@@ -1,37 +1,32 @@
 /**
- * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
- * The button can also be disabled to negate any interaction with it, or change its colors with the state : ButtonState
- * property.
- * If auto toggle parameter is true, the button will automaticaly change its state between active and 
- * unactive when clicked.
+ * @fileoverview This file creates a huge popup that allows the user to configurate a new perspective visualization.
+ * The available configurations are.
+ * - Build a sentence that "explains" how the clustering will work and what attributes will be compared.
+ * - Pick what Legend attributes will be used.
+ * - Pick what artworks/beliefs/concepts attributes will be used in the clustering.
+ * - Pick a name for the perspective.
+ * Theres also a dev mode button to open up more options for an experienced user. These options are:
+ * - Pick the clustering algorythm to use and the weight of its explanability.
+ * - When similar/dissimilar artworks is selected, a slider allows to pick what threshold define when two artworks are similar/dissimilar
+ * - When same artworks is selected, a dropdown to pick what artwork to focus on the clustering.
+ * - Each artworks/beliefs/concepts attributes has a new dropdown to pick what similarity function to use.
+ * - A grey button at the right limit opens a text-area to see the sent perspective json. Used mostly to debug what the CM is receiving.
+ * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { EButtonState, EFileSource } from "../constants/viewOptions";
+import { ESimilarity, IConfigurationSeed } from "../constants/ConfigToolUtils";
+import * as config from "../constants/ConfigToolUtils";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
+//Local files
 import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
-import RequestManager from "../managers/requestManager";
-import { ESimilarity, IConfigurationSeed } from "../constants/ConfigToolUtils";
-import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
-
-import * as config from "../constants/ConfigToolUtils";
 import { Slider } from "../basicComponents/Slider";
 import { ITranslation } from "../managers/CTranslation";
-
-const darkBackgroundStyle: React.CSSProperties = {
-    background: "rgba(0, 0, 0, 0.3)",
-
-    position: "fixed",
-    top: "0",
-    right: "0",
-    bottom: "0",
-    left: "0",
-
-    zIndex: 100,
-}
+import RequestManager from "../managers/requestManager";
 
 const innerPanelStyle: React.CSSProperties = {
     width: "90vw",
@@ -141,6 +136,7 @@ export const ConfigurationTool = ({
         if (isActive) {
             requestManager.requestConfigurationToolSeed((newSeed: IConfigurationSeed) => {
                 if (newSeed !== undefined) {
+                    //validate and init all tool's values with the new seed data
                     if (newSeed.interaction_similarity_functions.length === 0) {
                         alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
                     } else {
@@ -195,9 +191,6 @@ export const ConfigurationTool = ({
                     } catch (error: any) {
                         throw Error("Failed while setting available similarity2 dropdown " + error);
                     }
-
-
-
                 }
             });
         }
@@ -234,11 +227,10 @@ export const ConfigurationTool = ({
 
     //Toggle the background dev mode if dev mode is active
     const backgroundStyle: React.CSSProperties = JSON.parse(JSON.stringify(devModeBackgroundStyle));
-
     backgroundStyle.display = isDevMode ? "block" : "none";
 
     return (
-        <div style={darkBackgroundStyle} className={isActive ? "toVisibleAnim" : "toHiddenAnim"}>
+        <div className={isActive ? "dark-background toVisibleAnim " : "dark-background toHiddenAnim"}>
             <div style={innerPanelStyle}>
                 {/*Row with the buttons to open DEV MODE or exit the application */}
                 <div key={0} style={topButtonsStyle}>
@@ -373,7 +365,9 @@ export const ConfigurationTool = ({
                             {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
                         </fieldset>
                         <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.same === similarity2)}>
+
                             <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>{rightSideSentence}</h3>
+
                             {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr, artworksAttrDrop,
                                 setArtworksAttrDrop, isDevMode)}
                         </fieldset>
@@ -436,15 +430,16 @@ export const ConfigurationTool = ({
 };
 
 /**
- * Creates a dropdown to pick between diferent ESimilarity Options
- * @param sim current ESimilarity value selected
- * @param setSimilarity callback executed when an option is selected
- * @returns 
+ * Creates a dropdown to pick between the available ESimilarity options 
+ * @param sim current similarity selected
+ * @param setSimilarity set the current similarity
+ * @param similarityAvailableValues list with all ESimilarity available values
+ * @param translation object used to translate text
+ * @returns the created dropdown
  */
 function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
     similarityAvailableValues: Array<ESimilarity>, translation: ITranslation | undefined): React.ReactNode[] {
     const buttons: React.ReactNode[] = [];
-
 
     for (let i = 0; i < similarityAvailableValues.length; i++) {
 
@@ -466,12 +461,16 @@ function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
             />
         )
     }
-
     return buttons;
-
 }
 
-
+/**
+ * Creates a dropdown to pick what clustering algorithm will be used.
+ * @param seed seed configuration
+ * @param selectedAlgorythm current selected algorythm
+ * @param setSelectedAlgorythm set the current selected aglorytm
+ * @returns returns the dropdown
+ */
 function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, selectedAlgorythm: config.IAlgorithm, setSelectedAlgorythm: Function): React.ReactNode {
 
     if (seed !== undefined) {
@@ -503,6 +502,7 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
                 postIcon={<div className="down-arrow" />}
             />
         );
+
     } else {
         <DropMenu
             key={0}
@@ -540,7 +540,7 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
                         citizenAttr.set(userAttribute.att_name, !isChecked);
                         setCitizenAttr(new Map(citizenAttr));
                     }}>
-                    {/*The on change is a dummy function needed to not get error because otherwise the checked 
+                    {/*The on change is a dummy function needed to not get some errors because otherwise the checked 
                         property changes without onChange being implemented*/}
                     <input key={1} type="checkbox" style={{ userSelect: "none", cursor: "pointer" }}
                         id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false}
@@ -555,13 +555,26 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
 }
 
 
-
 /**
- * Creates several checkboxes to select the artworks attributes to use in the clustering
+ * 
  * @param sim2 Similarity value of the second similarity dropdown. If === Same, the checkboxes will be disabled
  * @param seed configuration seed
  * @param artworksAttr current state of the checkboxes
  * @param setArtworksAttr callback executed when a checkbox is clicked 
+ * @returns 
+ */
+
+
+/**
+ * Creates several checkboxes to select the artworks attributes to use in the clustering. Additionaly, if dev mode is active
+ * it also creates the dropdowns to pick the similarity function for each attribute
+ * @param sim2 current artwork similarity
+ * @param seed current seed configuration
+ * @param artworksAttr selected state of all artworks attribute
+ * @param setArtworksAttr set the selected state of all artworks attributes
+ * @param artworksAttrDrop selected state of all artworks dropdown similarity function
+ * @param setArtworksAttrDrop set the prevous variable
+ * @param isDevMode 
  * @returns 
  */
 function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed | undefined,
@@ -617,6 +630,15 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
     }
 }
 
+/**
+ * Get the similarity function dropdown of a single artwork attribute
+ * @param attrName name of the owner attribute
+ * @param algorithms available similarity functions for this attribute
+ * @param artworksAttrDrop state of this dropdown
+ * @param setArtworksAttrDrop set the state of this dropdown
+ * @param isDevMode if false this component will be hidden
+ * @returns 
+ */
 function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.IAlgorithm[],
     artworksAttrDrop: Map<string, boolean[]>, setArtworksAttrDrop: Function, isDevMode: boolean) {
 
@@ -675,9 +697,9 @@ function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.
 }
 /**
  * Creates the middle dropdown
- * @param selectedOption current st
+ * @param selectedOption current selected option
  * @param seed configuration seed
- * @param setSelectedOption callback executed when a selected option is clicked
+ * @param setSelectedOption update the selected option
  * @returns 
  */
 function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: IConfigurationSeed | undefined,
@@ -725,6 +747,11 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: ICo
     }
 }
 
+/**
+ * Hide and make uninteractuable the artworks checkboxes when hide is true
+ * @param hide 
+ * @returns 
+ */
 function getArtworkCheckboxStyle(hide: boolean): React.CSSProperties {
 
     const style: React.CSSProperties = {
@@ -740,6 +767,12 @@ function getArtworkCheckboxStyle(hide: boolean): React.CSSProperties {
     return style;
 }
 
+/**
+ * Returns the style of the text area with the JSON sent to the CM
+ * @param textAreaHeight dynamic height of the text area to fit the text inside it
+ * @param isTextAreaActive if false, the text area will be hidden
+ * @returns 
+ */
 function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): React.CSSProperties {
     const style: React.CSSProperties = {
         overflowY: "auto",
@@ -752,7 +785,14 @@ function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): Re
     return style;
 }
 
-
+/**
+ * Creates a slider to select the similar/dissimilar threshold of the artworks attributes
+ * @param artworksWeight current threshold weight
+ * @param setArtworksWeight set the threshold weight
+ * @param similarity2 current state of the similar/dissimilar artworks
+ * @param translation object to translate the text
+ * @returns 
+ */
 function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity,
     translation: ITranslation | undefined): React.ReactNode {
 
@@ -774,11 +814,12 @@ function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function
 }
 
 /**
- * Returns a dropDown that allows the user to pick what artwork to use when doing "same" artworks
- * @param similarity2 
- * @param selectedArtwork 
- * @param setSelectedArtwork 
- * @param seed 
+ * Creates the dropdown to select what artowrk to focus on when doing same artworks. If same is not selected, it will be
+ * hidden.
+ * @param similarity2 current state of the similarity between artworks
+ * @param selectedArtwork current selected artwork
+ * @param setSelectedArtwork update the selected artwork
+ * @param seed current seed configuration
  * @returns 
  */
 function getNArtworksDropdown(similarity2: ESimilarity, selectedArtwork: config.INameAndIdPair | undefined,
@@ -820,6 +861,7 @@ function getNArtworksDropdown(similarity2: ESimilarity, selectedArtwork: config.
         return "";
     }
 }
+
 
 function getArtworsSliderDropdownStyle(isDevMode: boolean, similarity: ESimilarity) {
 

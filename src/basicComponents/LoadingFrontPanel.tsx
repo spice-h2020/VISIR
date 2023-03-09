@@ -1,5 +1,5 @@
 /**
- * @fileoverview This files creates popup that darken the background. The popup has a customizable loading text
+ * @fileoverview This files creates popup that darkens and disables the background. The popup has a customizable loading text
  * and a spinner spining while loading.
  * When the popup appears, it does it in a transition. When it dissapear, it does it instantly.
  * @package Requires React package. 

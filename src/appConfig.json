@@ -4,7 +4,5 @@
 	"API_PASS": "pass",
 	"LANG": "en",
 	"MAX_GET_REQUEST_TIMEOUT": 2000,
-	"NODE_RELOCATION_INCREMENT": 1.25,
-	"Example-ucm_uri": "http://147.96.25.144:8080/",
-	"Example-local_url": "http://localhost:8080/"
+	"NODE_RELOCATION_INCREMENT": 1.25
 }

@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a Tooltip positioned close to an object. 
- * A floating container with some transparency and a button to close it. 
+ * The tooltip is a floating container with some transparency, some information about a selected object and a button to close it. 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
