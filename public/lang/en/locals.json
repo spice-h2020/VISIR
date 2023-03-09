@@ -90,7 +90,7 @@
         "requestingConfToolSeed": "Requesting configuration tool seed",
         "simpleRequest": "Request to",
         "CMisBusy": "Community Model is busy. Trying again",
-        "sendingPerspectiveConfig": "Sending a perspectiva configuration",
-        "requestPerspectiveConfig": "Requesting a perspectiva configuration file"
+        "sendingPerspectiveConfig": "Sending perspective configuration",
+        "requestPerspectiveConfig": "Requesting perspective's configuration file"
     }
 }

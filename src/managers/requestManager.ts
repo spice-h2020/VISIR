@@ -298,21 +298,19 @@ export default class RequestManager {
     }
 
     sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource,
-        changeItemState?: Function, apiURL?: string) => void, callback: Function) {
+        changeItemState?: Function, apiURL?: string, apiUser?: string, apiPass?: string) => void, callback: Function) {
 
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.sendingPerspectiveConfig}` });
 
-        console.log(this.apiUsername)
-        console.log(this.apiPassword)
-
         // For some reason, CM receives an empty object when axios does the post request.
         if (this.usingAPI) {
+
             fetch(`${this.axios.defaults.baseURL}${this.confSeedPOSTurl}`, {
                 method: 'POST',
                 headers: {
-                    "Authorization": `Basic ${encode(`${this.apiUsername}:${this.apiPassword}`)}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${btoa(this.apiUsername + ':' + this.apiPassword)}`,
+                    // 'Accept': 'application/json',
+                    // 'Content-Type': 'application/json',
 
                 },
                 body: JSON.stringify(newConfiguration)
@@ -322,7 +320,7 @@ export default class RequestManager {
                     console.log("response: " + res)
 
                     if (this.usingAPI) {
-                        updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
+                        updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL, this.apiUsername, this.apiPassword)
                     } else {
                         updateFileSource(EFileSource.Local)
                     }

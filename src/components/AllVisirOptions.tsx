@@ -177,8 +177,6 @@ function getFileSourceButtons(changeFileSource: Function, selectedItems: EButton
     passRef: React.RefObject<HTMLInputElement>,
     translation: ITranslation | undefined): React.ReactNode[] {
 
-    console.log(selectedItems);
-
     const useApiFunction = () => {
         if (urlRef.current && userRef.current && passRef.current) {
             changeFileSource(EFileSource.Api, urlRef.current.value, userRef.current.value, passRef.current.value);
