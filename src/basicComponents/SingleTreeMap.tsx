@@ -5,12 +5,15 @@
  * @author Marco Expósito Pérez
  */
 //Packages
+import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { IStringNumberRelation } from "../constants/perspectivesTypes";
 
 interface SingleTreeMapProps {
     data: IStringNumberRelation[];
     showPercentage: boolean;
+    onTreeClick?: Function;
+    explKey?: string | undefined;
 }
 
 /**
@@ -19,9 +22,11 @@ interface SingleTreeMapProps {
 export const SingleTreeMap = ({
     data,
     showPercentage,
+    onTreeClick,
+    explKey,
 }: SingleTreeMapProps) => {
 
-    const options: ApexCharts.ApexOptions = {
+    let options: ApexCharts.ApexOptions = {
         legend: {
             show: false
         },
@@ -29,6 +34,13 @@ export const SingleTreeMap = ({
             type: 'treemap',
             toolbar: {
                 show: false
+            },
+            events: {
+                dataPointSelection: (event: any, chartContext: any, config: any) => {
+                    if (onTreeClick) {
+                        onTreeClick(data[config.dataPointIndex].value)
+                    }
+                }
             }
         },
         tooltip: {
@@ -37,7 +49,7 @@ export const SingleTreeMap = ({
                 formatter: (value) => { return value + "%" },
             },
         }
-    };
+    }
 
     const series = [];
     const serieData = [];
@@ -56,6 +68,7 @@ export const SingleTreeMap = ({
     return (
         <div className="treemap-container">
             <ReactApexChart
+                key={explKey}
                 options={options}
                 series={series}
                 type="treemap"

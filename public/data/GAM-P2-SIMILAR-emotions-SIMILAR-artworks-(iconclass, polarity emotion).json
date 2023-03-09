@@ -35,6 +35,8 @@
                             "interest": 3.225806451612903
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "joy",
                     "visible": true
                 },
                 {
@@ -116,6 +118,8 @@
                             "serenity": 10
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "joy",
                     "visible": true
                 },
                 {
@@ -175,6 +179,8 @@
                             "interest": 14.285714285714285
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "love",
                     "visible": true
                 },
                 {
@@ -226,11 +232,13 @@
                     "explanation_data": {
                         "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
                         "data": {
-                            "surprise": 40,
+                            "sadness": 40,
                             "fear": 40,
                             "anticipation": 20
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "sadness",
                     "visible": true
                 },
                 {

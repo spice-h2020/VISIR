@@ -114,6 +114,8 @@ export enum EExplanationTypes {
 export interface ICommunityExplanation extends anyProperty {
     explanation_type: EExplanationTypes;
     explanation_data: anyProperty;
+    explanation_key?: string;
+    maxValue?: string;
     visible: boolean;
     order: number;
 }

@@ -20,7 +20,7 @@
  */
 //Constants
 import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
-import { IBoundingBox, ISelectedObjectAction, ESelectedObjectAction, IStateFunctions } from "../constants/auxTypes";
+import { IBoundingBox, ISelectedObjectAction, ESelectedObjectAction, IStateFunctions, IAttribute } from "../constants/auxTypes";
 //Packages
 import { FitOptions, TimelineAnimationType } from "vis-network";
 import { Dispatch } from "react";
@@ -234,4 +234,20 @@ export default class EventsCtrl {
         this.zoomToNodes([]);
     }
 
+    selectAttribute(selectedAttribute: IAttribute) {
+        let allIds: string[] = [];
+
+        for (const comm of this.netCtrl.explicitCtrl.communitiesData) {
+            for (const expl of comm.explanations) {
+                if (expl.explanation_key === selectedAttribute.key &&
+                    expl.maxValue === selectedAttribute.value) {
+                    allIds = allIds.concat(comm.users);
+                }
+            }
+        }
+        const allCommunityNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, allIds, [], undefined, allIds);
+
+        this.netCtrl.edgeCtrl.unselectEdges();
+        this.zoomToNodes(allCommunityNodes);
+    }
 }

@@ -10,7 +10,7 @@
 //Constants
 import { ViewOptions } from '../constants/viewOptions';
 import { IUserData, ICommunityData, EPerspectiveVisState, IPerspectiveData } from '../constants/perspectivesTypes';
-import { ISelectedObject, ESelectedObjectAction, IStateFunctions, DiferentAttrbError } from '../constants/auxTypes';
+import { ISelectedObject, ESelectedObjectAction, IStateFunctions, DiferentAttrbError, IAttribute } from '../constants/auxTypes';
 //Packages
 import React, { useEffect, useState, useRef } from "react";
 //Local files
@@ -52,7 +52,9 @@ interface PerspectiveViewProps {
     unique: boolean;
 
     translation: ITranslation | undefined;
-    cancelPerspective: (idToCancel: string) => (void),
+    cancelPerspective: (idToCancel: string) => (void);
+
+    selectedAttribute: IAttribute | undefined;
 }
 
 /**
@@ -70,6 +72,7 @@ export const PerspectiveView = ({
     unique,
     translation,
     cancelPerspective,
+    selectedAttribute,
 }: PerspectiveViewProps) => {
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
@@ -89,6 +92,13 @@ export const PerspectiveView = ({
     }, [networkFocusID, netManager])
 
     ViewOptionsUseEffect(viewOptions, netManager, sf.setSelectedObject, networkFocusID);
+
+    //When an attribute is selected, highlight all communities that have the key of this attribute and the value is the most representative.
+    useEffect(() => {
+        if (selectedAttribute && netManager) {
+            netManager.eventsCtrl.selectAttribute(selectedAttribute)
+        }
+    }, [selectedAttribute, netManager])
 
     //Do something when the user clicks in a network
     useEffect(() => {
@@ -196,6 +206,8 @@ export const PerspectiveView = ({
                 showLabel={viewOptions.showLabels}
                 state={networkState}
                 translation={translation}
+
+                setSelectedAttribute={sf.setSelectedAttribute}
             />
 
         return (

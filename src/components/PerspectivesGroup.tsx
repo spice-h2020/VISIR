@@ -11,7 +11,7 @@
 //Constants
 import { IPerspectiveData, EPerspectiveVisState } from "../constants/perspectivesTypes";
 import { ViewOptions, EAppCollapsedState } from "../constants/viewOptions"
-import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction } from "../constants/auxTypes";
+import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction, IAttribute } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer, useState } from "react";
 //Local files
@@ -68,12 +68,14 @@ export const PerspectivesGroups = ({
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
     const [networkFocusID, setNetworkFocusID] = useState<string | undefined>();
     const [selectedObject, setSelectedObject] = useReducer(selectedObjectReducer, undefined);
+    const [selectedAttribute, setSelectedAttribute] = useState<IAttribute | undefined>();
 
     const sf: IStateFunctions = {
         setLegendData: setLegendData,
         setDimensionStrategy: setDimensionStrategy,
         setNetworkFocusId: setNetworkFocusID,
         setSelectedObject: setSelectedObject,
+        setSelectedAttribute: setSelectedAttribute,
     }
 
     //When the collapsed state changes, we clear both datatables
@@ -113,6 +115,7 @@ export const PerspectivesGroups = ({
             unique={rightPerspective === undefined}
             translation={translation}
             cancelPerspective={cancelPerspective}
+            selectedAttribute={selectedAttribute}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -128,6 +131,7 @@ export const PerspectivesGroups = ({
             unique={leftPerspective === undefined}
             translation={translation}
             cancelPerspective={cancelPerspective}
+            selectedAttribute={selectedAttribute}
         />
 
     return (

@@ -34,6 +34,8 @@ interface DataTableProps {
     state: string;
 
     translation: ITranslation | undefined;
+
+    setSelectedAttribute: Function;
 }
 
 /**
@@ -47,10 +49,14 @@ export const DataTable = ({
     allUsers,
     showLabel,
     state,
-    translation
+    translation,
+    setSelectedAttribute
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks, translation), [community, allUsers, showLabel, artworks, translation]);
+    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks,
+        translation, setSelectedAttribute),
+        [community, allUsers, showLabel, artworks, translation]);
+
     const htmlRef = useRef(null);
 
     useEffect(() => {
@@ -82,7 +88,7 @@ export const DataTable = ({
  * @returns a react component with the community's panel.
  */
 function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], showLabel: boolean,
-    artworks: IArtworkData[], translation: ITranslation | undefined) {
+    artworks: IArtworkData[], translation: ITranslation | undefined, setSelectedAttribute: Function) {
 
     if (community !== undefined) {
         const tittle = <div key={0} className="dataColumn-subtittle"> {translation?.dataColumn.communityTittle} </div>;
@@ -124,7 +130,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
                 content.push(
                     <React.Fragment key={6 + i * 2}>
                         {getCommunityExplanation(community, community.explanations[i], allUsers, showLabel,
-                            artworks, translation)}
+                            artworks, translation, setSelectedAttribute)}
                     </React.Fragment>);
 
                 content.push(<br key={7 + i * 2} />);
@@ -151,7 +157,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
  * @returns a react component with the explanations.
  */
 function getCommunityExplanation(communityData: ICommunityData, explanation: ICommunityExplanation, allUsers: IUserData[],
-    showLabel: boolean, artworks: IArtworkData[], translation: ITranslation | undefined) {
+    showLabel: boolean, artworks: IArtworkData[], translation: ITranslation | undefined, setSelectedAttribute: Function) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
@@ -234,10 +240,16 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
                         )
                     } else {
 
+                        const onTreeClick = (value: string) => {
+                            if (explanation.explanation_key) {
+                                setSelectedAttribute({ key: explanation.explanation_key, value: value })
+                            }
+                        }
+
                         return (
                             <div>
                                 <div> {explanation.explanation_data.label}</div>
-                                <div> {getWordClouds(explanation.explanation_data.data)}</div>
+                                <div> {getCommunityWordCloud(explanation.explanation_data.data, onTreeClick, communityData.id)}</div>
                             </div>);
                     }
                 }
@@ -316,6 +328,33 @@ export function getWordClouds(data: IStringNumberRelation[], showPercentage: boo
                 <span className="word-cloud-wrapper" />
                 {showCloud ? wordCloud : ""}
                 {showTreeMap ? treeMap : ""}
+            </React.Fragment>);
+    } catch (e: any) {
+        console.log("Error while creating a wordCloud from implicit attributes data");
+        console.log(e);
+        return <React.Fragment />
+    }
+}
+
+export function getCommunityWordCloud(data: IStringNumberRelation[], onTreeClick: Function, key: string | undefined): React.ReactNode {
+    try {
+        const wordCloud = <WordCloudGraph
+            data={data}
+            showPercentage={true}
+        />
+
+        const treeMap = <SingleTreeMap
+            explKey={key}
+            data={data}
+            showPercentage={true}
+            onTreeClick={onTreeClick}
+        />
+
+        return (
+            <React.Fragment>
+                <span className="word-cloud-wrapper" />
+                {wordCloud}
+                {treeMap}
             </React.Fragment>);
     } catch (e: any) {
         console.log("Error while creating a wordCloud from implicit attributes data");

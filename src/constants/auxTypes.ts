@@ -7,7 +7,7 @@
 import { Dispatch } from "react";
 import { DimAttribute } from "./nodes";
 //Local files
-import { anyProperty, ICommunityData, IUserData } from "./perspectivesTypes";
+import { ICommunityData, IUserData } from "./perspectivesTypes";
 import { EButtonState } from "./viewOptions";
 
 /**
@@ -24,6 +24,11 @@ export interface IBoundingBox {
         border: string
         name: string
     }
+}
+
+export interface IAttribute {
+    key: string,
+    value: string,
 }
 
 /**
@@ -51,6 +56,7 @@ export interface IStateFunctions {
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
     setSelectedObject: Dispatch<ISelectedObjectAction>;
+    setSelectedAttribute: React.Dispatch<React.SetStateAction<IAttribute | undefined>>
 }
 
 /**

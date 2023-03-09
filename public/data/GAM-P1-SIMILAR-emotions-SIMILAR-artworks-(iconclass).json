@@ -33,6 +33,8 @@
                             "disgust": 4.166666666666666
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "joy",
                     "visible": true
                 },
                 {
@@ -101,8 +103,8 @@
                     "explanation_data": {
                         "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
                         "data": {
-                            "joy": 50,
-                            "sadness": 14.285714285714285,
+                            "sadness": 50,
+                            "joy": 14.285714285714285,
                             "anticipation": 7.142857142857142,
                             "serenity": 7.142857142857142,
                             "fear": 7.142857142857142,
@@ -110,6 +112,8 @@
                             "interest": 7.142857142857142
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "sadness",
                     "visible": true
                 },
                 {
@@ -174,6 +178,8 @@
                             "anger": 20
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "joy",
                     "visible": true
                 },
                 {
@@ -229,6 +235,8 @@
                             "love": 16.666666666666664
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "joy",
                     "visible": true
                 },
                 {
@@ -279,10 +287,12 @@
                     "explanation_data": {
                         "label": "Percentage distribution of the implicit attribute (interest.itMakesMeThinkAbout.emotions):",
                         "data": {
-                            "surprise": 50,
+                            "sadness": 50,
                             "fear": 50
                         }
                     },
+                    "explanation_key": "interest.itMakesMeThinkAbout.emotions",
+                    "maxValue": "sadness",
                     "visible": true
                 },
                 {
