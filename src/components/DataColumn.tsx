@@ -55,7 +55,7 @@ export const DataTable = ({
 
     const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks,
         translation, setSelectedAttribute),
-        [community, allUsers, showLabel, artworks, translation]);
+        [community, allUsers, showLabel, artworks, translation, setSelectedAttribute]);
 
     const htmlRef = useRef(null);
 
