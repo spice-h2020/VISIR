@@ -71,7 +71,7 @@ function getColStyle(i: number, screenSize: EScreenSize) {
             if (showDebugColor) newStyle.backgroundColor = "rgba(255, 0, 0, 0.25)";
             switch (screenSize) {
                 case EScreenSize.normal:
-                    newStyle.width = "25vw";
+                    newStyle.width = "20vw";
                     break;
                 default: {
                     newStyle.width = "10vw";
@@ -84,7 +84,7 @@ function getColStyle(i: number, screenSize: EScreenSize) {
             if (showDebugColor) newStyle.backgroundColor = "rgba(255, 255, 0, 0.25)";
             switch (screenSize) {
                 case EScreenSize.normal:
-                    newStyle.width = "50vw";
+                    newStyle.width = "60vw";
                     break;
                 case EScreenSize.small:
                     newStyle.width = "70vw";
@@ -99,7 +99,7 @@ function getColStyle(i: number, screenSize: EScreenSize) {
             if (showDebugColor) newStyle.backgroundColor = "rgba(255, 0, 255, 0.25)";
             switch (screenSize) {
                 case EScreenSize.normal:
-                    newStyle.width = "25vw";
+                    newStyle.width = "20vw";
                     break;
                 case EScreenSize.small:
                     newStyle.width = "25vw";

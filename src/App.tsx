@@ -306,7 +306,7 @@ export const App = ({
       navBar = <Navbar
         leftAlignedItems={[hamburgerBtn]}
         midAlignedItems={[
-          <div style={{ marginLeft: "5px", width: "20vw" }}>
+          <div style={{ marginLeft: "5px", width: "25vw" }}>
             {leftSelectBtn}
           </div>,
           <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center" }}>
@@ -314,7 +314,7 @@ export const App = ({
             {updateBtn}
             {rightCollapse}
           </div>,
-          <div style={{ marginRight: "5px", width: "20vw" }}>
+          <div style={{ marginRight: "5px", width: "25vw" }}>
             {rightSelectBtn}
           </div>,
 
@@ -342,7 +342,7 @@ export const App = ({
             </div>
           ]}
           midAlignedItems={[
-            <div style={{ marginLeft: "5px", width: "20vw" }}>
+            <div style={{ marginLeft: "5px", width: "25vw" }}>
               {leftSelectBtn}
             </div>,
             <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center" }}>
@@ -350,7 +350,7 @@ export const App = ({
               {updateBtn}
               {rightCollapse}
             </div>,
-            <div style={{ marginRight: "5px", width: "20vw" }}>
+            <div style={{ marginRight: "5px", width: "25vw" }}>
               {rightSelectBtn}
             </div>,
 
