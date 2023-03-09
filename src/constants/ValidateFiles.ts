@@ -233,6 +233,16 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
         }
         arg.explanation_type = types.EExplanationTypes[arg.explanation_type];
 
+        if (arg.explanation_key !== undefined) {
+            if (typeof (arg.explanation_key) !== "string") {
+                try {
+                    arg.explanation_key = String(arg.explanation_key);
+                } catch (e: any) {
+                    throw Error(`Explanation_key is not a string`);
+                }
+            }
+        }
+
         //Explicit attributes doesnt require a validation
         if (arg.explanation_type !== types.EExplanationTypes.explicit_attributes) {
             if (arg.explanation_data === undefined) {
@@ -318,19 +328,32 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
             const keys = Object.keys(arg.explanation_data.data);
             const newData: types.IStringNumberRelation[] = [];
 
+            arg.maxValue = undefined;
             for (let i = 0; i < keys.length; i++) {
+
                 const newCount = Number(arg.explanation_data.data[keys[i]].toFixed(2));
 
                 if (keys[i] === "") {
                     keys[i] = "(empty)"
                 }
 
-                newData.push({
+                const item: types.IStringNumberRelation = {
                     value: keys[i],
                     count: newCount
-                });
+                }
+
+                newData.push(item);
+
+                if (arg.maxValue === undefined) {
+                    arg.maxValue = item;
+                } else {
+                    if (arg.maxValue.count < item.count) {
+                        arg.maxValue = item;
+                    }
+                }
             }
 
+            arg.maxValue = arg.maxValue.value;
             arg.explanation_data.data = newData;
         }
 

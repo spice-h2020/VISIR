@@ -34,7 +34,6 @@
                         }
                     },
                     "explanation_key": "interest.itMakesMeThinkAbout.emotions",
-                    "maxValue": "joy",
                     "visible": true
                 },
                 {
@@ -113,7 +112,6 @@
                         }
                     },
                     "explanation_key": "interest.itMakesMeThinkAbout.emotions",
-                    "maxValue": "sadness",
                     "visible": true
                 },
                 {
@@ -179,7 +177,6 @@
                         }
                     },
                     "explanation_key": "interest.itMakesMeThinkAbout.emotions",
-                    "maxValue": "joy",
                     "visible": true
                 },
                 {
@@ -236,7 +233,6 @@
                         }
                     },
                     "explanation_key": "interest.itMakesMeThinkAbout.emotions",
-                    "maxValue": "joy",
                     "visible": true
                 },
                 {
@@ -292,7 +288,6 @@
                         }
                     },
                     "explanation_key": "interest.itMakesMeThinkAbout.emotions",
-                    "maxValue": "sadness",
                     "visible": true
                 },
                 {
