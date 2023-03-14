@@ -22,6 +22,7 @@ export interface IBoundingBox {
     color?: {
         color: string
         border: string
+        highlight: string
         name: string
     }
 }

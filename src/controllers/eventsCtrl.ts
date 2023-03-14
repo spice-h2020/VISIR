@@ -196,6 +196,9 @@ export default class EventsCtrl {
             this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, [node.id]);
         }
 
+
+        this.netCtrl.bbCtrl.highlightedComms = [];
+
         return node;
     }
 
@@ -209,6 +212,8 @@ export default class EventsCtrl {
         const selectedNodes = community.users;
         this.zoomToNodes(selectedNodes);
 
+
+        this.netCtrl.bbCtrl.highlightedComms = [community];
         this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, []);
         this.netCtrl.edgeCtrl.unselectEdges();
     }
@@ -220,6 +225,8 @@ export default class EventsCtrl {
     externalCommunityClicked(community: ICommunityData) {
         const localNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, community.users, [], undefined, community.users);
 
+
+        this.netCtrl.bbCtrl.highlightedComms = [];
         this.netCtrl.edgeCtrl.unselectEdges();
         this.zoomToNodes(localNodes);
     }
@@ -230,24 +237,28 @@ export default class EventsCtrl {
     nothingClicked() {
         this.netCtrl.nodeVisuals.colorAllNodes(this.netCtrl.nodes);
         this.netCtrl.edgeCtrl.unselectEdges();
-
+        this.netCtrl.bbCtrl.highlightedComms = [];
         this.zoomToNodes([]);
     }
 
     selectAttribute(selectedAttribute: IAttribute) {
         let allIds: string[] = [];
+        let communitiesToHighlight: ICommunityData[] = [];
 
         for (const comm of this.netCtrl.explicitCtrl.communitiesData) {
             for (const expl of comm.explanations) {
                 if (expl.explanation_key === selectedAttribute.key &&
                     expl.maxValue === selectedAttribute.value) {
                     allIds = allIds.concat(comm.users);
+                    communitiesToHighlight.push(comm);
+                    break;
                 }
             }
         }
-        const allCommunityNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, allIds, [], undefined, allIds);
+        this.netCtrl.bbCtrl.highlightedComms = communitiesToHighlight;
+        this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, allIds, [], undefined, []);
 
         this.netCtrl.edgeCtrl.unselectEdges();
-        this.zoomToNodes(allCommunityNodes);
+        this.zoomToNodes(allIds);
     }
 }
