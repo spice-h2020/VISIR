@@ -10,14 +10,10 @@ import { validateConfigurationSeed, validatePerspectiveDataJSON, validatePerspec
 import { IPerspectiveData, PerspectiveId as IPerspectiveId, PerspectiveId } from '../constants/perspectivesTypes';
 //Packages
 import { Axios } from 'axios'
-import { encode } from "base-64"
-
 //Config
 import config from '../appConfig.json';
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
 import { ITranslation } from './CTranslation';
-
-const apiVersion = "v1.1";
 
 export default class RequestManager {
     isActive: boolean;
@@ -33,19 +29,16 @@ export default class RequestManager {
     //URL to ask for files when local url is selected
     baseLocalURL: string = "./data/";
 
-    allPerspectivesGETurl: string = `${apiVersion}/visir/index`;
-    singlePerspectiveGETurl: string = `${apiVersion}/visir/file/`;
-    perspectiveConfigGETurl: string = `${apiVersion}/perspectives/`;
+    allPerspectivesGETurl: string = "visualizationAPI/index";
+    singlePerspectiveGETurl: string = "visualizationAPI/file/";
+    perspectiveConfigGETurl: string = "v1.1/perspectives/"
 
-    confSeedGETurl: string = `${apiVersion}/visir/seed`;
-    confSeedPOSTurl: string = `${apiVersion}/perspectives`;
+    confSeedGETurl: string = "v1.1/seed";
+    confSeedPOSTurl: string = "v1.1/perspective";
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     translation: ITranslation | undefined;
-
-    apiUsername: string = "user";
-    apiPassword: string = "pass";
 
     /**
      * Constructor of the class
@@ -64,19 +57,11 @@ export default class RequestManager {
      * Initialize axios API
      * @param {String} baseURL base url of all axios petitions
      */
-    init(baseURL: string | undefined, apiUser?: string, apiPass?: string) {
+    init(baseURL: string | undefined) {
         if (baseURL !== undefined) {
-            this.apiUsername = apiUser ? apiUser : "";
-            this.apiPassword = apiPass ? apiPass : "";
-
             this.axios = new Axios({
                 baseURL: baseURL,
                 timeout: config.MAX_GET_REQUEST_TIMEOUT,
-                auth: {
-                    username: this.apiUsername,
-                    password: this.apiPassword
-                }
-
             });
             this.isActive = true;
         } else
@@ -283,7 +268,7 @@ export default class RequestManager {
      * Update the baseURL of the requestManager
      * @param {EFileSource} newSource the new fileSource
      */
-    changeBaseURL(newSource: EFileSource, apiURL?: string, apiUser?: string, apiPass?: string) {
+    changeBaseURL(newSource: EFileSource, apiURL?: string) {
         let newUrl = newSource === EFileSource.Local ? this.baseLocalURL : apiURL;
 
         if (apiURL === undefined && newSource === EFileSource.Api) {
@@ -292,26 +277,23 @@ export default class RequestManager {
 
         this.usingAPI = newSource === EFileSource.Api;
 
-        this.init(newUrl, apiUser, apiPass);
+        this.init(newUrl);
 
         console.log(`Source url changed to ${newUrl}`)
     }
 
     sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource,
-        changeItemState?: Function, apiURL?: string, apiUser?: string, apiPass?: string) => void, callback: Function) {
+        changeItemState?: Function, apiURL?: string) => void, callback: Function) {
 
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.sendingPerspectiveConfig}` });
 
         // For some reason, CM receives an empty object when axios does the post request.
         if (this.usingAPI) {
-
             fetch(`${this.axios.defaults.baseURL}${this.confSeedPOSTurl}`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Basic ${btoa(this.apiUsername + ':' + this.apiPassword)}`,
-                    // 'Accept': 'application/json',
-                    // 'Content-Type': 'application/json',
-
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newConfiguration)
             })
@@ -320,7 +302,7 @@ export default class RequestManager {
                     console.log("response: " + res)
 
                     if (this.usingAPI) {
-                        updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL, this.apiUsername, this.apiPassword)
+                        updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
                     } else {
                         updateFileSource(EFileSource.Local)
                     }
