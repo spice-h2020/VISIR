@@ -33,8 +33,8 @@ export default class RequestManager {
     singlePerspectiveGETurl: string = "visualizationAPI/file/";
     perspectiveConfigGETurl: string = "v1.1/perspectives/"
 
-    confSeedGETurl: string = `${apiVersion}/visir/seed`;
-    confSeedPOSTurl: string = `${apiVersion}/perspective`;
+    confSeedGETurl: string = "v1.1/seed";
+    confSeedPOSTurl: string = "v1.1/perspective";
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
