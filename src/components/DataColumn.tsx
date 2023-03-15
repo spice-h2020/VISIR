@@ -209,75 +209,14 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
             //Implicit attribute explanation are more specific and have diferent modes
             case EExplanationTypes.implicit_attributes: {
 
-                //Show the explanation data in an accordion with diferent artwork informations inside it
-                if (explanation.explanation_data.accordionMode) {
-                    let accordionItems: React.ReactNode[] = [];
+                return getImplicitExplanation(explanation, artworks);
 
-                    const keys = Object.keys(explanation.explanation_data.data)
-                    //Check each iconclass family
-                    for (let key in keys) {
-                        let artworksPanels: React.ReactNode[] = [];
-
-                        const data: string[] = explanation.explanation_data.data[keys[key]];
-                        //Check each of the related artworks
-                        for (let i = 0; i < data.length; i++) {
-                            artworksPanels.push(<ArtworkPanel artworksData={artworks} id={data[i]} />);
-                        }
-
-                        accordionItems.push(
-                            <div>
-                                {keys[key]}
-                                {artworksPanels}
-                            </div>
-                        );
-
-                    }
-                    return (
-                        <div>
-                            <div> {explanation.explanation_data.label} </div>
-                            <Accordion items={accordionItems} tittles={keys} />
-                        </div>);
-
-
-                    //If its not an accordion explanation, try to do a wordCloud explanation
-                } else {
-
-                    //If there are no values for a wordCloud, we just show the information in plain text rows. 
-                    if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
-                        let textData: React.ReactNode[] = [];
-
-                        for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
-                            textData.push(
-                                <li key={i} style={{ marginLeft: "2rem" }}>
-                                    {explanation.explanation_data.data[i].value}
-                                    <br />
-                                </li >);
-                        }
-
-                        return (
-                            <div>
-                                <div> {explanation.explanation_data.label}</div>
-                                <div>
-                                    {textData}
-                                </div>
-                            </div>
-                        )
-                    } else {
-                        /*When an implicit attribute is selected, if possible, will select that attribute in the visualization.
-                        this means all communities with the same attribute key and value will be highlighted*/
-                        const onTreeClick = (value: string) => {
-                            if (explanation.explanation_key) {
-                                setSelectedAttribute({ key: explanation.explanation_key, value: value })
-                            }
-                        }
-
-                        return (
-                            <div>
-                                <div> {explanation.explanation_data.label}</div>
-                                <div> {getCommunityWordCloud(explanation.explanation_data.data, onTreeClick, communityData.id)}</div>
-                            </div>);
-                    }
-                }
+            }
+            case EExplanationTypes.implicit_attributes_map: {
+                return getImplicitMapExplanation(explanation, setSelectedAttribute, communityData.id);
+            }
+            case EExplanationTypes.implicit_attributes_list: {
+                return "";
             }
             default: {
                 console.log("Unrecognized explanation type");
@@ -288,7 +227,90 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
     }
 }
 
+function getImplicitExplanation(explanation: ICommunityExplanation, artworks: IArtworkData[]) {
+    //Show the explanation data in an accordion with diferent artwork informations inside it
+    if (explanation.explanation_data.accordionMode) {
+        let accordionItems: React.ReactNode[] = [];
 
+        const keys = Object.keys(explanation.explanation_data.data)
+        //Check each iconclass family
+        for (let key in keys) {
+            let artworksPanels: React.ReactNode[] = [];
+
+            const data: string[] = explanation.explanation_data.data[keys[key]];
+            //Check each of the related artworks
+            for (let i = 0; i < data.length; i++) {
+                artworksPanels.push(<ArtworkPanel artworksData={artworks} id={data[i]} />);
+            }
+
+            accordionItems.push(
+                <div>
+                    {keys[key]}
+                    {artworksPanels}
+                </div>
+            );
+
+        }
+        return (
+            <div>
+                <div> {explanation.explanation_data.label} </div>
+                <Accordion items={accordionItems} tittles={keys} />
+            </div>);
+
+
+        //If its not an accordion explanation, try to do a wordCloud explanation
+    } else {
+
+        //If there are no values for a wordCloud, we just show the information in plain text rows. 
+        if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
+            let textData: React.ReactNode[] = [];
+
+            for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
+                textData.push(
+                    <li key={i} style={{ marginLeft: "2rem" }}>
+                        {explanation.explanation_data.data[i].value}
+                        <br />
+                    </li >);
+            }
+
+            return (
+                <div>
+                    <div> {explanation.explanation_data.label}</div>
+                    <div>
+                        {textData}
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <div> {explanation.explanation_data.label}</div>
+                    <div> {getWordClouds(explanation.explanation_data.data, true, true, true)}</div>
+                </div>);
+
+
+        }
+    }
+}
+
+function getImplicitMapExplanation(explanation: ICommunityExplanation, setSelectedAttribute: Function,
+    communityId: string) {
+
+    /*When an implicit attribute is selected, if possible, will select that attribute in the visualization.
+    this means all communities with the same attribute key and value will be highlighted*/
+    const onTreeClick = (value: string) => {
+        if (explanation.explanation_key) {
+            setSelectedAttribute({ key: explanation.explanation_key, value: value, type: explanation.explanation_type })
+        }
+    }
+
+    return (
+        <div>
+            <div> {explanation.explanation_data.label}</div>
+            <div> {getCommunityWordCloud(explanation.explanation_data.data, onTreeClick, communityId)}</div>
+        </div>);
+
+}
 
 /**
  * Returns a stacked bar graph of some data

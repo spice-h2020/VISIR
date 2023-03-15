@@ -105,7 +105,9 @@ export interface IStringNumberRelation {
 export enum EExplanationTypes {
     explicit_attributes,
     medoid,
-    implicit_attributes
+    implicit_attributes,
+    implicit_attributes_map,
+    implicit_attributes_list,
 }
 
 /**

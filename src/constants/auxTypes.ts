@@ -7,7 +7,7 @@
 import { Dispatch } from "react";
 import { DimAttribute } from "./nodes";
 //Local files
-import { ICommunityData, IUserData } from "./perspectivesTypes";
+import { ICommunityData, EExplanationTypes, IUserData } from "./perspectivesTypes";
 import { EButtonState } from "./viewOptions";
 
 /**
@@ -30,6 +30,7 @@ export interface IBoundingBox {
 export interface IAttribute {
     key: string,
     value: string,
+    type: EExplanationTypes
 }
 
 /**

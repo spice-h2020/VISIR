@@ -19,7 +19,7 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
+import { EExplanationTypes, ICommunityData, IUserData } from "../constants/perspectivesTypes";
 import { IBoundingBox, ISelectedObjectAction, ESelectedObjectAction, IStateFunctions, IAttribute } from "../constants/auxTypes";
 //Packages
 import { FitOptions, TimelineAnimationType } from "vis-network";
@@ -245,14 +245,32 @@ export default class EventsCtrl {
         let allIds: string[] = [];
         let communitiesToHighlight: ICommunityData[] = [];
 
+
         for (const comm of this.netCtrl.explicitCtrl.communitiesData) {
             for (const expl of comm.explanations) {
-                if (expl.explanation_key === selectedAttribute.key &&
-                    expl.maxValue === selectedAttribute.value) {
-                    allIds = allIds.concat(comm.users);
-                    communitiesToHighlight.push(comm);
-                    break;
+
+                if (expl.explanation_type === selectedAttribute.type) {
+                    switch (selectedAttribute.type) {
+                        case EExplanationTypes.implicit_attributes_map: {
+                            console.log(expl.explanation_key === selectedAttribute.key);
+                            console.log(expl.maxValue === selectedAttribute.value);
+
+                            if (expl.explanation_key === selectedAttribute.key &&
+                                expl.maxValue === selectedAttribute.value) {
+                                allIds = allIds.concat(comm.users);
+                                communitiesToHighlight.push(comm);
+                            }
+
+                            break;
+                        }
+                        case EExplanationTypes.implicit_attributes_list: {
+                            break;
+                        }
+                    }
+
+
                 }
+
             }
         }
         this.netCtrl.bbCtrl.highlightedComms = communitiesToHighlight;

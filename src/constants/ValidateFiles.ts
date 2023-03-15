@@ -4,7 +4,6 @@
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FORMERR } from "dns";
 import { EConfigToolTypes, IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndIdPair, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
@@ -216,7 +215,7 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
 
         return arg;
     } catch (e: any) {
-        throw Error(`Community data is not valid: ${e.message}`);
+        throw Error(`Community data ${arg.name ? `whose name is ${arg.name}` : "of unvalid name"} is not valid: ${e.message}`);
     }
 }
 function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
@@ -263,12 +262,22 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
             switch (arg.explanation_type) {
                 case types.EExplanationTypes.medoid: {
                     arg = isMedoidExplanationValid(arg);
-                    arg.order = 2;
+                    arg.order = 4;
                     break;
                 }
                 case types.EExplanationTypes.implicit_attributes: {
-                    arg = isImplicitAttributesExplanationValid(arg);
+                    arg = isImplicitAttributesExplanationValid(arg, false);
+                    arg.order = 3;
+                    break;
+                }
+                case types.EExplanationTypes.implicit_attributes_map: {
+                    arg = isImplicitAttributesExplanationValid(arg, true);
                     arg.order = 1;
+                    break;
+                }
+                case types.EExplanationTypes.implicit_attributes_list: {
+                    arg = isImplicitAttributesListExplanationValid(arg);
+                    arg.order = 2;
                     break;
                 }
             }
@@ -302,7 +311,7 @@ function isMedoidExplanationValid(arg: any): types.ICommunityExplanation {
     }
 }
 
-function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplanation {
+function isImplicitAttributesExplanationValid(arg: any, isMapExplanation: boolean): types.ICommunityExplanation {
     try {
         if (arg.explanation_data.label === undefined) {
             throw Error(`Label text is undefined`);
@@ -312,6 +321,19 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
                 arg.explanation_data.label = String(arg.explanation_data.label);
             } catch (e: any) {
                 throw Error(`Label text is not a string`);
+            }
+        }
+
+        if (isMapExplanation) {
+            if (arg.explanation_key === undefined) {
+                throw Error(`Explanation key is undefined`);
+            }
+            if (typeof (arg.explanation_key) !== "string") {
+                try {
+                    arg.explanation_key = String(arg.explanation_key);
+                } catch (e: any) {
+                    throw Error(`Explanation key is not a string`);
+                }
             }
         }
 
@@ -353,16 +375,81 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
                 }
             }
 
-            arg.maxValue = arg.maxValue.value;
+            if (isMapExplanation) {
+                arg.maxValue = arg.maxValue.value;
+            }
+
             arg.explanation_data.data = newData;
         }
 
         return arg;
     } catch (e: any) {
-        throw Error(`Community Implicit Attributes explanation is not valid: ${e.message}`);
+        throw Error(`Community Implicit Attributes explanation ${isMapExplanation ? "map" : ""} is not valid: ${e.message}`);
     }
 }
 
+function isImplicitAttributesListExplanationValid(arg: any): types.ICommunityExplanation {
+    try {
+        if (arg.explanation_key === undefined) {
+            throw Error(`Explanation key is undefined`);
+        }
+        if (typeof (arg.explanation_key) !== "string") {
+            try {
+                arg.explanation_key = String(arg.explanation_key);
+            } catch (e: any) {
+                throw Error(`Explanation key is not a string`);
+            }
+        }
+
+        if (arg.explanation_data.label === undefined) {
+            throw Error(`Label text is undefined`);
+        }
+        if (typeof (arg.explanation_data.label) !== "string") {
+            try {
+                arg.explanation_data.label = String(arg.explanation_data.label);
+            } catch (e: any) {
+                throw Error(`Label text is not a string`);
+            }
+        }
+
+        if (arg.explanation_data.data === undefined) {
+            throw Error(`Data attribute is undefined`);
+        }
+        if (typeof (arg.explanation_data.data) !== "object") {
+            throw Error(`Data attribute is not an object`);
+        }
+
+
+
+        for (let value of arg.explanation_data.data as { key: string, label: string }[]) {
+            if (value.key === undefined) {
+                throw Error(`Key of a value from the data Array is undefined`);
+            }
+            if (typeof (value.key) !== "string") {
+                try {
+                    value.key = String(value.key);
+                } catch (e: any) {
+                    throw Error(`Key (${value.key}) from the data Array is not a string`);
+                }
+            }
+
+            if (value.label === undefined) {
+                throw Error(`Label of a value with (${value.key}) as key from the data Array is undefined`);
+            }
+            if (typeof (value.label) !== "string") {
+                try {
+                    value.label = String(value.label);
+                } catch (e: any) {
+                    throw Error(`Value ${value.label} of a value with (${value.key}) as key from the data Array is not a string`);
+                }
+            }
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Community Implicit Attributes list explanation is not valid: ${e.message}`);
+    }
+}
 
 function isUserDataValid(arg: any): types.IUserData {
     try {
@@ -920,25 +1007,3 @@ function isAlgorithmValid(arg: any): IAlgorithm {
     }
 }
 //#endregion
-
-function fixedHex(number: any, length: any) {
-    var str = number.toString(16).toUpperCase();
-    while (str.length < length)
-        str = "0" + str;
-    return str;
-}
-
-/* Creates a unicode literal based on the string */
-function unicodeLiteral(str: any) {
-    var i;
-    var result = "";
-    for (i = 0; i < str.length; ++i) {
-        /* You should probably replace this by an isASCII test */
-        if (str.charCodeAt(i) > 126 || str.charCodeAt(i) < 32)
-            result += "\\u" + fixedHex(str.charCodeAt(i), 4);
-        else
-            result += str[i];
-    }
-
-    return result;
-}
