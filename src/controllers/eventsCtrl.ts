@@ -245,18 +245,15 @@ export default class EventsCtrl {
         let allIds: string[] = [];
         let communitiesToHighlight: ICommunityData[] = [];
 
+        console.log(selectedAttribute);
 
         for (const comm of this.netCtrl.explicitCtrl.communitiesData) {
             for (const expl of comm.explanations) {
 
-                if (expl.explanation_type === selectedAttribute.type) {
+                if (expl.explanation_type === selectedAttribute.type && expl.explanation_key === selectedAttribute.key) {
                     switch (selectedAttribute.type) {
                         case EExplanationTypes.implicit_attributes_map: {
-                            console.log(expl.explanation_key === selectedAttribute.key);
-                            console.log(expl.maxValue === selectedAttribute.value);
-
-                            if (expl.explanation_key === selectedAttribute.key &&
-                                expl.maxValue === selectedAttribute.value) {
+                            if (expl.maxValue === selectedAttribute.value) {
                                 allIds = allIds.concat(comm.users);
                                 communitiesToHighlight.push(comm);
                             }
@@ -264,6 +261,14 @@ export default class EventsCtrl {
                             break;
                         }
                         case EExplanationTypes.implicit_attributes_list: {
+
+                            for (const data of expl.explanation_data.data) {
+                                if (data.key === selectedAttribute.value) {
+                                    allIds = allIds.concat(comm.users);
+                                    communitiesToHighlight.push(comm);
+                                }
+                            }
+
                             break;
                         }
                     }

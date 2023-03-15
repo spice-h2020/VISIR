@@ -21,6 +21,7 @@ import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
 import { ArtworkPanel } from "../basicComponents/ArtworkPanel";
 import { Accordion } from "../basicComponents/Accordion";
 import { ITranslation } from "../managers/CTranslation";
+import { Button } from "../basicComponents/Button";
 
 interface DataTableProps {
     tittle?: String;
@@ -181,6 +182,14 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
 
     } else {
 
+        /*When an implicit attribute is selected, if possible, will select that attribute in the visualization.
+this means all communities with the same attribute key and value will be highlighted*/
+        const onAttributeSelected = (value: string) => {
+            if (explanation.explanation_key) {
+                setSelectedAttribute({ key: explanation.explanation_key, value: value, type: explanation.explanation_type })
+            }
+        }
+
         switch (explanation.explanation_type) {
             //Explicit attributes are simply shown in a stacked bar graph with colors representing its dimension
             case EExplanationTypes.explicit_attributes: {
@@ -208,15 +217,13 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
             }
             //Implicit attribute explanation are more specific and have diferent modes
             case EExplanationTypes.implicit_attributes: {
-
                 return getImplicitExplanation(explanation, artworks);
-
             }
             case EExplanationTypes.implicit_attributes_map: {
-                return getImplicitMapExplanation(explanation, setSelectedAttribute, communityData.id);
+                return getImplicitMapExplanation(explanation, onAttributeSelected, communityData.id);
             }
             case EExplanationTypes.implicit_attributes_list: {
-                return "";
+                return getImplicitListExplanation(explanation, onAttributeSelected);
             }
             default: {
                 console.log("Unrecognized explanation type");
@@ -293,23 +300,45 @@ function getImplicitExplanation(explanation: ICommunityExplanation, artworks: IA
     }
 }
 
-function getImplicitMapExplanation(explanation: ICommunityExplanation, setSelectedAttribute: Function,
+function getImplicitMapExplanation(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void,
     communityId: string) {
 
-    /*When an implicit attribute is selected, if possible, will select that attribute in the visualization.
-    this means all communities with the same attribute key and value will be highlighted*/
-    const onTreeClick = (value: string) => {
-        if (explanation.explanation_key) {
-            setSelectedAttribute({ key: explanation.explanation_key, value: value, type: explanation.explanation_type })
-        }
+    return (
+        <div>
+            <div> {`${explanation.explanation_data.label} : ${explanation.explanation_key}`}</div>
+            <div> {getCommunityWordCloud(explanation.explanation_data.data, onAttributeSelected, communityId)}</div>
+        </div>);
+}
+
+function getImplicitListExplanation(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void) {
+    const textData = [];
+
+    for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
+        textData.push(
+            <li key={i} style={{ marginLeft: "2rem", marginBottom: "0.2rem", display: "inline-flex" }}>
+                <div style={{ height: "auto", marginRight: "0.2rem" }}>
+                    <Button
+                        content={<div style={{ padding: "0px" }}> {explanation.explanation_data.data[i].key} </div>}
+                        onClick={() => {
+                            onAttributeSelected(explanation.explanation_data.data[i].key)
+                        }}
+                        extraClassName={"primary"}
+                    />
+                </div>
+
+                {`  ${explanation.explanation_data.data[i].label}`}
+                <br />
+            </li >);
     }
 
     return (
         <div>
-            <div> {explanation.explanation_data.label}</div>
-            <div> {getCommunityWordCloud(explanation.explanation_data.data, onTreeClick, communityId)}</div>
-        </div>);
-
+            <div> {`${explanation.explanation_data.label} : ${explanation.explanation_key}`}</div>
+            <div style={{ marginTop: "0.5rem" }}>
+                {textData}
+            </div>
+        </div>
+    )
 }
 
 /**
