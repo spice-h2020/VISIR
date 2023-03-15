@@ -17,21 +17,21 @@ const configuration = {
     //backgroundColor and border color of the bounding boxes.
     color: [
         {
-            color: "rgba(248, 212, 251, 0.6)", border: "rgba(242, 169, 249, 1)", highlight: "rgba(248, 212, 251, 0.8)", name: "Purple" //purple
+            color: "rgba(248, 212, 251, 0.6)", border: "rgba(242, 169, 249, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Purple" //purple
         }, {
-            color: "rgba(255, 255, 170, 0.6)", border: "rgba(255, 222, 120, 1)", highlight: "rgba(255, 255, 170, 0.8)", name: "Yellow" //Yellow
+            color: "rgba(255, 255, 170, 0.6)", border: "rgba(255, 222, 120, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Yellow" //Yellow
         }, {
-            color: "rgba(211, 245, 192, 0.6)", border: "rgba(169, 221, 140, 1)", highlight: "rgba(211, 245, 192, 0.8)", name: "Green" //Green
+            color: "rgba(211, 245, 192, 0.6)", border: "rgba(169, 221, 140, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Green" //Green
         }, {
-            color: "rgba(254, 212, 213, 0.6)", border: "rgba(252, 153, 156, 1)", highlight: "rgba(254, 212, 213, 0.8)", name: "Red" //Red
+            color: "rgba(254, 212, 213, 0.6)", border: "rgba(252, 153, 156, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Red" //Red
         }, {
-            color: "rgba(220, 235, 254, 0.6)", border: "rgba(168, 201, 248, 1)", highlight: "rgba(220, 235, 254, 0.8)", name: "Blue" //Blue
+            color: "rgba(220, 235, 254, 0.6)", border: "rgba(168, 201, 248, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Blue" //Blue
         }, {
-            color: "rgba(250, 220, 185, 0.6)", border: "rgba(250, 169, 73, 1)", highlight: "rgba(250, 220, 185, 0.8)", name: "Orange" //orange
+            color: "rgba(250, 220, 185, 0.6)", border: "rgba(250, 169, 73, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Orange" //orange
         }, {
-            color: "rgba(240, 240, 240, 0.6)", border: "rgba(230, 230, 230, 1)", highlight: "rgba(240, 240, 240, 0.8)", name: "White" //white
+            color: "rgba(240, 240, 240, 0.6)", border: "rgba(230, 230, 230, 1)", highlight: "rgba(10, 10, 10, 1)", name: "White" //white
         }, {
-            color: "rgba(10, 10, 10, 0.6)", border: "rgba(0, 0, 0, 1)", highlight: "rgba(10, 10, 10, 0.8)", name: "Black" //black
+            color: "rgba(10, 10, 10, 0.6)", border: "rgba(0, 0, 0, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Black" //black
         }
     ],
     inexistentColor: {
@@ -106,14 +106,15 @@ export default class BoxesController {
 
                 let borderColor = bb.color!.border;
                 let backgroundColor = bb.color!.color;
+                let borderWidth = configuration.boderWidth;
 
                 if (this.highlightedComms.includes(this.comData[i])) {
-                    backgroundColor = bb.color!.highlight;
+                    borderWidth *= 2;
                     borderColor = bb.color!.highlight;
                 }
 
                 //Draw Border
-                ctx.lineWidth = configuration.boderWidth;
+                ctx.lineWidth = borderWidth;
                 ctx.strokeStyle = borderColor;
                 ctx.strokeRect(bb.left, bb.top, bb.right - bb.left, bb.bottom - bb.top);
 
