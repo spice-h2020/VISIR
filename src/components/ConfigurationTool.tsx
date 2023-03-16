@@ -75,9 +75,7 @@ interface ConfToolProps {
 }
 
 const emptyAlgorithm: config.IAlgorithm = { name: "undefined Algorithm", params: [], default: true }
-const emptyOption: config.ISimilarityFunction = {
-    name: "undefined option", params: [], on_attribute: { att_name: "none", att_type: "string", }, interaction_object: { att_name: "none", att_type: "string", }
-}
+
 /**
  * UI component that executes a function when clicked.
  */
@@ -116,7 +114,7 @@ export const ConfigurationTool = ({
     const [rightSideSentence, setRightSideSentence] = useState<string>("");
 
     //Middle select option state
-    const [selectedOption, setSelectedOption] = useState<config.ISimilarityFunction>(emptyOption);
+    const [selectedOption, setSelectedOption] = useState<config.ISimilarityFunction | undefined>(undefined);
     //Checkboxes state
     const [citizenAttr, setCitizenAttr] = useState<Map<string, boolean>>(new Map<string, boolean>());
     const [artworksAttr, setArtworksAttr] = useState<Map<string, boolean>>(new Map<string, boolean>());
@@ -138,11 +136,13 @@ export const ConfigurationTool = ({
                 if (newSeed !== undefined) {
                     //validate and init all tool's values with the new seed data
                     if (newSeed.interaction_similarity_functions.length === 0) {
-                        alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
+                        console.log("Configuration Tool initial configuration doesnt contain an interaction similarity function");
+                        setSelectedOption(undefined);
                     } else {
                         setSeed(newSeed)
                         setSelectedOption(newSeed.interaction_similarity_functions[0]);
                     }
+                    setSeed(newSeed)
 
                     try {
                         setArtworksAttrDrop(config.initArtworksAttrDrop(newSeed.artwork_attributes));
@@ -299,15 +299,8 @@ export const ConfigurationTool = ({
                     borderTop: "2px solid red"
                 }}>
                     <div>
-                        <DropMenu
-                            key={0}
-                            items={getSimilarityDropdown(similarity1, setSimilarity1,
-                                similarity1AvailableValues, translation)}
-                            content={ESimilarity[similarity1]}
-                            menuDirection={EDropMenuDirection.down}
-                            extraClassButton={"transparent"}
-                            postIcon={<div className="down-arrow" />}
-                        />
+                        {getSimilarityDropdown(similarity1, setSimilarity1,
+                            similarity1AvailableValues, translation, selectedOption, true)}
                     </div>
                     <div>
                         <React.Fragment key={1}>
@@ -315,18 +308,11 @@ export const ConfigurationTool = ({
                         </React.Fragment>
                     </div>
                     <div>
-                        <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {midSentence} </span>
+                        <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {selectedOption !== undefined ? midSentence : ""} </span>
                     </div>
                     <div>
-                        <DropMenu
-                            key={3}
-                            items={getSimilarityDropdown(similarity2, setSimilarity2,
-                                similarity2AvailableValues, translation)}
-                            content={ESimilarity[similarity2]}
-                            menuDirection={EDropMenuDirection.down}
-                            extraClassButton={"transparent"}
-                            postIcon={<div className="down-arrow" />}
-                        />
+                        {getSimilarityDropdown(similarity2, setSimilarity2,
+                            similarity2AvailableValues, translation)}
                     </div>
                     <div style={{ display: "inline-flex" }}>
                         <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {lastSentence} </span>
@@ -438,9 +424,15 @@ export const ConfigurationTool = ({
  * @returns the created dropdown
  */
 function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
-    similarityAvailableValues: Array<ESimilarity>, translation: ITranslation | undefined): React.ReactNode[] {
+    similarityAvailableValues: Array<ESimilarity>, translation: ITranslation | undefined, selectedOption?: config.ISimilarityFunction | undefined,
+    isFirstDropdown: boolean = false
+): React.ReactNode {
+
     const buttons: React.ReactNode[] = [];
 
+    if (isFirstDropdown && selectedOption === undefined) {
+        return "";
+    }
     for (let i = 0; i < similarityAvailableValues.length; i++) {
 
         const btnContent = translation?.perspectiveBuider.similarityValues[
@@ -461,7 +453,15 @@ function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
             />
         )
     }
-    return buttons;
+    return (
+        <DropMenu
+            key={0}
+            items={buttons}
+            content={ESimilarity[sim]}
+            menuDirection={EDropMenuDirection.down}
+            extraClassButton={"transparent"}
+            postIcon={<div className="down-arrow" />}
+        />)
 }
 
 /**
@@ -702,8 +702,12 @@ function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.
  * @param setSelectedOption update the selected option
  * @returns 
  */
-function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: IConfigurationSeed | undefined,
+function getOptionSelector(selectedOption: config.ISimilarityFunction | undefined, seed: IConfigurationSeed | undefined,
     setSelectedOption: Function): React.ReactNode {
+
+    if (selectedOption === undefined) {
+        return "";
+    }
 
     if (!seed) {
         return (

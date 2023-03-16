@@ -167,7 +167,7 @@ export function initSimilarity2(type: EConfigToolTypes, setSimilarity: Function)
 
 export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: Map<string, boolean>,
     artworksAttr: Map<string, boolean>, artworksDropdownAttr: Map<string, boolean[]>,
-    selectedOption: ISimilarityFunction, similarity1: ESimilarity, similarity2: ESimilarity, perspectiveName: string,
+    selectedOption: ISimilarityFunction | undefined, similarity1: ESimilarity, similarity2: ESimilarity, perspectiveName: string,
     algorithm: IAlgorithm, algWeight: number, selectedArtwork: INameAndIdPair | undefined, artworksWeight: number) {
 
     let newConfig: any = {
@@ -177,7 +177,7 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
     };
 
     fillUserAttributes(citizenAttr, newConfig);
-    fillInteractionSimilarityFunctions(selectedOption, similarity1, seed, newConfig);
+    fillInteractionSimilarityFunctions(selectedOption, similarity1, newConfig);
     fillSimilarityFunctions(similarity2, newConfig, seed, artworksAttr, artworksDropdownAttr, selectedArtwork);
 
     let configName = perspectiveName.replaceAll(" ", "_");
@@ -201,7 +201,7 @@ export function createConfigurationFile(seed: IConfigurationSeed, citizenAttr: M
 }
 
 function getDefaultName(similarity1: ESimilarity, configName: string, newConfig: any, seed: IConfigurationSeed,
-    selectedOption: ISimilarityFunction, similarity2: ESimilarity, artworksAttr: Map<string, boolean>,
+    selectedOption: ISimilarityFunction | undefined, similarity2: ESimilarity, artworksAttr: Map<string, boolean>,
     selectedArtworkName: string | undefined) {
 
     switch (similarity1) {
@@ -219,7 +219,7 @@ function getDefaultName(similarity1: ESimilarity, configName: string, newConfig:
         }
     }
 
-    if (newConfig.interaction_similarity_functions.length !== 0)
+    if (newConfig.interaction_similarity_functions.length !== 0 && selectedOption !== undefined)
         configName += selectedOption.on_attribute.att_name;
 
     switch (similarity2) {
@@ -367,34 +367,32 @@ function fillSimilarityFunctions(similarity2: ESimilarity, newConfig: any, seed:
     }
 }
 
-function fillInteractionSimilarityFunctions(selectedOption: ISimilarityFunction, similarity1: ESimilarity, seed: IConfigurationSeed, newConfig: any) {
+function fillInteractionSimilarityFunctions(selectedOption: ISimilarityFunction | undefined, similarity1: ESimilarity, newConfig: any) {
+    let obj = { sim_function: {} as any };
+
+    if (selectedOption === undefined) {
+        obj.sim_function = [];
+    } else {
+        obj.sim_function = JSON.parse(JSON.stringify(selectedOption));
+    }
+
     switch (similarity1) {
         case ESimilarity.same: {
-            let obj = { sim_function: {} as any };
-            obj.sim_function = JSON.parse(JSON.stringify(selectedOption));
-
             obj.sim_function.name = "EqualSimilarityDAO";
 
-            newConfig.interaction_similarity_functions.push(obj);
             break;
         }
         case ESimilarity.similar: {
-            let obj = { sim_function: {} as any };
-            obj.sim_function = JSON.parse(JSON.stringify(selectedOption));
-
-            newConfig.interaction_similarity_functions.push(obj);
 
             break;
         }
         case ESimilarity.dissimilar: {
-            let obj = { sim_function: {} as any };
-            obj.sim_function = JSON.parse(JSON.stringify(selectedOption));
             obj.sim_function.dissimilar = true;
-            newConfig.interaction_similarity_functions.push(obj);
-
             break;
         }
     }
+
+    newConfig.interaction_similarity_functions.push(obj);
 
 }
 

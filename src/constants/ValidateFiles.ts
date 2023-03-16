@@ -764,7 +764,7 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         }
 
         if (arg.interaction_similarity_functions === undefined) {
-            throw Error(`Interactions Similarity Functions are undefined`);
+            arg.interaction_similarity_functions = [];
         }
 
         if (typeof (arg.interaction_similarity_functions) !== "object") {
@@ -795,6 +795,7 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         if (typeof (arg.HetchStructure) !== "boolean") {
             throw Error(`HetchStructure is not a boolean`);
         }
+
 
         if (arg.HetchStructure) {
             arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.HECTH;
