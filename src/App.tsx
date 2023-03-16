@@ -31,7 +31,7 @@ import { ConfigurationTool } from './components/ConfigurationTool';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AllVisirOptions } from './components/AllVisirOptions';
-import { SavePerspective } from './components/savePerspectives';
+import { ManagePerspectives } from './components/ManagePerspectives';
 import { CTranslation, ITranslation } from './managers/CTranslation';
 
 
@@ -407,7 +407,7 @@ export const App = ({
         translation={currentLanguage}
       />
 
-      <SavePerspective
+      <ManagePerspectives
         key={3}
         isActive={isSavePerspectiveActive}
         setIsActive={setIsSavePerspectiveActive}

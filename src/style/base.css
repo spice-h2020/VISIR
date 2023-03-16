@@ -193,7 +193,11 @@ body {
 }
 
 .maximum-width {
-    width: 100%;
+    width: 100% !important;
+}
+
+.vw50-width {
+    width: 60vw !important;
 }
 
 .btn-select-perspective {
@@ -220,11 +224,13 @@ body {
 }
 
 .primary {
-    background-color: var(--primaryButtonColor);
+    background-color: var(--primaryButtonColor) !important;
+    color: var(--buttonTextColor) !important;
 }
 
 .primary.active {
-    background-color: #ff605d;
+    background-color: #ff605d !important;
+    color: var(--buttonTextColor) !important;
 }
 
 .secondary {

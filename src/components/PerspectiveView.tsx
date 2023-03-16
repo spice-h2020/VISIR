@@ -1,9 +1,9 @@
 /**
- * @fileoverview This file creates a network controller based on the perspectiveData that has the responsability of 
- * creating the vis.js network object, creates a dataTable component updating it with the necesary information and 
- * reacts to diferent changes.
- * When some of the viewOptions attribute changes, the network will be updated accordingly.
- * When the selected object changes, the dataTable and the network will be updated.
+ * @fileoverview This files creates the perspective visualization.
+ * First it creates the network controller that holds all the logic and configuration of the perspective.
+ * Then it will create a vis.js network to represent the perspective.
+ * Additionaly, a dataTable will be created at a side of the perspective to show extra information based on the selected
+ * object
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -17,7 +17,7 @@ import React, { useEffect, useState, useRef } from "react";
 import NetworkController from '../controllers/networkController';
 import NodeDimensionStrategy from '../managers/nodeDimensionStrat';
 import { DataTable } from './DataColumn';
-import { CTranslation, ITranslation } from '../managers/CTranslation';
+import { ITranslation } from '../managers/CTranslation';
 
 const networkContainer: React.CSSProperties = {
     margin: "0px 1.5% 15px 1.5%",
@@ -46,9 +46,7 @@ interface PerspectiveViewProps {
     perspectiveState: EPerspectiveVisState;
     //If true, mirror the dataTable and vis.js network position
     mirror?: boolean;
-    /**
-     * If its the unique active perspective in the app
-     */
+    //If its the unique active perspective in the app 
     unique: boolean;
 
     translation: ITranslation | undefined;
@@ -77,7 +75,9 @@ export const PerspectiveView = ({
 
     const [netManager, setNetManager] = useState<NetworkController | undefined>();
 
+    //Community currently selected in this perspective. In the vent of the selected object being an user, the community of the user will be selected
     const [selectedCommunity, setSelectedCommunity] = useState<ICommunityData>();
+    //User/node currently selected in this perspective.
     const [selectedNode, setSelectedNode] = useState<IUserData | undefined>();
 
     const visJsRef = useRef<HTMLDivElement>(null);
@@ -105,19 +105,22 @@ export const PerspectiveView = ({
         //Check if something has been clicked
         if (netManager !== undefined) {
             if (selectedObject?.obj !== undefined) {
-                //If a node has been clicked.
+                //Check if the clicked something is a node/user.
                 if (selectedObject.obj.explanations === undefined && selectedObject.obj.id !== undefined) {
 
                     const nodeData: IUserData = netManager.nodes.get(selectedObject.obj.id) as IUserData;
 
-                    //If the node exist in this network
+                    //If the node is from this network, highlight it and show its data in the dataTable
                     if (nodeData !== undefined && nodeData !== null) {
-                        //If its a medoid node
+                        /*If its a medoid node, it's id may exist in this network, but it may still be from another perspective, 
+                        thats why we need to compare now if the sourceID of the selected object equals this network id*/
                         if (nodeData.isMedoid) {
+
                             if (selectedObject.sourceID === netManager.id) {
                                 netManager.eventsCtrl.nodeClicked(selectedObject.obj.id);
                                 setSelectedNode(nodeData as IUserData);
                                 setSelectedCommunity(netManager.bbCtrl.comData[nodeData.community_number]);
+
                             } else {
                                 netManager.eventsCtrl.nothingClicked();
                                 setSelectedNode(undefined);
@@ -236,6 +239,7 @@ export const PerspectiveView = ({
  * They will update the network in diferent ways depending on the option
  * @param viewOptions object that will trigger the useEffects.
  * @param netMgr will execute the changes once useEffects are triggered
+ * @param setSelectedObject Function used to clear the dataTables
  */
 function ViewOptionsUseEffect(viewOptions: ViewOptions, netMgr: NetworkController | undefined,
     setSelectedObject: Function, focusedId: string | undefined) {

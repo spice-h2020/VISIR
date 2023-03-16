@@ -1,6 +1,12 @@
 /**
- * @fileoverview This file creates a panel with the data of a user and its interactions.
- * If no user is provided, the panel will be empty.
+ * @fileoverview This file creates a panel that shows diferent information about an user. If no user is provided, the panel will be empty.
+ * - First it shows the explicit community values of the user.
+ * - If showLabels is active, it will show the user's label.
+ * - All user's implicit community values will be shown if they exist.
+ * - Additionaly,  the user's interactions will be shown in two diferent accordions. One with the interactions related to
+ * the user community, the ones that were used in the clustering. And another accordion with the rest of the interactions, it 
+ * may be empty.
+ * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -12,7 +18,7 @@ import React from "react";
 //Local files
 import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
-import { CTranslation, ITranslation } from "../managers/CTranslation";
+import { ITranslation } from "../managers/CTranslation";
 import { getWordClouds } from "./DataColumn";
 
 const sectionTittleStyle: React.CSSProperties = {
@@ -66,6 +72,8 @@ export const NodePanel = ({
             content.push(
                 <p key={2 + i} style={frenchIndent}> <strong> {key} </strong> &nbsp; {value} </p >);
         }
+
+
         content.push(<div key={-2}> {getImplicitCommunityValues(node?.implicit_community)} </div>)
 
         content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, translation)} </div>);
@@ -86,7 +94,8 @@ export const NodePanel = ({
 };
 
 /**
- * Returns an accordion that includes all the node's interactions.
+ * Returns two diferent accordions that includes all the node's interactions. One accordion has the community related 
+ * interactions, the other has the rest of the user interactions
  * @param node source node
  * @param artworks all artworks' data
  * @returns a react component with the node's interactions accordion.
@@ -99,7 +108,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
         if (node.community_interactions !== undefined) {
 
             const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
-                getInteractionsPanel(node.community_interactions, artworks, true);
+                getInteractionsPanel(node.community_interactions, artworks);
 
             if (interactionPanels.length > 0) {
                 content.push(
@@ -117,7 +126,7 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
 
         if (node.no_community_interactions !== undefined) {
             const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
-                getInteractionsPanel(node.no_community_interactions, artworks, false);
+                getInteractionsPanel(node.no_community_interactions, artworks);
 
             if (interactionPanels.length > 0) {
                 content.push(
@@ -138,7 +147,13 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
     return content;
 }
 
-function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkData[], isCommunity: boolean) {
+/**
+ * Creates and returns a fully created accordion with the user interactions
+ * @param interactions interactions to include in the accordion
+ * @param artworks dataBase with all artworks to show its data in the panels
+ * @returns 
+ */
+function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkData[]) {
     const tittles: string[] = new Array<string>();
     const interactionPanels: React.ReactNode[] = new Array<React.ReactNode>();
 
@@ -159,6 +174,11 @@ function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkDa
     return { interactionPanels, tittles };
 }
 
+/**
+ * Returns a list with the user's implicit values
+ * @param implicit_communities user implicit values
+ * @returns 
+ */
 function getImplicitCommunityValues(implicit_communities: anyProperty): React.ReactNode {
 
     const keys = Object.keys(implicit_communities);

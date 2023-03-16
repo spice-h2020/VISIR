@@ -1,20 +1,20 @@
 /**
- * @fileoverview This file creates a dropdown that show/hides the legend of the app. This also creates the content.
- * The legend allows the user to understand the relations between the node's dimensions and the value of 
- * its explicit communities.
- * The user can also toggle any Legend value to hide all node's with that value.
+ * @fileoverview This file creates a dropdown that show/hides the legend of the app.
+ * The legend allows the user to understand the relations between the node's dimensions (color and shape) and the value of 
+ * it's explicit communities.
+ * The user can also toggle any Legend value to hide all nodes with that value.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { DimAttribute, Dimensions, nodeConst } from '../constants/nodes';
 import { EButtonState } from '../constants/viewOptions';
+import { ILegendData } from '../constants/auxTypes';
 //Packages
 import React from "react";
 //Local files
 import { Button } from '../basicComponents/Button';
 import { ColorStain } from '../basicComponents/ColorStain';
-import { ILegendData } from '../constants/auxTypes';
 import { DropMenu, EDropMenuDirection } from '../basicComponents/DropMenu';
 import { ShapeForm } from '../basicComponents/ShapeForm';
 import { ITranslation } from '../managers/CTranslation';
@@ -62,7 +62,7 @@ export const LegendComponent = ({
     if (legendData !== undefined && legendData.dims !== undefined && legendData.dims.length > 0) {
 
         const legendRows: React.ReactNode[] = getLegendButtons(legendData.dims, legendConf, onLegendClick);
-        const anonRows: React.ReactNode = getAnonButtons(legendData.anonGroup, legendData.anonymous, legendConf,
+        const anonRows: React.ReactNode = getAnonButtons(legendData.anonymous, legendConf,
             onLegendClick, translation);
 
         const legendContent =
@@ -101,6 +101,7 @@ export const LegendComponent = ({
 
     }
 };
+
 
 /**
  * Get all the buttons that creates the legend tooltip.
@@ -141,7 +142,7 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
                         }}
                         postIcon={
                             <div style={{ paddingLeft: "5px" }}>
-                                {getIcon(valueText, legendData[i].dimension, j)}
+                                {getIcon(legendData[i].dimension, j)}
                             </div>}
                     />
                 );
@@ -162,36 +163,45 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
 }
 
 /**
- * Returns the content of a legend button based on data from a community and its related values and dimensions.
- * @param value value of the attribute of this row.
- * @param dim dimension of the attribute of this row.
- * @param index index of the community.
+ * Returns the icon of a legend button based on its dimension and the order in the dimension.
+ * @param dim dimension of the attribute.
+ * @param order order in the dimension.
  * @returns a react component.
  */
-const getIcon = (value: string, dim: Dimensions, index: number): React.ReactNode => {
+const getIcon = (dim: Dimensions, order: number): React.ReactNode => {
     switch (dim) {
         case Dimensions.Color:
             return (
                 <ColorStain
-                    color={nodeConst.nodeDimensions.getColor(index)}
+                    color={nodeConst.nodeDimensions.getColor(order)}
                 />)
         case Dimensions.Shape:
             return (
                 <ShapeForm
                     scale={1}
-                    shape={nodeConst.nodeDimensions.getShape(index).name}
+                    shape={nodeConst.nodeDimensions.getShape(order).name}
                 />
             )
+        //This dimension is currently unused
         case Dimensions.Border:
             return (
-                <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(index), borderWidth: "4px" }}></div>
+                <div className="col-3 box" style={{ borderColor: nodeConst.nodeDimensions.getBorder(order), borderWidth: "4px" }}></div>
             )
         default:
             return <div> ERROR WHILE CREATING THIS ROW CONTENT</div>
     }
 }
 
-function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map<string, Map<string
+/**
+ * Some users may not have any explicit community values. Those users are anonymous and have a special place in the legend
+ * only if they exist. This functionc reates the buttons for these type of users
+ * @param anonymous if anonymous users exist
+ * @param legendConf configuration of the legend with visibility state of anonymous nodes
+ * @param onClick 
+ * @param translation 
+ * @returns 
+ */
+function getAnonButtons(anonymous: boolean, legendConf: Map<string, Map<string
     , boolean>>, onClick: Function, translation: ITranslation | undefined): React.ReactNode {
 
     let output: React.ReactNode = undefined;
@@ -199,6 +209,7 @@ function getAnonButtons(anonGroups: boolean, anonymous: boolean, legendConf: Map
     if (anonymous) {
         let buttonState: EButtonState = EButtonState.unactive;
 
+        //Creates the anonymous map if it doesnt exist
         let valueMap = legendConf.get(`${nodeConst.anonymousGroupKey}User`);
         if (valueMap === undefined) {
             legendConf.set(`${nodeConst.anonymousGroupKey}User`, new Map<string, boolean>());

@@ -1,18 +1,19 @@
 /**
- * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
- * The button can also be disabled to negate any interaction with it, or change its colors with the state : ButtonState
- * property.
- * If auto toggle parameter is true, the button will automaticaly change its state between active and 
- * unactive when clicked.
+ * @fileoverview This file creates a panel with the list of available perspectives.
+ * - The user can pick whatever perspectives they want to process them.
+ * - Once some perspectives has been selected, the user can download all of them to save them for later use.
+ * 
+ * - There is a checkbox/toggle to easily select all perspectives or deselect all
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
-
-//Packages
-import React, { useState } from "react";
-import { Button } from "../basicComponents/Button";
+//Constants
 import { PerspectiveId } from "../constants/perspectivesTypes";
 import { EButtonState } from "../constants/viewOptions";
+//Packages
+import React, { useState } from "react";
+//Local files
+import { Button } from "../basicComponents/Button";
 import { ITranslation } from "../managers/CTranslation";
 import RequestManager from "../managers/requestManager";
 
@@ -44,7 +45,7 @@ const topButtonsStyle: React.CSSProperties = {
     justifyContent: "space-between",
 }
 
-interface SavePerspectivesProps {
+interface ManagePerspectivesProps {
     isActive: boolean,
     setIsActive: Function,
     allPerspectivesIds: PerspectiveId[],
@@ -54,13 +55,13 @@ interface SavePerspectivesProps {
 /**
  * UI component that executes a function when clicked.
  */
-export const SavePerspective = ({
+export const ManagePerspectives = ({
     isActive,
     setIsActive,
     allPerspectivesIds,
     requestManager,
     translation
-}: SavePerspectivesProps) => {
+}: ManagePerspectivesProps) => {
 
     const [states, setStates] = useState<Map<string, boolean>>(init(allPerspectivesIds));
     const [allToggle, setAllToggle] = useState<boolean>(false);
