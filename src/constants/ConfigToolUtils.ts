@@ -343,14 +343,22 @@ function fillSimilarityFunctions(similarity2: ESimilarity, newConfig: any, seed:
                 const name = value.on_attribute.att_name;
 
                 if (artworksAttr.get(name)) {
-                    newConfig.similarity_functions.push({
-                        sim_function: {
-                            dissimilar: true,
-                            //name: value.name,
-                            on_attribute: value.on_attribute,
-                            //params: value.params,
+
+                    const sim_functions = artworksDropdownAttr.get(name);
+                    if (sim_functions) {
+                        for (let i = 0; i < value.sim_function.length; i++) {
+                            if (sim_functions[i]) {
+                                newConfig.similarity_functions.push({
+                                    sim_function: {
+                                        dissimilar: true,
+                                        name: value.sim_function[i].name,
+                                        on_attribute: value.on_attribute,
+                                        params: value.sim_function[i].params,
+                                    }
+                                });
+                            }
                         }
-                    });
+                    }
                 }
             });
 

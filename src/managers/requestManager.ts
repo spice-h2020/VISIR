@@ -315,6 +315,8 @@ export default class RequestManager {
                     window.alert(err);
                     callback();
                 });
+        } else {
+            this.setLoadingState({ isActive: false });
         }
     }
 
