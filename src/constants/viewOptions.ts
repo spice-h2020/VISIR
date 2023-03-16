@@ -1,8 +1,9 @@
 /**
- * @fileoverview This file contains enums and a class related with the visualization options and 
- * has the initial options of the options dropdown
+ * @fileoverview This file contains data structures related with the visualization options and 
+ * has the initial options of the visualization
  * @author Marco Expósito Pérez
  */
+
 /**
  * Available "all perspective file/details" sources
  */
@@ -103,7 +104,8 @@ export const initialOptions = {
     nRelevantCommArtworks: 4,
 }
 /**
- * Class that contains the value of all visualization options that will change how the user see the networks
+ * Class that contains the value of all visualization options that will change how the user see the networks and automaticaly
+ * initialize all of them
  */
 export class ViewOptions {
 

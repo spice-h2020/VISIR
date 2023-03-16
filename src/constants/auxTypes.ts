@@ -27,6 +27,9 @@ export interface IBoundingBox {
     }
 }
 
+/**
+ * Interface of an implicit attribute of a community
+ */
 export interface IAttribute {
     key: string,
     value: string,
@@ -34,7 +37,7 @@ export interface IAttribute {
 }
 
 /**
- * Legend data source
+ * Legend data source with the information to know what value has X dimension
  */
 export interface ILegendData {
     dims: DimAttribute[],
@@ -70,12 +73,14 @@ export interface ISelectedObject {
     sourceID?: string;
 }
 
+
+
+//#region Reducer types/function
+
 export interface ILegendDataAction {
     type: "dims" | "anon" | "anonGroup" | "reset";
     newData: boolean | DimAttribute[];
 }
-
-//#region Reducer types/function
 
 export function legendDataReducer(currentState: ILegendData, action: ILegendDataAction) {
     switch (action.type) {

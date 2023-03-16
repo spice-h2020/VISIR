@@ -1,5 +1,5 @@
 /**
- * @fileoverview This file contains diferent interfaces and classes related with the perspectives.
+ * @fileoverview This file contains diferent interfaces and classes directly related with the perspectives and its validation.
  * @author Marco Expósito Pérez
  */
 import { Dimensions } from "./nodes";

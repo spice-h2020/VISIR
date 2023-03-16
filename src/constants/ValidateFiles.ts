@@ -1,13 +1,11 @@
 /**
- * @fileoverview This file contains 2 functions to validate Files already parsed to JSON. One function for a file with All perspectives details, 
- * and one for a file with the data of a single perspective.
+ * @fileoverview This file has diferent functions to validate everything returned by the CM.
  * @author Marco Expósito Pérez
  */
 //Constants
 import { EConfigToolTypes, IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndIdPair, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
-import { ECommunityType } from "./perspectivesTypes";
 
 //#region All perspectives JSON
 
@@ -196,7 +194,7 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
         arg.explanations.sort((v1: types.ICommunityExplanation, v2: types.ICommunityExplanation) => v1.order - v2.order)
 
         if (arg["community-type"] === undefined) {
-            arg.type = ECommunityType.inexistent;
+            arg.type = types.ECommunityType.inexistent;
 
         } else {
             if (typeof (arg["community-type"]) !== "string") {
@@ -207,9 +205,9 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
                 }
             }
 
-            arg.type = ECommunityType[arg["community-type"]];
+            arg.type = types.ECommunityType[arg["community-type"]];
             if (arg.type === undefined) {
-                arg.type = ECommunityType.implicit;
+                arg.type = types.ECommunityType.implicit;
             }
         }
 

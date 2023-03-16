@@ -1,11 +1,12 @@
 /**
- * @fileoverview This File contains diferent interfaces used to validate a configuration tool seed and to create the
- * configuration json sent to the CM.
+ * @fileoverview This File contains diferent data structures and cuntions to validate a configuration tool seed, to create the
+ * initial configuration of the config tool. Additionaly creates the json that the CM will acept to create the new perspective 
  * @author Marco Expósito Pérez
  */
 
 import { ITranslation } from "../managers/CTranslation";
 
+/**Available similarity values */
 export enum ESimilarity {
     same,
     similar,
@@ -60,6 +61,8 @@ export enum EConfigToolTypes {
     DMH,
 }
 
+/*Available similarity options that changes depending on the configTool. 
+Currently all configurations use the same format, but it could change*/
 export const similarity1Map = new Map<EConfigToolTypes, Array<ESimilarity>>();
 similarity1Map.set(EConfigToolTypes.GENERIC, [ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
 similarity1Map.set(EConfigToolTypes.HECTH, [ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
