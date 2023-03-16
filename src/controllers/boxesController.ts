@@ -1,5 +1,5 @@
 /**
- * @fileoverview This class controls where bounding boxes should be drawn and when a click hits a bounding box.
+ * @fileoverview This class controls where and how a bounding box should be drawn and when the user's click hits a bounding box.
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -14,7 +14,7 @@ const configuration = {
     padding: 15,
     //width of the border of the bounding boxes.
     boderWidth: 4,
-    //backgroundColor and border color of the bounding boxes.
+    //backgroundColor and border color of the bounding boxes. Highlight its used to override the border color when a community must be highlighted
     color: [
         {
             color: "rgba(248, 212, 251, 0.6)", border: "rgba(242, 169, 249, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Purple" //purple
@@ -44,6 +44,9 @@ export default class BoxesController {
      * Data of all communities of the network
      */
     comData: ICommunityData[]
+    /**
+     * Communities that must be highlighted next time bounding boxes are drawn
+     */
     highlightedComms: ICommunityData[]
 
     /**

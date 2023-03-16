@@ -14,6 +14,8 @@
  *  A community of other network -> Highlight all nodes that are also inside this network and zoom to them.
  *  Nothing is selected -> Deselect all edges, nodes and zoom out to fit all the network.
  * 
+ *  A community's attribute has been selected -> Highlight all communities that are related to the selected attribute
+ * 
  * @package Requires vis network package.
  * @package Requires react package.
  * @author Marco Expósito Pérez
@@ -241,16 +243,22 @@ export default class EventsCtrl {
         this.zoomToNodes([]);
     }
 
+    /**
+     * Function executed when a community attribute in the dataColumn has been clicked/selected
+     * @param selectedAttribute the selected attribute
+     */
     selectAttribute(selectedAttribute: IAttribute) {
         let allIds: string[] = [];
         let communitiesToHighlight: ICommunityData[] = [];
 
-        console.log(selectedAttribute);
 
         for (const comm of this.netCtrl.explicitCtrl.communitiesData) {
             for (const expl of comm.explanations) {
 
                 if (expl.explanation_type === selectedAttribute.type && expl.explanation_key === selectedAttribute.key) {
+                    /*Depending on the type of the implicit attribute, we compare only the maximum value of the explanation
+                    attributes, or we check if any of the values contains the selected attribute
+                    */
                     switch (selectedAttribute.type) {
                         case EExplanationTypes.implicit_attributes_map: {
                             if (expl.maxValue === selectedAttribute.value) {
@@ -272,12 +280,10 @@ export default class EventsCtrl {
                             break;
                         }
                     }
-
-
                 }
-
             }
         }
+
         this.netCtrl.bbCtrl.highlightedComms = communitiesToHighlight;
         this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, allIds, [], undefined, []);
 

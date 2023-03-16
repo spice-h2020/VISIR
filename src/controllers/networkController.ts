@@ -1,6 +1,6 @@
 /**
- * @fileoverview This class creates the controller of this network. 
- * Creating all other controllers, setting up vis.js's options and parsing the initial data.
+ * @fileoverview This class creates the controller of this network that initialize and centralize all controllers and 
+ * creates the vis.js network
  * @package Requires vis network package.
  * @package Requires vis data package.
  * @author Marco Expósito Pérez
@@ -16,13 +16,13 @@ import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network"
 import { DataSet } from "vis-data";
 //Local Files
 import BoxesController from "./boxesController";
-import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 import NodeLocation from "./nodeLocation";
 import NodeExplicitComms from "./nodeExplicitComms";
 import NodeVisualsCtrl from "./nodeVisualsCtrl";
 import EdgeVisualsCtrl from "./edgeVisualsCtrl";
 import EventsCtrl from "./eventsCtrl";
-import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
+
+import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 
 export default class NetworkController {
     //Options of the vis.js network
@@ -64,7 +64,6 @@ export default class NetworkController {
      */
     constructor(perspectiveData: IPerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: IStateFunctions,
         dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string, unique: boolean) {
-
 
         this.isReady = false;
 
@@ -108,6 +107,7 @@ export default class NetworkController {
             this.explicitCtrl.parseArtworksRelatedToTheCommunity(user);
             nodeLocation.updateNodeGroup(user);
         });
+
         this.explicitCtrl.sortExplicitData();
         this.explicitCtrl.makeArtworksUnique(viewOptions.nRelevantCommArtworks);
 

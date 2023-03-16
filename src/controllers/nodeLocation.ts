@@ -3,6 +3,11 @@
  * in a circular pattern.
  * It also separates each node in a group to create another circular pattern inside the group.
  * If a group has a medoid node, it will be placed in the middle of the group.
+ * 
+ * Users of a community that is not realy a community (users without community), will be separated in a non-circular pattern.
+ * 
+ * If the final pattern overlaps some nodes of diferent communities, everything will be recalculated increaseing a bit the distance 
+ * between communities
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -10,6 +15,7 @@ import { IBoundingBox, IPoint } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
 import { ECommunityType, ICommunityData, IUserData } from "../constants/perspectivesTypes";
 import config from '../appConfig.json';
+
 /**
  * Aux interface to help group nodes in their partition of the canvas's layout
  */
@@ -40,9 +46,12 @@ export default class NodeLocation {
         this.initializeNodeGroups();
     }
 
+    /**
+     * Creates the initial node Groups that will be used later to calculate node's location
+     */
     initializeNodeGroups() {
         for (let i = 0; i < this.allCommData.length; i++) {
-            const areaPartition: IPoint = this.findCommunityCenter(this.allCommData[i], i, this.allCommData.length);
+            const areaPartition: IPoint = this.findCommunityCenter(i, this.allCommData.length);
 
             const nNodes = this.nodeGroups[i] ? this.nodeGroups[i].partition.nNodes : 0;
             const users = this.nodeGroups[i] ? this.nodeGroups[i].nodes : new Array<string>();
@@ -58,7 +67,7 @@ export default class NodeLocation {
         }
     }
 
-    findCommunityCenter(commData: ICommunityData, order: number, nAreas: number) {
+    findCommunityCenter(order: number, nAreas: number) {
         const distanceFromCenter = nAreas * 50;
         const pi2 = (2 * Math.PI);
 
@@ -147,6 +156,10 @@ export default class NodeLocation {
         return output;
     }
 
+    /**
+     * Check if there is any overlap between community bounding boxes, and re calculate everything increasing the base distance
+     * @returns 
+     */
     needMoreIterations(): boolean {
         for (let i = 0; i < this.nodeGroups.length; i++) {
             const bbToCheck = this.nodeGroups[i].bb;

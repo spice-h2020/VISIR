@@ -1,6 +1,8 @@
 /**
- * @fileoverview This class parse the node's explicit communities, calculates the % of users that have a determined
- * explicit community value and find the medoid user if the community explanation is configured to.
+ * @fileoverview This class calculates two different things based on the community and its users data.
+ * Analyze explicit community data from all nodes to determine the percentage of each community's explicit community values.
+ * Parse interactions data from all users to calculate what are the relevant artworks/interactions of the community, and 
+ * filter them from most relevant to less relevant
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -75,7 +77,7 @@ export default class NodeExplicitComms {
     }
 
     /**
-     * Parse the explicit community data of the node 
+     * Reads the explicit data of a node and update its community with the values
      * @param node source node
      * @param dimStrat dimension strategy controller
      */
@@ -123,6 +125,10 @@ export default class NodeExplicitComms {
         }
     }
 
+    /**
+     * Checks the community related interactions of a user and adds it to the community artwork data.
+     * @param node source data
+     */
     parseArtworksRelatedToTheCommunity(node: IUserData) {
         if (this.communitiesData[node.community_number].allArtworks === undefined) {
             this.communitiesData[node.community_number].allArtworks = new Map<string, number>();
@@ -134,6 +140,10 @@ export default class NodeExplicitComms {
         }
     }
 
+    /**
+     * Parse all community artworks data to remove duplicates and filter them by popularity
+     * @param nRelevantCommArtworks 
+     */
     makeArtworksUnique(nRelevantCommArtworks: number) {
 
         for (let i = 0; i < this.communitiesData.length; i++) {
@@ -149,6 +159,12 @@ export default class NodeExplicitComms {
         }
     }
 
+    /**
+     * Check if all explicit values of a node are unknown
+     * @param node source node
+     * @param keys explicit keys of the node
+     * @returns 
+     */
     areKeysUnknown(node: IUserData, keys: string[]) {
         let isUnknown: boolean = true;
 
@@ -164,7 +180,7 @@ export default class NodeExplicitComms {
     }
 
     /**
-     * Update the explicit data of the network
+     * Update the explicit data of the network with a users data
      * @param key key of the explicit community
      * @param node source node
      */
@@ -185,6 +201,9 @@ export default class NodeExplicitComms {
         }
     }
 
+    /**
+     * Sort the explicit data of the communities from most popular to least.
+     */
     sortExplicitData() {
         this.explicitData.forEach((data) => {
             data.values.sort().reverse();
