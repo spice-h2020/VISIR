@@ -15,6 +15,7 @@
 //Constants
 import { EFileSource, EButtonState, IViewOptionAction, ViewOptions } from "../constants/viewOptions";
 import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
+import config from '../appConfig.json';
 //Packages
 import React, { Dispatch, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,8 +24,6 @@ import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
 import { Slider } from "../basicComponents/Slider";
 import { ITranslation } from "../managers/CTranslation";
-//Config file
-import config from '../appConfig.json';
 
 interface AllVisirOptionsProps {
     //On click handler

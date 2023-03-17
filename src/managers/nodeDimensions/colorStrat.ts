@@ -61,6 +61,10 @@ export default class ColorStrategy extends GenericStrategy {
 
     }
 
+    /**
+     * Update this dimension attribute/values map with the new Dimension array
+     * @param attributesArray 
+     */
     update(attributesArray: DimAttribute[]) {
         this.attr = attributesArray.filter(attr => attr.dimension === Dimensions.Color)[0];
 

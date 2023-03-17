@@ -254,7 +254,6 @@ export default class NodeVisualsCtrl {
         let hideNode = false;
         const keys = Object.keys(node.explicit_community);
 
-
         for (let i = 0; i < keys.length; i++) {
             const value = node.explicit_community[keys[i]]
             const valuesMap = this.legendConfig.get(keys[i]);

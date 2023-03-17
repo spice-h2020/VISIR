@@ -21,7 +21,6 @@ import NodeExplicitComms from "./nodeExplicitComms";
 import NodeVisualsCtrl from "./nodeVisualsCtrl";
 import EdgeVisualsCtrl from "./edgeVisualsCtrl";
 import EventsCtrl from "./eventsCtrl";
-
 import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 
 export default class NetworkController {

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview This class reads the translation files of the project, and creates an object to translate all the text
+ * of the application
+ * @author Marco Expósito Pérez
+ */
+//Constant
 import { anyProperty } from "../constants/perspectivesTypes";
 import config from '../appConfig.json';
 
@@ -98,14 +104,14 @@ export interface ITranslation extends anyProperty {
     }
 }
 
+/**
+ * A class that ease the translation of the app
+ */
 export class CTranslation {
     t!: ITranslation;
     defaultT!: ITranslation;
 
-    constructor() {
-
-    }
-
+    constructor() { }
 
     initializeTranslation(setTranslation: Function) {
         fetch(`lang/default/locals.json`,
@@ -144,6 +150,11 @@ export class CTranslation {
 
     }
 
+    /**
+     * Validate a translation file and update all empty translation words with the default translation
+     * @param newT new translation
+     * @returns 
+     */
     validateTranslation(newT: ITranslation | undefined) {
         let defaultTranslation = this.defaultT;
 
@@ -186,5 +197,4 @@ export class CTranslation {
         }
         return newT;
     }
-
 }

@@ -87,7 +87,11 @@ export default class NodeDimensionStrategy {
         });
     }
 
-    //Check if the new legend attributes are diferent to the one already created
+    /**
+     * Check if the new legend attributes are diferent to the one already created
+     * @param newAttributes new attributes
+     * @returns 
+     */
     checkAttrDiferences(newAttributes: DimAttribute[]) {
         if (newAttributes.length <= 0) {
             return false;
@@ -130,6 +134,9 @@ export default class NodeDimensionStrategy {
         return true;
     }
 
+    /**
+     * Update the strategies with the new attributes array
+     */
     updateAttributes() {
         this.strategies.forEach((strat) => {
             strat.update(this.attributesArray);

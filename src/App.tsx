@@ -12,8 +12,11 @@
 import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer, initialOptions } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { ILegendData, legendDataReducer } from './constants/auxTypes';
+import config from './appConfig.json';
+import './style/base.css';
 //Packages
 import React, { useEffect, useReducer, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //Local files
 import { EScreenSize, Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -21,15 +24,9 @@ import { PerspectivesGroups } from './components/PerspectivesGroup';
 import { LegendComponent } from './components/LegendComponent';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import RequestManager from './managers/requestManager';
-
-import './style/base.css';
 import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFrontPanel';
 import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
-
-import config from './appConfig.json';
 import { ConfigurationTool } from './components/ConfigurationTool';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AllVisirOptions } from './components/AllVisirOptions';
 import { ManagePerspectives } from './components/ManagePerspectives';
 import { CTranslation, ITranslation } from './managers/CTranslation';
@@ -53,9 +50,7 @@ export const App = ({
     new CTranslation().initializeTranslation(setCurrentLanguage)
   }, [])
 
-
-
-  //Parameters to activate/disactivate and edit the loading spinner.
+  //State to activate/disactivate and edit the loading spinner.
   const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
 
   const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState, currentLanguage));
@@ -110,7 +105,9 @@ export const App = ({
   let screenSize: EScreenSize = windowWidth < 600 ? EScreenSize.smallest :
     windowWidth < 1200 ? EScreenSize.small : EScreenSize.normal;
 
-  //CREATE ALL NAVBAR COMPONENTS
+  //------------------------------------//
+  //--- CREATE ALL NAVBAR COMPONENTS ---//
+  //------------------------------------//
 
   let keyIndex = 0;
   const visirBtn =
@@ -175,6 +172,7 @@ export const App = ({
       insideHamburger={screenSize === EScreenSize.smallest}
       translation={currentLanguage}
     />
+
   //Button to collapse the visualization to the left if there are more than 1 active perspectove
   const leftCollapse =
     <div>
@@ -246,6 +244,7 @@ export const App = ({
   const hamburgerContent = [];
   let navBar: React.ReactNode;
 
+  //Based on the screenshize, add diferent components to the hamburger button.
   switch (screenSize) {
     case EScreenSize.smallest: {
       hamburgerContent.push(allVIsirOptions);

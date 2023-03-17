@@ -23,13 +23,14 @@
 //Constants
 import { EExplanationTypes, ICommunityData, IUserData } from "../constants/perspectivesTypes";
 import { IBoundingBox, ISelectedObjectAction, ESelectedObjectAction, IStateFunctions, IAttribute } from "../constants/auxTypes";
+import { nodeConst } from "../constants/nodes";
 //Packages
 import { FitOptions, TimelineAnimationType } from "vis-network";
 import { Dispatch } from "react";
 //Local files
 import NetworkController from "./networkController";
 import { getHTMLPosition } from "../basicComponents/Tooltip";
-import { nodeConst } from "../constants/nodes";
+
 
 export default class EventsCtrl {
     netCtrl: NetworkController;

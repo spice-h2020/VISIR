@@ -7,6 +7,7 @@
  */
 //Constants
 import { DimAttribute, Dimensions } from "../../constants/nodes";
+//Local files
 import { IUserData } from "../../constants/perspectivesTypes";
 
 export default abstract class GenericStrategy {
@@ -52,7 +53,11 @@ export default abstract class GenericStrategy {
     abstract change(user: IUserData, isFocus: boolean, increasedSize: boolean): void;
     //Change the user properties to make it colorless acordingly with the dimension strategy
     abstract toColorless(user: IUserData): void;
-    //Update the values of the array with the new incorpored keys/values
+
+    /**
+     * Update this dimension attribute/values map with the new Dimension array
+     * @param attributesArray 
+     */
     abstract update(attributesArray: DimAttribute[]): void;
 }
 

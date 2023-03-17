@@ -8,10 +8,10 @@
 import { EFileSource, initialOptions } from '../constants/viewOptions';
 import { validateConfigurationSeed, validatePerspectiveDataJSON, validatePerspectiveIDfile as validateAllPerspectiveIDfile } from '../constants/ValidateFiles';
 import { IPerspectiveData, PerspectiveId as IPerspectiveId, PerspectiveId } from '../constants/perspectivesTypes';
+import config from '../appConfig.json';
 //Packages
 import { Axios } from 'axios'
-//Config
-import config from '../appConfig.json';
+//Local File
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
 import { ITranslation } from './CTranslation';
 
@@ -161,9 +161,12 @@ export default class RequestManager {
         return this.requestToUrl(this.usingAPI ? `${this.allPerspectivesGETurl}` : "dataList.json");
     }
 
+    /**
+     * Request the configuration tool seed from the CM and validate
+     * @param callback 
+     */
     requestConfigurationToolSeed(callback: Function) {
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingConfToolSeed}` });
-
 
         this.getConfigurationToolSeed()
             .then((response: any) => {
@@ -191,10 +194,20 @@ export default class RequestManager {
             });
     }
 
+    /**
+     * Get configuration tool seed
+     * @returns 
+     */
     getConfigurationToolSeed() {
         return this.requestToUrl(this.usingAPI ? this.confSeedGETurl : "configurationTool/seedFile.json");
     }
 
+
+    /**
+     * Request something to an url
+     * @param url 
+     * @returns 
+     */
     requestToUrl(url: string): any {
         console.log(`${this.translation?.loadingText.simpleRequest} ${this.axios.defaults.baseURL}${url}`);
         this.currentJobWaitTime = 0;
@@ -222,6 +235,11 @@ export default class RequestManager {
             });
     }
 
+    /**
+     * Ask if a job is in progress and return the result if when the job is completed
+     * @param url 
+     * @returns 
+     */
     askJobInProgress(url: any): any {
         this.currentJobWaitTime += this.jobTimeOut;
 
@@ -282,6 +300,12 @@ export default class RequestManager {
         console.log(`Source url changed to ${newUrl}`)
     }
 
+    /**
+     * Send a new perspective configuration to the CM
+     * @param newConfiguration 
+     * @param updateFileSource 
+     * @param callback 
+     */
     sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource,
         changeItemState?: Function, apiURL?: string) => void, callback: Function) {
 
@@ -320,6 +344,11 @@ export default class RequestManager {
         }
     }
 
+    /**
+     * Request a perspective configuration file so the user can download it
+     * @param perspectiveId 
+     * @param callback 
+     */
     requestPerspectiveConfig(perspectiveId: PerspectiveId, callback: Function) {
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestPerspectiveConfig}` });
 
@@ -355,9 +384,11 @@ export default class RequestManager {
         }
     }
 }
-
-
-
+/**
+ * Add a delay
+ * @param seconds 
+ * @returns 
+ */
 function delay(seconds: number) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
