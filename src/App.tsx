@@ -62,7 +62,7 @@ export const App = ({
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
-  const [fileSource, setFileSource] = useState<[EFileSource, string]>([initialOptions.fileSource, config.API_URI])
+  const [fileSource, setFileSource] = useState<[EFileSource, string, string, string]>([initialOptions.fileSource, config.API_URI, config.API_USER, config.API_PASS])
 
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useReducer(legendDataReducer, { dims: [], anonymous: false, anonGroup: false } as ILegendData);
@@ -91,10 +91,12 @@ export const App = ({
   })
 
 
-  const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
-    setFileSource([fileSource, apiURL ? apiURL : ""]);
+  const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,
+    apiUser?: string, apiPass?: string) => {
 
-    requestManager.changeBaseURL(fileSource, apiURL);
+    setFileSource([fileSource, apiURL ? apiURL : "", apiUser ? apiUser : "", apiPass ? apiPass : ""]);
+
+    requestManager.changeBaseURL(fileSource, apiURL, apiUser, apiPass);
     requestManager.requestAllPerspectivesIds((newIds: PerspectiveId[]) => {
       initPerspectivess(setLeftPerspective, setRightPerspective, newIds, perspectiveId1, requestManager, perspectiveId2,
         setAllPerspectivesIds);
@@ -195,7 +197,7 @@ export const App = ({
       key={++keyIndex}
       content={<FontAwesomeIcon color='white' style={{ height: "1rem" }} icon={["fas", "arrows-rotate"]} />}
       onClick={() => {
-        updateFileSource(fileSource[0], () => { }, fileSource[1]);
+        updateFileSource(fileSource[0], () => { }, fileSource[1], fileSource[2], fileSource[3]);
       }}
       extraClassName={"mid dark"}
       hoverText={currentLanguage?.toolbar.updateBtn.hoverText}

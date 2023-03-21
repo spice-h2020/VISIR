@@ -15,7 +15,10 @@ export interface ITranslation extends anyProperty {
         Options: {
             hoverText: "Options",
             useLocalFiles: "Use local files",
-            useURL: "Use url",
+            useURL: "CM URL:",
+            user: "User",
+            pass: "Pass",
+            connectBtnHover: "Connect to CM",
             showLabel: "Show labels",
             hideEdges: "hide unselected Edges",
             minSimilarity: "Minimum similarity",

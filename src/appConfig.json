@@ -1,8 +1,8 @@
 {
-	"API_URI": "http://localhost:6060/",
+	"API_URI": "http://localhost:8080/",
+	"API_USER": "user",
+	"API_PASS": "pass",
 	"LANG": "en",
-	"Example-ucm_uri": "http://147.96.25.144:8080/",
-	"Example-local_url": "http://localhost:8080/",
 	"MAX_GET_REQUEST_TIMEOUT": 2000,
 	"NODE_RELOCATION_INCREMENT": 1.25
 }
