@@ -64,6 +64,12 @@ export default class RequestManager {
      */
     init(baseURL: string | undefined, apiUser?: string, apiPass?: string) {
         if (baseURL !== undefined) {
+            if (baseURL[baseURL.length - 1] !== '/') {
+                baseURL = `${baseURL}/`
+            }
+
+            console.log(`Source url changed to ${baseURL}`)
+
             this.apiUsername = apiUser ? apiUser : "";
             this.apiPassword = apiPass ? apiPass : "";
 
@@ -309,8 +315,6 @@ export default class RequestManager {
         this.usingAPI = newSource === EFileSource.Api;
 
         this.init(newUrl, apiUser, apiPass);
-
-        console.log(`Source url changed to ${newUrl}`)
     }
 
     /**
