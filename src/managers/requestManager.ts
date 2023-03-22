@@ -15,7 +15,7 @@ import { Axios } from 'axios'
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
 import { ITranslation } from './CTranslation';
 
-const apiVersion = "v1.1";
+const apiVersion = "v2.0";
 
 export default class RequestManager {
     isActive: boolean;
@@ -31,7 +31,7 @@ export default class RequestManager {
     //URL to ask for files when local url is selected
     baseLocalURL: string = "./data/";
 
-    allPerspectivesGETurl: string = `${apiVersion}/visir/index`;
+    allPerspectivesGETurl: string = `${apiVersion}/visir/files`;
     singlePerspectiveGETurl: string = `${apiVersion}/visir/files/`;
     perspectiveConfigGETurl: string = `${apiVersion}/perspectives/`;
 
