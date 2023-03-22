@@ -28,7 +28,7 @@ import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFront
 import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
 import { ConfigurationTool } from './components/ConfigurationTool';
 import { AllVisirOptions } from './components/AllVisirOptions';
-import { ManagePerspectives } from './components/ManagePerspectives';
+import { SavePerspectives } from './components/SavePerspectives';
 import { CTranslation, ITranslation } from './managers/CTranslation';
 
 
@@ -408,7 +408,7 @@ export const App = ({
         translation={currentLanguage}
       />
 
-      <ManagePerspectives
+      <SavePerspectives
         key={3}
         isActive={isSavePerspectiveActive}
         setIsActive={setIsSavePerspectiveActive}

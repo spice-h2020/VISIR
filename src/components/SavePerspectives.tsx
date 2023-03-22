@@ -45,7 +45,7 @@ const topButtonsStyle: React.CSSProperties = {
     justifyContent: "space-between",
 }
 
-interface ManagePerspectivesProps {
+interface SavePerspectivesProps {
     isActive: boolean,
     setIsActive: Function,
     allPerspectivesIds: PerspectiveId[],
@@ -55,13 +55,13 @@ interface ManagePerspectivesProps {
 /**
  * UI component that executes a function when clicked.
  */
-export const ManagePerspectives = ({
+export const SavePerspectives = ({
     isActive,
     setIsActive,
     allPerspectivesIds,
     requestManager,
     translation
-}: ManagePerspectivesProps) => {
+}: SavePerspectivesProps) => {
 
     const [states, setStates] = useState<Map<string, boolean>>(init(allPerspectivesIds));
     const [allToggle, setAllToggle] = useState<boolean>(false);
