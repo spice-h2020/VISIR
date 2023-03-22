@@ -21,7 +21,7 @@ export interface IConfigurationSeed {
     algorithm: IAlgorithm[],
     artworks: INameAndIdPair[],
     configToolType: EConfigToolTypes,
-    HecthStructure: boolean
+    BeliefStructure: boolean
 }
 
 export interface IArtworkAttribute {

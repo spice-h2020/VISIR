@@ -786,16 +786,16 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         }
 
         //Check what structure does this seed uses
-        if (arg.HetchStructure === undefined) {
-            arg.HetchStructure = false;
+        if (arg.BeliefStructure === undefined) {
+            arg.BeliefStructure = false;
         }
 
-        if (typeof (arg.HetchStructure) !== "boolean") {
-            throw Error(`HetchStructure is not a boolean`);
+        if (typeof (arg.BeliefStructure) !== "boolean") {
+            throw Error(`BeliefStructure is not a boolean`);
         }
 
 
-        if (arg.HetchStructure) {
+        if (arg.BeliefStructure) {
             arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.HECTH;
         } else {
             arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.GENERIC;
