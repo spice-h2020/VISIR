@@ -32,7 +32,7 @@ export default class RequestManager {
     baseLocalURL: string = "./data/";
 
     allPerspectivesGETurl: string = `${apiVersion}/visir/index`;
-    singlePerspectiveGETurl: string = `${apiVersion}/visir/file/`;
+    singlePerspectiveGETurl: string = `${apiVersion}/visir/files/`;
     perspectiveConfigGETurl: string = `${apiVersion}/perspectives/`;
 
     confSeedGETurl: string = `${apiVersion}/visir/seed`;
@@ -335,8 +335,8 @@ export default class RequestManager {
                 method: 'POST',
                 headers: {
                     'Authorization': `Basic ${btoa(this.apiUsername + ':' + this.apiPassword)}`,
-                    // 'Accept': 'application/json',
-                    // 'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
 
                 },
                 body: JSON.stringify(newConfiguration)
