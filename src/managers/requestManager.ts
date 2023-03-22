@@ -42,8 +42,8 @@ export default class RequestManager {
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     translation: ITranslation | undefined;
 
-    apiUsername: string = "user";
-    apiPassword: string = "pass";
+    apiUsername: string = config.API_USER;
+    apiPassword: string = config.API_PASS;
 
     /**
      * Constructor of the class
