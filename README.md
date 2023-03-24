@@ -176,14 +176,16 @@ After the accordion, a new accordion will include the user's interactions that a
 
     - **Explicit Explanation**:
     Shows a bar divided in portions that represents an explicit community. Each portion represents one of the explicit community value. Hovering above a portion will show the name of the value.
-    - **Medoid Explanation**:
-    Shows the node information of the medoid user/node.
-    - **Implicit Explanation**: 
-    Shows a percentage distribution of an implicit attribute in a wordCloud or in some cases, only shows a list of the most representative implicit attributes.
+    - **Representative User Explanation**:
+    Shows the node information of the representative user/node.
+    - **Implicit Explanation map**: 
+    Shows a percentage distribution of an implicit attribute as a wordCloud and as a treeMap. Clicking any treeMap value will filter all communities in the visualization that have such value as the maximum value of the attribute.
+    - **Implicit Explanation list**: 
+    Shows a list with the implicit attributes of the community. Each row of the list starts with a button that can be clicked to filter all communities that has the clicked value.
 
 
 
-*Last update of the content of this doc: 29/11/2022*
+*Last update of the content of this doc: 23/03/2023*
 
 
 
