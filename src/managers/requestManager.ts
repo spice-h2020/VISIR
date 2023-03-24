@@ -361,6 +361,7 @@ export default class RequestManager {
                 });
         } else {
             this.setLoadingState({ isActive: false });
+            callback();
         }
     }
 

@@ -128,6 +128,7 @@ export const ConfigurationTool = ({
 
     const [textAreaHeight, setTextAreaHeight] = useState<number>(0);
     const textAreaRef = useRef(null);
+    const perspectiveNameRef = useRef(null);
 
     //When the configuration tool is active, check for the latest configuration seed
     useEffect(() => {
@@ -384,7 +385,7 @@ export const ConfigurationTool = ({
                     height: "5vh"
                 }}>
                     <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}> {translation?.perspectiveBuider.perspectiveNameLabel}:</label>
-                    <input key={1} style={{ marginRight: "1rem" }} type="text" id="f-perspective_name" name="f-perspective_name"
+                    <input key={1} ref={perspectiveNameRef} style={{ marginRight: "1rem" }} type="text" id="f-perspective_name" name="f-perspective_name"
                         onChange={
                             (element) => {
                                 setPerspectiveName(element.target.value)
@@ -404,7 +405,15 @@ export const ConfigurationTool = ({
 
                                     setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
-                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => { });
+
+
+
+                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => {
+                                        setPerspectiveName("");
+                                        if (perspectiveNameRef.current) {
+                                            (perspectiveNameRef.current as any).value = "";
+                                        }
+                                    });
                                 }
                             }
                         }
