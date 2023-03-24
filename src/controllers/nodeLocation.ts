@@ -149,8 +149,8 @@ export default class NodeLocation {
             const xIndex = Math.ceil(nodeIndex % rows);
             const yIndex = nodeIndex / rows;
 
-            output.x = center.x + xIndex * 30;
-            output.y = center.y + yIndex * 30;
+            output.x = center.x + xIndex * 32;
+            output.y = center.y + yIndex * 32;
         }
 
         return output;
