@@ -299,18 +299,13 @@ export const ConfigurationTool = ({
 
                     borderTop: "2px solid red"
                 }}>
-                    <div>
-                        {getSimilarityDropdown(similarity1, setSimilarity1,
-                            similarity1AvailableValues, translation, selectedOption, true)}
-                    </div>
-                    <div>
-                        <React.Fragment key={1}>
-                            {getOptionSelector(selectedOption, seed, setSelectedOption)}
-                        </React.Fragment>
-                    </div>
-                    <div>
-                        <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {selectedOption !== undefined ? midSentence : ""} </span>
-                    </div>
+
+                    {getSimilarityDropdown(similarity1, setSimilarity1,
+                        similarity1AvailableValues, translation, selectedOption, true)}
+
+                    {getOptionSelector(selectedOption, seed, setSelectedOption)}
+                    {getSentenceDiv(selectedOption, midSentence)}
+
                     <div>
                         {getSimilarityDropdown(similarity2, setSimilarity2,
                             similarity2AvailableValues, translation)}
@@ -424,6 +419,15 @@ export const ConfigurationTool = ({
     );
 };
 
+
+function getSentenceDiv(selectedOption: config.ISimilarityFunction | undefined, midSentence: string): React.ReactNode {
+    if (selectedOption) {
+        return <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {selectedOption !== undefined ? midSentence : ""} </span>
+    } else {
+        return <React.Fragment key={0}></React.Fragment>;
+    }
+}
+
 /**
  * Creates a dropdown to pick between the available ESimilarity options 
  * @param sim current similarity selected
@@ -463,14 +467,16 @@ function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
         )
     }
     return (
-        <DropMenu
-            key={0}
-            items={buttons}
-            content={ESimilarity[sim]}
-            menuDirection={EDropMenuDirection.down}
-            extraClassButton={"transparent"}
-            postIcon={<div className="down-arrow" />}
-        />)
+        <div>
+            <DropMenu
+                key={0}
+                items={buttons}
+                content={ESimilarity[sim]}
+                menuDirection={EDropMenuDirection.down}
+                extraClassButton={"transparent"}
+                postIcon={<div className="down-arrow" />}
+            />
+        </div>)
 }
 
 /**
@@ -535,7 +541,7 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
     setCitizenAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>): React.ReactNode[] {
 
     if (seed === undefined) {
-        return [<React.Fragment key={0}></React.Fragment>];
+        return [""];
     } else {
         const checkboxes = [];
 
@@ -592,7 +598,7 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
     : React.ReactNode[] {
 
     if (seed === undefined) {
-        return [<div key={0}></div>];
+        return [""];
     } else {
         const checkboxes = [];
 
@@ -654,7 +660,7 @@ function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.
     const buttonStates = artworksAttrDrop.get(attrName);
 
     if (buttonStates === undefined) {
-        return <div />
+        return "";
     }
 
     const dropMenuItems: React.ReactNode[] = [];
@@ -720,13 +726,15 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction | undefine
 
     if (!seed) {
         return (
-            <DropMenu
-                items={[]}
-                content={`No options available`}
-                menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent"}
-                postIcon={<div className="down-arrow" />}
-            />);
+            <div>
+                <DropMenu
+                    items={[]}
+                    content={`No options available`}
+                    menuDirection={EDropMenuDirection.down}
+                    extraClassButton={"transparent"}
+                    postIcon={<div className="down-arrow" />}
+                />
+            </div>);
     } else {
 
         const items = [];
@@ -750,13 +758,15 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction | undefine
         }
 
         return (
-            <DropMenu
-                items={items}
-                content={`${selectedOption.on_attribute.att_name.charAt(0).toUpperCase()}${selectedOption.on_attribute.att_name.slice(1)}`}
-                menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent"}
-                postIcon={<div className="down-arrow" />}
-            />);
+            <div>
+                <DropMenu
+                    items={items}
+                    content={`${selectedOption.on_attribute.att_name.charAt(0).toUpperCase()}${selectedOption.on_attribute.att_name.slice(1)}`}
+                    menuDirection={EDropMenuDirection.down}
+                    extraClassButton={"transparent"}
+                    postIcon={<div className="down-arrow" />}
+                />
+            </div>);
     }
 }
 
