@@ -339,14 +339,14 @@ export const ConfigurationTool = ({
 
                         width: "100%"
                     }}>
-                        <fieldset key={0} style={{ height: "-webkit-fill-available", overflowY: "auto", minInlineSize: "auto", width: "35%" }}>
+                        <fieldset key={0} className="fillAvailableHeight" style={{ overflowY: "auto", minInlineSize: "auto", width: "35%" }}>
                             <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>
 
                                 {`${translation?.perspectiveBuider.leftBoxTittle}`} </h3>
 
                             {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
                         </fieldset>
-                        <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.same === similarity2)}>
+                        <fieldset key={1} className="fillAvailableHeight" style={getArtworkCheckboxStyle(ESimilarity.same === similarity2)}>
 
                             <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>{rightSideSentence}</h3>
 
@@ -781,7 +781,7 @@ function getArtworkCheckboxStyle(hide: boolean): React.CSSProperties {
         pointerEvents: hide ? "none" : "auto",
         opacity: hide ? "30%" : "100%",
         userSelect: "none",
-        height: "-webkit-fill-available",
+
         overflowY: "auto",
         minInlineSize: "auto",
         width: "100%",

@@ -175,7 +175,9 @@ body {
 
 .btn-content {
     display: inline-flex !important;
-    width: -webkit-fill-available !important;
+    width: -webkit-fill-available;
+    width: fill-available;
+    width: -moz-available;
     padding: 0.7rem 0.7rem !important;
 }
 
@@ -188,14 +190,24 @@ body {
 /*Change teh size of the btn content for some specific dropdowns*/
 .dropdown-minimumSize>.btn-content {
     display: inline-flex !important;
-    width: -webkit-fill-available !important;
+    width: -webkit-fill-available;
+    width: fill-available;
+    width: -moz-available;
     padding: 0rem 0rem !important;
 }
 
 .dropdown-mediumSize>.btn-content {
     display: inline-flex !important;
-    width: -webkit-fill-available !important;
-    padding: 0.3rem 0.3rem !important;
+    width: -webkit-fill-available;
+    width: fill-available;
+    width: -moz-available;
+    padding: 0.32rem 0.3rem !important;
+}
+
+.fillAvailableHeight {
+    height: -webkit-fill-available !important;
+    height: fill-available !important;
+    height: -moz-available !important;
 }
 
 .maximum-width {
