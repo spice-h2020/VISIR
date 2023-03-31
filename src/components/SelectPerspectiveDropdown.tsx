@@ -8,19 +8,22 @@
  * otherwhise, the loading item will swap its state to inactive again.
  * - If a disabled item/button is clicked, as previously explained, will do nothing.
  * 
+ * - When activating a second perspective, the perspective load may not be completed because the perspectives are not compatible
+ * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { EButtonState } from "../constants/viewOptions"
-import { bStateArrayReducer, CTranslation, EbuttonStateArrayAction, IbStateArrayAction } from "../constants/auxTypes";
+import { bStateArrayReducer, EbuttonStateArrayAction, IbStateArrayAction } from "../constants/auxTypes";
+import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from "../constants/perspectivesTypes";
 //Packages
 import React, { useEffect, useReducer, useState } from "react";
 //Local files
 import { Button } from "../basicComponents/Button";
 import RequestManager from "../managers/requestManager";
-import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from "../constants/perspectivesTypes";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
+import { ITranslation } from "../managers/CTranslation";
 
 interface SelectPerspectiveProps {
     //tittle of the dropdown.
@@ -35,7 +38,7 @@ interface SelectPerspectiveProps {
     isLeftDropdown: boolean,
 
     requestMan: RequestManager,
-    translationClass: CTranslation;
+    translation: ITranslation | undefined;
 
     insideHamburger?: boolean,
 }
@@ -52,7 +55,7 @@ export const SelectPerspectiveDropdown = ({
     allIds,
     isLeftDropdown,
     requestMan,
-    translationClass: tClass,
+    translation,
     insideHamburger = false,
 }: SelectPerspectiveProps) => {
 
@@ -60,8 +63,8 @@ export const SelectPerspectiveDropdown = ({
     const [mainBtnText, setMainBtnText] = useState<string>(tittle);
 
 
-    /*Init all dropdown items to unactive except the active perspectives that will be active or disabled depending on
-    their position and what position does this dropdown owns. */
+    /*Init all dropdown items to unactive except the perspectives that are selected by any of the dropdowns. Depending on what
+    dropdown is the owner of the perspective (either left or right dropdown), the perspective will be active or disabled */
     useEffect(() => {
         if (allIds !== undefined) {
             setStates({ action: EbuttonStateArrayAction.reset, index: allIds.length, newState: EButtonState.unactive });
@@ -100,7 +103,7 @@ export const SelectPerspectiveDropdown = ({
         return (
             <DropMenu
                 items={[]}
-                content={tClass.t.toolbar.selectPerspective.noPerspectiveName}
+                content={translation?.toolbar.selectPerspective.noAvailableName}
                 extraClassButton="transparent maximum-width"
                 postIcon={<div className="down-arrow" />}
                 hoverText="No available perspectives"
@@ -109,7 +112,7 @@ export const SelectPerspectiveDropdown = ({
     }
 
     const perspectivesButtons: React.ReactNode[] = getButtons(allIds, states, setStates, setAllIds, setActivePerspective,
-        isLeftDropdown, requestMan, tClass);
+        isLeftDropdown, requestMan, translation);
 
     if (!insideHamburger) {
         return (
@@ -126,19 +129,18 @@ export const SelectPerspectiveDropdown = ({
             />
         );
     } else {
-        let hamburgerBtnStyle: React.CSSProperties = {};
-        hamburgerBtnStyle.maxWidth = "10vw";
+
 
         return (
             <DropMenu
                 items={perspectivesButtons}
                 content={
-                    <div style={hamburgerBtnStyle} className="btn-select-perspective">
+                    <div className="btn-select-perspective">
                         {mainBtnText}
                     </div>}
-                extraClassButton="primary maximum-width blinkSizeAnim btn-dropdown"
+                extraClassButton="primary vw50-width blinkSizeAnim btn-dropdown"
                 hoverText={mainBtnText}
-                menuDirection={EDropMenuDirection.right}
+                menuDirection={EDropMenuDirection.down}
                 postIcon={<div className="down-arrow" />}
             />
         );
@@ -157,7 +159,7 @@ export const SelectPerspectiveDropdown = ({
  * @returns returns an array of react components
  */
 function getButtons(allIds: PerspectiveId[], states: EButtonState[], setStates: React.Dispatch<IbStateArrayAction>,
-    setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager, tClass: CTranslation): React.ReactNode[] {
+    setAllIds: Function, setActivePerspective: Function, isLeft: boolean, requestMan: RequestManager, translation: ITranslation | undefined): React.ReactNode[] {
 
     const maxButtonNameLength = 85;
     const buttons = new Array<React.ReactNode>();

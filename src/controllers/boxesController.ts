@@ -1,5 +1,5 @@
 /**
- * @fileoverview This class controls where bounding boxes should be drawn and when a click hits a bounding box.
+ * @fileoverview This class controls where and how a bounding box should be drawn and when the user's click hits a bounding box.
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -14,24 +14,24 @@ const configuration = {
     padding: 15,
     //width of the border of the bounding boxes.
     boderWidth: 4,
-    //backgroundColor and border color of the bounding boxes.
+    //backgroundColor and border color of the bounding boxes. Highlight its used to override the border color when a community must be highlighted
     color: [
         {
-            color: "rgba(248, 212, 251, 0.6)", border: "rgba(242, 169, 249, 1)", name: "Purple" //purple
+            color: "rgba(248, 212, 251, 0.6)", border: "rgba(242, 169, 249, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Purple" //purple
         }, {
-            color: "rgba(255, 255, 170, 0.6)", border: "rgba(255, 222, 120, 1)", name: "Yellow" //Yellow
+            color: "rgba(255, 255, 170, 0.6)", border: "rgba(255, 222, 120, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Yellow" //Yellow
         }, {
-            color: "rgba(211, 245, 192, 0.6)", border: "rgba(169, 221, 140, 1)", name: "Green" //Green
+            color: "rgba(211, 245, 192, 0.6)", border: "rgba(169, 221, 140, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Green" //Green
         }, {
-            color: "rgba(254, 212, 213, 0.6)", border: "rgba(252, 153, 156, 1)", name: "Red" //Red
+            color: "rgba(254, 212, 213, 0.6)", border: "rgba(252, 153, 156, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Red" //Red
         }, {
-            color: "rgba(220, 235, 254, 0.6)", border: "rgba(168, 201, 248, 1)", name: "Blue" //Blue
+            color: "rgba(220, 235, 254, 0.6)", border: "rgba(168, 201, 248, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Blue" //Blue
         }, {
-            color: "rgba(250, 220, 185, 0.6)", border: "rgba(250, 169, 73, 1)", name: "Orange" //orange
+            color: "rgba(250, 220, 185, 0.6)", border: "rgba(250, 169, 73, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Orange" //orange
         }, {
-            color: "rgba(240, 240, 240, 0.6)", border: "rgba(230, 230, 230, 1)", name: "White" //white
+            color: "rgba(240, 240, 240, 0.6)", border: "rgba(230, 230, 230, 1)", highlight: "rgba(10, 10, 10, 1)", name: "White" //white
         }, {
-            color: "rgba(10, 10, 10, 0.6)", border: "rgba(0, 0, 0, 1)", name: "Black" //black
+            color: "rgba(10, 10, 10, 0.6)", border: "rgba(0, 0, 0, 1)", highlight: "rgba(10, 10, 10, 1)", name: "Black" //black
         }
     ],
     inexistentColor: {
@@ -44,6 +44,10 @@ export default class BoxesController {
      * Data of all communities of the network
      */
     comData: ICommunityData[]
+    /**
+     * Communities that must be highlighted next time bounding boxes are drawn
+     */
+    highlightedComms: ICommunityData[]
 
     /**
      * Constructor of the class
@@ -51,6 +55,7 @@ export default class BoxesController {
      */
     constructor(communityData: ICommunityData[]) {
         this.comData = communityData;
+        this.highlightedComms = [];
     }
 
     /**
@@ -58,7 +63,7 @@ export default class BoxesController {
      * @param node Data of all users of the network
      */
     calculateBoundingBoxes(node: IUserData) {
-        const group: number = node.implicit_community;
+        const community_number: number = node.community_number;
 
         const nodeBB: IBoundingBox = {
             top: node.y - node.size / 2 - configuration.padding,
@@ -67,28 +72,28 @@ export default class BoxesController {
             right: node.x + node.size / 2 + configuration.padding
         }
 
-        if (this.comData[group].bb === undefined) {
+        if (this.comData[community_number].bb === undefined) {
 
-            this.comData[group].bb = nodeBB;
+            this.comData[community_number].bb = nodeBB;
 
-            if (this.comData[group].type !== ECommunityType.inexistent) {
-                this.comData[group].bb.color = configuration.color[group % configuration.color.length];
+            if (this.comData[community_number].type !== ECommunityType.inexistent) {
+                this.comData[community_number].bb.color = configuration.color[community_number % configuration.color.length];
             } else {
-                this.comData[group].bb.color = configuration.inexistentColor;
+                this.comData[community_number].bb.color = configuration.inexistentColor;
             }
 
         } else {
-            if (nodeBB.left < this.comData[group].bb.left)
-                this.comData[group].bb.left = nodeBB.left;
+            if (nodeBB.left < this.comData[community_number].bb.left)
+                this.comData[community_number].bb.left = nodeBB.left;
 
-            if (nodeBB.top < this.comData[group].bb.top)
-                this.comData[group].bb.top = nodeBB.top;
+            if (nodeBB.top < this.comData[community_number].bb.top)
+                this.comData[community_number].bb.top = nodeBB.top;
 
-            if (nodeBB.right > this.comData[group].bb.right)
-                this.comData[group].bb.right = nodeBB.right;
+            if (nodeBB.right > this.comData[community_number].bb.right)
+                this.comData[community_number].bb.right = nodeBB.right;
 
-            if (nodeBB.bottom > this.comData[group].bb.bottom)
-                this.comData[group].bb.bottom = nodeBB.bottom;
+            if (nodeBB.bottom > this.comData[community_number].bb.bottom)
+                this.comData[community_number].bb.bottom = nodeBB.bottom;
         }
     }
 
@@ -102,14 +107,23 @@ export default class BoxesController {
 
                 const bb: IBoundingBox = this.comData[i].bb;
 
+                let borderColor = bb.color!.border;
+                let backgroundColor = bb.color!.color;
+                let borderWidth = configuration.boderWidth;
+
+                if (this.highlightedComms.includes(this.comData[i])) {
+                    borderWidth *= 2;
+                    borderColor = bb.color!.highlight;
+                }
+
                 //Draw Border
-                ctx.lineWidth = configuration.boderWidth;
-                ctx.strokeStyle = bb.color!.border;
+                ctx.lineWidth = borderWidth;
+                ctx.strokeStyle = borderColor;
                 ctx.strokeRect(bb.left, bb.top, bb.right - bb.left, bb.bottom - bb.top);
 
                 //Draw Background
                 ctx.lineWidth = 0;
-                ctx.fillStyle = bb.color!.color;
+                ctx.fillStyle = backgroundColor;
                 ctx.fillRect(bb.left, bb.top, bb.right - bb.left, bb.bottom - bb.top);
             }
         }

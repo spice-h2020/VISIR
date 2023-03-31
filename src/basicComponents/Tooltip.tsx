@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a Tooltip positioned close to an object. 
- * A floating container with some transparency and a button to close it. 
+ * The tooltip is a floating container with some transparency, some information about a selected object and a button to close it. 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -11,6 +11,7 @@ import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
 import React, { useEffect, useRef, useState } from "react";
 //Local files
 import { Button } from "./Button";
+import { ITranslation } from "../managers/CTranslation";
 
 interface TooltipProps {
     /**
@@ -21,6 +22,8 @@ interface TooltipProps {
      * If the tooltip should hide users' labels and ids when shown.
      */
     showLabel: boolean;
+
+    translation: ITranslation | undefined;
 }
 
 /**
@@ -29,6 +32,7 @@ interface TooltipProps {
 export const Tooltip = ({
     selectedObject,
     showLabel,
+    translation,
 }: TooltipProps) => {
     const [isActive, setActive] = useState<Boolean>(false);
     const [yOffset, setYoffset] = useState<number>(0);
@@ -57,8 +61,8 @@ export const Tooltip = ({
 
     }, [selectedObject?.obj, showLabel])
 
-    const tooltipTittle: React.ReactNode = getTooltipTittle(selectObject);
-    const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, showLabel);
+    const tooltipTittle: React.ReactNode = getTooltipTittle(selectObject, translation);
+    const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, showLabel, translation);
 
     if (selectedObject !== undefined && selectedObject.obj !== undefined && selectedObject.position !== undefined && isActive) {
         const style: React.CSSProperties = {}
@@ -112,18 +116,18 @@ export const getHTMLPosition = (element: HTMLDivElement) => {
 }
 
 
-function getTooltipBody(selectedObject: ICommunityData | IUserData | undefined, showLabel: boolean) {
+function getTooltipBody(selectedObject: ICommunityData | IUserData | undefined, showLabel: boolean, translation: ITranslation | undefined) {
     const body: React.ReactNode[] = []
 
     if (selectedObject !== undefined) {
         if (selectedObject?.users) {
 
-            body.push(<div className="row" key={-1}> <strong> Name: </strong> &nbsp; {selectedObject.name} </div>);
+            body.push(<div className="row" key={-1}> <strong> {translation?.dataColumn.communityNameLabel} </strong> &nbsp; {selectedObject.name} </div>);
 
         } else {
 
             if (showLabel) {
-                body.push(<div className="row" key={-1}> <strong> Label: </strong> &nbsp; {selectedObject.label} </div>);
+                body.push(<div className="row" key={-1}> <strong> {translation?.dataColumn.userLabelLabel} </strong> &nbsp; {selectedObject.label} </div>);
             }
 
             const keys = Object.keys(selectedObject.explicit_community);
@@ -137,14 +141,14 @@ function getTooltipBody(selectedObject: ICommunityData | IUserData | undefined, 
     return body;
 }
 
-function getTooltipTittle(selectedObject: ICommunityData | IUserData | undefined) {
+function getTooltipTittle(selectedObject: ICommunityData | IUserData | undefined, translation: ITranslation | undefined) {
     let tittle: React.ReactNode = "";
 
     if (selectedObject !== undefined)
         if (selectedObject?.users) {
-            tittle = "Community Attributes"
+            tittle = translation?.dataColumn.communityTittle;
         } else {
-            tittle = "Citizen Attributes"
+            tittle = translation?.dataColumn.citizenTittle;
         }
 
     return tittle;

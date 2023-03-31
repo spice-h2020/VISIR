@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file creates a words cloud graph. Currently the colors of the words are randomized 
- * by the package.
+ * by the package but it tryes to only use dark colors.
  * @package Requires React package.  
  * @package Requires react-tagcloud package.
  * @author Marco Expósito Pérez

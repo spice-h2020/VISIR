@@ -115,6 +115,12 @@ body {
     align-self: center;
 }
 
+.user-input-text {
+    width: 10rem;
+    font-size: 0.9rem;
+    align-self: center;
+}
+
 .dataColumn-tittle {
     font-size: 1.5rem;
 }
@@ -169,7 +175,9 @@ body {
 
 .btn-content {
     display: inline-flex !important;
-    width: -webkit-fill-available !important;
+    width: -webkit-fill-available;
+    width: fill-available;
+    width: -moz-available;
     padding: 0.7rem 0.7rem !important;
 }
 
@@ -182,18 +190,32 @@ body {
 /*Change teh size of the btn content for some specific dropdowns*/
 .dropdown-minimumSize>.btn-content {
     display: inline-flex !important;
-    width: -webkit-fill-available !important;
+    width: -webkit-fill-available;
+    width: fill-available;
+    width: -moz-available;
     padding: 0rem 0rem !important;
 }
 
 .dropdown-mediumSize>.btn-content {
     display: inline-flex !important;
-    width: -webkit-fill-available !important;
-    padding: 0.3rem 0.3rem !important;
+    width: -webkit-fill-available;
+    width: fill-available;
+    width: -moz-available;
+    padding: 0.32rem 0.3rem !important;
+}
+
+.fillAvailableHeight {
+    height: -webkit-fill-available !important;
+    height: fill-available !important;
+    height: -moz-available !important;
 }
 
 .maximum-width {
-    width: 100%;
+    width: 100% !important;
+}
+
+.vw50-width {
+    width: 60vw !important;
 }
 
 .btn-select-perspective {
@@ -220,11 +242,13 @@ body {
 }
 
 .primary {
-    background-color: var(--primaryButtonColor);
+    background-color: var(--primaryButtonColor) !important;
+    color: var(--buttonTextColor) !important;
 }
 
 .primary.active {
-    background-color: #ff605d;
+    background-color: #ff605d !important;
+    color: var(--buttonTextColor) !important;
 }
 
 .secondary {
@@ -305,7 +329,6 @@ body {
 .btn-icon-content {
     align-self: center;
     display: flex;
-    padding-right: 1rem;
 }
 
 .down-arrow {
@@ -613,6 +636,7 @@ body {
 }
 
 input[type="range"] {
+    appearance: none;
     -webkit-appearance: none;
     margin-top: 0.7rem;
     width: 100%;
@@ -639,6 +663,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"]::-moz-range-thumb {
+    appearance: none;
     -webkit-appearance: none;
     height: var(--sliderThumbSize);
     width: var(--sliderThumbSize);
@@ -650,6 +675,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 input[type="range"]::-ms-thumb {
+    appearance: none;
     -webkit-appearance: none;
     height: var(--sliderThumbSize);
     width: var(--sliderThumbSize);
@@ -662,6 +688,7 @@ input[type="range"]::-ms-thumb {
 
 /* Input Track */
 input[type=range]::-webkit-slider-runnable-track {
+    appearance: none;
     -webkit-appearance: none;
     box-shadow: none;
     border: none;
@@ -669,6 +696,7 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 
 input[type=range]::-moz-range-track {
+    appearance: none;
     -webkit-appearance: none;
     box-shadow: none;
     border: none;
@@ -676,6 +704,7 @@ input[type=range]::-moz-range-track {
 }
 
 input[type="range"]::-ms-track {
+    appearance: none;
     -webkit-appearance: none;
     box-shadow: none;
     border: none;

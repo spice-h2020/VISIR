@@ -1,8 +1,7 @@
 /**
- * @fileoverview This file creates a panel with the information of a user interaction with an artwork. This is used
- * inside accordion items to show all interactions in a compact way.
- * It shows the name,year,author and image of an artwork. And what the user said about the artwork with the emotions
- * they felt.
+ * @fileoverview This file creates a panel with the information of an artwork related to a community. This is used
+ * inside accordion items to show diferent artworks in a compact way.
+ * It shows the name,year,author, the image of the artwork and the number of interactions with the artwork.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -19,7 +18,7 @@ interface ArtworkPanelProps {
 }
 
 /**
- * UI component that only shows information about a single interaction of a user with an artwork.
+ * UI component that only shows information about a single artwork of a community.
  */
 export const ArtworkPanel = ({
     artworksData,

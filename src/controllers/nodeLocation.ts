@@ -3,6 +3,11 @@
  * in a circular pattern.
  * It also separates each node in a group to create another circular pattern inside the group.
  * If a group has a medoid node, it will be placed in the middle of the group.
+ * 
+ * Users of a community that is not realy a community (users without community), will be separated in a non-circular pattern.
+ * 
+ * If the final pattern overlaps some nodes of diferent communities, everything will be recalculated increaseing a bit the distance 
+ * between communities
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -10,6 +15,7 @@ import { IBoundingBox, IPoint } from "../constants/auxTypes";
 import { nodeConst } from "../constants/nodes";
 import { ECommunityType, ICommunityData, IUserData } from "../constants/perspectivesTypes";
 import config from '../appConfig.json';
+
 /**
  * Aux interface to help group nodes in their partition of the canvas's layout
  */
@@ -40,9 +46,12 @@ export default class NodeLocation {
         this.initializeNodeGroups();
     }
 
+    /**
+     * Creates the initial node Groups that will be used later to calculate node's location
+     */
     initializeNodeGroups() {
         for (let i = 0; i < this.allCommData.length; i++) {
-            const areaPartition: IPoint = this.findCommunityCenter(this.allCommData[i], i, this.allCommData.length);
+            const areaPartition: IPoint = this.findCommunityCenter(i, this.allCommData.length);
 
             const nNodes = this.nodeGroups[i] ? this.nodeGroups[i].partition.nNodes : 0;
             const users = this.nodeGroups[i] ? this.nodeGroups[i].nodes : new Array<string>();
@@ -58,7 +67,7 @@ export default class NodeLocation {
         }
     }
 
-    findCommunityCenter(commData: ICommunityData, order: number, nAreas: number) {
+    findCommunityCenter(order: number, nAreas: number) {
         const distanceFromCenter = nAreas * 50;
         const pi2 = (2 * Math.PI);
 
@@ -76,11 +85,11 @@ export default class NodeLocation {
      * @param node source node
      */
     updateNodeGroup(node: IUserData) {
-        const group = node.implicit_community;
+        const community_number = node.community_number;
 
         if (!node.isMedoid) {
-            this.nodeGroups[group].nodes.push(node.id);
-            this.nodeGroups[group].partition.nNodes++;
+            this.nodeGroups[community_number].nodes.push(node.id);
+            this.nodeGroups[community_number].partition.nNodes++;
         }
     }
 
@@ -89,23 +98,23 @@ export default class NodeLocation {
      * @param node node to edit
      */
     setNodeLocation(node: IUserData, communityType: ECommunityType) {
-        const group = node.implicit_community;
+        const community_number = node.community_number;
 
         if (node.isMedoid && communityType !== ECommunityType.inexistent) {
 
-            node.x = this.nodeGroups[group].partition.center.x;
-            node.y = this.nodeGroups[group].partition.center.y;
+            node.x = this.nodeGroups[community_number].partition.center.x;
+            node.y = this.nodeGroups[community_number].partition.center.y;
 
         } else {
-            const nodePos: IPoint = this.getNodePos(this.nodeGroups[group], node.id, communityType);
+            const nodePos: IPoint = this.getNodePos(this.nodeGroups[community_number], node.id, communityType);
 
             node.x = nodePos.x;
             node.y = nodePos.y;
 
-            this.nodeGroups[group].bb.left = this.nodeGroups[group].bb.left > nodePos.x ? nodePos.x : this.nodeGroups[group].bb.left;
-            this.nodeGroups[group].bb.right = this.nodeGroups[group].bb.right < nodePos.x ? nodePos.x : this.nodeGroups[group].bb.right;
-            this.nodeGroups[group].bb.top = this.nodeGroups[group].bb.top > nodePos.y ? nodePos.y : this.nodeGroups[group].bb.top;
-            this.nodeGroups[group].bb.bottom = this.nodeGroups[group].bb.bottom < nodePos.y ? nodePos.y : this.nodeGroups[group].bb.bottom;
+            this.nodeGroups[community_number].bb.left = this.nodeGroups[community_number].bb.left > nodePos.x ? nodePos.x : this.nodeGroups[community_number].bb.left;
+            this.nodeGroups[community_number].bb.right = this.nodeGroups[community_number].bb.right < nodePos.x ? nodePos.x : this.nodeGroups[community_number].bb.right;
+            this.nodeGroups[community_number].bb.top = this.nodeGroups[community_number].bb.top > nodePos.y ? nodePos.y : this.nodeGroups[community_number].bb.top;
+            this.nodeGroups[community_number].bb.bottom = this.nodeGroups[community_number].bb.bottom < nodePos.y ? nodePos.y : this.nodeGroups[community_number].bb.bottom;
         }
     }
 
@@ -140,13 +149,17 @@ export default class NodeLocation {
             const xIndex = Math.ceil(nodeIndex % rows);
             const yIndex = nodeIndex / rows;
 
-            output.x = center.x + xIndex * 30;
-            output.y = center.y + yIndex * 30;
+            output.x = center.x + xIndex * 32;
+            output.y = center.y + yIndex * 32;
         }
 
         return output;
     }
 
+    /**
+     * Check if there is any overlap between community bounding boxes, and re calculate everything increasing the base distance
+     * @returns 
+     */
     needMoreIterations(): boolean {
         for (let i = 0; i < this.nodeGroups.length; i++) {
             const bbToCheck = this.nodeGroups[i].bb;

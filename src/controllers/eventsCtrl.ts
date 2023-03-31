@@ -14,20 +14,23 @@
  *  A community of other network -> Highlight all nodes that are also inside this network and zoom to them.
  *  Nothing is selected -> Deselect all edges, nodes and zoom out to fit all the network.
  * 
+ *  A community's attribute has been selected -> Highlight all communities that are related to the selected attribute
+ * 
  * @package Requires vis network package.
  * @package Requires react package.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { ICommunityData, IUserData } from "../constants/perspectivesTypes";
-import { IBoundingBox, ISelectedObjectAction, ESelectedObjectAction, IStateFunctions } from "../constants/auxTypes";
+import { EExplanationTypes, ICommunityData, IUserData } from "../constants/perspectivesTypes";
+import { IBoundingBox, ISelectedObjectAction, ESelectedObjectAction, IStateFunctions, IAttribute } from "../constants/auxTypes";
+import { nodeConst } from "../constants/nodes";
 //Packages
 import { FitOptions, TimelineAnimationType } from "vis-network";
 import { Dispatch } from "react";
 //Local files
 import NetworkController from "./networkController";
 import { getHTMLPosition } from "../basicComponents/Tooltip";
-import { nodeConst } from "../constants/nodes";
+
 
 export default class EventsCtrl {
     netCtrl: NetworkController;
@@ -196,6 +199,9 @@ export default class EventsCtrl {
             this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, [node.id]);
         }
 
+
+        this.netCtrl.bbCtrl.highlightedComms = [];
+
         return node;
     }
 
@@ -209,6 +215,8 @@ export default class EventsCtrl {
         const selectedNodes = community.users;
         this.zoomToNodes(selectedNodes);
 
+
+        this.netCtrl.bbCtrl.highlightedComms = [community];
         this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, []);
         this.netCtrl.edgeCtrl.unselectEdges();
     }
@@ -220,6 +228,8 @@ export default class EventsCtrl {
     externalCommunityClicked(community: ICommunityData) {
         const localNodes = this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, community.users, [], undefined, community.users);
 
+
+        this.netCtrl.bbCtrl.highlightedComms = [];
         this.netCtrl.edgeCtrl.unselectEdges();
         this.zoomToNodes(localNodes);
     }
@@ -230,8 +240,55 @@ export default class EventsCtrl {
     nothingClicked() {
         this.netCtrl.nodeVisuals.colorAllNodes(this.netCtrl.nodes);
         this.netCtrl.edgeCtrl.unselectEdges();
-
+        this.netCtrl.bbCtrl.highlightedComms = [];
         this.zoomToNodes([]);
     }
 
+    /**
+     * Function executed when a community attribute in the dataColumn has been clicked/selected
+     * @param selectedAttribute the selected attribute
+     */
+    selectAttribute(selectedAttribute: IAttribute) {
+        let allIds: string[] = [];
+        let communitiesToHighlight: ICommunityData[] = [];
+
+
+        for (const comm of this.netCtrl.explicitCtrl.communitiesData) {
+            for (const expl of comm.explanations) {
+
+                if (expl.explanation_type === selectedAttribute.type && expl.explanation_key === selectedAttribute.key) {
+                    /*Depending on the type of the implicit attribute, we compare only the maximum value of the explanation
+                    attributes, or we check if any of the values contains the selected attribute
+                    */
+                    switch (selectedAttribute.type) {
+                        case EExplanationTypes.implicit_attributes_map: {
+                            if (expl.maxValue === selectedAttribute.value) {
+                                allIds = allIds.concat(comm.users);
+                                communitiesToHighlight.push(comm);
+                            }
+
+                            break;
+                        }
+                        case EExplanationTypes.implicit_attributes_list: {
+
+                            for (const data of expl.explanation_data.data) {
+                                if (data.key === selectedAttribute.value) {
+                                    allIds = allIds.concat(comm.users);
+                                    communitiesToHighlight.push(comm);
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        this.netCtrl.bbCtrl.highlightedComms = communitiesToHighlight;
+        this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, allIds, [], undefined, []);
+
+        this.netCtrl.edgeCtrl.unselectEdges();
+        this.zoomToNodes(allIds);
+    }
 }

@@ -1,7 +1,7 @@
 /**
  * @fileoverview This file creates a table with the data of a community, a user and its interactions.
  * If a user is provided, the communnity will be the users community. Otherwise, no user data will be shown.
- * Community data will include stacked bars and the medoid user information if the explanation configuration allows it.
+ * Community data will include diferent explanations based on the community data.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -18,9 +18,10 @@ import { StackedBarGraph } from "../basicComponents/StackedBarGraph";
 import { NodePanel } from "./NodePanel";
 import { WordCloudGraph } from "../basicComponents/WordCloudGraph";
 import { SingleTreeMap } from "../basicComponents/SingleTreeMap";
-import { CTranslation } from "../constants/auxTypes";
 import { ArtworkPanel } from "../basicComponents/ArtworkPanel";
 import { Accordion } from "../basicComponents/Accordion";
+import { ITranslation } from "../managers/CTranslation";
+import { Button } from "../basicComponents/Button";
 
 interface DataTableProps {
     tittle?: String;
@@ -33,7 +34,9 @@ interface DataTableProps {
     showLabel: boolean;
     state: string;
 
-    translationClass: CTranslation;
+    translation: ITranslation | undefined;
+
+    setSelectedAttribute: Function;
 }
 
 /**
@@ -47,10 +50,14 @@ export const DataTable = ({
     allUsers,
     showLabel,
     state,
-    translationClass: tClass
+    translation,
+    setSelectedAttribute
 }: DataTableProps) => {
 
-    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks, tClass), [community, allUsers, showLabel, artworks, tClass]);
+    const CommunityPanel: React.ReactNode = useMemo(() => getCommunityPanel(community, allUsers, showLabel, artworks,
+        translation, setSelectedAttribute),
+        [community, allUsers, showLabel, artworks, translation, setSelectedAttribute]);
+
     const htmlRef = useRef(null);
 
     useEffect(() => {
@@ -60,48 +67,52 @@ export const DataTable = ({
     }, [node, community]);
 
     return (
-        <div className={`dataColumn-container ${state}`} ref={htmlRef} style={getContainerStyle(state)}>
+        <div className={`dataColumn-container ${state}`} ref={htmlRef} style={getDataColumnContainerStyle(state)}>
             <h2 key={0} className="tittle dataColumn-tittle">  {tittle} </h2>
             <NodePanel
                 key={1}
-                tittle={tClass.t.dataColumn.citizenTittle}
+                tittle={`${translation?.dataColumn.citizenTittle}`}
                 node={node}
                 showLabel={showLabel}
                 artworks={artworks}
-                translationClass={tClass}
+                translation={translation}
             />
             {CommunityPanel}
         </div>
     )
 };
 
-
 /**
- * Returns a panel with all the community's information.
- * @param community source community.
- * @returns a react component with the community's panel.
+ * Returns a panel with all the community's data
+ * @param community data of the community
+ * @param allUsers data of all users of the perspective
+ * @param showLabel visualization option value
+ * @param artworks data of all artworks of the perspective
+ * @param translation object to translate text
+ * @param setSelectedAttribute set the current selected attribute for especific community highlighting
+ * @returns 
  */
 function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUserData[], showLabel: boolean,
-    artworks: IArtworkData[], tClass: CTranslation) {
+    artworks: IArtworkData[], translation: ITranslation | undefined, setSelectedAttribute: Function) {
 
     if (community !== undefined) {
-        const tittle = <div key={0} className="dataColumn-subtittle"> {tClass.t.dataColumn.communityPanelTittle} </div>;
+        //Add the basic community data
+        const tittle = <div key={0} className="dataColumn-subtittle"> {translation?.dataColumn.communityTittle} </div>;
         let content: React.ReactNode[] = [];
 
-        content.push(<div className="row" key={1}> <strong> {tClass.t.dataColumn.communityNameLabel} </strong> &nbsp; {community.name} </div>);
-        content.push(<div className="row" key={2}> {` ${tClass.t.dataColumn.citizenAmount} ${community.users.length}`} </div>);
-        content.push(<div className="row" key={23}> {` ${tClass.t.dataColumn.anonymous} ${community.anonUsers.length}`} </div>);
+        content.push(<div className="row" key={1}> <strong> {translation?.dataColumn.communityNameLabel} </strong> &nbsp; {community.name} </div>);
+        content.push(<div className="row" key={2}> {` ${translation?.dataColumn.totalCitizensLabel} ${community.users.length}`} </div>);
+        content.push(<div className="row" key={23}> {` ${translation?.dataColumn.anonymousLabel} ${community.anonUsers.length}`} </div>);
         content.push(<br key={4} />);
 
-        //Add accordion with the artworks
+        //Add an accordion with the artworks related to this community
         let accordionItems: React.ReactNode[] = [];
         let tittles: string[] = [];
 
         for (let i = community.representative_artworks.length - 1; i >= 0; i--) {
 
             const artworkData = artworks.find((element: IArtworkData) => { return element.id === community.representative_artworks[i][0] })
-            tittles.push(artworkData?.tittle ? `${artworkData.tittle} - Interactions: ${community.representative_artworks[i][1]}` :
-                `no Tittle - Interactions: ${community.representative_artworks[i][1]}`);
+            tittles.push(`${artworkData?.tittle} - ${translation?.dataColumn.interactionsName}: ${community.representative_artworks[i][1]}`);
 
             accordionItems.push(
                 <div key={i}>
@@ -115,17 +126,17 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
         content.push(
             <div key={5}>
-                <div key={0}> {"Relevant artworks to this community: "} </div>
+                <div key={0}> {translation?.dataColumn.relevantArtworks} </div>
                 <Accordion key={1} items={accordionItems} tittles={tittles} />
             </div>);
 
-        //Add community explanations
+        //Add all the diferent community explanations
         for (let i = 0; i < community.explanations.length; i++) {
             if (community.explanations[i].visible) {
                 content.push(
                     <React.Fragment key={6 + i * 2}>
                         {getCommunityExplanation(community, community.explanations[i], allUsers, showLabel,
-                            artworks, tClass)}
+                            artworks, translation, setSelectedAttribute)}
                     </React.Fragment>);
 
                 content.push(<br key={7 + i * 2} />);
@@ -145,26 +156,49 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
 }
 
+
 /**
  * Returns a panel with the explanations of the community based on the explanation parameter configuration.
  * @param communityData source community.
  * @param explanation data of the explanations to know its type and if it should be visible.
  * @returns a react component with the explanations.
  */
+
+/**
+ * Returns a panel with an available and visible explanation
+ * @param communityData source community
+ * @param explanation data of the explanation
+ * @param allUsers all users of the perspective
+ * @param showLabel visualization option value
+ * @param artworks all artworks of the perspective
+ * @param translation object to translate text
+ * @param setSelectedAttribute set the current selected attribute for especific community highlighting
+ * @returns 
+ */
 function getCommunityExplanation(communityData: ICommunityData, explanation: ICommunityExplanation, allUsers: IUserData[],
-    showLabel: boolean, artworks: IArtworkData[], tClass: CTranslation) {
+    showLabel: boolean, artworks: IArtworkData[], translation: ITranslation | undefined, setSelectedAttribute: Function) {
     if (explanation.visible === false) {
         return <React.Fragment />;
 
     } else {
 
+        /*When an implicit attribute is selected, if possible, will select that attribute in the visualization.
+this means all communities with the same attribute key and value will be highlighted*/
+        const onAttributeSelected = (value: string) => {
+            if (explanation.explanation_key) {
+                setSelectedAttribute({ key: explanation.explanation_key, value: value, type: explanation.explanation_type })
+            }
+        }
+
         switch (explanation.explanation_type) {
+            //Explicit attributes are simply shown in a stacked bar graph with colors representing its dimension
             case EExplanationTypes.explicit_attributes: {
                 return (
                     <div>
-                        {getStackedBars(communityData.explicitDataArray, tClass)}
+                        {getStackedBars(communityData.explicitDataArray, translation)}
                     </div>);
             }
+            //Medoid explanation is shown showing the medoid user data like any other user
             case EExplanationTypes.medoid: {
 
                 const medoid = allUsers.find((value) => { return value.id === explanation.explanation_data.id });
@@ -173,75 +207,23 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
                     <React.Fragment>
                         <hr />
                         <NodePanel
-                            tittle={tClass.t.dataColumn.medoidTittle}
+                            tittle={`${translation?.dataColumn.medoidTittle}`}
                             node={medoid}
                             showLabel={showLabel}
                             artworks={artworks}
-                            translationClass={tClass}
+                            translation={translation}
                         />
                     </React.Fragment>);
             }
+            //Implicit attribute explanation are more specific and have diferent modes
             case EExplanationTypes.implicit_attributes: {
-                //New explanation type that shows information in an accordion of artworks
-                if (explanation.explanation_data.accordionMode) {
-                    let accordionItems: React.ReactNode[] = [];
-
-                    const keys = Object.keys(explanation.explanation_data.data)
-                    //Check each iconclass familty
-                    for (let key in keys) {
-                        let artworksPanels: React.ReactNode[] = [];
-
-                        const data: string[] = explanation.explanation_data.data[keys[key]];
-                        //Check each of the related artworks
-                        for (let i = 0; i < data.length; i++) {
-                            artworksPanels.push(<ArtworkPanel artworksData={artworks} id={data[i]} />);
-                        }
-
-                        accordionItems.push(
-                            <div>
-                                {keys[key]}
-                                {artworksPanels}
-                            </div>
-                        );
-
-                    }
-                    return (
-                        <div>
-                            <div> {explanation.explanation_data.label} </div>
-                            <Accordion items={accordionItems} tittles={keys} />
-                        </div>);
-
-
-
-                } else { //If theres no values for a wordCloud, we just show the information in plain text rows. 
-                    if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
-                        let textData: React.ReactNode[] = [];
-
-                        for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
-                            textData.push(
-                                <li key={i} style={{ marginLeft: "2rem" }}>
-                                    {explanation.explanation_data.data[i].value}
-                                    <br />
-                                </li >);
-                        }
-
-                        return (
-                            <div>
-                                <div> {explanation.explanation_data.label}</div>
-                                <div>
-                                    {textData}
-                                </div>
-                            </div>
-                        )
-                    } else {
-
-                        return (
-                            <div>
-                                <div> {explanation.explanation_data.label}</div>
-                                <div> {getWordClouds(explanation.explanation_data.data)}</div>
-                            </div>);
-                    }
-                }
+                return getImplicitExplanation(explanation, artworks);
+            }
+            case EExplanationTypes.implicit_attributes_map: {
+                return getImplicitMapExplanation(explanation, onAttributeSelected, communityData.id);
+            }
+            case EExplanationTypes.implicit_attributes_list: {
+                return getImplicitListExplanation(explanation, onAttributeSelected);
             }
             default: {
                 console.log("Unrecognized explanation type");
@@ -252,14 +234,120 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
     }
 }
 
+function getImplicitExplanation(explanation: ICommunityExplanation, artworks: IArtworkData[]) {
+    //Show the explanation data in an accordion with diferent artwork informations inside it
+    if (explanation.explanation_data.accordionMode) {
+        let accordionItems: React.ReactNode[] = [];
 
+        const keys = Object.keys(explanation.explanation_data.data)
+        //Check each iconclass family
+        for (let key in keys) {
+            let artworksPanels: React.ReactNode[] = [];
+
+            const data: string[] = explanation.explanation_data.data[keys[key]];
+            //Check each of the related artworks
+            for (let i = 0; i < data.length; i++) {
+                artworksPanels.push(<ArtworkPanel artworksData={artworks} id={data[i]} />);
+            }
+
+            accordionItems.push(
+                <div>
+                    {keys[key]}
+                    {artworksPanels}
+                </div>
+            );
+
+        }
+        return (
+            <div>
+                <div> {explanation.explanation_data.label} </div>
+                <Accordion items={accordionItems} tittles={keys} />
+            </div>);
+
+
+        //If its not an accordion explanation, try to do a wordCloud explanation
+    } else {
+
+        //If there are no values for a wordCloud, we just show the information in plain text rows. 
+        if (isAllZero(explanation.explanation_data.data as IStringNumberRelation[])) {
+            let textData: React.ReactNode[] = [];
+
+            for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
+                textData.push(
+                    <li key={i} style={{ marginLeft: "2rem" }}>
+                        {explanation.explanation_data.data[i].value}
+                        <br />
+                    </li >);
+            }
+
+            return (
+                <div>
+                    <div> {explanation.explanation_data.label}</div>
+                    <div>
+                        {textData}
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <div> {explanation.explanation_data.label}</div>
+                    <div> {getWordClouds(explanation.explanation_data.data, true, true, true)}</div>
+                </div>);
+
+
+        }
+    }
+}
+
+function getImplicitMapExplanation(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void,
+    communityId: string) {
+
+    return (
+        <div>
+            <div> {`${explanation.explanation_data.label} : ${explanation.explanation_key}`}</div>
+            <div> {getCommunityWordCloud(explanation.explanation_data.data, onAttributeSelected, communityId)}</div>
+        </div>);
+}
+
+function getImplicitListExplanation(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void) {
+    const textData = [];
+
+    for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
+        textData.push(
+            <li key={i} style={{ marginLeft: "2rem", marginBottom: "0.2rem", display: "inline-flex" }}>
+                <div style={{ height: "auto", marginRight: "0.2rem" }}>
+                    <Button
+                        content={<div style={{ padding: "0px" }}> {explanation.explanation_data.data[i].key} </div>}
+                        onClick={() => {
+                            onAttributeSelected(explanation.explanation_data.data[i].key)
+                        }}
+                        extraClassName={"primary"}
+                    />
+                </div>
+
+                {`  ${explanation.explanation_data.data[i].label}`}
+                <br />
+            </li >);
+    }
+
+    return (
+        <div>
+            <div> {`${explanation.explanation_data.label} : ${explanation.explanation_key}`}</div>
+            <div style={{ marginTop: "0.5rem" }}>
+                {textData}
+            </div>
+        </div>
+    )
+}
 
 /**
- * Returns all stacked bar graphs of a community.
- * @param community source community.
- * @returns a react component array with the community's stacked bar.
+ * Returns a stacked bar graph of some data
+ * @param data data to use in the stacked graph
+ * @param translation object to translate text
+ * @returns 
  */
-function getStackedBars(data: IExplicitCommData[] | undefined, tClass: CTranslation) {
+function getStackedBars(data: IExplicitCommData[] | undefined, translation: ITranslation | undefined) {
     let content: React.ReactNode[] = new Array<React.ReactNode>();
 
     if (data !== undefined && data.length > 0) {
@@ -275,14 +363,15 @@ function getStackedBars(data: IExplicitCommData[] | undefined, tClass: CTranslat
         }
     } else {
         content.push(
-            <div key={0} > {tClass.t.dataColumn.unknownUserAttrb}</div>
+            <div key={0} > {translation?.dataColumn.noUserAttrb}</div>
         );
     }
 
     return content;
 }
 
-function getContainerStyle(currentState: string): React.CSSProperties {
+//If the perspective of this dataColumn is active, add a red border
+function getDataColumnContainerStyle(currentState: string): React.CSSProperties {
     let newStyle: React.CSSProperties = {}
 
     if (currentState === "active") {
@@ -295,23 +384,65 @@ function getContainerStyle(currentState: string): React.CSSProperties {
 }
 
 /**
- * Creates two word cloud graphs
- * @param data parameters that will be represented in the cloud
- * @returns a react node with two diferent word clouds visualizations.
+ * Creates a word cloud graph and a treeMap graph based on the same data, and pack them in the same container
+ * @param data data source
+ * @param showPercentage if true, both graphs will show its data with a % at the end
+ * @param showCloud If false, the word cloud wont be shown
+ * @param showTreeMap if false, the word cloud wont be shown
+ * @returns 
  */
-export function getWordClouds(data: IStringNumberRelation[], showPercentage: boolean = true): React.ReactNode {
+export function getWordClouds(data: IStringNumberRelation[], showPercentage: boolean = true, showCloud: boolean = true,
+    showTreeMap: boolean = true): React.ReactNode {
     try {
+        const wordCloud = <WordCloudGraph
+            data={data}
+            showPercentage={showPercentage}
+        />
+
+        const treeMap = <SingleTreeMap
+            data={data}
+            showPercentage={showPercentage}
+        />
+
         return (
             <React.Fragment>
                 <span className="word-cloud-wrapper" />
-                <WordCloudGraph
-                    data={data}
-                    showPercentage={showPercentage}
-                />
-                <SingleTreeMap
-                    data={data}
-                    showPercentage={showPercentage}
-                />
+                {showCloud ? wordCloud : ""}
+                {showTreeMap ? treeMap : ""}
+            </React.Fragment>);
+    } catch (e: any) {
+        console.log("Error while creating a wordCloud from implicit attributes data");
+        console.log(e);
+        return <React.Fragment />
+    }
+}
+
+/**
+ * Same idea as getWordClouds, but it adds temporal support for onTreeClick function to set the selected attribute
+ * @param data data source
+ * @param onTreeClick function to execute when a treeMap rectangle has been clicked
+ * @param key key of the community to separate diferent treeMaps
+ * @returns 
+ */
+export function getCommunityWordCloud(data: IStringNumberRelation[], onTreeClick: Function, key: string | undefined): React.ReactNode {
+    try {
+        const wordCloud = <WordCloudGraph
+            data={data}
+            showPercentage={true}
+        />
+
+        const treeMap = <SingleTreeMap
+            explKey={key}
+            data={data}
+            showPercentage={true}
+            onTreeClick={onTreeClick}
+        />
+
+        return (
+            <React.Fragment>
+                <span className="word-cloud-wrapper" />
+                {wordCloud}
+                {treeMap}
             </React.Fragment>);
     } catch (e: any) {
         console.log("Error while creating a wordCloud from implicit attributes data");

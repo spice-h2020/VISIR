@@ -1,36 +1,32 @@
 /**
- * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
- * The button can also be disabled to negate any interaction with it, or change its colors with the state : ButtonState
- * property.
- * If auto toggle parameter is true, the button will automaticaly change its state between active and 
- * unactive when clicked.
+ * @fileoverview This file creates a huge popup that allows the user to configurate a new perspective visualization.
+ * The available configurations are.
+ * - Build a sentence that "explains" how the clustering will work and what attributes will be compared.
+ * - Pick what Legend attributes will be used.
+ * - Pick what artworks/beliefs/concepts attributes will be used in the clustering.
+ * - Pick a name for the perspective.
+ * Theres also a dev mode button to open up more options for an experienced user. These options are:
+ * - Pick the clustering algorythm to use and the weight of its explanability.
+ * - When similar/dissimilar artworks is selected, a slider allows to pick what threshold define when two artworks are similar/dissimilar
+ * - When same artworks is selected, a dropdown to pick what artwork to focus on the clustering.
+ * - Each artworks/beliefs/concepts attributes has a new dropdown to pick what similarity function to use.
+ * - A grey button at the right limit opens a text-area to see the sent perspective json. Used mostly to debug what the CM is receiving.
+ * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
 import { EButtonState, EFileSource } from "../constants/viewOptions";
+import { ESimilarity, IConfigurationSeed } from "../constants/ConfigToolUtils";
+import * as config from "../constants/ConfigToolUtils";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
+//Local files
 import { Button } from "../basicComponents/Button";
 import { DropMenu, EDropMenuDirection } from "../basicComponents/DropMenu";
-import RequestManager from "../managers/requestManager";
-import { ESimilarity, IConfigurationSeed } from "../constants/ConfigToolUtils";
-import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
-
-import * as config from "../constants/ConfigToolUtils";
 import { Slider } from "../basicComponents/Slider";
-
-const darkBackgroundStyle: React.CSSProperties = {
-    background: "rgba(0, 0, 0, 0.3)",
-
-    position: "fixed",
-    top: "0",
-    right: "0",
-    bottom: "0",
-    left: "0",
-
-    zIndex: 100,
-}
+import { ITranslation } from "../managers/CTranslation";
+import RequestManager from "../managers/requestManager";
 
 const innerPanelStyle: React.CSSProperties = {
     width: "90vw",
@@ -69,20 +65,18 @@ const devModeBackgroundStyle: React.CSSProperties = {
     color: "gray"
 }
 
-
-
 interface ConfToolProps {
     requestManager: RequestManager
     isActive: boolean
     setIsActive: React.Dispatch<React.SetStateAction<boolean>>
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
-    updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void;
+    updateFileSource: (fileSource: EFileSource,
+        changeItemState?: Function, apiURL?: string, apiUser?: string, apiPass?: string) => void;
+
+    translation: ITranslation | undefined;
 }
 
 const emptyAlgorithm: config.IAlgorithm = { name: "undefined Algorithm", params: [], default: true }
-const emptyOption: config.ISimilarityFunction = {
-    name: "undefined option", params: [], on_attribute: { att_name: "none", att_type: "string", }, interaction_object: { att_name: "none", att_type: "string", }
-}
+
 /**
  * UI component that executes a function when clicked.
  */
@@ -90,13 +84,16 @@ export const ConfigurationTool = ({
     requestManager,
     isActive,
     setIsActive,
-    setLoadingState,
     updateFileSource,
+    translation
 }: ConfToolProps) => {
     const [isDevMode, setIsDevMode] = useState<boolean>(false);
 
     //Seed for all the configuration
     const [seed, setSeed] = useState<IConfigurationSeed>();
+
+    //Has any perspective been sent?
+    const [hasSent, setHasSent] = useState<boolean>(false);
 
     //Written perspective name
     const [perspectiveName, setPerspectiveName] = useState<string>("");
@@ -108,20 +105,20 @@ export const ConfigurationTool = ({
     const [selectedArtwork, setSelectedArtwork] = useState<config.INameAndIdPair>();
 
     //Similarity Dropdown states
-    const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.Same);
-    const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.Same);
+    const [similarity1, setSimilarity1] = useState<ESimilarity>(ESimilarity.same);
+    const [similarity2, setSimilarity2] = useState<ESimilarity>(ESimilarity.same);
 
     //Sentence structure
     const [midSentence, setMidSentence] = useState<string>("");
     const [lastSentence, setLastSentence] = useState<string>("");
 
-    const [similarity1AvailableValues, setSimilarity1AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
-    const [similarity2AvailableValues, setSimilarity2AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.Similar, ESimilarity.Same, ESimilarity.Different]);
+    const [similarity1AvailableValues, setSimilarity1AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
+    const [similarity2AvailableValues, setSimilarity2AvailableValues] = useState<Array<ESimilarity>>([ESimilarity.similar, ESimilarity.same, ESimilarity.dissimilar]);
 
     const [rightSideSentence, setRightSideSentence] = useState<string>("");
 
     //Middle select option state
-    const [selectedOption, setSelectedOption] = useState<config.ISimilarityFunction>(emptyOption);
+    const [selectedOption, setSelectedOption] = useState<config.ISimilarityFunction | undefined>(undefined);
     //Checkboxes state
     const [citizenAttr, setCitizenAttr] = useState<Map<string, boolean>>(new Map<string, boolean>());
     const [artworksAttr, setArtworksAttr] = useState<Map<string, boolean>>(new Map<string, boolean>());
@@ -135,18 +132,22 @@ export const ConfigurationTool = ({
 
     const [textAreaHeight, setTextAreaHeight] = useState<number>(0);
     const textAreaRef = useRef(null);
+    const perspectiveNameRef = useRef(null);
 
     //When the configuration tool is active, check for the latest configuration seed
     useEffect(() => {
         if (isActive) {
             requestManager.requestConfigurationToolSeed((newSeed: IConfigurationSeed) => {
                 if (newSeed !== undefined) {
+                    //validate and init all tool's values with the new seed data
                     if (newSeed.interaction_similarity_functions.length === 0) {
-                        alert("Configuration Tool initial configuration doesnt contain an interaction similarity function")
+                        console.log("Configuration Tool initial configuration doesnt contain an interaction similarity function");
+                        setSelectedOption(undefined);
                     } else {
                         setSeed(newSeed)
                         setSelectedOption(newSeed.interaction_similarity_functions[0]);
                     }
+                    setSeed(newSeed)
 
                     try {
                         setArtworksAttrDrop(config.initArtworksAttrDrop(newSeed.artwork_attributes));
@@ -167,19 +168,19 @@ export const ConfigurationTool = ({
                     }
 
                     try {
-                        setMidSentence(config.initMidSentence(newSeed.configToolType));
+                        setMidSentence(config.initMidSentence(newSeed.configToolType, translation));
                     } catch (error: any) {
                         throw Error("Failed while setting mid sentence word " + error);
                     }
 
                     try {
-                        setLastSentence(config.initLastSentence(newSeed.configToolType));
+                        setLastSentence(config.initLastSentence(newSeed.configToolType, translation));
                     } catch (error: any) {
                         throw Error("Failed while setting mid sentence word " + error);
                     }
 
                     try {
-                        setRightSideSentence(config.initRightSideSentence(newSeed.configToolType));
+                        setRightSideSentence(config.initRightSideSentence(newSeed.configToolType, translation));
                     } catch (error: any) {
                         throw Error("Failed while setting right side word " + error);
                     }
@@ -195,13 +196,10 @@ export const ConfigurationTool = ({
                     } catch (error: any) {
                         throw Error("Failed while setting available similarity2 dropdown " + error);
                     }
-
-
-
                 }
             });
         }
-    }, [isActive, requestManager]);
+    }, [isActive, requestManager, translation]);
 
     //Init the new citizen and artworks attributes
     useEffect(() => {
@@ -234,32 +232,43 @@ export const ConfigurationTool = ({
 
     //Toggle the background dev mode if dev mode is active
     const backgroundStyle: React.CSSProperties = JSON.parse(JSON.stringify(devModeBackgroundStyle));
-
     backgroundStyle.display = isDevMode ? "block" : "none";
 
     return (
-        <div style={darkBackgroundStyle} className={isActive ? "toVisibleAnim" : "toHiddenAnim"}>
+        <div className={isActive ? "dark-background toVisibleAnim " : "dark-background toHiddenAnim"}>
             <div style={innerPanelStyle}>
                 {/*Row with the buttons to open DEV MODE or exit the application */}
                 <div key={0} style={topButtonsStyle}>
                     <span key={0} style={{ marginLeft: "10px" }}>
                         <Button
                             key={0}
-                            content="Dev mode "
+                            content={translation?.perspectiveBuider.devModeBtn}
                             extraClassName="dark"
                             state={isDevMode ? EButtonState.active : EButtonState.unactive}
                             onClick={() => { setIsDevMode(!isDevMode); }}
                         />
                     </span>
                     <div key={1} style={backgroundStyle}>
-                        DEV MODE
+                        {translation?.perspectiveBuider.devModeBtn}
                     </div>
                     <span key={2} style={{ marginRight: "10px" }}>
                         <Button
                             key={1}
                             content=""
                             extraClassName="dark btn-close"
-                            onClick={() => { setIsActive(false); }}
+                            onClick={() => {
+                                setIsActive(false);
+                                if (hasSent) {
+                                    setHasSent(false);
+
+                                    if (requestManager.usingAPI) {
+                                        updateFileSource(EFileSource.Api, undefined, requestManager.axios.defaults.baseURL,
+                                            requestManager.apiUsername, requestManager.apiPassword)
+                                    } else {
+                                        updateFileSource(EFileSource.Local)
+                                    }
+                                }
+                            }}
                             postIcon={<div className="icon-close"></div>}
                         />
                     </span>
@@ -275,9 +284,7 @@ export const ConfigurationTool = ({
                         alignItems: "center", height: "100%", paddingBottom: "1rem",
                         width: "100%"
                     }}>
-                        <div key={3} title="The percentage of weight minimum of users that must be represented by the same value
-                        of contributions attributes (emotions, values, sentiments) to make such attribute explanable.
-                        A big value increase the number of communities and maybe, increase the number of users without community."
+                        <div key={3} title={translation?.perspectiveBuider.algorithmSliderExplanation}
                             style={{ display: `${isDevMode ? "inline-flex" : "none"}`, alignItems: "center" }}>
                             <div style={{ width: "50%" }}>
                                 {getAlgorythmSelectorDropdown(seed, selectedAlgorithm, setSelectedAlgorithm)}
@@ -289,7 +296,7 @@ export const ConfigurationTool = ({
                                     minimum={0.0}
                                     maximum={1.0}
                                     step={0.1}
-                                    content={"Explainability weight"}
+                                    content={translation?.perspectiveBuider.algorithmSlider}
                                 />
                             </div>
                         </div>
@@ -308,35 +315,16 @@ export const ConfigurationTool = ({
 
                     borderTop: "2px solid red"
                 }}>
+
+                    {getSimilarityDropdown(similarity1, setSimilarity1,
+                        similarity1AvailableValues, translation, selectedOption, true)}
+
+                    {getOptionSelector(selectedOption, seed, setSelectedOption)}
+                    {getSentenceDiv(selectedOption, midSentence)}
+
                     <div>
-                        <DropMenu
-                            key={0}
-                            items={getSimilarityDropdown(similarity1, setSimilarity1,
-                                similarity1AvailableValues)}
-                            content={ESimilarity[similarity1]}
-                            menuDirection={EDropMenuDirection.down}
-                            extraClassButton={"transparent"}
-                            postIcon={<div className="down-arrow" />}
-                        />
-                    </div>
-                    <div>
-                        <React.Fragment key={1}>
-                            {getOptionSelector(selectedOption, seed, setSelectedOption)}
-                        </React.Fragment>
-                    </div>
-                    <div>
-                        <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {midSentence} </span>
-                    </div>
-                    <div>
-                        <DropMenu
-                            key={3}
-                            items={getSimilarityDropdown(similarity2, setSimilarity2,
-                                similarity2AvailableValues)}
-                            content={ESimilarity[similarity2]}
-                            menuDirection={EDropMenuDirection.down}
-                            extraClassButton={"transparent"}
-                            postIcon={<div className="down-arrow" />}
-                        />
+                        {getSimilarityDropdown(similarity2, setSimilarity2,
+                            similarity2AvailableValues, translation)}
                     </div>
                     <div style={{ display: "inline-flex" }}>
                         <span key={5} style={{ alignSelf: "center", margin: "0% 15px" }}> {lastSentence} </span>
@@ -345,9 +333,8 @@ export const ConfigurationTool = ({
                             {getNArtworksDropdown(similarity2, selectedArtwork, setSelectedArtwork, seed)}
                         </div>
                         <div key={4} style={getArtworsSliderDropdownStyle(isDevMode, similarity2)}
-                            title="Minimum similarity between artworks from two interactions to calculate the similarity between them.
-                        (otherwise its assume as similar)">
-                            {getSimilaritySlider(artworksWeight, setArtworksWeight, similarity2)}
+                            title={translation?.perspectiveBuider.similaritySliderExplanation}>
+                            {getSimilaritySlider(artworksWeight, setArtworksWeight, similarity2, translation)}
                         </div>
                     </div>
                 </div>
@@ -368,12 +355,17 @@ export const ConfigurationTool = ({
 
                         width: "100%"
                     }}>
-                        <fieldset key={0} style={{ height: "-webkit-fill-available", overflowY: "auto", minInlineSize: "auto", width: "35%" }}>
-                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>Legend Attributes</h3>
+                        <fieldset key={0} className="fillAvailableHeight" style={{ overflowY: "auto", minInlineSize: "auto", width: "35%" }}>
+                            <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>
+
+                                {`${translation?.perspectiveBuider.leftBoxTittle}`} </h3>
+
                             {getCitizenAttributeSelector(seed, citizenAttr, setCitizenAttr)}
                         </fieldset>
-                        <fieldset key={1} style={getArtworkCheckboxStyle(ESimilarity.Same === similarity2)}>
+                        <fieldset key={1} className="fillAvailableHeight" style={getArtworkCheckboxStyle(ESimilarity.same === similarity2)}>
+
                             <h3 style={{ padding: "0.25rem 0px", margin: "0px 0px", borderBottom: "1px solid black" }}>{rightSideSentence}</h3>
+
                             {getArtworkAttributeSelector(similarity2, seed, artworksAttr, setArtworksAttr, artworksAttrDrop,
                                 setArtworksAttrDrop, isDevMode)}
                         </fieldset>
@@ -403,8 +395,8 @@ export const ConfigurationTool = ({
                     margin: "1rem 0px",
                     height: "5vh"
                 }}>
-                    <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}>Perspective Name:</label>
-                    <input key={1} style={{ marginRight: "1rem" }} type="text" id="f-perspective_name" name="f-perspective_name"
+                    <label key={0} htmlFor="f-perspective_name" style={{ marginRight: "1rem" }}> {translation?.perspectiveBuider.perspectiveNameLabel}:</label>
+                    <input key={1} ref={perspectiveNameRef} style={{ marginRight: "1rem" }} type="text" id="f-perspective_name" name="f-perspective_name"
                         onChange={
                             (element) => {
                                 setPerspectiveName(element.target.value)
@@ -412,7 +404,7 @@ export const ConfigurationTool = ({
                         }
                     />
                     <Button
-                        content="Send Perspective"
+                        content={translation?.perspectiveBuider.sendBtn}
                         extraClassName="primary"
 
                         onClick={
@@ -424,7 +416,17 @@ export const ConfigurationTool = ({
 
                                     setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
-                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => { });
+                                    requestManager.sendNewConfigSeed(newConfiguration, () => { }, () => {
+
+                                        alert(`${newConfiguration.name} perspective has been sent`)
+
+                                        setPerspectiveName("");
+                                        if (perspectiveNameRef.current) {
+                                            (perspectiveNameRef.current as any).value = "";
+                                        }
+
+                                        setHasSent(true);
+                                    });
                                 }
                             }
                         }
@@ -435,21 +437,43 @@ export const ConfigurationTool = ({
     );
 };
 
+
+function getSentenceDiv(selectedOption: config.ISimilarityFunction | undefined, midSentence: string): React.ReactNode {
+    if (selectedOption) {
+        return <span key={2} style={{ alignSelf: "center", margin: "0% 15px" }}> {selectedOption !== undefined ? midSentence : ""} </span>
+    } else {
+        return <React.Fragment key={0}></React.Fragment>;
+    }
+}
+
 /**
- * Creates a dropdown to pick between diferent ESimilarity Options
- * @param sim current ESimilarity value selected
- * @param setSimilarity callback executed when an option is selected
- * @returns 
+ * Creates a dropdown to pick between the available ESimilarity options 
+ * @param sim current similarity selected
+ * @param setSimilarity set the current similarity
+ * @param similarityAvailableValues list with all ESimilarity available values
+ * @param translation object used to translate text
+ * @returns the created dropdown
  */
 function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
-    similarityAvailableValues: Array<ESimilarity>): React.ReactNode[] {
+    similarityAvailableValues: Array<ESimilarity>, translation: ITranslation | undefined, selectedOption?: config.ISimilarityFunction | undefined,
+    isFirstDropdown: boolean = false
+): React.ReactNode {
+
     const buttons: React.ReactNode[] = [];
 
+    if (isFirstDropdown && selectedOption === undefined) {
+        return "";
+    }
     for (let i = 0; i < similarityAvailableValues.length; i++) {
+
+        const btnContent = translation?.perspectiveBuider.similarityValues[
+            ESimilarity[similarityAvailableValues[i]] as "same" | "similar" | "dissimilar"
+        ];
+
         buttons.push(
             <Button
                 key={i}
-                content={ESimilarity[similarityAvailableValues[i]]}
+                content={btnContent}
                 state={sim === similarityAvailableValues[i] ? EButtonState.active : EButtonState.unactive}
                 onClick={
                     () => {
@@ -460,12 +484,26 @@ function getSimilarityDropdown(sim: ESimilarity, setSimilarity: Function,
             />
         )
     }
-
-    return buttons;
-
+    return (
+        <div>
+            <DropMenu
+                key={0}
+                items={buttons}
+                content={ESimilarity[sim]}
+                menuDirection={EDropMenuDirection.down}
+                extraClassButton={"transparent"}
+                postIcon={<div className="down-arrow" />}
+            />
+        </div>)
 }
 
-
+/**
+ * Creates a dropdown to pick what clustering algorithm will be used.
+ * @param seed seed configuration
+ * @param selectedAlgorythm current selected algorythm
+ * @param setSelectedAlgorythm set the current selected aglorytm
+ * @returns returns the dropdown
+ */
 function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, selectedAlgorythm: config.IAlgorithm, setSelectedAlgorythm: Function): React.ReactNode {
 
     if (seed !== undefined) {
@@ -497,6 +535,7 @@ function getAlgorythmSelectorDropdown(seed: IConfigurationSeed | undefined, sele
                 postIcon={<div className="down-arrow" />}
             />
         );
+
     } else {
         <DropMenu
             key={0}
@@ -520,7 +559,7 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
     setCitizenAttr: React.Dispatch<React.SetStateAction<Map<string, boolean>>>): React.ReactNode[] {
 
     if (seed === undefined) {
-        return [<React.Fragment key={0}></React.Fragment>];
+        return [""];
     } else {
         const checkboxes = [];
 
@@ -534,7 +573,7 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
                         citizenAttr.set(userAttribute.att_name, !isChecked);
                         setCitizenAttr(new Map(citizenAttr));
                     }}>
-                    {/*The on change is a dummy function needed to not get error because otherwise the checked 
+                    {/*The on change is a dummy function needed to not get some errors because otherwise the checked 
                         property changes without onChange being implemented*/}
                     <input key={1} type="checkbox" style={{ userSelect: "none", cursor: "pointer" }}
                         id={`cit-${userAttribute.att_name}`} value={userAttribute.att_name} checked={isChecked ? isChecked : false}
@@ -549,13 +588,26 @@ function getCitizenAttributeSelector(seed: IConfigurationSeed | undefined, citiz
 }
 
 
-
 /**
- * Creates several checkboxes to select the artworks attributes to use in the clustering
+ * 
  * @param sim2 Similarity value of the second similarity dropdown. If === Same, the checkboxes will be disabled
  * @param seed configuration seed
  * @param artworksAttr current state of the checkboxes
  * @param setArtworksAttr callback executed when a checkbox is clicked 
+ * @returns 
+ */
+
+
+/**
+ * Creates several checkboxes to select the artworks attributes to use in the clustering. Additionaly, if dev mode is active
+ * it also creates the dropdowns to pick the similarity function for each attribute
+ * @param sim2 current artwork similarity
+ * @param seed current seed configuration
+ * @param artworksAttr selected state of all artworks attribute
+ * @param setArtworksAttr set the selected state of all artworks attributes
+ * @param artworksAttrDrop selected state of all artworks dropdown similarity function
+ * @param setArtworksAttrDrop set the prevous variable
+ * @param isDevMode 
  * @returns 
  */
 function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed | undefined,
@@ -564,16 +616,16 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
     : React.ReactNode[] {
 
     if (seed === undefined) {
-        return [<div key={0}></div>];
+        return [""];
     } else {
         const checkboxes = [];
 
         for (let i = 0; i < seed.artwork_attributes.length; i++) {
             const onAttribute = seed.artwork_attributes[i].on_attribute;
-            const isChecked: boolean | undefined = artworksAttr.get(onAttribute.att_name) && sim2 !== ESimilarity.Same;
+            const isChecked: boolean | undefined = artworksAttr.get(onAttribute.att_name) && sim2 !== ESimilarity.same;
 
             checkboxes.push(
-                <div key={i} className={`checkbox-row ${ESimilarity.Same === sim2 ? "" : "active"}`}
+                <div key={i} className={`checkbox-row ${ESimilarity.same === sim2 ? "" : "active"}`}
                     style={{
                         display: "flex",
                         flexDirection: "row",
@@ -611,13 +663,22 @@ function getArtworkAttributeSelector(sim2: ESimilarity, seed: IConfigurationSeed
     }
 }
 
+/**
+ * Get the similarity function dropdown of a single artwork attribute
+ * @param attrName name of the owner attribute
+ * @param algorithms available similarity functions for this attribute
+ * @param artworksAttrDrop state of this dropdown
+ * @param setArtworksAttrDrop set the state of this dropdown
+ * @param isDevMode if false this component will be hidden
+ * @returns 
+ */
 function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.IAlgorithm[],
     artworksAttrDrop: Map<string, boolean[]>, setArtworksAttrDrop: Function, isDevMode: boolean) {
 
     const buttonStates = artworksAttrDrop.get(attrName);
 
     if (buttonStates === undefined) {
-        return <div />
+        return "";
     }
 
     const dropMenuItems: React.ReactNode[] = [];
@@ -669,23 +730,29 @@ function getSingleArtworkAttributeDropdown(attrName: string, algorithms: config.
 }
 /**
  * Creates the middle dropdown
- * @param selectedOption current st
+ * @param selectedOption current selected option
  * @param seed configuration seed
- * @param setSelectedOption callback executed when a selected option is clicked
+ * @param setSelectedOption update the selected option
  * @returns 
  */
-function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: IConfigurationSeed | undefined,
+function getOptionSelector(selectedOption: config.ISimilarityFunction | undefined, seed: IConfigurationSeed | undefined,
     setSelectedOption: Function): React.ReactNode {
+
+    if (selectedOption === undefined) {
+        return "";
+    }
 
     if (!seed) {
         return (
-            <DropMenu
-                items={[]}
-                content={`No options available`}
-                menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent"}
-                postIcon={<div className="down-arrow" />}
-            />);
+            <div>
+                <DropMenu
+                    items={[]}
+                    content={`No options available`}
+                    menuDirection={EDropMenuDirection.down}
+                    extraClassButton={"transparent"}
+                    postIcon={<div className="down-arrow" />}
+                />
+            </div>);
     } else {
 
         const items = [];
@@ -709,23 +776,30 @@ function getOptionSelector(selectedOption: config.ISimilarityFunction, seed: ICo
         }
 
         return (
-            <DropMenu
-                items={items}
-                content={`${selectedOption.on_attribute.att_name.charAt(0).toUpperCase()}${selectedOption.on_attribute.att_name.slice(1)}`}
-                menuDirection={EDropMenuDirection.down}
-                extraClassButton={"transparent"}
-                postIcon={<div className="down-arrow" />}
-            />);
+            <div>
+                <DropMenu
+                    items={items}
+                    content={`${selectedOption.on_attribute.att_name.charAt(0).toUpperCase()}${selectedOption.on_attribute.att_name.slice(1)}`}
+                    menuDirection={EDropMenuDirection.down}
+                    extraClassButton={"transparent"}
+                    postIcon={<div className="down-arrow" />}
+                />
+            </div>);
     }
 }
 
+/**
+ * Hide and make uninteractuable the artworks checkboxes when hide is true
+ * @param hide 
+ * @returns 
+ */
 function getArtworkCheckboxStyle(hide: boolean): React.CSSProperties {
 
     const style: React.CSSProperties = {
         pointerEvents: hide ? "none" : "auto",
         opacity: hide ? "30%" : "100%",
         userSelect: "none",
-        height: "-webkit-fill-available",
+
         overflowY: "auto",
         minInlineSize: "auto",
         width: "100%",
@@ -734,6 +808,12 @@ function getArtworkCheckboxStyle(hide: boolean): React.CSSProperties {
     return style;
 }
 
+/**
+ * Returns the style of the text area with the JSON sent to the CM
+ * @param textAreaHeight dynamic height of the text area to fit the text inside it
+ * @param isTextAreaActive if false, the text area will be hidden
+ * @returns 
+ */
 function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): React.CSSProperties {
     const style: React.CSSProperties = {
         overflowY: "auto",
@@ -746,10 +826,18 @@ function getTextAreaStyle(textAreaHeight: number, isTextAreaActive: boolean): Re
     return style;
 }
 
+/**
+ * Creates a slider to select the similar/dissimilar threshold of the artworks attributes
+ * @param artworksWeight current threshold weight
+ * @param setArtworksWeight set the threshold weight
+ * @param similarity2 current state of the similar/dissimilar artworks
+ * @param translation object to translate the text
+ * @returns 
+ */
+function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity,
+    translation: ITranslation | undefined): React.ReactNode {
 
-function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function, similarity2: ESimilarity): React.ReactNode {
-
-    if (similarity2 !== ESimilarity.Same) {
+    if (similarity2 !== ESimilarity.same) {
 
         return (
             <Slider
@@ -758,7 +846,7 @@ function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function
                 minimum={0.0}
                 maximum={1.0}
                 step={0.1}
-                content={`${ESimilarity[similarity2]} Threshold similarity`}
+                content={`${translation?.perspectiveBuider.similaritySlider}`}
             />);
 
     } else {
@@ -767,18 +855,19 @@ function getSimilaritySlider(artworksWeight: number, setArtworksWeight: Function
 }
 
 /**
- * Returns a dropDown that allows the user to pick what artwork to use when doing "same" artworks
- * @param similarity2 
- * @param selectedArtwork 
- * @param setSelectedArtwork 
- * @param seed 
+ * Creates the dropdown to select what artowrk to focus on when doing same artworks. If same is not selected, it will be
+ * hidden.
+ * @param similarity2 current state of the similarity between artworks
+ * @param selectedArtwork current selected artwork
+ * @param setSelectedArtwork update the selected artwork
+ * @param seed current seed configuration
  * @returns 
  */
 function getNArtworksDropdown(similarity2: ESimilarity, selectedArtwork: config.INameAndIdPair | undefined,
     setSelectedArtwork: Function, seed: IConfigurationSeed | undefined): React.ReactNode {
     const items = [];
 
-    if (seed !== undefined && selectedArtwork !== undefined && similarity2 === ESimilarity.Same) {
+    if (seed !== undefined && selectedArtwork !== undefined && similarity2 === ESimilarity.same) {
         for (let i = 0; i < seed.artworks.length; i++) {
             const name = seed.artworks[i].name;
 
@@ -814,9 +903,10 @@ function getNArtworksDropdown(similarity2: ESimilarity, selectedArtwork: config.
     }
 }
 
+
 function getArtworsSliderDropdownStyle(isDevMode: boolean, similarity: ESimilarity) {
 
-    let shouldDisplay = isDevMode || similarity === ESimilarity.Same
+    let shouldDisplay = isDevMode || similarity === ESimilarity.same
     const style: React.CSSProperties =
     {
         display: `${shouldDisplay ? "block" : "none"}`,

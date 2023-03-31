@@ -7,7 +7,7 @@
 import { Dispatch } from "react";
 import { DimAttribute } from "./nodes";
 //Local files
-import { anyProperty, ICommunityData, IUserData } from "./perspectivesTypes";
+import { ICommunityData, EExplanationTypes, IUserData } from "./perspectivesTypes";
 import { EButtonState } from "./viewOptions";
 
 /**
@@ -22,168 +22,22 @@ export interface IBoundingBox {
     color?: {
         color: string
         border: string
+        highlight: string
         name: string
     }
 }
 
 /**
- * Interface of a translation json
+ * Interface of an implicit attribute of a community
  */
-export interface ITranslation extends anyProperty {
-    toolbar: {
-        fileSourceDrop: {
-            name: string,
-            localFiles: string,
-            Api_URL: string,
-        },
-        optionsDrop: {
-            name: string,
-            hideLabels: string,
-            hideEdges: string,
-            minSimilarity: string,
-            removeEdges: string,
-        },
-        selectPerspective: {
-            defaultName: string,
-            noPerspectiveName: string,
-        },
-        legend: {
-            name: string,
-            noLegend: string,
-        }
-    },
-    loadingText: {
-        requestFiles: string,
-        requestPerspective: string,
-        requestingAllPerspectives: string,
-        requestingConfToolSeed: string,
-        CMisBusy: string,
-        simpleRequest: string,
-        simpleLoading: string,
-    },
-    dataColumn: {
-        citizenTittle: string,
-        citizenAmount: string,
-        anonymous: string,
-        medoidTittle: string,
-        mainInteractionsTittle: string,
-        otherInteractionsTittle: string,
-        labelText: string,
-        unknownUserAttrb: string,
-        communityPanelTittle: string,
-        communityNameLabel: string,
-    },
-    legend: {
-        anonymousRow: string,
-        anonymousExplanation: string,
-    }
+export interface IAttribute {
+    key: string,
+    value: string,
+    type: EExplanationTypes
 }
 
-export class CTranslation {
-    t!: ITranslation;
-
-    constructor(newT: ITranslation | undefined) {
-        this.t = this.initT(newT);
-    }
-
-    initT(newT: ITranslation | undefined) {
-        let initial = this.defaultT();
-
-        if (newT === undefined) {
-            return initial;
-        }
-
-        const keys = Object.keys(initial);
-        for (const key of keys) {
-
-            if (newT[key] !== undefined) {
-
-                if (typeof initial[key] === "object") {
-                    const subKeys = Object.keys(initial[key]);
-
-                    for (const subkey of subKeys) {
-
-                        if (newT[key][subkey] !== undefined) {
-
-                            if (typeof initial[key][subkey] === "object") {
-                                const subsubKeys = Object.keys(initial[key][subkey]);
-
-                                for (const subsubkey of subsubKeys) {
-
-                                    if (newT[key][subkey][subsubkey] === undefined) {
-                                        newT[key][subkey][subsubkey] = initial[key][subkey][subsubkey];
-                                    }
-                                }
-                            }
-
-                        } else {
-                            newT[key][subkey] = initial[key][subkey];
-                        }
-                    }
-                }
-
-            } else {
-                newT[key] = initial[key];
-            }
-        }
-        return newT;
-    }
-
-    defaultT() {
-        const t: ITranslation = {
-            toolbar: {
-                fileSourceDrop: {
-                    name: "File Source",
-                    localFiles: "Local app files",
-                    Api_URL: "Api URL"
-                },
-                optionsDrop: {
-                    name: "Options",
-                    hideLabels: "Hide node labels",
-                    hideEdges: "Hide unselected Edges",
-                    minSimilarity: "Minimum similarity:",
-                    removeEdges: "Remove % of edges:"
-                },
-                selectPerspective: {
-                    defaultName: "Select perspective",
-                    noPerspectiveName: "No available perspectives",
-                },
-                legend: {
-                    name: "Legend",
-                    noLegend: "Unactive Legend",
-                }
-            },
-            loadingText: {
-                requestFiles: "Requesting files to",
-                requestPerspective: "Requesting perspective",
-                requestingAllPerspectives: "Requesting file with All perspectives",
-                requestingConfToolSeed: "Requesting configuration tool seed",
-                CMisBusy: "Community Model is busy. Trying again",
-                simpleRequest: "Requesting",
-                simpleLoading: "Loading"
-            },
-            dataColumn: {
-                citizenTittle: "Citizen Attributes",
-                citizenAmount: "Total Citizens:",
-                anonymous: "Anonymous",
-                medoidTittle: "Medoid Attributes",
-                mainInteractionsTittle: "Interactions related to this user's community:",
-                otherInteractionsTittle: "Other user interactions:",
-                labelText: "label",
-                unknownUserAttrb: "All users' attributes are unknown",
-                communityPanelTittle: "Community Attributes",
-                communityNameLabel: "Name"
-            },
-            legend: {
-                anonymousRow: "Anonymous Users",
-                anonymousExplanation: "Users without any explicit data"
-            }
-        }
-        return t;
-    }
-}
 /**
- * Legend data source
+ * Legend data source with the information to know what value has X dimension
  */
 export interface ILegendData {
     dims: DimAttribute[],
@@ -207,6 +61,7 @@ export interface IStateFunctions {
     setDimensionStrategy: Function;
     setNetworkFocusId: Function;
     setSelectedObject: Dispatch<ISelectedObjectAction>;
+    setSelectedAttribute: React.Dispatch<React.SetStateAction<IAttribute | undefined>>
 }
 
 /**
@@ -218,12 +73,14 @@ export interface ISelectedObject {
     sourceID?: string;
 }
 
+
+
+//#region Reducer types/function
+
 export interface ILegendDataAction {
     type: "dims" | "anon" | "anonGroup" | "reset";
     newData: boolean | DimAttribute[];
 }
-
-//#region Reducer types/function
 
 export function legendDataReducer(currentState: ILegendData, action: ILegendDataAction) {
     switch (action.type) {

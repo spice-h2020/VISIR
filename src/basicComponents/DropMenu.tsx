@@ -1,8 +1,9 @@
 /**
  * @fileoverview This file creates a button that when activated, shows an extra menu. 
  * The main button can be activated by click or by hovering.
- * The extra menu can be hidden if the user clicks outside the extra menu or by clicking the main button.
- * The behaviour will depend on the properties
+ * The extra menu can be hidden if the user clicks outside the extra menu or by clicking the main button again.
+ * The extra menu direction depends on menuDirection property.
+ * There are a bunch of properties to change the style of the menu content and of the main button of the dropmenu
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */

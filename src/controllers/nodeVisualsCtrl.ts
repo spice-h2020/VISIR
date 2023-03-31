@@ -245,10 +245,14 @@ export default class NodeVisualsCtrl {
         this.dimStrat.nodeToColorless(node);
     }
 
+    /**
+     * Check if the node must be hidden because of the legend
+     * @param node 
+     * @returns 
+     */
     isHidedByLegend(node: IUserData) {
         let hideNode = false;
         const keys = Object.keys(node.explicit_community);
-
 
         for (let i = 0; i < keys.length; i++) {
             const value = node.explicit_community[keys[i]]

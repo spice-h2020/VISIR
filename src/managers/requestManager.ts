@@ -8,13 +8,14 @@
 import { EFileSource, initialOptions } from '../constants/viewOptions';
 import { validateConfigurationSeed, validatePerspectiveDataJSON, validatePerspectiveIDfile as validateAllPerspectiveIDfile } from '../constants/ValidateFiles';
 import { IPerspectiveData, PerspectiveId as IPerspectiveId, PerspectiveId } from '../constants/perspectivesTypes';
-//Packages
-import { Axios, AxiosRequestConfig } from 'axios'
-//Config
 import config from '../appConfig.json';
+//Packages
+import { Axios } from 'axios'
+//Local File
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
-import { CTranslation } from '../constants/auxTypes';
+import { ITranslation } from './CTranslation';
 
+const apiVersion = "v2.0";
 
 export default class RequestManager {
     isActive: boolean;
@@ -30,23 +31,26 @@ export default class RequestManager {
     //URL to ask for files when local url is selected
     baseLocalURL: string = "./data/";
 
-    allPerspectivesGETurl: string = "visualizationAPI/index";
-    singlePerspectiveGETurl: string = "visualizationAPI/file/";
-    perspectiveConfigGETurl: string = "v1.1/perspectives/"
+    allPerspectivesGETurl: string = `${apiVersion}/visir/files`;
+    singlePerspectiveGETurl: string = `${apiVersion}/visir/files/`;
+    perspectiveConfigGETurl: string = `${apiVersion}/perspectives/`;
 
-    confSeedGETurl: string = "v1.1/seed";
-    confSeedPOSTurl: string = "v1.1/perspective";
+    confSeedGETurl: string = `${apiVersion}/visir/seed`;
+    confSeedPOSTurl: string = `${apiVersion}/perspectives`;
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
-    tClass: CTranslation;
+    translation: ITranslation | undefined;
+
+    apiUsername: string = config.API_USER;
+    apiPassword: string = config.API_PASS;
 
     /**
      * Constructor of the class
      */
-    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, tClass: CTranslation) {
+    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, translation: ITranslation | undefined) {
         this.setLoadingState = setLoadingState;
-        this.tClass = tClass
+        this.translation = translation;
 
         this.isActive = initialOptions.fileSource === EFileSource.Api;
         this.usingAPI = false;
@@ -58,11 +62,25 @@ export default class RequestManager {
      * Initialize axios API
      * @param {String} baseURL base url of all axios petitions
      */
-    init(baseURL: string | undefined) {
+    init(baseURL: string | undefined, apiUser?: string, apiPass?: string) {
         if (baseURL !== undefined) {
+            if (baseURL[baseURL.length - 1] !== '/') {
+                baseURL = `${baseURL}/`
+            }
+
+            console.log(`Source url changed to ${baseURL}`)
+
+            this.apiUsername = apiUser ? apiUser : "";
+            this.apiPassword = apiPass ? apiPass : "";
+
             this.axios = new Axios({
                 baseURL: baseURL,
                 timeout: config.MAX_GET_REQUEST_TIMEOUT,
+                auth: {
+                    username: this.apiUsername,
+                    password: this.apiPassword
+                }
+
             });
             this.isActive = true;
         } else
@@ -76,7 +94,7 @@ export default class RequestManager {
      * if something went wrong.
      */
     requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting perspective ${name}` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestPerspective} Requesting perspective ${name}` });
 
         this.getPerspective(perspectiveId)
             .then((response: any) => {
@@ -94,7 +112,7 @@ export default class RequestManager {
 
                     callback(perspective);
                 } else {
-                    throw new Error(`Error wuile getting Perspective ${perspectiveId}: ${response.statusText}`);
+                    throw new Error(`Error while getting Perspective ${perspectiveId}: ${response.statusText}`);
                 }
             })
             .catch((error: any) => {
@@ -124,7 +142,7 @@ export default class RequestManager {
      * something went wrong.
      */
     requestAllPerspectivesIds(callback: Function, stateCallback?: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting all perspectives` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingAllPerspectives}` });
 
         this.getAllPerspectives()
             .then((response: any) => {
@@ -162,9 +180,12 @@ export default class RequestManager {
         return this.requestToUrl(this.usingAPI ? `${this.allPerspectivesGETurl}` : "dataList.json");
     }
 
+    /**
+     * Request the configuration tool seed from the CM and validate
+     * @param callback 
+     */
     requestConfigurationToolSeed(callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting configuration tool seed` });
-
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingConfToolSeed}` });
 
         this.getConfigurationToolSeed()
             .then((response: any) => {
@@ -191,12 +212,23 @@ export default class RequestManager {
                 this.setLoadingState({ isActive: false });
             });
     }
+
+    /**
+     * Get configuration tool seed
+     * @returns 
+     */
     getConfigurationToolSeed() {
         return this.requestToUrl(this.usingAPI ? this.confSeedGETurl : "configurationTool/seedFile.json");
     }
 
+
+    /**
+     * Request something to an url
+     * @param url 
+     * @returns 
+     */
     requestToUrl(url: string): any {
-        console.log(`Request to ${this.axios.defaults.baseURL}${url}`);
+        console.log(`${this.translation?.loadingText.simpleRequest} ${this.axios.defaults.baseURL}${url}`);
         this.currentJobWaitTime = 0;
 
         return this.axios.get(url)
@@ -222,13 +254,18 @@ export default class RequestManager {
             });
     }
 
+    /**
+     * Ask if a job is in progress and return the result if when the job is completed
+     * @param url 
+     * @returns 
+     */
     askJobInProgress(url: any): any {
         this.currentJobWaitTime += this.jobTimeOut;
 
         if (this.currentJobWaitTime > this.jobMaxWaitTime) {
             throw new Error("Max wait time for the community model reached");
         }
-        this.setLoadingState({ isActive: true, msg: `Community Model is busy (${this.currentJobWaitTime / 2})` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.CMisBusy} (${this.currentJobWaitTime / 2})` });
 
         return this.axios.get(url)
             .then(async (response) => {
@@ -268,7 +305,7 @@ export default class RequestManager {
      * Update the baseURL of the requestManager
      * @param {EFileSource} newSource the new fileSource
      */
-    changeBaseURL(newSource: EFileSource, apiURL?: string) {
+    changeBaseURL(newSource: EFileSource, apiURL?: string, apiUser?: string, apiPass?: string) {
         let newUrl = newSource === EFileSource.Local ? this.baseLocalURL : apiURL;
 
         if (apiURL === undefined && newSource === EFileSource.Api) {
@@ -277,23 +314,30 @@ export default class RequestManager {
 
         this.usingAPI = newSource === EFileSource.Api;
 
-        this.init(newUrl);
-
-        console.log(`Source url changed to ${newUrl}`)
+        this.init(newUrl, apiUser, apiPass);
     }
 
+    /**
+     * Send a new perspective configuration to the CM
+     * @param newConfiguration 
+     * @param updateFileSource 
+     * @param callback 
+     */
     sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource,
-        changeItemState?: Function, apiURL?: string) => void, callback: Function) {
+        changeItemState?: Function, apiURL?: string, apiUser?: string, apiPass?: string) => void, callback: Function) {
 
-        this.setLoadingState({ isActive: true, msg: `Sending a perspective configuration` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.sendingPerspectiveConfig}` });
 
         // For some reason, CM receives an empty object when axios does the post request.
         if (this.usingAPI) {
+
             fetch(`${this.axios.defaults.baseURL}${this.confSeedPOSTurl}`, {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Basic ${btoa(this.apiUsername + ':' + this.apiPassword)}`,
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+
                 },
                 body: JSON.stringify(newConfiguration)
             })
@@ -301,25 +345,30 @@ export default class RequestManager {
                 .then((res) => {
                     console.log("response: " + res)
 
-                    if (this.usingAPI) {
-                        updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
-                    } else {
-                        updateFileSource(EFileSource.Local)
-                    }
-
                     callback();
                 })
                 .catch((err) => {
                     console.log(err)
-                    this.setLoadingState({ isActive: false });
+
                     window.alert(err);
                     callback();
-                });
+                }).finally(() => {
+                    this.setLoadingState({ isActive: false });
+                });;
+
+        } else {
+            this.setLoadingState({ isActive: false });
+            callback();
         }
     }
 
+    /**
+     * Request a perspective configuration file so the user can download it
+     * @param perspectiveId 
+     * @param callback 
+     */
     requestPerspectiveConfig(perspectiveId: PerspectiveId, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `Requesting perspective configuration file` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestPerspectiveConfig}` });
 
         if (this.usingAPI) {
             this.requestToUrl(`${this.perspectiveConfigGETurl}${perspectiveId.id.split(" ")[0]}`)
@@ -353,9 +402,11 @@ export default class RequestManager {
         }
     }
 }
-
-
-
+/**
+ * Add a delay
+ * @param seconds 
+ * @returns 
+ */
 function delay(seconds: number) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }

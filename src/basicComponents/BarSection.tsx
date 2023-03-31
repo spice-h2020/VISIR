@@ -1,6 +1,6 @@
 /**
- * @fileoverview This file creates a portion of an horizontal stacked bar graphic. 
- * If the bar is too thin, the inside text will be hidden.
+ * @fileoverview This file creates a section of an horizontal stacked bar graphic. 
+ * If the bar is too thin, the inside text will be cropped and/or hidden.
  * The color of the bar depends on the dimension of the bar. Shape dimension additionaly add the shape figure to the 
  * shown text.
  * @package Requires React package. 
@@ -8,12 +8,14 @@
  */
 //Constants
 import { Dimensions, nodeConst } from "../constants/nodes";
+import { IStringNumberRelation } from "../constants/perspectivesTypes";
 //Packages
 import React, { useEffect, useRef, useState } from "react";
+//Local files
 import { ShapeForm } from "./ShapeForm";
-import { IStringNumberRelation } from "../constants/perspectivesTypes";
 
-interface StackedBarProps {
+
+interface StackedBarSectionProps {
     data: IStringNumberRelation;
     /**
      * Dimensions represented in the portion.
@@ -31,14 +33,14 @@ interface StackedBarProps {
 }
 
 /**
- * UI component that creates a portion of a stacked bar graph.
+ * UI component that creates a section of a stacked bar graph.
  */
-export const BarPortion = ({
+export const BarSection = ({
     data,
     dim,
     dimensionIndex,
     portionOrder
-}: StackedBarProps) => {
+}: StackedBarSectionProps) => {
 
     const [text, setText] = useState<string>(`${data.count}%`);
     const [isSymbolActive, setSymbolActive] = useState<boolean>(true);

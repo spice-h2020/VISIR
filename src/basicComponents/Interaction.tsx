@@ -10,6 +10,7 @@
 import { IArtworkData, IStringNumberRelation, IInteraction } from "../constants/perspectivesTypes";
 //Packages
 import { useEffect, useState } from "react";
+//Local files
 import { getWordClouds, isAllZero } from "../components/DataColumn";
 
 interface InteractionPanelProps {

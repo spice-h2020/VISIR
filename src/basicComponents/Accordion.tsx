@@ -19,7 +19,7 @@ interface AccordionProps {
 }
 
 /**
- * Group of elements that shows the user the tittle of diferent panels and allows the user to click one of them to 
+ * Group of elements with different tittles and diferent panels that allows the user to click one of them to 
  * expand a panel while collapsing others.
  */
 export const Accordion = ({

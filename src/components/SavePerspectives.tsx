@@ -1,18 +1,20 @@
 /**
- * @fileoverview This file creates a button that can be clicked and will execute the onClick function prop.
- * The button can also be disabled to negate any interaction with it, or change its colors with the state : ButtonState
- * property.
- * If auto toggle parameter is true, the button will automaticaly change its state between active and 
- * unactive when clicked.
+ * @fileoverview This file creates a panel with the list of available perspectives.
+ * - The user can pick whatever perspectives they want to process them.
+ * - Once some perspectives has been selected, the user can download all of them to save them for later use.
+ * 
+ * - There is a checkbox/toggle to easily select all perspectives or deselect all
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
-
-//Packages
-import React, { useState } from "react";
-import { Button } from "../basicComponents/Button";
+//Constants
 import { PerspectiveId } from "../constants/perspectivesTypes";
 import { EButtonState } from "../constants/viewOptions";
+//Packages
+import React, { useState } from "react";
+//Local files
+import { Button } from "../basicComponents/Button";
+import { ITranslation } from "../managers/CTranslation";
 import RequestManager from "../managers/requestManager";
 
 const innerPanelStyle: React.CSSProperties = {
@@ -47,16 +49,18 @@ interface SavePerspectivesProps {
     isActive: boolean,
     setIsActive: Function,
     allPerspectivesIds: PerspectiveId[],
-    requestManager: RequestManager
+    requestManager: RequestManager,
+    translation: ITranslation | undefined,
 }
 /**
  * UI component that executes a function when clicked.
  */
-export const SavePerspective = ({
+export const SavePerspectives = ({
     isActive,
     setIsActive,
     allPerspectivesIds,
-    requestManager
+    requestManager,
+    translation
 }: SavePerspectivesProps) => {
 
     const [states, setStates] = useState<Map<string, boolean>>(init(allPerspectivesIds));
@@ -70,7 +74,7 @@ export const SavePerspective = ({
                 <div key={0} style={topButtonsStyle}>
                     <span />
                     <h3 key={1} className="save-perspectives-tittle">
-                        Save Perspectives
+                        {translation?.savePerspectives.tittle}
                     </h3>
                     <span key={2} style={{ marginRight: "10px" }}>
                         <Button
@@ -105,18 +109,16 @@ export const SavePerspective = ({
                                     setAllToggle(!allToggle);
                                 }}
                             />
-                            <label style={{ marginLeft: "5px" }} htmlFor="SelectAll-cb"> Toggle All</label>
+                            <label style={{ marginLeft: "5px" }} htmlFor="SelectAll-cb"> {translation?.savePerspectives.toggleLabel}</label>
                         </div>
                         <div style={{ margin: "10px 5px" }}>
                             <Button
-                                content="Download perspectives"
+                                content={translation?.savePerspectives.downloadBtn}
                                 extraClassName="primary"
                                 onClick={() => {
 
                                     for (let i = 0; i < allPerspectivesIds.length; i++) {
                                         if (states.get(allPerspectivesIds[i].id)) {
-                                            console.log("Download " + allPerspectivesIds[i].id.split(" ")[0] + " whose name is" + allPerspectivesIds[i].name);
-                                            //downloadFile("./public/data", allPerspectivesIds[i].name + ".json");
                                             requestManager.requestPerspectiveConfig(allPerspectivesIds[i], () => { });
                                         }
                                     }
@@ -175,18 +177,3 @@ function init(allPerspectivesIds: PerspectiveId[]) {
 
     return initialState;
 }
-
-function downloadFile(url: string, fileName: string) {
-    fetch(url, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
-        .then(res => res.blob())
-        .then(res => {
-            const aElement = document.createElement('a');
-            aElement.setAttribute('download', fileName);
-            const href = URL.createObjectURL(res);
-            aElement.href = href;
-            // aElement.setAttribute('href', href);
-            aElement.setAttribute('target', '_blank');
-            aElement.click();
-            URL.revokeObjectURL(href);
-        });
-};

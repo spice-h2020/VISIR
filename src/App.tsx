@@ -11,9 +11,12 @@
 //Constants
 import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer, initialOptions } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
-import { CTranslation, ILegendData, legendDataReducer } from './constants/auxTypes';
+import { ILegendData, legendDataReducer } from './constants/auxTypes';
+import config from './appConfig.json';
+import './style/base.css';
 //Packages
 import React, { useEffect, useReducer, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //Local files
 import { EScreenSize, Navbar } from './basicComponents/Navbar';
 import { Button } from './basicComponents/Button';
@@ -21,19 +24,12 @@ import { PerspectivesGroups } from './components/PerspectivesGroup';
 import { LegendComponent } from './components/LegendComponent';
 import { SelectPerspectiveDropdown } from './components/SelectPerspectiveDropdown';
 import RequestManager from './managers/requestManager';
-
-import './style/base.css';
 import { ILoadingState, LoadingFrontPanel } from './basicComponents/LoadingFrontPanel';
 import { DropMenu, EDropMenuDirection } from './basicComponents/DropMenu';
-
-import config from './appConfig.json';
-import { HamburguerIcon } from './basicComponents/HamburgerButton';
 import { ConfigurationTool } from './components/ConfigurationTool';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AllVisirOptions } from './components/AllVisirOptions';
-import { SavePerspective } from './components/savePerspectives';
-
+import { SavePerspectives } from './components/SavePerspectives';
+import { CTranslation, ITranslation } from './managers/CTranslation';
 
 
 interface AppProps {
@@ -48,20 +44,25 @@ export const App = ({
 
 }: AppProps) => {
 
-  const [currentLanguage, setCurrentLanguage] = useState<CTranslation>(new CTranslation(undefined))
+  const [currentLanguage, setCurrentLanguage] = useState<ITranslation | undefined>(undefined)
 
   useEffect(() => {
-    selectInitialLanguage(setCurrentLanguage);
+    new CTranslation().initializeTranslation(setCurrentLanguage)
   }, [])
 
-  //Parameters to activate/disactivate and edit the loading spinner.
+  //State to activate/disactivate and edit the loading spinner.
   const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
 
   const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState, currentLanguage));
+  useEffect(() => {
+    if (requestManager)
+      requestManager.translation = currentLanguage;
+
+  }, [currentLanguage, requestManager]);
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
-  const [fileSource, setFileSource] = useState<[EFileSource, string]>([initialOptions.fileSource, config.API_URI])
+  const [fileSource, setFileSource] = useState<[EFileSource, string, string, string]>([initialOptions.fileSource, config.API_URI, config.API_USER, config.API_PASS])
 
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useReducer(legendDataReducer, { dims: [], anonymous: false, anonGroup: false } as ILegendData);
@@ -90,10 +91,12 @@ export const App = ({
   })
 
 
-  const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,) => {
-    setFileSource([fileSource, apiURL ? apiURL : ""]);
+  const updateFileSource = (fileSource: EFileSource, changeItemState?: Function, apiURL?: string,
+    apiUser?: string, apiPass?: string) => {
 
-    requestManager.changeBaseURL(fileSource, apiURL);
+    setFileSource([fileSource, apiURL ? apiURL : "", apiUser ? apiUser : "", apiPass ? apiPass : ""]);
+
+    requestManager.changeBaseURL(fileSource, apiURL, apiUser, apiPass);
     requestManager.requestAllPerspectivesIds((newIds: PerspectiveId[]) => {
       initPerspectivess(setLeftPerspective, setRightPerspective, newIds, perspectiveId1, requestManager, perspectiveId2,
         setAllPerspectivesIds);
@@ -104,7 +107,9 @@ export const App = ({
   let screenSize: EScreenSize = windowWidth < 600 ? EScreenSize.smallest :
     windowWidth < 1200 ? EScreenSize.small : EScreenSize.normal;
 
-  //CREATE ALL NAVBAR COMPONENTS
+  //------------------------------------//
+  //--- CREATE ALL NAVBAR COMPONENTS ---//
+  //------------------------------------//
 
   let keyIndex = 0;
   const visirBtn =
@@ -123,7 +128,7 @@ export const App = ({
     <AllVisirOptions
       key={++keyIndex}
       setViewOptions={setViewOptions}
-      translationClass={currentLanguage}
+      translation={currentLanguage}
       viewOptions={viewOptions}
       setFileSource={updateFileSource}
       curentFileSource={fileSource}
@@ -134,7 +139,7 @@ export const App = ({
       key={++keyIndex}
       content={<FontAwesomeIcon color='black' size='xl' icon={["fas", "floppy-disk"]} />}
       extraClassName={"transparent"}
-      hoverText="Save perspectives"
+      hoverText={currentLanguage?.toolbar.savePerspective.hoverText}
       onClick={(state: EButtonState) => {
         if (state !== EButtonState.disabled) {
           setIsSavePerspectiveActive(!isSavePerspectiveActive);
@@ -154,21 +159,22 @@ export const App = ({
         }
       }}
       state={isConfigToolActive ? EButtonState.active : EButtonState.unactive}
-      hoverText="Perspective builder"
+      hoverText={currentLanguage?.toolbar.perspectiveBuilder.hoverText}
     />
 
   const leftSelectBtn =
     <SelectPerspectiveDropdown
       key={++keyIndex}
-      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} A`}
+      tittle={`${currentLanguage?.toolbar.selectPerspective.unselectedName} A`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setLeftPerspective}
       allIds={allPerspectivesIds}
       isLeftDropdown={true}
       requestMan={requestManager}
       insideHamburger={screenSize === EScreenSize.smallest}
-      translationClass={currentLanguage}
+      translation={currentLanguage}
     />
+
   //Button to collapse the visualization to the left if there are more than 1 active perspectove
   const leftCollapse =
     <div>
@@ -182,7 +188,7 @@ export const App = ({
         }}
         extraClassName={`first dark`}
         state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
-        hoverText="Collapse perspective to the left"
+        hoverText={currentLanguage?.toolbar.collapseBtns.leftHoverText}
       />
     </div>
 
@@ -191,10 +197,10 @@ export const App = ({
       key={++keyIndex}
       content={<FontAwesomeIcon color='white' style={{ height: "1rem" }} icon={["fas", "arrows-rotate"]} />}
       onClick={() => {
-        updateFileSource(fileSource[0], () => { }, fileSource[1]);
+        updateFileSource(fileSource[0], () => { }, fileSource[1], fileSource[2], fileSource[3]);
       }}
       extraClassName={"mid dark"}
-      hoverText="Update perspectives"
+      hoverText={currentLanguage?.toolbar.updateBtn.hoverText}
     />
 
   //Button to collapse the visualization to the right if there are more than 1 active perspectove
@@ -210,21 +216,21 @@ export const App = ({
           }
         }}
         state={leftPerspective !== undefined && rightPerspective !== undefined ? EButtonState.unactive : EButtonState.disabled}
-        hoverText="Collapse perspective to the right"
+        hoverText={currentLanguage?.toolbar.collapseBtns.rightHoverText}
       />
     </div>
 
   const rightSelectBtn =
     <SelectPerspectiveDropdown
       key={++keyIndex}
-      tittle={`${currentLanguage.t.toolbar.selectPerspective.defaultName} B`}
+      tittle={`${currentLanguage?.toolbar.selectPerspective.unselectedName} B`}
       setAllIds={setAllPerspectivesIds}
       setActivePerspective={setRightPerspective}
       allIds={allPerspectivesIds}
       isLeftDropdown={false}
       requestMan={requestManager}
       insideHamburger={screenSize === EScreenSize.smallest}
-      translationClass={currentLanguage}
+      translation={currentLanguage}
     />
   const legendBtn =
     <LegendComponent
@@ -234,12 +240,13 @@ export const App = ({
       onLegendClick={(newMap: Map<string, boolean>) => {
         setViewOptions({ updateType: "legendConfig", newValue: newMap, });
       }}
-      translationClass={currentLanguage}
+      translation={currentLanguage}
     />
 
   const hamburgerContent = [];
   let navBar: React.ReactNode;
 
+  //Based on the screenshize, add diferent components to the hamburger button.
   switch (screenSize) {
     case EScreenSize.smallest: {
       hamburgerContent.push(allVIsirOptions);
@@ -253,7 +260,7 @@ export const App = ({
         <DropMenu
           content={
             <div className='row' style={{ alignItems: "center", height: "40px" }}>
-              <HamburguerIcon />
+              <FontAwesomeIcon color='black' style={{ height: "2.1rem" }} icon={["fas", "bars"]} />
             </div>}
           extraClassButton="transparent mainBtn"
           menuDirection={EDropMenuDirection.down}
@@ -275,7 +282,6 @@ export const App = ({
               {legendBtn}
             </div>
           ]}
-          screenSize={screenSize}
         />
       break;
     }
@@ -288,7 +294,7 @@ export const App = ({
         <DropMenu
           content={
             <div className='row' style={{ alignItems: "center", height: "40px" }}>
-              <HamburguerIcon />
+              <FontAwesomeIcon color='black' style={{ height: "2.1rem" }} icon={["fas", "bars"]} />
             </div>}
           extraClassButton="transparent mainBtn"
           menuDirection={EDropMenuDirection.down}
@@ -299,7 +305,7 @@ export const App = ({
       navBar = <Navbar
         leftAlignedItems={[hamburgerBtn]}
         midAlignedItems={[
-          <div style={{ marginLeft: "5px", width: "20vw" }}>
+          <div style={{ marginLeft: "5px", width: "30vw" }}>
             {leftSelectBtn}
           </div>,
           <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center" }}>
@@ -307,7 +313,7 @@ export const App = ({
             {updateBtn}
             {rightCollapse}
           </div>,
-          <div style={{ marginRight: "5px", width: "20vw" }}>
+          <div style={{ marginRight: "5px", width: "30vw" }}>
             {rightSelectBtn}
           </div>,
 
@@ -317,7 +323,6 @@ export const App = ({
             {legendBtn}
           </div>
         ]}
-        screenSize={screenSize}
       />
       break;
     }
@@ -335,7 +340,7 @@ export const App = ({
             </div>
           ]}
           midAlignedItems={[
-            <div style={{ marginLeft: "5px", width: "20vw" }}>
+            <div style={{ marginLeft: "5px", width: "25vw" }}>
               {leftSelectBtn}
             </div>,
             <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center" }}>
@@ -343,7 +348,7 @@ export const App = ({
               {updateBtn}
               {rightCollapse}
             </div>,
-            <div style={{ marginRight: "5px", width: "20vw" }}>
+            <div style={{ marginRight: "5px", width: "25vw" }}>
               {rightSelectBtn}
             </div>,
 
@@ -353,7 +358,6 @@ export const App = ({
               {legendBtn}
             </div>
           ]}
-          screenSize={screenSize}
         />
       break;
     }
@@ -380,9 +384,6 @@ export const App = ({
     setAllPerspectivesIds(allIds);
   }
 
-
-
-
   return (
     <div>
       {navBar}
@@ -394,7 +395,7 @@ export const App = ({
         collapsedState={collapseState}
         viewOptions={viewOptions}
         setLegendData={setLegendData}
-        translationClass={currentLanguage}
+        translation={currentLanguage}
         cancelPerspective={cancelPerspective}
       />
 
@@ -402,17 +403,18 @@ export const App = ({
         key={2}
         requestManager={requestManager}
         isActive={isConfigToolActive}
-        setLoadingState={SetLoadingState}
         setIsActive={setIsConfigToolActive}
         updateFileSource={updateFileSource}
+        translation={currentLanguage}
       />
 
-      <SavePerspective
+      <SavePerspectives
         key={3}
         isActive={isSavePerspectiveActive}
         setIsActive={setIsSavePerspectiveActive}
         allPerspectivesIds={allPerspectivesIds}
         requestManager={requestManager}
+        translation={currentLanguage}
       />
 
       <LoadingFrontPanel
@@ -450,20 +452,3 @@ function initPerspectivess(setLeftPerspective: React.Dispatch<React.SetStateActi
     setAllPerspectivesIds([]);
   }
 }
-
-function selectInitialLanguage(setCurrentLanguage: React.Dispatch<React.SetStateAction<CTranslation>>) {
-  fetch(`localization/${config.LANG}.json`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (language) {
-      setCurrentLanguage(new CTranslation(language));
-    });
-}
-
