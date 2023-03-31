@@ -69,7 +69,8 @@ interface ConfToolProps {
     requestManager: RequestManager
     isActive: boolean
     setIsActive: React.Dispatch<React.SetStateAction<boolean>>
-    updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void;
+    updateFileSource: (fileSource: EFileSource,
+        changeItemState?: Function, apiURL?: string, apiUser?: string, apiPass?: string) => void;
 
     translation: ITranslation | undefined;
 }
@@ -90,6 +91,9 @@ export const ConfigurationTool = ({
 
     //Seed for all the configuration
     const [seed, setSeed] = useState<IConfigurationSeed>();
+
+    //Has any perspective been sent?
+    const [hasSent, setHasSent] = useState<boolean>(false);
 
     //Written perspective name
     const [perspectiveName, setPerspectiveName] = useState<string>("");
@@ -252,7 +256,19 @@ export const ConfigurationTool = ({
                             key={1}
                             content=""
                             extraClassName="dark btn-close"
-                            onClick={() => { setIsActive(false); }}
+                            onClick={() => {
+                                setIsActive(false);
+                                if (hasSent) {
+                                    setHasSent(false);
+
+                                    if (requestManager.usingAPI) {
+                                        updateFileSource(EFileSource.Api, undefined, requestManager.axios.defaults.baseURL,
+                                            requestManager.apiUsername, requestManager.apiPassword)
+                                    } else {
+                                        updateFileSource(EFileSource.Local)
+                                    }
+                                }
+                            }}
                             postIcon={<div className="icon-close"></div>}
                         />
                     </span>
@@ -400,14 +416,16 @@ export const ConfigurationTool = ({
 
                                     setTextAreaContent(JSON.stringify(newConfiguration, null, 4));
 
+                                    requestManager.sendNewConfigSeed(newConfiguration, () => { }, () => {
 
+                                        alert(`${newConfiguration.name} perspective has been sent`)
 
-
-                                    requestManager.sendNewConfigSeed(newConfiguration, updateFileSource, () => {
                                         setPerspectiveName("");
                                         if (perspectiveNameRef.current) {
                                             (perspectiveNameRef.current as any).value = "";
                                         }
+
+                                        setHasSent(true);
                                     });
                                 }
                             }

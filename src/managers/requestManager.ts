@@ -345,20 +345,17 @@ export default class RequestManager {
                 .then((res) => {
                     console.log("response: " + res)
 
-                    if (this.usingAPI) {
-                        updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL, this.apiUsername, this.apiPassword)
-                    } else {
-                        updateFileSource(EFileSource.Local)
-                    }
-
                     callback();
                 })
                 .catch((err) => {
                     console.log(err)
-                    this.setLoadingState({ isActive: false });
+
                     window.alert(err);
                     callback();
-                });
+                }).finally(() => {
+                    this.setLoadingState({ isActive: false });
+                });;
+
         } else {
             this.setLoadingState({ isActive: false });
             callback();
