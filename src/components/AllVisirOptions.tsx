@@ -31,7 +31,7 @@ interface AllVisirOptionsProps {
     setFileSource: Function;
     translation: ITranslation | undefined;
 
-    curentFileSource: [EFileSource, String, String, String];
+    curentFileSource: [EFileSource, string, string, string];
 
     setViewOptions: Dispatch<IViewOptionAction>;
     viewOptions: ViewOptions;
@@ -73,7 +73,7 @@ export const AllVisirOptions = ({
 
     //When the app starts, select the initial fileSource and load its perspectives
     useEffect(() => {
-        changeFileSource(curentFileSource[0]);
+        changeFileSource(curentFileSource[0], curentFileSource[1], curentFileSource[2], curentFileSource[3]);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
