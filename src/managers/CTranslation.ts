@@ -53,7 +53,9 @@ export interface ITranslation extends anyProperty {
     savePerspectives: {
         tittle: "Save Perspectives",
         toggleLabel: "Toggle All",
-        downloadBtn: "Download perspectives"
+        downloadBtn: "Download perspectives",
+        deleteBtn: "Delete perspectives",
+        areUSure: "Are you sure you want to remove the selected perspectives?"
     }
     perspectiveBuider: {
         devModeBtn: "Dev mode",

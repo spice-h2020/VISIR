@@ -9,7 +9,7 @@
  */
 //Constants
 import { PerspectiveId } from "../constants/perspectivesTypes";
-import { EButtonState } from "../constants/viewOptions";
+import { EButtonState, EFileSource } from "../constants/viewOptions";
 //Packages
 import React, { useState } from "react";
 //Local files
@@ -49,6 +49,8 @@ interface SavePerspectivesProps {
     isActive: boolean,
     setIsActive: Function,
     allPerspectivesIds: PerspectiveId[],
+    updateFileSource: (fileSource: EFileSource,
+        changeItemState?: Function, apiURL?: string, apiUser?: string, apiPass?: string) => void;
     requestManager: RequestManager,
     translation: ITranslation | undefined,
 }
@@ -59,6 +61,7 @@ export const SavePerspectives = ({
     isActive,
     setIsActive,
     allPerspectivesIds,
+    updateFileSource,
     requestManager,
     translation
 }: SavePerspectivesProps) => {
@@ -113,6 +116,34 @@ export const SavePerspectives = ({
                         </div>
                         <div style={{ margin: "10px 5px" }}>
                             <Button
+                                content={translation?.savePerspectives.deleteBtn}
+                                extraClassName="dark"
+                                onClick={() => {
+                                    if (window.confirm(translation?.savePerspectives.areUSure)) {
+                                        for (let i = 0; i < allPerspectivesIds.length; i++) {
+                                            if (states.get(allPerspectivesIds[i].id)) {
+                                                requestManager.deletePerspective(allPerspectivesIds[i].id);
+                                            }
+                                        }
+
+                                        const updateFiles = () => {
+                                            if (requestManager.usingAPI) {
+                                                updateFileSource(EFileSource.Api, () => { }, requestManager.axios.defaults.baseURL,
+                                                    requestManager.apiUsername, requestManager.apiPassword)
+                                            } else {
+                                                updateFileSource(EFileSource.Local)
+                                            }
+                                        }
+                                        //Neccesary delay to give the CM a minimum time to remove the perspectives
+                                        setTimeout(updateFiles, 150);
+
+                                        setIsActive(false);
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div style={{ margin: "10px 5px" }}>
+                            <Button
                                 content={translation?.savePerspectives.downloadBtn}
                                 extraClassName="primary"
                                 onClick={() => {
@@ -122,6 +153,8 @@ export const SavePerspectives = ({
                                             requestManager.requestPerspectiveConfig(allPerspectivesIds[i], () => { });
                                         }
                                     }
+
+                                    setIsActive(false);
                                 }}
                             />
                         </div>

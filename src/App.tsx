@@ -413,6 +413,7 @@ export const App = ({
         isActive={isSavePerspectiveActive}
         setIsActive={setIsSavePerspectiveActive}
         allPerspectivesIds={allPerspectivesIds}
+        updateFileSource={updateFileSource}
         requestManager={requestManager}
         translation={currentLanguage}
       />

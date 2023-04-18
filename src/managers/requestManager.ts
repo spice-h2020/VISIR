@@ -31,12 +31,15 @@ export default class RequestManager {
     //URL to ask for files when local url is selected
     baseLocalURL: string = "./data/";
 
+    //GET REQUEST
     allPerspectivesGETurl: string = `${apiVersion}/visir/files`;
     singlePerspectiveGETurl: string = `${apiVersion}/visir/files/`;
     perspectiveConfigGETurl: string = `${apiVersion}/perspectives/`;
-
     confSeedGETurl: string = `${apiVersion}/visir/seed`;
+    //POST REQUEST
     confSeedPOSTurl: string = `${apiVersion}/perspectives`;
+    //DELETE REQUEST
+    deletePerspectiveDELurl: string = `${apiVersion}/perspectives`;
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
@@ -94,7 +97,9 @@ export default class RequestManager {
      * if something went wrong.
      */
     requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestPerspective} Requesting perspective ${name}` });
+        this.setLoadingState({
+            isActive: true, msg: `${this.translation?.loadingText.requestPerspective ? this.translation?.loadingText.requestPerspective : "Requesting perspective "} ${name}`
+        });
 
         this.getPerspective(perspectiveId)
             .then((response: any) => {
@@ -343,7 +348,8 @@ export default class RequestManager {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log("response: " + res)
+                    console.log("response: ->")
+                    console.log(res);
 
                     callback();
                 })
@@ -397,6 +403,19 @@ export default class RequestManager {
                     alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
 
                 }).finally(() => {
+                    this.setLoadingState({ isActive: false });
+                });
+        }
+    }
+
+    /**
+     * Delete a perspective from the CM dataBase
+     * @param perspectiveId id of the perspective to remove
+     */
+    deletePerspective(perspectiveId: string) {
+        if (this.usingAPI) {
+            this.axios.delete(`${this.deletePerspectiveDELurl}/${perspectiveId}`)
+                .finally(() => {
                     this.setLoadingState({ isActive: false });
                 });
         }

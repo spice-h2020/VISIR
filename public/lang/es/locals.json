@@ -41,7 +41,9 @@
     "savePerspectives": {
         "tittle": "Guardar perspectivas",
         "toggleLabel": "Mostrar/Ocultar todas",
-        "downloadBtn": "Descargar perspectivas"
+        "downloadBtn": "Descargar perspectivas",
+        "deleteBtn": "Borrar perspectivas",
+        "areUSure": "¿Quieres eliminar las perspectivas seleccionadas?"
     },
     "perspectiveBuider": {
         "devModeBtn": "Modo desarrollador",
