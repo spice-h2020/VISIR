@@ -144,6 +144,7 @@ function getLegendButtons(legendData: DimAttribute[], legendConf: Map<string, Ma
                             <div style={{ paddingLeft: "5px" }}>
                                 {getIcon(legendData[i].dimension, j)}
                             </div>}
+                        hoverText={valueText}
                     />
                 );
             }
