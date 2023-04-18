@@ -102,7 +102,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
         content.push(<div className="row" key={1}> <strong> {translation?.dataColumn.communityNameLabel} </strong> &nbsp; {community.name} </div>);
         content.push(<div className="row" key={2}> {` ${translation?.dataColumn.totalCitizensLabel} ${community.users.length}`} </div>);
-        content.push(<div className="row" key={23}> {` ${translation?.dataColumn.anonymousLabel} ${community.anonUsers.length}`} </div>);
+        content.push(<div className="row" key={3}> {` ${translation?.dataColumn.anonymousLabel} ${community.anonUsers.length}`} </div>);
         content.push(<br key={4} />);
 
         //Add an accordion with the artworks related to this community
@@ -132,6 +132,7 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
         //Add all the diferent community explanations
         for (let i = 0; i < community.explanations.length; i++) {
+
             if (community.explanations[i].visible) {
                 content.push(
                     <React.Fragment key={6 + i * 2}>
@@ -155,14 +156,6 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
 
 
 }
-
-
-/**
- * Returns a panel with the explanations of the community based on the explanation parameter configuration.
- * @param communityData source community.
- * @param explanation data of the explanations to know its type and if it should be visible.
- * @returns a react component with the explanations.
- */
 
 /**
  * Returns a panel with an available and visible explanation
@@ -223,7 +216,7 @@ this means all communities with the same attribute key and value will be highlig
                 return getImplicitMapExplanation(explanation, onAttributeSelected, communityData.id);
             }
             case EExplanationTypes.implicit_attributes_list: {
-                return getImplicitListExplanation(explanation, onAttributeSelected);
+                return getImplicitListExplanation(explanation, onAttributeSelected, artworks);
             }
             default: {
                 console.log("Unrecognized explanation type");
@@ -310,25 +303,53 @@ function getImplicitMapExplanation(explanation: ICommunityExplanation, onAttribu
         </div>);
 }
 
-function getImplicitListExplanation(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void) {
+function getImplicitListExplanation(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void,
+    artworks: IArtworkData[]) {
+
+    if (explanation.explanation_data.data[0].artworks) {
+        return getImplicitListAccordionExplanation(explanation, onAttributeSelected, artworks);
+    } else {
+        return getImplicitListTextExplanation(explanation, onAttributeSelected);
+    }
+
+}
+
+function getImplicitListAccordionExplanation(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void,
+    artworks: IArtworkData[]) {
+
+    const accordionItems: React.ReactNode[] = [];
+    const accordionTittles: string[] = [];
+
+    let accordionItemContent: React.ReactNode[] = [];
+
+    for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
+        accordionTittles.push(explanation.explanation_data.data[i].key)
+        accordionItemContent.push(getExplanationListButton(explanation, onAttributeSelected, i));
+
+        for (let j = 0; j < explanation.explanation_data.data[i].artworks; ++j) {
+            accordionItemContent.push(<ArtworkPanel key={`${i}${j}`} artworksData={artworks} id={explanation.explanation_data.data[i].data[j]} />);
+        }
+
+        accordionItems.push(accordionItemContent);
+        accordionItemContent = [];
+    }
+
+    return (<div>
+        <div> {`${explanation.explanation_data.label} : ${explanation.explanation_key}`}</div>
+        <div style={{ marginTop: "0.5rem" }}>
+            <Accordion
+                items={accordionItems}
+                tittles={accordionTittles}
+            />
+        </div>
+    </div>)
+}
+
+function getImplicitListTextExplanation(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void) {
     const textData = [];
 
     for (let i = 0; i < explanation.explanation_data.data.length; ++i) {
-        textData.push(
-            <li key={i} style={{ marginLeft: "2rem", marginBottom: "0.2rem", display: "inline-flex" }}>
-                <div style={{ height: "auto", marginRight: "0.2rem" }}>
-                    <Button
-                        content={<div style={{ padding: "0px" }}> {explanation.explanation_data.data[i].key} </div>}
-                        onClick={() => {
-                            onAttributeSelected(explanation.explanation_data.data[i].key)
-                        }}
-                        extraClassName={"primary"}
-                    />
-                </div>
-
-                {`  ${explanation.explanation_data.data[i].label}`}
-                <br />
-            </li >);
+        textData.push(getExplanationListButton(explanation, onAttributeSelected, i));
     }
 
     return (
@@ -341,6 +362,23 @@ function getImplicitListExplanation(explanation: ICommunityExplanation, onAttrib
     )
 }
 
+function getExplanationListButton(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void, index: number) {
+    return (
+        <li key={index} className="interaction-container" style={{ display: "inline-flex" }}>
+            <div style={{ height: "auto", marginRight: "0.2rem" }}>
+                <Button
+                    content={<div style={{ padding: "0px" }}> {explanation.explanation_data.data[index].key} </div>}
+                    onClick={() => {
+                        onAttributeSelected(explanation.explanation_data.data[index].key)
+                    }}
+                    extraClassName={"primary"}
+                />
+            </div>
+            {`  ${explanation.explanation_data.data[index].label}`}
+            <br />
+        </li >
+    )
+}
 /**
  * Returns a stacked bar graph of some data
  * @param data data to use in the stacked graph
