@@ -2,7 +2,7 @@
 	"API_URI": "http://localhost:6060/",
 	"API_USER": "user",
 	"API_PASS": "pass",
-	"USE_API_BY_DEFAULT": false,
+	"USE_API_BY_DEFAULT": true,
 	"LANG": "en",
 	"MAX_GET_REQUEST_TIMEOUT": 2000,
 	"NODE_RELOCATION_INCREMENT": 1.25

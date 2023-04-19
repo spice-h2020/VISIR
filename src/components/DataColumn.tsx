@@ -365,17 +365,16 @@ function getImplicitListTextExplanation(explanation: ICommunityExplanation, onAt
 function getExplanationListButton(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void, index: number) {
     return (
         <li key={index} className="interaction-container" style={{ display: "inline-flex" }}>
-            <div style={{ height: "auto", marginRight: "0.2rem" }}>
+            <div style={{ height: "auto", marginRight: "0.2rem", display: "inline-flex", flexDirection: "column" }}>
                 <Button
                     content={<div style={{ padding: "0px" }}> {explanation.explanation_data.data[index].key} </div>}
                     onClick={() => {
                         onAttributeSelected(explanation.explanation_data.data[index].key)
                     }}
-                    extraClassName={"primary"}
+                    extraClassName={"primary explanationListButton"}
                 />
+                {`${explanation.explanation_data.data[index].label}`}
             </div>
-            {`  ${explanation.explanation_data.data[index].label}`}
-            <br />
         </li >
     )
 }
