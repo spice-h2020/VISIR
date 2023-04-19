@@ -371,7 +371,7 @@ function getExplanationListButton(explanation: ICommunityExplanation, onAttribut
                     onClick={() => {
                         onAttributeSelected(explanation.explanation_data.data[index].key)
                     }}
-                    extraClassName={"primary explanationListButton"}
+                    extraClassName={"secondary explanationListButton"}
                 />
                 {`${explanation.explanation_data.data[index].label}`}
             </div>

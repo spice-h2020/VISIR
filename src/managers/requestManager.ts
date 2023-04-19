@@ -45,15 +45,21 @@ export default class RequestManager {
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     translation: ITranslation | undefined;
 
-    apiUsername: string = config.API_USER;
-    apiPassword: string = config.API_PASS;
+    apiDefaultURL: string;
+    apiUsername: string;
+    apiPassword: string;
 
     /**
      * Constructor of the class
      */
-    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, translation: ITranslation | undefined) {
+    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, translation: ITranslation | undefined,
+        apiURL: string, apiUsername: string, apiPassword: string) {
         this.setLoadingState = setLoadingState;
         this.translation = translation;
+
+        this.apiDefaultURL = apiURL;
+        this.apiUsername = apiUsername;
+        this.apiPassword = apiPassword;
 
         this.isActive = initialOptions.fileSource === EFileSource.Api;
         this.usingAPI = false;
@@ -189,7 +195,7 @@ export default class RequestManager {
      * Request the configuration tool seed from the CM and validate
      * @param callback 
      */
-    requestConfigurationToolSeed(callback: Function) {
+    requestConfigurationToolSeed(callback: Function, setIsActive: Function) {
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingConfToolSeed}` });
 
         this.getConfigurationToolSeed()
@@ -208,6 +214,7 @@ export default class RequestManager {
             })
             .catch((error: any) => {
                 callback(undefined);
+                setIsActive(false);
 
                 console.log(`Configuration tool seed was not found:`);
                 console.log(error);
@@ -314,7 +321,7 @@ export default class RequestManager {
         let newUrl = newSource === EFileSource.Local ? this.baseLocalURL : apiURL;
 
         if (apiURL === undefined && newSource === EFileSource.Api) {
-            newUrl = config.API_URI;
+            newUrl = this.apiDefaultURL;
         }
 
         this.usingAPI = newSource === EFileSource.Api;
