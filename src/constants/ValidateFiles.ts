@@ -257,6 +257,19 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
                 }
             }
 
+            if (arg.unavailable === undefined) {
+                arg.unavailable = false;
+            } else {
+                if (typeof (arg.unavailable) !== "boolean") {
+                    throw Error(`Unavailable is not a boolean`);
+                }
+            }
+
+            if (arg.unavailable) {
+                arg.order = 5;
+                return arg;
+            }
+
             switch (arg.explanation_type) {
                 case types.EExplanationTypes.medoid: {
                     arg = isMedoidExplanationValid(arg);

@@ -96,7 +96,8 @@ export interface ITranslation extends anyProperty {
         interactionsName: "Interactions",
         noUserAttrb: "All users' attributes are unknown",
         relevantArtworks: "Relevant artworks to this community",
-        medoidTittle: "Representative citizen"
+        medoidTittle: "Representative citizen",
+        unavailableExplanation: "Unavailable explanation"
     }
     loadingText: {
         requestPerspective: "Requesting perspective",

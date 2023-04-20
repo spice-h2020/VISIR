@@ -153,8 +153,6 @@ function getCommunityPanel(community: ICommunityData | undefined, allUsers: IUse
     } else {
         return <React.Fragment />
     }
-
-
 }
 
 /**
@@ -174,54 +172,63 @@ function getCommunityExplanation(communityData: ICommunityData, explanation: ICo
         return <React.Fragment />;
 
     } else {
+        if (explanation.unavailable) {
+            return (
+                <React.Fragment>
+                    <hr />
+                    {`${explanation.explanation_data.label} : ${explanation.explanation_key} -> ${translation?.dataColumn.unavailableExplanation}`}
+                </React.Fragment>
+            );
+        } else {
+            /*When an implicit attribute is selected, if possible, will select that attribute in the visualization.
+    this means all communities with the same attribute key and value will be highlighted*/
+            const onAttributeSelected = (value: string) => {
+                if (explanation.explanation_key) {
+                    setSelectedAttribute({ key: explanation.explanation_key, value: value, type: explanation.explanation_type })
+                }
+            }
 
-        /*When an implicit attribute is selected, if possible, will select that attribute in the visualization.
-this means all communities with the same attribute key and value will be highlighted*/
-        const onAttributeSelected = (value: string) => {
-            if (explanation.explanation_key) {
-                setSelectedAttribute({ key: explanation.explanation_key, value: value, type: explanation.explanation_type })
-            }
-        }
+            switch (explanation.explanation_type) {
+                //Explicit attributes are simply shown in a stacked bar graph with colors representing its dimension
+                case EExplanationTypes.explicit_attributes: {
+                    return (
+                        <div>
+                            {getStackedBars(communityData.explicitDataArray, translation)}
+                        </div>);
+                }
+                //Medoid explanation is shown showing the medoid user data like any other user
+                case EExplanationTypes.medoid: {
 
-        switch (explanation.explanation_type) {
-            //Explicit attributes are simply shown in a stacked bar graph with colors representing its dimension
-            case EExplanationTypes.explicit_attributes: {
-                return (
-                    <div>
-                        {getStackedBars(communityData.explicitDataArray, translation)}
-                    </div>);
-            }
-            //Medoid explanation is shown showing the medoid user data like any other user
-            case EExplanationTypes.medoid: {
+                    const medoid = allUsers.find((value) => { return value.id === explanation.explanation_data.id });
 
-                const medoid = allUsers.find((value) => { return value.id === explanation.explanation_data.id });
-
-                return (
-                    <React.Fragment>
-                        <hr />
-                        <NodePanel
-                            tittle={`${translation?.dataColumn.medoidTittle}`}
-                            node={medoid}
-                            showLabel={showLabel}
-                            artworks={artworks}
-                            translation={translation}
-                        />
-                    </React.Fragment>);
-            }
-            //Implicit attribute explanation are more specific and have diferent modes
-            case EExplanationTypes.implicit_attributes: {
-                return getImplicitExplanation(explanation, artworks);
-            }
-            case EExplanationTypes.implicit_attributes_map: {
-                return getImplicitMapExplanation(explanation, onAttributeSelected, communityData.id);
-            }
-            case EExplanationTypes.implicit_attributes_list: {
-                return getImplicitListExplanation(explanation, onAttributeSelected, artworks);
-            }
-            default: {
-                console.log("Unrecognized explanation type");
-                console.log(explanation.explanation_type);
-                return "";
+                    return (
+                        <React.Fragment>
+                            <hr />
+                            <NodePanel
+                                tittle={`${translation?.dataColumn.medoidTittle}`}
+                                node={medoid}
+                                showLabel={showLabel}
+                                artworks={artworks}
+                                translation={translation}
+                            />
+                        </React.Fragment>
+                    );
+                }
+                //Implicit attribute explanation are more specific and have diferent modes
+                case EExplanationTypes.implicit_attributes: {
+                    return getImplicitExplanation(explanation, artworks);
+                }
+                case EExplanationTypes.implicit_attributes_map: {
+                    return getImplicitMapExplanation(explanation, onAttributeSelected, communityData.id);
+                }
+                case EExplanationTypes.implicit_attributes_list: {
+                    return getImplicitListExplanation(explanation, onAttributeSelected, artworks);
+                }
+                default: {
+                    console.log("Unrecognized explanation type");
+                    console.log(explanation.explanation_type);
+                    return "";
+                }
             }
         }
     }
