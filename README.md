@@ -9,6 +9,7 @@ Documentation explained in the [wiki](https://github.com/MarcoExpPer/SPICE-visua
 1. [How to run the application localy](#How-to-run-the-application-localy)
     1. [Using Docker](#Using-Docker)
     2. [Using Node.js and NPM](#Using-Node.js-and-NPM)
+    3. [How to run an optimized build](#How-to-run-an-optimized-build)
 2. [Easy how to use guide](#Easy-how-to-use-the-app)
 3. [How to add more testing files](#How-to-add-more-testing-files)
 4. [Preconfiguration available](#Preconfiguration-available)
@@ -44,6 +45,15 @@ Prerequisite: [Node](https://nodejs.org/en/).
 4. Launch the local server with the following command `npm run start`
 
 5. The app will automaticaly be opened by your web browser in the localhost port 3000. If it hasn't opened, try manualy opening the page `http://localhost:3000/`
+
+### Run an optimized build
+Prerequisite: Run the application using Node.js and NPM.
+
+1. Do all [How to run the application localy](#How-to-run-the-application-localy) steps using Node.js and NPM up to the step 3, including itself.
+
+2. Once `npm install` has finished, execute `npm run deploy`
+
+3. A new folder called "build" will be created inside the project. This folder contains the optimized-shipping version of the application. To open the aplication you need to open build/index.html with a web browser.
 
 ______________________
 ## Easy how to use the app.
