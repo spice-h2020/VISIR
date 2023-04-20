@@ -153,7 +153,11 @@ export default class RequestManager {
      * something went wrong.
      */
     requestAllPerspectivesIds(callback: Function, stateCallback?: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingAllPerspectives}` });
+        this.setLoadingState({
+            isActive: true, msg: `${this.translation?.loadingText.requestingAllPerspectives ?
+                this.translation?.loadingText.requestingAllPerspectives
+                : "Requesting All perspectives"}`
+        });
 
         this.getAllPerspectives()
             .then((response: any) => {
