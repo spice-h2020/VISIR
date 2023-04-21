@@ -34,7 +34,8 @@
                             "disgust": 4.166666666666666
                         }
                     },
-                    "visible": true
+                    "visible": true,
+                    "unavailable": true
                 },
                 {
                     "explanation_type": "implicit_attributes_list",

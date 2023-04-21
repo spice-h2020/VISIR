@@ -137,69 +137,77 @@ export const ConfigurationTool = ({
     //When the configuration tool is active, check for the latest configuration seed
     useEffect(() => {
         if (isActive) {
-            requestManager.requestConfigurationToolSeed((newSeed: IConfigurationSeed) => {
-                if (newSeed !== undefined) {
-                    //validate and init all tool's values with the new seed data
-                    if (newSeed.interaction_similarity_functions.length === 0) {
-                        console.log("Configuration Tool initial configuration doesnt contain an interaction similarity function");
-                        setSelectedOption(undefined);
-                    } else {
-                        setSeed(newSeed)
-                        setSelectedOption(newSeed.interaction_similarity_functions[0]);
-                    }
-                    setSeed(newSeed)
+            try {
+                requestManager.requestConfigurationToolSeed(
+                    (newSeed: IConfigurationSeed) => {
+                        if (newSeed !== undefined) {
 
-                    try {
-                        setArtworksAttrDrop(config.initArtworksAttrDrop(newSeed.artwork_attributes));
-                    } catch (error: any) {
-                        throw Error("Failed while setting artworks attributes " + error);
-                    }
+                            //validate and init all tool's values with the new seed data
+                            if (newSeed.interaction_similarity_functions.length === 0) {
+                                console.log("Configuration Tool initial configuration doesnt contain an interaction similarity function");
+                                setSelectedOption(undefined);
+                            } else {
+                                setSeed(newSeed)
+                                setSelectedOption(newSeed.interaction_similarity_functions[0]);
+                            }
+                            setSeed(newSeed)
 
-                    try {
-                        setSelectedAlgorithm(config.initAlgorythmDrop(newSeed.algorithm));
-                    } catch (error: any) {
-                        throw Error("Failed while setting default Algorythm attributes " + error);
-                    }
+                            try {
+                                setArtworksAttrDrop(config.initArtworksAttrDrop(newSeed.artwork_attributes));
+                            } catch (error: any) {
+                                throw Error("Failed while setting artworks attributes " + error);
+                            }
 
-                    try {
-                        setSelectedArtwork(newSeed.artworks[0]);
-                    } catch (error: any) {
-                        throw Error("Failed while setting default Artwork " + error);
-                    }
+                            try {
+                                setSelectedAlgorithm(config.initAlgorythmDrop(newSeed.algorithm));
+                            } catch (error: any) {
+                                throw Error("Failed while setting default Algorythm attributes " + error);
+                            }
 
-                    try {
-                        setMidSentence(config.initMidSentence(newSeed.configToolType, translation));
-                    } catch (error: any) {
-                        throw Error("Failed while setting mid sentence word " + error);
-                    }
+                            try {
+                                setSelectedArtwork(newSeed.artworks[0]);
+                            } catch (error: any) {
+                                throw Error("Failed while setting default Artwork " + error);
+                            }
 
-                    try {
-                        setLastSentence(config.initLastSentence(newSeed.configToolType, translation));
-                    } catch (error: any) {
-                        throw Error("Failed while setting mid sentence word " + error);
-                    }
+                            try {
+                                setMidSentence(config.initMidSentence(newSeed.configToolType, translation));
+                            } catch (error: any) {
+                                throw Error("Failed while setting mid sentence word " + error);
+                            }
 
-                    try {
-                        setRightSideSentence(config.initRightSideSentence(newSeed.configToolType, translation));
-                    } catch (error: any) {
-                        throw Error("Failed while setting right side word " + error);
-                    }
+                            try {
+                                setLastSentence(config.initLastSentence(newSeed.configToolType, translation));
+                            } catch (error: any) {
+                                throw Error("Failed while setting mid sentence word " + error);
+                            }
 
-                    try {
-                        setSimilarity1AvailableValues(config.initSimilarity1(newSeed.configToolType, setSimilarity1));
-                    } catch (error: any) {
-                        throw Error("Failed while setting available similarity1 dropdown " + error);
-                    }
+                            try {
+                                setRightSideSentence(config.initRightSideSentence(newSeed.configToolType, translation));
+                            } catch (error: any) {
+                                throw Error("Failed while setting right side word " + error);
+                            }
 
-                    try {
-                        setSimilarity2AvailableValues(config.initSimilarity2(newSeed.configToolType, setSimilarity2));
-                    } catch (error: any) {
-                        throw Error("Failed while setting available similarity2 dropdown " + error);
-                    }
-                }
-            });
+                            try {
+                                setSimilarity1AvailableValues(config.initSimilarity1(newSeed.configToolType, setSimilarity1));
+                            } catch (error: any) {
+                                throw Error("Failed while setting available similarity1 dropdown " + error);
+                            }
+
+                            try {
+                                setSimilarity2AvailableValues(config.initSimilarity2(newSeed.configToolType, setSimilarity2));
+                            } catch (error: any) {
+                                throw Error("Failed while setting available similarity2 dropdown " + error);
+                            }
+
+                        }
+                    }, setIsActive);
+
+            } catch (error: any) {
+                setIsActive(false);
+            }
         }
-    }, [isActive, requestManager, translation]);
+    }, [isActive, setIsActive, requestManager, translation]);
 
     //Init the new citizen and artworks attributes
     useEffect(() => {

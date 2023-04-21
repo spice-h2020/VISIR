@@ -84,7 +84,8 @@
         "interactionsName": "Interacciones",
         "noUserAttrb": "Todos los atributos del ciudadano son desconocidos",
         "relevantArtworks": "Obras relacionadas con la comunidad",
-        "medoidTittle": "Ciudadano representativo"
+        "medoidTittle": "Ciudadano representativo",
+        "unavailableExplanation": "explicación no disponible"
     },
     "loadingText": {
         "requestPerspective": "Cargando la perspectiva ",

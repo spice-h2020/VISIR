@@ -176,7 +176,7 @@ body {
 .btn-content {
     display: inline-flex !important;
     width: -webkit-fill-available;
-    width: fill-available;
+    width: stretch;
     width: -moz-available;
     padding: 0.7rem 0.7rem !important;
 }
@@ -191,7 +191,7 @@ body {
 .dropdown-minimumSize>.btn-content {
     display: inline-flex !important;
     width: -webkit-fill-available;
-    width: fill-available;
+    width: stretch;
     width: -moz-available;
     padding: 0rem 0rem !important;
 }
@@ -199,14 +199,14 @@ body {
 .dropdown-mediumSize>.btn-content {
     display: inline-flex !important;
     width: -webkit-fill-available;
-    width: fill-available;
+    width: stretch;
     width: -moz-available;
     padding: 0.32rem 0.3rem !important;
 }
 
 .fillAvailableHeight {
     height: -webkit-fill-available !important;
-    height: fill-available !important;
+    height: stretch !important;
     height: -moz-available !important;
 }
 
@@ -223,6 +223,11 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.explanationListButton {
+    width: 80%;
+    align-self: center;
 }
 
 /*Diferent visual changes for btns*/

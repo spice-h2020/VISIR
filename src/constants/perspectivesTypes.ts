@@ -119,6 +119,7 @@ export interface ICommunityExplanation extends anyProperty {
     explanation_key?: string;
     maxValue?: string;
     visible: boolean;
+    unavailable?: boolean;
     order: number;
 }
 

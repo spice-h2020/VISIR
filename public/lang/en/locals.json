@@ -84,7 +84,8 @@
         "interactionsName": "Interactions",
         "noUserAttrb": "All users' attributes are unknown",
         "relevantArtworks": "Relevant artworks to this community",
-        "medoidTittle": "Representative citizen"
+        "medoidTittle": "Representative citizen",
+        "unavailableExplanation": "explanation is not available"
     },
     "loadingText": {
         "requestPerspective": "Requesting perspective",
