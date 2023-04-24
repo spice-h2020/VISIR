@@ -1,5 +1,4 @@
 # SPICE-visualization-ReactPort
-Port of [SPICE-visualization repository](https://github.com/gjimenezUCM/SPICE-visualization) to react and typescript
 
 Access to the [github pages deployment](https://marcoexpper.github.io/SPICE-visualization-ReactPort/). 
 
@@ -233,12 +232,14 @@ After the accordion, a new accordion will include the user's interactions that a
     - **Implicit Explanation map**: 
     Shows a percentage distribution of an implicit attribute as a wordCloud and as a treeMap. Clicking any treeMap value will filter all communities in the visualization that have such value as the maximum value of the attribute.
     - **Implicit Explanation list**: 
-    Shows a list with the implicit attributes of the community. Each row of the list starts with a button that can be clicked to filter all communities that has the clicked value.
+    Shows a list with the implicit attributes of the community. Each row of the list starts with a button that can be clicked to filter all communities that have the clicked value.
+    - **Implicit Explanation Accordion**: 
+    Shows an accordion with the different attributes of the community. Each accordion item includes the information of the artworks related to such attribute. As before, a button may be clicked to filter all communities that have the same clicked value.
 
 
-    There are more explanations not explained here.
 
-*Last update of the content of this doc: 23/03/2023*
+Port of [SPICE-visualization repository](https://github.com/gjimenezUCM/SPICE-visualization) to react and typescript
+*Last update of the content of this doc: 23/04/2023*
 
 
 
