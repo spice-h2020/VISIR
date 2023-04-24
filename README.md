@@ -1,8 +1,10 @@
-# SPICE-visualization-ReactPort
+# VISIR
 
-Access to the [github pages deployment](https://marcoexpper.github.io/SPICE-visualization-ReactPort/). 
+![VISIR Logo](public/images/spice-readme-logo.png)
 
-Documentation explained in the [wiki](https://github.com/MarcoExpPer/SPICE-visualization-ReactPort/wiki)
+Access to the [github pages deployment](https://gjimenezucm.github.io/SPICE-VISIR/). 
+
+Documentation explained in the [wiki](https://gjimenezucm.github.io/SPICE-VISIR/wiki)
 
 #### Index
 1. [How to run the application localy](#How-to-run-the-application-localy)
