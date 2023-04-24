@@ -10,28 +10,8 @@
 import { IArtworkData, IStringNumberRelation, IInteraction } from "../constants/perspectivesTypes";
 //Packages
 import { useEffect, useState } from "react";
-import { getWordClouds } from "../components/DataColumn";
-
-const interactionBox: React.CSSProperties = {
-    borderLeft: "1px solid var(--grayLineColor)",
-    borderRight: "1px solid var(--grayLineColor)",
-    padding: "0.5rem",
-}
-
-const userFeelings: React.CSSProperties = {
-    width: "80%",
-    margin: "1rem auto",
-    border: "2px dashed var(--primaryButtonColor)",
-    boxSizing: "border-box",
-    textAlign: "center",
-    padding: "1rem",
-}
-
-const artworkImage: React.CSSProperties = {
-    maxHeight: "100%",
-    maxWidth: "100%",
-    border: "2px solid var(--grayLineColor)",
-}
+//Local files
+import { getWordClouds, isAllZero } from "../components/DataColumn";
 
 interface InteractionPanelProps {
     artworksData: IArtworkData[];
@@ -56,7 +36,7 @@ export const InteractionPanel = ({
 
     if (artworkData !== undefined) {
         return (
-            <div style={interactionBox}>
+            <div className="interaction-container">
                 <div style={{ maxHeight: "20vh" }} className="row">
                     <div className="col">
                         <div style={{ fontSize: "80%" }}>
@@ -69,13 +49,13 @@ export const InteractionPanel = ({
                         </div>
                     </div>
                     <div className="col">
-                        <img style={artworkImage} src={artworkData.image}
+                        <img className="artwork-image" src={artworkData.image}
                             alt={artworkData.tittle}
                         />
                     </div>
                 </div>
                 <div className="row">
-                    <div style={userFeelings}>
+                    <div className="user-makes-me-feel">
                         "{interaction.feelings}"
                     </div>
                 </div>
@@ -90,10 +70,17 @@ export const InteractionPanel = ({
 
 function getEmotions(extracted_emotions: IStringNumberRelation[] | undefined): React.ReactNode {
     if (extracted_emotions !== undefined) {
+
+        if (isAllZero(extracted_emotions)) {
+            for (let pair of extracted_emotions) {
+                pair.count = 1;
+            }
+        }
+
         return (
             <div>
                 <strong> Makes me feel:</strong>
-                {getWordClouds(extracted_emotions)}
+                {getWordClouds(extracted_emotions, false)}
             </div>);
 
     } else {

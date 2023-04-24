@@ -1,9 +1,8 @@
 /**
- * @fileoverview This file creates the perspective view component and broadcast the necesary options, 
- * like what node is currently selected.
- * This component also holds and resets the controllers shared by the perspectives, like the dimensions strategy.
+ * @fileoverview This file creates the perspective view component and broadcast diferent options and items between all 
+ * active perspectives
  * 
- * The first perspective view created has the responsability of creating the dimensions strategy.
+ * This component also holds and resets the managers shared between the perspectives.
  * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
@@ -11,14 +10,14 @@
 //Constants
 import { IPerspectiveData, EPerspectiveVisState } from "../constants/perspectivesTypes";
 import { ViewOptions, EAppCollapsedState } from "../constants/viewOptions"
-import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction, CTranslation } from "../constants/auxTypes";
+import { ESelectedObjectAction, selectedObjectReducer, IStateFunctions, ILegendDataAction, IAttribute } from "../constants/auxTypes";
 //Packages
 import { useEffect, useReducer, useState } from "react";
 //Local files
 import { Tooltip } from "../basicComponents/Tooltip";
 import { PerspectiveView } from "./PerspectiveView";
 import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
-import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
+import { ITranslation } from "../managers/CTranslation";
 
 const perspectiveContainers: React.CSSProperties = {
     display: "flex",
@@ -48,9 +47,11 @@ interface PerspectivesGroupProps {
      */
     setLegendData: React.Dispatch<ILegendDataAction>,
 
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>,
+    translation: ITranslation | undefined;
 
-    translationClass: CTranslation,
+    /**
+     * Function to cancel a perspective by ID, removing it from the visualization 
+     */
     cancelPerspective: (idToCancel: string) => (void),
 }
 
@@ -63,20 +64,23 @@ export const PerspectivesGroups = ({
     collapsedState,
     viewOptions,
     setLegendData,
-    setLoadingState,
-    translationClass: tClass,
+    translation,
     cancelPerspective,
 }: PerspectivesGroupProps) => {
 
     const [dimensionStrategy, setDimensionStrategy] = useState<NodeDimensionStrategy | undefined>();
     const [networkFocusID, setNetworkFocusID] = useState<string | undefined>();
+    //When a user clicks somewhere in a perspective, whatever it clicks will be the selected object shared between perspectives
     const [selectedObject, setSelectedObject] = useReducer(selectedObjectReducer, undefined);
+    //When a user clicks a community's attribute from the data column, the clicked attribute will be shared between perspectives
+    const [selectedAttribute, setSelectedAttribute] = useState<IAttribute | undefined>();
 
     const sf: IStateFunctions = {
         setLegendData: setLegendData,
         setDimensionStrategy: setDimensionStrategy,
         setNetworkFocusId: setNetworkFocusID,
         setSelectedObject: setSelectedObject,
+        setSelectedAttribute: setSelectedAttribute,
     }
 
     //When the collapsed state changes, we clear both datatables
@@ -85,7 +89,7 @@ export const PerspectivesGroups = ({
         setNetworkFocusID(undefined);
     }, [collapsedState]);
 
-    //When no perspective is loaded, we clear all configuration
+    //When no perspective is loaded or all are unloaded, we clear all base configuration
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined && dimensionStrategy !== undefined) {
             setLegendData({ type: "reset", newData: false });
@@ -96,6 +100,7 @@ export const PerspectivesGroups = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [leftPerspective, rightPerspective, dimensionStrategy]);
 
+    //Necesary to toggle the border visualization. Currently unused because border option currently is removed from the application
     useEffect(() => {
         if (dimensionStrategy !== undefined)
             dimensionStrategy.toggleBorderStat(viewOptions.border);
@@ -113,10 +118,10 @@ export const PerspectivesGroups = ({
             dimStrat={dimensionStrategy}
             networkFocusID={networkFocusID}
             perspectiveState={leftState}
-            setLoadingState={setLoadingState}
             unique={rightPerspective === undefined}
-            translationClass={tClass}
+            translation={translation}
             cancelPerspective={cancelPerspective}
+            selectedAttribute={selectedAttribute}
         />
 
     const rightComponent = rightPerspective === undefined ? "" :
@@ -129,17 +134,18 @@ export const PerspectivesGroups = ({
             networkFocusID={networkFocusID}
             perspectiveState={rightState}
             mirror={true}
-            setLoadingState={setLoadingState}
             unique={leftPerspective === undefined}
-            translationClass={tClass}
+            translation={translation}
             cancelPerspective={cancelPerspective}
+            selectedAttribute={selectedAttribute}
         />
 
     return (
         <div style={perspectiveContainers}>
             < Tooltip
                 selectedObject={selectedObject}
-                hideLabels={viewOptions.hideLabels}
+                showLabel={viewOptions.showLabels}
+                translation={translation}
             />
             <div style={widthStyle.get(leftState)}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.id}`}>

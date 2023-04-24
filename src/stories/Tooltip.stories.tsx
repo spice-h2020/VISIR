@@ -18,14 +18,16 @@ export const userExample = Template.bind({});
 const user: IUserData = {
   id: '01',
   label: 'user1',
-  implicit_community: 0,
+  community_number: 0,
   explicit_community: { ageGroup: "adult", Language: "ESP" },
   interactions: [],
   community_interactions: [],
   no_community_interactions: [],
   isMedoid: false,
   isAnonymous: false,
-  isAnonGroup: false
+  isAnonGroup: false,
+  implicit_community: {}
+
 }
 
 const userObject: ISelectedObject = {
@@ -49,7 +51,8 @@ const comm: ICommunityData = {
   },
   ],
   users: [],
-  artworks: [],
+  allArtworks: new Map<string, number>(),
+  representative_artworks: [],
   explicitCommunity: {},
   anonUsers: [],
   type: ECommunityType.implicit,

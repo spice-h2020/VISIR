@@ -21,36 +21,7 @@
             "att_type": "String"
         }
     ],
-    "interaction_similarity_functions": [
-        {
-            "sim_function": {
-                "name": "ExtendedPlutchikEmotionSimilarityDAO",
-                "params": [],
-                "on_attribute": {
-                    "att_name": "interest.itMakesMeThinkAbout.emotions",
-                    "att_type": "dict"
-                },
-                "interaction_object": {
-                    "att_name": "id",
-                    "att_type": "String"
-                }
-            }
-        },
-        {
-            "sim_function": {
-                "name": "SentimentSimilarityDAO",
-                "params": [],
-                "on_attribute": {
-                    "att_name": "interest.itMakesMeThinkAbout.sentiment",
-                    "att_type": "dict"
-                },
-                "interaction_object": {
-                    "att_name": "id",
-                    "att_type": "String"
-                }
-            }
-        }
-    ],
+    "interaction_similarity_functions": [],
     "artwork_attributes": [
         {
             "on_attribute": {
@@ -434,5 +405,24 @@
             "params": [],
             "default": false
         }
-    ]
+    ],
+    "artworks": [
+        {
+            "name": "Sponde del Po",
+            "id": "324234234"
+        },
+        {
+            "name": "Ritorno alla stalla (La ritirata)",
+            "id": "234234423234"
+        },
+        {
+            "name": "Pugilatore",
+            "id": "234423342"
+        },
+        {
+            "name": "Piccola composizione (Fantome incantato)",
+            "id": "34432432"
+        }
+    ],
+    "BeliefStructure": false
 }

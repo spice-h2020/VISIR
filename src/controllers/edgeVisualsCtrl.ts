@@ -9,11 +9,10 @@
  */
 //Constants
 import { IEdgeData } from "../constants/perspectivesTypes";
-//Packages
-import { DataSetEdges, Edge } from "vis-network";
-//Local files
 import { ViewOptions } from "../constants/viewOptions";
 import { edgeConst } from "../constants/edges";
+//Packages
+import { DataSetEdges, Edge } from "vis-network";
 
 export default class EdgeVisualsCtrl {
     /**

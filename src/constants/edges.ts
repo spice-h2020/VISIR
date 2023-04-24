@@ -1,5 +1,5 @@
 /**
- * @fileoverview This File contains a namespace with edges constants.
+ * @fileoverview This File contains a namespace with edge's configuration constants.
  * @author Marco Expósito Pérez
  */
 

@@ -78,4 +78,17 @@ export default class ShapeStrategy extends GenericStrategy {
             user["image"] = nodeConst.colorlessAnon;
         }
     }
+
+    /**
+     * Update this dimension attribute/values map with the new Dimension array
+     * @param attributesArray 
+     */
+    update(attributesArray: DimAttribute[]) {
+        this.attr = attributesArray.filter(attr => attr.dimension === Dimensions.Shape)[0];
+
+        this.dimensionMap = new Map<string, string>();
+        if (this.attr !== undefined) {
+            this.fillMap(nodeConst.nodeDimensions.getShape);
+        }
+    }
 }

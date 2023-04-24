@@ -7,44 +7,59 @@
 //Constants
 import { EFileSource, initialOptions } from '../constants/viewOptions';
 import { validateConfigurationSeed, validatePerspectiveDataJSON, validatePerspectiveIDfile as validateAllPerspectiveIDfile } from '../constants/ValidateFiles';
-import { IPerspectiveData, PerspectiveId as IPerspectiveId } from '../constants/perspectivesTypes';
+import { IPerspectiveData, PerspectiveId as IPerspectiveId, PerspectiveId } from '../constants/perspectivesTypes';
+import config from '../appConfig.json';
 //Packages
 import { Axios } from 'axios'
-//Config
-import config from '../appConfig.json';
+//Local File
 import { ILoadingState } from '../basicComponents/LoadingFrontPanel';
-import { CTranslation } from '../constants/auxTypes';
+import { ITranslation } from './CTranslation';
 
+const apiVersion = "v2.0";
 
 export default class RequestManager {
     isActive: boolean;
     axios: Axios;
     usingAPI: boolean;
 
-    jobTimeOut: number = 2; //in seconds
-    jobMaxWaitTime: number = 60; //in seconds
+
+    jobTimeOut: number = 2; //in seconds. Visir wait this time between asking CM for the state of a job
+    jobMaxWaitTime: number = 30; //in seconds. Max wait time of VISIR while asking for a job if its finished
 
     currentJobWaitTime: number = 0;
 
     //URL to ask for files when local url is selected
     baseLocalURL: string = "./data/";
 
-    allPerspectivesGET: string = "visualizationAPI/index";
-    singlePerspectiveGet: string = "visualizationAPI/file/";
-
-    confSeedGET: string = "v1.1/seed";
-    confSeedPOST: string = "v1.1/perspective";
+    //GET REQUEST
+    allPerspectivesGETurl: string = `${apiVersion}/visir/files`;
+    singlePerspectiveGETurl: string = `${apiVersion}/visir/files/`;
+    perspectiveConfigGETurl: string = `${apiVersion}/perspectives/`;
+    confSeedGETurl: string = `${apiVersion}/visir/seed`;
+    //POST REQUEST
+    confSeedPOSTurl: string = `${apiVersion}/perspectives`;
+    //DELETE REQUEST
+    deletePerspectiveDELurl: string = `${apiVersion}/perspectives`;
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
-    tClass: CTranslation;
+    translation: ITranslation | undefined;
+
+    apiDefaultURL: string;
+    apiUsername: string;
+    apiPassword: string;
 
     /**
      * Constructor of the class
      */
-    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, tClass: CTranslation) {
+    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, translation: ITranslation | undefined,
+        apiURL: string, apiUsername: string, apiPassword: string) {
         this.setLoadingState = setLoadingState;
-        this.tClass = tClass
+        this.translation = translation;
+
+        this.apiDefaultURL = apiURL;
+        this.apiUsername = apiUsername;
+        this.apiPassword = apiPassword;
 
         this.isActive = initialOptions.fileSource === EFileSource.Api;
         this.usingAPI = false;
@@ -56,11 +71,25 @@ export default class RequestManager {
      * Initialize axios API
      * @param {String} baseURL base url of all axios petitions
      */
-    init(baseURL: string | undefined) {
+    init(baseURL: string | undefined, apiUser?: string, apiPass?: string) {
         if (baseURL !== undefined) {
+            if (baseURL[baseURL.length - 1] !== '/') {
+                baseURL = `${baseURL}/`
+            }
+
+            console.log(`Source url changed to ${baseURL}`)
+
+            this.apiUsername = apiUser ? apiUser : "";
+            this.apiPassword = apiPass ? apiPass : "";
+
             this.axios = new Axios({
                 baseURL: baseURL,
-                timeout: 2000,
+                timeout: config.MAX_GET_REQUEST_TIMEOUT,
+                auth: {
+                    username: this.apiUsername,
+                    password: this.apiPassword
+                }
+
             });
             this.isActive = true;
         } else
@@ -74,7 +103,9 @@ export default class RequestManager {
      * if something went wrong.
      */
     requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestPerspective} ${name}` });
+        this.setLoadingState({
+            isActive: true, msg: `${this.translation?.loadingText.requestPerspective ? this.translation?.loadingText.requestPerspective : "Requesting perspective "} ${name}`
+        });
 
         this.getPerspective(perspectiveId)
             .then((response: any) => {
@@ -90,19 +121,20 @@ export default class RequestManager {
                     perspective.id = perspectiveId;
                     perspective.name = perspective.name === undefined ? name : perspective.name;
 
-                    this.setLoadingState({ isActive: false });
                     callback(perspective);
                 } else {
-                    throw new Error(`Error wuile getting Perspective ${perspectiveId}: ${response.statusText}`);
+                    throw new Error(`Error while getting Perspective ${perspectiveId}: ${response.statusText}`);
                 }
             })
             .catch((error: any) => {
-
                 callback(undefined);
 
                 console.log(`Perspective file with id: (${perspectiveId}) was not found: ${error}`);
                 console.log(error);
                 alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
+
+            }).finally(() => {
+                this.setLoadingState({ isActive: false });
             });
     }
     /**
@@ -111,7 +143,7 @@ export default class RequestManager {
     * @returns {Object} Returns the file
     */
     getPerspective(id: string) {
-        return this.requestToUrl(this.usingAPI ? `${this.singlePerspectiveGet}${id}` : `${id}.json`);
+        return this.requestToUrl(this.usingAPI ? `${this.singlePerspectiveGETurl}${id}` : `${id}.json`);
     }
 
 
@@ -121,7 +153,11 @@ export default class RequestManager {
      * something went wrong.
      */
     requestAllPerspectivesIds(callback: Function, stateCallback?: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestingAllPerspectives}` });
+        this.setLoadingState({
+            isActive: true, msg: `${this.translation?.loadingText.requestingAllPerspectives ?
+                this.translation?.loadingText.requestingAllPerspectives
+                : "Requesting All perspectives"}`
+        });
 
         this.getAllPerspectives()
             .then((response: any) => {
@@ -140,13 +176,15 @@ export default class RequestManager {
                 }
             })
             .catch((error: any) => {
-
                 callback(undefined);
                 if (stateCallback) stateCallback();
 
                 console.log(`All IDs file was not found:`);
                 console.log(error);
                 alert(`All IDs file was not found: ${error.message}`);
+            })
+            .finally(() => {
+                this.setLoadingState({ isActive: false });
             });
     }
     /**
@@ -154,12 +192,15 @@ export default class RequestManager {
      * @returns {Object} returns the information of all perspectives
      */
     getAllPerspectives() {
-        return this.requestToUrl(this.usingAPI ? `${this.allPerspectivesGET}` : "dataList.json");
+        return this.requestToUrl(this.usingAPI ? `${this.allPerspectivesGETurl}` : "dataList.json");
     }
 
-    requestConfigurationToolSeed(callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.requestingConfToolSeed}` });
-
+    /**
+     * Request the configuration tool seed from the CM and validate
+     * @param callback 
+     */
+    requestConfigurationToolSeed(callback: Function, setIsActive: Function) {
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingConfToolSeed}` });
 
         this.getConfigurationToolSeed()
             .then((response: any) => {
@@ -177,23 +218,36 @@ export default class RequestManager {
             })
             .catch((error: any) => {
                 callback(undefined);
+                setIsActive(false);
 
                 console.log(`Configuration tool seed was not found:`);
                 console.log(error);
-                this.setLoadingState({ isActive: false });
 
                 alert(`Configuration tool seed was not found: ${error.message}`);
+            }).finally(() => {
+                this.setLoadingState({ isActive: false });
             });
     }
+
+    /**
+     * Get configuration tool seed
+     * @returns 
+     */
     getConfigurationToolSeed() {
-        return this.requestToUrl(this.usingAPI ? this.confSeedGET : "configurationTool/seedFile.json");
+        return this.requestToUrl(this.usingAPI ? this.confSeedGETurl : "configurationTool/seedFile.json");
     }
 
+
+    /**
+     * Request something to an url
+     * @param url 
+     * @returns 
+     */
     requestToUrl(url: string): any {
-        console.log(`Request to ${this.axios.defaults.baseURL}${url}`);
+        console.log(`${this.translation?.loadingText.simpleRequest} ${this.axios.defaults.baseURL}${url}`);
         this.currentJobWaitTime = 0;
 
-        return this.axios.get(url, {})
+        return this.axios.get(url)
             .then(async (response) => {
                 console.log(response)
 
@@ -209,21 +263,27 @@ export default class RequestManager {
                 } else {
                     throw new Error(`Error while requestion a file to ${this.axios.defaults.baseURL}${url}: ${response.statusText}`);
                 }
+
             })
             .catch((error) => {
                 throw error;
             });
     }
 
+    /**
+     * Ask if a job is in progress and return the result if when the job is completed
+     * @param url 
+     * @returns 
+     */
     askJobInProgress(url: any): any {
         this.currentJobWaitTime += this.jobTimeOut;
 
         if (this.currentJobWaitTime > this.jobMaxWaitTime) {
             throw new Error("Max wait time for the community model reached");
         }
-        this.setLoadingState({ isActive: true, msg: `${this.tClass.t.loadingText.CMisBusy} (${this.currentJobWaitTime / 2})` });
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.CMisBusy} (${this.currentJobWaitTime / 2})` });
 
-        return this.axios.get(url, {})
+        return this.axios.get(url)
             .then(async (response) => {
                 console.log(`Job in ${this.axios.defaults.baseURL}${url}`);
                 console.log(response)
@@ -232,19 +292,21 @@ export default class RequestManager {
 
                 if (response.status === 200 || response.status === 202) {
 
-                    if (data.job["job-state"] === "STARTED") {
-                        await delay(this.jobTimeOut);
-                        return this.askJobInProgress(data.job.path);
+                    switch (data.job["job-state"]) {
 
-                    } else {
-                        if (data.job["job-status"] === "ERROR") {
-
+                        case "ERROR":
                             console.log(`Job with an error, ${data.job.data}`)
                             throw new Error(`Community Model had an error: ${data.job.data}`)
 
-                        } else {
+                        case "COMPLETED":
                             return { status: response.status, data: data.job.data };
-                        }
+
+                        case "STARTED":
+                        default:
+                            await delay(this.jobTimeOut);
+                            return this.askJobInProgress(data.job.path);
+
+
                     }
                 } else {
                     throw new Error(`Error while waiting for a job in path ${url}: ${response.statusText}`);
@@ -252,84 +314,129 @@ export default class RequestManager {
             })
             .catch((error) => {
                 throw error;
-            });
+            })
     }
 
     /**
      * Update the baseURL of the requestManager
      * @param {EFileSource} newSource the new fileSource
      */
-    changeBaseURL(newSource: EFileSource, apiURL?: string) {
+    changeBaseURL(newSource: EFileSource, apiURL?: string, apiUser?: string, apiPass?: string) {
         let newUrl = newSource === EFileSource.Local ? this.baseLocalURL : apiURL;
 
         if (apiURL === undefined && newSource === EFileSource.Api) {
-            newUrl = config.API_URI;
+            newUrl = this.apiDefaultURL;
         }
 
         this.usingAPI = newSource === EFileSource.Api;
 
-        this.init(newUrl);
-
-        console.log(`Source url changed to ${newUrl}`)
+        this.init(newUrl, apiUser, apiPass);
     }
 
-    sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource, changeItemState?: Function, apiURL?: string) => void,
-        callback: Function) {
+    /**
+     * Send a new perspective configuration to the CM
+     * @param newConfiguration 
+     * @param updateFileSource 
+     * @param callback 
+     */
+    sendNewConfigSeed(newConfiguration: any, updateFileSource: (fileSource: EFileSource,
+        changeItemState?: Function, apiURL?: string, apiUser?: string, apiPass?: string) => void, callback: Function) {
+
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.sendingPerspectiveConfig}` });
 
         // For some reason, CM receives an empty object when axios does the post request.
-        //newConfiguration = JSON.stringify(newConfiguration)
-        /*
-        this.axios.post(this.confSeedPOST,
-            newConfiguration)
-            .then((response) => {
-                const data = JSON.parse(response.data);
-                window.alert("inserted perspectiveId: " + data.insertedPerspectiveId);
-
-                if (this.usingAPI) {
-                    updateFileSource(EFileSource.Api, callback, this.axios.defaults.baseURL)
-                } else {
-                    updateFileSource(EFileSource.Local, callback)
-                }
-
-            })
-            .catch((err) => {
-                console.log(err);
-                window.alert(err);
-            });
-        */
-
         if (this.usingAPI) {
-            fetch(`${this.axios.defaults.baseURL}${this.confSeedPOST}`, {
+
+            fetch(`${this.axios.defaults.baseURL}${this.confSeedPOSTurl}`, {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Basic ${btoa(this.apiUsername + ':' + this.apiPassword)}`,
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+
                 },
                 body: JSON.stringify(newConfiguration)
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log("response: " + res)
-                    window.alert("inserted perspectiveId: hmm" + res.insertedPerspectiveId);
-
-                    if (this.usingAPI) {
-                        updateFileSource(EFileSource.Api, undefined, this.axios.defaults.baseURL)
-                    } else {
-                        updateFileSource(EFileSource.Local)
-                    }
+                    console.log("response: ->")
+                    console.log(res);
 
                     callback();
                 })
-                .catch(function (err) {
+                .catch((err) => {
                     console.log(err)
+
                     window.alert(err);
                     callback();
+                }).finally(() => {
+                    this.setLoadingState({ isActive: false });
+                });;
+
+        } else {
+            this.setLoadingState({ isActive: false });
+            callback();
+        }
+    }
+
+    /**
+     * Request a perspective configuration file so the user can download it
+     * @param perspectiveId 
+     * @param callback 
+     */
+    requestPerspectiveConfig(perspectiveId: PerspectiveId, callback: Function) {
+        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestPerspectiveConfig}` });
+
+        if (this.usingAPI) {
+            this.requestToUrl(`${this.perspectiveConfigGETurl}${perspectiveId.id.split(" ")[0]}`)
+                .then((response: any) => {
+                    if (response.status === 200) {
+
+                        //Create a link that automaticaly is clicked and downloads the response.data json
+                        const aElement = document.createElement('a');
+                        aElement.setAttribute('download', `${perspectiveId.name}.json`);
+                        const href = URL.createObjectURL(new Blob([JSON.stringify(response.data, undefined, 2)], { type: "text/json" }));
+                        aElement.href = href;
+                        aElement.setAttribute('target', '_blank');
+                        aElement.click();
+                        aElement.remove();
+                        URL.revokeObjectURL(href);
+
+                    } else {
+                        throw new Error(`Error while requesting perspective config ${perspectiveId}: ${response.statusText}`);
+                    }
+                })
+                .catch((error: any) => {
+                    callback(undefined);
+
+                    console.log(`Perspective file with id: (${perspectiveId}) was not found: ${error}`);
+                    console.log(error);
+                    alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
+
+                }).finally(() => {
+                    this.setLoadingState({ isActive: false });
+                });
+        }
+    }
+
+    /**
+     * Delete a perspective from the CM dataBase
+     * @param perspectiveId id of the perspective to remove
+     */
+    deletePerspective(perspectiveId: string) {
+        if (this.usingAPI) {
+            this.axios.delete(`${this.deletePerspectiveDELurl}/${perspectiveId}`)
+                .finally(() => {
+                    this.setLoadingState({ isActive: false });
                 });
         }
     }
 }
-
-
+/**
+ * Add a delay
+ * @param seconds 
+ * @returns 
+ */
 function delay(seconds: number) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }

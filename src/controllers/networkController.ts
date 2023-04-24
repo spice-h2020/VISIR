@@ -1,6 +1,6 @@
 /**
- * @fileoverview This class creates the controller of this network. 
- * Creating all other controllers, setting up vis.js's options and parsing the initial data.
+ * @fileoverview This class creates the controller of this network that initialize and centralize all controllers and 
+ * creates the vis.js network
  * @package Requires vis network package.
  * @package Requires vis data package.
  * @author Marco Expósito Pérez
@@ -16,13 +16,12 @@ import { Data, DataSetEdges, DataSetNodes, Network, Options } from "vis-network"
 import { DataSet } from "vis-data";
 //Local Files
 import BoxesController from "./boxesController";
-import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 import NodeLocation from "./nodeLocation";
 import NodeExplicitComms from "./nodeExplicitComms";
 import NodeVisualsCtrl from "./nodeVisualsCtrl";
 import EdgeVisualsCtrl from "./edgeVisualsCtrl";
 import EventsCtrl from "./eventsCtrl";
-import { ILoadingState } from "../basicComponents/LoadingFrontPanel";
+import NodeDimensionStrategy from "../managers/nodeDimensionStrat";
 
 export default class NetworkController {
     //Options of the vis.js network
@@ -33,6 +32,8 @@ export default class NetworkController {
     edgeCtrl!: EdgeVisualsCtrl;
     //Node visuals controller
     nodeVisuals!: NodeVisualsCtrl;
+    //Communities controller
+    explicitCtrl!: NodeExplicitComms;
 
     //Network event controller
     eventsCtrl: EventsCtrl;
@@ -51,7 +52,6 @@ export default class NetworkController {
     //Ready flag
     isReady: boolean;
 
-    setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     /**
      * Constructor of the class 
      * @param perspectiveData Data of this perspective
@@ -62,10 +62,8 @@ export default class NetworkController {
      * @param networkFocusID ID of the current network with the tooltip focus
      */
     constructor(perspectiveData: IPerspectiveData, htmlRef: HTMLDivElement, viewOptions: ViewOptions, sf: IStateFunctions,
-        dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string,
-        setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, unique: boolean) {
+        dimStrat: NodeDimensionStrategy | undefined, networkFocusID: string, unique: boolean) {
 
-        this.setLoadingState = setLoadingState;
         this.isReady = false;
 
         this.id = perspectiveData.id;
@@ -79,10 +77,13 @@ export default class NetworkController {
         this.createOptions();
         this.net = new Network(htmlRef, { nodes: this.nodes, edges: this.edges } as Data, this.options);
 
+        this.explicitCtrl = new NodeExplicitComms(perspectiveData.communities);
+
         this.parseNodes(perspectiveData, dimStrat, sf, viewOptions, unique);
         this.parseEdges(this.edges, perspectiveData.similarity, viewOptions);
 
         this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
+
 
         this.isReady = true;
         this.eventsCtrl.zoomToNodes([]);
@@ -97,27 +98,34 @@ export default class NetworkController {
      */
     parseNodes(perspectiveData: IPerspectiveData, dimStrat: NodeDimensionStrategy | undefined, sf: IStateFunctions,
         viewOptions: ViewOptions, unique: boolean) {
-        const explicitCtrl = new NodeExplicitComms(perspectiveData.communities);
-        const nodeLocation = new NodeLocation(perspectiveData.communities.length, perspectiveData.users.length);
+
+        const nodeLocation = new NodeLocation(perspectiveData.communities);
 
         perspectiveData.users.forEach((user: IUserData) => {
-            explicitCtrl.parseExplicitCommunity(user, sf.setLegendData);
-            explicitCtrl.parseArtworksRelatedToTheCommunity(user);
+            this.explicitCtrl.parseExplicitCommunity(user, sf.setLegendData);
+            this.explicitCtrl.parseArtworksRelatedToTheCommunity(user);
             nodeLocation.updateNodeGroup(user);
         });
-        explicitCtrl.sortExplicitData();
-        explicitCtrl.makeArtworksUnique();
 
-        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, explicitCtrl.explicitData, viewOptions, unique);
+        this.explicitCtrl.sortExplicitData();
+        this.explicitCtrl.makeArtworksUnique(viewOptions.nRelevantCommArtworks);
+
+        this.nodeVisuals = new NodeVisualsCtrl(dimStrat, sf, this.explicitCtrl.explicitData, viewOptions, unique);
         this.bbCtrl = new BoxesController(perspectiveData.communities);
 
+        //Check none of the node bounding boxes are overlaping
+        do {
+            perspectiveData.users.forEach((user: IUserData) => {
+                nodeLocation.setNodeLocation(user, this.explicitCtrl.communitiesData[user.community_number].type);
+            });
+        } while (nodeLocation.needMoreIterations())
+
         perspectiveData.users.forEach((user: IUserData) => {
-            nodeLocation.setNodeLocation(user, explicitCtrl.communitiesData[user.implicit_community].type);
-            this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.hideLabels);
+            this.nodeVisuals.setNodeInitialVisuals(user, viewOptions.showLabels);
             this.bbCtrl.calculateBoundingBoxes(user);
         });
 
-        explicitCtrl.calcExplicitPercentile(this.nodeVisuals.dimStrat);
+        this.explicitCtrl.calcExplicitPercentile(this.nodeVisuals.dimStrat);
 
         this.nodes.update(perspectiveData.users);
     }

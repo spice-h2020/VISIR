@@ -4,6 +4,8 @@
  * property.
  * If auto toggle parameter is true, the button will automaticaly change its state between active and 
  * unactive when clicked.
+ * PostIcon prop allows to add an icon at the end of the content of the button while extraClassName allows for further
+ * style customization.
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -35,6 +37,10 @@ interface ButtonProps {
    * Text that will be shown to the user when hovering the button.
    */
   hoverText?: string;
+  /**
+  * Icon added to the end of the btn
+  */
+  postIcon?: React.ReactNode;
 }
 
 /**
@@ -47,6 +53,7 @@ export const Button = ({
   onClick = (): void => { },
   extraClassName = "",
   hoverText = "",
+  postIcon,
 }: ButtonProps) => {
 
   const [buttonState, setButtonState] = useState<EButtonState>(state);
@@ -56,7 +63,6 @@ export const Button = ({
   }, [state]);
 
   const buttonClassState = buttonState !== EButtonState.unactive ? EButtonState[buttonState] : "";
-
   return (
     <button title={hoverText} type="button" className={`btn ${extraClassName} ${buttonClassState}`}
       onClick={(): void => {
@@ -70,7 +76,10 @@ export const Button = ({
         }
       }}
     >
-      {content}
+      <div className="btn-content">
+        <div style={{ width: "100%", overflow: "hidden" }}> {content} </div>
+        {postIcon ? <div className="btn-icon-content"> {postIcon} </div> : ""}
+      </div>
     </button >
   );
 };

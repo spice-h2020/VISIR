@@ -7,24 +7,12 @@
 //Packages
 import React from "react";
 
-const navBarContainer: React.CSSProperties = {
-    listStyleType: "none",
-    overflow: "hidden",
-    backgroundColor: "rgb(248, 249, 250)",
-    boxSizing: "border-box",
-    display: "flex",
-    flexWrap: "wrap",
-
-    paddingTop: "0.5rem",
-    paddingBottom: "0.5rem",
-
-    position: "fixed",
-    top: "0",
-
-    zIndex: "100",
-    height: "70px",
-    width: "100%",
+export enum EScreenSize {
+    normal,
+    small,
+    smallest,
 }
+
 interface NavbarProps {
     /**
      * Components aligned to the left of the navBar.
@@ -46,28 +34,22 @@ interface NavbarProps {
 export const Navbar = ({
     leftAlignedItems = [],
     midAlignedItems = [],
-    rightAlignedItems = [],
+    rightAlignedItems = []
 }: NavbarProps) => {
 
     return (
-        <div style={navBarContainer}>
-            <div className="col-4"
-                style={{ flexDirection: "row", display: "flex" }}
-            >
+        <div className="navbar-container">
+            <div className="navBar-column">
                 {leftAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div className="col-4"
-                style={{ display: "contents" }}
-            >
+            <div className="navBar-column" style={{ justifyContent: "center" }}>
                 {midAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}
             </div>
-            <div className="col-4"
-                style={{ flexDirection: "row-reverse", display: "flex" }}
-            >
+            <div className="navBar-column">
                 {rightAlignedItems.map((item: React.ReactNode, index: number): JSX.Element => {
                     return (<React.Fragment key={index}>{item}</React.Fragment>);
                 })}

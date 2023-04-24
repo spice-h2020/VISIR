@@ -1,14 +1,11 @@
 /**
- * @fileoverview This file contains 2 functions to validate Files already parsed to JSON. One function for a file with All perspectives details, 
- * and one for a file with the data of a single perspective.
+ * @fileoverview This file has diferent functions to validate everything returned by the CM.
  * @author Marco Expósito Pérez
  */
 //Constants
-import { FORMERR } from "dns";
-import { IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
+import { EConfigToolTypes, IAlgorithm, IArtworkAttribute, IConfigurationSeed, INameAndIdPair, INameAndTypePair, ISimilarityFunction } from "./ConfigToolUtils";
 import { edgeConst } from "./edges";
 import * as types from "./perspectivesTypes";
-import { ECommunityType } from "./perspectivesTypes";
 
 //#region All perspectives JSON
 
@@ -197,7 +194,7 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
         arg.explanations.sort((v1: types.ICommunityExplanation, v2: types.ICommunityExplanation) => v1.order - v2.order)
 
         if (arg["community-type"] === undefined) {
-            arg.type = ECommunityType.inexistent;
+            arg.type = types.ECommunityType.inexistent;
 
         } else {
             if (typeof (arg["community-type"]) !== "string") {
@@ -208,15 +205,15 @@ function isCommunityDataValid(arg: any): types.ICommunityData {
                 }
             }
 
-            arg.type = ECommunityType[arg["community-type"]];
+            arg.type = types.ECommunityType[arg["community-type"]];
             if (arg.type === undefined) {
-                arg.type = ECommunityType.implicit;
+                arg.type = types.ECommunityType.implicit;
             }
         }
 
         return arg;
     } catch (e: any) {
-        throw Error(`Community data is not valid: ${e.message}`);
+        throw Error(`Community data ${arg.name ? `whose name is ${arg.name}` : "of unvalid name"} is not valid: ${e.message}`);
     }
 }
 function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
@@ -232,6 +229,16 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
             }
         }
         arg.explanation_type = types.EExplanationTypes[arg.explanation_type];
+
+        if (arg.explanation_key !== undefined) {
+            if (typeof (arg.explanation_key) !== "string") {
+                try {
+                    arg.explanation_key = String(arg.explanation_key);
+                } catch (e: any) {
+                    throw Error(`Explanation_key is not a string`);
+                }
+            }
+        }
 
         //Explicit attributes doesnt require a validation
         if (arg.explanation_type !== types.EExplanationTypes.explicit_attributes) {
@@ -250,15 +257,38 @@ function isCommunityExplanationValid(arg: any): types.ICommunityExplanation {
                 }
             }
 
+            if (arg.unavailable === undefined) {
+                arg.unavailable = false;
+            } else {
+                if (typeof (arg.unavailable) !== "boolean") {
+                    throw Error(`Unavailable is not a boolean`);
+                }
+            }
+
+            if (arg.unavailable) {
+                arg.order = 5;
+                return arg;
+            }
+
             switch (arg.explanation_type) {
                 case types.EExplanationTypes.medoid: {
                     arg = isMedoidExplanationValid(arg);
-                    arg.order = 2;
+                    arg.order = 4;
                     break;
                 }
                 case types.EExplanationTypes.implicit_attributes: {
-                    arg = isImplicitAttributesExplanationValid(arg);
+                    arg = isImplicitAttributesExplanationValid(arg, false);
+                    arg.order = 3;
+                    break;
+                }
+                case types.EExplanationTypes.implicit_attributes_map: {
+                    arg = isImplicitAttributesExplanationValid(arg, true);
                     arg.order = 1;
+                    break;
+                }
+                case types.EExplanationTypes.implicit_attributes_list: {
+                    arg = isImplicitAttributesListExplanationValid(arg);
+                    arg.order = 2;
                     break;
                 }
             }
@@ -292,8 +322,96 @@ function isMedoidExplanationValid(arg: any): types.ICommunityExplanation {
     }
 }
 
-function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplanation {
+function isImplicitAttributesExplanationValid(arg: any, isMapExplanation: boolean): types.ICommunityExplanation {
     try {
+        if (arg.explanation_data.label === undefined) {
+            throw Error(`Label text is undefined`);
+        }
+        if (typeof (arg.explanation_data.label) !== "string") {
+            try {
+                arg.explanation_data.label = String(arg.explanation_data.label);
+            } catch (e: any) {
+                throw Error(`Label text is not a string`);
+            }
+        }
+
+        if (isMapExplanation) {
+            if (arg.explanation_key === undefined) {
+                throw Error(`Explanation key is undefined`);
+            }
+            if (typeof (arg.explanation_key) !== "string") {
+                try {
+                    arg.explanation_key = String(arg.explanation_key);
+                } catch (e: any) {
+                    throw Error(`Explanation key is not a string`);
+                }
+            }
+        }
+
+        if (arg.explanation_data.data === undefined) {
+            throw Error(`Data attribute is undefined`);
+        }
+        if (typeof (arg.explanation_data.data) !== "object") {
+            throw Error(`Data attribute is not an object`);
+        }
+
+        if (arg.explanation_data.accordionMode === undefined) {
+            arg.explanation_data.accordionMode = false;
+
+            const keys = Object.keys(arg.explanation_data.data);
+            const newData: types.IStringNumberRelation[] = [];
+
+            arg.maxValue = undefined;
+            for (let i = 0; i < keys.length; i++) {
+
+                const newCount = Number(arg.explanation_data.data[keys[i]].toFixed(2));
+
+                if (keys[i] === "") {
+                    keys[i] = "(empty)"
+                }
+
+                const item: types.IStringNumberRelation = {
+                    value: keys[i],
+                    count: newCount
+                }
+
+                newData.push(item);
+
+                if (arg.maxValue === undefined) {
+                    arg.maxValue = item;
+                } else {
+                    if (arg.maxValue.count < item.count) {
+                        arg.maxValue = item;
+                    }
+                }
+            }
+
+            if (isMapExplanation) {
+                arg.maxValue = arg.maxValue.value;
+            }
+
+            arg.explanation_data.data = newData;
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Community Implicit Attributes explanation ${isMapExplanation ? "map" : ""} is not valid: ${e.message}`);
+    }
+}
+
+function isImplicitAttributesListExplanationValid(arg: any): types.ICommunityExplanation {
+    try {
+        if (arg.explanation_key === undefined) {
+            throw Error(`Explanation key is undefined`);
+        }
+        if (typeof (arg.explanation_key) !== "string") {
+            try {
+                arg.explanation_key = String(arg.explanation_key);
+            } catch (e: any) {
+                throw Error(`Explanation key is not a string`);
+            }
+        }
+
         if (arg.explanation_data.label === undefined) {
             throw Error(`Label text is undefined`);
         }
@@ -312,34 +430,37 @@ function isImplicitAttributesExplanationValid(arg: any): types.ICommunityExplana
             throw Error(`Data attribute is not an object`);
         }
 
-        if (arg.explanation_data.accordionMode === undefined) {
-            arg.explanation_data.accordionMode = false;
 
-            const keys = Object.keys(arg.explanation_data.data);
-            const newData: types.IStringNumberRelation[] = [];
 
-            for (let i = 0; i < keys.length; i++) {
-                const newCount = Number(arg.explanation_data.data[keys[i]].toFixed(2));
-
-                if (keys[i] === "") {
-                    keys[i] = "(empty)"
+        for (let value of arg.explanation_data.data as { key: string, label: string }[]) {
+            if (value.key === undefined) {
+                throw Error(`Key of a value from the data Array is undefined`);
+            }
+            if (typeof (value.key) !== "string") {
+                try {
+                    value.key = String(value.key);
+                } catch (e: any) {
+                    throw Error(`Key (${value.key}) from the data Array is not a string`);
                 }
-
-                newData.push({
-                    value: keys[i],
-                    count: newCount
-                });
             }
 
-            arg.explanation_data.data = newData;
+            if (value.label === undefined) {
+                throw Error(`Label of a value with (${value.key}) as key from the data Array is undefined`);
+            }
+            if (typeof (value.label) !== "string") {
+                try {
+                    value.label = String(value.label);
+                } catch (e: any) {
+                    throw Error(`Value ${value.label} of a value with (${value.key}) as key from the data Array is not a string`);
+                }
+            }
         }
 
         return arg;
     } catch (e: any) {
-        throw Error(`Community Implicit Attributes explanation is not valid: ${e.message}`);
+        throw Error(`Community Implicit Attributes list explanation is not valid: ${e.message}`);
     }
 }
-
 
 function isUserDataValid(arg: any): types.IUserData {
     try {
@@ -379,7 +500,7 @@ function isUserDataValid(arg: any): types.IUserData {
                 throw Error(`Group of the user (${arg.id}) is not a number`);
         }
 
-        arg.implicit_community = arg.group;
+        arg.community_number = arg.group;
         delete arg.group;
 
         if (arg.explicit_community === undefined) {
@@ -397,20 +518,12 @@ function isUserDataValid(arg: any): types.IUserData {
             }
         }
 
-        if (arg.interactions === undefined) {
-            arg.interactions = [];
+        if (arg.implicit_community === undefined) {
+            arg.implicit_community = {};
         }
 
-        const nInteractions = Object.keys(arg.interactions).length;
-        if (nInteractions > 0) {
-
-            try {
-                for (let i = 0; i < nInteractions; i++) {
-                    arg.interactions[i] = isInteractionValid(arg.interactions[i]);
-                }
-            } catch (e: any) {
-                throw Error(`Interaction of the user (${arg.id}) has problems: ${e.message}`);
-            }
+        if (typeof (arg.implicit_community) !== "object") {
+            throw Error(`Implicit community of the user (${arg.id}) is not an object. There may not be any explicit community values`);
         }
 
         if (arg.community_interactions === undefined) {
@@ -444,7 +557,6 @@ function isUserDataValid(arg: any): types.IUserData {
             } catch (e: any) {
                 throw Error(`No-community interaction of the user (${arg.id}) has problems: ${e.message}`);
             }
-
         }
 
         return arg;
@@ -663,7 +775,7 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         }
 
         if (arg.interaction_similarity_functions === undefined) {
-            throw Error(`Interactions Similarity Functions are undefined`);
+            arg.interaction_similarity_functions = [];
         }
 
         if (typeof (arg.interaction_similarity_functions) !== "object") {
@@ -678,6 +790,30 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
             throw Error(`Algorithms are not an object`);
         }
 
+        if (arg.artworks === undefined) {
+            arg.artworks = [];
+        }
+
+        if (typeof (arg.artworks) !== "object") {
+            throw Error(`Artworks are not an object`);
+        }
+
+        //Check what structure does this seed uses
+        if (arg.BeliefStructure === undefined) {
+            arg.BeliefStructure = false;
+        }
+
+        if (typeof (arg.BeliefStructure) !== "boolean") {
+            throw Error(`BeliefStructure is not a boolean`);
+        }
+
+
+        if (arg.BeliefStructure) {
+            arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.HECTH;
+        } else {
+            arg.configToolType = arg.configToolType ? arg.configToolType : EConfigToolTypes.GENERIC;
+        }
+
         for (let i = 0; i < arg.artwork_attributes.length; i++) {
             arg.artwork_attributes[i] = isArtworkAttributesValid(arg.artwork_attributes[i]);
         }
@@ -690,6 +826,13 @@ export function validateConfigurationSeed(arg: any): IConfigurationSeed {
         for (let i = 0; i < arg.algorithm.length; i++) {
             arg.algorithm[i] = isAlgorithmValid(arg.algorithm[i]);
         }
+        for (let i = 0; i < arg.artworks.length; i++) {
+            arg.artworks[i] = isNameAndIdPairValid(arg.artworks[i]);
+        }
+
+        arg.artworks.sort((a: INameAndIdPair, b: INameAndIdPair) => {
+            return (a.name < b.name ? -1 : 1)
+        })
 
         console.log(`Configuration seed file validation has been completed -> `);
         console.log(arg as IConfigurationSeed);
@@ -761,6 +904,41 @@ function isNameAndTypePairValid(arg: any): INameAndTypePair {
         return arg;
     } catch (e: any) {
         throw Error(`Name and Type data is not valid: ${e.message}`);
+    }
+}
+
+function isNameAndIdPairValid(arg: any): INameAndIdPair {
+    try {
+
+        if (arg === undefined) {
+            throw Error(`Name and ID data is undefined`);
+        }
+
+        if (arg.name === undefined) {
+            throw Error(`Name is undefined`);
+        }
+        if (typeof (arg.name) !== "string") {
+            try {
+                arg.name = String(arg.name);
+            } catch (e: any) {
+                throw Error(`Name is not a string`);
+            }
+        }
+
+        if (arg.id === undefined) {
+            throw Error(`Id is undefined`);
+        }
+        if (typeof (arg.id) !== "string") {
+            try {
+                arg.id = String(arg.id);
+            } catch (e: any) {
+                throw Error(`Id is not a string`);
+            }
+        }
+
+        return arg;
+    } catch (e: any) {
+        throw Error(`Name and id data is not valid: ${e.message}`);
     }
 }
 

@@ -1,5 +1,5 @@
 /**
- * @fileoverview This file contains diferent interfaces and classes related with the perspectives.
+ * @fileoverview This file contains diferent interfaces and classes directly related with the perspectives and its validation.
  * @author Marco Expósito Pérez
  */
 import { Dimensions } from "./nodes";
@@ -54,7 +54,8 @@ export interface ICommunityData extends anyProperty {
     name: string;
     explanations: ICommunityExplanation[];
     users: string[];
-    artworks: string[];
+    allArtworks: Map<string, number>;
+    representative_artworks: [string, number][];
     anonUsers: string[];
     type: ECommunityType;
 
@@ -104,7 +105,9 @@ export interface IStringNumberRelation {
 export enum EExplanationTypes {
     explicit_attributes,
     medoid,
-    implicit_attributes
+    implicit_attributes,
+    implicit_attributes_map,
+    implicit_attributes_list,
 }
 
 /**
@@ -113,7 +116,10 @@ export enum EExplanationTypes {
 export interface ICommunityExplanation extends anyProperty {
     explanation_type: EExplanationTypes;
     explanation_data: anyProperty;
+    explanation_key?: string;
+    maxValue?: string;
     visible: boolean;
+    unavailable?: boolean;
     order: number;
 }
 
@@ -123,16 +129,17 @@ export interface ICommunityExplanation extends anyProperty {
 export interface IUserData extends anyProperty {
     id: string;
     label: string;
-    implicit_community: number;
-    explicit_community: anyProperty;
+    community_number: number;
+    explicit_community: any;
+    implicit_community: anyProperty;
 
-    interactions: IInteraction[];
     community_interactions: IInteraction[];
     no_community_interactions: IInteraction[];
 
     isMedoid: boolean;
     isAnonymous: boolean;
     isAnonGroup: boolean;
+
 }
 
 /**

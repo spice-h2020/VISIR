@@ -12,6 +12,10 @@ import ColorStrategy from "./nodeDimensions/colorStrat";
 import GenericStrategy from "./nodeDimensions/genericStrat"
 import ShapeStrategy from "./nodeDimensions/shapeStrat";
 
+export interface comparisonError {
+
+}
+
 export default class NodeDimensionStrategy {
 
     //Array with all available strategies.
@@ -83,11 +87,17 @@ export default class NodeDimensionStrategy {
         });
     }
 
+    /**
+     * Check if the new legend attributes are diferent to the one already created
+     * @param newAttributes new attributes
+     * @returns 
+     */
     checkAttrDiferences(newAttributes: DimAttribute[]) {
         if (newAttributes.length <= 0) {
             return false;
         }
 
+        let keysUpdated = false;
         for (const attr of newAttributes) {
 
             //Check if the key of attr exist 
@@ -95,13 +105,16 @@ export default class NodeDimensionStrategy {
                 return e.key === attr.key;
             })
 
+
+
             if (foundKey) {
                 //If the key exists, check if all values of attr.values exist in the found key
                 for (const value of attr.values) {
                     if (!foundKey.values.find((e) => {
                         return e === value;
                     })) {
-                        return false;
+                        keysUpdated = true;
+                        foundKey.values.push(value);
                     }
                 }
 
@@ -110,6 +123,23 @@ export default class NodeDimensionStrategy {
             }
         }
 
+        if (keysUpdated) {
+            this.updateAttributes();
+
+            this.setLegendData({
+                type: "dims",
+                newData: this.attributesArray
+            });
+        }
         return true;
+    }
+
+    /**
+     * Update the strategies with the new attributes array
+     */
+    updateAttributes() {
+        this.strategies.forEach((strat) => {
+            strat.update(this.attributesArray);
+        });
     }
 }

@@ -61,4 +61,17 @@ export default class ColorStrategy extends GenericStrategy {
 
     }
 
+    /**
+     * Update this dimension attribute/values map with the new Dimension array
+     * @param attributesArray 
+     */
+    update(attributesArray: DimAttribute[]) {
+        this.attr = attributesArray.filter(attr => attr.dimension === Dimensions.Color)[0];
+
+        this.dimensionMap = new Map<string, string>();
+        if (this.attr !== undefined) {
+            this.fillMap(nodeConst.nodeDimensions.getColor);
+        }
+    }
+
 }

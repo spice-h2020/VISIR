@@ -1,19 +1,12 @@
 /**
  * @fileoverview This file creates a slider with an optional text above that tracks the current slider value.
+ * It has a few parameters to control the minimum, maximum and the step of the available values for the slider.
+ * On input function will be executed every time the user stops moving the slider
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Packages
 import { useState } from "react";
-
-const sliderContainer: React.CSSProperties = {
-    padding: "0.7rem 0.7rem",
-
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    fontSize: "1rem"
-}
 
 interface SliderProps {
     /**
@@ -48,7 +41,7 @@ interface SliderProps {
 
 
 /**
- * UI component that creates a slider .
+ * UI component that creates a slider.
  */
 export const Slider = ({
     content,
@@ -79,7 +72,7 @@ export const Slider = ({
     const size = (parseFloat(value) - minimum) * 100 / (maximum - minimum) + '% 100%';
 
     return (
-        <div style={sliderContainer}>
+        <div className="slider-container">
             {label}
             <input type="range"
                 style={{ backgroundSize: size }}

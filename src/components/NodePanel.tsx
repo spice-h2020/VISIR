@@ -1,27 +1,34 @@
 /**
- * @fileoverview This file creates a panel with the data of a user and its interactions.
- * If no user is provided, the panel will be empty.
+ * @fileoverview This file creates a panel that shows diferent information about an user. If no user is provided, the panel will be empty.
+ * - First it shows the explicit community values of the user.
+ * - If showLabels is active, it will show the user's label.
+ * - All user's implicit community values will be shown if they exist.
+ * - Additionaly,  the user's interactions will be shown in two diferent accordions. One with the interactions related to
+ * the user community, the ones that were used in the clustering. And another accordion with the rest of the interactions, it 
+ * may be empty.
+ * 
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
 //Constants
-import { IArtworkData, IInteraction, IUserData }
+import { anyProperty, IArtworkData, IInteraction, IStringNumberRelation, IUserData }
     from "../constants/perspectivesTypes";
 //Packages
 import React from "react";
 //Local files
 import { InteractionPanel } from "../basicComponents/Interaction";
 import { Accordion } from "../basicComponents/Accordion";
-import { CTranslation } from "../constants/auxTypes";
+import { ITranslation } from "../managers/CTranslation";
+import { getWordClouds } from "./DataColumn";
 
 const sectionTittleStyle: React.CSSProperties = {
     fontSize: "1.2em",
-    fontWeight: "400",
+    fontWeight: "bold",
     fontFamily: "var(--contentFont)",
     lineHeight: "135%",
     width: "100%",
     margin: "0.5rem 0px",
-    color: "var(--title)"
+    color: "var(--title)",
 }
 
 const frenchIndent: React.CSSProperties = {
@@ -32,9 +39,9 @@ const frenchIndent: React.CSSProperties = {
 interface NodePanelProps {
     tittle: String;
     node: IUserData | undefined;
-    hideLabel: boolean;
+    showLabel: boolean;
     artworks: IArtworkData[];
-    translationClass: CTranslation;
+    translation: ITranslation | undefined;
 }
 
 /**
@@ -43,9 +50,9 @@ interface NodePanelProps {
 export const NodePanel = ({
     tittle,
     node,
-    hideLabel,
+    showLabel,
     artworks,
-    translationClass: tClass,
+    translation,
 }: NodePanelProps) => {
 
     const tittleContainer = <div key={0} style={sectionTittleStyle}> {tittle} </div>;
@@ -53,8 +60,8 @@ export const NodePanel = ({
 
     if (node !== undefined) {
 
-        if (!hideLabel) {
-            content.push(<p style={frenchIndent} key={1}> <strong> {`${tClass.t.dataColumn.labelText}:`} </strong> &nbsp; {node.label} </p>);
+        if (showLabel) {
+            content.push(<p style={frenchIndent} key={1}> <strong> {`${translation?.dataColumn.userLabelLabel}:`} </strong> &nbsp; {node.label} </p>);
         }
 
         const keys = Object.keys(node.explicit_community);
@@ -66,7 +73,10 @@ export const NodePanel = ({
                 <p key={2 + i} style={frenchIndent}> <strong> {key} </strong> &nbsp; {value} </p >);
         }
 
-        content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, tClass)} </div>);
+
+        content.push(<div key={-2}> {getImplicitCommunityValues(node?.implicit_community)} </div>)
+
+        content.push(<div key={-1} style={{ margin: "0.5rem 0px" }}> {getInteractionsAccordion(node, artworks, translation)} </div>);
     }
 
     if (content.length === 0) {
@@ -84,25 +94,27 @@ export const NodePanel = ({
 };
 
 /**
- * Returns an accordion that includes all the node's interactions.
+ * Returns two diferent accordions that includes all the node's interactions. One accordion has the community related 
+ * interactions, the other has the rest of the user interactions
  * @param node source node
  * @param artworks all artworks' data
  * @returns a react component with the node's interactions accordion.
  */
-function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[], tClass: CTranslation) {
+function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtworkData[], translation: ITranslation | undefined) {
     let content: React.ReactNode[] = [];
 
-    if (node !== undefined && node.interactions !== undefined) {
+    if (node !== undefined) {
 
         if (node.community_interactions !== undefined) {
+
             const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
-                getInteractionsPanel(node.community_interactions, artworks, true);
+                getInteractionsPanel(node.community_interactions, artworks);
 
             if (interactionPanels.length > 0) {
                 content.push(
                     <div key={1} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            {`${tClass.t.dataColumn.mainInteractionsTittle}`}
+                            {`${translation?.dataColumn.relatedContributions}`}
                         </strong>
                         <Accordion
                             items={interactionPanels}
@@ -114,13 +126,13 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
 
         if (node.no_community_interactions !== undefined) {
             const { interactionPanels, tittles }: { interactionPanels: React.ReactNode[]; tittles: string[]; } =
-                getInteractionsPanel(node.no_community_interactions, artworks, false);
+                getInteractionsPanel(node.no_community_interactions, artworks);
 
             if (interactionPanels.length > 0) {
                 content.push(
                     <div key={0} style={{ margin: "0.5rem 0px" }}>
                         <strong>
-                            {`${tClass.t.dataColumn.otherInteractionsTittle}`}
+                            {`${translation?.dataColumn.otherContributions}`}
                         </strong>
                         <Accordion
                             items={interactionPanels}
@@ -135,7 +147,13 @@ function getInteractionsAccordion(node: IUserData | undefined, artworks: IArtwor
     return content;
 }
 
-function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkData[], isCommunity: boolean) {
+/**
+ * Creates and returns a fully created accordion with the user interactions
+ * @param interactions interactions to include in the accordion
+ * @param artworks dataBase with all artworks to show its data in the panels
+ * @returns 
+ */
+function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkData[]) {
     const tittles: string[] = new Array<string>();
     const interactionPanels: React.ReactNode[] = new Array<React.ReactNode>();
 
@@ -154,4 +172,59 @@ function getInteractionsPanel(interactions: IInteraction[], artworks: IArtworkDa
         }
     }
     return { interactionPanels, tittles };
+}
+
+/**
+ * Returns a list with the user's implicit values
+ * @param implicit_communities user implicit values
+ * @returns 
+ */
+function getImplicitCommunityValues(implicit_communities: anyProperty): React.ReactNode {
+
+    const keys = Object.keys(implicit_communities);
+    if (keys.length === 0) {
+        return <></>
+    }
+
+    const data: React.ReactNode[] = [];
+
+    const lastData: React.ReactNode[] = [];
+    const tittles: string[] = [];
+
+    for (let i = 0; i < keys.length; i++) {
+        //Its a dicctionary variable that its represented with a word cloud
+        if (typeof implicit_communities[keys[i]] === "object") {
+            const wordData: IStringNumberRelation[] = [];
+
+            const objectKeys = Object.keys(implicit_communities[keys[i]]);
+            for (let oKey in objectKeys) {
+                wordData.push({
+                    value: objectKeys[oKey],
+                    count: implicit_communities[keys[i]][objectKeys[oKey]]
+                });
+            }
+
+            tittles.push(keys[i]);
+
+            lastData.push(
+                <div key={i}>
+                    {getWordClouds(wordData, true, true, true)}
+                </div>);
+
+        } else {
+            //Its a simple variable represented with plain text
+            data.push(<p key={i} style={frenchIndent}> <strong> {keys[i]}: </strong> &nbsp; {implicit_communities[keys[i]]} </p >);
+        }
+    }
+
+    return (
+        <React.Fragment>
+            {data}
+            <Accordion
+                items={lastData}
+                tittles={tittles}
+            />
+        </React.Fragment>
+    )
+
 }

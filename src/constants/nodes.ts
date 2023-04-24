@@ -1,5 +1,5 @@
 /**
- * @fileoverview This file contains diferent aux classes and constant parameters related with the nodes/users of each 
+ * @fileoverview This file contains diferent aux classes and constant configuration parameters related with the nodes/users of each 
  * perspective.
  * @author Marco Expósito Pérez
  */

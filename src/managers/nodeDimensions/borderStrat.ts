@@ -1,5 +1,5 @@
 /**
- * @fileoverview This class changes the border color of users/nodes.
+ * @fileoverview This class changes the border color of users/nodes based on their explicit values.
  * @author Marco Expósito Pérez
  */
 //Constants
@@ -58,5 +58,18 @@ export default class BorderStrategy extends GenericStrategy {
             user["borderWidth"] = nodeConst.defaultBorderColorWidth;
         else
             user["borderWidth"] = 0;
+    }
+
+    /**
+     * Update this dimension attribute/values map with the new Dimension array
+     * @param attributesArray 
+     */
+    update(attributesArray: DimAttribute[]) {
+        this.attr = attributesArray.filter(attr => attr.dimension === Dimensions.Border)[0];
+
+        this.dimensionMap = new Map<string, string>();
+        if (this.attr !== undefined) {
+            this.fillMap(nodeConst.nodeDimensions.getBorder);
+        }
     }
 }

@@ -21,7 +21,7 @@ const loreIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed 
 const node: IUserData = {
     id: '1',
     label: '213435',
-    implicit_community: 0,
+    community_number: 0,
     explicit_community: {
         AgeGroup: "Adult",
         Language: "ESP"
@@ -59,7 +59,8 @@ const node: IUserData = {
     no_community_interactions: [],
     isMedoid: false,
     isAnonymous: false,
-    isAnonGroup: false
+    isAnonGroup: false,
+    implicit_community: {}
 };
 
 const comm: ICommunityData = {
@@ -93,7 +94,8 @@ const comm: ICommunityData = {
         },
     ],
     users: ["1", "2", "3", "4", "5", "6"],
-    artworks: [],
+    allArtworks: new Map<string, number>(),
+    representative_artworks: [],
     explicitDataArray: [
         {
             key: "Language",
@@ -149,7 +151,7 @@ const allUsers = [
     {
         id: '0',
         label: '113435',
-        implicit_community: 0,
+        community_number: 0,
         explicit_community: {
             AgeGroup: "adult",
             Language: "ES"
@@ -167,12 +169,13 @@ const allUsers = [
         no_community_interactions: [],
         isMedoid: true,
         isAnonymous: false,
-        isAnonGroup: false
+        isAnonGroup: false,
+        implicit_community: {}
     },
     {
         id: '1',
         label: '213435',
-        implicit_community: 0,
+        community_number: 0,
         explicit_community: {
             AgeGroup: "Adult",
             Language: "ESP"
@@ -210,7 +213,8 @@ const allUsers = [
         no_community_interactions: [],
         isMedoid: false,
         isAnonymous: false,
-        isAnonGroup: false
+        isAnonGroup: false,
+        implicit_community: {}
     },
 ]
 
@@ -220,7 +224,7 @@ Example.args = {
     artworks: artworkData,
 
     allUsers: allUsers,
-    hideLabel: false
+    showLabel: false
 };
 
 
@@ -229,6 +233,6 @@ export const Empty = Template.bind({});
 Empty.args = {
     artworks: artworkData,
 
-    hideLabel: false
+    showLabel: false
 };
 

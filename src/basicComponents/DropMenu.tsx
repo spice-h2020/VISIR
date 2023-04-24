@@ -1,8 +1,9 @@
 /**
  * @fileoverview This file creates a button that when activated, shows an extra menu. 
  * The main button can be activated by click or by hovering.
- * The extra menu can be hidden if the user clicks outside the extra menu or by clicking the main button.
- * The behaviour will depend on the properties
+ * The extra menu can be hidden if the user clicks outside the extra menu or by clicking the main button again.
+ * The extra menu direction depends on menuDirection property.
+ * There are a bunch of properties to change the style of the menu content and of the main button of the dropmenu
  * @package Requires React package. 
  * @author Marco Expósito Pérez
  */
@@ -18,28 +19,6 @@ export enum EDropMenuDirection {
     down,
     left,
     up
-}
-
-const dropdownStyle: React.CSSProperties = {
-    float: "left",
-    overflow: "hidden",
-}
-
-
-const contentStyle: React.CSSProperties = {
-    position: "fixed",
-    zIndex: "10",
-    padding: "0.5rem 0.3rem",
-
-    boxShadow: "0px 0.5rem 1.5rem 0px rgba(0, 0, 0, 0.2)",
-    backgroundColor: "white",
-
-    backgroundClip: "padding-box",
-    border: "2px solid rgba(0, 0, 0, 0.15)",
-    borderRadius: "0.25rem",
-
-    maxHeight: "80vh",
-    overflowY: "auto",
 }
 
 interface DropMenuProps {
@@ -85,6 +64,10 @@ interface DropMenuProps {
      * buttonFixatesState has priority over this. If the main button is clicked, this property will be ignored.
      */
     hoverChangesState?: boolean;
+    /**
+     * Icon added to the end of the btn that toggles the dropdown
+     */
+    postIcon?: React.ReactNode;
 }
 
 export const DropMenu = ({
@@ -98,6 +81,8 @@ export const DropMenu = ({
     menuDirection = EDropMenuDirection.down,
     buttonFixatesState = true,
     hoverChangesState = false,
+    postIcon,
+
 }: DropMenuProps) => {
 
     const [showDropDown, setShowDropDown] = useState<boolean>(false);
@@ -126,7 +111,7 @@ export const DropMenu = ({
             showDropDown ? EButtonState.active : EButtonState.unactive
             : state;
 
-        let innerDropMenu: React.ReactNode =
+        let mainBtn: React.ReactNode =
             <React.Fragment>
                 <Button
                     key={-1}
@@ -134,6 +119,7 @@ export const DropMenu = ({
                     state={mainButtonState}
                     extraClassName={extraClassButton}
                     hoverText={hoverText}
+                    postIcon={postIcon}
                     onClick={() => {
                         if (buttonFixatesState) {
                             if (showDropDown) {
@@ -152,7 +138,7 @@ export const DropMenu = ({
                     }}
                 />
 
-                {<div key={0} style={getExtraMenuStyle(showDropDown, containerRef, menuDirection)}
+                {<div key={0} className="dropdown-content-wrapper" style={getExtraMenuStyle(showDropDown, containerRef, menuDirection)}
                     onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}
                 >
                     {items}
@@ -162,9 +148,9 @@ export const DropMenu = ({
         //Place the dropright content at the same height as the btn that activates it
         switch (menuDirection) {
             case EDropMenuDirection.right:
-                innerDropMenu =
+                mainBtn =
                     <div key={-2} className='row' onMouseEnter={() => { onHover(true) }} onMouseLeave={() => { onHover(false) }}>
-                        {innerDropMenu}
+                        {mainBtn}
                     </div>
                 break;
             default: {
@@ -173,16 +159,16 @@ export const DropMenu = ({
         }
 
         return (
-            <div key={-3} style={getMainMenuStyle(menuDirection)} className={extraClassContainer} ref={containerRef}>
-                {innerDropMenu}
+            <div key={-3} className={`${extraClassContainer} dropdown-wrapper`} ref={containerRef}>
+                {mainBtn}
             </div>
         )
 
 
     } else {
         return (
-            <div key={-5} style={getMainMenuStyle(menuDirection)}
-                className={extraClassContainer}
+            <div key={-5}
+                className={`${extraClassContainer} dropdown-wrapper`}
                 ref={containerRef}
             >
                 <Button
@@ -190,6 +176,7 @@ export const DropMenu = ({
                     content={content}
                     state={EButtonState.disabled}
                     extraClassName={extraClassButton}
+                    postIcon={postIcon}
                 />
             </div >
         );
@@ -230,24 +217,9 @@ const useOutsideClick = (state: boolean, ref: React.RefObject<HTMLDivElement>, c
     }, [state, closeWhenOutsideClick, ref, callback]);
 };
 
-
-const getMainMenuStyle = (menuDirection: EDropMenuDirection) => {
-    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(dropdownStyle)));
-
-    switch (menuDirection) {
-        case EDropMenuDirection.down: {
-            newStyle.marginLeft = "0.5rem";
-            newStyle.marginRight = "0.5rem";
-            break;
-        }
-    }
-
-    return newStyle;
-}
-
 function getExtraMenuStyle(currentState: Boolean, ref: React.RefObject<HTMLDivElement>,
     menuDirection: EDropMenuDirection): React.CSSProperties {
-    let newStyle: React.CSSProperties = (JSON.parse(JSON.stringify(contentStyle)));
+    let newStyle: React.CSSProperties = {};
 
     if (currentState) {
         newStyle.display = "flex";

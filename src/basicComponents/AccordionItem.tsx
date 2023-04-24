@@ -19,15 +19,6 @@ const panelStyle: React.CSSProperties = {
     transition: "max-height 0.2s ease-out"
 }
 
-const buttonText: React.CSSProperties = {
-    width: "90%",
-    float: "left",
-    textAlign: "left",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis"
-}
-
 interface AccordionItemProps {
     item: React.ReactNode;
     tittle: string;
@@ -54,7 +45,7 @@ export const AccordionItem = ({
         <div className="accordion-menu">
             <Button
                 content={
-                    <div style={buttonText}>
+                    <div className="accordion-btn-content">
                         {tittle}
                     </div>}
                 state={state}
@@ -65,8 +56,9 @@ export const AccordionItem = ({
                         newState: state === EButtonState.active ? EButtonState.unactive : EButtonState.active
                     });
                 }}
-                extraClassName="btn-accordion plus"
+                extraClassName="btn-accordion dropdown-mediumSize"
                 hoverText={tittle}
+                postIcon={<div className="dark plus" />}
             />
             <div
                 ref={contentRef}

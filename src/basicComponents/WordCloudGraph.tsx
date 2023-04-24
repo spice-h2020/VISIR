@@ -1,30 +1,19 @@
 /**
  * @fileoverview This file creates a words cloud graph. Currently the colors of the words are randomized 
- * by the package.
+ * by the package but it tryes to only use dark colors.
  * @package Requires React package.  
  * @package Requires react-tagcloud package.
  * @author Marco Expósito Pérez
  */
 //Packages
-import React from 'react';
 import { TagCloud } from 'react-tagcloud'
 import { IStringNumberRelation } from '../constants/perspectivesTypes';
-
-const tagCloudStyle: React.CSSProperties = {
-    maxHeight: "20vh",
-    cursor: "default",
-    backgroundColor: "white",
-    width: "80%",
-    margin: "auto",
-
-    textAlign: "center",
-    fontWeight: "bold",
-}
 
 interface WordCloudProps {
     minSize?: number;
     maxSize?: number;
     data: IStringNumberRelation[];
+    showPercentage: boolean;
 }
 
 /**
@@ -34,14 +23,17 @@ export const WordCloudGraph = ({
     minSize = 10,
     maxSize = 30,
     data,
+    showPercentage,
 }: WordCloudProps) => {
 
-    for (let obj of data) {
-        obj.props = { title: `${obj.count}%` }
+    if (showPercentage) {
+        for (let obj of data) {
+            obj.props = { title: `${obj.count}%` }
+        }
     }
 
     return (
-        <div style={tagCloudStyle}>
+        <div className='word-cloud-container'>
             <TagCloud
                 tags={data}
                 minSize={minSize}

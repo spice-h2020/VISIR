@@ -1,5 +1,5 @@
 /**
- * @fileoverview This files creates popup that darken the background. The popup has a customizable loading text
+ * @fileoverview This files creates popup that darkens and disables the background. The popup has a customizable loading text
  * and a spinner spining while loading.
  * When the popup appears, it does it in a transition. When it dissapear, it does it instantly.
  * @package Requires React package. 
@@ -9,45 +9,6 @@
 import React, { useEffect, useState } from "react";
 //Local files
 import { Spinner } from "./spinner";
-
-const darkBackgroundStyle: React.CSSProperties = {
-    background: "rgba(0, 0, 0, 0.3)",
-
-    position: "fixed",
-    top: "0",
-    right: "0",
-    bottom: "0",
-    left: "0",
-
-    zIndex: 100,
-}
-
-const loadingText: React.CSSProperties = {
-    marginTop: "1rem",
-}
-
-const innerPanelStyle: React.CSSProperties = {
-    display: "flex",
-    width: "30vw",
-    height: "30vh",
-
-    //Center the panel in the view screen
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    marginTop: "-15vh",
-    marginLeft: "-15vw",
-
-    background: "var(--bodyBackground)",
-    borderRadius: "15px",
-
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    alignContent: "center",
-    flexWrap: "nowrap",
-};
-
 
 export interface ILoadingState {
     isActive: boolean,
@@ -89,10 +50,10 @@ export const LoadingFrontPanel = ({
         return <React.Fragment />
     }
     return (
-        <div style={darkBackgroundStyle} className={active ? "toVisibleAnim" : "toHiddenAnim"}>
-            <div style={innerPanelStyle} >
+        <div className={active ? "dark-background toVisibleAnim " : "dark-background toHiddenAnim"}>
+            <div className="inner-loading-panel" >
                 <Spinner scale={1} />
-                <span style={loadingText}> {state.msg + '.'.repeat(numDots)} </span>
+                <span className="loading-text"> {state.msg + '.'.repeat(numDots)} </span>
             </div>
         </div >
     );
