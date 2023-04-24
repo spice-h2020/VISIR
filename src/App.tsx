@@ -12,7 +12,6 @@
 import { EFileSource, EButtonState, ViewOptions, viewOptionsReducer, EAppCollapsedState, collapseReducer, initialOptions } from './constants/viewOptions';
 import { PerspectiveActiveState, IPerspectiveData, PerspectiveId } from './constants/perspectivesTypes';
 import { ILegendData, legendDataReducer } from './constants/auxTypes';
-import config from './appConfig.json';
 import './style/base.css';
 //Packages
 import React, { useEffect, useReducer, useState } from 'react';
@@ -34,14 +33,19 @@ import { CTranslation, ITranslation } from './managers/CTranslation';
 
 interface AppProps {
   perspectiveId1: string | null,
-  perspectiveId2: string | null
+  perspectiveId2: string | null,
+  apiURL: string,
+  apiUSER: string,
+  apiPASS: string
 }
 
 export const App = ({
 
   perspectiveId1,
-  perspectiveId2
-
+  perspectiveId2,
+  apiURL,
+  apiUSER,
+  apiPASS
 }: AppProps) => {
 
   const [currentLanguage, setCurrentLanguage] = useState<ITranslation | undefined>(undefined)
@@ -53,7 +57,9 @@ export const App = ({
   //State to activate/disactivate and edit the loading spinner.
   const [loadingState, SetLoadingState] = useState<ILoadingState>({ isActive: false })
 
-  const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState, currentLanguage));
+  const [requestManager] = useState<RequestManager>(new RequestManager(SetLoadingState, currentLanguage, apiURL,
+    apiUSER, apiPASS));
+
   useEffect(() => {
     if (requestManager)
       requestManager.translation = currentLanguage;
@@ -62,7 +68,7 @@ export const App = ({
 
   //Current options that change how the user view each perspective
   const [viewOptions, setViewOptions] = useReducer(viewOptionsReducer, new ViewOptions());
-  const [fileSource, setFileSource] = useState<[EFileSource, string, string, string]>([initialOptions.fileSource, config.API_URI, config.API_USER, config.API_PASS])
+  const [fileSource, setFileSource] = useState<[EFileSource, string, string, string]>([initialOptions.fileSource, apiURL, apiUSER, apiPASS])
 
   //Current dimension attributes data to create the legend buttons/options
   const [legendData, setLegendData] = useReducer(legendDataReducer, { dims: [], anonymous: false, anonGroup: false } as ILegendData);
@@ -413,6 +419,7 @@ export const App = ({
         isActive={isSavePerspectiveActive}
         setIsActive={setIsSavePerspectiveActive}
         allPerspectivesIds={allPerspectivesIds}
+        updateFileSource={updateFileSource}
         requestManager={requestManager}
         translation={currentLanguage}
       />
