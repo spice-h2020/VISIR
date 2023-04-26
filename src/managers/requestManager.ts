@@ -31,26 +31,35 @@ export default class RequestManager {
     //URL to ask for files when local url is selected
     baseLocalURL: string = "./data/";
 
+    //GET REQUEST
     allPerspectivesGETurl: string = `${apiVersion}/visir/files`;
     singlePerspectiveGETurl: string = `${apiVersion}/visir/files/`;
     perspectiveConfigGETurl: string = `${apiVersion}/perspectives/`;
-
     confSeedGETurl: string = `${apiVersion}/visir/seed`;
+    //POST REQUEST
     confSeedPOSTurl: string = `${apiVersion}/perspectives`;
+    //DELETE REQUEST
+    deletePerspectiveDELurl: string = `${apiVersion}/perspectives`;
 
     //Change the state of the loading spinner
     setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>;
     translation: ITranslation | undefined;
 
-    apiUsername: string = config.API_USER;
-    apiPassword: string = config.API_PASS;
+    apiDefaultURL: string;
+    apiUsername: string;
+    apiPassword: string;
 
     /**
      * Constructor of the class
      */
-    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, translation: ITranslation | undefined) {
+    constructor(setLoadingState: React.Dispatch<React.SetStateAction<ILoadingState>>, translation: ITranslation | undefined,
+        apiURL: string, apiUsername: string, apiPassword: string) {
         this.setLoadingState = setLoadingState;
         this.translation = translation;
+
+        this.apiDefaultURL = apiURL;
+        this.apiUsername = apiUsername;
+        this.apiPassword = apiPassword;
 
         this.isActive = initialOptions.fileSource === EFileSource.Api;
         this.usingAPI = false;
@@ -94,7 +103,9 @@ export default class RequestManager {
      * if something went wrong.
      */
     requestPerspectiveFIle(perspectiveId: string, name: string, callback: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestPerspective} Requesting perspective ${name}` });
+        this.setLoadingState({
+            isActive: true, msg: `${this.translation?.loadingText.requestPerspective ? this.translation?.loadingText.requestPerspective : "Requesting perspective "} ${name}`
+        });
 
         this.getPerspective(perspectiveId)
             .then((response: any) => {
@@ -142,7 +153,11 @@ export default class RequestManager {
      * something went wrong.
      */
     requestAllPerspectivesIds(callback: Function, stateCallback?: Function) {
-        this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingAllPerspectives}` });
+        this.setLoadingState({
+            isActive: true, msg: `${this.translation?.loadingText.requestingAllPerspectives ?
+                this.translation?.loadingText.requestingAllPerspectives
+                : "Requesting All perspectives"}`
+        });
 
         this.getAllPerspectives()
             .then((response: any) => {
@@ -184,7 +199,7 @@ export default class RequestManager {
      * Request the configuration tool seed from the CM and validate
      * @param callback 
      */
-    requestConfigurationToolSeed(callback: Function) {
+    requestConfigurationToolSeed(callback: Function, setIsActive: Function) {
         this.setLoadingState({ isActive: true, msg: `${this.translation?.loadingText.requestingConfToolSeed}` });
 
         this.getConfigurationToolSeed()
@@ -203,6 +218,7 @@ export default class RequestManager {
             })
             .catch((error: any) => {
                 callback(undefined);
+                setIsActive(false);
 
                 console.log(`Configuration tool seed was not found:`);
                 console.log(error);
@@ -309,7 +325,7 @@ export default class RequestManager {
         let newUrl = newSource === EFileSource.Local ? this.baseLocalURL : apiURL;
 
         if (apiURL === undefined && newSource === EFileSource.Api) {
-            newUrl = config.API_URI;
+            newUrl = this.apiDefaultURL;
         }
 
         this.usingAPI = newSource === EFileSource.Api;
@@ -343,7 +359,8 @@ export default class RequestManager {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log("response: " + res)
+                    console.log("response: ->")
+                    console.log(res);
 
                     callback();
                 })
@@ -397,6 +414,19 @@ export default class RequestManager {
                     alert(`Perspective file with id: (${perspectiveId}) was not found: ${error.message}`);
 
                 }).finally(() => {
+                    this.setLoadingState({ isActive: false });
+                });
+        }
+    }
+
+    /**
+     * Delete a perspective from the CM dataBase
+     * @param perspectiveId id of the perspective to remove
+     */
+    deletePerspective(perspectiveId: string) {
+        if (this.usingAPI) {
+            this.axios.delete(`${this.deletePerspectiveDELurl}/${perspectiveId}`)
+                .finally(() => {
                     this.setLoadingState({ isActive: false });
                 });
         }

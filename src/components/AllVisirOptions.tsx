@@ -15,7 +15,6 @@
 //Constants
 import { EFileSource, EButtonState, IViewOptionAction, ViewOptions } from "../constants/viewOptions";
 import { EbuttonStateArrayAction, bStateArrayReducer } from "../constants/auxTypes";
-import config from '../appConfig.json';
 //Packages
 import React, { Dispatch, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -82,7 +81,8 @@ export const AllVisirOptions = ({
     const userRef = React.useRef<HTMLInputElement>(null);
     const passRef = React.useRef<HTMLInputElement>(null);
 
-    const allButtons: React.ReactNode[] = getFileSourceButtons(changeFileSource, fileSourceState, urlRef, userRef, passRef, translation)
+    const allButtons: React.ReactNode[] = getFileSourceButtons(changeFileSource, fileSourceState, urlRef, userRef, passRef, translation,
+        curentFileSource)
 
     //--- VISUALIZATION OPTIONS ---//
     const [optionsStates, setOptionsStates] = useReducer(bStateArrayReducer, initOptions(viewOptions));
@@ -196,7 +196,7 @@ const initOptions = (viewOptions: ViewOptions): EButtonState[] => {
 function getFileSourceButtons(changeFileSource: Function, selectedItems: EButtonState[],
     urlRef: React.RefObject<HTMLInputElement>, userRef: React.RefObject<HTMLInputElement>,
     passRef: React.RefObject<HTMLInputElement>,
-    translation: ITranslation | undefined): React.ReactNode[] {
+    translation: ITranslation | undefined, curentFileSource: [EFileSource, string, string, string]): React.ReactNode[] {
 
     //Function executed when the api option is selected
     const useApiFunction = () => {
@@ -219,7 +219,7 @@ function getFileSourceButtons(changeFileSource: Function, selectedItems: EButton
             {/*First row with the CM url text area */}
             <div className="row" style={{ marginBottom: "0.4rem" }}>
                 <label htmlFor="f-urlSource" style={{ marginRight: "5px" }}> {`${translation?.toolbar.Options.useURL}`} </label>
-                <input type="text" id="f-urlSource" ref={urlRef} defaultValue={config.API_URI}
+                <input type="text" id="f-urlSource" ref={urlRef} defaultValue={curentFileSource[1]}
                     className="url-input-text" />
 
             </div>
@@ -227,10 +227,10 @@ function getFileSourceButtons(changeFileSource: Function, selectedItems: EButton
             <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                     <div className="row"> <label htmlFor="f-userSource" style={{ marginRight: "5px" }} > {`${translation?.toolbar.Options.user}`} </label>
-                        <input type="text" ref={userRef} id="f-userSource" className="user-input-text" defaultValue={config.API_USER} /> </div>
+                        <input type="text" ref={userRef} id="f-userSource" className="user-input-text" defaultValue={curentFileSource[2]} /> </div>
 
                     <div className="row"> <label htmlFor="f-passSource" style={{ marginRight: "5px" }} > {`${translation?.toolbar.Options.pass}`} </label>
-                        <input type="text" ref={passRef} id="f-passSource" className="user-input-text" defaultValue={config.API_PASS} /> </div>
+                        <input type="password" ref={passRef} id="f-passSource" className="user-input-text" defaultValue={curentFileSource[3]} /> </div>
                 </div>
                 <div>
                     <Button
