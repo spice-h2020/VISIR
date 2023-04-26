@@ -371,16 +371,19 @@ function getImplicitListTextExplanation(explanation: ICommunityExplanation, onAt
 
 function getExplanationListButton(explanation: ICommunityExplanation, onAttributeSelected: (value: string) => void, index: number) {
     return (
-        <li key={index} className="interaction-container" style={{ display: "inline-flex" }}>
-            <div style={{ height: "auto", marginRight: "0.2rem", display: "inline-flex", flexDirection: "column" }}>
+        <li key={index} className="interaction-container" style={{ display: "inline-flex", width: "100%", boxSizing: "border-box" }}>
+            <div style={{ height: "auto", marginRight: "0.2rem", display: "inline-flex", flexDirection: "column", width: "100%", boxSizing: "border-box" }}>
                 <Button
                     content={<div style={{ padding: "0px" }}> {explanation.explanation_data.data[index].key} </div>}
                     onClick={() => {
                         onAttributeSelected(explanation.explanation_data.data[index].key)
                     }}
+                    hoverText={explanation.explanation_data.data[index].key}
                     extraClassName={"secondary explanationListButton"}
                 />
-                {`${explanation.explanation_data.data[index].label}`}
+                <div style={{ width: "100%", boxSizing: "border-box" }}>
+                    {`${explanation.explanation_data.data[index].label}`}
+                </div>
             </div>
         </li >
     )

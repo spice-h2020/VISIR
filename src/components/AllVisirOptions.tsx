@@ -230,7 +230,7 @@ function getFileSourceButtons(changeFileSource: Function, selectedItems: EButton
                         <input type="text" ref={userRef} id="f-userSource" className="user-input-text" defaultValue={curentFileSource[2]} /> </div>
 
                     <div className="row"> <label htmlFor="f-passSource" style={{ marginRight: "5px" }} > {`${translation?.toolbar.Options.pass}`} </label>
-                        <input type="text" ref={passRef} id="f-passSource" className="user-input-text" defaultValue={curentFileSource[3]} /> </div>
+                        <input type="password" ref={passRef} id="f-passSource" className="user-input-text" defaultValue={curentFileSource[3]} /> </div>
                 </div>
                 <div>
                     <Button
