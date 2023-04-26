@@ -117,8 +117,6 @@ export class CTranslation {
     t!: ITranslation;
     defaultT!: ITranslation;
 
-    constructor() { }
-
     initializeTranslation(setTranslation: Function) {
         fetch(`lang/default/locals.json`,
             {
