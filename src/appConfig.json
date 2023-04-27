@@ -1,5 +1,5 @@
 {
-	"API_URI": "http://localhost:6060/",
+	"API_URI": "https://spice.fdi.ucm.es/hecht/",
 	"API_USER": "user",
 	"API_PASS": "pass",
 	"USE_API_BY_DEFAULT": false,

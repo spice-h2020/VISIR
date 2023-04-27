@@ -1,11 +1,10 @@
 services:
   app:
-    container_name: spice-visualization-react
-    image: spice-visualization-react
     build:
+      dockerfile: dev.Dockerfile
       context: .
       target: development
     volumes:
       - ./src:/app/src
     ports:
-      - ${DOCKER_PORT}:${PORT}
+      - ${VISIR_HOST_PORT}:${PORT}

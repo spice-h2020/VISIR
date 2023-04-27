@@ -54,6 +54,11 @@ Prerequisite: Run the application using Node.js and NPM.
 
 3. A new folder called "build" will be created inside the project. This folder contains the optimized-shipping version of the application. To open the aplication you need to open build/index.html with a web browser.
 
+
+# Development
+
+`docker-compose -f docker-compose.dev.yml --env-file dev.env build`
+`docker-compose -f docker-compose.dev.yml --env-file dev.env up`
 ______________________
 ## Easy how to use the app.
 0. By default if the URL contains perspective1 and/or perspective2 variables, the app will try to request and activate those perspectives. These URL variables are optional, there are other ways to pick between perspectives.
