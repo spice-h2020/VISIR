@@ -1,15 +1,20 @@
-FROM node:16-alpine AS development
+FROM node:16-alpine AS build
+LABEL autodelete-visir="true"
+# Remove manually with:
+# list=$(docker images -q -f "dangling=true" -f "label=autodelete-visir=true")
+# if [ -n "$list" ]; then
+#      docker rmi $list
+# fi
 ENV NODE_ENV development
 # Add a work directory
 WORKDIR /app
 # Cache and Install dependencies
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 # Copy app files
-COPY . .
-# Expose port
-EXPOSE 3000
+COPY . ./
 # Start the app
-CMD ["npm", "start"]
+RUN npm run build
 
-# docker-compose -f docker-compose.dev.yml up
+FROM nginx
+COPY --from=build /app/build /usr/share/nginx/html
