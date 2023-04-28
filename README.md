@@ -1,66 +1,49 @@
-# SPICE-visualization-ReactPort
+# VISIR
 
-Access to the [github pages deployment](https://marcoexpper.github.io/SPICE-visualization-ReactPort/). 
+![VISIR Logo](public/images/visir-readme-logo.png)
 
-Documentation explained in the [wiki](https://github.com/MarcoExpPer/SPICE-visualization-ReactPort/wiki)
+VISIR (VISualization for Interpretation and Reflection) is a tool that enables museum curators the detection, visualization, and explanation of communities needed in the SPICE IRL model. The app is available at:
 
-#### Index
-1. [How to run the application localy](#How-to-run-the-application-localy)
-    1. [Using Docker](#Using-Docker)
-    2. [Using Node.js and NPM](#Using-Node.js-and-NPM)
-    3. [How to run an optimized build](#How-to-run-an-optimized-build)
-2. [Easy how to use guide](#Easy-how-to-use-the-app)
-3. [How to add more testing files](#How-to-add-more-testing-files)
-4. [Preconfiguration available](#Preconfiguration-available)
-5. [Complete user guide](#Complete-user-guide)
-    1. [Loading](#Loading)
-    2. [Toolbar](#Toolbar)
-    3. [Perspective Builder](#Perspective-Builder)
-    4. [Perspective representation](#Perspective-representation)
-    5. [Clicking the network](#Clicking-the-network)
-    6. [DataColumn](#DataColumn)
+- <https://gjimenezucm.github.io/SPICE-VISIR/>. 
+- <https://spice.fdi.ucm.es/visir/>
 
-## How to run the application localy
+
+_The research leading to these software has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement SPICE No 870811_
+
+
+![SPICE logo](public/images/spice-logo.png)
+
+
+# How to run the application localy
 There are 2 ways of running the application. Docker allows for an easy one command instalation, Node.js allows to introduce new testing files. Both options start with these steps.
 
 Prerequisite: [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell) or any similar command prompt to execute commands.
 
-1. Download all the code of [this repository](https://codeload.github.com/MarcoExpPer/SPICE-visualization-ReactPort/zip/refs/heads/main).
-
+1. Download all the code of [this repository](../../archive/refs/heads/main.zip).
 2. Go to the project forlder inside PowerShell or similars.
 
-### Using Docker.
-Prerequisite: [Docker](https://www.docker.com/).
-
-3. Run the docker container with the following command `docker-compose -f docker-compose.dev.yml up` inside the project folder.
-
-4. The app will be automaticaly launched in `http://localhost:3000/` once the previous command finishes, so open that URL in your web browser.
-
-### Using Node.js and NPM. 
+## Using Node.js and NPM. 
 Prerequisite: [Node](https://nodejs.org/en/).
 
 3. Use powershell to go to the downloaded program folder and install all packages with the following command `npm install`
-
 4. Launch the local server with the following command `npm run start`
-
 5. The app will automaticaly be opened by your web browser in the localhost port 3000. If it hasn't opened, try manualy opening the page `http://localhost:3000/`
+## Using Docker (development)
+Prerequisite: [Docker](https://www.docker.com/).
 
-### Run an optimized build
-Prerequisite: Run the application using Node.js and NPM.
-
-1. Do all [How to run the application localy](#How-to-run-the-application-localy) steps using Node.js and NPM up to the step 3, including itself.
-
-2. Once `npm install` has finished, execute `npm run deploy`
-
-3. A new folder called "build" will be created inside the project. This folder contains the optimized-shipping version of the application. To open the aplication you need to open build/index.html with a web browser.
+1. Run the docker container with the following command `docker-compose -f docker-compose.dev.yml --env-file dev.env up` inside the project folder.
+2. The app will be automaticaly launched in `http://localhost:5500/` once the previous command finishes, so open that URL in your web browser (see `dev.env` file for modifying exposed port).
 
 
-# Development
+## Using Docker (deployment)
+Prerequisite: [Docker](https://www.docker.com/).
 
-`docker-compose -f docker-compose.dev.yml --env-file dev.env build`
-`docker-compose -f docker-compose.dev.yml --env-file dev.env up`
+1. Create a `.env` file following the instructions in the `template.env` file
+2. Run the docker container with the following command `docker-compose --env-file .env up` inside the project folder.
+3. The app will be automatically launched in `http://localhost:5500/` with a Ngnix server and with suppport for Trafik inverse proxy.
+
 ______________________
-## Easy how to use the app.
+# Easy how to use the app.
 0. By default if the URL contains perspective1 and/or perspective2 variables, the app will try to request and activate those perspectives. These URL variables are optional, there are other ways to pick between perspectives.
     1. An example of a URL with IDs is the following "http://localhost:3000/?perspective1=5&perspective2=6" Where 5 and 6 are the id of the files.
 
@@ -84,7 +67,7 @@ ______________________
 
 6. All nodes will have diferent colours and shapes. Legend dropdown allows you to understand what does every colour/shape means. If you click any of the legend rows, all nodes that contain that characteristic will be made less obstrusive to the visualization.
 
-#### Other options
+## Other options
 Options dropdown has several diferent options to change how the visualization is shown.
 
 - Hide node labels is activated by default. Hides the label and id of the nodes both in the dataTables/tooltip and in the visualized network.
@@ -119,14 +102,14 @@ _______________________
 
 _______________________
 
-## Complete user guide
+# Complete user guide
 
 In this section all the app will be explained from a user point of view.
 
-### Loading
+## Loading
 When the app starts, it may request files to the CM (Community Model). If the CM is not well defined, unavailable or is not correctly configured, an error will pop explaining what was the problem. Accept the error to continue using the  app. It's not a critical problem if the CM is not intended to be used.
 
-### Toolbar
+## Toolbar
 
 From left to right: 
 - **The first button** with VISIR logo and name will refresh the web page to its default value, resetting any visualization configuration to default.
@@ -168,7 +151,7 @@ The first two options choose where the perspective's files will be picked from. 
 - **Legend dropdown** will show the legend of the current actives perspectives. If there are no active perspectives, will be disabled.
 Once is active, the legend will show all the explicit communities of the users and the value of each of them. Clicking any of the values in the legend will reduce the visibility of all the users/nodes with that explicit value. 
 
-### Perspective Builder
+## Perspective Builder
 
 As previously stated, the perspective builder allows to create new perspectives to visualize in VISIR. It's necessary a connection to a CM in order to see the created perspectives.
 
@@ -210,7 +193,7 @@ Finally, the **size** of the node represents if its a representative citizen of 
 
 The lines that go from a node to another node represent that those nodes are connected by a similarity value. The value is equal or higher than the value selected in the minimum similarity slider.
 
-### Clicking the network
+## Clicking the network
 
 Once any perspective is active, the user can interact with the network by clicking it.
 
@@ -218,7 +201,7 @@ Once any perspective is active, the user can interact with the network by clicki
 - **Clicking** one of the **bounding boxes** (and not a node inside the box), will highlight and zoom to all nodes in the box. The other active perspective will highlight the same nodes in it's own perspective and distribution. DataColumns will show information about this community and will explain why it was created.
 - **Not clicking** a node nor a bounding box will zoom to fit all nodes inside the viewport and will clear all the dataColumns.
 
-### DataColumn
+## DataColumn
 
 The data column shows different data based on the click interaction of the user. 
 - **Citizen information**: Citizen information shows the node's label (if its shown by the options) and also all its explicit communities and values. 
@@ -242,9 +225,12 @@ After the accordion, a new accordion will include the user's interactions that a
     Shows an accordion with the different attributes of the community. Each accordion item includes the information of the artworks related to such attribute. As before, a button may be clicked to filter all communities that have the same clicked value.
 
 
+# LICENSE
 
-Port of [SPICE-visualization repository](https://github.com/gjimenezUCM/SPICE-visualization) to react and typescript
-*Last update of the content of this doc: 23/04/2023*
+The content of this repository is distributed under [Apache 2.0 License](LICENSE).
+
+
+*Last update of the content of this doc: 26/04/2023*
 
 
 

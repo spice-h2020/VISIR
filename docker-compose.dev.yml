@@ -4,6 +4,7 @@ services:
       dockerfile: dev.Dockerfile
       context: .
       target: development
+      restart: unless-stopped
     volumes:
       - ./src:/app/src
     ports:
