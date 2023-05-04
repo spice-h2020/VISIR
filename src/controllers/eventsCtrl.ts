@@ -43,9 +43,14 @@ export default class EventsCtrl {
     one call*/
     resizeEventTimer!: ReturnType<typeof setTimeout>;
 
+    isZoomReady: boolean;
+    zoomStack: string[][];
+
     constructor(netController: NetworkController, sf: IStateFunctions, focusedNetId: string) {
         this.netCtrl = netController;
         this.focusedNetId = focusedNetId;
+        this.isZoomReady = true;
+        this.zoomStack = [];
 
         this.netCtrl.net.on("beforeDrawing", (ctx) => this.beforeDrawing(ctx));
 
@@ -140,15 +145,31 @@ export default class EventsCtrl {
      * @param nodes ID of the nodes to zoom to. If empty, vis.js will zoom to all nodes
      */
     zoomToNodes(nodes: string[]) {
-
-        const fitOptions: FitOptions = {
-            animation: {
-                duration: nodeConst.zoomDuration
-            } as TimelineAnimationType,
-            nodes: nodes
+        if (this.zoomStack.length < 3) {
+            this.zoomStack.push(nodes);
+            this.executeZoom();
         }
+    }
 
-        this.netCtrl.net.fit(fitOptions);
+    executeZoom() {
+        if (this.isZoomReady && this.zoomStack.length != 0) {
+            this.isZoomReady = false;
+
+            const fitOptions: FitOptions = {
+                animation: {
+                    duration: nodeConst.zoomDuration
+                } as TimelineAnimationType,
+                nodes: this.zoomStack.shift()
+            }
+
+            this.netCtrl.net.fit(fitOptions);
+
+            setTimeout(() => {
+                this.isZoomReady = true;
+                this.executeZoom();
+
+            }, nodeConst.zoomDuration);
+        }
     }
 
     /**
@@ -213,12 +234,12 @@ export default class EventsCtrl {
         this.selectedObject = community;
 
         const selectedNodes = community.users;
-        this.zoomToNodes(selectedNodes);
-
 
         this.netCtrl.bbCtrl.highlightedComms = [community];
         this.netCtrl.nodeVisuals.selectNodes(this.netCtrl.nodes, selectedNodes, []);
         this.netCtrl.edgeCtrl.unselectEdges();
+
+        this.zoomToNodes(selectedNodes);
     }
 
     /**

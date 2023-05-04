@@ -102,11 +102,10 @@ export const PerspectiveView = ({
 
     //Do something when the user clicks in a network
     useEffect(() => {
-
-        sf.setSelectedAttribute(undefined);
-
         //Check if something has been clicked
-        if (netManager !== undefined) {
+        if (netManager !== undefined && netManager.isReady) {
+            sf.setSelectedAttribute(undefined);
+
             if (selectedObject?.obj !== undefined) {
                 //Check if the clicked something is a node/user.
                 if (selectedObject.obj.explanations === undefined && selectedObject.obj.id !== undefined) {
