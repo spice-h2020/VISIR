@@ -95,7 +95,7 @@ export const PerspectiveView = ({
 
     //When an attribute is selected, highlight all communities that have the key of this attribute and the value is the most representative.
     useEffect(() => {
-        if (selectedAttribute && netManager) {
+        if (selectedAttribute && netManager && netManager.isReady) {
             netManager.eventsCtrl.selectAttribute(selectedAttribute)
         }
     }, [selectedAttribute, netManager])

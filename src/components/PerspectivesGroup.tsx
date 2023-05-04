@@ -86,6 +86,8 @@ export const PerspectivesGroups = ({
     //When the collapsed state changes, we clear both datatables
     useEffect(() => {
         setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
+        setSelectedAttribute(undefined);
+
         setNetworkFocusID(undefined);
     }, [collapsedState]);
 
@@ -93,10 +95,13 @@ export const PerspectivesGroups = ({
     useEffect(() => {
         if (leftPerspective === undefined && rightPerspective === undefined && dimensionStrategy !== undefined) {
             setLegendData({ type: "reset", newData: false });
-            setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
+
             setNetworkFocusID(undefined);
             setDimensionStrategy(undefined);
         }
+
+        setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
+        setSelectedAttribute(undefined);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [leftPerspective, rightPerspective, dimensionStrategy]);
 
@@ -106,6 +111,13 @@ export const PerspectivesGroups = ({
             dimensionStrategy.toggleBorderStat(viewOptions.border);
 
     }, [viewOptions.border, dimensionStrategy]);
+
+    //Hide tooltip while selecting attributes
+    // useEffect( () => {
+    //     if(selectedAttribute !== undefined){
+    //         setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
+    //     }
+    // }, [selectedAttribute])
 
     const { leftState, rightState } = calculatePerspectiveState(leftPerspective, rightPerspective, collapsedState);
 
