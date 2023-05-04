@@ -24,6 +24,7 @@ interface TooltipProps {
     showLabel: boolean;
 
     translation: ITranslation | undefined;
+    isTooltipActive: boolean;
 }
 
 /**
@@ -33,8 +34,9 @@ export const Tooltip = ({
     selectedObject,
     showLabel,
     translation,
+    isTooltipActive,
 }: TooltipProps) => {
-    const [isActive, setActive] = useState<Boolean>(false);
+    const [isActive, setActive] = useState<Boolean>(isTooltipActive);
     const [yOffset, setYoffset] = useState<number>(0);
 
     const [selectObject, setSelecObject] = useState<ICommunityData | IUserData | undefined>();
@@ -56,10 +58,13 @@ export const Tooltip = ({
 
 
     useEffect(() => {
-        setActive(true);
         setSelecObject(selectedObject?.obj);
 
     }, [selectedObject?.obj, showLabel])
+
+    useEffect(() => {
+        setActive(isTooltipActive);
+    }, [isTooltipActive])
 
     const tooltipTittle: React.ReactNode = getTooltipTittle(selectObject, translation);
     const tooltipBody: React.ReactNode[] = getTooltipBody(selectObject, showLabel, translation);

@@ -75,6 +75,8 @@ export const PerspectivesGroups = ({
     //When a user clicks a community's attribute from the data column, the clicked attribute will be shared between perspectives
     const [selectedAttribute, setSelectedAttribute] = useState<IAttribute | undefined>();
 
+    const [isTooltipActive, setIsTooltipActive] = useState<boolean>(false);
+
     const sf: IStateFunctions = {
         setLegendData: setLegendData,
         setDimensionStrategy: setDimensionStrategy,
@@ -113,11 +115,15 @@ export const PerspectivesGroups = ({
     }, [viewOptions.border, dimensionStrategy]);
 
     //Hide tooltip while selecting attributes
-    // useEffect( () => {
-    //     if(selectedAttribute !== undefined){
-    //         setSelectedObject({ action: ESelectedObjectAction.clear, newValue: undefined, sourceID: "0" });
-    //     }
-    // }, [selectedAttribute])
+    useEffect(() => {
+        if (selectedAttribute !== undefined) {
+            setIsTooltipActive(false);
+        } else {
+            if (selectedObject !== undefined) {
+                setIsTooltipActive(true);
+            }
+        }
+    }, [selectedAttribute, selectedObject])
 
     const { leftState, rightState } = calculatePerspectiveState(leftPerspective, rightPerspective, collapsedState);
 
@@ -158,6 +164,7 @@ export const PerspectivesGroups = ({
                 selectedObject={selectedObject}
                 showLabel={viewOptions.showLabels}
                 translation={translation}
+                isTooltipActive={isTooltipActive}
             />
             <div style={widthStyle.get(leftState)}
                 key={leftPerspective === undefined ? -1 : `first${leftPerspective.id}`}>
