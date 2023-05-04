@@ -170,6 +170,7 @@ export const PerspectiveView = ({
                 setSelectedCommunity(undefined);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedObject?.obj, selectedObject?.sourceID, perspectiveData.id, netManager]);
 
     //Create the vis network controller

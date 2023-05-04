@@ -45,6 +45,7 @@ export default class EventsCtrl {
 
     isZoomReady: boolean;
     zoomStack: string[][];
+    maxZoomStackSize: number = 3;
 
     constructor(netController: NetworkController, sf: IStateFunctions, focusedNetId: string) {
         this.netCtrl = netController;
@@ -145,14 +146,16 @@ export default class EventsCtrl {
      * @param nodes ID of the nodes to zoom to. If empty, vis.js will zoom to all nodes
      */
     zoomToNodes(nodes: string[]) {
-        if (this.zoomStack.length < 3) {
-            this.zoomStack.push(nodes);
-            this.executeZoom();
+        if (this.zoomStack.length >= this.maxZoomStackSize) {
+            this.zoomStack.shift();
         }
+
+        this.zoomStack.push(nodes);
+        this.executeZoom();
     }
 
     executeZoom() {
-        if (this.isZoomReady && this.zoomStack.length != 0) {
+        if (this.isZoomReady && this.zoomStack.length !== 0) {
             this.isZoomReady = false;
 
             const fitOptions: FitOptions = {
