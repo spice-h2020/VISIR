@@ -84,9 +84,8 @@ export default class NetworkController {
 
         this.eventsCtrl = new EventsCtrl(this, sf, networkFocusID);
 
-
-        this.isReady = true;
         this.eventsCtrl.zoomToNodes([]);
+        this.isReady = true;
     }
 
     /**

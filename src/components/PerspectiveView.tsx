@@ -95,7 +95,7 @@ export const PerspectiveView = ({
 
     //When an attribute is selected, highlight all communities that have the key of this attribute and the value is the most representative.
     useEffect(() => {
-        if (selectedAttribute && netManager) {
+        if (selectedAttribute && netManager && netManager.isReady) {
             netManager.eventsCtrl.selectAttribute(selectedAttribute)
         }
     }, [selectedAttribute, netManager])
@@ -103,7 +103,9 @@ export const PerspectiveView = ({
     //Do something when the user clicks in a network
     useEffect(() => {
         //Check if something has been clicked
-        if (netManager !== undefined) {
+        if (netManager !== undefined && netManager.isReady) {
+            sf.setSelectedAttribute(undefined);
+
             if (selectedObject?.obj !== undefined) {
                 //Check if the clicked something is a node/user.
                 if (selectedObject.obj.explanations === undefined && selectedObject.obj.id !== undefined) {
@@ -168,6 +170,7 @@ export const PerspectiveView = ({
                 setSelectedCommunity(undefined);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedObject?.obj, selectedObject?.sourceID, perspectiveData.id, netManager]);
 
     //Create the vis network controller
